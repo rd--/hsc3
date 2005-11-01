@@ -1,0 +1,9 @@
+Name:             Hsc
+Version:          0.1
+License:          GPL
+Author:           Rohan Drape
+Homepage:         http://www.slavepianos.org/rd/
+Category:         Audio Synthesis
+Build-Depends:    base
+Synopsis:         Haskell client for the SuperCollider synthesis server
+Exposed-modules:  Hsc
