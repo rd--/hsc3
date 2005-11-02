@@ -8,8 +8,8 @@ mcel (MCE l) = l
 mcel u       = [u]
 
 reqMCE :: UGen -> Bool
-reqMCE (UGen _ _ i _ _) = not $ null $ filter isMCE i
-reqMCE _                = False
+reqMCE (UGen _ _ i _ _ _) = not $ null $ filter isMCE i
+reqMCE _                  = False
 
 mceDepth :: [UGen] -> Int
 mceDepth i = maximum $ map (length . mcel) $ filter isMCE i
@@ -21,7 +21,7 @@ extendu n (MCE l) = take n $ cycle l
 extendu n u       = replicate n u
 
 mce :: UGen -> UGen
-mce (UGen r n i o s) = MCE (map (\i'' -> (UGen r n i'' o s)) i')
+mce (UGen r n i o s id) = MCE (map (\i'' -> (UGen r n i'' o s id)) i')
     where d  = mceDepth i
           i' = invert $ map (extendu d) i
 

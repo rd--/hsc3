@@ -11,7 +11,7 @@ data Input = Input Int Int
              deriving (Eq, Show)
 
 implicit :: Int -> UGen
-implicit n = UGen KR "Control" [] (replicate n KR) 0
+implicit n = UGen KR "Control" [] (replicate n KR) 0 0
 
 graph :: UGen -> Graph
 graph root = Graph n c u'
@@ -35,7 +35,7 @@ mkinput g u
     | isConstant u      = Input (-1) (nindex g u)
     | isControl u       = Input 0 (cindex g u)
     | isUGen u          = Input (uindex g u) 0
-mkinput g (Proxy u n) = Input (uindex g u) n
+mkinput g (Proxy u n)   = Input (uindex g u) n
 
 nvalue   (Constant n)    = n
 cdefault (Control _ _ n) = n
@@ -44,14 +44,14 @@ input_u8v :: Input -> U8v
 input_u8v (Input u p) = i16_u8v u ++ i16_u8v p
 
 ugen_u8v :: Graph -> UGen -> U8v
-ugen_u8v g c@(Control r n v) = pstr_u8v n ++ i16_u8v (cindex g c)
-ugen_u8v g (UGen r n i o s)  = pstr_u8v n ++
-                               i8_u8v (rateId r) ++
-                               i16_u8v (length i) ++
-                               i16_u8v (length o) ++
-                               i16_u8v s ++ 
-                               (concat $ map (input_u8v . (mkinput g)) i) ++
-                               (concat $ map (i8_u8v . rateId) o)
+ugen_u8v g c@(Control r n v)    = pstr_u8v n ++ i16_u8v (cindex g c)
+ugen_u8v g (UGen r n i o s id)  = pstr_u8v n ++
+                                  i8_u8v (rateId r) ++
+                                  i16_u8v (length i) ++
+                                  i16_u8v (length o) ++
+                                  i16_u8v s ++ 
+                                  (concat $ map (input_u8v . (mkinput g)) i) ++
+                                  (concat $ map (i8_u8v . rateId) o)
 
 graphdef :: String -> Graph -> U8v
 graphdef s g@(Graph n c u) = str_u8v "SCgf" ++

@@ -13,8 +13,9 @@ playu fd u = do sync' fd "/done" (d_recv b)
           b = graphdef "Anonymous" g
 
 hasOutputs :: UGen -> Bool
-hasOutputs (UGen _ _ _ o _) = length o > 0
-hasOutputs _                = False
+hasOutputs (UGen _ _ _ o _ _) = length o > 0
+hasOutputs (MCE _)            = True
+hasOutputs _                  = False
 
 play fd u 
     | hasOutputs u = playu fd (out AR 0 u)

@@ -5,6 +5,8 @@ module Hsc (module Hsc.List,
             module Hsc.Graph,
             module Hsc.Math,
             module Hsc.Oscillator,
+            module Hsc.Noise,
+            module Hsc.Panner,
             module Hsc.Filter,
             module Hsc.IO,
             module Hsc.OpenSoundControl,
@@ -19,6 +21,8 @@ import Hsc.MCE
 import Hsc.Graph
 import Hsc.Math
 import Hsc.Oscillator
+import Hsc.Noise
+import Hsc.Panner
 import Hsc.Filter
 import Hsc.IO
 import Hsc.OpenSoundControl
