@@ -12,3 +12,8 @@ lfclipnoise r id freq = UGen r "LFClipNoise" [freq] [r] 0 id
 lfnoise0 r id freq    = UGen r "LFNoise0"    [freq] [r] 0 id
 lfnoise1 r id freq    = UGen r "LFNoise1"    [freq] [r] 0 id
 lfnoise2 r id freq    = UGen r "LFNoise2"    [freq] [r] 0 id
+
+dust  r id density = UGen r "Dust"  [density] [r] 0 id
+dust2 r id density = UGen r "Dust2" [density] [r] 0 id
+
+linrand id r lo hi m = UGen r "LinRand" [lo,hi,m] [r] 0 id
