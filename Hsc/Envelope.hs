@@ -1,26 +1,52 @@
 module Hsc.Envelope where
 
 import Hsc.UGen
+import Hsc.Math
 
-envgen r gate lvl bias scale done env = 
+envgen r gate lvl bias scale done env =
     UGen r "EnvGen" ([gate,lvl,bias,scale,done] ++ env) [r] 0 0
 
 data EnvCurve = EnvStep 
               | EnvLin | EnvExp 
               | EnvSin | EnvCos 
-              | EnvNum
+              | EnvNum UGen
               | EnvSqr | EnvCub
-              deriving (Eq, Ord, Show, Enum)
+              deriving (Eq, Show)
 
-env_curve c = fromIntegral $ fromEnum c
+env_curve :: EnvCurve -> UGen
+env_curve EnvStep    = 0.0
+env_curve EnvLin     = 1.0
+env_curve EnvExp     = 2.0
+env_curve EnvSin     = 3.0
+env_curve EnvCos     = 4.0
+env_curve (EnvNum u) = 5.0
+env_curve EnvSqr     = 6.0
+env_curve EnvCub     = 7.0
 
-env_value c = 0.0
+env_value :: EnvCurve -> UGen
+env_value (EnvNum u) = u
+env_value _          = 0.0
 
-env (l:vl) (t:m) crv rls lp = 
-    [l, t, rls, lp] ++ concat (zipWith3 f vl m (take n $ cycle crv))
+env :: [UGen] -> [UGen] -> [EnvCurve] -> UGen -> UGen -> [UGen]
+env (l:vl) tms crv rls lp =
+    [l, n', rls, lp] ++ concat (zipWith3 f vl tms (take n $ cycle crv))
     where f    = (\l t c -> [l, t, env_curve c, env_value c])
-          n    = length (t:m)
-          
+          n    = length tms
+          n'   = fromIntegral n
+
+envperc :: UGen -> UGen -> UGen -> [EnvCurve] -> [UGen]
 envperc atk rls lvl crv = env [0.0, lvl, 0.0] [atk, rls] crv (-1.0) (-1.0)
 
-envperc' = envperc 0.01 1.0 1.0 [EnvExp, EnvExp]
+envperc' :: [UGen]
+envperc' = envperc 0.01 1.0 1.0[c,c]
+    where c = EnvNum (-4.0)
+
+envtriangle :: UGen -> UGen -> [UGen]
+envtriangle dur lvl = env [0.0, lvl, 0.0] [n, n] c (-1.0) (-1.0)
+    where c = [EnvLin, EnvLin]
+          n = dur / 2.0
+
+envsine :: UGen -> UGen -> [UGen]
+envsine dur lvl = env [0.0, lvl, 0.0] [n, n] c (-1.0) (-1.0)
+    where c = [EnvSin, EnvSin]
+          n = dur / 2.0
