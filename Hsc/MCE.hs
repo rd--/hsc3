@@ -21,9 +21,10 @@ extendu n (MCE l) = take n $ cycle l
 extendu n u       = replicate n u
 
 mce :: UGen -> UGen
-mce (UGen r n i o s id) = MCE (map (\i'' -> (UGen r n i'' o s id)) i')
-    where d  = mceDepth i
-          i' = invert $ map (extendu d) i
+mce (UGen r n i o s id) = MCE (map f i')
+    where f i = UGen r n i o s id
+          d   = mceDepth i
+          i'  = invert $ map (extendu d) i
 
 -- Out and such like use this to force any required MCE.
 

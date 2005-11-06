@@ -64,4 +64,3 @@ proxy u@(UGen _ _ _ o _ _) = (MCE (map f [0..(n-1)]))
           
 proxyU :: Rate -> String -> [UGen] -> [Output] -> Special -> Int -> UGen
 proxyU r n i o s id = proxy (UGen r n i o s id)
-

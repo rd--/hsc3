@@ -89,9 +89,11 @@ gdot g@(Graph n c u) = ["digraph Anonymous {"]
                        ++ map (edot g) (edges g)
                        ++ ["}"]
 
-draw u = do h <- openFile f WriteMode
-            mapM (hPutStrLn h) (gdot g)
-            hClose h
-            system ("open " ++ f)
+draw :: String -> UGen -> IO ()
+draw v u = do h <- openFile f WriteMode
+              mapM (hPutStrLn h) (gdot g)
+              hClose h
+              system (v ++ " " ++ f)
+              return ()
     where g = graph u
           f = "/tmp/hsc.dot"
