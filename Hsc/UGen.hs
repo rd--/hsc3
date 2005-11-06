@@ -54,6 +54,7 @@ isConstant, isControl, isUGen :: UGen -> Bool
 isConstant u                  = utype u == ConstantT
 isControl u                   = utype u == ControlT
 isUGen u                      = utype u == UGenT
+isProxy u                     = utype u == ProxyT
 isMCE u                       = utype u == MCET
 
 proxy :: UGen -> UGen
