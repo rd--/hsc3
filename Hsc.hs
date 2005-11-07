@@ -18,7 +18,8 @@ module Hsc (module Hsc.List,
             module Hsc.OpenSoundControl,
             module Hsc.Server,
             module Hsc.Udp,
-            module Hsc.Play) where
+            module Hsc.Play,
+            module Hsc.Schedule) where
 
 import Hsc.List
 import Hsc.U8v
@@ -41,6 +42,7 @@ import Hsc.OpenSoundControl
 import Hsc.Server
 import Hsc.Udp
 import Hsc.Play
+import Hsc.Schedule
 
 -- analog bubbles
 
