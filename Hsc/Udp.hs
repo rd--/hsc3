@@ -28,3 +28,6 @@ sync' fd b = do send' fd b
 syncto' :: Socket -> String -> U8v -> IO Bool
 syncto' fd rpl b = do (c,_) <- sync' fd b
                       return (c == rpl)
+
+close' :: Socket -> IO ()
+close' = sClose

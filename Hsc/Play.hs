@@ -25,6 +25,10 @@ play fd u
 init_ fd = do send' fd (g_new 1 1 0)
 stop  fd = do send' fd (g_freeAll 1)
 
-play' sc u = do fd <- sc; play fd u
-stop' sc   = do fd <- sc; stop fd
-init' sc   = do fd <- sc; init_ fd
+withfd fd' a = do fd <- fd'
+                  a fd
+                  close' fd
+
+play' sc u = withfd sc (\fd -> play fd u)
+stop' sc   = withfd sc stop
+init' sc   = withfd sc init_
