@@ -1,10 +1,12 @@
-module Hsc.Dot where
+module Hsc.Dot (draw, draw') where
 
 import Hsc.UGen
 import Hsc.Graph
 import List (intersperse)
 import System.IO
 import System.Cmd (system)
+import System.Directory (getTemporaryDirectory)
+import System.Posix.Env (getEnvDefault)
 
 type UTerminal = (UGen, Int)
 type UEdge     = (UTerminal, UTerminal)
@@ -89,11 +91,18 @@ gdot g@(Graph n c u) = ["digraph Anonymous {"]
                        ++ map (edot g) (edges g)
                        ++ ["}"]
 
+udot :: UGen -> [String]
+udot u = gdot (graph u)
+
 draw :: String -> UGen -> IO ()
-draw v u = do h <- openFile f WriteMode
-              mapM (hPutStrLn h) (gdot g)
+draw v u = do d <- getTemporaryDirectory
+              f <- return (d ++ "/hsc.dot")
+              h <- openFile f WriteMode
+              mapM (hPutStrLn h) (udot u)
               hClose h
-              system (v ++ " " ++ f)
+              system $ v ++ " " ++ f
               return ()
-    where g = graph u
-          f = "/tmp/hsc.dot"
+
+draw' :: UGen -> IO ()
+draw' u = do v <- getEnvDefault "DOTVIEWER" "dotty"
+             draw v u
