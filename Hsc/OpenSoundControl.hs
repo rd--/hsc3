@@ -65,7 +65,10 @@ unosc' [] [] = []
 unosc' (c:cs) b  = u8v_osc c (take n b) : unosc' cs (drop n b)
     where n = osc_sz' c b
 
-unosc :: U8v -> (String, [Osc])
+type OscM = (String, [Osc])
+type OscB = (Double, [OscM])
+
+unosc :: U8v -> OscM
 unosc b = (cmd, arg)
     where n               = osc_sz'  's' b
           (OscString cmd) = u8v_osc 's' b

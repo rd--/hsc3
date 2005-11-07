@@ -1,9 +1,10 @@
 module Hsc.Udp where
 
-import Network.Socket
-
 import Hsc.U8v
 import Hsc.OpenSoundControl
+
+import Network.Socket
+import Control.Exception
 
 sc :: IO Socket
 sc = do fd <- socket AF_INET Datagram 0
@@ -19,7 +20,11 @@ recv' :: Socket -> IO U8v
 recv' fd   = do b <- recv fd 8192
                 return (str_u8v b)
 
-sync' :: Socket -> String -> U8v -> IO Bool
-sync' fd rply b = do send' fd b
-                     r <- recv' fd
-                     return (rply == (fst (unosc r)))
+sync' :: Socket -> U8v -> IO OscM
+sync' fd b = do send' fd b
+                r <- recv' fd
+                return (unosc r)
+
+syncto' :: Socket -> String -> U8v -> IO Bool
+syncto' fd rpl b = do (c,_) <- sync' fd b
+                      return (c == rpl)
