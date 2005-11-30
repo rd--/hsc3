@@ -2,7 +2,7 @@ module Hsc.Dot (draw, draw') where
 
 import Hsc.UGen
 import Hsc.Graph
-import List (intersperse)
+import Data.List (intersperse)
 import System.IO
 import System.Cmd (system)
 import System.Directory (getTemporaryDirectory)

@@ -1,7 +1,7 @@
 module Hsc.List where
 
-import Maybe (fromJust)
-import List
+import Data.Maybe (fromJust)
+import Data.List
 
 instance Num a => Num [a] where
     negate         = map negate
