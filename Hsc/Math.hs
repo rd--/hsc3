@@ -25,7 +25,7 @@ instance Fractional UGen where
     fromRational a = Constant (fromRational a)
 
 instance Floating UGen where
-    pi             = Constant 3.141592653589793
+    pi             = Constant pi
     exp            = uop 15
     log            = uop 25
     sqrt           = uop 14
@@ -40,9 +40,10 @@ instance Floating UGen where
     sinh           = uop 34
     cosh           = uop 35
     tanh           = uop 36
-    asinh a        = Constant 0
-    acosh a        = Constant 0
-    atanh a        = Constant 0
+    -- cf. module Haskore.Interface.CSound.Orchestra
+    asinh x        = log (sqrt (x*x+1) + x)
+    acosh x        = log (sqrt (x*x-1) + x)
+    atanh x        = (log (1+x) - log (1-x)) / 2
 
 class (Num a, Fractional a, Floating a) => Op a where
     not            :: a -> a
