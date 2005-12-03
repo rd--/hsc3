@@ -50,8 +50,8 @@ ugen_u8v g (UGen r n i o s id)  = pstr_u8v n ++
                                   i16_u8v (length i) ++
                                   i16_u8v (length o) ++
                                   i16_u8v s ++ 
-                                  (concat $ map (input_u8v . (mkinput g)) i) ++
-                                  (concat $ map (i8_u8v . rateId) o)
+                                  concatMap (input_u8v . mkinput g) i ++
+                                  concatMap (i8_u8v . rateId) o
 
 graphdef :: String -> Graph -> U8v
 graphdef s g@(Graph n c u) = str_u8v "SCgf" ++
@@ -59,11 +59,11 @@ graphdef s g@(Graph n c u) = str_u8v "SCgf" ++
                              i16_u8v 1 ++
                              pstr_u8v s ++
                              i16_u8v (length n) ++
-                             (concat $ map (f32_u8v . nvalue) n) ++
+                             concatMap (f32_u8v . nvalue) n ++
                              i16_u8v (length c) ++
-                             (concat $ map (f32_u8v . cdefault) c) ++
+                             concatMap (f32_u8v . cdefault) c ++
                              i16_u8v (length c) ++
-                             (concat $ map (ugen_u8v g) c) ++
+                             concatMap (ugen_u8v g) c ++
                              i16_u8v (length u) ++
-                             (concat $ map (ugen_u8v g) u)
+                             concatMap (ugen_u8v g) u
 

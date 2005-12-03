@@ -37,7 +37,7 @@ osc_desc :: [Osc] -> U8v
 osc_desc l = osc_u8v (OscString $ ',' : (map osc_tag l))
 
 osc :: String -> [Osc] -> U8v
-osc cmd l = osc_u8v (OscString cmd) ++ osc_desc l ++ (concat $ map osc_u8v l)
+osc cmd l = osc_u8v (OscString cmd) ++ osc_desc l ++ concatMap osc_u8v l
 
 osc_sz :: Char -> U8v -> Int
 osc_sz 'i' _ = 4

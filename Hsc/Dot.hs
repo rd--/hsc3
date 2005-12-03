@@ -24,7 +24,7 @@ uedges u@(UGen _ _ i _ _ _) = map f i'
 uedges _                    = []
 
 edges :: Graph -> [UEdge]
-edges (Graph n c u) = concat (map uedges u)
+edges (Graph n c u) = concatMap uedges u
 
 bdot :: String -> String -> String -> String -> String
 bdot lbl shp clr slt = lbl

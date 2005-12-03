@@ -30,9 +30,9 @@ rateId KR = 1
 rateId AR = 2
 
 nodes :: UGen -> [UGen]
-nodes u@(UGen _ _ i _ _ _)  =  u : concat (map nodes i)
+nodes u@(UGen _ _ i _ _ _)  =  u : concatMap nodes i
 nodes (Proxy u i)           =  u : nodes u
-nodes (MCE u)               =  concat $ map nodes u
+nodes (MCE u)               =  concatMap nodes u
 nodes u                     =  [u]
 
 -- Apply depth first.
@@ -61,6 +61,6 @@ proxy :: UGen -> UGen
 proxy u@(UGen _ _ _ o _ _) = (MCE (map f [0..(n-1)]))
     where f = \i -> (Proxy u i)
           n = length o
-          
+
 proxyU :: Rate -> String -> [UGen] -> [Output] -> Special -> Int -> UGen
 proxyU r n i o s id = proxy (UGen r n i o s id)
