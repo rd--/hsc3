@@ -10,3 +10,7 @@ saw     r freq       = UGen r "Saw"     [freq]       [r] 0 0
 
 vosc  r b f phase    = UGen r "VOsc"    [b,f,phase]  [r] 0 0
 vosc3 r b f1 f2 f3   = UGen r "VOsc3"   [b,f1,f2,f3] [r] 0 0
+
+formant r f0 f bw = UGen r "Formant" [f0,f,bw] [r] 0 0
+
+pulse r freq width = UGen r "Pulse" [freq,width] [r] 0 0
