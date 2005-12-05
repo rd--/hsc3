@@ -25,4 +25,4 @@ Modulate frequency
 
 Modulate number of harmonics.
 
-> blip AR 200 (line KR 1 100 20) 0.2
+> blip AR 200 (line KR 1 100 20 2) * 0.2

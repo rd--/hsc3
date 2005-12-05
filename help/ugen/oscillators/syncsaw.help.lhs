@@ -9,4 +9,4 @@ waveform, so it may alias.
 The frequency of the slave synched sawtooth wave should always be
 greater than the syncFreq.
 
-> syncsaw AR 100 (line KR 100 800 12 2) 0.1
+> syncsaw AR 100 (line KR 100 800 12 2) * 0.1

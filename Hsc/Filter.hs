@@ -13,6 +13,8 @@ bpz2 r i         = UGen r "BPZ2" [i] [r] 0 0
 brf  r i freq rq = UGen r "BRF" [i,freq,rq] [r] 0 0
 brz2 r i         = UGen r "BRZ2" [i] [r] 0 0
 
+clip r i l h = UGen r "Clip" [i,l,h] [r] 0 0
+
 comb' c r i max dly dcy = UGen r c [i, max, dly, dcy] [r] 0 0
 combn = comb' "CombN"
 combl = comb' "CombL"
@@ -29,11 +31,21 @@ delayc = delay' "DelayC"
 delayl = delay' "DelayL"
 delayn = delay' "DelayN"
 
+formlet r i f a d = UGen r "Formlet" [i,f,a,d] [r] 0 0
+
 fos r i a0 a1 b1 = UGen r "FOS" [i,a0,a1,b1] [r] 0 0
+
+hpf r i f = UGen r "HPF"  [i,f] [r] 0 0
+hpz1 r i  = UGen r "HPZ1" [i]   [r] 0 0
+hpz2 r i  = UGen r "HPZ2" [i]   [r] 0 0
 
 lag  r i t = UGen r "Lag"  [i,t] [r] 0 0
 lag2 r i t = UGen r "Lag2" [i,t] [r] 0 0
 lag3 r i t = UGen r "Lag3" [i,t] [r] 0 0
+
+leakdc r i coef = UGen r "LeakDC" [i,coef] [r] 0 0
+
+linlin r i sl sh dl dh = UGen r "LinLin" [i,sl,sh,dl,dh] [r] 0 0
 
 lpf r i f = UGen r "LPF"  [i,f] [r] 0 0
 lpz1 r i  = UGen r "LPZ1" [i]   [r] 0 0
@@ -54,6 +66,8 @@ rlpf r i freq rq = UGen r "RLPF" [i,freq,rq] [r] 0 0
 
 resonz r i freq bwr = UGen r "Resonz" [i,freq,bwr] [r] 0 0
 ringz  r i freq dcy = UGen r "Ringz"  [i,freq,dcy] [r] 0 0
+
+slew r i up dn = UGen r "Slew" [i,up,dn] [r] 0 0
 
 sos r i a0 a1 a2 b1 b2 = UGen r "SOS" [i,a0,a1,a2,b1,b2] [r] 0 0
 

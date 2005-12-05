@@ -12,12 +12,12 @@ if the frequency is modulated by certain alternating signals.
 freq - frequency in Hertz
 iphase - initial phase
 
-Note this has an extra iphase argument from the SC2 variant.
+Note the phase argument, which was not in the SC2 variant.
 
-> fsinosc AR '(440 550) 0 0.05
+> fsinosc AR (MCE [440, 550]) 0 * 0.05
 
-> fsinosc AR (xline KR 200 4000 1) 0 0.25
+> fsinosc AR (xline KR 200 4000 1 2) 0 * 0.1
 
 Loses amplitude towards the end
 
-> fsinosc AR (fsinosc AR (xline KR 4 401 8) 0 200 800) 0 0.25
+> fsinosc AR (fsinosc AR (xline KR 4 401 8 2) 0 * 200 + 800) 0 * 0.1
