@@ -56,6 +56,8 @@ median r length i = UGen r "Median" [length,i] [r] 0 0
 onepole r i coef = UGen r "OnePole" [i,coef] [r] 0 0
 onezero r i coef = UGen r "OneZero" [i,coef] [r] 0 0
 
+pitchshift r i w p d t = UGen r "PitchShift" [i,w,p,d,t] [r] 0 0
+
 quad' c' r freq a b c xi = UGen r c' [freq,a,b,c,xi] [r] 0 0
 quadc = quad' "QuadC"
 quadl = quad' "QuadL"

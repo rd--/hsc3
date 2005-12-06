@@ -21,8 +21,6 @@ lfdnoise2    id r freq = UGen r "LFDNoise2"    [freq] [r] 0 id
 dust  id r density = UGen r "Dust"  [density] [r] 0 id
 dust2 id r density = UGen r "Dust2" [density] [r] 0 id
 
-linrand id r lo hi m = UGen r "LinRand" [lo,hi,m] [r] 0 id
-
 texprand id r lo hi trig = UGen r "TExpRand" [lo,hi,trig] [r] 0 id
 tirand   id r lo hi trig = UGen r "TIRand"   [lo,hi,trig] [r] 0 id
 trand    id r lo hi trig = UGen r "TRand"    [lo,hi,trig] [r] 0 id
