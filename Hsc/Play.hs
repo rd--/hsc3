@@ -18,7 +18,7 @@ hasOutputs (UGen _ _ _ o _ _) = length o > 0
 hasOutputs (MCE _)            = True
 hasOutputs _                  = False
 
-play fd u 
+play fd u
     | hasOutputs u = playu fd (out AR 0 u)
     | otherwise    = playu fd u
 

@@ -54,7 +54,7 @@ str_u8v s = map (asU8 . ord) s
 
 pstr_u8v :: String -> U8v
 pstr_u8v s = i8_u8v n ++ str_u8v s
-    where n = length s 
+    where n = length s
 
 u8v_str :: [U8] -> String
 u8v_str s = map (chr . fromIntegral) s

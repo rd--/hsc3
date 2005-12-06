@@ -21,7 +21,7 @@ osc_pad' :: Int -> Int
 osc_pad' n = n + 4 - (mod n 4)
 
 osc_pad :: [a] -> a -> [a]
-osc_pad s p = s ++ (replicate n p) 
+osc_pad s p = s ++ (replicate n p)
     where n = 4 - (mod (length s) 4)
 
 osc_u8v :: Osc -> U8v
@@ -29,7 +29,7 @@ osc_u8v (OscInt i)    = i32_u8v i
 osc_u8v (OscFloat f)  = f32_u8v f
 osc_u8v (OscDouble d) = f64_u8v d
 osc_u8v (OscString s) = osc_pad (str_u8v s) 0
-osc_u8v (OscBlob b)   = osc_u8v (OscInt n) ++ b' 
+osc_u8v (OscBlob b)   = osc_u8v (OscInt n) ++ b'
     where b' = osc_pad b 0
           n  = length b'
 

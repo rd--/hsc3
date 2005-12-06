@@ -58,4 +58,4 @@ c_getn id n      = osc "/c_getn" [OscInt id, OscInt n]
 
 -- Local Variables:
 -- truncate-lines:t
--- End:            
+-- End:

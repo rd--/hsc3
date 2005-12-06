@@ -35,4 +35,4 @@ pv_rectcomb2 r ba bb teeth phase width = UGen r "PV_RectComb2" [ba,bb,teeth,phas
 
 -- Local Variables:
 -- truncate-lines:t
--- End:            
+-- End:

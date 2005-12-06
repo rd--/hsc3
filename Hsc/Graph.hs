@@ -4,10 +4,10 @@ import Hsc.UGen
 import Hsc.List (uniq, findIndex')
 import Hsc.U8v
 
-data Graph = Graph [UGen] [UGen] [UGen] 
+data Graph = Graph [UGen] [UGen] [UGen]
              deriving (Eq, Show)
 
-data Input = Input Int Int 
+data Input = Input Int Int
              deriving (Eq, Show)
 
 implicit :: Int -> UGen
@@ -31,7 +31,7 @@ cindex (Graph _ c _) x = index' c x
 nindex (Graph n _ _) x = index' n x
 
 mkinput :: Graph -> UGen -> Input
-mkinput g u 
+mkinput g u
     | isConstant u      = Input (-1) (nindex g u)
     | isControl u       = Input 0 (cindex g u)
     | isUGen u          = Input (uindex g u) 0
@@ -49,7 +49,7 @@ ugen_u8v g (UGen r n i o s id)  = pstr_u8v n ++
                                   i8_u8v (rateId r) ++
                                   i16_u8v (length i) ++
                                   i16_u8v (length o) ++
-                                  i16_u8v s ++ 
+                                  i16_u8v s ++
                                   concatMap (input_u8v . mkinput g) i ++
                                   concatMap (i8_u8v . rateId) o
 

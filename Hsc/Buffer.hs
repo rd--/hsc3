@@ -30,6 +30,6 @@ bufrd n r buf phs lp intp = proxyU r "BufRd" [buf,phs,lp,intp] r' 0 0
 
 bufwr r buf phs lp i = UGen r "BufWr" ([buf,phs,lp] ++ forceMCE i) [] 0 0
 
-tgrains n r trg buf rate cntr dur pan amp interp = 
+tgrains n r trg buf rate cntr dur pan amp interp =
     proxyU r "TGrains" [trg,buf,rate,cntr,dur,pan,amp,interp] r' 0 0
     where r' = (replicate n r)

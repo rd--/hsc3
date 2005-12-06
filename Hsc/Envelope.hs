@@ -6,9 +6,9 @@ import Hsc.Math
 envgen r gate lvl bias scale done env =
     UGen r "EnvGen" ([gate,lvl,bias,scale,done] ++ env) [r] 0 0
 
-data EnvCurve = EnvStep 
-              | EnvLin | EnvExp 
-              | EnvSin | EnvCos 
+data EnvCurve = EnvStep
+              | EnvLin | EnvExp
+              | EnvSin | EnvCos
               | EnvNum UGen
               | EnvSqr | EnvCub
               deriving (Eq, Show)
