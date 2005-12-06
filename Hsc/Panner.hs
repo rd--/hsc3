@@ -9,3 +9,5 @@ pan4    r i x y level = proxyU r "Pan4"    [i,x,y,level]   [r,r,r,r] 0 0
 
 panb  r i az el level = proxyU r "PanB"    [i,az,el,level] [r,r,r,r] 0 0
 panb2 r i az    level = proxyU r "PanB2"   [i,az,level]    [r,r,r]   0 0
+
+rotate2 r x y pos     = proxyU r "Rotate2" [x,y,pos]       [r,r]     0 0
