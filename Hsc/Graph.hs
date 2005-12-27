@@ -44,8 +44,8 @@ input_u8v :: Input -> U8v
 input_u8v (Input u p) = i16_u8v u ++ i16_u8v p
 
 ugen_u8v :: Graph -> UGen -> U8v
-ugen_u8v g c@(Control r n v)    = pstr_u8v n ++ i16_u8v (cindex g c)
-ugen_u8v g (UGen r n i o s id)  = pstr_u8v n ++
+ugen_u8v g c@(Control _ n _)    = pstr_u8v n ++ i16_u8v (cindex g c)
+ugen_u8v g (UGen r n i o s _)   = pstr_u8v n ++
                                   i8_u8v (rateId r) ++
                                   i16_u8v (length i) ++
                                   i16_u8v (length o) ++

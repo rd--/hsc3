@@ -18,10 +18,10 @@ data UType    = ConstantT | ControlT | UGenT | ProxyT | MCET
                 deriving (Eq, Show)
 
 rate :: UGen -> Rate
-rate (Constant a)       =  IR
+rate (Constant _)       =  IR
 rate (Control r _ _)    =  r
 rate (UGen r _ _ _ _ _) =  r
-rate (Proxy u i)        =  rate u
+rate (Proxy u _)        =  rate u
 rate (MCE u)            =  maximum $ map rate u
 
 rateId :: Rate -> Int
@@ -31,7 +31,7 @@ rateId AR = 2
 
 nodes :: UGen -> [UGen]
 nodes u@(UGen _ _ i _ _ _)  =  u : concatMap nodes i
-nodes (Proxy u i)           =  u : nodes u
+nodes (Proxy u _)           =  u : nodes u
 nodes (MCE u)               =  concatMap nodes u
 nodes u                     =  [u]
 

@@ -10,7 +10,7 @@ instance Num a => Num [a] where
     (*)            = zipWith (*)
     abs            = map abs
     signum         = map signum
-    fromInteger i  = []
+    fromInteger _  = []
 
 uniq :: (Eq a) => [a] -> [a]
 uniq []     = []

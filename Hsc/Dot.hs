@@ -17,14 +17,14 @@ uterminal u                  = (u,0)
 
 uedges :: UGen -> [UEdge]
 uedges u@(UGen _ _ i _ _ _) = map f i'
-    where g (u,i)  = or [isUGen u, isProxy u]
+    where g (u,_)  = or [isUGen u, isProxy u]
           n        = length i - 1
           i'       = filter g $ zip i [0..n]
           f (i, j) = (uterminal i, (u, j))
 uedges _                    = []
 
 edges :: Graph -> [UEdge]
-edges (Graph n c u) = concatMap uedges u
+edges (Graph _ _ u) = concatMap uedges u
 
 bdot :: String -> String -> String -> String -> String
 bdot lbl shp clr slt = lbl
@@ -56,7 +56,7 @@ ratecolor KR = "blue"
 ratecolor IR = "yellow"
 
 idot :: UGen -> Int -> String
-idot (Constant n) i = show n
+idot (Constant n) _ = show n
 idot _            i = "<I_" ++ show i ++ ">"
 
 uname :: String -> Int -> String
@@ -69,7 +69,7 @@ uname "BinaryOpUGen"  4 = "/"
 uname n               _ = n
 
 ndot :: Graph -> UGen -> String
-ndot g u@(UGen r n i o s id) = rdot lbl clr [upr,lwr]
+ndot g u@(UGen r n i o s _) = rdot lbl clr [upr,lwr]
     where lbl = nlabel g u
           clr = ratecolor r
           i'  = length i - 1
@@ -77,7 +77,7 @@ ndot g u@(UGen r n i o s id) = rdot lbl clr [upr,lwr]
           o'  = length o - 1
           lwr = map (\j -> "<O_" ++ show j ++ ">") [0..o']
 
-ndot g u@(Control r n d) = nlabel g u
+ndot g u@(Control r n _) = nlabel g u
                            ++ "[shape=\"trapezium\", color=\""
                            ++ ratecolor r
                            ++ "\",label=\""
@@ -85,7 +85,7 @@ ndot g u@(Control r n d) = nlabel g u
                            ++ "];"
 
 gdot :: Graph -> [String]
-gdot g@(Graph n c u) = ["digraph Anonymous {"]
+gdot g@(Graph _ c u) = ["digraph Anonymous {"]
                        ++ map (ndot g) c
                        ++ map (ndot g) u
                        ++ map (edot g) (edges g)

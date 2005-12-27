@@ -4,7 +4,6 @@ import Hsc.U8v
 import Hsc.OpenSoundControl
 
 import Network.Socket
-import Control.Exception
 
 sc :: IO Socket
 sc = do fd <- socket AF_INET Datagram 0

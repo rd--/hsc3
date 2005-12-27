@@ -4,8 +4,8 @@ import Data.Int (Int32, Int64)
 import Data.Word (Word8)
 import Data.Bits (Bits, shiftL, shiftR, (.&.))
 import Data.Char (chr, ord)
-import Control.Monad.ST (ST, runST)
-import Data.Array.ST (STUArray, newArray, readArray, castSTUArray)
+import Control.Monad.ST (runST)
+import Data.Array.ST (newArray, readArray, castSTUArray)
 
 type Float32 = Float
 type Float64 = Double

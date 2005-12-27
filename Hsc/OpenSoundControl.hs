@@ -45,6 +45,7 @@ osc_sz 'f' _ = 4
 osc_sz 'd' _ = 8
 osc_sz 's' b = elemIndex' 0 b
 osc_sz 'b' b = u8v_i32 (take 4 b)
+osc_sz _   _ = error "illegal osc type"
 
 osc_sz' :: Char -> U8v -> Int
 osc_sz' 'i' _ = 4
@@ -52,6 +53,7 @@ osc_sz' 'f' _ = 4
 osc_sz' 'd' _ = 8
 osc_sz' 's' b = osc_pad' $ elemIndex' 0 b
 osc_sz' 'b' b = osc_pad' $ u8v_i32 (take 4 b)
+osc_sz' _   _ = error "illegal osc type"
 
 u8v_osc :: Char -> U8v -> Osc
 u8v_osc 'i' b = OscInt $ u8v_i32 b
@@ -59,10 +61,11 @@ u8v_osc 'f' b = OscFloat $ u8v_f32 b
 u8v_osc 'd' b = OscDouble $ u8v_f64 b
 u8v_osc 's' b = OscString $ u8v_str $ take n b where n = osc_sz 's' b
 u8v_osc 'b' b = OscBlob $ take n (drop 4 b) where n = osc_sz 'b' b
+u8v_osc _   _ = error "illegal osc type"
 
 unosc' :: [Char] -> U8v -> [Osc]
-unosc' [] [] = []
-unosc' (c:cs) b  = u8v_osc c (take n b) : unosc' cs (drop n b)
+unosc' []     _ = []
+unosc' (c:cs) b = u8v_osc c (take n b) : unosc' cs (drop n b)
     where n = osc_sz' c b
 
 type OscM = (String, [Osc])

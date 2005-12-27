@@ -19,7 +19,7 @@ env_curve EnvLin     = 1.0
 env_curve EnvExp     = 2.0
 env_curve EnvSin     = 3.0
 env_curve EnvCos     = 4.0
-env_curve (EnvNum u) = 5.0
+env_curve (EnvNum _) = 5.0
 env_curve EnvSqr     = 6.0
 env_curve EnvCub     = 7.0
 
