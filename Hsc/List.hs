@@ -25,5 +25,6 @@ elemIndex' e l = fromJust $ elemIndex e l
 -- Unsafe...
 
 invert :: [[a]] -> [[a]]
-invert l = map (\n -> (map (!! n) l)) [0..n]
-    where n = (length (head l)) - 1
+invert l = map f [0..n]
+    where f n = map (!! n) l
+          n   = (length (head l)) - 1

@@ -59,8 +59,8 @@ isMCE u                       = utype u == MCET
 
 proxy :: UGen -> UGen
 proxy u@(UGen _ _ _ o _ _) = (MCE (map f [0..(n-1)]))
-    where f = \i -> (Proxy u i)
-          n = length o
+    where f i = (Proxy u i)
+          n   = length o
 
 proxyU :: Rate -> String -> [UGen] -> [Output] -> Special -> Int -> UGen
 proxyU r n i o s id = proxy (UGen r n i o s id)

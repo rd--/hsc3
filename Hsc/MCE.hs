@@ -29,5 +29,5 @@ mce (UGen r n i o s id) = MCE (map f i')
 -- Out and such like use this to force any required MCE.
 
 forceMCE :: UGen -> [UGen]
-forceMCE u = mcel $ traverseu (\u -> if reqMCE u then mce u else u) u
-
+forceMCE u = mcel $ traverseu f u
+    where f u = if reqMCE u then mce u else u
