@@ -19,7 +19,7 @@ hasOutputs (MCE _)            = True
 hasOutputs _                  = False
 
 play fd u
-    | hasOutputs u = playu fd (out AR 0 u)
+    | hasOutputs u = playu fd (out 0 u)
     | otherwise    = playu fd u
 
 init_ fd = do send' fd (g_new 1 1 0)

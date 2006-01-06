@@ -58,9 +58,15 @@ isProxy u                     = utype u == ProxyT
 isMCE u                       = utype u == MCET
 
 proxy :: UGen -> UGen
-proxy u@(UGen _ _ _ o _ _) = (MCE (map f [0..(n-1)]))
+proxy u@(UGen _ _ _ o _ _) 
+    | length o > 1 = (MCE (map f [0..(n-1)]))
+    | otherwise    = u
     where f i = (Proxy u i)
           n   = length o
 
 proxyU :: Rate -> String -> [UGen] -> [Output] -> Special -> Int -> UGen
 proxyU r n i o s id = proxy (UGen r n i o s id)
+
+mkFilter c i o s id = proxyU r c i o' s id
+    where r = maximum (map rate i)
+          o'= replicate o r

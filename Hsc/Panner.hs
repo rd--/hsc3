@@ -2,12 +2,12 @@ module Hsc.Panner where
 
 import Hsc.UGen
 
-linpan2 r i x   level = proxyU r "LinPan2" [i,x,level]     [r,r]     0 0
+linpan2 i x   level = mkFilter "LinPan2" [i,x,level]     2 0 0
 
-pan2    r i x   level = proxyU r "Pan2"    [i,x,level]     [r,r]     0 0
-pan4    r i x y level = proxyU r "Pan4"    [i,x,y,level]   [r,r,r,r] 0 0
+pan2    i x   level = mkFilter "Pan2"    [i,x,level]     2 0 0
+pan4    i x y level = mkFilter "Pan4"    [i,x,y,level]   4 0 0
 
-panb  r i az el level = proxyU r "PanB"    [i,az,el,level] [r,r,r,r] 0 0
-panb2 r i az    level = proxyU r "PanB2"   [i,az,level]    [r,r,r]   0 0
+panb  i az el level = mkFilter "PanB"    [i,az,el,level] 4 0 0
+panb2 i az    level = mkFilter "PanB2"   [i,az,level]    3 0 0
 
-rotate2 r x y pos     = proxyU r "Rotate2" [x,y,pos]       [r,r]     0 0
+rotate2 x y pos     = mkFilter "Rotate2" [x,y,pos]       2 0 0

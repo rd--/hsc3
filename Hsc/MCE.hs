@@ -31,3 +31,11 @@ mce (UGen r n i o s id) = MCE (map f i')
 forceMCE :: UGen -> [UGen]
 forceMCE u = mcel $ traverseu f u
     where f u = if reqMCE u then mce u else u
+
+mceInputs [x]    = forceMCE x
+mceInputs (x:xs) = x : mceInputs xs
+mceInputs []     = error "no inputs"
+
+mkFilterMCE c i o s id = UGen r c (mceInputs i) o' s id
+    where r = maximum (map rate i)
+          o'= replicate o r

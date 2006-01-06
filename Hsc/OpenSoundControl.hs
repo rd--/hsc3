@@ -20,6 +20,9 @@ osc_tag (OscBlob _)   = 'b'
 osc_pad' :: Int -> Int
 osc_pad' n = n + 4 - (mod n 4)
 
+osc_pad'' :: Int -> Int
+osc_pad'' n = if (mod n 4) == 0 then n else osc_pad' n
+
 osc_pad :: [a] -> a -> [a]
 osc_pad s p = s ++ (replicate n p)
     where n = 4 - (mod (length s) 4)
@@ -48,12 +51,7 @@ osc_sz 'b' b = u8v_i32 (take 4 b)
 osc_sz _   _ = error "illegal osc type"
 
 osc_sz' :: Char -> U8v -> Int
-osc_sz' 'i' _ = 4
-osc_sz' 'f' _ = 4
-osc_sz' 'd' _ = 8
-osc_sz' 's' b = osc_pad' $ elemIndex' 0 b
-osc_sz' 'b' b = osc_pad' $ u8v_i32 (take 4 b)
-osc_sz' _   _ = error "illegal osc type"
+osc_sz' c  b = osc_pad'' (osc_sz c b)
 
 u8v_osc :: Char -> U8v -> Osc
 u8v_osc 'i' b = OscInt $ u8v_i32 b
@@ -73,8 +71,8 @@ type OscB = (Double, [OscM])
 
 unosc :: U8v -> OscM
 unosc b = (cmd, arg)
-    where n               = osc_sz'  's' b
+    where n               = osc_sz' 's' b
           (OscString cmd) = u8v_osc 's' b
-          m               = osc_sz'  's' (drop n b)
+          m               = osc_sz' 's' (drop n b)
           (OscString dsc) = u8v_osc 's' (drop n b)
           arg             = unosc' (drop 1 dsc) (drop (n + m) b)
