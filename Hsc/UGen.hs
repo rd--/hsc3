@@ -2,18 +2,14 @@ module Hsc.UGen where
 
 data Rate     = IR | KR | AR
                 deriving (Eq, Ord, Show)
-
 type Output   = Rate
-
 type Special  = Int
-
 data UGen     = Constant Float
               | Control Rate String Float
               | UGen Rate String [UGen] [Output] Special Int
               | Proxy UGen Int
               | MCE [UGen]
                 deriving (Eq, Show)
-
 data UType    = ConstantT | ControlT | UGenT | ProxyT | MCET
                 deriving (Eq, Show)
 

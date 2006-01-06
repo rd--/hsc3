@@ -8,4 +8,4 @@ for exponential decaying envelopes triggered by impulses.
 
 Used as an envelope.
 
-> decay AR (impulse AR (xline KR 1 50 20 2) 0.25) 0.2 * (pinknoise 0 AR)
+> decay (impulse AR (xline KR 1 50 20 2) 0.25) 0.2 * (pinknoise 0 AR)

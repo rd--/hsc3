@@ -3,17 +3,17 @@ module Hsc.Buffer where
 import Hsc.UGen
 import Hsc.MCE
 
-bufallpass' c r buf i dly dcy = UGen r c [buf,i,dly,dcy] [r] 0 0
+bufallpass' c buf i dly dcy = mkFilter c [buf,i,dly,dcy] 1 0 0
 bufallpassc = bufallpass' "BufAllpassC"
 bufallpassl = bufallpass' "BufAllpassL"
 bufallpassn = bufallpass' "BufAllpassN"
 
-bufcomb' c r buf i dly dcy = UGen r c [buf,i,dly,dcy] [r] 0 0
+bufcomb' c buf i dly dcy = mkFilter c [buf,i,dly,dcy] 1 0 0
 bufcombc = bufcomb' "BufCombC"
 bufcombl = bufcomb' "BufCombL"
 bufcombn = bufcomb' "BufCombN"
 
-bufdelay' c r buf i dly = UGen r c [buf,i,dly] [r] 0 0
+bufdelay' c buf i dly = mkFilter c [buf,i,dly] 1 0 0
 bufdelayc = bufdelay' "BufDelayC"
 bufdelayl = bufdelay' "BufDelayL"
 bufdelayn = bufdelay' "BufDelayN"
@@ -28,7 +28,7 @@ bufsamples    r buf = UGen r "BufSamples"    [buf] [r] 0 0
 bufrd n r buf phs lp intp = proxyU r "BufRd" [buf,phs,lp,intp] r' 0 0
     where r' = (replicate n r)
 
-bufwr r buf phs lp i = UGen r "BufWr" ([buf,phs,lp] ++ forceMCE i) [] 0 0
+bufwr buf phs lp i = mkFilterMCE "BufWr" [buf,phs,lp,i] 0 0 0
 
 tgrains n r trg buf rate cntr dur pan amp interp =
     proxyU r "TGrains" [trg,buf,rate,cntr,dur,pan,amp,interp] r' 0 0
