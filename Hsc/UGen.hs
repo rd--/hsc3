@@ -1,7 +1,7 @@
 module Hsc.UGen where
 
-data Rate     = IR | KR | AR
-                deriving (Eq, Ord, Show)
+data Rate     = IR | KR | AR | DR
+                deriving (Eq, Show)
 type Output   = Rate
 type Special  = Int
 data UGen     = Constant Float
@@ -12,6 +12,14 @@ data UGen     = Constant Float
                 deriving (Eq, Show)
 data UType    = ConstantT | ControlT | UGenT | ProxyT | MCET
                 deriving (Eq, Show)
+
+rateord IR = 0
+rateord DR = 1
+rateord KR = 2
+rateord AR = 3
+
+instance Ord Rate where
+    compare a b = compare (rateord a) (rateord b)
 
 rate :: UGen -> Rate
 rate (Constant _)       =  IR
@@ -24,6 +32,7 @@ rateId :: Rate -> Int
 rateId IR = 0
 rateId KR = 1
 rateId AR = 2
+rateID DR = 3
 
 nodes :: UGen -> [UGen]
 nodes u@(UGen _ _ i _ _ _)  =  u : concatMap nodes i

@@ -54,6 +54,7 @@ ratecolor :: Rate -> String
 ratecolor AR = "black"
 ratecolor KR = "blue"
 ratecolor IR = "yellow"
+ratecolor DR = "red"
 
 idot :: UGen -> Int -> String
 idot (Constant n) _ = show n
