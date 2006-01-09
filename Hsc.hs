@@ -6,6 +6,7 @@ module Hsc (module Hsc.List,
             module Hsc.Dot,
             module Hsc.Math,
             module Hsc.Buffer,
+            module Hsc.Demand,
             module Hsc.Envelope,
             module Hsc.Filter,
             module Hsc.FFT,
@@ -29,6 +30,7 @@ import Hsc.Graph
 import Hsc.Dot
 import Hsc.Math
 import Hsc.Buffer
+import Hsc.Demand
 import Hsc.Envelope
 import Hsc.Filter
 import Hsc.FFT
