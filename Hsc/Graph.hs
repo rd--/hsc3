@@ -66,4 +66,3 @@ graphdef s g@(Graph n c u) = str_u8v "SCgf" ++
                              concatMap (ugen_u8v g) c ++
                              i16_u8v (length u) ++
                              concatMap (ugen_u8v g) u
-

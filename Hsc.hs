@@ -67,3 +67,7 @@ pg f = out 0 $ pan2 i l 1
 pt = out 0 $ pan2 i l 0.1
     where i = sinosc AR 440 0
           l = mousex KR (-1) 1 0 0.1
+
+ps = MRG [a, b]
+    where a = pauseself (mousex KR (-1) 1 0 0.1)
+          b = out 0 (sinosc AR 440 0 * 0.1)

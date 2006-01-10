@@ -53,3 +53,6 @@ envsine dur lvl = env [0.0, lvl, 0.0] [n, n] c (-1.0) (-1.0)
 
 xline r start end dur done = UGen r "XLine" [start,end,dur,done] [r] 0 r0
 line  r start end dur done = UGen r "Line"  [start,end,dur,done] [r] 0 r0
+
+freeself  i = mkFilter "FreeSelf"  [i] 1 0 r0
+pauseself i = mkFilter "PauseSelf" [i] 1 0 r0
