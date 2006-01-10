@@ -4,7 +4,7 @@ import Hsc.UGen
 import Hsc.Math
 
 envgen r gate lvl bias scale done env =
-    UGen r "EnvGen" ([gate,lvl,bias,scale,done] ++ env) [r] 0 0
+    UGen r "EnvGen" ([gate,lvl,bias,scale,done] ++ env) [r] 0 r0
 
 data EnvCurve = EnvStep
               | EnvLin | EnvExp
@@ -51,5 +51,5 @@ envsine dur lvl = env [0.0, lvl, 0.0] [n, n] c (-1.0) (-1.0)
     where c = [EnvSin, EnvSin]
           n = dur / 2.0
 
-xline r start end dur done = UGen r "XLine" [start,end,dur,done] [r] 0 0
-line  r start end dur done = UGen r "Line"  [start,end,dur,done] [r] 0 0
+xline r start end dur done = UGen r "XLine" [start,end,dur,done] [r] 0 r0
+line  r start end dur done = UGen r "Line"  [start,end,dur,done] [r] 0 r0

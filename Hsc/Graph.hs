@@ -11,7 +11,7 @@ data Input = Input Int Int
              deriving (Eq, Show)
 
 implicit :: Int -> UGen
-implicit n = UGen KR "Control" [] (replicate n KR) 0 0
+implicit n = UGen KR "Control" [] (replicate n KR) 0 r0
 
 graph :: UGen -> Graph
 graph root = Graph n c u'

@@ -4,14 +4,19 @@ data Rate     = IR | KR | AR | DR
                 deriving (Eq, Show)
 type Output   = Rate
 type Special  = Int
+data UId      = UId Int
+                deriving (Eq, Show)
 data UGen     = Constant Float
               | Control Rate String Float
-              | UGen Rate String [UGen] [Output] Special Int
+              | UGen Rate String [UGen] [Output] Special UId
               | Proxy UGen Int
               | MCE [UGen]
                 deriving (Eq, Show)
 data UType    = ConstantT | ControlT | UGenT | ProxyT | MCET
                 deriving (Eq, Show)
+
+r0 = UId 0
+r1 = UId 1
 
 rateord IR = 0
 rateord DR = 1
@@ -63,13 +68,13 @@ isProxy u                     = utype u == ProxyT
 isMCE u                       = utype u == MCET
 
 proxy :: UGen -> UGen
-proxy u@(UGen _ _ _ o _ _) 
+proxy u@(UGen _ _ _ o _ _)
     | length o > 1 = (MCE (map f [0..(n-1)]))
     | otherwise    = u
     where f i = (Proxy u i)
           n   = length o
 
-proxyU :: Rate -> String -> [UGen] -> [Output] -> Special -> Int -> UGen
+proxyU :: Rate -> String -> [UGen] -> [Output] -> Special -> UId -> UGen
 proxyU r n i o s id = proxy (UGen r n i o s id)
 
 mkFilter c i o s id = proxyU r c i o' s id

@@ -3,11 +3,11 @@ module Hsc.Math where
 import Hsc.UGen
 
 binop :: Special -> UGen -> UGen -> UGen
-binop i a b =  UGen r "BinaryOpUGen" [a,b] [r] i 0
+binop i a b =  UGen r "BinaryOpUGen" [a,b] [r] i r0
     where r = max (rate a) (rate b)
 
 uop :: Special -> UGen -> UGen
-uop   i a   =  UGen r "UnaryOpUGen"  [a]   [r] i 0
+uop   i a   =  UGen r "UnaryOpUGen"  [a]   [r] i r0
     where r = rate a
 
 instance Num UGen where

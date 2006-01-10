@@ -33,5 +33,5 @@ rand    id r lo hi   = UGen r "Rand"    [lo,hi]   [r] 0 id
 exprand id r lo hi   = UGen r "ExpRand" [lo,hi]   [r] 0 id
 linrand id r lo hi m = UGen r "LinRand" [lo,hi,m] [r] 0 id
 
-hasher r i = UGen r "Hasher" [i] [r] 0 0
-mantissamask r i bits = UGen r "MantissaMask" [i,bits] [r] 0 0
+hasher r i            = UGen r "Hasher"       [i]      [r] 0 r0
+mantissamask r i bits = UGen r "MantissaMask" [i,bits] [r] 0 r0
