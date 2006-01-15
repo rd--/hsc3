@@ -1,7 +1,6 @@
 module Hsc.Buffer where
 
-import Hsc.UGen
-import Hsc.MCE
+import Hsc.Construct
 
 bufallpass' c buf i dly dcy = mkFilter c [buf,i,dly,dcy] 1 0 r0
 bufallpassc = bufallpass' "BufAllpassC"
@@ -18,18 +17,15 @@ bufdelayc = bufdelay' "BufDelayC"
 bufdelayl = bufdelay' "BufDelayL"
 bufdelayn = bufdelay' "BufDelayN"
 
-bufchannels   r buf = UGen r "BufChannels"   [buf] [r] 0 r0
-bufdur        r buf = UGen r "BufDur"        [buf] [r] 0 r0
-bufframes     r buf = UGen r "BufFrames"     [buf] [r] 0 r0
-bufratescale  r buf = UGen r "BufRateScale"  [buf] [r] 0 r0
-bufsamplerate r buf = UGen r "BufSampleRate" [buf] [r] 0 r0
-bufsamples    r buf = UGen r "BufSamples"    [buf] [r] 0 r0
+bufchannels   r buf = mkOsc r "BufChannels"   [buf] 1 0 r0
+bufdur        r buf = mkOsc r "BufDur"        [buf] 1 0 r0
+bufframes     r buf = mkOsc r "BufFrames"     [buf] 1 0 r0
+bufratescale  r buf = mkOsc r "BufRateScale"  [buf] 1 0 r0
+bufsamplerate r buf = mkOsc r "BufSampleRate" [buf] 1 0 r0
+bufsamples    r buf = mkOsc r "BufSamples"    [buf] 1 0 r0
 
-bufrd n r buf phs lp intp = proxyU r "BufRd" [buf,phs,lp,intp] r' 0 r0
-    where r' = (replicate n r)
+bufrd n r buf phs lp intp = mkOsc r "BufRd" [buf,phs,lp,intp] n 0 r0
+bufwr buf phs lp i = mkFilterMCE "BufWr" [buf,phs,lp] i 0 0 r0
 
-bufwr buf phs lp i = mkFilterMCE "BufWr" [buf,phs,lp,i] 0 0 r0
-
-tgrains n r trg buf rate cntr dur pan amp interp =
-    proxyU r "TGrains" [trg,buf,rate,cntr,dur,pan,amp,interp] r' 0 r0
-    where r' = (replicate n r)
+tgrains n r trg buf rate cntr dur pan amp interp = mkOsc r "TGrains" i n 0 r0
+    where i = [trg,buf,rate,cntr,dur,pan,amp,interp]

@@ -1,14 +1,13 @@
 module Hsc.Math where
 
 import Hsc.UGen
+import Hsc.Construct
 
 binop :: Special -> UGen -> UGen -> UGen
-binop i a b =  UGen r "BinaryOpUGen" [a,b] [r] i r0
-    where r = max (rate a) (rate b)
+binop i a b = mkFilter "BinaryOpUGen" [a,b] 1 i (UId 0)
 
 uop :: Special -> UGen -> UGen
-uop   i a   =  UGen r "UnaryOpUGen"  [a]   [r] i r0
-    where r = rate a
+uop   i a   = mkFilter "UnaryOpUGen"  [a]   1 i (UId 0)
 
 instance Num UGen where
     negate         = uop 0

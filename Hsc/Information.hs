@@ -1,12 +1,12 @@
 module Hsc.Information where
 
-import Hsc.UGen
+import Hsc.Construct
 
-numaudiobuses    r = UGen r "NumAudioBuses"    [] [r] 0 r0
-numbuffers       r = UGen r "NumBuffers"       [] [r] 0 r0
-numcontrolbuses  r = UGen r "NumControlBuses"  [] [r] 0 r0
-numinputbuses    r = UGen r "NumInputBuses"    [] [r] 0 r0
-numoutputbuses   r = UGen r "NumOutputBuses"   [] [r] 0 r0
-numrunningsynths r = UGen r "NumRunningSynths" [] [r] 0 r0
-sampledur        r = UGen r "SampleDur"        [] [r] 0 r0
-samplerate       r = UGen r "SampleRate"       [] [r] 0 r0
+numaudiobuses    r = mkOsc r "NumAudioBuses"    [] 1 0 r0
+numbuffers       r = mkOsc r "NumBuffers"       [] 1 0 r0
+numcontrolbuses  r = mkOsc r "NumControlBuses"  [] 1 0 r0
+numinputbuses    r = mkOsc r "NumInputBuses"    [] 1 0 r0
+numoutputbuses   r = mkOsc r "NumOutputBuses"   [] 1 0 r0
+numrunningsynths r = mkOsc r "NumRunningSynths" [] 1 0 r0
+sampledur        r = mkOsc r "SampleDur"        [] 1 0 r0
+samplerate       r = mkOsc r "SampleRate"       [] 1 0 r0

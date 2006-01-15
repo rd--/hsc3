@@ -11,7 +11,7 @@ data Input = Input Int Int
              deriving (Eq, Show)
 
 implicit :: Int -> UGen
-implicit n = UGen KR "Control" [] (replicate n KR) 0 r0
+implicit n = UGen KR "Control" [] (replicate n KR) 0 (UId 0)
 
 graph :: UGen -> Graph
 graph root = Graph n c u'
@@ -30,12 +30,13 @@ uindex (Graph _ _ u) x = index' u x
 cindex (Graph _ c _) x = index' c x
 nindex (Graph n _ _) x = index' n x
 
-mkinput :: Graph -> UGen -> Input
-mkinput g u
+mkInput :: Graph -> UGen -> Input
+mkInput g u
     | isConstant u      = Input (-1) (nindex g u)
     | isControl u       = Input 0 (cindex g u)
     | isUGen u          = Input (uindex g u) 0
-mkinput g (Proxy u n)   = Input (uindex g u) n
+mkInput g (Proxy u n)   = Input (uindex g u) n
+mkInput g u             = error ("illegal input: " ++ show u)
 
 nvalue   (Constant n)    = n
 cdefault (Control _ _ n) = n
@@ -50,7 +51,7 @@ ugen_u8v g (UGen r n i o s _)   = pstr_u8v n ++
                                   i16_u8v (length i) ++
                                   i16_u8v (length o) ++
                                   i16_u8v s ++
-                                  concatMap (input_u8v . mkinput g) i ++
+                                  concatMap (input_u8v . mkInput g) i ++
                                   concatMap (i8_u8v . rateId) o
 
 graphdef :: String -> Graph -> U8v

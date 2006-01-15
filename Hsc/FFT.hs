@@ -1,6 +1,7 @@
 module Hsc.FFT where
 
 import Hsc.UGen
+import Hsc.Construct
 
-fft  r buf i = UGen r "FFT"  [buf,i] [r] 0 r0
-ifft r buf   = UGen r "IFFT" [buf]   [r] 0 r0
+fft  buf i = mkOsc KR "FFT"  [buf,i] 1 0 r0
+ifft buf   = mkOsc AR "IFFT" [buf]   1 0 r0

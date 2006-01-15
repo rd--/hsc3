@@ -2,6 +2,7 @@ module Hsc (module Hsc.List,
             module Hsc.U8v,
             module Hsc.UGen,
             module Hsc.MCE,
+            module Hsc.Construct,
             module Hsc.Graph,
             module Hsc.Dot,
             module Hsc.Math,
@@ -26,6 +27,7 @@ import Hsc.List
 import Hsc.U8v
 import Hsc.UGen
 import Hsc.MCE
+import Hsc.Construct
 import Hsc.Graph
 import Hsc.Dot
 import Hsc.Math

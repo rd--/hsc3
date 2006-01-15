@@ -1,37 +1,38 @@
 module Hsc.PV where
 
 import Hsc.UGen
+import Hsc.Construct
 
-pv_add ba bb = UGen KR "PV_Add" [ba,bb] [KR] 0 r0
-pv_binscramble buf wp width trg = UGen KR "PV_BinScramble" [buf,wp,width,trg] [KR] 0 r0
-pv_binshift buf str shift = UGen KR "PV_BinShift" [buf,str,shift] [KR] 0 r0
-pv_binwipe ba bb wp = UGen KR "PV_BinWipe" [ba,bb,wp] [KR] 0 r0
-pv_brickwall buf wp = UGen KR "PV_BrickWall" [buf,wp] [KR] 0 r0
-pv_conformalmap buf real imag = UGen KR "PV_ConformalMap" [buf,real,imag] [KR] 0 r0
-pv_copyphase ba bb = UGen KR "PV_CopyPhase" [ba,bb] [KR] 0 r0
-pv_diffuser buf trg = UGen KR "PV_Diffuser" [buf,trg] [KR] 0 r0
-pv_hainsworthfoote buf h f thr wait = UGen KR "PV_HainsworthFoote" [buf,h,f,thr,wait] [KR] 0 r0
-pv_jensenandersen buf sc hfe hfc sf thr wait = UGen KR "PV_JensenAndersen" [buf,sc,hfe,hfc,sf,thr,wait] [KR] 0 r0
-pv_localmax buf thr = UGen KR "PV_LocalMax" [buf,thr] [KR] 0 r0
-pv_magabove buf thr = UGen KR "PV_MagAbove" [buf,thr] [KR] 0 r0
-pv_magbelow buf thr = UGen KR "PV_MagBelow" [buf,thr] [KR] 0 r0
-pv_magclip buf thr = UGen KR "PV_MagClip" [buf,thr] [KR] 0 r0
-pv_magfreeze buf frz = UGen KR "PV_MagFreeze" [buf,frz] [KR] 0 r0
-pv_magmul ba bb = UGen KR "PV_MagMul" [ba,bb] [KR] 0 r0
-pv_magnoise buf = UGen KR "PV_MagNoise" [buf] [KR] 0 r0
-pv_magshift buf str shift = UGen KR "PV_MagShift" [buf,str,shift] [KR] 0 r0
-pv_magsmear buf bins = UGen KR "PV_MagSmear" [buf,bins] [KR] 0 r0
-pv_magsquared buf = UGen KR "PV_MagSquared" [buf] [KR] 0 r0
-pv_max ba bb = UGen KR "PV_Max" [ba,bb] [KR] 0 r0
-pv_min ba bb = UGen KR "PV_Min" [ba,bb] [KR] 0 r0
-pv_mul ba bb = UGen KR "PV_Mul" [ba,bb] [KR] 0 r0
-pv_phaseshift buf shift = UGen KR "PV_PhaseShift" [buf,shift] [KR] 0 r0
-pv_phaseshift270 buf = UGen KR "PV_PhaseShift270" [buf] [KR] 0 r0
-pv_phaseshift90 buf = UGen KR "PV_PhaseShift90" [buf] [KR] 0 r0
-pv_randcomb id buf wp trg = UGen KR "PV_RandComb" [buf,wp,trg] [KR] 0 id
-pv_randwipe id ba bb wp trg = UGen KR "PV_RandWipe" [ba,bb,wp,trg] [KR] 0 id
-pv_rectcomb buf teeth phase width = UGen KR "PV_RectComb" [buf,teeth,phase,width] [KR] 0 r0
-pv_rectcomb2 ba bb teeth phase width = UGen KR "PV_RectComb2" [ba,bb,teeth,phase,width] [KR] 0 r0
+pv_add ba bb = mkOsc KR "PV_Add" [ba,bb] 1 0 r0
+pv_binscramble buf wp width trg = mkOsc KR "PV_BinScramble" [buf,wp,width,trg] 1 0 r0
+pv_binshift buf str shift = mkOsc KR "PV_BinShift" [buf,str,shift] 1 0 r0
+pv_binwipe ba bb wp = mkOsc KR "PV_BinWipe" [ba,bb,wp] 1 0 r0
+pv_brickwall buf wp = mkOsc KR "PV_BrickWall" [buf,wp] 1 0 r0
+pv_conformalmap buf real imag = mkOsc KR "PV_ConformalMap" [buf,real,imag] 1 0 r0
+pv_copyphase ba bb = mkOsc KR "PV_CopyPhase" [ba,bb] 1 0 r0
+pv_diffuser buf trg = mkOsc KR "PV_Diffuser" [buf,trg] 1 0 r0
+pv_hainsworthfoote buf h f thr wait = mkOsc KR "PV_HainsworthFoote" [buf,h,f,thr,wait] 1 0 r0
+pv_jensenandersen buf sc hfe hfc sf thr wait = mkOsc KR "PV_JensenAndersen" [buf,sc,hfe,hfc,sf,thr,wait] 1 0 r0
+pv_localmax buf thr = mkOsc KR "PV_LocalMax" [buf,thr] 1 0 r0
+pv_magabove buf thr = mkOsc KR "PV_MagAbove" [buf,thr] 1 0 r0
+pv_magbelow buf thr = mkOsc KR "PV_MagBelow" [buf,thr] 1 0 r0
+pv_magclip buf thr = mkOsc KR "PV_MagClip" [buf,thr] 1 0 r0
+pv_magfreeze buf frz = mkOsc KR "PV_MagFreeze" [buf,frz] 1 0 r0
+pv_magmul ba bb = mkOsc KR "PV_MagMul" [ba,bb] 1 0 r0
+pv_magnoise buf = mkOsc KR "PV_MagNoise" [buf] 1 0 r0
+pv_magshift buf str shift = mkOsc KR "PV_MagShift" [buf,str,shift] 1 0 r0
+pv_magsmear buf bins = mkOsc KR "PV_MagSmear" [buf,bins] 1 0 r0
+pv_magsquared buf = mkOsc KR "PV_MagSquared" [buf] 1 0 r0
+pv_max ba bb = mkOsc KR "PV_Max" [ba,bb] 1 0 r0
+pv_min ba bb = mkOsc KR "PV_Min" [ba,bb] 1 0 r0
+pv_mul ba bb = mkOsc KR "PV_Mul" [ba,bb] 1 0 r0
+pv_phaseshift buf shift = mkOsc KR "PV_PhaseShift" [buf,shift] 1 0 r0
+pv_phaseshift270 buf = mkOsc KR "PV_PhaseShift270" [buf] 1 0 r0
+pv_phaseshift90 buf = mkOsc KR "PV_PhaseShift90" [buf] 1 0 r0
+pv_randcomb id buf wp trg = mkOsc KR "PV_RandComb" [buf,wp,trg] 1 0 id
+pv_randwipe id ba bb wp trg = mkOsc KR "PV_RandWipe" [ba,bb,wp,trg] 1 0 id
+pv_rectcomb buf teeth phase width = mkOsc KR "PV_RectComb" [buf,teeth,phase,width] 1 0 r0
+pv_rectcomb2 ba bb teeth phase width = mkOsc KR "PV_RectComb2" [ba,bb,teeth,phase,width] 1 0 r0
 
 -- Local Variables:
 -- truncate-lines:t
