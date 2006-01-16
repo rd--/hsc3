@@ -1,6 +1,7 @@
 module Hsc.Graph where
 
 import Hsc.UGen
+import Hsc.Rate
 import Hsc.List (uniq, findIndex')
 import Hsc.U8v
 

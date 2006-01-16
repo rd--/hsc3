@@ -1,6 +1,7 @@
 module Hsc.Dot (draw, draw') where
 
 import Hsc.UGen
+import Hsc.Rate
 import Hsc.Graph
 import Data.List (intersperse)
 import System.IO

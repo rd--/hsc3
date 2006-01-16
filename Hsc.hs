@@ -1,5 +1,6 @@
 module Hsc (module Hsc.List,
             module Hsc.U8v,
+            module Hsc.Rate,
             module Hsc.UGen,
             module Hsc.MCE,
             module Hsc.Construct,
@@ -16,7 +17,6 @@ module Hsc (module Hsc.List,
             module Hsc.Noise,
             module Hsc.Oscillator,
             module Hsc.Panner,
-            module Hsc.PV,
             module Hsc.OpenSoundControl,
             module Hsc.Server,
             module Hsc.Udp,
@@ -25,6 +25,7 @@ module Hsc (module Hsc.List,
 
 import Hsc.List
 import Hsc.U8v
+import Hsc.Rate
 import Hsc.UGen
 import Hsc.MCE
 import Hsc.Construct
@@ -40,7 +41,6 @@ import Hsc.Information
 import Hsc.IO
 import Hsc.Noise
 import Hsc.Panner
-import Hsc.PV
 import Hsc.Oscillator
 import Hsc.OpenSoundControl
 import Hsc.Server

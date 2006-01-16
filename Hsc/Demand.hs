@@ -1,6 +1,7 @@
 module Hsc.Demand where
 
 import Hsc.UGen
+import Hsc.Rate
 import Hsc.Construct
 
 dbrown l lo hi step  = mkOsc DR "Dbrown"  [l, lo, hi, step] 1 0 r0
