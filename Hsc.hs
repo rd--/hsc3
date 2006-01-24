@@ -21,7 +21,8 @@ module Hsc (module Hsc.List,
             module Hsc.Server,
             module Hsc.Udp,
             module Hsc.Play,
-            module Hsc.Schedule) where
+            module Hsc.Schedule,
+            module Hsc.SndFile) where
 
 import Hsc.List
 import Hsc.U8v
@@ -47,6 +48,7 @@ import Hsc.Server
 import Hsc.Udp
 import Hsc.Play
 import Hsc.Schedule
+import Hsc.SndFile
 
 -- analog bubbles
 

@@ -29,7 +29,8 @@ i32_u8v :: Int -> U8v
 i32_u8v n = [byte 3 n, byte 2 n, byte 1 n, byte 0 n]
 
 i64_u8v :: Integer -> U8v
-i64_u8v n = [byte 7 n, byte 6 n, byte 5 n, byte 4 n, byte 3 n, byte 2 n, byte 1 n, byte 0 n]
+i64_u8v n = [byte 7 n, byte 6 n, byte 5 n, byte 4 n,
+             byte 3 n, byte 2 n, byte 1 n, byte 0 n]
 
 f32_i32 :: Float32 -> Int32
 f32_i32 d = runST (do a  <- newArray (1, 1) d
@@ -71,7 +72,10 @@ u8v_i32 :: U8v -> Int
 u8v_i32 [d,c,b,a] = shiftL' d 24 + shiftL' c 16 + shiftL' b 8 + shiftL' a 0
 
 u8v_i64 :: U8v -> Integer
-u8v_i64 [h,g,f,e,d,c,b,a] = shiftL' h 56 + shiftL' g 48 + shiftL' f 40 + shiftL' e 32 + shiftL' d 24 + shiftL' c 16 + shiftL' b 8 + shiftL' a 0
+u8v_i64 [h,g,f,e,d,c,b,a] = shiftL' h 56 + shiftL' g 48 +
+                            shiftL' f 40 + shiftL' e 32 +
+                            shiftL' d 24 + shiftL' c 16 +
+                            shiftL' b 8 + shiftL' a 0
 
 i32_f32 :: Int32 -> Float32
 i32_f32 d = runST (do a  <- newArray (1, 1) d
@@ -88,4 +92,3 @@ i64_f64 d = runST (do a  <- newArray (1, 1) d
 
 u8v_f64 :: U8v -> Float64
 u8v_f64 b = i64_f64 (fromIntegral $ u8v_i64 b)
-
