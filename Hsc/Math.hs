@@ -44,15 +44,54 @@ instance Floating UGen where
     acosh x        = log (sqrt (x*x-1) + x)
     atanh x        = (log (1+x) - log (1-x)) / 2
 
+-- The Eq and Ord classes in the Prelude require Bool, hence the name
+-- mangling.  True is 1.0, False is 0.0
+
+class EqE a where
+    (==*)  :: a -> a -> a
+    (/=*)  :: a -> a -> a
+
+instance EqE UGen where
+    (==*)  = binop 6
+    (/=*)  = binop 7
+
+instance EqE Float where
+    a ==* b = if a == b then 1.0 else 0.0
+    a /=* b = if a /= b then 1.0 else 0.0
+
+class OrdE a where
+    (<*)  :: a -> a -> a
+    (<=*) :: a -> a -> a
+    (>*)  :: a -> a -> a
+    (>=*) :: a -> a -> a
+    maxE  :: a -> a -> a
+    minE  :: a -> a -> a
+
+instance OrdE UGen where
+    (<*)  = binop 8
+    (<=*) = binop 10
+    (>*)  = binop 9
+    (>=*) = binop 11
+    minE  = binop 12
+    maxE  = binop 13
+
+instance OrdE Float where
+    a <* b   = if a < b   then 1.0 else 0.0
+    a <=* b  = if a <= b  then 1.0 else 0.0
+    a >* b   = if a > b   then 1.0 else 0.0
+    a >=* b  = if a >= b  then 1.0 else 0.0
+    minE a b = min a b
+    maxE a b = max a b
+
 class (Num a, Fractional a, Floating a) => UnaryOp a where
-    not            :: a -> a
+    notE           :: a -> a
     isnil          :: a -> a
     notnil         :: a -> a
     bitnot         :: a -> a
     asfloat        :: a -> a
     asint          :: a -> a
     ceil           :: a -> a
-    floor          :: a -> a
+    floorE         :: a -> a
     frac           :: a -> a
     squared        :: a -> a
     cubed          :: a -> a
@@ -68,14 +107,14 @@ class (Num a, Fractional a, Floating a) => UnaryOp a where
     log10          :: a -> a
 
 instance UnaryOp UGen where
-    not            = uop 1
+    notE           = uop 1
     isnil          = uop 2
     notnil         = uop 3
     bitnot         = uop 4
     asfloat        = uop 6
     asint          = uop 7
     ceil           = uop 8
-    floor          = uop 9
+    floorE         = uop 9
     frac           = uop 10
     squared        = uop 12
     cubed          = uop 13
@@ -90,27 +129,28 @@ instance UnaryOp UGen where
     log2           = uop 26
     log10          = uop 27
 
-class EqU a where
-    (==*)  :: a -> a -> a
-
-instance EqU UGen where
-    (==*)  = binop 6
-
-class OrdU a where
-    (<*)  :: a -> a -> a
-    (<=*) :: a -> a -> a
-    (>*)  :: a -> a -> a
-    (>=*) :: a -> a -> a
-    maxU  :: a -> a -> a
-    minU  :: a -> a -> a
-
-instance OrdU UGen where
-    (<*)  = binop 8
-    (<=*) = binop 10
-    (>*)  = binop 9
-    (>=*) = binop 11
-    minU  = binop 12
-    maxU  = binop 13
+instance UnaryOp Float where
+    notE a      = if a >  0.0 then 0.0 else 1.0
+    isnil a     = if a == 0.0 then 0.0 else 1.0
+    notnil a    = if a /= 0.0 then 0.0 else 1.0
+    bitnot a    = a
+    asfloat a   = a
+    asint a     = a
+    ceil a      = fromIntegral (ceiling a)
+    floorE a    = fromIntegral (floor a)
+    frac a      = a
+    squared a   = a * a
+    cubed   a   = a * a * a
+    midicps a   = 440.0 * (2.0 ** ((a - 69.0) * 0.083333333333))
+    cpsmidi a   = (log2 (a * 0.0022727272727) * 12.0) + 69.0
+    midiratio a = 2.0 ** (a * 0.083333333333)
+    ratiomidi a = 12.0 * (log2 a)
+    dbamp a     = a
+    ampdb a     = a
+    octcps a    = 440.0 * (2.0 ** (a - 4.75))
+    cpsoct a    = log2 (a * 0.0022727272727) + 4.75
+    log2 a      = logBase 2 a
+    log10 a     = logBase 10 a
 
 class (Num a, Fractional a, Floating a) => BinaryOp a where
     idiv           :: a -> a -> a
