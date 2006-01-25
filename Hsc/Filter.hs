@@ -13,8 +13,6 @@ bpz2 i         = mkFilter "BPZ2" [i] 1 0 r0
 brf  i freq rq = mkFilter "BRF" [i,freq,rq] 1 0 r0
 brz2 i         = mkFilter "BRZ2" [i] 1 0 r0
 
-clip i l h = mkFilter "Clip" [i,l,h] 1 0 r0
-
 comb' c i max dly dcy = mkFilter c [i, max, dly, dcy] 1 0 r0
 combn = comb' "CombN"
 combl = comb' "CombL"

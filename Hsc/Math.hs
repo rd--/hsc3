@@ -229,3 +229,67 @@ instance BinaryOp UGen where
     firstarg       = binop 46
     randrange      = binop 47
     exprandrange   = binop 48
+
+instance BinaryOp Float where
+    idiv a b           = error "unimplemented binop"
+    mod a b            = error "unimplemented binop"
+    bitand a b         = error "unimplemented binop"
+    bitor a b          = error "unimplemented binop"
+    bitxor a b         = error "unimplemented binop"
+    lcm a b            = error "unimplemented binop"
+    gcd a b            = error "unimplemented binop"
+    round a b          = if b == 0 then a else floorE (a/b + 0.5) * b
+    roundup a b        = if b == 0 then a else ceil (a/b + 0.5) * b
+    trunc a b          = error "unimplemented binop"
+    atan2 a b          = atan (b/a)
+    hypot a b          = error "unimplemented binop"
+    hypotx a b         = error "unimplemented binop"
+    pow a b            = error "unimplemented binop"
+    shiftleft a b      = error "unimplemented binop"
+    shiftright a b     = error "unimplemented binop"
+    unsignedshift a b  = error "unimplemented binop"
+    fill a b           = error "unimplemented binop"
+    ring1 a b          = a * b + a
+    ring2 a b          = a * b + a + b
+    ring3 a b          = a * a * b
+    ring4 a b          = a * a * b - a * b * b
+    difsqr a b         = (a*a) - (b*b)
+    sumsqr a b         = (a*a) + (b*b)
+    sqrsum a b         = (a+b) * (a+b)
+    sqrdif a b         = (a-b) * (a-b)
+    absdif a b         = abs (a - b)
+    thresh a b         = if a <  b then 0 else a
+    amclip a b         = if b <= 0 then 0 else a * b
+    scaleneg a b       = (abs a - a) * b' + a where b' = 0.5 * b + 0.5
+    clip2 a b          = clip a (-b) b
+    excess a b         = a - clip a (-b) b
+    fold2 a b          = fold a (-b) b
+    wrap2 a b          = wrap a (-b) b
+    firstarg a b       = a
+    randrange a b      = error "unimplemented binop"
+    exprandrange a b   = error "unimplemented binop"
+
+class (Num a, Fractional a, Floating a) => TernaryOp a where
+    wrap :: a -> a -> a -> a
+    fold :: a -> a -> a -> a
+    clip :: a -> a -> a -> a
+
+instance TernaryOp Float where
+    wrap a b c = if a >= b && a <= c 
+                 then a 
+                 else a - r * floorE (a-b)/r 
+        where r = c - b
+    fold a b c = if a >= b && a <= c 
+                 then a 
+                 else y' + b
+        where r  = c - b
+              r' = r + r
+              x  = a - b
+              y  = x - r' * floorE x/r'
+              y' = if y >= r then r' - y else y
+    clip a b c = if a < b then b else if a > c then c else a
+
+instance TernaryOp UGen where
+    wrap a b c = error "unimplemented ternary op"
+    fold a b c = error "unimplemented ternary op"
+    clip i l h = mkFilter "Clip" [i,l,h] 1 0 r0
