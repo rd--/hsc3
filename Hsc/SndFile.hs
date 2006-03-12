@@ -1,7 +1,6 @@
 module Hsc.SndFile where
 
 import Hsc.U8v
-import System.IO
 
 auMagic       = 0x2e736e64
 auEncLinear8  = 2
@@ -17,14 +16,9 @@ auSizeOf n | n == auEncLinear8  = 1
            | n == auEncDouble   = 8
            | otherwise          = error "auSizeOf: illegal encoding"
 
-auMkHdr (nf, enc, sr, nc) = f [auMagic,
-                               28,
-                               nf * nc * (auSizeOf enc),
-                               enc,
-                               sr,
-                               nc,
-                               0]
-    where f = concatMap i32_u8v
+auMkHdr (nf, enc, sr, nc) = f [auMagic, 28, nb, enc, sr, nc, 0]
+    where f  = concatMap i32_u8v
+          nb = nf * nc * (auSizeOf enc)
 
 auUnHdr u = (nf, enc, sr, nc)
     where f n = u8v_i32 (take 4 (drop n u))
@@ -37,6 +31,3 @@ auUnHdr u = (nf, enc, sr, nc)
 auF32 sr d = auMkHdr (length d, auEncFloat, sr, 1) ++ d'
     where d' = concatMap f32_u8v d
 
-u8Write fn u = do h <- openFile fn WriteMode
-                  hPutStr h (u8v_str u)
-                  hClose h

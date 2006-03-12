@@ -12,21 +12,23 @@ sc = do fd <- socket AF_INET Datagram 0
         -- setSocketOption fd RecvTimeOut 1000
         return fd
 
-send' :: Socket -> U8v -> IO Int
-send' fd b = send fd (u8v_str b)
+send' :: Socket -> Osc -> IO Int
+send' fd o = send fd (u8v_str (osc o))
 
-recv' :: Socket -> IO U8v
+recv' :: Socket -> IO Osc
 recv' fd   = do b <- recv fd 8192
-                return (str_u8v b)
+                return (unosc (str_u8v b))
 
-sync' :: Socket -> U8v -> IO OscM
-sync' fd b = do send' fd b
+sync' :: Socket -> Osc -> IO Osc
+sync' fd o = do send' fd o
                 r <- recv' fd
-                return (unosc r)
+                return r
 
-syncto' :: Socket -> String -> U8v -> IO Bool
-syncto' fd rpl b = do (c,_) <- sync' fd b
+{-
+syncto' :: Socket -> String -> Osc -> IO Bool
+syncto' fd rpl o = do (OscM c _) <- sync' fd o
                       return (c == rpl)
+-}
 
 close' :: Socket -> IO ()
 close' = sClose

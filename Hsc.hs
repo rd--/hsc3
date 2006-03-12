@@ -22,6 +22,7 @@ module Hsc (module Hsc.List,
             module Hsc.Udp,
             module Hsc.Play,
             module Hsc.Schedule,
+            module Hsc.Score,
             module Hsc.SndFile) where
 
 import Hsc.List
@@ -48,6 +49,7 @@ import Hsc.Server
 import Hsc.Udp
 import Hsc.Play
 import Hsc.Schedule
+import Hsc.Score
 import Hsc.SndFile
 
 -- analog bubbles
@@ -75,3 +77,7 @@ pt = out 0 $ pan2 i l 0.1
 ps = MRG [a, b]
     where a = pauseself (mousex KR (-1) 1 0 0.1)
           b = out 0 (sinosc AR 440 0 * 0.1)
+
+ts = Score [OscB 0.0 [d_recv' "test" ab],
+            OscB 1.0 [s_new "test" (-1) 1 1],
+            OscB 3.0 [g_freeAll 1]]

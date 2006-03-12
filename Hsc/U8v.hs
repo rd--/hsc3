@@ -6,6 +6,7 @@ import Data.Bits (Bits, shiftL, shiftR, (.&.))
 import Data.Char (chr, ord)
 import Control.Monad.ST (runST)
 import Data.Array.ST (newArray, readArray, castSTUArray)
+import System.IO (openFile, IOMode(..), hPutStr, hClose)
 
 type Float32 = Float
 type Float64 = Double
@@ -31,6 +32,8 @@ i32_u8v n = [byte 3 n, byte 2 n, byte 1 n, byte 0 n]
 i64_u8v :: Integer -> U8v
 i64_u8v n = [byte 7 n, byte 6 n, byte 5 n, byte 4 n,
              byte 3 n, byte 2 n, byte 1 n, byte 0 n]
+
+u64_u8v = i64_u8v
 
 f32_i32 :: Float32 -> Int32
 f32_i32 d = runST (do a  <- newArray (1, 1) d
@@ -92,3 +95,9 @@ i64_f64 d = runST (do a  <- newArray (1, 1) d
 
 u8v_f64 :: U8v -> Float64
 u8v_f64 b = i64_f64 (fromIntegral $ u8v_i64 b)
+
+-- IO
+
+u8vWrite fn u = do h <- openFile fn WriteMode
+                   hPutStr h (u8v_str u)
+                   hClose h

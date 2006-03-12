@@ -7,11 +7,13 @@ import Hsc.Udp
 import Hsc.Server
 import Hsc.IO
 
-playu fd u = do r <- sync' fd (d_recv b)
+d_recv' n u = d_recv b
+    where g = graph u
+          b = graphdef n g
+
+playu fd u = do r <- sync' fd (d_recv' "Anonymous" u)
                 send' fd (s_new "Anonymous" (-1) 1 1)
                 return r
-    where g = graph u
-          b = graphdef "Anonymous" g
 
 hasOutputs :: UGen -> Bool
 hasOutputs (UGen _ _ _ o _ _) = length o > 0
