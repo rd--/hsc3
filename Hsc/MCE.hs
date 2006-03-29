@@ -1,7 +1,7 @@
 module Hsc.MCE where
 
 import Hsc.UGen
-import Hsc.List (invert)
+import Data.List (transpose)
 
 mceDegree :: UGen -> Int
 mceDegree (MCE l) = length l
@@ -18,7 +18,7 @@ mceTransform :: UGen -> UGen
 mceTransform (UGen r n i o s id) = MCE (map f i')
     where f i = UGen r n i o s id
           d   = maximum $ map mceDegree (filter isMCE i)
-          i'  = invert $ map (mceExtend d) i
+          i'  = transpose $ map (mceExtend d) i
 
 mced :: UGen -> UGen
 mced u = if mceReq u then mceTransform u else u
