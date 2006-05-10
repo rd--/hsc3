@@ -3,6 +3,15 @@ module Hsc.Construct where
 import Hsc.UId
 import Hsc.UGen
 import Hsc.MCE
+import Data.Unique
+
+mkUId :: IO Int
+mkUId = do u <- newUnique
+           return (hashUnique u)
+
+uniquify :: UGen -> IO UGen
+uniquify (UGen r n i o s id) = do uid <- mkUId
+                                  return (UGen r n i o s (UId uid))
 
 r0 = UId 0
 r1 = UId 1

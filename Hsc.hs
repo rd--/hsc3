@@ -6,7 +6,7 @@ module Hsc (module Hsc.List,
             module Hsc.MCE,
             module Hsc.Construct,
             module Hsc.Graph,
-            module Hsc.Dot,
+            --module Hsc.Dot,
             module Hsc.Math,
             module Hsc.Buffer,
             module Hsc.Demand,
@@ -34,7 +34,7 @@ import Hsc.UGen
 import Hsc.MCE
 import Hsc.Construct
 import Hsc.Graph
-import Hsc.Dot
+--import Hsc.Dot
 import Hsc.Math
 import Hsc.Buffer
 import Hsc.Demand
