@@ -3,10 +3,8 @@ module Hsc.Graph where
 import Hsc.UId
 import Hsc.UGen
 import Hsc.Rate
-import Hsc.List (findIndex')
+import Hsc.List (findIndex', nub')
 import Hsc.U8v
-
-import Data.List (nub)
 
 data Graph = Graph [UGen] [UGen] [UGen]
              deriving (Eq, Show)
@@ -19,7 +17,7 @@ implicit n = UGen KR "Control" [] (replicate n KR) 0 (UId 0)
 
 graph :: UGen -> Graph
 graph root = Graph n c u'
-  where e  = nub $ nodes root
+  where e  = nub' $ nodes root
         n  = filter isConstant e
         c  = filter isControl e
         u  = reverse $ filter isUGen e
