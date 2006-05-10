@@ -1,5 +1,6 @@
 module Hsc.Math where
 
+import Hsc.UId
 import Hsc.UGen
 import Hsc.Construct
 

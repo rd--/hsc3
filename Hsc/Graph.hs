@@ -1,5 +1,6 @@
 module Hsc.Graph where
 
+import Hsc.UId
 import Hsc.UGen
 import Hsc.Rate
 import Hsc.List (findIndex')

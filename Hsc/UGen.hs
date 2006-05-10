@@ -1,12 +1,11 @@
 module Hsc.UGen where
 
+import Hsc.UId
 import Hsc.Rate
 
 type Name     = String
 type Output   = Rate
 type Special  = Int
-data UId      = UId Int
-                deriving (Eq, Show)
 data UGen     = Constant Float
               | Control Rate Name Float
               | UGen Rate Name [UGen] [Output] Special UId

@@ -1,5 +1,6 @@
 module Hsc.Construct where
 
+import Hsc.UId
 import Hsc.UGen
 import Hsc.MCE
 
