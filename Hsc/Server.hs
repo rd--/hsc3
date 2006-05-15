@@ -20,7 +20,7 @@ clearSched      = OscM "/clearSched" []
 
 d_recv b        = OscM "/d_recv" [OscBlob b]
 d_load p        = OscM "/d_load" [OscString p]
-d_loadDir p     = OscM "/d_loafDir" [OscString p]
+d_loadDir p     = OscM "/d_loadDir" [OscString p]
 d_free n        = OscM "/d_free" [OscString n]
 
 n_free id       = OscM "/n_free" [OscInt id]
@@ -38,6 +38,12 @@ s_new n i a t   = OscM "/s_new" [OscString n, OscInt i, OscInt a, OscInt t]
 s_get id i      = OscM "/s_get" [OscInt id, OscInt i]
 s_getn id i n   = OscM "/s_getn" [OscInt id, OscInt i, OscInt n]
 s_noid id       = OscM "/s_noid" [OscInt id]
+
+n_set_multi id ctrl    = OscM "/n_set" ([OscInt id] ++ flatten_control ctrl)
+s_new_control n i a t ctrl =
+   OscM "/s_new" ([OscString n, OscInt i, OscInt a, OscInt t] ++
+                   flatten_control ctrl)
+flatten_control = concatMap (\(name,val) -> [OscString name, OscFloat val])
 
 g_new id a t    = OscM "/g_new" [OscInt id, OscInt a, OscInt t]
 g_head g n      = OscM "/g_head" [OscInt g, OscInt n]
