@@ -4,7 +4,7 @@ import Hsc.UGen
 import Hsc.Math
 import Hsc.Construct
 
-envgen r gate lvl bias scale done env = mkOsc r "EnvGen" i 1 0 r0
+envgen r gate lvl bias scale done env = mkOsc r "EnvGen" i 1 0
     where i = [gate,lvl,bias,scale,done] ++ env
 
 data EnvCurve = EnvStep
@@ -52,8 +52,8 @@ envsine dur lvl = env [0.0, lvl, 0.0] [n, n] c (-1.0) (-1.0)
     where c = [EnvSin, EnvSin]
           n = dur / 2.0
 
-xline r start end dur done = mkOsc r "XLine" [start,end,dur,done] 1 0 r0
-line  r start end dur done = mkOsc r "Line"  [start,end,dur,done] 1 0 r0
+xline r start end dur done = mkOsc r "XLine" [start,end,dur,done] 1 0
+line  r start end dur done = mkOsc r "Line"  [start,end,dur,done] 1 0
 
-freeself  i = mkFilter "FreeSelf"  [i] 1 0 r0
-pauseself i = mkFilter "PauseSelf" [i] 1 0 r0
+freeself  i = mkFilter "FreeSelf"  [i] 1 0
+pauseself i = mkFilter "PauseSelf" [i] 1 0

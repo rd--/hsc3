@@ -5,10 +5,10 @@ import Hsc.UGen
 import Hsc.Construct
 
 binop :: Special -> UGen -> UGen -> UGen
-binop i a b = mkFilter "BinaryOpUGen" [a,b] 1 i (UId 0)
+binop i a b = mkFilter "BinaryOpUGen" [a,b] 1 i
 
 uop :: Special -> UGen -> UGen
-uop   i a   = mkFilter "UnaryOpUGen"  [a]   1 i (UId 0)
+uop   i a   = mkFilter "UnaryOpUGen"  [a]   1 i
 
 instance Num UGen where
     negate         = uop 0
@@ -293,4 +293,4 @@ instance TernaryOp Float where
 instance TernaryOp UGen where
     wrap a b c = error "unimplemented ternary op"
     fold a b c = error "unimplemented ternary op"
-    clip i l h = mkFilter "Clip" [i,l,h] 1 0 r0
+    clip i l h = mkFilter "Clip" [i,l,h] 1 0
