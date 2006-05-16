@@ -2,14 +2,18 @@ module Hsc.Server where
 
 import Hsc.OpenSoundControl
 
-type AddAction = Int
+data AddAction = AddToHead
+               | AddToTail
+               | AddBefore
+               | AddAfter
+               | AddReplace
+                 deriving (Eq, Show, Enum)
 
-addToHead, addToTail, addBefore, addAfter, addReplace :: Int
-addToHead  = 0
-addToTail  = 1
-addBefore  = 2
-addAfter   = 3
-addReplace = 4
+hd = AddToHead
+tl = AddToTail
+
+addAction :: AddAction -> Int
+addAction = fromEnum
 
 quit            = OscM "/quit" []
 notify c        = OscM "/notify" [OscInt c]
@@ -34,12 +38,12 @@ n_before a b    = OscM "/n_before" [OscInt a, OscInt b]
 n_query id      = OscM "/n_query" [OscInt id]
 n_trace id      = OscM "/n_trace" [OscInt id]
 
-s_new n i a t   = OscM "/s_new" [OscString n, OscInt i, OscInt a, OscInt t]
+s_new n i a t   = OscM "/s_new" [OscString n, OscInt i, OscInt (addAction a), OscInt t]
 s_get id i      = OscM "/s_get" [OscInt id, OscInt i]
 s_getn id i n   = OscM "/s_getn" [OscInt id, OscInt i, OscInt n]
 s_noid id       = OscM "/s_noid" [OscInt id]
 
-g_new id a t    = OscM "/g_new" [OscInt id, OscInt a, OscInt t]
+g_new id a t    = OscM "/g_new" [OscInt id, OscInt (addAction a), OscInt t]
 g_head g n      = OscM "/g_head" [OscInt g, OscInt n]
 g_tail g n      = OscM "/g_tail" [OscInt g, OscInt n]
 g_freeAll id    = OscM "/g_freeAll" [OscInt id]

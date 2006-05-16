@@ -12,7 +12,7 @@ d_recv' n u = d_recv b
           b = graphdef n g
 
 playu fd u = do r <- sync' fd (d_recv' "Anonymous" u)
-                send' fd (s_new "Anonymous" (-1) addToTail 1)
+                send' fd (s_new "Anonymous" (-1) AddToTail 1)
                 return r
 
 hasOutputs :: UGen -> Bool
@@ -24,7 +24,7 @@ play fd u
     | hasOutputs u = playu fd (out 0 u)
     | otherwise    = playu fd u
 
-init_ fd = do send' fd (g_new 1 addToTail 0)
+init_ fd = do send' fd (g_new 1 AddToTail 0)
 stop  fd = do send' fd (g_freeAll 1)
 
 withfd fd' a = do fd <- fd'
