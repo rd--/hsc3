@@ -39,12 +39,6 @@ s_get id i      = OscM "/s_get" [OscInt id, OscInt i]
 s_getn id i n   = OscM "/s_getn" [OscInt id, OscInt i, OscInt n]
 s_noid id       = OscM "/s_noid" [OscInt id]
 
-n_set_multi id ctrl    = OscM "/n_set" ([OscInt id] ++ flatten_control ctrl)
-s_new_control n i a t ctrl =
-   OscM "/s_new" ([OscString n, OscInt i, OscInt a, OscInt t] ++
-                   flatten_control ctrl)
-flatten_control = concatMap (\(name,val) -> [OscString name, OscFloat val])
-
 g_new id a t    = OscM "/g_new" [OscInt id, OscInt a, OscInt t]
 g_head g n      = OscM "/g_head" [OscInt g, OscInt n]
 g_tail g n      = OscM "/g_tail" [OscInt g, OscInt n]
@@ -70,6 +64,12 @@ c_setn id n f    = OscM "/c_setn" $ [OscInt id, OscInt n] ++ (map OscFloat f)
 c_fill id i f    = OscM "/c_fill" [OscInt id, OscInt i, OscFloat f]
 c_get  id        = OscM "/c_get" [OscInt id]
 c_getn id n      = OscM "/c_getn" [OscInt id, OscInt n]
+
+-- Variants with variable argument support.
+
+flatten_controls = concatMap (\(name,val) -> [OscString name, OscFloat val])
+n_set' id c      = OscM "/n_set" ([OscInt id] ++ flatten_controls c)
+s_new' n i a t c = OscM "/s_new" ([OscString n, OscInt i, OscInt a, OscInt t] ++ flatten_controls c)
 
 -- Local Variables:
 -- truncate-lines:t
