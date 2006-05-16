@@ -2,6 +2,15 @@ module Hsc.Server where
 
 import Hsc.OpenSoundControl
 
+type AddAction = Int
+
+addToHead, addToTail, addBefore, addAfter, addReplace :: Int
+addToHead  = 0
+addToTail  = 1
+addBefore  = 2
+addAfter   = 3
+addReplace = 4
+
 quit            = OscM "/quit" []
 notify c        = OscM "/notify" [OscInt c]
 status          = OscM "/status" []

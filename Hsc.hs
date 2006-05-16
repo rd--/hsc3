@@ -81,5 +81,5 @@ ps = MRG [a, b]
           b = out 0 (sinosc AR 440 0 * 0.1)
 
 ts = Score [OscB 0.0 [d_recv' "test" ab],
-            OscB 1.0 [s_new "test" (-1) 1 1],
+            OscB 1.0 [s_new "test" (-1) addToTail 1],
             OscB 3.0 [g_freeAll 1]]
