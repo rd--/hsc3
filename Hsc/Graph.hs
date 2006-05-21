@@ -5,6 +5,7 @@ import Hsc.UGen
 import Hsc.Rate
 import Hsc.List (findIndex', nub')
 import Hsc.U8v
+import Data.List (filter, length, reverse)
 
 data Graph = Graph [UGen] [UGen] [UGen]
              deriving (Eq, Show)
@@ -20,7 +21,7 @@ graph root = Graph n c u'
   where e  = nub' $ nodes root
         n  = filter isConstant e
         c  = filter isControl e
-        u  = reverse $ filter isUGen e
+        u  = filter isUGen e
         u' = if null c then u else implicit (length c) : u
 
 index' :: (Eq a) => [a] -> a -> Int
