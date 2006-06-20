@@ -15,3 +15,5 @@ vosc3 r b f1 f2 f3   = mkOsc r "VOsc3"   [b,f1,f2,f3] 1 0
 formant r f0 f bw  = mkOsc r "Formant"  [f0,f,bw] 1 0
 pulse r freq width = mkOsc r "Pulse" [freq,width] 1 0
 blip r freq nharm  = mkOsc r "Blip"  [freq,nharm] 1 0
+
+lfpulse r freq iphase width = mkOsc r "LFPulse" [freq,iphase,width] 1 0
