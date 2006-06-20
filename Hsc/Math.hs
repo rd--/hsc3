@@ -48,6 +48,14 @@ instance Floating UGen where
 -- The Eq and Ord classes in the Prelude require Bool, hence the name
 -- mangling.  True is 1.0, False is 0.0
 
+instance Ord UGen where
+    (<)  = error "Ord is partial, see OrdE"
+    (<=) = error "Ord is partial, see OrdE"
+    (>)  = error "Ord is partial, see OrdE"
+    (>=) = error "Ord is partial, see OrdE"
+    min  = binop 12
+    max  = binop 13
+
 class EqE a where
     (==*)  :: a -> a -> a
     (/=*)  :: a -> a -> a
@@ -65,24 +73,18 @@ class OrdE a where
     (<=*) :: a -> a -> a
     (>*)  :: a -> a -> a
     (>=*) :: a -> a -> a
-    maxE  :: a -> a -> a
-    minE  :: a -> a -> a
 
 instance OrdE UGen where
     (<*)  = binop 8
     (<=*) = binop 10
     (>*)  = binop 9
     (>=*) = binop 11
-    minE  = binop 12
-    maxE  = binop 13
 
 instance OrdE Float where
     a <* b   = if a < b   then 1.0 else 0.0
     a <=* b  = if a <= b  then 1.0 else 0.0
     a >* b   = if a > b   then 1.0 else 0.0
     a >=* b  = if a >= b  then 1.0 else 0.0
-    minE a b = min a b
-    maxE a b = max a b
 
 class (Num a, Fractional a, Floating a) => UnaryOp a where
     notE           :: a -> a
