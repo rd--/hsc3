@@ -37,9 +37,10 @@ hpf i f = mkFilter "HPF"  [i,f] 1 0
 hpz1 i  = mkFilter "HPZ1" [i]   1 0
 hpz2 i  = mkFilter "HPZ2" [i]   1 0
 
-lag  i t = mkFilter "Lag"  [i,t] 1 0
-lag2 i t = mkFilter "Lag2" [i,t] 1 0
-lag3 i t = mkFilter "Lag3" [i,t] 1 0
+lag   i t = mkFilter "Lag"   [i,t] 1 0
+lag2  i t = mkFilter "Lag2"  [i,t] 1 0
+lag3  i t = mkFilter "Lag3"  [i,t] 1 0
+latch i t = mkFilter "Latch" [i,t] 1 0
 
 leakdc i coef = mkFilter "LeakDC" [i,coef] 1 0
 
