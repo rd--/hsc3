@@ -53,12 +53,3 @@ import Hsc.Play
 import Hsc.Schedule
 import Hsc.Score
 import Hsc.SndFile
-
--- analog bubbles
-
-ab = out 0 $ combn s 0.2 0.2 4
-  where s = sinosc AR (midicps f) 0 * 0.1
-        f = lfsaw KR 0.4 0 * 24 + o
-        o = lfsaw KR (MCE [8, 7.23]) 0 * 3 + 80
-
-
