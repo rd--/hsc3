@@ -1,9 +1,9 @@
 module Hsc.FFT where
 
-import Hsc.UGen
-import Hsc.Rate
-import Hsc.Construct
-import Hsc.UId
+--import Hsc.UGen
+import Hsc.Rate (Rate(AR, KR))
+import Hsc.Construct (mkOsc, mkOsc', uniquify)
+import Hsc.UId (UId(UId))
 
 fft  buf i = mkOsc KR "FFT"  [buf,i] 1 0
 ifft buf   = mkOsc AR "IFFT" [buf]   1 0

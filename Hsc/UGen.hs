@@ -1,7 +1,7 @@
 module Hsc.UGen where
 
-import Hsc.UId
-import Hsc.Rate
+import Hsc.UId  (UId)
+import Hsc.Rate (Rate(IR))
 
 type Name     = String
 type Output   = Rate

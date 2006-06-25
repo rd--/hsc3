@@ -5,7 +5,6 @@ import Hsc.UGen
 import Hsc.Rate
 import Hsc.List (findIndex', nub')
 import Hsc.U8v
-import Data.List (filter, length, reverse)
 
 data Graph = Graph [UGen] [UGen] [UGen]
              deriving (Eq, Show)
@@ -39,7 +38,7 @@ mkInput g u
     | isControl u       = Input 0 (cindex g u)
     | isUGen u          = Input (uindex g u) 0
 mkInput g (Proxy u n)   = Input (uindex g u) n
-mkInput g u             = error ("illegal input: " ++ show u)
+mkInput g u             = error ("illegal input: " ++ show (g,u))
 
 nvalue   (Constant n)    = n
 cdefault (Control _ _ n) = n

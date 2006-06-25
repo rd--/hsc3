@@ -1,7 +1,7 @@
 module Hsc.Udp where
 
-import Hsc.U8v
-import Hsc.OpenSoundControl
+import Hsc.U8v (u8v_str, str_u8v)
+import Hsc.OpenSoundControl (Osc, osc, unosc)
 
 import Network.Socket
 

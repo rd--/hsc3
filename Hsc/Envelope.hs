@@ -1,8 +1,8 @@
 module Hsc.Envelope where
 
-import Hsc.UGen
-import Hsc.Math
-import Hsc.Construct
+import Hsc.UGen (UGen)
+import Hsc.Math ()
+import Hsc.Construct (mkOsc, mkFilter)
 
 envgen r gate lvl bias scale done env = mkOsc r "EnvGen" i 1 0
     where i = [gate,lvl,bias,scale,done] ++ env

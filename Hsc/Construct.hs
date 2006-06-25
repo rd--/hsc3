@@ -10,8 +10,8 @@ mkUId = do u <- newUnique
            return (hashUnique u)
 
 uniquify :: UGen -> IO UGen
-uniquify (UGen r n i o s id) = do uid <- mkUId
-                                  return (UGen r n i o s (UId uid))
+uniquify (UGen r n i o s _) = do uid <- mkUId
+                                 return (UGen r n i o s (UId uid))
 
 consU r n i o s id = proxy (mced u)
     where u = UGen r n i o s id

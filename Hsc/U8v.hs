@@ -5,7 +5,7 @@ import Data.Word (Word8)
 import Data.Bits (Bits, shiftL, shiftR, (.&.))
 import Data.Char (chr, ord)
 import Control.Monad.ST (runST, ST)
-import Data.Array.ST (STUArray, MArray, newArray, readArray, castSTUArray)
+import Data.Array.ST (MArray, newArray, readArray, castSTUArray)
 import System.IO (openFile, IOMode(..), hPutStr, hClose)
 
 type Float32 = Float
