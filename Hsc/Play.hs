@@ -28,8 +28,9 @@ reset fd = do send' fd (g_freeAll 0)
               send' fd (g_new 1 AddToTail 0)
 
 withfd fd' a = do fd <- fd'
-                  a fd
+                  r <- a fd
                   close' fd
+                  return r
 
 play'  sc u = withfd sc (\fd -> play fd u)
 reset' sc   = withfd sc reset
