@@ -294,7 +294,9 @@ instance TernaryOp Float where
               y' = if y >= r then r' - y else y
     clip a b c = if a < b then b else if a > c then c else a
 
+unimplemented_ternaryop a b c = error ("unimplemented ternary op" ++ show a ++ show b ++ show c)
+
 instance TernaryOp UGen where
-    wrap a b c = error "unimplemented ternary op"
-    fold a b c = error "unimplemented ternary op"
+    wrap a b c = unimplemented_ternaryop a b c
+    fold a b c = unimplemented_ternaryop a b c
     clip i l h = mkFilter "Clip" [i,l,h] 1 0
