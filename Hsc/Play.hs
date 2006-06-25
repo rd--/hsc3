@@ -7,9 +7,7 @@ import Hsc.Udp
 import Hsc.Server
 import Hsc.IO
 
-d_recv' n u = d_recv b
-    where g = graph u
-          b = graphdef n g
+d_recv' n u = d_recv (graphdef n (graph u))
 
 playu fd u = do r <- sync' fd (d_recv' "Anonymous" u)
                 send' fd (s_new "Anonymous" (-1) AddToTail 1)
