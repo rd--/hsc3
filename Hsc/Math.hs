@@ -232,7 +232,7 @@ instance BinaryOp UGen where
     randrange      = binop 47
     exprandrange   = binop 48
 
-unimplemented_binop a b = error ("unimplemented binop" ++ show a ++ show b)
+unimplemented_binop a b = error ("unimplemented binop" ++ show (a,b))
 
 instance BinaryOp Float where
     idiv a b           = unimplemented_binop a b
@@ -269,7 +269,7 @@ instance BinaryOp Float where
     excess a b         = a - clip a (-b) b
     fold2 a b          = fold a (-b) b
     wrap2 a b          = wrap a (-b) b
-    firstarg a b       = a
+    firstarg a _       = a
     randrange a b      = unimplemented_binop a b
     exprandrange a b   = unimplemented_binop a b
 
@@ -293,7 +293,7 @@ instance TernaryOp Float where
               y' = if y >= r then r' - y else y
     clip a b c = if a < b then b else if a > c then c else a
 
-unimplemented_ternaryop a b c = error ("unimplemented ternary op" ++ show a ++ show b ++ show c)
+unimplemented_ternaryop a b c = error ("unimplemented ternary op" ++ show (a, b, c))
 
 instance TernaryOp UGen where
     wrap a b c = unimplemented_ternaryop a b c

@@ -1,8 +1,8 @@
 module Hsc.Demand where
 
-import Hsc.UGen
-import Hsc.Rate
-import Hsc.Construct
+import Hsc.UGen ()
+import Hsc.Rate (Rate(DR))
+import Hsc.Construct (mkOsc, mkOscMCE)
 
 dbrown l lo hi step  = mkOsc DR "Dbrown"  [l, lo, hi, step] 1 0
 dgeom l start grow   = mkOsc DR "Dgeom"   [l, start, grow]  1 0
