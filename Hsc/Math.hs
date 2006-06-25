@@ -233,25 +233,27 @@ instance BinaryOp UGen where
     randrange      = binop 47
     exprandrange   = binop 48
 
+unimplemented_binop a b = error ("unimplemented binop" ++ show a ++ show b)
+
 instance BinaryOp Float where
-    idiv a b           = error "unimplemented binop"
-    mod a b            = error "unimplemented binop"
-    bitand a b         = error "unimplemented binop"
-    bitor a b          = error "unimplemented binop"
-    bitxor a b         = error "unimplemented binop"
-    lcm a b            = error "unimplemented binop"
-    gcd a b            = error "unimplemented binop"
+    idiv a b           = unimplemented_binop a b
+    mod a b            = unimplemented_binop a b
+    bitand a b         = unimplemented_binop a b
+    bitor a b          = unimplemented_binop a b
+    bitxor a b         = unimplemented_binop a b
+    lcm a b            = unimplemented_binop a b
+    gcd a b            = unimplemented_binop a b
     round a b          = if b == 0 then a else floorE (a/b + 0.5) * b
     roundup a b        = if b == 0 then a else ceil (a/b + 0.5) * b
-    trunc a b          = error "unimplemented binop"
+    trunc a b          = unimplemented_binop a b
     atan2 a b          = atan (b/a)
-    hypot a b          = error "unimplemented binop"
-    hypotx a b         = error "unimplemented binop"
-    pow a b            = error "unimplemented binop"
-    shiftleft a b      = error "unimplemented binop"
-    shiftright a b     = error "unimplemented binop"
-    unsignedshift a b  = error "unimplemented binop"
-    fill a b           = error "unimplemented binop"
+    hypot a b          = unimplemented_binop a b
+    hypotx a b         = unimplemented_binop a b
+    pow a b            = unimplemented_binop a b
+    shiftleft a b      = unimplemented_binop a b
+    shiftright a b     = unimplemented_binop a b
+    unsignedshift a b  = unimplemented_binop a b
+    fill a b           = unimplemented_binop a b
     ring1 a b          = a * b + a
     ring2 a b          = a * b + a + b
     ring3 a b          = a * a * b
@@ -269,8 +271,8 @@ instance BinaryOp Float where
     fold2 a b          = fold a (-b) b
     wrap2 a b          = wrap a (-b) b
     firstarg a b       = a
-    randrange a b      = error "unimplemented binop"
-    exprandrange a b   = error "unimplemented binop"
+    randrange a b      = unimplemented_binop a b
+    exprandrange a b   = unimplemented_binop a b
 
 class (Num a, Fractional a, Floating a) => TernaryOp a where
     wrap :: a -> a -> a -> a
