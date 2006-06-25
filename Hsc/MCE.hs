@@ -1,6 +1,6 @@
 module Hsc.MCE where
 
-import Hsc.UGen
+import Hsc.UGen (UGen(UGen, MCE), isMCE)
 import Data.List (transpose)
 
 mceDegree :: UGen -> Int

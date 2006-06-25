@@ -1,6 +1,6 @@
 module Hsc.Filter where
 
-import Hsc.Construct
+import Hsc.Construct (mkFilter)
 
 allpass' c i max dly dcy = mkFilter c [i, max, dly, dcy] 1 0
 allpassn = allpass' "AllpassN"

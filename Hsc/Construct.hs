@@ -1,9 +1,9 @@
 module Hsc.Construct where
 
-import Hsc.UId
-import Hsc.UGen
-import Hsc.MCE
-import Data.Unique
+import Hsc.UId (UId(UId))
+import Hsc.UGen (UGen(UGen, MCE), rateOf, proxy)
+import Hsc.MCE (mced)
+import Data.Unique (newUnique, hashUnique)
 
 mkUId :: IO Int
 mkUId = do u <- newUnique

@@ -1,7 +1,7 @@
 module Hsc.Math where
 
-import Hsc.UGen
-import Hsc.Construct
+import Hsc.UGen (UGen(Constant), Special)
+import Hsc.Construct (mkFilter)
 
 binop :: Special -> UGen -> UGen -> UGen
 binop i a b = mkFilter "BinaryOpUGen" [a,b] 1 i

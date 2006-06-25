@@ -1,8 +1,8 @@
 module Hsc.Graph where
 
-import Hsc.UId
-import Hsc.UGen
-import Hsc.Rate
+import Hsc.UId (UId(UId))
+import Hsc.UGen (UGen(..), nodes, isConstant, isControl, isUGen)
+import Hsc.Rate (Rate(KR), rateId)
 import Hsc.List (findIndex', nub')
 import Hsc.U8v
 

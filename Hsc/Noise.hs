@@ -1,7 +1,7 @@
 module Hsc.Noise where
 
-import Hsc.Construct
-import Hsc.UId
+import Hsc.Construct (mkOsc, mkOsc', uniquify)
+import Hsc.UId       (UId(UId))
 
 brownnoise' id r = mkOsc' r "BrownNoise" [] 1 0 id
 clipnoise'  id r = mkOsc' r "ClipNoise"  [] 1 0 id

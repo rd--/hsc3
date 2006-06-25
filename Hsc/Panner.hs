@@ -1,6 +1,6 @@
 module Hsc.Panner where
 
-import Hsc.Construct
+import Hsc.Construct (mkFilter)
 
 linpan2 i x   level = mkFilter "LinPan2" [i,x,level]     2 0
 

@@ -1,6 +1,6 @@
 module Hsc.Oscillator where
 
-import Hsc.Construct
+import Hsc.Construct (mkOsc)
 
 impulse r freq phase = mkOsc r "Impulse" [freq,phase] 1 0
 lfsaw   r freq phase = mkOsc r "LFSaw"   [freq,phase] 1 0

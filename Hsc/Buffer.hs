@@ -1,6 +1,6 @@
 module Hsc.Buffer where
 
-import Hsc.Construct
+import Hsc.Construct (mkFilter, mkFilterMCE, mkOsc)
 
 bufallpass' c buf i dly dcy = mkFilter c [buf,i,dly,dcy] 1 0
 bufallpassc = bufallpass' "BufAllpassC"

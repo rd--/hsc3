@@ -1,6 +1,5 @@
 module Hsc.FFT where
 
---import Hsc.UGen
 import Hsc.Rate (Rate(AR, KR))
 import Hsc.Construct (mkOsc, mkOsc', uniquify)
 import Hsc.UId (UId(UId))

@@ -1,6 +1,6 @@
 module Hsc.Information where
 
-import Hsc.Construct
+import Hsc.Construct (mkOsc)
 
 numaudiobuses    r = mkOsc r "NumAudioBuses"    [] 1 0
 numbuffers       r = mkOsc r "NumBuffers"       [] 1 0
