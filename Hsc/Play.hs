@@ -5,9 +5,6 @@ import Hsc.Graph (graph, graphdef)
 import Hsc.Udp (send', sync', close')
 import Hsc.Server
 import Hsc.IO (out)
-import Hsc.OpenSoundControl (Osc)
-
-import Network.Socket (Socket)
 
 d_recv' n u = d_recv (graphdef n (graph u))
 
