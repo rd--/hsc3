@@ -1,11 +1,13 @@
 module Hsc.Play where
 
-import Hsc.UGen
-import Hsc.Graph
-import Hsc.Math
-import Hsc.Udp
+import Hsc.UGen (UGen(..))
+import Hsc.Graph (graph, graphdef)
+import Hsc.Udp (send', sync', close')
 import Hsc.Server
-import Hsc.IO
+import Hsc.IO (out)
+import Hsc.OpenSoundControl (Osc)
+
+import Network.Socket (Socket)
 
 d_recv' n u = d_recv (graphdef n (graph u))
 
@@ -19,7 +21,7 @@ hasOutputs (MCE _)            = True
 hasOutputs _                  = False
 
 play fd u
-    | hasOutputs u = playu fd (out 0 u)
+    | hasOutputs u = playu fd (out (Constant 0) u)
     | otherwise    = playu fd u
 
 init_ fd = do send' fd (g_new 1 AddToTail 0)
