@@ -3,7 +3,9 @@ module Hsc.Construct where
 import Hsc.UId (UId(UId))
 import Hsc.UGen (UGen(UGen, MCE), rateOf, proxy)
 import Hsc.MCE (mced)
+
 import Data.Unique (newUnique, hashUnique)
+import Control.Monad (liftM, join)
 
 mkUId :: IO Int
 mkUId = do u <- newUnique
@@ -41,10 +43,7 @@ mkFilterMCE c i j o s = mkFilter c (i ++ mcel j) o s
 dupn n u  = do d  <- mapM uniquify (take n (repeat u))
                return (MCE d)
 
-dupn' n u = do u' <- u
-               d  <- mapM uniquify (take n (repeat u'))
-               return (MCE d)
+dup       = dupn 2
+dupn' n u = join ((liftM (dupn n) u))
+dup'      = dupn' 2
 
-dup  = dupn 2
-
-dup' = dupn' 2
