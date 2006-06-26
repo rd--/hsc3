@@ -73,7 +73,7 @@ c_getn id n      = OscM "/c_getn" [OscInt id, OscInt n]
 
 flatten_controls = concatMap (\(name,val) -> [OscString name, OscFloat val])
 n_set' id c      = OscM "/n_set" ([OscInt id] ++ flatten_controls c)
-s_new' n i a t c = OscM "/s_new" ([OscString n, OscInt i, OscInt a, OscInt t] ++ flatten_controls c)
+s_new' n i a t c = OscM "/s_new" ([OscString n, OscInt i, OscInt (addAction a), OscInt t] ++ flatten_controls c)
 
 -- Local Variables:
 -- truncate-lines:t
