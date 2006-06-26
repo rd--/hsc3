@@ -34,3 +34,16 @@ mcel u       = [u]
 mkOscMCE r c i j o s = mkOsc r c (i ++ mcel j) o s
 
 mkFilterMCE c i j o s = mkFilter c (i ++ mcel j) o s
+
+--
+
+dupn n u  = do d  <- mapM uniquify (take n (repeat u))
+               return (MCE d)
+
+dupn' n u = do u' <- u
+               d  <- mapM uniquify (take n (repeat u'))
+               return (MCE d)
+
+dup  = dupn 2
+
+dup' = dupn' 2
