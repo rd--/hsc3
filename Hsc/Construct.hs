@@ -12,6 +12,8 @@ mkUId = do u <- newUnique
 uniquify :: UGen -> IO UGen
 uniquify (UGen r n i o s _) = do uid <- mkUId
                                  return (UGen r n i o s (UId uid))
+uniquify (MCE u)           = do u' <- mapM uniquify u
+                                return (MCE u')
 
 consU r n i o s id = proxy (mced u)
     where u = UGen r n i o s id
