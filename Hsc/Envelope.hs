@@ -39,7 +39,7 @@ envperc :: UGen -> UGen -> UGen -> [EnvCurve] -> [UGen]
 envperc atk rls lvl crv = env [0.0, lvl, 0.0] [atk, rls] crv (-1.0) (-1.0)
 
 envperc' :: [UGen]
-envperc' = envperc 0.01 1.0 1.0[c,c]
+envperc' = envperc 0.01 1.0 1.0 [c,c]
     where c = EnvNum (-4.0)
 
 envtriangle :: UGen -> UGen -> [UGen]
