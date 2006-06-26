@@ -1,6 +1,6 @@
 module Hsc.Math where
 
-import Hsc.UGen (UGen(Constant), Special)
+import Hsc.UGen (UGen(Constant, MCE), Special)
 import Hsc.Construct (mkFilter)
 
 binop :: Special -> UGen -> UGen -> UGen
@@ -299,3 +299,10 @@ instance TernaryOp UGen where
     wrap a b c = unimplemented_ternaryop a b c
     fold a b c = unimplemented_ternaryop a b c
     clip i l h = mkFilter "Clip" [i,l,h] 1 0
+
+--
+
+mix (MCE u)  = foldl1 (+) u
+mix u        = u
+
+mix_fill n f = mix (MCE (map f [0..n-1]))
