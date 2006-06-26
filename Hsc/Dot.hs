@@ -18,7 +18,7 @@ uterminal u                  = (u,0)
 
 uedges :: UGen -> [UEdge]
 uedges u@(UGen _ _ i _ _ _) = map f i'
-    where g (u,_)  = or [isUGen u, isProxy u]
+    where g (u,_)  = or [isUGen u, isProxy u, isControl u]
           n        = length i - 1
           i'       = filter g $ zip i [0..n]
           f (i, j) = (uterminal i, (u, j))
@@ -122,7 +122,7 @@ ndot g u@(Control r n _) = nlabel g u
                            ++ ratecolor r
                            ++ "\",label=\""
                            ++ n ++ ":" ++ show (cindex g u)
-                           ++ "];"
+                           ++ "\"];"
 
 gdot :: Graph -> [String]
 gdot g@(Graph _ c u) = ["digraph Anonymous {"]
