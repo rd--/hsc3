@@ -41,6 +41,8 @@ nlabel g u
     | isControl  u = "C_" ++ show (cindex g u)
     | isUGen     u = "U_" ++ show (uindex g u)
 
+-- This is broken for Control edges...
+
 edot g ((lu, ln), (ru, rn)) = nlabel g lu ++ ":O_" ++ show ln
                               ++ " -> "
                               ++ nlabel g ru ++ ":I_" ++ show rn ++ ";"
@@ -117,11 +119,11 @@ ndot g u@(UGen r n i o s _) = rdot lbl clr [upr,lwr]
           o'  = length o - 1
           lwr = map (\j -> "<O_" ++ show j ++ ">") [0..o']
 
-ndot g u@(Control r n _) = nlabel g u
+ndot g u@(Control r n v) = nlabel g u
                            ++ "[shape=\"trapezium\", color=\""
                            ++ ratecolor r
                            ++ "\",label=\""
-                           ++ n ++ ":" ++ show (cindex g u)
+                           ++ n ++ ":" ++ show v
                            ++ "\"];"
 
 gdot :: Graph -> [String]
