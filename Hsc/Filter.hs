@@ -54,6 +54,8 @@ lpz2 i  = mkFilter "LPZ2" [i]   1 0
 
 median length i = mkFilter "Median" [length,i] 1 0
 
+muladd s m a = mkFilter "MulAdd" [s,m,a] 1 0
+
 onepole i coef = mkFilter "OnePole" [i,coef] 1 0
 onezero i coef = mkFilter "OneZero" [i,coef] 1 0
 
