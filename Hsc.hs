@@ -22,6 +22,7 @@ module Hsc (module Hsc.List,
             module Hsc.Server,
             module Hsc.Udp,
             module Hsc.Play,
+            module Hsc.Random,
             module Hsc.Schedule,
             module Hsc.Score,
             module Hsc.SndFile) where
@@ -50,6 +51,7 @@ import Hsc.OpenSoundControl
 import Hsc.Server
 import Hsc.Udp
 import Hsc.Play
+import Hsc.Random
 import Hsc.Schedule
 import Hsc.Score
 import Hsc.SndFile
