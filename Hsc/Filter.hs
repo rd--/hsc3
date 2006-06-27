@@ -44,6 +44,8 @@ latch i t = mkFilter "Latch" [i,t] 1 0
 
 leakdc i coef = mkFilter "LeakDC" [i,coef] 1 0
 
+linen g at sl rt da = mkFilter "Linen" [g,at,sl,rt,da] 1 0
+
 linlin i sl sh dl dh = mkFilter "LinLin" [i,sl,sh,dl,dh] 1 0
 
 lpf i f = mkFilter "LPF"  [i,f] 1 0
