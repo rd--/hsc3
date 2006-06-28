@@ -3,24 +3,25 @@ module Hsc.Math where
 import Hsc.UGen (UGen(Constant, MCE), Special)
 import Hsc.Construct (mkFilter)
 
-binop :: Special -> UGen -> UGen -> UGen
-binop i a b = mkFilter "BinaryOpUGen" [a,b] 1 i
+--binop :: Special -> UGen -> UGen -> UGen
+binop _ f (Constant a) (Constant b) = Constant (f a b)
+binop i _ a            b = mkFilter "BinaryOpUGen" [a,b] 1 i
 
 uop :: Special -> UGen -> UGen
 uop   i a   = mkFilter "UnaryOpUGen"  [a]   1 i
 
 instance Num UGen where
     negate         = uop 0
-    (+)            = binop 0
-    (-)            = binop 1
-    (*)            = binop 2
+    (+)            = binop 0 (+)
+    (-)            = binop 1 (-)
+    (*)            = binop 2 (*)
     abs            = uop 5
     signum         = uop 11
     fromInteger a  = Constant (fromInteger a)
 
 instance Fractional UGen where
     recip          = uop 16
-    (/)            = binop 4
+    (/)            = binop 4 (/)
     fromRational a = Constant (fromRational a)
 
 instance Floating UGen where
@@ -28,7 +29,7 @@ instance Floating UGen where
     exp            = uop 15
     log            = uop 25
     sqrt           = uop 14
-    (**)           = binop 25
+    (**)           = binop 25 (**)
     logBase a b    = log b / log a
     sin            = uop 28
     cos            = uop 29
@@ -52,16 +53,16 @@ instance Ord UGen where
     (<=) = error "Ord is partial, see OrdE"
     (>)  = error "Ord is partial, see OrdE"
     (>=) = error "Ord is partial, see OrdE"
-    min  = binop 12
-    max  = binop 13
+    min  = binop 12 min
+    max  = binop 13 max
 
 class EqE a where
     (==*)  :: a -> a -> a
     (/=*)  :: a -> a -> a
 
 instance EqE UGen where
-    (==*)  = binop 6
-    (/=*)  = binop 7
+    (==*)  = binop 6 (==*)
+    (/=*)  = binop 7 (/=*)
 
 instance EqE Float where
     a ==* b = if a == b then 1.0 else 0.0
@@ -74,10 +75,10 @@ class OrdE a where
     (>=*) :: a -> a -> a
 
 instance OrdE UGen where
-    (<*)  = binop 8
-    (<=*) = binop 10
-    (>*)  = binop 9
-    (>=*) = binop 11
+    (<*)  = binop 8  (<*)
+    (<=*) = binop 10 (<=*)
+    (>*)  = binop 9  (>*)
+    (>=*) = binop 11 (>=*)
 
 instance OrdE Float where
     a <* b   = if a < b   then 1.0 else 0.0
@@ -194,43 +195,43 @@ class (Num a, Fractional a, Floating a) => BinaryOp a where
     exprandrange   :: a -> a -> a
 
 instance BinaryOp UGen where
-    idiv           = binop  3
-    mod            = binop  5
-    bitand         = binop 14
-    bitor          = binop 15
-    bitxor         = binop 16
-    lcm            = binop 17
-    gcd            = binop 18
-    round          = binop 19
-    roundup        = binop 20
-    trunc          = binop 21
-    atan2          = binop 22
-    hypot          = binop 23
-    hypotx         = binop 24
-    pow            = binop 25
-    shiftleft      = binop 26
-    shiftright     = binop 27
-    unsignedshift  = binop 28
-    fill           = binop 29
-    ring1          = binop 30
-    ring2          = binop 31
-    ring3          = binop 32
-    ring4          = binop 33
-    difsqr         = binop 34
-    sumsqr         = binop 35
-    sqrsum         = binop 36
-    sqrdif         = binop 37
-    absdif         = binop 38
-    thresh         = binop 39
-    amclip         = binop 40
-    scaleneg       = binop 41
-    clip2          = binop 42
-    excess         = binop 43
-    fold2          = binop 44
-    wrap2          = binop 45
-    firstarg       = binop 46
-    randrange      = binop 47
-    exprandrange   = binop 48
+    idiv           = binop  3 unimplemented_binop
+    mod            = binop  5 unimplemented_binop
+    bitand         = binop 14 unimplemented_binop
+    bitor          = binop 15 unimplemented_binop
+    bitxor         = binop 16 unimplemented_binop
+    lcm            = binop 17 unimplemented_binop
+    gcd            = binop 18 unimplemented_binop
+    round          = binop 19 unimplemented_binop
+    roundup        = binop 20 unimplemented_binop
+    trunc          = binop 21 unimplemented_binop
+    atan2          = binop 22 unimplemented_binop
+    hypot          = binop 23 unimplemented_binop
+    hypotx         = binop 24 unimplemented_binop
+    pow            = binop 25 unimplemented_binop
+    shiftleft      = binop 26 unimplemented_binop
+    shiftright     = binop 27 unimplemented_binop
+    unsignedshift  = binop 28 unimplemented_binop
+    fill           = binop 29 unimplemented_binop
+    ring1          = binop 30 unimplemented_binop
+    ring2          = binop 31 unimplemented_binop
+    ring3          = binop 32 unimplemented_binop
+    ring4          = binop 33 unimplemented_binop
+    difsqr         = binop 34 unimplemented_binop
+    sumsqr         = binop 35 unimplemented_binop
+    sqrsum         = binop 36 unimplemented_binop
+    sqrdif         = binop 37 unimplemented_binop
+    absdif         = binop 38 unimplemented_binop
+    thresh         = binop 39 unimplemented_binop
+    amclip         = binop 40 unimplemented_binop
+    scaleneg       = binop 41 unimplemented_binop
+    clip2          = binop 42 unimplemented_binop
+    excess         = binop 43 unimplemented_binop
+    fold2          = binop 44 unimplemented_binop
+    wrap2          = binop 45 unimplemented_binop
+    firstarg       = binop 46 unimplemented_binop
+    randrange      = binop 47 unimplemented_binop
+    exprandrange   = binop 48 unimplemented_binop
 
 unimplemented_binop a b = error ("unimplemented binop" ++ show (a,b))
 
