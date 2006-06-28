@@ -108,6 +108,7 @@ class (Num a, Fractional a, Floating a) => UnaryOp a where
     cpsoct         :: a -> a
     log2           :: a -> a
     log10          :: a -> a
+    softclip       :: a -> a
 
 instance UnaryOp UGen where
     notE           = uop 1
@@ -131,6 +132,7 @@ instance UnaryOp UGen where
     cpsoct         = uop 24
     log2           = uop 26
     log10          = uop 27
+    softclip       = uop 43
 
 instance UnaryOp Float where
     notE a      = if a >  0.0 then 0.0 else 1.0
@@ -154,6 +156,7 @@ instance UnaryOp Float where
     cpsoct a    = log2 (a * 0.0022727272727) + 4.75
     log2 a      = logBase 2 a
     log10 a     = logBase 10 a
+    softclip a  = a
 
 class (Num a, Fractional a, Floating a) => BinaryOp a where
     idiv           :: a -> a -> a
