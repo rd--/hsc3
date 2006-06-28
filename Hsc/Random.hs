@@ -6,6 +6,10 @@ rrand :: Float -> Float -> IO Float
 rrand l r = do n <- getStdRandom (randomR (l,r))
                return n
 
+rrandi :: Int -> Int -> IO Int
+rrandi l r = do n <- getStdRandom (randomR (l,r))
+                return n
+
 -- Normal value in [0,1]
 
 nrrand = rrand 0 1
