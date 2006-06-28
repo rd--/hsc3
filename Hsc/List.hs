@@ -1,7 +1,7 @@
 module Hsc.List where
 
 import Data.Maybe (fromJust)
-import Data.List  (nub, findIndex, elemIndex)
+import Data.List  (nub, findIndex, elemIndex, transpose)
 
 instance Num a => Num [a] where
     negate         = map negate
@@ -22,3 +22,5 @@ nub' l = nub (reverse l)
 
 iota 0 _ _ = []
 iota n i s = i : (iota (n - 1) (i + s) s)
+
+interleave l = concat (transpose l)
