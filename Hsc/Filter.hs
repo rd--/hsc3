@@ -1,6 +1,6 @@
 module Hsc.Filter where
 
-import Hsc.Construct (mkFilter)
+import Hsc.Construct (mkFilter, mkFilterMCE)
 
 allpass' c i max dly dcy = mkFilter c [i, max, dly, dcy] 1 0
 allpassn = allpass' "AllpassN"
@@ -36,6 +36,8 @@ fos i a0 a1 b1 = mkFilter "FOS" [i,a0,a1,b1] 1 0
 hpf i f = mkFilter "HPF"  [i,f] 1 0
 hpz1 i  = mkFilter "HPZ1" [i]   1 0
 hpz2 i  = mkFilter "HPZ2" [i]   1 0
+
+klank i fs fp d s = mkFilterMCE "Klank" [i,fs,fp,d] s 1 0
 
 lag   i t = mkFilter "Lag"   [i,t] 1 0
 lag2  i t = mkFilter "Lag2"  [i,t] 1 0
