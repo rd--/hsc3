@@ -1,46 +1,44 @@
 module Hsc.Math where
 
-import Hsc.UGen (UGen(Constant, MCE), Special)
+import Hsc.UGen (UGen(Constant, MCE))
 import Hsc.Construct (mkFilter)
 
---binop :: Special -> UGen -> UGen -> UGen
-binop _ f (Constant a) (Constant b) = Constant (f a b)
-binop i _ a            b = mkFilter "BinaryOpUGen" [a,b] 1 i
+uop _ f (Constant a) = Constant (f a) 
+uop i _ a            = mkFilter "UnaryOpUGen"  [a]   1 i
 
-uop :: Special -> UGen -> UGen
-uop   i a   = mkFilter "UnaryOpUGen"  [a]   1 i
+binop _ f (Constant a) (Constant b) = Constant (f a b)
+binop i _ a            b            = mkFilter "BinaryOpUGen" [a,b] 1 i
 
 instance Num UGen where
-    negate         = uop 0
+    negate         = uop 0 negate
     (+)            = binop 0 (+)
     (-)            = binop 1 (-)
     (*)            = binop 2 (*)
-    abs            = uop 5
-    signum         = uop 11
+    abs            = uop 5 abs
+    signum         = uop 11 signum
     fromInteger a  = Constant (fromInteger a)
 
 instance Fractional UGen where
-    recip          = uop 16
+    recip          = uop 16 recip
     (/)            = binop 4 (/)
     fromRational a = Constant (fromRational a)
 
 instance Floating UGen where
     pi             = Constant pi
-    exp            = uop 15
-    log            = uop 25
-    sqrt           = uop 14
+    exp            = uop 15 exp
+    log            = uop 25 log
+    sqrt           = uop 14 sqrt
     (**)           = binop 25 (**)
     logBase a b    = log b / log a
-    sin            = uop 28
-    cos            = uop 29
-    tan            = uop 30
-    asin           = uop 31
-    acos           = uop 32
-    atan           = uop 33
-    sinh           = uop 34
-    cosh           = uop 35
-    tanh           = uop 36
-    -- cf. module Haskore.Interface.CSound.Orchestra
+    sin            = uop 28 sin
+    cos            = uop 29 cos
+    tan            = uop 30 tan
+    asin           = uop 31 asin
+    acos           = uop 32 acos
+    atan           = uop 33 atan
+    sinh           = uop 34 sinh
+    cosh           = uop 35 cosh
+    tanh           = uop 36 tanh
     asinh x        = log (sqrt (x*x+1) + x)
     acosh x        = log (sqrt (x*x-1) + x)
     atanh x        = (log (1+x) - log (1-x)) / 2
@@ -111,52 +109,54 @@ class (Num a, Fractional a, Floating a) => UnaryOp a where
     softclip       :: a -> a
 
 instance UnaryOp UGen where
-    notE           = uop 1
-    isnil          = uop 2
-    notnil         = uop 3
-    bitnot         = uop 4
-    asfloat        = uop 6
-    asint          = uop 7
-    ceil           = uop 8
-    floorE         = uop 9
-    frac           = uop 10
-    squared        = uop 12
-    cubed          = uop 13
-    midicps        = uop 17
-    cpsmidi        = uop 18
-    midiratio      = uop 19
-    ratiomidi      = uop 20
-    dbamp          = uop 21
-    ampdb          = uop 22
-    octcps         = uop 23
-    cpsoct         = uop 24
-    log2           = uop 26
-    log10          = uop 27
-    softclip       = uop 43
+    notE           = uop 1 notE
+    isnil          = uop 2 isnil
+    notnil         = uop 3 notnil
+    bitnot         = uop 4 bitnot
+    asfloat        = uop 6 asfloat
+    asint          = uop 7 asint
+    ceil           = uop 8 ceil
+    floorE         = uop 9 floorE
+    frac           = uop 10 frac
+    squared        = uop 12 squared
+    cubed          = uop 13 cubed
+    midicps        = uop 17 midicps
+    cpsmidi        = uop 18 cpsmidi
+    midiratio      = uop 19 midiratio
+    ratiomidi      = uop 20 ratiomidi
+    dbamp          = uop 21 dbamp
+    ampdb          = uop 22 ampdb
+    octcps         = uop 23 octcps
+    cpsoct         = uop 24 cpsoct
+    log2           = uop 26 log2
+    log10          = uop 27 log10
+    softclip       = uop 43 softclip
+
+__uop a = error ("unimplemented unary op" ++ show a)
 
 instance UnaryOp Float where
     notE a      = if a >  0.0 then 0.0 else 1.0
     isnil a     = if a == 0.0 then 0.0 else 1.0
     notnil a    = if a /= 0.0 then 0.0 else 1.0
-    bitnot a    = a
-    asfloat a   = a
-    asint a     = a
+    bitnot a    = __uop a
+    asfloat a   = __uop a
+    asint a     = __uop a
     ceil a      = fromIntegral (ceiling a)
     floorE a    = fromIntegral (floor a)
-    frac a      = a
+    frac a      = __uop a
     squared a   = a * a
     cubed   a   = a * a * a
     midicps a   = 440.0 * (2.0 ** ((a - 69.0) * 0.083333333333))
     cpsmidi a   = (log2 (a * 0.0022727272727) * 12.0) + 69.0
     midiratio a = 2.0 ** (a * 0.083333333333)
     ratiomidi a = 12.0 * (log2 a)
-    dbamp a     = a
-    ampdb a     = a
+    dbamp a     = __uop a
+    ampdb a     = __uop a
     octcps a    = 440.0 * (2.0 ** (a - 4.75))
     cpsoct a    = log2 (a * 0.0022727272727) + 4.75
     log2 a      = logBase 2 a
     log10 a     = logBase 10 a
-    softclip a  = a
+    softclip a  = __uop a
 
 class (Num a, Fractional a, Floating a) => BinaryOp a where
     idiv           :: a -> a -> a
@@ -197,66 +197,66 @@ class (Num a, Fractional a, Floating a) => BinaryOp a where
     randrange      :: a -> a -> a
     exprandrange   :: a -> a -> a
 
-instance BinaryOp UGen where
-    idiv           = binop  3 unimplemented_binop
-    mod            = binop  5 unimplemented_binop
-    bitand         = binop 14 unimplemented_binop
-    bitor          = binop 15 unimplemented_binop
-    bitxor         = binop 16 unimplemented_binop
-    lcm            = binop 17 unimplemented_binop
-    gcd            = binop 18 unimplemented_binop
-    round          = binop 19 unimplemented_binop
-    roundup        = binop 20 unimplemented_binop
-    trunc          = binop 21 unimplemented_binop
-    atan2          = binop 22 unimplemented_binop
-    hypot          = binop 23 unimplemented_binop
-    hypotx         = binop 24 unimplemented_binop
-    pow            = binop 25 unimplemented_binop
-    shiftleft      = binop 26 unimplemented_binop
-    shiftright     = binop 27 unimplemented_binop
-    unsignedshift  = binop 28 unimplemented_binop
-    fill           = binop 29 unimplemented_binop
-    ring1          = binop 30 unimplemented_binop
-    ring2          = binop 31 unimplemented_binop
-    ring3          = binop 32 unimplemented_binop
-    ring4          = binop 33 unimplemented_binop
-    difsqr         = binop 34 unimplemented_binop
-    sumsqr         = binop 35 unimplemented_binop
-    sqrsum         = binop 36 unimplemented_binop
-    sqrdif         = binop 37 unimplemented_binop
-    absdif         = binop 38 unimplemented_binop
-    thresh         = binop 39 unimplemented_binop
-    amclip         = binop 40 unimplemented_binop
-    scaleneg       = binop 41 unimplemented_binop
-    clip2          = binop 42 unimplemented_binop
-    excess         = binop 43 unimplemented_binop
-    fold2          = binop 44 unimplemented_binop
-    wrap2          = binop 45 unimplemented_binop
-    firstarg       = binop 46 unimplemented_binop
-    randrange      = binop 47 unimplemented_binop
-    exprandrange   = binop 48 unimplemented_binop
+__binop a b = error ("unimplemented binop" ++ show (a,b))
 
-unimplemented_binop a b = error ("unimplemented binop" ++ show (a,b))
+instance BinaryOp UGen where
+    idiv           = binop  3 __binop
+    mod            = binop  5 __binop
+    bitand         = binop 14 __binop
+    bitor          = binop 15 __binop
+    bitxor         = binop 16 __binop
+    lcm            = binop 17 __binop
+    gcd            = binop 18 __binop
+    round          = binop 19 __binop
+    roundup        = binop 20 __binop
+    trunc          = binop 21 __binop
+    atan2          = binop 22 __binop
+    hypot          = binop 23 __binop
+    hypotx         = binop 24 __binop
+    pow            = binop 25 __binop
+    shiftleft      = binop 26 __binop
+    shiftright     = binop 27 __binop
+    unsignedshift  = binop 28 __binop
+    fill           = binop 29 __binop
+    ring1          = binop 30 __binop
+    ring2          = binop 31 __binop
+    ring3          = binop 32 __binop
+    ring4          = binop 33 __binop
+    difsqr         = binop 34 __binop
+    sumsqr         = binop 35 __binop
+    sqrsum         = binop 36 __binop
+    sqrdif         = binop 37 __binop
+    absdif         = binop 38 __binop
+    thresh         = binop 39 __binop
+    amclip         = binop 40 __binop
+    scaleneg       = binop 41 __binop
+    clip2          = binop 42 __binop
+    excess         = binop 43 __binop
+    fold2          = binop 44 __binop
+    wrap2          = binop 45 __binop
+    firstarg       = binop 46 __binop
+    randrange      = binop 47 __binop
+    exprandrange   = binop 48 __binop
 
 instance BinaryOp Float where
-    idiv a b           = unimplemented_binop a b
-    mod a b            = unimplemented_binop a b
-    bitand a b         = unimplemented_binop a b
-    bitor a b          = unimplemented_binop a b
-    bitxor a b         = unimplemented_binop a b
-    lcm a b            = unimplemented_binop a b
-    gcd a b            = unimplemented_binop a b
+    idiv a b           = __binop a b
+    mod a b            = __binop a b
+    bitand a b         = __binop a b
+    bitor a b          = __binop a b
+    bitxor a b         = __binop a b
+    lcm a b            = __binop a b
+    gcd a b            = __binop a b
     round a b          = if b == 0 then a else floorE (a/b + 0.5) * b
     roundup a b        = if b == 0 then a else ceil (a/b + 0.5) * b
-    trunc a b          = unimplemented_binop a b
+    trunc a b          = __binop a b
     atan2 a b          = atan (b/a)
-    hypot a b          = unimplemented_binop a b
-    hypotx a b         = unimplemented_binop a b
-    pow a b            = unimplemented_binop a b
-    shiftleft a b      = unimplemented_binop a b
-    shiftright a b     = unimplemented_binop a b
-    unsignedshift a b  = unimplemented_binop a b
-    fill a b           = unimplemented_binop a b
+    hypot a b          = __binop a b
+    hypotx a b         = __binop a b
+    pow a b            = __binop a b
+    shiftleft a b      = __binop a b
+    shiftright a b     = __binop a b
+    unsignedshift a b  = __binop a b
+    fill a b           = __binop a b
     ring1 a b          = a * b + a
     ring2 a b          = a * b + a + b
     ring3 a b          = a * a * b
@@ -274,8 +274,8 @@ instance BinaryOp Float where
     fold2 a b          = fold a (-b) b
     wrap2 a b          = wrap a (-b) b
     firstarg a _       = a
-    randrange a b      = unimplemented_binop a b
-    exprandrange a b   = unimplemented_binop a b
+    randrange a b      = __binop a b
+    exprandrange a b   = __binop a b
 
 class (Num a, Fractional a, Floating a) => TernaryOp a where
     wrap :: a -> a -> a -> a
@@ -297,14 +297,12 @@ instance TernaryOp Float where
               y' = if y >= r then r' - y else y
     clip a b c = if a < b then b else if a > c then c else a
 
-unimplemented_ternaryop a b c = error ("unimplemented ternary op" ++ show (a, b, c))
+__ternaryop a b c = error ("unimplemented ternary op" ++ show (a, b, c))
 
 instance TernaryOp UGen where
-    wrap a b c = unimplemented_ternaryop a b c
-    fold a b c = unimplemented_ternaryop a b c
+    wrap a b c = __ternaryop a b c
+    fold a b c = __ternaryop a b c
     clip i l h = mkFilter "Clip" [i,l,h] 1 0
-
---
 
 mix (MCE u)  = foldl1 (+) u
 mix u        = u
