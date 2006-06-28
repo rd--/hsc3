@@ -25,6 +25,7 @@ module Hsc (module Hsc.List,
             module Hsc.Random,
             module Hsc.Schedule,
             module Hsc.Score,
+            module Hsc.Status,
             module Hsc.SndFile) where
 
 import Hsc.List
@@ -54,4 +55,5 @@ import Hsc.Play
 import Hsc.Random
 import Hsc.Schedule
 import Hsc.Score
+import Hsc.Status
 import Hsc.SndFile
