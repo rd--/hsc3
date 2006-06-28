@@ -27,5 +27,7 @@ bufsamples    r buf = mkOsc r "BufSamples"    [buf] 1 0
 bufrd n r buf phs lp intp = mkOsc r "BufRd" [buf,phs,lp,intp] n 0
 bufwr buf phs lp i = mkFilterMCE "BufWr" [buf,phs,lp] i 0 0
 
+playbuf r n b r' t s l = mkOsc r "PlayBuf" [b,r',t,s,l] n 0
+
 tgrains n trg buf rate cntr dur pan amp interp = mkFilter "TGrains" i n 0
     where i = [trg,buf,rate,cntr,dur,pan,amp,interp]
