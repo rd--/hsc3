@@ -78,5 +78,7 @@ slew i up dn = mkFilter "Slew" [i,up,dn] 1 0
 
 sos i a0 a1 a2 b1 b2 = mkFilter "SOS" [i,a0,a1,a2,b1,b2] 1 0
 
+stepper t r min max s v = mkFilter "Stepper" [t,r,min,max,s,v] 1 0
+
 twopole i freq radius = mkFilter "TwoPole" [i,freq,radius] 1 0
 twozero i freq radius = mkFilter "TwoZero" [i,freq,radius] 1 0

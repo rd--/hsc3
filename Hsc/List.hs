@@ -24,3 +24,12 @@ iota 0 _ _ = []
 iota n i s = i : (iota (n - 1) (i + s) s)
 
 interleave l = concat (transpose l)
+
+compose []     i = i
+compose (f:fs) i = compose fs (f i)
+
+{--
+f .> g     = g . f
+compose fs = foldl (.>) id fs
+--}
+
