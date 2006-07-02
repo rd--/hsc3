@@ -52,6 +52,8 @@ envsine dur lvl = env [0.0, lvl, 0.0] [n, n] c (-1.0) (-1.0)
     where c = [EnvSin, EnvSin]
           n = dur / 2.0
 
+envlinen aT sT rT l c = env [0, l, l, 0] [aT, sT, rT] c (-1) (-1)
+
 xline r start end dur done = mkOsc r "XLine" [start,end,dur,done] 1 0
 line  r start end dur done = mkOsc r "Line"  [start,end,dur,done] 1 0
 
