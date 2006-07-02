@@ -43,6 +43,9 @@ f32_i32 d = runST ((do a  <- newArray (1, 1) d
 f32_u8v :: Float32 -> U8v
 f32_u8v f = i32_u8v (fromIntegral $ f32_i32 f)
 
+f64_f32 :: Float64 -> Float32
+f64_f32 n = realToFrac n
+
 f64_i64 :: Float64 -> Int64
 f64_i64 d = runST ((do a  <- newArray (1, 1) d
                        a' <- castSTUArray a

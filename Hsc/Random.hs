@@ -5,13 +5,9 @@ import Hsc.UGen(UGen(Constant, MCE))
 import Control.Monad
 import System.Random
 
-rrand :: Float -> Float -> IO Float
+rrand :: Double -> Double -> IO Double
 rrand l r = do n <- getStdRandom (randomR (l,r))
                return n
-
-rrandd :: Double -> Double -> IO Double
-rrandd l r = do n <- getStdRandom (randomR (l,r))
-                return n
 
 rrandi :: Int -> Int -> IO Int
 rrandi l r = do n <- getStdRandom (randomR (l,r))

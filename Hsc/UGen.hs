@@ -6,8 +6,8 @@ import Hsc.Rate (Rate(IR))
 type Name     = String
 type Output   = Rate
 type Special  = Int
-data UGen     = Constant Float
-              | Control Rate Name Float
+data UGen     = Constant Double
+              | Control Rate Name Double
               | UGen Rate Name [UGen] [Output] Special UId
               | Proxy UGen Int
               | MCE [UGen]

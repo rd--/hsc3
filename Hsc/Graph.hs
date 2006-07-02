@@ -62,9 +62,9 @@ graphdef s g@(Graph n c u) = str_u8v "SCgf" ++
                              i16_u8v 1 ++
                              pstr_u8v s ++
                              i16_u8v (length n) ++
-                             concatMap (f32_u8v . nvalue) n ++
+                             concatMap (f32_u8v . f64_f32 . nvalue) n ++
                              i16_u8v (length c) ++
-                             concatMap (f32_u8v . cdefault) c ++
+                             concatMap (f32_u8v . f64_f32 . cdefault) c ++
                              i16_u8v (length c) ++
                              concatMap (ugen_u8v g) c ++
                              i16_u8v (length u) ++

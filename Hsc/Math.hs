@@ -62,7 +62,7 @@ instance EqE UGen where
     (==*)  = binop 6 (==*)
     (/=*)  = binop 7 (/=*)
 
-instance EqE Float where
+instance EqE Double where
     a ==* b = if a == b then 1.0 else 0.0
     a /=* b = if a /= b then 1.0 else 0.0
 
@@ -78,7 +78,7 @@ instance OrdE UGen where
     (>*)  = binop 9  (>*)
     (>=*) = binop 11 (>=*)
 
-instance OrdE Float where
+instance OrdE Double where
     a <* b   = if a < b   then 1.0 else 0.0
     a <=* b  = if a <= b  then 1.0 else 0.0
     a >* b   = if a > b   then 1.0 else 0.0
@@ -134,7 +134,7 @@ instance UnaryOp UGen where
 
 __uop a = error ("unimplemented unary op" ++ show a)
 
-instance UnaryOp Float where
+instance UnaryOp Double where
     notE a      = if a >  0.0 then 0.0 else 1.0
     isnil a     = if a == 0.0 then 0.0 else 1.0
     notnil a    = if a /= 0.0 then 0.0 else 1.0
@@ -238,7 +238,7 @@ instance BinaryOp UGen where
     randrange      = binop 47 __binop
     exprandrange   = binop 48 __binop
 
-instance BinaryOp Float where
+instance BinaryOp Double where
     idiv a b           = __binop a b
     mod a b            = __binop a b
     bitand a b         = __binop a b
@@ -282,7 +282,7 @@ class (Num a, Fractional a, Floating a) => TernaryOp a where
     fold :: a -> a -> a -> a
     clip :: a -> a -> a -> a
 
-instance TernaryOp Float where
+instance TernaryOp Double where
     wrap a b c = if a >= b && a <= c 
                  then a 
                  else a - r * floorE (a-b)/r 
