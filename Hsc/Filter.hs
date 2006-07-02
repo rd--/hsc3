@@ -63,6 +63,8 @@ onezero i coef = mkFilter "OneZero" [i,coef] 1 0
 
 pitchshift i w p d t = mkFilter "PitchShift" [i,w,p,d,t] 1 0
 
+pulsedivider trig div start = mkFilter "PulseDivider" [trig, div, start] 1 0
+
 quad' c' freq a b c xi = mkFilter c' [freq,a,b,c,xi] 1 0
 quadc = quad' "QuadC"
 quadl = quad' "QuadL"
