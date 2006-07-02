@@ -39,4 +39,4 @@ at t f = do n <- f t
             at (t + n) f
 
 at' f = do t <- utc
-           forkIO (at t f)
+           at t f
