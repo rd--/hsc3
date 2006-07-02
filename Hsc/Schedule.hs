@@ -30,3 +30,13 @@ ntp = do t <- utc
 pause :: Double -> IO ()
 pause n = threadDelay i
     where i = dti $ n * 1000000.0
+
+pauseUntil t = do n <- utc
+                  pause (t - n)
+
+at t f = do n <- f t
+            pauseUntil (t + n)
+            at (t + n) f
+
+at' f = do t <- utc
+           forkIO (at t f)
