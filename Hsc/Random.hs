@@ -9,6 +9,10 @@ rrand :: Float -> Float -> IO Float
 rrand l r = do n <- getStdRandom (randomR (l,r))
                return n
 
+rrandd :: Double -> Double -> IO Double
+rrandd l r = do n <- getStdRandom (randomR (l,r))
+                return n
+
 rrandi :: Int -> Int -> IO Int
 rrandi l r = do n <- getStdRandom (randomR (l,r))
                 return n
