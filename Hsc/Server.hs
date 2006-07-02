@@ -64,7 +64,7 @@ b_get id i             = OscM "/b_get" [OscInt id, OscInt i]
 b_getn id i n          = OscM "/b_getn" [OscInt id, OscInt i, OscInt n]
 
 c_set  id f      = OscM "/c_set" [OscInt id, OscFloat f]
-c_setn id n f    = OscM "/c_setn" $ [OscInt id, OscInt n, OscInt (length l)] ++ (map OscFloat f)
+c_setn id n f    = OscM "/c_setn" $ [OscInt id, OscInt n, OscInt (length f)] ++ (map OscFloat f)
 c_fill id i f    = OscM "/c_fill" [OscInt id, OscInt i, OscFloat f]
 c_get  id        = OscM "/c_get" [OscInt id]
 c_getn id n      = OscM "/c_getn" [OscInt id, OscInt n]
