@@ -5,7 +5,7 @@ import Hsc.Schedule (utc_ntp)
 import Hsc.U8v
 
 data OscT = OscInt Int
-          | OscFloat Float
+          | OscFloat Double
           | OscDouble Double
           | OscString String
           | OscBlob U8v
@@ -34,7 +34,7 @@ osc_pad s p = s ++ (replicate n p)
 
 osc_u8v :: OscT -> U8v
 osc_u8v (OscInt i)    = i32_u8v i
-osc_u8v (OscFloat f)  = f32_u8v f
+osc_u8v (OscFloat f)  = f32_u8v (f64_f32 f)
 osc_u8v (OscDouble d) = f64_u8v d
 osc_u8v (OscString s) = osc_pad (str_u8v s) 0
 osc_u8v (OscBlob b)   = osc_u8v (OscInt n) ++ b'
@@ -66,7 +66,7 @@ osc_sz' c    b = osc_pad'' (osc_sz c b)
 
 u8v_osc :: Char -> U8v -> OscT
 u8v_osc 'i' b = OscInt $ u8v_i32 b
-u8v_osc 'f' b = OscFloat $ u8v_f32 b
+u8v_osc 'f' b = OscFloat $ f32_f64 (u8v_f32 b)
 u8v_osc 'd' b = OscDouble $ u8v_f64 b
 u8v_osc 's' b = OscString $ u8v_str $ take n b where n = osc_sz 's' b
 u8v_osc 'b' b = OscBlob $ take n (drop 4 b) where n = osc_sz 'b' b
