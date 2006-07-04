@@ -30,7 +30,7 @@ d_free n        = OscM "/d_free" [OscString n]
 n_free id       = OscM "/n_free" [OscInt id]
 n_run id f      = OscM "/n_run" [OscInt id, OscInt f]
 n_set id i f    = OscM "/n_set" [OscInt id, OscString i, OscFloat f]
-n_setn id i n l = OscM "/n_setn" $ [OscInt id, OscString i, OscInt n, OscInt (length l)] ++ (map OscFloat l)
+n_setn id i n l = OscM "/n_setn" $ [OscInt id, OscString i, OscInt (length l)] ++ (map OscFloat l)
 n_fill id i n v = OscM "/n_fill" [OscInt id, OscString i, OscInt n, OscFloat v]
 n_map id i b    = OscM "/n_map" [OscInt id, OscString i, OscInt b]
 n_mapn id i b n = OscM "/n_mapn" [OscInt id, OscString i, OscInt b, OscInt n]
@@ -64,7 +64,7 @@ b_get id i             = OscM "/b_get" [OscInt id, OscInt i]
 b_getn id i n          = OscM "/b_getn" [OscInt id, OscInt i, OscInt n]
 
 c_set  id f      = OscM "/c_set" [OscInt id, OscFloat f]
-c_setn id n f    = OscM "/c_setn" $ [OscInt id, OscInt n, OscInt (length f)] ++ (map OscFloat f)
+c_setn id n f    = OscM "/c_setn" $ [OscInt id, OscInt (length f)] ++ (map OscFloat f)
 c_fill id i f    = OscM "/c_fill" [OscInt id, OscInt i, OscFloat f]
 c_get  id        = OscM "/c_get" [OscInt id]
 c_getn id n      = OscM "/c_getn" [OscInt id, OscInt n]
