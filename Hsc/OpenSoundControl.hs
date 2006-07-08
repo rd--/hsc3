@@ -84,3 +84,9 @@ unosc b = OscM cmd arg
           m               = osc_sz' 's' (drop n b)
           (OscString dsc) = u8v_osc 's' (drop n b)
           arg             = unosc' (drop 1 dsc) (drop (n + m) b)
+
+osc_show' (OscInt n)    = show n
+osc_show' (OscFloat n)  = show n
+osc_show' (OscDouble n) = show n
+osc_show' (OscString s) = show s
+osc_show' (OscBlob b)   = show b

@@ -1,7 +1,7 @@
 module Hsc.Status where
 
 import Hsc.Server (status)
-import Hsc.OpenSoundControl (Osc(OscM), OscT(OscInt, OscFloat, OscDouble))
+import Hsc.OpenSoundControl (Osc(OscM), osc_show')
 import Hsc.Udp (sync', sc, close')
 import Hsc.List (interleave)
 
@@ -13,10 +13,6 @@ statusFields = ["# UGens                     ",
                 "% CPU (Peak)                ",
                 "Sample Rate (Nominal)       ",
                 "Sample Rate (Actual)        "]
-
-osc_show' (OscInt n)    = show n
-osc_show' (OscFloat n)  = show n
-osc_show' (OscDouble n) = show n
 
 statusInfo (OscM "status.reply" l) = map osc_show' (tail l)
 statusInfo _                       = error "non status.reply message"
