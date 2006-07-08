@@ -1,8 +1,7 @@
 module Hsc.FFT where
 
 import Hsc.Rate (Rate(AR, KR))
-import Hsc.Construct (mkOsc, mkOsc', uniquify)
-import Hsc.UId (UId(UId))
+import Hsc.Construct (mkOsc, mkOsc', uniquify, zeroUId)
 
 fft  buf i = mkOsc KR "FFT"  [buf,i] 1 0
 ifft buf   = mkOsc AR "IFFT" [buf]   1 0
@@ -39,8 +38,8 @@ pv_rectcomb2 ba bb teeth phase width = mkOsc KR "PV_RectComb2" [ba,bb,teeth,phas
 pv_randcomb' id buf wp trg = mkOsc' KR "PV_RandComb" [buf,wp,trg] 1 0 id
 pv_randwipe' id ba bb wp trg = mkOsc' KR "PV_RandWipe" [ba,bb,wp,trg] 1 0 id
 
-pv_randcomb buf wp trg = uniquify (pv_randcomb' (UId 0) buf wp trg)
-pv_randwipe ba bb wp trg = uniquify (pv_randwipe' (UId 0) ba bb wp trg)
+pv_randcomb buf wp trg = uniquify (pv_randcomb' zeroUId buf wp trg)
+pv_randwipe ba bb wp trg = uniquify (pv_randwipe' zeroUId ba bb wp trg)
 
 -- Local Variables:
 -- truncate-lines:t

@@ -1,19 +1,23 @@
 module Hsc.Construct where
 
-import Hsc.UId (UId(UId))
-import Hsc.UGen (UGen(UGen, MCE), rateOf, proxy)
+import Hsc.UGen (UId(..), UGen(..), rateOf, proxy)
 import Hsc.MCE (mced)
 
 import Data.Unique (newUnique, hashUnique)
 import Control.Monad (liftM, join)
 
-mkUId :: IO Int
-mkUId = do u <- newUnique
-           return (hashUnique u)
+zeroUId = (UId 0)
+
+mkId :: IO Int
+mkId = do u <- newUnique
+          return (hashUnique u)
+
+mkUId = do id <- mkId
+           return (UId id)
 
 uniquify :: UGen -> IO UGen
-uniquify (UGen r n i o s _) = do uid <- mkUId
-                                 return (UGen r n i o s (UId uid))
+uniquify (UGen r n i o s _) = do id <- mkUId
+                                 return (UGen r n i o s id)
 uniquify (MCE u)            = do u' <- mapM uniquify u
                                  return (MCE u')
 uniquify u                  = error ("uniquify: illegal value" ++ show u)
@@ -21,13 +25,13 @@ uniquify u                  = error ("uniquify: illegal value" ++ show u)
 consU r n i o s id = proxy (mced u)
     where u = UGen r n i o s id
 
-mkOsc r c i o s = consU r c i o' s (UId 0)
+mkOsc r c i o s = consU r c i o' s zeroUId
     where o' = replicate o r
 
 mkOsc' r c i o s id = consU r c i o' s id
     where o' = replicate o r
 
-mkFilter c i o s = consU r c i o' s (UId 0)
+mkFilter c i o s = consU r c i o' s zeroUId
     where r = maximum (map rateOf i)
           o'= replicate o r
 

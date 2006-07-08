@@ -1,7 +1,6 @@
 module Hsc.Noise where
 
-import Hsc.Construct (mkOsc, mkOsc', uniquify)
-import Hsc.UId       (UId(UId))
+import Hsc.Construct (mkOsc, mkOsc', uniquify, zeroUId)
 
 brownnoise' id r = mkOsc' r "BrownNoise" [] 1 0 id
 clipnoise'  id r = mkOsc' r "ClipNoise"  [] 1 0 id
@@ -34,31 +33,31 @@ rand'    id r lo hi   = mkOsc' r "Rand"    [lo,hi]   1 0 id
 exprand' id r lo hi   = mkOsc' r "ExpRand" [lo,hi]   1 0 id
 linrand' id r lo hi m = mkOsc' r "LinRand" [lo,hi,m] 1 0 id
 
-brownnoise r = uniquify (brownnoise' (UId 0) r)
-clipnoise r  = uniquify (clipnoise'  (UId 0) r)
-graynoise r  = uniquify (graynoise'  (UId 0) r)
-pinknoise r  = uniquify (pinknoise'  (UId 0) r)
-whitenoise r = uniquify (whitenoise' (UId 0) r)
+brownnoise r = uniquify (brownnoise' zeroUId r)
+clipnoise r  = uniquify (clipnoise'  zeroUId r)
+graynoise r  = uniquify (graynoise'  zeroUId r)
+pinknoise r  = uniquify (pinknoise'  zeroUId r)
+whitenoise r = uniquify (whitenoise' zeroUId r)
 
-lfclipnoise r freq = uniquify (lfclipnoise'  (UId 0) r freq)
-lfnoise0    r freq = uniquify (lfnoise0'     (UId 0) r freq)
-lfnoise1    r freq = uniquify (lfnoise1'     (UId 0) r freq)
-lfnoise2    r freq = uniquify (lfnoise2'     (UId 0) r freq)
+lfclipnoise r freq = uniquify (lfclipnoise'  zeroUId r freq)
+lfnoise0    r freq = uniquify (lfnoise0'     zeroUId r freq)
+lfnoise1    r freq = uniquify (lfnoise1'     zeroUId r freq)
+lfnoise2    r freq = uniquify (lfnoise2'     zeroUId r freq)
 
-dust  r density = uniquify (dust'   (UId 0) r density)
-dust2 r density = uniquify (dust2'  (UId 0) r density)
+dust  r density = uniquify (dust'   zeroUId r density)
+dust2 r density = uniquify (dust2'  zeroUId r density)
 
-texprand r lo hi trig = uniquify (texprand' (UId 0) r lo hi trig)
-tirand   r lo hi trig = uniquify (tirand'   (UId 0) r lo hi trig)
-trand    r lo hi trig = uniquify (trand'    (UId 0) r lo hi trig)
+texprand r lo hi trig = uniquify (texprand' zeroUId r lo hi trig)
+tirand   r lo hi trig = uniquify (tirand'   zeroUId r lo hi trig)
+trand    r lo hi trig = uniquify (trand'    zeroUId r lo hi trig)
 
-coingate r prob i = uniquify (coingate' (UId 0) r prob i)
+coingate r prob i = uniquify (coingate' zeroUId r prob i)
 
-irand   r lo hi   = uniquify (irand'   (UId 0) r lo hi)
-nrand   r lo hi n = uniquify (nrand'   (UId 0) r lo hi n)
-rand    r lo hi   = uniquify (rand'    (UId 0) r lo hi)
-exprand r lo hi   = uniquify (exprand' (UId 0) r lo hi)
-linrand r lo hi m = uniquify (linrand' (UId 0) r lo hi m)
+irand   r lo hi   = uniquify (irand'   zeroUId r lo hi)
+nrand   r lo hi n = uniquify (nrand'   zeroUId r lo hi n)
+rand    r lo hi   = uniquify (rand'    zeroUId r lo hi)
+exprand r lo hi   = uniquify (exprand' zeroUId r lo hi)
+linrand r lo hi m = uniquify (linrand' zeroUId r lo hi m)
 
 hasher r i            = mkOsc r "Hasher"       [i]      1 0
 mantissamask r i bits = mkOsc r "MantissaMask" [i,bits] 1 0
