@@ -17,19 +17,19 @@ data UType    = ConstantT | ControlT | UGenT | ProxyT | MCET | MRGT
                 deriving (Eq, Show)
 
 rateOf :: UGen -> Rate
-rateOf (Constant _)       =  IR
-rateOf (Control r _ _)    =  r
-rateOf (UGen r _ _ _ _ _) =  r
-rateOf (Proxy u _)        =  rateOf u
-rateOf (MCE u)            =  maximum $ map rateOf u
-rateOf _                  =  error "illegal ugen"
+rateOf (Constant _)        =  IR
+rateOf (Control r _ _)     =  r
+rateOf (UGen r _ _ _ _ _)  =  r
+rateOf (Proxy u _)         =  rateOf u
+rateOf (MCE u)             =  maximum $ map rateOf u
+rateOf _                   =  error "rateOf: illegal ugen"
 
 nodes :: UGen -> [UGen]
-nodes u@(UGen _ _ i _ _ _)  =  u : concatMap nodes i
-nodes (Proxy u _)           =  u : nodes u
-nodes (MCE u)               =  concatMap nodes u
-nodes (MRG u)               =  concatMap nodes u
-nodes u                     =  [u]
+nodes u@(UGen _ _ i _ _ _) =  u : concatMap nodes i
+nodes (Proxy u _)          =  u : nodes u
+nodes (MCE u)              =  concatMap nodes u
+nodes (MRG u)              =  concatMap nodes u
+nodes u                    =  [u]
 
 -- Apply depth first.
 
