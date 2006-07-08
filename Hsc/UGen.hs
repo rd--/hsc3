@@ -62,3 +62,4 @@ proxy u@(UGen _ _ _ o _ _)
     | otherwise    = u
     where f i = (Proxy u i)
           n   = length o
+proxy _       = error "proxy: illegal ugen"

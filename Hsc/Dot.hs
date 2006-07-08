@@ -40,6 +40,7 @@ nlabel g u
     | isConstant u = "N_" ++ show (nindex g u)
     | isControl  u = "C_" ++ show (cindex g u)
     | isUGen     u = "U_" ++ show (uindex g u)
+    | otherwise    = error "nlabel: illegal input"
 
 -- This is broken for Control edges...
 
@@ -131,13 +132,13 @@ ndot g u@(UGen r n i o s _) = rdot lbl clr [upr,lwr]
           upr = uname n s : zipWith (\j k -> idot j k) i [0..i']
           o'  = length o - 1
           lwr = map (\j -> "<O_" ++ show j ++ ">") [0..o']
-
-ndot g u@(Control r n v) = nlabel g u
-                           ++ "[shape=\"trapezium\", color=\""
-                           ++ ratecolor r
-                           ++ "\",label=\""
-                           ++ n ++ ":" ++ show v
-                           ++ "\"];"
+ndot g u@(Control r n v)    = nlabel g u
+                              ++ "[shape=\"trapezium\", color=\""
+                              ++ ratecolor r
+                              ++ "\",label=\""
+                              ++ n ++ ":" ++ show v
+                              ++ "\"];"
+ndot _ _                    = error "ndot: illegal input"
 
 gdot :: Graph -> [String]
 gdot g@(Graph _ c u) = ["digraph Anonymous {"]

@@ -73,18 +73,22 @@ shiftL' n i = shiftL (fromIntegral n) i
 
 u8v_i8 :: U8v -> Int
 u8v_i8 [a] = shiftL' a 0
+u8v_i8 _   = error "illegal input"
 
 u8v_i16 :: U8v -> Int
 u8v_i16 [b,a] = shiftL' b 8 + shiftL' a 0
+u8v_i16 _     = error "illegal input"
 
 u8v_i32 :: U8v -> Int
 u8v_i32 [d,c,b,a] = shiftL' d 24 + shiftL' c 16 + shiftL' b 8 + shiftL' a 0
+u8v_i32 _         = error "illegal input"
 
 u8v_i64 :: U8v -> Integer
 u8v_i64 [h,g,f,e,d,c,b,a] = shiftL' h 56 + shiftL' g 48 +
                             shiftL' f 40 + shiftL' e 32 +
                             shiftL' d 24 + shiftL' c 16 +
                             shiftL' b 8 + shiftL' a 0
+u8v_i64 _                 = error "illegal input"
 
 i32_f32 :: Int32 -> Float32
 i32_f32 d = runST ((do a  <- newArray (1, 1) d

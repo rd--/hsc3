@@ -19,6 +19,7 @@ osc_show' (OscFloat n)  = show n
 osc_show' (OscDouble n) = show n
 
 statusInfo (OscM "status.reply" l) = map osc_show' (tail l)
+statusInfo _                       = error "non status.reply message"
 
 status' = do fd <- sc
              r <- sync' fd status

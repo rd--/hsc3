@@ -5,6 +5,7 @@ import Data.List (transpose)
 
 mceDegree :: UGen -> Int
 mceDegree (MCE l) = length l
+mceDegree _       = error "mceDegree: illegal ugen"
 
 mceReq :: UGen -> Bool
 mceReq (UGen _ _ i _ _ _) = not $ null $ filter isMCE i
@@ -19,6 +20,7 @@ mceTransform (UGen r n i o s id) = MCE (map f i')
     where f i = UGen r n i o s id
           d   = maximum $ map mceDegree (filter isMCE i)
           i'  = transpose $ map (mceExtend d) i
+mceTransform _                   = error "mceTransform: illegal ugen"
 
 mced :: UGen -> UGen
 mced u = if mceReq u then mceTransform u else u

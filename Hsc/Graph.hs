@@ -32,15 +32,17 @@ cindex (Graph _ c _) x = index' c x
 nindex (Graph n _ _) x = index' n x
 
 mkInput :: Graph -> UGen -> Input
-mkInput g u
-    | isConstant u      = Input (-1) (nindex g u)
-    | isControl u       = Input 0 (cindex g u)
-    | isUGen u          = Input (uindex g u) 0
-mkInput g (Proxy u n)   = Input (uindex g u) n
-mkInput g u             = error ("illegal input: " ++ show (g,u))
+mkInput g u@(UGen _ _ _ _ _ _) = Input (uindex g u) 0
+mkInput g u@(Constant _)       = Input (-1) (nindex g u)
+mkInput g u@(Control _ _ _)    = Input 0 (cindex g u)
+mkInput g (Proxy u n)          = Input (uindex g u) n
+mkInput g u                    = error ("mkInput: illegal input: " ++ show (g,u))
 
 nvalue   (Constant n)    = n
+nvalue   _               = error "nvalue: non constant input"
+
 cdefault (Control _ _ n) = n
+cdefault  _              = error "cdefault: non control input"
 
 input_u8v :: Input -> U8v
 input_u8v (Input u p) = i16_u8v u ++ i16_u8v p
@@ -54,6 +56,7 @@ ugen_u8v g (UGen r n i o s _)   = pstr_u8v n ++
                                   i16_u8v s ++
                                   concatMap (input_u8v . mkInput g) i ++
                                   concatMap (i8_u8v . rateId) o
+ugen_u8v _ _                    = error "illegal input"
 
 graphdef :: String -> Graph -> U8v
 graphdef s g@(Graph n c u) = str_u8v "SCgf" ++

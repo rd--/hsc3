@@ -29,6 +29,7 @@ env_value (EnvNum u) = u
 env_value _          = 0.0
 
 env :: [UGen] -> [UGen] -> [EnvCurve] -> UGen -> UGen -> [UGen]
+env []     _   _   _   _  = error "env: illegal specification"
 env (l:vl) tms crv rls lp =
     [l, n', rls, lp] ++ concat (zipWith3 f vl tms (take n $ cycle crv))
     where f l t c = [l, t, env_curve c, env_value c]
