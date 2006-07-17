@@ -38,7 +38,7 @@ auUnHdr u = (nf, enc, sr, nc)
 auF32 = (AuFloat,  f32_u8v)
 auF64 = (AuDouble, f64_u8v)
 
-toSndFile (enc, encdr) sr nc fn d = u8vWrite fn b
+writeSndFile (enc, encdr) sr nc fn d = u8vWrite fn b
     where nf = length d `div` nc
           h  = auMkHdr (nf, enc, sr, nc)
           d' = concatMap encdr d
