@@ -28,7 +28,8 @@ ntp = do t <- utc
          return (utc_ntp t)
 
 pause :: Double -> IO ()
-pause n = threadDelay i
+pause n | n > 0     = threadDelay i
+        | otherwise = do return ()
     where i = dti $ n * 1000000.0
 
 pauseUntil t = do n <- utc
