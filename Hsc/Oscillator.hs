@@ -18,3 +18,5 @@ blip r freq nharm  = mkOsc r "Blip"  [freq,nharm] 1 0
 
 lfpulse r freq iphase width = mkOsc r "LFPulse" [freq,iphase,width] 1 0
 varsaw  r freq iphase width = mkOsc r "VarSaw"  [freq,iphase,width] 1 0
+
+phasor r t f s e p = mkOsc r "Phasor" [t,f,s,e,p] 1 0
