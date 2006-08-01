@@ -1,7 +1,7 @@
 module Hsc.List where
 
 import Data.Maybe (fromJust)
-import Data.List  (nub, findIndex, elemIndex, transpose)
+import Data.List  (nub, findIndex, elemIndex, transpose, find)
 
 instance Num a => Num [a] where
     negate         = map negate
@@ -12,11 +12,14 @@ instance Num a => Num [a] where
     signum         = map signum
     fromInteger _  = []
 
+find' :: (a -> Bool) -> [a] -> a
+find' f l = fromJust (find f l)
+
 findIndex' :: (a -> Bool) -> [a] -> Int
-findIndex' f l = fromJust $ findIndex f l
+findIndex' f l = fromJust (findIndex f l)
 
 elemIndex' :: (Eq a) => a -> [a] -> Int
-elemIndex' e l = fromJust $ elemIndex e l
+elemIndex' e l = fromJust (elemIndex e l)
 
 nub' l = nub (reverse l)
 
