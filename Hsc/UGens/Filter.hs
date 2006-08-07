@@ -2,10 +2,10 @@ module Hsc.UGens.Filter where
 
 import Hsc.Construct (mkFilter, mkFilterMCE)
 
-allPass' c i max dly dcy = mkFilter c [i, max, dly, dcy] 1 0
-allPassN = allPass' "AllPassN"
-allPassL = allPass' "AllPassL"
-allPassC = allPass' "AllPassC"
+allpass' c i max dly dcy = mkFilter c [i, max, dly, dcy] 1 0
+allpassN = allpass' "AllpassN"
+allpassL = allpass' "AllpassL"
+allpassC = allpass' "AllpassC"
 
 bpf  i freq rq = mkFilter "BPF" [i,freq,rq] 1 0
 bpz2 i         = mkFilter "BPZ2" [i] 1 0
