@@ -1,4 +1,4 @@
-module Hsc.Filter where
+module Hsc.UGens.Filter where
 
 import Hsc.Construct (mkFilter, mkFilterMCE)
 

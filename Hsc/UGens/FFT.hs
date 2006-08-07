@@ -1,4 +1,4 @@
-module Hsc.FFT where
+module Hsc.UGens.FFT where
 
 import Hsc.Rate (Rate(AR, KR))
 import Hsc.Construct (mkOsc, mkOsc', uniquify, zeroUId)

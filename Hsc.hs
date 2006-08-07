@@ -7,16 +7,17 @@ module Hsc (module Hsc.List,
             module Hsc.Graph,
             module Hsc.Dot,
             module Hsc.Math,
-            module Hsc.Buffer,
-            module Hsc.Demand,
             module Hsc.Envelope,
-            module Hsc.Filter,
-            module Hsc.FFT,
-            module Hsc.Information,
-            module Hsc.IO,
-            module Hsc.Noise,
-            module Hsc.Oscillator,
-            module Hsc.Panner,
+            module Hsc.UGens.Buffer,
+            module Hsc.UGens.Demand,
+            module Hsc.UGens.Envelope,
+            module Hsc.UGens.Filter,
+            module Hsc.UGens.FFT,
+            module Hsc.UGens.Information,
+            module Hsc.UGens.IO,
+            module Hsc.UGens.Noise,
+            module Hsc.UGens.Oscillator,
+            module Hsc.UGens.Panner,
             module Hsc.OpenSoundControl,
             module Hsc.Server,
             module Hsc.Udp,
@@ -36,16 +37,17 @@ import Hsc.Construct
 import Hsc.Graph
 import Hsc.Dot
 import Hsc.Math
-import Hsc.Buffer
-import Hsc.Demand
 import Hsc.Envelope
-import Hsc.Filter
-import Hsc.FFT
-import Hsc.Information
-import Hsc.IO
-import Hsc.Noise
-import Hsc.Panner
-import Hsc.Oscillator
+import Hsc.UGens.Buffer
+import Hsc.UGens.Demand
+import Hsc.UGens.Envelope
+import Hsc.UGens.Filter
+import Hsc.UGens.FFT
+import Hsc.UGens.Information
+import Hsc.UGens.IO
+import Hsc.UGens.Noise
+import Hsc.UGens.Panner
+import Hsc.UGens.Oscillator
 import Hsc.OpenSoundControl
 import Hsc.Server
 import Hsc.Udp

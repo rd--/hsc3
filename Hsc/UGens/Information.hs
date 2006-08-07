@@ -1,4 +1,4 @@
-module Hsc.Information where
+module Hsc.UGens.Information where
 
 import Hsc.Construct (mkOsc)
 

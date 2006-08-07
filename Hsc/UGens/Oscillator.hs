@@ -1,4 +1,4 @@
-module Hsc.Oscillator where
+module Hsc.UGens.Oscillator where
 
 import Hsc.Construct (mkOsc)
 

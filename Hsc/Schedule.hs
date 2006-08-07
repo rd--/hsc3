@@ -1,5 +1,6 @@
 module Hsc.Schedule where
 
+import Prelude hiding (floor)
 import Control.Concurrent
 import GHC.Real (floor)
 import System.Time

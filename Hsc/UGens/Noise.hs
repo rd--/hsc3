@@ -1,4 +1,4 @@
-module Hsc.Noise where
+module Hsc.UGens.Noise where
 
 import Hsc.Construct (mkOsc, mkOsc', uniquify, zeroUId)
 

@@ -1,4 +1,4 @@
-module Hsc.Panner where
+module Hsc.UGens.Panner where
 
 import Hsc.Construct (mkFilter)
 

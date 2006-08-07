@@ -1,4 +1,4 @@
-module Hsc.IO where
+module Hsc.UGens.IO where
 
 import Hsc.Construct
 
