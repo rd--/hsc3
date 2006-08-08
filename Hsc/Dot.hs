@@ -7,7 +7,7 @@ import Data.List (intersperse)
 import System.IO
 import System.Cmd (system)
 import System.Directory (getTemporaryDirectory)
-import System.Posix.Env (getEnvDefault)
+import System.Environment (getEnv)
 
 type UTerminal = (UGen, Int)
 type UEdge     = (UTerminal, UTerminal)
@@ -159,6 +159,9 @@ draw v u = do d <- getTemporaryDirectory
               system $ v ++ " " ++ f
               return ()
 
+
+getDotViewer = catch (getEnv "DOTVIEWER") (\_ -> return "dotty")
+
 draw' :: UGen -> IO ()
-draw' u = do v <- getEnvDefault "DOTVIEWER" "dotty"
+draw' u = do v <- getDotViewer
              draw v u

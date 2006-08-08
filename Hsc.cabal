@@ -4,6 +4,6 @@ License:          GPL
 Author:           Rohan Drape
 Homepage:         http://www.slavepianos.org/rd/
 Category:         Audio Synthesis
-Build-Depends:    base, network, unix
+Build-Depends:    base, network
 Synopsis:         Haskell client for the SuperCollider synthesis server
 Exposed-modules:  Hsc
