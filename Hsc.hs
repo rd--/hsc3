@@ -6,6 +6,7 @@ module Hsc (module Hsc.List,
             module Hsc.Construct,
             module Hsc.Graph,
             module Hsc.Dot,
+            module Hsc.Operator,
             module Hsc.Math,
             module Hsc.Envelope,
             module Hsc.UGens.Buffer,
@@ -36,6 +37,7 @@ import Hsc.MCE
 import Hsc.Construct
 import Hsc.Graph
 import Hsc.Dot
+import Hsc.Operator
 import Hsc.Math
 import Hsc.Envelope
 import Hsc.UGens.Buffer
