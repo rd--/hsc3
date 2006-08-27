@@ -9,6 +9,7 @@ import System.IO
 import System.Cmd (system)
 import System.Directory (getTemporaryDirectory)
 import System.Environment (getEnv)
+import Control.Exception (bracket)
 
 type UTerminal = (UGen, Int)
 type UEdge     = (UTerminal, UTerminal)
@@ -93,10 +94,11 @@ udot u = gdot (graph u)
 
 draw :: String -> UGen -> IO ()
 draw v u = do d <- getTemporaryDirectory
-              f <- return (d ++ "/hsc.dot")
-              h <- openFile f WriteMode
-              mapM (hPutStrLn h) (udot u)
-              hClose h
+              -- better Distribution.Compat.joinPaths ?
+              let f = d ++ "/hsc.dot"
+              -- let f = "/tmp/hsc.dot"
+              bracket (openFile f WriteMode) hClose
+                      (flip hPutStr (unlines (udot u)))
               system $ v ++ " " ++ f
               return ()
 

@@ -7,6 +7,7 @@ import Data.Char (chr, ord)
 import Control.Monad.ST (runST, ST)
 import Data.Array.ST (MArray, newArray, readArray, castSTUArray)
 import System.IO (openFile, IOMode(..), hPutStr, hClose)
+import Control.Exception (bracket)
 
 type Float32 = Float
 type Float64 = Double
@@ -108,6 +109,5 @@ u8v_f64 b = i64_f64 (fromIntegral $ u8v_i64 b)
 
 -- IO
 
-u8vWrite fn u = do h <- openFile fn WriteMode
-                   hPutStr h (u8v_str u)
-                   hClose h
+u8vWrite fn u = bracket (openFile fn WriteMode) hClose
+                        (flip hPutStr (u8v_str u))

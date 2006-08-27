@@ -5,6 +5,7 @@ import Hsc.Graph (graph, graphdef)
 import Hsc.Udp (send', sync', close')
 import Hsc.Server
 import Hsc.UGens.IO (out)
+import Control.Exception (bracket)
 
 d_recv' n u = d_recv (graphdef n (graph u))
 
@@ -24,10 +25,7 @@ play fd u
 reset fd = do send' fd (g_freeAll 0)
               send' fd (g_new 1 AddToTail 0)
 
-withfd fd' a = do fd <- fd'
-                  r <- a fd
-                  close' fd
-                  return r
+withfd fd' = bracket fd' close'
 
 play'  sc u = withfd sc (\fd -> play fd u)
 reset' sc   = withfd sc reset
