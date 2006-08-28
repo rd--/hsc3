@@ -16,8 +16,8 @@ mceExtend n (MCE l) = take n $ cycle l
 mceExtend n u       = replicate n u
 
 mceTransform :: UGen -> UGen
-mceTransform (UGen r n i o s id) = MCE (map f i')
-    where f i = UGen r n i o s id
+mceTransform (UGen r n i o s uid) = MCE (map f i')
+    where f j = UGen r n j o s uid
           d   = maximum $ map mceDegree (filter isMCE i)
           i'  = transpose $ map (mceExtend d) i
 mceTransform _                   = error "mceTransform: illegal ugen"

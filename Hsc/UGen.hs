@@ -34,7 +34,7 @@ nodes u                    =  [u]
 -- Apply depth first.
 
 traverseu :: (UGen -> UGen) -> UGen -> UGen
-traverseu f (UGen r n i o s id) = f (UGen r n (map (traverseu f) i) o s id)
+traverseu f (UGen r n i o s uid) = f (UGen r n (map (traverseu f) i) o s uid)
 traverseu f (MCE l)             = f (MCE (map (traverseu f) l))
 traverseu f (MRG l)             = f (MRG (map (traverseu f) l))
 traverseu f (Proxy u n)         = f (Proxy (traverseu f u) n)

@@ -20,10 +20,10 @@ uTerminal u                  = (u,0)
 
 uEdges :: UGen -> [UEdge]
 uEdges u@(UGen _ _ i _ _ _) = map f i'
-    where g (u,_)  = or [isUGen u, isProxy u, isControl u]
+    where g (v,_)  = or [isUGen v, isProxy v, isControl v]
           n        = length i - 1
           i'       = filter g $ zip i [0..n]
-          f (i, j) = (uTerminal i, (u, j))
+          f (k, j) = (uTerminal k, (u, j))
 uEdges _                    = []
 
 edges :: Graph -> [UEdge]

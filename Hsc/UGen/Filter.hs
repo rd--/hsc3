@@ -3,7 +3,7 @@ module Hsc.UGen.Filter where
 import Hsc.Construct (mkFilter, mkFilterMCE)
 import Hsc.UGen (UGen, Name)
 
-allpass' c i max dly dcy = mkFilter c [i, max, dly, dcy] 1 0
+allpass' c i maxTime dly dcy = mkFilter c [i, maxTime, dly, dcy] 1 0
 allpassN = allpass' "AllpassN"
 allpassL = allpass' "AllpassL"
 allpassC = allpass' "AllpassC"
@@ -14,7 +14,7 @@ bpz2 i         = mkFilter "BPZ2" [i] 1 0
 brf  i freq rq = mkFilter "BRF" [i,freq,rq] 1 0
 brz2 i         = mkFilter "BRZ2" [i] 1 0
 
-comb' c i max dly dcy = mkFilter c [i, max, dly, dcy] 1 0
+comb' c i maxTime dly dcy = mkFilter c [i, maxTime, dly, dcy] 1 0
 combN = comb' "CombN"
 combL = comb' "CombL"
 combC = comb' "CombC"
@@ -25,7 +25,7 @@ decay2 i atk dcy = mkFilter "Decay2" [i,atk,dcy] 1 0
 delay1 i = mkFilter "Delay1" [i] 1 0
 delay2 i = mkFilter "Delay2" [i] 1 0
 
-delay' c i max dly = mkFilter c [i,max,dly] 1 0
+delay' c i maxTime dly = mkFilter c [i,maxTime,dly] 1 0
 delayC = delay' "DelayC"
 delayL = delay' "DelayL"
 delayN = delay' "DelayN"
@@ -55,7 +55,7 @@ lpf i f = mkFilter "LPF"  [i,f] 1 0
 lpz1 i  = mkFilter "LPZ1" [i]   1 0
 lpz2 i  = mkFilter "LPZ2" [i]   1 0
 
-median length i = mkFilter "Median" [length,i] 1 0
+median size i = mkFilter "Median" [size,i] 1 0
 
 mulAdd s m a = mkFilter "MulAdd" [s,m,a] 1 0
 
@@ -64,7 +64,7 @@ oneZero i coef = mkFilter "OneZero" [i,coef] 1 0
 
 pitchShift i w p d t = mkFilter "PitchShift" [i,w,p,d,t] 1 0
 
-pulseDivider trig div start = mkFilter "PulseDivider" [trig, div, start] 1 0
+pulseDivider trig factor start = mkFilter "PulseDivider" [trig, factor, start] 1 0
 
 quad' c' freq a b c xi = mkFilter c' [freq,a,b,c,xi] 1 0
 quadC = quad' "QuadC"
@@ -81,7 +81,7 @@ slew i up dn = mkFilter "Slew" [i,up,dn] 1 0
 
 sos i a0 a1 a2 b1 b2 = mkFilter "SOS" [i,a0,a1,a2,b1,b2] 1 0
 
-stepper t r min max s v = mkFilter "Stepper" [t,r,min,max,s,v] 1 0
+stepper t r minTime maxTime s v = mkFilter "Stepper" [t,r,minTime,maxTime,s,v] 1 0
 
 twoPole i freq radius = mkFilter "TwoPole" [i,freq,radius] 1 0
 twoZero i freq radius = mkFilter "TwoZero" [i,freq,radius] 1 0

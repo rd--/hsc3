@@ -22,15 +22,15 @@ uniquify (MCE u)            = liftM MCE (mapM uniquify u)
 uniquify u                  = error ("uniquify: illegal value" ++ show u)
 
 consU :: Rate -> Name -> [UGen] -> [Output] -> Special -> UId -> UGen
-consU r n i o s id = proxy (mced u)
-    where u = UGen r n i o s id
+consU r n i o s uid = proxy (mced u)
+    where u = UGen r n i o s uid
 
 mkOsc :: Rate -> Name -> [UGen] -> Int -> Special -> UGen
 mkOsc r c i o s = consU r c i o' s zeroUId
     where o' = replicate o r
 
 mkOsc' :: Rate -> Name -> [UGen] -> Int -> Special -> UId -> UGen
-mkOsc' r c i o s id = consU r c i o' s id
+mkOsc' r c i o s uid = consU r c i o' s uid
     where o' = replicate o r
 
 mkFilter :: Name -> [UGen] -> Int -> Special -> UGen
