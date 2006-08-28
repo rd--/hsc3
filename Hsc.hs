@@ -9,16 +9,16 @@ module Hsc (module Hsc.List,
             module Hsc.Operator,
             module Hsc.Math,
             module Hsc.Envelope,
-            module Hsc.UGens.Buffer,
-            module Hsc.UGens.Demand,
-            module Hsc.UGens.Envelope,
-            module Hsc.UGens.Filter,
-            module Hsc.UGens.FFT,
-            module Hsc.UGens.Information,
-            module Hsc.UGens.IO,
-            module Hsc.UGens.Noise,
-            module Hsc.UGens.Oscillator,
-            module Hsc.UGens.Panner,
+            module Hsc.UGen.Buffer,
+            module Hsc.UGen.Demand,
+            module Hsc.UGen.Envelope,
+            module Hsc.UGen.Filter,
+            module Hsc.UGen.FFT,
+            module Hsc.UGen.Information,
+            module Hsc.UGen.IO,
+            module Hsc.UGen.Noise,
+            module Hsc.UGen.Oscillator,
+            module Hsc.UGen.Panner,
             module Hsc.OpenSoundControl,
             module Hsc.Server,
             module Hsc.Udp,
@@ -40,16 +40,16 @@ import Hsc.Dot
 import Hsc.Operator
 import Hsc.Math
 import Hsc.Envelope
-import Hsc.UGens.Buffer
-import Hsc.UGens.Demand
-import Hsc.UGens.Envelope
-import Hsc.UGens.Filter
-import Hsc.UGens.FFT
-import Hsc.UGens.Information
-import Hsc.UGens.IO
-import Hsc.UGens.Noise
-import Hsc.UGens.Panner
-import Hsc.UGens.Oscillator
+import Hsc.UGen.Buffer
+import Hsc.UGen.Demand
+import Hsc.UGen.Envelope
+import Hsc.UGen.Filter
+import Hsc.UGen.FFT
+import Hsc.UGen.Information
+import Hsc.UGen.IO
+import Hsc.UGen.Noise
+import Hsc.UGen.Panner
+import Hsc.UGen.Oscillator
 import Hsc.OpenSoundControl
 import Hsc.Server
 import Hsc.Udp

@@ -1,4 +1,4 @@
-module Hsc.UGens.IO where
+module Hsc.UGen.IO where
 
 import Hsc.Construct (mkOsc, mkFilterMCE)
 

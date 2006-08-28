@@ -1,4 +1,4 @@
-module Hsc.UGens.Envelope where
+module Hsc.UGen.Envelope where
 
 import Hsc.Construct (mkOsc, mkFilter)
 

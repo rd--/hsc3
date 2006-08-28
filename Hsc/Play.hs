@@ -4,7 +4,7 @@ import Hsc.UGen (UGen(..))
 import Hsc.Graph (graph, graphdef)
 import Hsc.Udp (send', sync', close')
 import Hsc.Server
-import Hsc.UGens.IO (out)
+import Hsc.UGen.IO (out)
 import Control.Exception (bracket)
 
 d_recv' n u = d_recv (graphdef n (graph u))

@@ -1,4 +1,4 @@
-module Hsc.UGens.Demand where
+module Hsc.UGen.Demand where
 
 import Hsc.UGen ()
 import Hsc.Rate (Rate(DR))

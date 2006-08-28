@@ -1,4 +1,4 @@
-module Hsc.UGens.Buffer where
+module Hsc.UGen.Buffer where
 
 import Hsc.Construct (mkFilter, mkFilterMCE, mkOsc)
 
