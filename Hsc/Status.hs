@@ -6,6 +6,7 @@ import Hsc.Udp (sync', sc, close')
 import Hsc.List (interleave)
 import Control.Exception (bracket)
 
+statusFields :: [String]
 statusFields = ["# UGens                     ", 
                 "# Synths                    ", 
                 "# Groups                    ",
@@ -15,9 +16,11 @@ statusFields = ["# UGens                     ",
                 "Sample Rate (Nominal)       ",
                 "Sample Rate (Actual)        "]
 
+statusInfo :: Osc -> [String]
 statusInfo (OscM "status.reply" l) = map osc_show' (tail l)
 statusInfo _                       = error "non status.reply message"
 
+status' :: IO Osc
 status' = bracket sc close'
       (\fd ->
           do r <- sync' fd status

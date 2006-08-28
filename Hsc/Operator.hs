@@ -107,9 +107,11 @@ data Binary = Add
             | ExpRandRange
               deriving (Eq, Show, Enum)
 
+unaryName :: Int -> String
 unaryName   0 = "-"
 unaryName   n = show (toEnum n :: Unary)
 
+binaryName :: Int -> String
 binaryName  0 = "+"
 binaryName  1 = "-"
 binaryName  2 = "*"

@@ -34,6 +34,7 @@ i64_u8v :: Integer -> U8v
 i64_u8v n = [byte 7 n, byte 6 n, byte 5 n, byte 4 n,
              byte 3 n, byte 2 n, byte 1 n, byte 0 n]
 
+u64_u8v :: Integer -> U8v
 u64_u8v = i64_u8v
 
 f32_i32 :: Float32 -> Int32
@@ -70,6 +71,7 @@ pstr_u8v s = i8_u8v n ++ str_u8v s
 u8v_str :: [U8] -> String
 u8v_str s = map (chr . fromIntegral) s
 
+shiftL' :: (Bits b) => U8 -> Int -> b
 shiftL' n i = shiftL (fromIntegral n) i
 
 u8v_i8 :: U8v -> Int
@@ -109,5 +111,6 @@ u8v_f64 b = i64_f64 (fromIntegral $ u8v_i64 b)
 
 -- IO
 
+u8vWrite :: FilePath -> [U8] -> IO ()
 u8vWrite fn u = bracket (openFile fn WriteMode) hClose
                         (flip hPutStr (u8v_str u))

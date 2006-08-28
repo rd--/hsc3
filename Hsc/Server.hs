@@ -1,6 +1,7 @@
 module Hsc.Server where
 
 import Hsc.OpenSoundControl
+import Hsc.U8v (U8v)
 
 data AddAction = AddToHead
                | AddToTail
@@ -9,6 +10,7 @@ data AddAction = AddToHead
                | AddReplace
                  deriving (Eq, Show, Enum)
 
+hd, tl :: AddAction
 hd = AddToHead
 tl = AddToTail
 
@@ -74,6 +76,65 @@ c_getn id n      = OscM "/c_getn" [OscInt id, OscInt n]
 flatten_controls = concatMap (\(name,val) -> [OscString name, OscFloat val])
 n_set' id c      = OscM "/n_set" ([OscInt id] ++ flatten_controls c)
 s_new' n i a t c = OscM "/s_new" ([OscString n, OscInt i, OscInt (addAction a), OscInt t] ++ flatten_controls c)
+
+-- bundle = OscB 0 -- does not work :-(
+
+
+b_alloc :: Int -> Int -> Int -> Osc
+b_allocRead :: Int -> String -> Int -> Int -> Osc
+b_close :: Int -> Osc
+b_fill :: Int -> Int -> Int -> Double -> Osc
+b_free :: Int -> Osc
+b_get :: Int -> Int -> Osc
+b_getn :: Int -> Int -> Int -> Osc
+b_query :: Int -> Osc
+b_read :: Int -> String -> Int -> Int -> Int -> Int -> Osc
+b_set :: Int -> Int -> Double -> Osc
+b_setn :: Int -> Int -> [Double] -> Osc
+b_write :: Int -> String -> Int -> Int -> Int -> Int -> Int -> Osc
+b_zero :: Int -> Osc
+clearSched :: Osc
+c_fill :: Int -> Int -> Double -> Osc
+c_get :: Int -> Osc
+c_getn :: Int -> Int -> Osc
+c_set :: Int -> Double -> Osc
+c_setn :: Int -> [Double] -> Osc
+dumpOSC :: Int -> Osc
+d_free :: String -> Osc
+d_load :: String -> Osc
+d_loadDir :: String -> Osc
+d_recv :: U8v -> Osc
+flatten_controls :: [(String, Double)] -> [OscT]
+g_deepFree :: Int -> Osc
+g_freeAll :: Int -> Osc
+g_head :: Int -> Int -> Osc
+g_new :: Int -> AddAction -> Int -> Osc
+g_tail :: Int -> Int -> Osc
+notify :: Int -> Osc
+n_before :: Int -> Int -> Osc
+n_fill :: Int -> String -> Int -> Double -> Osc
+n_free :: Int -> Osc
+n_map :: Int -> String -> Int -> Osc
+n_mapn :: Int -> String -> Int -> Int -> Osc
+n_query :: Int -> Osc
+n_run :: Int -> Int -> Osc
+n_set :: Int -> String -> Double -> Osc
+n_setn :: Int -> String -> [Double] -> Osc
+n_set' :: Int -> [(String, Double)] -> Osc
+n_trace :: Int -> Osc
+quit :: Osc
+status :: Osc
+sync :: Int -> Osc
+s_get :: Int -> Int -> Osc
+s_getn :: Int -> Int -> Int -> Osc
+s_new :: String -> Int -> AddAction -> Int -> Osc
+s_new' :: String
+	  -> Int
+	  -> AddAction
+	  -> Int
+	  -> [(String, Double)]
+	  -> Osc
+s_noid :: Int -> Osc
 
 -- Local Variables:
 -- truncate-lines:t

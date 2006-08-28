@@ -28,7 +28,10 @@ index' c x = findIndex' (== x) c
 uindex :: Graph -> UGen -> Int
 uindex (Graph _ _ u) x = index' u x
 
+cindex :: Graph -> UGen -> Int
 cindex (Graph _ c _) x = index' c x
+
+nindex :: Graph -> UGen -> Int
 nindex (Graph n _ _) x = index' n x
 
 mkInput :: Graph -> UGen -> Input
@@ -38,9 +41,11 @@ mkInput g u@(Control _ _ _)    = Input 0 (cindex g u)
 mkInput g (Proxy u n)          = Input (uindex g u) n
 mkInput g u                    = error ("mkInput: illegal input: " ++ show (g,u))
 
+nvalue :: UGen -> Double
 nvalue   (Constant n)    = n
 nvalue   _               = error "nvalue: non constant input"
 
+cdefault :: UGen -> Double
 cdefault (Control _ _ n) = n
 cdefault  _              = error "cdefault: non control input"
 

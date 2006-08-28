@@ -86,6 +86,7 @@ unosc b = OscM cmd arg
           (OscString dsc) = u8v_osc 's' (drop n b)
           arg             = unosc' (drop 1 dsc) (drop (n + m) b)
 
+osc_show' :: OscT -> String
 osc_show' (OscInt n)    = show n
 osc_show' (OscFloat n)  = show n
 osc_show' (OscDouble n) = show n

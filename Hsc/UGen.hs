@@ -48,6 +48,13 @@ utype (Proxy _ _)           = ProxyT
 utype (MCE _)               = MCET
 utype (MRG _)               = MRGT
 
+isConstant :: UGen -> Bool
+isControl :: UGen -> Bool
+isMCE :: UGen -> Bool
+isMRG :: UGen -> Bool
+isProxy :: UGen -> Bool
+isUGen :: UGen -> Bool
+
 isConstant u                = utype u == ConstantT
 isControl u                 = utype u == ControlT
 isUGen u                    = utype u == UGenT

@@ -1,7 +1,12 @@
 module Hsc.Envelope where
 
 import Hsc.UGen (UGen(..))
-import Hsc.Math ()
+import Hsc.Math () -- import type class instances
+
+
+doNothing :: UGen
+pauseSynth :: UGen
+removeSynth :: UGen
 
 doNothing   = Constant 0
 pauseSynth  = Constant 1
@@ -50,6 +55,7 @@ envSine :: UGen -> UGen -> [UGen]
 envSine dur lvl =
    env [0.0, lvl, 0.0] (dbl (dur / 2.0)) (dbl EnvSin) (-1.0) (-1.0)
 
+envLinen :: UGen -> UGen -> UGen -> UGen -> [EnvCurve] -> [UGen]
 envLinen aT sT rT l c = env [0, l, l, 0] [aT, sT, rT] c (-1) (-1)
 
 dbl :: a -> [a]

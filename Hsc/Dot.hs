@@ -46,6 +46,8 @@ nlabel g u
 
 -- This is broken for Control edges...
 
+edot :: (Show b) =>
+        Graph -> ((UGen, b), (UGen, b)) -> [Char]
 edot g ((lu, ln), (ru, rn)) = nlabel g lu ++ ":O_" ++ show ln
                               ++ " -> "
                               ++ nlabel g ru ++ ":I_" ++ show rn ++ ";"
@@ -93,6 +95,7 @@ udot :: UGen -> [String]
 udot u = gdot (graph u)
 
 --import Distribution.Compat.FilePath (joinPaths)
+joinPaths :: FilePath -> FilePath -> FilePath
 joinPaths a b = a ++ "/" ++ b
 
 draw :: String -> UGen -> IO ()
@@ -104,6 +107,7 @@ draw v u = do d <- getTemporaryDirectory
               return ()
 
 
+getDotViewer :: IO String
 getDotViewer = catch (getEnv "DOTVIEWER") (\_ -> return "dotty")
 
 draw' :: UGen -> IO ()

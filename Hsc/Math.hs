@@ -1,15 +1,17 @@
 module Hsc.Math where
 
 import Prelude hiding (EQ, GT, LT)
-import Hsc.Operator
+import Hsc.Operator(Unary(..),Binary(..))
 import Hsc.UGen (UGen(Constant, MCE))
 import Hsc.Construct (mkFilter)
 
+uop :: Unary -> (Double -> Double) -> UGen -> UGen
 uop _ f (Constant a) = Constant (f a) 
-uop i _ a            = mkFilter "UnaryOpUGen"  [a]   1 (fromEnum (i :: Unary))
+uop i _ a            = mkFilter "UnaryOpUGen"  [a]   1 (fromEnum i)
 
+binop :: Binary -> (Double -> Double -> Double) -> UGen -> UGen -> UGen
 binop _ f (Constant a) (Constant b) = Constant (f a b)
-binop i _ a            b            = mkFilter "BinaryOpUGen" [a,b] 1 (fromEnum (i :: Binary))
+binop i _ a            b            = mkFilter "BinaryOpUGen" [a,b] 1 (fromEnum i)
 
 instance Num UGen where
     negate         = uop Neg negate
@@ -134,6 +136,7 @@ instance UnaryOp UGen where
     log10          = uop Log10 log10
     softclip       = uop SoftClip softclip
 
+__uop :: Show a => a -> a
 __uop a = error ("unimplemented unary op" ++ show a)
 
 instance UnaryOp Double where
@@ -143,8 +146,8 @@ instance UnaryOp Double where
     bitnot a    = __uop a
     asfloat a   = __uop a
     asint a     = __uop a
-    ceil a      = fromIntegral (ceiling a)
-    floorE a    = fromIntegral (floor a)
+    ceil a      = fromIntegral (ceiling a :: Integer)
+    floorE a    = fromIntegral (floor a   :: Integer)
     frac a      = __uop a
     squared a   = a * a
     cubed   a   = a * a * a
@@ -198,6 +201,7 @@ class (Num a, Fractional a, Floating a) => BinaryOp a where
     randrange      :: a -> a -> a
     exprandrange   :: a -> a -> a
 
+__binop :: Show a => a -> a -> a
 __binop a b = error ("unimplemented binop" ++ show (a,b))
 
 instance BinaryOp UGen where
@@ -296,6 +300,7 @@ instance TernaryOp Double where
               y' = if y >= r then r' - y else y
     clip a b c = if a < b then b else if a > c then c else a
 
+__ternaryop :: Show a => a -> a -> a -> a
 __ternaryop a b c = error ("unimplemented ternary op" ++ show (a, b, c))
 
 instance TernaryOp UGen where
@@ -303,7 +308,9 @@ instance TernaryOp UGen where
     fold a b c = __ternaryop a b c
     clip i l h = mkFilter "Clip" [i,l,h] 1 0
 
+mix :: UGen -> UGen
 mix (MCE u)  = foldl1 (+) u
 mix u        = u
 
+mix_fill :: Int -> (Int -> UGen) -> UGen
 mix_fill n f = mix (MCE (map f [0..n-1]))

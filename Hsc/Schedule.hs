@@ -18,7 +18,7 @@ secdif :: Integer
 secdif = (70 * 365 + 17) * 24 * 60 * 60
 
 secntp :: Double -> Integer
-secntp i = round (i * itd 2^32)
+secntp i = round (i * itd (2^(32::Int)))
 
 utc_ntp :: Double -> Integer
 utc_ntp n = secntp (n + itd secdif)
@@ -29,12 +29,15 @@ ntp = liftM utc_ntp utc
 pause :: Double -> IO ()
 pause n = when (n>0) (threadDelay (dti (n * 1e6)))
 
+pauseUntil :: Double -> IO ()
 pauseUntil t = do n <- utc
                   pause (t - n)
 
+at :: Double -> (Double -> IO Double) -> IO t
 at t f = do n <- f t
             pauseUntil (t + n)
             at (t + n) f
 
+at' :: (Double -> IO Double) -> IO t
 at' f = do t <- utc
            at t f
