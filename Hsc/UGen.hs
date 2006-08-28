@@ -57,9 +57,9 @@ isMRG u                     = utype u == MRGT
 
 proxy :: UGen -> UGen
 proxy (MCE l) = MCE (map proxy l)
-proxy u@(UGen _ _ _ o _ _)
-    | length o > 1 = (MCE (map f [0..(n-1)]))
-    | otherwise    = u
-    where f i = (Proxy u i)
-          n   = length o
+proxy u@(UGen _ _ _ o _ _) =
+   case o of
+      -- length o > 1
+      (_:_:_) -> MCE (map (Proxy u) [0..(length o - 1)])
+      _       -> u
 proxy _       = error "proxy: illegal ugen"
