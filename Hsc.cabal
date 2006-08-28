@@ -6,4 +6,5 @@ Homepage:         http://www.slavepianos.org/rd/f/207949/
 Category:         Audio Synthesis
 Build-Depends:    base, network
 Synopsis:         Haskell client for the SuperCollider synthesis server
+GHC-Options:      -Wall
 Exposed-modules:  Hsc
