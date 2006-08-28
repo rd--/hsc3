@@ -38,9 +38,8 @@ u64_u8v :: Integer -> U8v
 u64_u8v = i64_u8v
 
 f32_i32 :: Float32 -> Int32
-f32_i32 d = runST ((do a  <- newArray (1, 1) d
-                       a' <- castSTUArray a
-                       readArray a' 1) :: ST s Int32)
+f32_i32 d = runST ((fromArray =<< castSTUArray =<< singletonArray d)
+                     :: ST s Int32)
 
 f32_u8v :: Float32 -> U8v
 f32_u8v f = i32_u8v (fromIntegral $ f32_i32 f)
@@ -52,9 +51,8 @@ f32_f64 :: Float32 -> Float64
 f32_f64 n = realToFrac n
 
 f64_i64 :: Float64 -> Int64
-f64_i64 d = runST ((do a  <- newArray (1, 1) d
-                       a' <- castSTUArray a
-                       readArray a' 1) :: ST s Int64)
+f64_i64 d = runST ((fromArray =<< castSTUArray =<< singletonArray d)
+                     :: ST s Int64)
 
 f64_u8v :: Float64 -> U8v
 f64_u8v f = i64_u8v (fromIntegral $ f64_i64 f)
@@ -94,17 +92,15 @@ u8v_i64 [h,g,f,e,d,c,b,a] = shiftL' h 56 + shiftL' g 48 +
 u8v_i64 _                 = error "illegal input"
 
 i32_f32 :: Int32 -> Float32
-i32_f32 d = runST ((do a  <- newArray (1, 1) d
-                       a' <- castSTUArray a
-                       readArray a' 1) :: ST s Float32)
+i32_f32 d = runST ((fromArray =<< castSTUArray =<< singletonArray d)
+                     :: ST s Float32)
 
 u8v_f32 :: U8v -> Float32
 u8v_f32 b = i32_f32 (fromIntegral $ u8v_i32 b)
 
 i64_f64 :: Int64 -> Float64
-i64_f64 d = runST ((do a  <- newArray (1, 1) d
-                       a' <- castSTUArray a
-                       readArray a' 1) :: ST s Float64)
+i64_f64 d = runST ((fromArray =<< castSTUArray =<< singletonArray d)
+                     :: ST s Float64)
 
 u8v_f64 :: U8v -> Float64
 u8v_f64 b = i64_f64 (fromIntegral $ u8v_i64 b)
@@ -114,3 +110,19 @@ u8v_f64 b = i64_f64 (fromIntegral $ u8v_i64 b)
 u8vWrite :: FilePath -> [U8] -> IO ()
 u8vWrite fn u = bracket (openFile fn WriteMode) hClose
                         (flip hPutStr (u8v_str u))
+
+singletonArray :: (MArray a e m) => e -> m (a Int e)
+singletonArray = newArray (0, 0::Int)
+
+fromArray :: (MArray a e m) => a Int e -> m e
+fromArray = flip readArray 0
+
+{-
+This is a non-Haskell98 signature
+
+castInt :: (MArray (STUArray s) b (ST s),
+            MArray (STUArray s) e (ST s)) =>
+           e -> ST s b
+castInt d =
+   fromArray =<< castSTUArray =<< singletonArray d
+-}
