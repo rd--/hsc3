@@ -1,6 +1,8 @@
 module Hsc.UGen.Buffer where
 
 import Hsc.Construct (mkFilter, mkFilterMCE, mkOsc)
+import Hsc.Rate (Rate)
+import Hsc.UGen (UGen, Name)
 
 bufAllPass' c buf i dly dcy = mkFilter c [buf,i,dly,dcy] 1 0
 bufAllPassC = bufAllPass' "BufAllPassC"
@@ -31,3 +33,27 @@ playBuf n r b r' t s l = mkOsc r "PlayBuf" [b,r',t,s,l] n 0
 
 tGrains n trg buf rate cntr dur pan amp interp = mkFilter "TGrains" i n 0
     where i = [trg,buf,rate,cntr,dur,pan,amp,interp]
+
+
+bufAllPassC :: UGen -> UGen -> UGen -> UGen -> UGen
+bufAllPassL :: UGen -> UGen -> UGen -> UGen -> UGen
+bufAllPassN :: UGen -> UGen -> UGen -> UGen -> UGen
+bufAllPass' :: Name -> UGen -> UGen -> UGen -> UGen -> UGen
+bufChannels :: Rate -> UGen -> UGen
+bufCombC :: UGen -> UGen -> UGen -> UGen -> UGen
+bufCombL :: UGen -> UGen -> UGen -> UGen -> UGen
+bufCombN :: UGen -> UGen -> UGen -> UGen -> UGen
+bufComb' :: Name -> UGen -> UGen -> UGen -> UGen -> UGen
+bufDelayC :: UGen -> UGen -> UGen -> UGen
+bufDelayL :: UGen -> UGen -> UGen -> UGen
+bufDelayN :: UGen -> UGen -> UGen -> UGen
+bufDelay' :: Name -> UGen -> UGen -> UGen -> UGen
+bufDur :: Rate -> UGen -> UGen
+bufFrames :: Rate -> UGen -> UGen
+bufRateScale :: Rate -> UGen -> UGen
+bufRd :: Int -> Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+bufSampleRate :: Rate -> UGen -> UGen
+bufSamples :: Rate -> UGen -> UGen
+bufWr :: UGen -> UGen -> UGen -> UGen -> UGen
+playBuf :: Int -> Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+tGrains :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen

@@ -1,6 +1,7 @@
 module Hsc.UGen.Filter where
 
 import Hsc.Construct (mkFilter, mkFilterMCE)
+import Hsc.UGen (UGen, Name)
 
 allpass' c i max dly dcy = mkFilter c [i, max, dly, dcy] 1 0
 allpassN = allpass' "AllpassN"
@@ -84,3 +85,60 @@ stepper t r min max s v = mkFilter "Stepper" [t,r,min,max,s,v] 1 0
 
 twoPole i freq radius = mkFilter "TwoPole" [i,freq,radius] 1 0
 twoZero i freq radius = mkFilter "TwoZero" [i,freq,radius] 1 0
+
+
+allpassC :: UGen -> UGen -> UGen -> UGen -> UGen
+allpassL :: UGen -> UGen -> UGen -> UGen -> UGen
+allpassN :: UGen -> UGen -> UGen -> UGen -> UGen
+allpass' :: Name -> UGen -> UGen -> UGen -> UGen -> UGen
+bpf :: UGen -> UGen -> UGen -> UGen
+bpz2 :: UGen -> UGen
+brf :: UGen -> UGen -> UGen -> UGen
+brz2 :: UGen -> UGen
+combC :: UGen -> UGen -> UGen -> UGen -> UGen
+combL :: UGen -> UGen -> UGen -> UGen -> UGen
+combN :: UGen -> UGen -> UGen -> UGen -> UGen
+comb' :: Name -> UGen -> UGen -> UGen -> UGen -> UGen
+decay :: UGen -> UGen -> UGen
+decay2 :: UGen -> UGen -> UGen -> UGen
+delay1 :: UGen -> UGen
+delay2 :: UGen -> UGen
+delayC :: UGen -> UGen -> UGen -> UGen
+delayL :: UGen -> UGen -> UGen -> UGen
+delayN :: UGen -> UGen -> UGen -> UGen
+delay' :: Name -> UGen -> UGen -> UGen -> UGen
+formlet :: UGen -> UGen -> UGen -> UGen -> UGen
+fos :: UGen -> UGen -> UGen -> UGen -> UGen
+hpf :: UGen -> UGen -> UGen
+hpz1 :: UGen -> UGen
+hpz2 :: UGen -> UGen
+klank :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+lag :: UGen -> UGen -> UGen
+lag2 :: UGen -> UGen -> UGen
+lag3 :: UGen -> UGen -> UGen
+latch :: UGen -> UGen -> UGen
+leakDC :: UGen -> UGen -> UGen
+linLin :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+linen :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+lpf :: UGen -> UGen -> UGen
+lpz1 :: UGen -> UGen
+lpz2 :: UGen -> UGen
+median :: UGen -> UGen -> UGen
+mulAdd :: UGen -> UGen -> UGen -> UGen
+onePole :: UGen -> UGen -> UGen
+oneZero :: UGen -> UGen -> UGen
+pitchShift :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+pulseDivider :: UGen -> UGen -> UGen -> UGen
+quadC :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+quadL :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+quadN :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+quad' :: Name -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+resonz :: UGen -> UGen -> UGen -> UGen
+rhpf :: UGen -> UGen -> UGen -> UGen
+ringz :: UGen -> UGen -> UGen -> UGen
+rlpf :: UGen -> UGen -> UGen -> UGen
+slew :: UGen -> UGen -> UGen -> UGen
+sos :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+stepper :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+twoPole :: UGen -> UGen -> UGen -> UGen
+twoZero :: UGen -> UGen -> UGen -> UGen

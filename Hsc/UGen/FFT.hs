@@ -2,6 +2,7 @@ module Hsc.UGen.FFT where
 
 import Hsc.Rate (Rate(AR, KR))
 import Hsc.Construct (mkOsc, mkOsc', uniquify, zeroUId)
+import Hsc.UGen (UGen, UId)
 
 fft  buf i = mkOsc KR "FFT"  [buf,i] 1 0
 ifft buf   = mkOsc AR "IFFT" [buf]   1 0
@@ -40,6 +41,42 @@ pv_RandWipe' id ba bb wp trg = mkOsc' KR "PV_RandWipe" [ba,bb,wp,trg] 1 0 id
 
 pv_RandComb buf wp trg = uniquify (pv_RandComb' zeroUId buf wp trg)
 pv_RandWipe ba bb wp trg = uniquify (pv_RandWipe' zeroUId ba bb wp trg)
+
+fft :: UGen -> UGen -> UGen
+ifft :: UGen -> UGen
+pv_Add :: UGen -> UGen -> UGen
+pv_BinScramble :: UGen -> UGen -> UGen -> UGen -> UGen
+pv_BinShift :: UGen -> UGen -> UGen -> UGen
+pv_BinWipe :: UGen -> UGen -> UGen -> UGen
+pv_BrickWall :: UGen -> UGen -> UGen
+pv_ConformalMap :: UGen -> UGen -> UGen -> UGen
+pv_CopyPhase :: UGen -> UGen -> UGen
+pv_Diffuser :: UGen -> UGen -> UGen
+pv_HainsworthFoote :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+pv_JensenAndersen :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+pv_LocalMax :: UGen -> UGen -> UGen
+pv_MagAbove :: UGen -> UGen -> UGen
+pv_MagBelow :: UGen -> UGen -> UGen
+pv_MagClip :: UGen -> UGen -> UGen
+pv_MagFreeze :: UGen -> UGen -> UGen
+pv_MagMul :: UGen -> UGen -> UGen
+pv_MagNoise :: UGen -> UGen
+pv_MagShift :: UGen -> UGen -> UGen -> UGen
+pv_MagSmear :: UGen -> UGen -> UGen
+pv_MagSquared :: UGen -> UGen
+pv_Max :: UGen -> UGen -> UGen
+pv_Min :: UGen -> UGen -> UGen
+pv_Mul :: UGen -> UGen -> UGen
+pv_PhaseShift :: UGen -> UGen -> UGen
+pv_PhaseShift270 :: UGen -> UGen
+pv_PhaseShift90 :: UGen -> UGen
+pv_RandComb :: UGen -> UGen -> UGen -> IO UGen
+pv_RandComb' :: UId -> UGen -> UGen -> UGen -> UGen
+pv_RandWipe :: UGen -> UGen -> UGen -> UGen -> IO UGen
+pv_RandWipe' :: UId -> UGen -> UGen -> UGen -> UGen -> UGen
+pv_RectComb :: UGen -> UGen -> UGen -> UGen -> UGen
+pv_RectComb2 :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+
 
 -- Local Variables:
 -- truncate-lines:t
