@@ -92,11 +92,12 @@ gdot g@(Graph _ c u) = ["digraph Anonymous {"]
 udot :: UGen -> [String]
 udot u = gdot (graph u)
 
+--import Distribution.Compat.FilePath (joinPaths)
+joinPaths a b = a ++ "/" ++ b
+
 draw :: String -> UGen -> IO ()
 draw v u = do d <- getTemporaryDirectory
-              -- better Distribution.Compat.joinPaths ?
-              let f = d ++ "/hsc.dot"
-              -- let f = "/tmp/hsc.dot"
+              let f = joinPaths d "hsc.dot"
               bracket (openFile f WriteMode) hClose
                       (flip hPutStr (unlines (udot u)))
               system $ v ++ " " ++ f
