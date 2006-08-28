@@ -88,7 +88,7 @@ instance OrdE Double where
     a >* b   = if a > b   then 1.0 else 0.0
     a >=* b  = if a >= b  then 1.0 else 0.0
 
-class (Num a, Fractional a, Floating a) => UnaryOp a where
+class (Floating a) => UnaryOp a where
     notE           :: a -> a
     isnil          :: a -> a
     notnil         :: a -> a
@@ -163,7 +163,7 @@ instance UnaryOp Double where
     log10 a     = logBase 10 a
     softclip a  = __uop a
 
-class (Num a, Fractional a, Floating a) => BinaryOp a where
+class (Floating a) => BinaryOp a where
     idiv           :: a -> a -> a
     mod            :: a -> a -> a
     bitand         :: a -> a -> a
@@ -280,7 +280,7 @@ instance BinaryOp Double where
     randrange a b      = __binop a b
     exprandrange a b   = __binop a b
 
-class (Num a, Fractional a, Floating a) => TernaryOp a where
+class (Floating a) => TernaryOp a where
     wrap :: a -> a -> a -> a
     fold :: a -> a -> a -> a
     clip :: a -> a -> a -> a
