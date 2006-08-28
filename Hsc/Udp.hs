@@ -21,8 +21,7 @@ recv' fd   = do b <- recv fd 8192
 
 sync' :: Socket -> Osc -> IO Osc
 sync' fd o = do send' fd o
-                r <- recv' fd
-                return r
+                recv' fd
 
 {-
 syncto' :: Socket -> String -> Osc -> IO Bool
