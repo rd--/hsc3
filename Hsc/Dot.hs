@@ -62,8 +62,8 @@ idot _            i = "<I_" ++ show i ++ ">"
 
 
 uname :: Name -> Int -> String
-uname "UnaryOpUGen"   n = uOpName n
-uname "BinaryOpUGen"  n = bOpName n
+uname "UnaryOpUGen"   n = unaryName n
+uname "BinaryOpUGen"  n = binaryName n
 uname n               _ = n
 
 ndot :: Graph -> UGen -> String

@@ -6,10 +6,10 @@ import Hsc.UGen (UGen(Constant, MCE))
 import Hsc.Construct (mkFilter)
 
 uop _ f (Constant a) = Constant (f a) 
-uop i _ a            = mkFilter "UnaryOpUGen"  [a]   1 (fromEnum (i :: UOp))
+uop i _ a            = mkFilter "UnaryOpUGen"  [a]   1 (fromEnum (i :: Unary))
 
 binop _ f (Constant a) (Constant b) = Constant (f a b)
-binop i _ a            b            = mkFilter "BinaryOpUGen" [a,b] 1 (fromEnum (i :: BOp))
+binop i _ a            b            = mkFilter "BinaryOpUGen" [a,b] 1 (fromEnum (i :: Binary))
 
 instance Num UGen where
     negate         = uop Neg negate
