@@ -4,22 +4,18 @@ import Hsc.UGen (UId(..), UGen(..), rateOf, proxy)
 import Hsc.MCE (mced)
 
 import Data.Unique (newUnique, hashUnique)
-import Control.Monad (liftM, join)
+import Control.Monad (liftM, join, replicateM)
 
 zeroUId = (UId 0)
 
 mkId :: IO Int
-mkId = do u <- newUnique
-          return (hashUnique u)
+mkId = liftM hashUnique newUnique
 
-mkUId = do id <- mkId
-           return (UId id)
+mkUId = liftM UId mkId
 
 uniquify :: UGen -> IO UGen
-uniquify (UGen r n i o s _) = do id <- mkUId
-                                 return (UGen r n i o s id)
-uniquify (MCE u)            = do u' <- mapM uniquify u
-                                 return (MCE u')
+uniquify (UGen r n i o s _) = liftM (UGen r n i o s) mkUId
+uniquify (MCE u)            = liftM MCE (mapM uniquify u)
 uniquify u                  = error ("uniquify: illegal value" ++ show u)
 
 consU r n i o s id = proxy (mced u)
@@ -44,10 +40,8 @@ mkFilterMCE c i j o s = mkFilter c (i ++ mcel j) o s
 
 --
 
-dupn n u  = do d  <- mapM uniquify (take n (repeat u))
-               return (MCE d)
+dupn  n u = liftM MCE (replicateM n (uniquify u))
+dupn' n u = u >>= dupn n
 
 dup       = dupn 2
-dupn' n u = join ((liftM (dupn n) u))
 dup'      = dupn' 2
-
