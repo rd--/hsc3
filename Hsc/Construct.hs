@@ -4,7 +4,7 @@ import Hsc.UGen (UId(..), UGen(..), rateOf, proxy)
 import Hsc.MCE (mced)
 
 import Data.Unique (newUnique, hashUnique)
-import Control.Monad (liftM, join, replicateM)
+import Control.Monad (liftM, replicateM)
 
 zeroUId = (UId 0)
 

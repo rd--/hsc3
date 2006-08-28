@@ -1,6 +1,6 @@
 module Hsc.Schedule where
 
-import Control.Concurrent (threadDelay, forkIO)
+import Control.Concurrent (threadDelay)
 import System.Time (ClockTime(TOD), getClockTime)
 import Control.Monad (liftM, when)
 
