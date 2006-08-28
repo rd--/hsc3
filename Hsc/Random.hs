@@ -2,46 +2,45 @@ module Hsc.Random where
 
 import Hsc.UGen(UGen(Constant, MCE))
 
-import Control.Monad
-import System.Random
+import System.Random (getStdRandom, randomR)
+import Control.Monad (liftM, liftM2, replicateM)
 
 rrand :: Double -> Double -> IO Double
-rrand l r = do n <- getStdRandom (randomR (l,r))
-               return n
+rrand l r = getStdRandom (randomR (l,r))
 
 rrandi :: Int -> Int -> IO Int
-rrandi l r = do n <- getStdRandom (randomR (l,r))
-                return n
+rrandi l r = getStdRandom (randomR (l,r))
 
 nrrand = rrand 0 1
 
-nrrand_linear = do a <- nrrand
-                   b <- nrrand
-                   return (min a b)
+-- auxiliary function
+merge2rand f = liftM2 f nrrand nrrand
 
-nrrand_inverse_linear = do a <- nrrand
-                           b <- nrrand
-                           return (max a b)
+-- Linearly distributed in [0,1) with a mean value of 0.2929.  The
+-- density function is given by 'f(x) = 2 * (1 - x)'.
 
-nrrand_triangular = do a <- nrrand
-                       b <- nrrand
-                       return (0.5 * (a + b))
+nrrand_linear = merge2rand min
+
+-- Linearly distributed in [0,1) with a mean value of 0.6969.  The
+-- density function is given by 'f(x) = 2 * (x - 1)'.
+
+nrrand_inverse_linear = merge2rand max
+
+nrrand_triangular = merge2rand (\a b -> (a+b)/2)
 
 nrrand_exponential l = do u <- nrrand
-                          return ((- (log u)) / l)
+                          return (- log u / l)
 
 rrandx l r = do a <- rrand 0.0 1.0
-                return (((r / l) ** a) * l)
+                return ((r / l) ** a * l)
 
-rrandl n l r = do rs <- replicateM n (rrand l r)
-                  return rs
+rrandl n l r = replicateM n (rrand l r)
 
-choose l = do n <- getStdRandom (randomR (0,(length l)-1))
-              return (l !! n)
+-- Random list element
 
-rrandc l r = do r <- rrand l r
-                return (Constant r)
+choose :: [a] -> IO a
+choose l = liftM (l!!) (getStdRandom (randomR (0, length l - 1)))
 
-rrandmce n l r = do rs <- rrandl n l r
-                    return (MCE (map Constant rs))
+rrandc l r = liftM Constant (rrand l r)
 
+rrandmce n l r = liftM (MCE . map Constant) (rrandl n l r)
