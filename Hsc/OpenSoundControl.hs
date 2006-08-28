@@ -23,14 +23,16 @@ osc_tag (OscString _) = 's'
 osc_tag (OscBlob _)   = 'b'
 
 osc_pad' :: Int -> Int
-osc_pad' n = n + 4 - (mod n 4)
+osc_pad' n = n + 4 - mod n 4
+-- too short:  osc_pad' n = n + mod (-n) 4
 
 osc_pad'' :: Int -> Int
-osc_pad'' n = if (mod n 4) == 0 then n else osc_pad' n
+osc_pad'' n = if 0 == mod n 4 then n else osc_pad' n
 
 osc_pad :: [a] -> a -> [a]
-osc_pad s p = s ++ (replicate n p)
-    where n = 4 - (mod (length s) 4)
+osc_pad s p = s ++ replicate n p
+    where n = 4 - mod (length s) 4
+-- too short:  where n = mod (- length s) 4
 
 osc_u8v :: OscT -> U8v
 osc_u8v (OscInt i)    = i32_u8v i
@@ -42,7 +44,7 @@ osc_u8v (OscBlob b)   = osc_u8v (OscInt n) ++ b'
           n  = length b'
 
 osc_desc :: [OscT] -> U8v
-osc_desc l = osc_u8v (OscString $ ',' : (map osc_tag l))
+osc_desc l = osc_u8v (OscString $ ',' : map osc_tag l)
 
 osc :: Osc -> U8v
 osc (OscM c l) = osc_u8v (OscString c) ++ 
@@ -56,7 +58,7 @@ osc_sz :: Char -> U8v -> Int
 osc_sz 'i' _ = 4
 osc_sz 'f' _ = 4
 osc_sz 'd' _ = 8
-osc_sz 's' b = (elemIndex' 0 b)
+osc_sz 's' b = elemIndex' 0 b
 osc_sz 'b' b = u8v_i32 (take 4 b)
 osc_sz _   _ = error "illegal osc type"
 
@@ -74,8 +76,9 @@ u8v_osc _   _ = error "illegal osc type"
 
 unosc' :: [Char] -> U8v -> [OscT]
 unosc' []     _ = []
-unosc' (c:cs) b = u8v_osc c (take n b) : unosc' cs (drop n b)
-    where n = osc_sz' c b
+unosc' (c:cs) b = u8v_osc c tb : unosc' cs db
+    where n       = osc_sz' c b
+          (tb,db) = splitAt n b
 
 unosc :: U8v -> Osc
 unosc b = OscM cmd arg
