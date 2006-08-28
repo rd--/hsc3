@@ -14,9 +14,9 @@ playu fd u = do r <- sync' fd (d_recv' "Anonymous" u)
                 return r
 
 hasOutputs :: UGen -> Bool
-hasOutputs (UGen _ _ _ o _ _)   = length o > 0
-hasOutputs (MCE _)              = True
-hasOutputs _                    = False
+hasOutputs (UGen _ _ _ o _ _) = not (null o)
+hasOutputs (MCE _)            = True
+hasOutputs _                  = False
 
 play fd u
     | hasOutputs u = playu fd (out (Constant 0) u)
