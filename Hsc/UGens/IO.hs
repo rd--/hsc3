@@ -1,6 +1,6 @@
 module Hsc.UGens.IO where
 
-import Hsc.Construct
+import Hsc.Construct (mkOsc, mkFilter, mkFilterMCE)
 
 in' n r bus = mkOsc r "In" [bus] n 0
 
