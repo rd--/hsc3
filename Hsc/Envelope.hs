@@ -36,22 +36,21 @@ env (l:vl) tms crv rls lp =
           n       = length tms
           n'      = fromIntegral n
 
-envperc :: UGen -> UGen -> UGen -> [EnvCurve] -> [UGen]
-envperc atk rls lvl crv = env [0.0, lvl, 0.0] [atk, rls] crv (-1.0) (-1.0)
+envPerc :: UGen -> UGen -> UGen -> [EnvCurve] -> [UGen]
+envPerc atk rls lvl crv = env [0.0, lvl, 0.0] [atk, rls] crv (-1.0) (-1.0)
 
-envperc' :: [UGen]
-envperc' = envperc 0.01 1.0 1.0 [c,c]
-    where c = EnvNum (-4.0)
+envPerc' :: [UGen]
+envPerc' = envPerc 0.01 1.0 1.0 (dbl (EnvNum (-4.0)))
 
-envtriangle :: UGen -> UGen -> [UGen]
-envtriangle dur lvl = env [0.0, lvl, 0.0] [n, n] c (-1.0) (-1.0)
-    where c = [EnvLin, EnvLin]
-          n = dur / 2.0
+envTriangle :: UGen -> UGen -> [UGen]
+envTriangle dur lvl =
+   env [0.0, lvl, 0.0] (dbl (dur / 2.0)) (dbl EnvLin) (-1.0) (-1.0)
 
-envsine :: UGen -> UGen -> [UGen]
-envsine dur lvl = env [0.0, lvl, 0.0] [n, n] c (-1.0) (-1.0)
-    where c = [EnvSin, EnvSin]
-          n = dur / 2.0
+envSine :: UGen -> UGen -> [UGen]
+envSine dur lvl =
+   env [0.0, lvl, 0.0] (dbl (dur / 2.0)) (dbl EnvSin) (-1.0) (-1.0)
 
-envlinen aT sT rT l c = env [0, l, l, 0] [aT, sT, rT] c (-1) (-1)
+envLineN aT sT rT l c = env [0, l, l, 0] [aT, sT, rT] c (-1) (-1)
 
+dbl :: a -> [a]
+dbl x = [x,x]
