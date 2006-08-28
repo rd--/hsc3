@@ -59,7 +59,6 @@ proxy :: UGen -> UGen
 proxy (MCE l) = MCE (map proxy l)
 proxy u@(UGen _ _ _ o _ _) =
    case o of
-      -- length o > 1
       (_:_:_) -> MCE (map (Proxy u) [0..(length o - 1)])
       _       -> u
 proxy _       = error "proxy: illegal ugen"

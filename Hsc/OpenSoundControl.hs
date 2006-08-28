@@ -24,7 +24,6 @@ osc_tag (OscBlob _)   = 'b'
 
 osc_pad' :: Int -> Int
 osc_pad' n = n + 4 - mod n 4
--- too short:  osc_pad' n = n + mod (-n) 4
 
 osc_pad'' :: Int -> Int
 osc_pad'' n = if 0 == mod n 4 then n else osc_pad' n
@@ -32,7 +31,6 @@ osc_pad'' n = if 0 == mod n 4 then n else osc_pad' n
 osc_pad :: [a] -> a -> [a]
 osc_pad s p = s ++ replicate n p
     where n = 4 - mod (length s) 4
--- too short:  where n = mod (- length s) 4
 
 osc_u8v :: OscT -> U8v
 osc_u8v (OscInt i)    = i32_u8v i
