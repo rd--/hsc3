@@ -3,15 +3,12 @@ module Hsc.Play where
 import Hsc.UGen (UGen(..))
 import Hsc.Graph (graph, graphdef)
 import Hsc.Udp (send', sync', close')
-import Hsc.Server (AddAction(AddToTail),
-          s_new, n_set, n_set', n_free, d_recv, g_new, g_freeAll)
+import Hsc.Server (AddAction(AddToTail), s_new, d_recv, g_new, g_freeAll)
 import Hsc.UGen.IO (out)
 import Hsc.OpenSoundControl (Osc)
 
 import Network.Socket (Socket)
-
 import Control.Exception (bracket)
-
 
 d_recv' :: String -> UGen -> Osc
 d_recv' n u = d_recv (graphdef n (graph u))
@@ -27,7 +24,7 @@ addOut u = if hasOutputs u then out (Constant 0) u else u
 init_ :: Socket -> IO Int
 init_ fd = send' fd (g_new 1 AddToTail 0)
 
-play :: Socket -> Int -> UGen -> IO Osc
+play :: Socket -> UGen -> IO Osc
 play  fd u = do r <- sync' fd (d_recv' "Anonymous" (addOut u))
                 send' fd (s_new "Anonymous" (-1) AddToTail 1)
                 return r
