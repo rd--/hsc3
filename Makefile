@@ -1,4 +1,4 @@
-flags = -W -O2 -fexcess-precision
+flags = -Wall -O2 -fexcess-precision
 
 all:
 	ghc --make $(flags) Hsc
