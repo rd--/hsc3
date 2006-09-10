@@ -1,7 +1,5 @@
-flags = -Wall -O2 -fexcess-precision
-
 all:
-	ghc --make $(flags) Hsc
+	ghc --make -Wall Sound.SC3
 
 clean:
-	rm -f *.aux *.log *.pdf *.tex *.o *.hi */*.o */*.hi */*/*.o */*/*.hi
+	rm -f *.aux *.log *.pdf *.tex */*.o */*.hi */*/*.o */*/*.hi */*/*/*.o */*/*/*.hi 
