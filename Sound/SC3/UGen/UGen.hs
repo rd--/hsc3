@@ -189,12 +189,31 @@ instance Floating UGen where
     atanh x        = (log (1+x) - log (1-x)) / 2
 
 instance Ord UGen where
+    (Constant a) <  (Constant b) = a <  b
+    (Constant a) <= (Constant b) = a <= b
+    (Constant a) >  (Constant b) = a <  b
+    (Constant a) >= (Constant b) = a >= b
+{-- GHC 6.4 dies using these as well as above...
     (<)  = error "Ord is partial, see OrdE"
-    (<=) = error "Ord is partial, see OrdE"
     (>)  = error "Ord is partial, see OrdE"
-    (>=) = error "Ord is partial, see OrdE"
+    (<=) = error "Ord is partial, see OrdE"
+    (<=) = error "Ord is partial, see OrdE"
+--}
     min  = binop Min min
     max  = binop Max max
+
+instance Enum UGen where
+    succ u                = u + 1
+    pred u                = u - 1
+    toEnum i              = Constant (fromIntegral i)
+    fromEnum (Constant n) = truncate n
+    fromEnum _            = error "cannot enumerate non-consant UGens"
+    enumFrom              = iterate (+1)
+    enumFromThen n m      = iterate (+(m-n)) n
+    enumFromTo n m        = takeWhile (<= m+1/2) (enumFrom n)
+    enumFromThenTo n n' m = takeWhile p (enumFromThen n n')
+        where p | n' >= n   = (<= m + (n'-n)/2)
+                | otherwise = (>= m + (n'-n)/2)
 
 instance EqE UGen where
     (==*)  = binop EQ (==*)
@@ -295,4 +314,3 @@ dup       = dupn 2
 
 dup' :: IO UGen -> IO UGen
 dup'      = dupn' 2
-
