@@ -35,8 +35,8 @@ pv_PhaseShift90 buf = mkOsc KR "PV_PhaseShift90" [buf] 1 0
 pv_RectComb buf teeth phase width = mkOsc KR "PV_RectComb" [buf,teeth,phase,width] 1 0
 pv_RectComb2 ba bb teeth phase width = mkOsc KR "PV_RectComb2" [ba,bb,teeth,phase,width] 1 0
 
-pv_RandComb' uid buf wp trg = mkOsc' KR "PV_RandComb" [buf,wp,trg] 1 0 uid
-pv_RandWipe' uid ba bb wp trg = mkOsc' KR "PV_RandWipe" [ba,bb,wp,trg] 1 0 uid
+pv_RandComb' uid buf wp trg = mkOsc' uid KR "PV_RandComb" [buf,wp,trg] 1 0
+pv_RandWipe' uid ba bb wp trg = mkOsc' uid KR "PV_RandWipe" [ba,bb,wp,trg] 1 0
 
 pv_RandComb buf wp trg = uniquify (pv_RandComb' zeroUId buf wp trg)
 pv_RandWipe ba bb wp trg = uniquify (pv_RandWipe' zeroUId ba bb wp trg)

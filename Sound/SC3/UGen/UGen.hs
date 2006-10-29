@@ -122,15 +122,17 @@ consU r n i o s uid = proxy (mced u)
     where u = UGen r n i o s uid
 
 mkOsc :: Rate -> Name -> [UGen] -> Int -> Special -> UGen
-mkOsc r c i o s = consU r c i o' s zeroUId
-    where o' = replicate o r
+mkOsc = mkOsc' zeroUId
 
-mkOsc' :: Rate -> Name -> [UGen] -> Int -> Special -> UId -> UGen
-mkOsc' r c i o s uid = consU r c i o' s uid
+mkOsc' :: UId -> Rate -> Name -> [UGen] -> Int -> Special -> UGen
+mkOsc' uid r c i o s = consU r c i o' s uid
     where o' = replicate o r
 
 mkFilter :: Name -> [UGen] -> Int -> Special -> UGen
-mkFilter c i o s = consU r c i o' s zeroUId
+mkFilter = mkFilter' zeroUId
+
+mkFilter' :: UId -> Name -> [UGen] -> Int -> Special -> UGen
+mkFilter' uid c i o s = consU r c i o' s uid
     where r = maximum (map rateOf i)
           o'= replicate o r
 

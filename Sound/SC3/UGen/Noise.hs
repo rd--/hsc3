@@ -1,46 +1,46 @@
 module Sound.SC3.UGen.Noise where
 
-import Sound.SC3.UGen.Rate (Rate)
-import Sound.SC3.UGen.UGen (UGen, UId, mkOsc, mkOsc', uniquify, zeroUId)
+import Sound.SC3.UGen.Rate (Rate(IR))
+import Sound.SC3.UGen.UGen (UGen, UId, mkOsc, mkOsc', mkFilter', uniquify, zeroUId)
 
 brownNoise', clipNoise', grayNoise', pinkNoise', whiteNoise' :: UId -> Rate -> UGen
-brownNoise' uid r = mkOsc' r "BrownNoise" [] 1 0 uid
-clipNoise'  uid r = mkOsc' r "ClipNoise"  [] 1 0 uid
-grayNoise'  uid r = mkOsc' r "GrayNoise"  [] 1 0 uid
-pinkNoise'  uid r = mkOsc' r "PinkNoise"  [] 1 0 uid
-whiteNoise' uid r = mkOsc' r "WhiteNoise" [] 1 0 uid
+brownNoise' uid r = mkOsc' uid r "BrownNoise" [] 1 0
+clipNoise'  uid r = mkOsc' uid r "ClipNoise"  [] 1 0
+grayNoise'  uid r = mkOsc' uid r "GrayNoise"  [] 1 0
+pinkNoise'  uid r = mkOsc' uid r "PinkNoise"  [] 1 0
+whiteNoise' uid r = mkOsc' uid r "WhiteNoise" [] 1 0
 
 lfClipNoise', lfNoise0', lfNoise1', lfNoise2' :: UId -> Rate -> UGen -> UGen
-lfClipNoise'  uid r freq = mkOsc' r "LFClipNoise"  [freq] 1 0 uid
-lfNoise0'     uid r freq = mkOsc' r "LFNoise0"     [freq] 1 0 uid
-lfNoise1'     uid r freq = mkOsc' r "LFNoise1"     [freq] 1 0 uid
-lfNoise2'     uid r freq = mkOsc' r "LFNoise2"     [freq] 1 0 uid
+lfClipNoise'  uid r freq = mkOsc' uid r "LFClipNoise"  [freq] 1 0
+lfNoise0'     uid r freq = mkOsc' uid r "LFNoise0"     [freq] 1 0
+lfNoise1'     uid r freq = mkOsc' uid r "LFNoise1"     [freq] 1 0
+lfNoise2'     uid r freq = mkOsc' uid r "LFNoise2"     [freq] 1 0
 
 lfdClipNoise', lfdNoise0', lfdNoise1', lfdNoise2' :: UId -> Rate -> UGen -> UGen
-lfdClipNoise' uid r freq = mkOsc' r "LFDClipNoise" [freq] 1 0 uid
-lfdNoise0'    uid r freq = mkOsc' r "LFDNoise0"    [freq] 1 0 uid
-lfdNoise1'    uid r freq = mkOsc' r "LFDNoise1"    [freq] 1 0 uid
-lfdNoise2'    uid r freq = mkOsc' r "LFDNoise2"    [freq] 1 0 uid
+lfdClipNoise' uid r freq = mkOsc' uid r "LFDClipNoise" [freq] 1 0
+lfdNoise0'    uid r freq = mkOsc' uid r "LFDNoise0"    [freq] 1 0
+lfdNoise1'    uid r freq = mkOsc' uid r "LFDNoise1"    [freq] 1 0
+lfdNoise2'    uid r freq = mkOsc' uid r "LFDNoise2"    [freq] 1 0
 
 dust', dust2' :: UId -> Rate -> UGen -> UGen
-dust'  uid r density = mkOsc' r "Dust"  [density] 1 0 uid
-dust2' uid r density = mkOsc' r "Dust2" [density] 1 0 uid
+dust'  uid r density = mkOsc' uid r "Dust"  [density] 1 0
+dust2' uid r density = mkOsc' uid r "Dust2" [density] 1 0
 
-tExpRand', tiRand', tRand' :: UId -> Rate -> UGen -> UGen -> UGen -> UGen
-tExpRand' uid r lo hi trig = mkOsc' r "TExpRand" [lo,hi,trig] 1 0 uid
-tiRand'   uid r lo hi trig = mkOsc' r "TIRand"   [lo,hi,trig] 1 0 uid
-tRand'    uid r lo hi trig = mkOsc' r "TRand"    [lo,hi,trig] 1 0 uid
+tExpRand', tiRand', tRand' :: UId -> UGen -> UGen -> UGen -> UGen
+tExpRand' uid lo hi trig = mkFilter' uid "TExpRand" [lo,hi,trig] 1 0
+tiRand'   uid lo hi trig = mkFilter' uid "TIRand"   [lo,hi,trig] 1 0
+tRand'    uid lo hi trig = mkFilter' uid "TRand"    [lo,hi,trig] 1 0
 
-coinGate' :: UId -> Rate -> UGen -> UGen -> UGen
-coinGate' uid r prob i = mkOsc' r "CoinGate" [prob,i] 1 0 uid
+coinGate' :: UId -> UGen -> UGen -> UGen
+coinGate' uid prob i = mkFilter' uid "CoinGate" [prob,i] 1 0
 
-iRand', rand', expRand' :: UId -> Rate -> UGen -> UGen -> UGen
-nRand', linRand' :: UId -> Rate -> UGen -> UGen -> UGen -> UGen
-iRand'   uid r lo hi   = mkOsc' r "IRand"   [lo,hi]   1 0 uid
-nRand'   uid r lo hi n = mkOsc' r "NRand"   [lo,hi,n] 1 0 uid
-rand'    uid r lo hi   = mkOsc' r "Rand"    [lo,hi]   1 0 uid
-expRand' uid r lo hi   = mkOsc' r "ExpRand" [lo,hi]   1 0 uid
-linRand' uid r lo hi m = mkOsc' r "LinRand" [lo,hi,m] 1 0 uid
+iRand', rand', expRand' :: UId -> UGen -> UGen -> UGen
+nRand', linRand' :: UId -> UGen -> UGen -> UGen -> UGen
+iRand'   uid lo hi   = mkOsc' uid IR "IRand"   [lo,hi]   1 0
+nRand'   uid lo hi n = mkOsc' uid IR "NRand"   [lo,hi,n] 1 0
+rand'    uid lo hi   = mkOsc' uid IR "Rand"    [lo,hi]   1 0
+expRand' uid lo hi   = mkOsc' uid IR "ExpRand" [lo,hi]   1 0
+linRand' uid lo hi m = mkOsc' uid IR "LinRand" [lo,hi,m] 1 0
 
 brownNoise, clipNoise, grayNoise, pinkNoise, whiteNoise :: Rate -> IO UGen
 brownNoise r = uniquify (brownNoise' zeroUId r)
@@ -59,21 +59,21 @@ dust, dust2 :: Rate -> UGen -> IO UGen
 dust  r density = uniquify (dust'   zeroUId r density)
 dust2 r density = uniquify (dust2'  zeroUId r density)
 
-tExpRand, tiRand, tRand :: Rate -> UGen -> UGen -> UGen -> IO UGen
-tExpRand r lo hi trig = uniquify (tExpRand' zeroUId r lo hi trig)
-tiRand   r lo hi trig = uniquify (tiRand'   zeroUId r lo hi trig)
-tRand    r lo hi trig = uniquify (tRand'    zeroUId r lo hi trig)
+tExpRand, tiRand, tRand :: UGen -> UGen -> UGen -> IO UGen
+tExpRand lo hi trig = uniquify (tExpRand' zeroUId lo hi trig)
+tiRand   lo hi trig = uniquify (tiRand'   zeroUId lo hi trig)
+tRand    lo hi trig = uniquify (tRand'    zeroUId lo hi trig)
 
-coinGate :: Rate -> UGen -> UGen -> IO UGen
-coinGate r prob i = uniquify (coinGate' zeroUId r prob i)
+coinGate :: UGen -> UGen -> IO UGen
+coinGate prob i = uniquify (coinGate' zeroUId prob i)
 
-iRand, rand, expRand :: Rate -> UGen -> UGen -> IO UGen
-nRand, linRand :: Rate -> UGen -> UGen -> UGen -> IO UGen
-iRand   r lo hi   = uniquify (iRand'   zeroUId r lo hi)
-nRand   r lo hi n = uniquify (nRand'   zeroUId r lo hi n)
-rand    r lo hi   = uniquify (rand'    zeroUId r lo hi)
-expRand r lo hi   = uniquify (expRand' zeroUId r lo hi)
-linRand r lo hi m = uniquify (linRand' zeroUId r lo hi m)
+iRand, rand, expRand :: UGen -> UGen -> IO UGen
+nRand, linRand :: UGen -> UGen -> UGen -> IO UGen
+iRand   lo hi   = uniquify (iRand'   zeroUId lo hi)
+nRand   lo hi n = uniquify (nRand'   zeroUId lo hi n)
+rand    lo hi   = uniquify (rand'    zeroUId lo hi)
+expRand lo hi   = uniquify (expRand' zeroUId lo hi)
+linRand lo hi m = uniquify (linRand' zeroUId lo hi m)
 
 hasher :: Rate -> UGen -> UGen
 hasher r i            = mkOsc r "Hasher"       [i]      1 0
