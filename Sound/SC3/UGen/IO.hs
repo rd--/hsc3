@@ -1,25 +1,52 @@
 module Sound.SC3.UGen.IO where
 
-import Sound.SC3.UGen.Rate (Rate)
-import Sound.SC3.UGen.UGen (UGen, mkOsc, mkFilterMCE)
+import Sound.SC3.UGen.Rate (Rate(AR, KR))
+import Sound.SC3.UGen.UGen (UGen,  mkOsc,  mkOscMCE, mkFilterMCE)
 
-in' n r bus = mkOsc r "In" [bus] n 0
+in' :: Rate -> UGen -> Int -> UGen
+in' r bus nc = mkOsc r "In" [bus] nc 0
 
-keyState r key minVal maxVal lag = mkOsc r "KeyState" [key,minVal,maxVal,lag] 1 0
+localIn :: Rate -> Int -> UGen
+localIn r nc = mkOsc r "In" [] nc 0
 
-mouseButton r minVal maxVal lag  = mkOsc r "MouseButton"  [minVal,maxVal,lag] 1 0
-mouseX r minVal maxVal warp lag  = mkOsc r "MouseX"  [minVal,maxVal,warp,lag] 1 0
-mouseY r minVal maxVal warp lag  = mkOsc r "MouseY"  [minVal,maxVal,warp,lag] 1 0
+lagIn :: UGen -> Int -> UGen -> UGen
+lagIn bus nc lag = mkOsc KR "LagIn" [bus, lag] nc 0
 
-out b i        = mkFilterMCE "Out"        [b] i 0 0
-offsetOut b i  = mkFilterMCE "OffsetOut"  [b] i 0 0
-replaceOut b i = mkFilterMCE "ReplaceOut" [b] i 0 0
+inFeedback :: UGen -> Int -> UGen
+inFeedback bus nc = mkOsc AR "InFeedback" [bus] nc 0
 
-in' :: Int -> Rate -> UGen -> UGen
-keyState :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-mouseButton :: Rate -> UGen -> UGen -> UGen -> UGen
-mouseX :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-mouseY :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+inTrig :: UGen -> Int -> UGen
+inTrig bus nc = mkOsc KR "InTrig" [bus] nc 0
+
 out :: UGen -> UGen -> UGen
-offsetOut :: UGen -> UGen -> UGen
+out bus i = mkFilterMCE "Out" [bus] i 0 0
+
 replaceOut :: UGen -> UGen -> UGen
+replaceOut bus i = mkFilterMCE "ReplaceOut" [bus] i 0 0
+
+offsetOut :: UGen -> UGen -> UGen
+offsetOut bus i = mkOscMCE AR "OffsetOut" [bus] i 0 0
+
+localOut :: UGen -> UGen
+localOut i = mkFilterMCE "LocalOut" [] i 0 0
+
+xOut :: UGen -> UGen -> UGen -> UGen
+xOut bus xfade i = mkFilterMCE "XOut" [bus, xfade] i 0 0
+
+sharedOut :: UGen -> UGen -> UGen
+sharedOut bus i = mkOscMCE KR "SharedOut" [bus] i 0 0
+
+sharedIn :: UGen -> Int -> UGen
+sharedIn bus nc = mkOsc KR "SharedIn" [bus] nc 0
+
+keyState :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+keyState r key minVal maxVal lag = mkOsc r "KeyState" [key, minVal, maxVal, lag] 1 0
+
+mouseButton :: Rate -> UGen -> UGen -> UGen -> UGen
+mouseButton r minVal maxVal lag = mkOsc r "MouseButton" [minVal, maxVal, lag] 1 0
+
+mouseX :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+mouseX r minVal maxVal warp lag = mkOsc r "MouseX" [minVal, maxVal, warp, lag] 1 0
+
+mouseY :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+mouseY r minVal maxVal warp lag = mkOsc r "MouseY" [minVal, maxVal, warp, lag] 1 0
