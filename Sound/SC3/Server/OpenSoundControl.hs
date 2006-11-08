@@ -50,7 +50,7 @@ osc (OscM c l) = osc_u8v (OscString c) ++
                  concatMap osc_u8v l
 osc (OscB t l) = osc_u8v (OscString "#bundle") ++ 
                  u64_u8v (utc_ntp t) ++
-                 concatMap osc l
+                 concatMap (osc_u8v . OscBlob . osc) l
 
 osc_sz :: Char -> [U8] -> Int
 osc_sz 'i' _ = 4
