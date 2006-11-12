@@ -1,11 +1,12 @@
-module Sound.SC3.Server.Status where
+module Sound.SC3.Server.Status (status') where
 
 import Sound.SC3.Server.Command (status)
 import Sound.SC3.Server.OpenSoundControl (Osc(OscM), osc_show')
-import Sound.SC3.Server.Udp (sync', sc, close')
+import Sound.SC3.Server.Udp (sync', close')
 
 import Data.List (transpose)
 import Control.Exception (bracket)
+import Network.Socket (Socket)
 
 statusFields :: [String]
 statusFields = ["# UGens                     ", 
@@ -21,10 +22,14 @@ statusInfo :: Osc -> [String]
 statusInfo (OscM "status.reply" l) = map osc_show' (tail l)
 statusInfo _                       = error "non status.reply message"
 
-status' :: IO Osc
-status' = bracket sc close'
+statusFormat :: Osc -> [String]
+statusFormat r = s : concat (transpose [statusFields, statusInfo r, replicate 8 "\n"])
+    where s = "***** SuperCollider Server Status *****\n"
+
+-- | Print server status information.
+status' :: IO Socket -> IO Osc
+status' sc = bracket sc close'
       (\fd ->
           do r <- sync' fd status
-             putStrLn "***** SuperCollider Server Status *****"
-             mapM putStr (concat (transpose [statusFields, statusInfo r, replicate 8 "\n"]))
+             mapM putStr (statusFormat r)
              return r)
