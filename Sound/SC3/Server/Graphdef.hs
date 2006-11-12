@@ -1,4 +1,4 @@
-module Sound.SC3.Server.Graphdef where
+module Sound.SC3.Server.Graphdef (graphdef) where
 
 import Sound.SC3.UGen.UGen (UGen(..))
 import Sound.SC3.UGen.Rate (rateId)
@@ -19,6 +19,7 @@ ugen_u8v g (UGen r n i o s _)   = pstr_u8v n ++
                                   concatMap (i8_u8v . rateId) o
 ugen_u8v _ _                    = error "illegal input"
 
+-- | Construct instrument definition bytecode.
 graphdef :: String -> Graph -> [U8]
 graphdef s g@(Graph n c u) = str_u8v "SCgf" ++
                              i32_u8v 0 ++
