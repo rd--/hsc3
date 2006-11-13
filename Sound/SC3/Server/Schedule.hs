@@ -1,4 +1,4 @@
-module Sound.SC3.Server.Schedule (utc, ntp, utc_ntp, pause, at) where
+module Sound.SC3.Server.Schedule (utc, ntp, utc_ntp, pause, pauseUntil, at) where
 
 import Control.Concurrent (threadDelay)
 import System.Time (ClockTime(TOD), getClockTime)
