@@ -10,8 +10,11 @@ data AddAction = AddToHead
                | AddReplace
                  deriving (Eq, Show, Enum)
 
-addAction :: AddAction -> Int
-addAction = fromEnum
+data PrintLevel = NoPrinter 
+                | TextPrinter
+                | HexPrinter
+                | AllPrinter
+                  deriving (Eq, Show, Enum)
 
 -- * Instrument definition commands.
 
@@ -51,8 +54,8 @@ n_mapn nid i b n = Message "/n_mapn" [Int nid, String i, Int b, Int n]
 n_query :: Int -> OSC
 n_query nid = Message "/n_query" [Int nid]
 
-n_run :: Int -> Int -> OSC
-n_run nid f = Message "/n_run" [Int nid, Int f]
+n_run :: Int -> Bool -> OSC
+n_run nid f = Message "/n_run" [Int nid, Int (fromEnum f)]
 
 n_set :: Int -> String -> Double -> OSC
 n_set nid i f = Message "/n_set" [Int nid, String i, Float f]
@@ -72,7 +75,7 @@ s_getn :: Int -> Int -> Int -> OSC
 s_getn nid i n = Message "/s_getn" [Int nid, Int i, Int n]
 
 s_new :: String -> Int -> AddAction -> Int -> OSC
-s_new n i a t = Message "/s_new" [String n, Int i, Int (addAction a), Int t]
+s_new n i a t = Message "/s_new" [String n, Int i, Int (fromEnum a), Int t]
 
 s_noid :: Int -> OSC
 s_noid nid = Message "/s_noid" [Int nid]
@@ -89,7 +92,7 @@ g_head g n = Message "/g_head" [Int g, Int n]
 g_head :: Int -> Int -> OSC
 
 g_new :: Int -> AddAction -> Int -> OSC
-g_new nid a t = Message "/g_new" [Int nid, Int (addAction a), Int t]
+g_new nid a t = Message "/g_new" [Int nid, Int (fromEnum a), Int t]
 
 g_tail :: Int -> Int -> OSC
 g_tail g n = Message "/g_tail" [Int g, Int n]
@@ -165,12 +168,12 @@ clearSched :: OSC
 clearSched = Message "/clearSched" []
 
 -- | Select printing of incoming Open Sound Control messages.
-dumpOSC c = Message "/dumpOSC" [Int c]
-dumpOSC :: Int -> OSC
+dumpOSC :: PrintLevel -> OSC
+dumpOSC c = Message "/dumpOSC" [Int (fromEnum c)]
 
 -- | Select reception of notification messages. (Asynchronous) 
-notify c = Message "/notify" [Int c]
-notify :: Int -> OSC
+notify :: Bool -> OSC
+notify c = Message "/notify" [Int (fromEnum c)]
 
 -- | Stop synthesis server.
 quit :: OSC
@@ -182,7 +185,7 @@ status = Message "/status" []
 
 -- | Request /synced message when all current asynchronous commands complete.
 sync :: Int -> OSC
-sync nid = Message "/sync" [Int nid]
+sync sid = Message "/sync" [Int sid]
 
 -- * Variants with variable argument support.
 
@@ -193,7 +196,7 @@ n_set' :: Int -> [(String, Double)] -> OSC
 n_set' nid c = Message "/n_set" ([Int nid] ++ flatten_controls c)
 
 s_new' :: String -> Int -> AddAction -> Int -> [(String, Double)] -> OSC
-s_new' n i a t c = Message "/s_new" ([String n, Int i, Int (addAction a), Int t] ++ flatten_controls c)
+s_new' n i a t c = Message "/s_new" ([String n, Int i, Int (fromEnum a), Int t] ++ flatten_controls c)
 
 -- Local Variables:
 -- truncate-lines:t
