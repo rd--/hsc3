@@ -99,8 +99,8 @@ udot u = gdot (graph u)
 joinPaths :: FilePath -> FilePath -> FilePath
 joinPaths a b = a ++ "/" ++ b
 
--- | Draw the UGen graph rooted at 'u' and display using the viewer 'v'.
-draw :: String -> UGen -> IO ()
+-- | Draw the UGen graph rooted at @u@ and display using the viewer @v@.
+draw :: String {-^ graph root @u@ -} -> UGen {-^ viewer @v@ -} -> IO ()
 draw v u = do d <- getTemporaryDirectory
               let f = joinPaths d "hsc.dot"
               bracket (openFile f WriteMode) hClose
@@ -108,10 +108,10 @@ draw v u = do d <- getTemporaryDirectory
               system $ v ++ " " ++ f
               return ()
 
--- | Read the environment variable 'DOTVIEWER', the default value is "dotty".
+-- | Read the environment variable @DOTVIEWER@, the default value is @"dotty"@.
 getDotViewer :: IO String
 getDotViewer = catch (getEnv "DOTVIEWER") (\_ -> return "dotty")
 
--- | Draw the UGen graph rooted at 'u' using the the viewer at 'getDotViewer'.
-draw' :: UGen -> IO ()
+-- | Draw the UGen graph rooted at @u@ using the viewer at 'getDotViewer'.
+draw' :: UGen {-^ graph root @u@ -} -> IO ()
 draw' u = getDotViewer >>= (flip draw u)

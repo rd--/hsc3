@@ -76,7 +76,7 @@ bufDelayL = mkBufDelay "BufDelayL"
 bufDelayN :: UGen -> UGen -> UGen -> UGen
 bufDelayN = mkBufDelay "BufDelayN"
 
--- * Buffer I/O.
+-- * Buffer I\/O.
 
 -- | Buffer reader.
 bufRd :: Int -> Rate -> UGen -> UGen -> UGen -> UGen -> UGen

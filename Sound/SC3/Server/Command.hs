@@ -179,11 +179,11 @@ notify c = Message "/notify" [Int (fromEnum c)]
 quit :: OSC
 quit = Message "/quit" []
 
--- | Request /status.reply message.
+-- | Request \/status.reply message.
 status :: OSC
 status = Message "/status" []
 
--- | Request /synced message when all current asynchronous commands complete.
+-- | Request \/synced message when all current asynchronous commands complete.
 sync :: Int -> OSC
 sync sid = Message "/sync" [Int sid]
 
@@ -193,7 +193,7 @@ flatten_controls :: [(String, Double)] -> [Datum]
 flatten_controls = concatMap (\(name,val) -> [String name, Float val])
 
 n_set' :: Int -> [(String, Double)] -> OSC
-n_set' nid c = Message "/n_set" ([Int nid] ++ flatten_controls c)
+n_set' nid c = Message "/n_set" (Int nid : flatten_controls c)
 
 s_new' :: String -> Int -> AddAction -> Int -> [(String, Double)] -> OSC
 s_new' n i a t c = Message "/s_new" ([String n, Int i, Int (fromEnum a), Int t] ++ flatten_controls c)
