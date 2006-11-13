@@ -48,17 +48,15 @@ align :: Int -> Int
 align n = mod (-n) 4
 
 -- | Align a byte string if required.
-extend :: [a] -> a -> [a]
-extend s p | n == 0    = s
-           | otherwise = s ++ replicate n p
-    where n = align (length s)
+extend :: a -> [a] -> [a]
+extend p s = s ++ replicate (align (length s)) p
 
 instance Encodable Datum where
     encode (Int i)    = i32_u8v i
     encode (Float f)  = f32_u8v (f64_f32 f)
     encode (Double d) = f64_u8v d
-    encode (String s) = extend (cstr_u8v s) 0
-    encode (Blob b)   = i32_u8v (length b) ++ (extend b) 0
+    encode (String s) = extend 0 (cstr_u8v s)
+    encode (Blob b)   = i32_u8v (length b) ++ extend 0 b
 
 instance Encodable OSC where
     encode (Message c l) = encode (String c) ++
