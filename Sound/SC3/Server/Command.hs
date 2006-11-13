@@ -1,6 +1,6 @@
 module Sound.SC3.Server.Command where
 
-import Sound.SC3.Server.OpenSoundControl
+import Sound.SC3.Server.OpenSoundControl (Osc(..), OscT(..))
 import Sound.SC3.Server.U8v (U8)
 
 data AddAction = AddToHead
