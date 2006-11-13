@@ -1,7 +1,7 @@
 module Sound.SC3.Server.Udp where
 
 import Sound.SC3.Server.U8v (u8v_str, str_u8v)
-import Sound.SC3.Server.OpenSoundControl (Osc, osc, unosc)
+import Sound.SC3.Server.OpenSoundControl (OSC, encode, decode)
 
 import Network.Socket
 
@@ -12,22 +12,16 @@ sc = do fd <- socket AF_INET Datagram 0
         -- setSocketOption fd RecvTimeOut 1000
         return fd
 
-send' :: Socket -> Osc -> IO Int
-send' fd o = send fd (u8v_str (osc o))
+send' :: Socket -> OSC -> IO Int
+send' fd o = send fd (u8v_str (encode o))
 
-recv' :: Socket -> IO Osc
+recv' :: Socket -> IO OSC
 recv' fd   = do b <- recv fd 8192
-                return (unosc (str_u8v b))
+                return (decode (str_u8v b))
 
-sync' :: Socket -> Osc -> IO Osc
+sync' :: Socket -> OSC -> IO OSC
 sync' fd o = do send' fd o
                 recv' fd
-
-{-
-syncto' :: Socket -> String -> Osc -> IO Bool
-syncto' fd rpl o = do (OscM c _) <- sync' fd o
-                      return (c == rpl)
--}
 
 close' :: Socket -> IO ()
 close' = sClose

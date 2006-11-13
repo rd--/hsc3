@@ -6,12 +6,12 @@ import Sound.SC3.UGen.Graph (graph)
 import Sound.SC3.Server.Graphdef (graphdef)
 import Sound.SC3.Server.Udp (send', sync', close')
 import Sound.SC3.Server.Command (AddAction(AddToTail), s_new, d_recv, g_new, g_freeAll)
-import Sound.SC3.Server.OpenSoundControl (Osc)
+import Sound.SC3.Server.OpenSoundControl (OSC)
 
 import Network.Socket (Socket)
 import Control.Exception (bracket)
 
-d_recv' :: String -> UGen -> Osc
+d_recv' :: String -> UGen -> OSC
 d_recv' n u = d_recv (graphdef n (graph u))
 
 hasOutputs :: UGen -> Bool
@@ -25,7 +25,7 @@ addOut u = if hasOutputs u then out (Constant 0) u else u
 init_ :: Socket -> IO Int
 init_ fd = send' fd (g_new 1 AddToTail 0)
 
-play :: Socket -> UGen -> IO Osc
+play :: Socket -> UGen -> IO OSC
 play  fd u = do r <- sync' fd (d_recv' "Anonymous" (addOut u))
                 send' fd (s_new "Anonymous" (-1) AddToTail 1)
                 return r
@@ -43,7 +43,7 @@ withfd fd' = bracket fd' close'
 init' :: IO Socket -> IO Int
 init'  sc   = withfd sc init_
 
-play' :: IO Socket -> UGen -> IO Osc
+play' :: IO Socket -> UGen -> IO OSC
 play'  sc u = withfd sc (flip play u)
 
 stop' :: IO Socket -> IO Int

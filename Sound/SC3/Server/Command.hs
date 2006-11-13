@@ -1,6 +1,6 @@
 module Sound.SC3.Server.Command where
 
-import Sound.SC3.Server.OpenSoundControl (Osc(..), OscT(..))
+import Sound.SC3.Server.OpenSoundControl (OSC(..), Datum(..))
 import Sound.SC3.Server.U8v (U8)
 
 data AddAction = AddToHead
@@ -16,184 +16,184 @@ addAction = fromEnum
 -- * Instrument definition commands.
 
 -- | Install a bytecode instrument definition. (Asynchronous)
-d_recv b = OscM "/d_recv" [OscBlob b]
-d_recv :: [U8] -> Osc
+d_recv b = Message "/d_recv" [Blob b]
+d_recv :: [U8] -> OSC
 
 -- | Load an instrument definition from a named file. (Asynchronous)
-d_load p = OscM "/d_load" [OscString p]
-d_load :: String -> Osc
+d_load p = Message "/d_load" [String p]
+d_load :: String -> OSC
 
 -- | Load a directory of instrument definitions files. (Asynchronous)
-d_loadDir p = OscM "/d_loadDir" [OscString p]
-d_loadDir :: String -> Osc
+d_loadDir p = Message "/d_loadDir" [String p]
+d_loadDir :: String -> OSC
 
 -- | Remove definition once all nodes using it have ended.
-d_free n = OscM "/d_free" [OscString n]
-d_free :: String -> Osc
+d_free n = Message "/d_free" [String n]
+d_free :: String -> OSC
 
 -- * Node commands.
 
-n_before a b = OscM "/n_before" [OscInt a, OscInt b]
-n_before :: Int -> Int -> Osc
+n_before a b = Message "/n_before" [Int a, Int b]
+n_before :: Int -> Int -> OSC
 
-n_fill :: Int -> String -> Int -> Double -> Osc
-n_fill nid i n v = OscM "/n_fill" [OscInt nid, OscString i, OscInt n, OscFloat v]
+n_fill :: Int -> String -> Int -> Double -> OSC
+n_fill nid i n v = Message "/n_fill" [Int nid, String i, Int n, Float v]
 
-n_free :: Int -> Osc
-n_free nid = OscM "/n_free" [OscInt nid]
+n_free :: Int -> OSC
+n_free nid = Message "/n_free" [Int nid]
 
-n_map :: Int -> String -> Int -> Osc
-n_map nid i b = OscM "/n_map" [OscInt nid, OscString i, OscInt b]
+n_map :: Int -> String -> Int -> OSC
+n_map nid i b = Message "/n_map" [Int nid, String i, Int b]
 
-n_mapn :: Int -> String -> Int -> Int -> Osc
-n_mapn nid i b n = OscM "/n_mapn" [OscInt nid, OscString i, OscInt b, OscInt n]
+n_mapn :: Int -> String -> Int -> Int -> OSC
+n_mapn nid i b n = Message "/n_mapn" [Int nid, String i, Int b, Int n]
 
-n_query :: Int -> Osc
-n_query nid = OscM "/n_query" [OscInt nid]
+n_query :: Int -> OSC
+n_query nid = Message "/n_query" [Int nid]
 
-n_run :: Int -> Int -> Osc
-n_run nid f = OscM "/n_run" [OscInt nid, OscInt f]
+n_run :: Int -> Int -> OSC
+n_run nid f = Message "/n_run" [Int nid, Int f]
 
-n_set :: Int -> String -> Double -> Osc
-n_set nid i f = OscM "/n_set" [OscInt nid, OscString i, OscFloat f]
+n_set :: Int -> String -> Double -> OSC
+n_set nid i f = Message "/n_set" [Int nid, String i, Float f]
 
-n_setn :: Int -> String -> [Double] -> Osc
-n_setn nid i l = OscM "/n_setn" $ [OscInt nid, OscString i, OscInt (length l)] ++ (map OscFloat l)
+n_setn :: Int -> String -> [Double] -> OSC
+n_setn nid i l = Message "/n_setn" $ [Int nid, String i, Int (length l)] ++ (map Float l)
 
-n_trace :: Int -> Osc
-n_trace nid = OscM "/n_trace" [OscInt nid]
+n_trace :: Int -> OSC
+n_trace nid = Message "/n_trace" [Int nid]
 
 -- * Synthesis node commands.
 
-s_get :: Int -> Int -> Osc
-s_get nid i = OscM "/s_get" [OscInt nid, OscInt i]
+s_get :: Int -> Int -> OSC
+s_get nid i = Message "/s_get" [Int nid, Int i]
 
-s_getn :: Int -> Int -> Int -> Osc
-s_getn nid i n = OscM "/s_getn" [OscInt nid, OscInt i, OscInt n]
+s_getn :: Int -> Int -> Int -> OSC
+s_getn nid i n = Message "/s_getn" [Int nid, Int i, Int n]
 
-s_new :: String -> Int -> AddAction -> Int -> Osc
-s_new n i a t = OscM "/s_new" [OscString n, OscInt i, OscInt (addAction a), OscInt t]
+s_new :: String -> Int -> AddAction -> Int -> OSC
+s_new n i a t = Message "/s_new" [String n, Int i, Int (addAction a), Int t]
 
-s_noid :: Int -> Osc
-s_noid nid = OscM "/s_noid" [OscInt nid]
+s_noid :: Int -> OSC
+s_noid nid = Message "/s_noid" [Int nid]
 
 -- * Group node commands.
 
-g_deepFree :: Int -> Osc
-g_deepFree nid = OscM "/g_deepFree" [OscInt nid]
+g_deepFree :: Int -> OSC
+g_deepFree nid = Message "/g_deepFree" [Int nid]
 
-g_freeAll :: Int -> Osc
-g_freeAll nid = OscM "/g_freeAll" [OscInt nid]
+g_freeAll :: Int -> OSC
+g_freeAll nid = Message "/g_freeAll" [Int nid]
 
-g_head g n = OscM "/g_head" [OscInt g, OscInt n]
-g_head :: Int -> Int -> Osc
+g_head g n = Message "/g_head" [Int g, Int n]
+g_head :: Int -> Int -> OSC
 
-g_new :: Int -> AddAction -> Int -> Osc
-g_new nid a t = OscM "/g_new" [OscInt nid, OscInt (addAction a), OscInt t]
+g_new :: Int -> AddAction -> Int -> OSC
+g_new nid a t = Message "/g_new" [Int nid, Int (addAction a), Int t]
 
-g_tail :: Int -> Int -> Osc
-g_tail g n = OscM "/g_tail" [OscInt g, OscInt n]
+g_tail :: Int -> Int -> OSC
+g_tail g n = Message "/g_tail" [Int g, Int n]
 
 -- * Unit Generator commands.
 
-u_cmd :: Int -> Int -> String -> [OscT] -> Osc
-u_cmd nid uid cmd arg = OscM "/u_cmd" ([OscInt nid, OscInt uid, OscString cmd] ++ arg)
+u_cmd :: Int -> Int -> String -> [Datum] -> OSC
+u_cmd nid uid cmd arg = Message "/u_cmd" ([Int nid, Int uid, String cmd] ++ arg)
 
 -- * Buffer commands.
 
 -- | Allocates zero filled buffer to number of channels and samples. (Asynchronous)
-b_alloc :: Int -> Int -> Int -> Osc
-b_alloc nid frames channels = OscM "/b_alloc" [OscInt nid, OscInt frames, OscInt channels]
+b_alloc :: Int -> Int -> Int -> OSC
+b_alloc nid frames channels = Message "/b_alloc" [Int nid, Int frames, Int channels]
 
-b_allocRead :: Int -> String -> Int -> Int -> Osc
-b_allocRead nid p f n = OscM "/b_allocRead" [OscInt nid, OscString p, OscInt f, OscInt n]
+b_allocRead :: Int -> String -> Int -> Int -> OSC
+b_allocRead nid p f n = Message "/b_allocRead" [Int nid, String p, Int f, Int n]
 
-b_close :: Int -> Osc
-b_close nid = OscM "/b_close" [OscInt nid]
+b_close :: Int -> OSC
+b_close nid = Message "/b_close" [Int nid]
 
-b_fill :: Int -> Int -> Int -> Double -> Osc
-b_fill nid i n f = OscM "/b_fill" [OscInt nid, OscInt i, OscInt n, OscFloat f]
+b_fill :: Int -> Int -> Int -> Double -> OSC
+b_fill nid i n f = Message "/b_fill" [Int nid, Int i, Int n, Float f]
 
-b_free :: Int -> Osc
-b_free nid = OscM "/b_free" [OscInt nid]
+b_free :: Int -> OSC
+b_free nid = Message "/b_free" [Int nid]
 
-b_get :: Int -> Int -> Osc
-b_get nid i = OscM "/b_get" [OscInt nid, OscInt i]
+b_get :: Int -> Int -> OSC
+b_get nid i = Message "/b_get" [Int nid, Int i]
 
-b_getn :: Int -> Int -> Int -> Osc
-b_getn nid i n = OscM "/b_getn" [OscInt nid, OscInt i, OscInt n]
+b_getn :: Int -> Int -> Int -> OSC
+b_getn nid i n = Message "/b_getn" [Int nid, Int i, Int n]
 
-b_query :: Int -> Osc
-b_query nid = OscM "/b_query" [OscInt nid]
+b_query :: Int -> OSC
+b_query nid = Message "/b_query" [Int nid]
 
-b_read :: Int -> String -> Int -> Int -> Int -> Int -> Osc
-b_read nid p f n f' z = OscM "/b_read" [OscInt nid, OscString p, OscInt f, OscInt n, OscInt f', OscInt z]
+b_read :: Int -> String -> Int -> Int -> Int -> Int -> OSC
+b_read nid p f n f' z = Message "/b_read" [Int nid, String p, Int f, Int n, Int f', Int z]
 
-b_set :: Int -> Int -> Double -> Osc
-b_set nid i f = OscM "/b_set" [OscInt nid, OscInt i, OscFloat f]
+b_set :: Int -> Int -> Double -> OSC
+b_set nid i f = Message "/b_set" [Int nid, Int i, Float f]
 
-b_setn :: Int -> Int -> [Double] -> Osc
-b_setn nid n l = OscM "/b_setn" $ [OscInt nid, OscInt n, OscInt (length l)] ++ (map OscFloat l)
+b_setn :: Int -> Int -> [Double] -> OSC
+b_setn nid n l = Message "/b_setn" $ [Int nid, Int n, Int (length l)] ++ (map Float l)
 
-b_write :: Int -> String -> Int -> Int -> Int -> Int -> Int -> Osc
-b_write nid p h t f s z = OscM "/b_write" [OscInt nid, OscString p, OscInt h, OscInt t, OscInt f, OscInt s, OscInt z]
+b_write :: Int -> String -> Int -> Int -> Int -> Int -> Int -> OSC
+b_write nid p h t f s z = Message "/b_write" [Int nid, String p, Int h, Int t, Int f, Int s, Int z]
 
-b_zero :: Int -> Osc
-b_zero nid = OscM "/b_zero" [OscInt nid]
+b_zero :: Int -> OSC
+b_zero nid = Message "/b_zero" [Int nid]
 
 -- * Control bus commands.
 
-c_fill :: Int -> Int -> Double -> Osc
-c_fill nid i f = OscM "/c_fill" [OscInt nid, OscInt i, OscFloat f]
+c_fill :: Int -> Int -> Double -> OSC
+c_fill nid i f = Message "/c_fill" [Int nid, Int i, Float f]
 
-c_get :: Int -> Osc
-c_get nid = OscM "/c_get" [OscInt nid]
+c_get :: Int -> OSC
+c_get nid = Message "/c_get" [Int nid]
 
-c_getn :: Int -> Int -> Osc
-c_getn nid n = OscM "/c_getn" [OscInt nid, OscInt n]
+c_getn :: Int -> Int -> OSC
+c_getn nid n = Message "/c_getn" [Int nid, Int n]
 
-c_set :: Int -> Double -> Osc
-c_set nid f = OscM "/c_set" [OscInt nid, OscFloat f]
+c_set :: Int -> Double -> OSC
+c_set nid f = Message "/c_set" [Int nid, Float f]
 
-c_setn :: Int -> [Double] -> Osc
-c_setn nid f = OscM "/c_setn" $ [OscInt nid, OscInt (length f)] ++ (map OscFloat f)
+c_setn :: Int -> [Double] -> OSC
+c_setn nid f = Message "/c_setn" $ [Int nid, Int (length f)] ++ (map Float f)
 
 -- * Server operation commands.
 
 -- | Remove all bundles from the scheduling queue.
-clearSched :: Osc
-clearSched = OscM "/clearSched" []
+clearSched :: OSC
+clearSched = Message "/clearSched" []
 
 -- | Select printing of incoming Open Sound Control messages.
-dumpOSC c = OscM "/dumpOSC" [OscInt c]
-dumpOSC :: Int -> Osc
+dumpOSC c = Message "/dumpOSC" [Int c]
+dumpOSC :: Int -> OSC
 
 -- | Select reception of notification messages. (Asynchronous) 
-notify c = OscM "/notify" [OscInt c]
-notify :: Int -> Osc
+notify c = Message "/notify" [Int c]
+notify :: Int -> OSC
 
 -- | Stop synthesis server.
-quit :: Osc
-quit = OscM "/quit" []
+quit :: OSC
+quit = Message "/quit" []
 
 -- | Request /status.reply message.
-status :: Osc
-status = OscM "/status" []
+status :: OSC
+status = Message "/status" []
 
 -- | Request /synced message when all current asynchronous commands complete.
-sync :: Int -> Osc
-sync nid = OscM "/sync" [OscInt nid]
+sync :: Int -> OSC
+sync nid = Message "/sync" [Int nid]
 
 -- * Variants with variable argument support.
 
-flatten_controls :: [(String, Double)] -> [OscT]
-flatten_controls = concatMap (\(name,val) -> [OscString name, OscFloat val])
+flatten_controls :: [(String, Double)] -> [Datum]
+flatten_controls = concatMap (\(name,val) -> [String name, Float val])
 
-n_set' :: Int -> [(String, Double)] -> Osc
-n_set' nid c = OscM "/n_set" ([OscInt nid] ++ flatten_controls c)
+n_set' :: Int -> [(String, Double)] -> OSC
+n_set' nid c = Message "/n_set" ([Int nid] ++ flatten_controls c)
 
-s_new' :: String -> Int -> AddAction -> Int -> [(String, Double)] -> Osc
-s_new' n i a t c = OscM "/s_new" ([OscString n, OscInt i, OscInt (addAction a), OscInt t] ++ flatten_controls c)
+s_new' :: String -> Int -> AddAction -> Int -> [(String, Double)] -> OSC
+s_new' n i a t c = Message "/s_new" ([String n, Int i, Int (addAction a), Int t] ++ flatten_controls c)
 
 -- Local Variables:
 -- truncate-lines:t
