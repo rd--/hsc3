@@ -45,9 +45,7 @@ descriptor l = encode (String $ ',' : map tag l)
 
 -- | The number of bytes required to align an OSC value.
 align :: Int -> Int
-align n | m == 0    = 0
-        | otherwise = 4 - m
-    where m = mod n 4
+align n = mod (-n) 4
 
 -- | Align a byte string if required.
 extend :: [a] -> a -> [a]
