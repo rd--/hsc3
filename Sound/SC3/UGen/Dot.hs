@@ -1,16 +1,16 @@
 module Sound.SC3.UGen.Dot (draw, draw') where
 
-import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.Rate
-import Sound.SC3.UGen.Operator
-import Sound.SC3.UGen.Graph
+import Sound.SC3.UGen.UGen (Name, UGen(..), isUGen, isProxy, isConstant, isControl)
+import Sound.SC3.UGen.Rate (Rate(..))
+import Sound.SC3.UGen.Operator (unaryName, binaryName)
+import Sound.SC3.UGen.Graph (Graph(Graph), nindex, cindex, uindex, graph)
 
+import Control.Exception (bracket)
 import Data.List (intersperse)
-import System.IO
+import System.IO (openFile, hClose, hPutStr, IOMode(WriteMode))
 import System.Cmd (system)
 import System.Directory (getTemporaryDirectory)
 import System.Environment (getEnv)
-import Control.Exception (bracket)
 
 type UTerminal = (UGen, Int)
 type UEdge     = (UTerminal, UTerminal)
@@ -95,7 +95,7 @@ gdot g@(Graph _ c u) = ["digraph Anonymous {"]
 udot :: UGen -> [String]
 udot u = gdot (graph u)
 
---import Distribution.Compat.FilePath (joinPaths)
+-- import Distribution.Compat.FilePath (joinPaths)
 joinPaths :: FilePath -> FilePath -> FilePath
 joinPaths a b = a ++ "/" ++ b
 
