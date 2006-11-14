@@ -1,4 +1,4 @@
-module Sound.SC3.Server.U8v where
+module Sound.OpenSoundControl.U8v where
 
 import Data.Int (Int32, Int64)
 import Data.Word (Word8)

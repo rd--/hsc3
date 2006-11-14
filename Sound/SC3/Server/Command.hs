@@ -1,6 +1,6 @@
 module Sound.SC3.Server.Command where
 
-import Sound.SC3.Server.OpenSoundControl (OSC(..), Datum(..))
+import Sound.OpenSoundControl (OSC(..), Datum(..))
 import Data.Word (Word8)
 
 data AddAction = AddToHead

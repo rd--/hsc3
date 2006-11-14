@@ -1,12 +1,12 @@
 module Sound.SC3.Server.Play where
 
+import Sound.OpenSoundControl (OSC)
 import Sound.SC3.UGen.UGen (UGen(..))
 import Sound.SC3.UGen.IO (out)
 import Sound.SC3.UGen.Graph (graph)
 import Sound.SC3.Server.Graphdef (graphdef)
 import Sound.SC3.Server.Udp (send', sync', close')
 import Sound.SC3.Server.Command (AddAction(AddToTail), s_new, d_recv, g_new, g_freeAll)
-import Sound.SC3.Server.OpenSoundControl (OSC)
 
 import Network.Socket (Socket)
 import Control.Exception (bracket)

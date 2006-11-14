@@ -1,11 +1,13 @@
-module Sound.SC3.Server.OpenSoundControl (OSC(..), 
-                                          Datum(..), 
-                                          encode, 
-                                          decode) where
+module Sound.OpenSoundControl.OSC (OSC(..), 
+                                   Datum(..), 
+                                   encode, 
+                                   decode) where
 
-import Sound.SC3.Server.Schedule (utc_ntp)
-import Sound.SC3.Server.U8v
-import Sound.SC3.UGen.Graph (elemIndex')
+import Sound.OpenSoundControl.Time (utc_ntp)
+import Sound.OpenSoundControl.U8v
+
+import Data.List (elemIndex)
+import Data.Maybe (fromJust)
 
 data Datum = Int Int
            | Float Double
@@ -65,6 +67,12 @@ instance Encodable OSC where
     encode (Bundle t l) = encode (String "#bundle") ++
                           u64_u8v (utc_ntp t) ++
                           concatMap (encode . Blob . encode) l
+
+-- | Variant that errors if no element is located.
+elemIndex' :: (Eq a, Show a) => a -> [a] -> Int
+elemIndex' e l | i == Nothing = error ("index search failed" ++ show (e,l))
+               | otherwise    = fromJust i
+    where i = elemIndex e l
 
 -- | The plain byte count of an OSC value.
 size :: Char -> [U8] -> Int

@@ -1,7 +1,7 @@
 module Sound.SC3.Server.Status (status') where
 
+import Sound.OpenSoundControl (OSC(Message))
 import Sound.SC3.Server.Command (status)
-import Sound.SC3.Server.OpenSoundControl (OSC(Message))
 import Sound.SC3.Server.Udp (sync', close')
 
 import Data.List (transpose)

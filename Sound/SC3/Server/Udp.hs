@@ -1,7 +1,7 @@
 module Sound.SC3.Server.Udp where
 
-import Sound.SC3.Server.U8v (u8v_str, str_u8v)
-import Sound.SC3.Server.OpenSoundControl (OSC, encode, decode)
+import Sound.OpenSoundControl.U8v (u8v_str, str_u8v)
+import Sound.OpenSoundControl (OSC, encode, decode)
 
 import Network.Socket
 

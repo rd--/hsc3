@@ -1,9 +1,9 @@
 module Sound.SC3.Server.Graphdef (graphdef) where
 
+import Sound.OpenSoundControl.U8v
 import Sound.SC3.UGen.UGen (UGen(..))
 import Sound.SC3.UGen.Rate (rateId)
 import Sound.SC3.UGen.Graph
-import Sound.SC3.Server.U8v
 
 input_u8v :: Input -> [U8]
 input_u8v (Input u p) = i16_u8v u ++ i16_u8v p
