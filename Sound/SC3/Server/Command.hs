@@ -1,7 +1,7 @@
 module Sound.SC3.Server.Command where
 
 import Sound.SC3.Server.OpenSoundControl (OSC(..), Datum(..))
-import Sound.SC3.Server.U8v (U8)
+import Data.Word (Word8)
 
 data AddAction = AddToHead
                | AddToTail
@@ -19,7 +19,7 @@ data PrintLevel = NoPrinter
 -- * Instrument definition commands.
 
 -- | Install a bytecode instrument definition. (Asynchronous)
-d_recv :: [U8] -> OSC
+d_recv :: [Word8] -> OSC
 d_recv b = Message "/d_recv" [Blob b]
 
 -- | Load an instrument definition from a named file. (Asynchronous)
