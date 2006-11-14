@@ -19,25 +19,25 @@ data PrintLevel = NoPrinter
 -- * Instrument definition commands.
 
 -- | Install a bytecode instrument definition. (Asynchronous)
-d_recv b = Message "/d_recv" [Blob b]
 d_recv :: [U8] -> OSC
+d_recv b = Message "/d_recv" [Blob b]
 
 -- | Load an instrument definition from a named file. (Asynchronous)
-d_load p = Message "/d_load" [String p]
 d_load :: String -> OSC
+d_load p = Message "/d_load" [String p]
 
 -- | Load a directory of instrument definitions files. (Asynchronous)
-d_loadDir p = Message "/d_loadDir" [String p]
 d_loadDir :: String -> OSC
+d_loadDir p = Message "/d_loadDir" [String p]
 
 -- | Remove definition once all nodes using it have ended.
-d_free n = Message "/d_free" [String n]
 d_free :: String -> OSC
+d_free n = Message "/d_free" [String n]
 
 -- * Node commands.
 
-n_before a b = Message "/n_before" [Int a, Int b]
 n_before :: Int -> Int -> OSC
+n_before a b = Message "/n_before" [Int a, Int b]
 
 n_fill :: Int -> String -> Int -> Double -> OSC
 n_fill nid i n v = Message "/n_fill" [Int nid, String i, Int n, Float v]
@@ -88,8 +88,8 @@ g_deepFree nid = Message "/g_deepFree" [Int nid]
 g_freeAll :: Int -> OSC
 g_freeAll nid = Message "/g_freeAll" [Int nid]
 
-g_head g n = Message "/g_head" [Int g, Int n]
 g_head :: Int -> Int -> OSC
+g_head g n = Message "/g_head" [Int g, Int n]
 
 g_new :: Int -> AddAction -> Int -> OSC
 g_new nid a t = Message "/g_new" [Int nid, Int (fromEnum a), Int t]
