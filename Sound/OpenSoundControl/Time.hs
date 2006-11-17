@@ -1,4 +1,4 @@
-module Sound.OpenSoundControl.Time (utc, ntp, utc_ntp) where
+module Sound.OpenSoundControl.Time (UTC, utc, ntp, utc_ntp) where
 
 import System.Time (ClockTime(TOD), getClockTime)
 import Control.Monad (liftM)
