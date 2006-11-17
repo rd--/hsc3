@@ -69,6 +69,14 @@ isProxy u                   = utype u == ProxyT
 isMCE u                     = utype u == MCET
 isMRG u                     = utype u == MRGT
 
+-- | True if the 'UGen' has output ports (ie. is not a sink UGen).
+hasOutputs :: UGen -> Bool
+hasOutputs (UGen _ _ _ o _ _) = not (null o)
+hasOutputs (MCE l)            = any hasOutputs l
+hasOutputs (MRG l)            = any hasOutputs l
+hasOutputs (Proxy _ _)        = True
+hasOutputs _                  = False
+
 proxy :: UGen -> UGen
 proxy (MCE l) = MCE (map proxy l)
 proxy u@(UGen _ _ _ o _ _) =

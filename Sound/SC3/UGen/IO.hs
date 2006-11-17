@@ -1,7 +1,7 @@
 module Sound.SC3.UGen.IO where
 
 import Sound.SC3.UGen.Rate (Rate(AR, KR))
-import Sound.SC3.UGen.UGen (UGen,  mkOsc,  mkOscMCE, mkFilterMCE)
+import Sound.SC3.UGen.UGen (UGen(Constant),  mkOsc,  mkOscMCE, mkFilterMCE, hasOutputs)
 
 in' :: Rate -> UGen -> Int -> UGen
 in' r bus nc = mkOsc r "In" [bus] nc 0
@@ -50,3 +50,9 @@ mouseX r minVal maxVal warp lag = mkOsc r "MouseX" [minVal, maxVal, warp, lag] 1
 
 mouseY :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
 mouseY r minVal maxVal warp lag = mkOsc r "MouseY" [minVal, maxVal, warp, lag] 1 0
+
+-- * Utilities
+
+-- | If the UGen has output ports connect it to an 'out' UGen.
+addOut :: UGen -> UGen
+addOut u = if hasOutputs u then out (Constant 0) u else u
