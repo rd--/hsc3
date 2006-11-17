@@ -63,17 +63,18 @@ dbl x = [x,x]
 
 -- UGens...
 
-envGen r gate lvl bias scale done pts = mkOsc r "EnvGen" i 1 0
-    where i = [gate,lvl,bias,scale,done] ++ pts
-
-xLine r start end dur done = mkOsc r "XLine" [start,end,dur,done] 1 0
-line  r start end dur done = mkOsc r "Line"  [start,end,dur,done] 1 0
-
-freeSelf  i = mkFilter "FreeSelf"  [i] 1 0
-pauseSelf i = mkFilter "PauseSelf" [i] 1 0
-
 envGen :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> [UGen] -> UGen
-freeSelf :: UGen -> UGen
+envGen r gate lvl bias scale done pts = mkOsc r "EnvGen" i 1 0
+ where i = [gate,lvl,bias,scale,done] ++ pts
+
 line :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-pauseSelf :: UGen -> UGen
+line r start end dur done = mkOsc r "Line" [start,end,dur,done] 1 0
+
 xLine :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+xLine r start end dur done = mkOsc r "XLine" [start,end,dur,done] 1 0
+
+freeSelf :: UGen -> UGen
+freeSelf i = mkFilter "FreeSelf" [i] 0 0
+
+pauseSelf :: UGen -> UGen
+pauseSelf i = mkFilter "PauseSelf" [i] 0 0
