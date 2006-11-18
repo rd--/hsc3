@@ -42,32 +42,40 @@ nodes u                    =  [u]
 
 traverseu :: (UGen -> UGen) -> UGen -> UGen
 traverseu f (UGen r n i o s uid) = f (UGen r n (map (traverseu f) i) o s uid)
-traverseu f (MCE l)             = f (MCE (map (traverseu f) l))
-traverseu f (MRG l)             = f (MRG (map (traverseu f) l))
-traverseu f (Proxy u n)         = f (Proxy (traverseu f u) n)
-traverseu f u                   = f u
+traverseu f (MCE l)              = f (MCE (map (traverseu f) l))
+traverseu f (MRG l)              = f (MRG (map (traverseu f) l))
+traverseu f (Proxy u n)          = f (Proxy (traverseu f u) n)
+traverseu f u                    = f u
 
-utype :: UGen -> UType
-utype (Constant _)          = ConstantT
-utype (Control _ _ _)       = ControlT
-utype (UGen _ _ _ _ _ _)    = UGenT
-utype (Proxy _ _)           = ProxyT
-utype (MCE _)               = MCET
-utype (MRG _)               = MRGT
-
+-- | Constant UGen predicate.
 isConstant :: UGen -> Bool
-isControl :: UGen -> Bool
-isMCE :: UGen -> Bool
-isMRG :: UGen -> Bool
-isProxy :: UGen -> Bool
-isUGen :: UGen -> Bool
+isConstant (Constant _) = True
+isConstant _            = False
 
-isConstant u                = utype u == ConstantT
-isControl u                 = utype u == ControlT
-isUGen u                    = utype u == UGenT
-isProxy u                   = utype u == ProxyT
-isMCE u                     = utype u == MCET
-isMRG u                     = utype u == MRGT
+-- | Control UGen predicate.
+isControl :: UGen -> Bool
+isControl (Control _ _ _) = True
+isControl _               = False
+
+-- | Proper UGen predicate.
+isUGen :: UGen -> Bool
+isUGen (UGen _ _ _ _ _ _) = True
+isUGen _                  = False
+
+-- | Proxy UGen predicate.
+isProxy :: UGen -> Bool
+isProxy (Proxy _ _) = True
+isProxy _           = False
+
+-- | MCE UGen predicate.
+isMCE :: UGen -> Bool
+isMCE (MCE _) = True
+isMCE _       = False
+
+-- | MRG UGen predicate.
+isMRG :: UGen -> Bool
+isMRG (MRG _) = True
+isMRG _       = False
 
 -- | True if the 'UGen' has output ports (ie. is not a sink UGen).
 hasOutputs :: UGen -> Bool
