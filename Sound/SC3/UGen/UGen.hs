@@ -200,15 +200,13 @@ instance Floating UGen where
 
 instance Ord UGen where
     (Constant a) <  (Constant b) = a <  b
+    _            <  _            = error "< at UGen is partial, see <*"
     (Constant a) <= (Constant b) = a <= b
+    _            <= _            = error "<= at UGen is partial, see <=*"
     (Constant a) >  (Constant b) = a <  b
+    _            >  _            = error "> at UGen is partial, see >*"
     (Constant a) >= (Constant b) = a >= b
-{-- GHC 6.4 dies using these as well as above...
-    (<)  = error "Ord is partial, see OrdE"
-    (>)  = error "Ord is partial, see OrdE"
-    (<=) = error "Ord is partial, see OrdE"
-    (<=) = error "Ord is partial, see OrdE"
---}
+    _            >= _            = error ">= at UGen is partial, see >=*"
     min  = binop Min min
     max  = binop Max max
 
