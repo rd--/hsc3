@@ -107,10 +107,12 @@ data Binary = Add
             | ExpRandRange
               deriving (Eq, Show, Enum)
 
+-- | Provide symbolic names for standard unary operators.
 unaryName :: Int -> String
 unaryName   0 = "-"
 unaryName   n = show (toEnum n :: Unary)
 
+-- | Provide symbolic names for standard binary operators.
 binaryName :: Int -> String
 binaryName  0 = "+"
 binaryName  1 = "-"
