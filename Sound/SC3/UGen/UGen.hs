@@ -102,7 +102,7 @@ mceDegree _       = error "mceDegree: illegal ugen"
 
 -- | Is expansion required, ie. are any inputs MCE values.
 mceReq :: UGen -> Bool
-mceReq (UGen _ _ i _ _ _) = not $ null $ filter isMCE i
+mceReq (UGen _ _ i _ _ _) = not (null (filter isMCE i))
 mceReq _                  = False
 
 -- | Extend UGen to specified degree.
@@ -114,9 +114,9 @@ mceExtend n u       = replicate n u
 mceTransform :: UGen -> UGen
 mceTransform (UGen r n i o s uid) = MCE (map f i')
     where f j = UGen r n j o s uid
-          d   = maximum $ map mceDegree (filter isMCE i)
-          i'  = transpose $ map (mceExtend d) i
-mceTransform _                   = error "mceTransform: illegal ugen"
+          d   = maximum (map mceDegree (filter isMCE i))
+          i'  = transpose (map (mceExtend d) i)
+mceTransform _                    = error "mceTransform: illegal ugen"
 
 -- | Apply MCE transformation if required.
 mced :: UGen -> UGen
