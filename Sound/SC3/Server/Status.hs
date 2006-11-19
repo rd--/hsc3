@@ -1,4 +1,4 @@
-module Sound.SC3.Server.Status (status') where
+module Sound.SC3.Server.Status (serverStatus) where
 
 import Sound.OpenSoundControl (OSC(Message))
 import Sound.SC3.Server.Command (status)
@@ -24,9 +24,8 @@ statusFormat :: OSC -> [String]
 statusFormat r = s : concat (transpose [statusFields, statusInfo r, replicate 8 "\n"])
     where s = "***** SuperCollider Server Status *****\n"
 
--- | Print server status information.
-status' :: UDP -> IO OSC
-status' fd = do send fd status 
-                r <- wait fd "status.reply"
-                mapM putStr (statusFormat r)
-                return r
+-- | Collect server status information.
+serverStatus :: UDP -> IO [String]
+serverStatus fd = do send fd status 
+                     r <- wait fd "status.reply"
+                     return (statusFormat r)
