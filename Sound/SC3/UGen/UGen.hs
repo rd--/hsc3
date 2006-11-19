@@ -20,8 +20,6 @@ data UGen     = Constant Double
               | MCE [UGen]
               | MRG [UGen]
                 deriving (Eq, Show)
-data UType    = ConstantT | ControlT | UGenT | ProxyT | MCET | MRGT
-                deriving (Eq, Show)
 
 rateOf :: UGen -> Rate
 rateOf (Constant _)        =  IR
