@@ -21,6 +21,7 @@ data UGen     = Constant Double
               | MRG [UGen]
                 deriving (Eq, Show)
 
+-- | Determine the rate of a UGen.
 rateOf :: UGen -> Rate
 rateOf (Constant _)        =  IR
 rateOf (Control r _ _)     =  r
@@ -29,6 +30,7 @@ rateOf (Proxy u _)         =  rateOf u
 rateOf (MCE u)             =  maximum $ map rateOf u
 rateOf _                   =  error "rateOf: illegal ugen"
 
+-- | The list of all UGens referenced in a UGen graph.
 nodes :: UGen -> [UGen]
 nodes u@(UGen _ _ i _ _ _) =  u : concatMap nodes i
 nodes (Proxy u _)          =  u : nodes u
@@ -36,8 +38,7 @@ nodes (MCE u)              =  concatMap nodes u
 nodes (MRG u)              =  concatMap nodes u
 nodes u                    =  [u]
 
--- Apply depth first.
-
+-- | Depth first traversal of a UGen graph.
 traverseu :: (UGen -> UGen) -> UGen -> UGen
 traverseu f (UGen r n i o s uid) = f (UGen r n (map (traverseu f) i) o s uid)
 traverseu f (MCE l)              = f (MCE (map (traverseu f) l))
@@ -45,32 +46,32 @@ traverseu f (MRG l)              = f (MRG (map (traverseu f) l))
 traverseu f (Proxy u n)          = f (Proxy (traverseu f u) n)
 traverseu f u                    = f u
 
--- | Constant UGen predicate.
+-- | Constant predicate.
 isConstant :: UGen -> Bool
 isConstant (Constant _) = True
 isConstant _            = False
 
--- | Control UGen predicate.
+-- | Control predicate.
 isControl :: UGen -> Bool
 isControl (Control _ _ _) = True
 isControl _               = False
 
--- | Proper UGen predicate.
+-- | UGen predicate.
 isUGen :: UGen -> Bool
 isUGen (UGen _ _ _ _ _ _) = True
 isUGen _                  = False
 
--- | Proxy UGen predicate.
+-- | Proxy predicate.
 isProxy :: UGen -> Bool
 isProxy (Proxy _ _) = True
 isProxy _           = False
 
--- | MCE UGen predicate.
+-- | MCE predicate.
 isMCE :: UGen -> Bool
 isMCE (MCE _) = True
 isMCE _       = False
 
--- | MRG UGen predicate.
+-- | MRG predicate.
 isMRG :: UGen -> Bool
 isMRG (MRG _) = True
 isMRG _       = False
@@ -83,6 +84,7 @@ hasOutputs (MRG l)            = any hasOutputs l
 hasOutputs (Proxy _ _)        = True
 hasOutputs _                  = False
 
+-- | Apply proxy transformation if required.
 proxy :: UGen -> UGen
 proxy (MCE l) = MCE (map proxy l)
 proxy u@(UGen _ _ _ o _ _) =
@@ -91,20 +93,24 @@ proxy u@(UGen _ _ _ o _ _) =
       _       -> u
 proxy _       = error "proxy: illegal ugen"
 
--- MCE 
+-- * Multiple Channel Expansion
 
+-- | Number of channels to expand to.
 mceDegree :: UGen -> Int
 mceDegree (MCE l) = length l
 mceDegree _       = error "mceDegree: illegal ugen"
 
+-- | Is expansion required, ie. are any inputs MCE values.
 mceReq :: UGen -> Bool
 mceReq (UGen _ _ i _ _ _) = not $ null $ filter isMCE i
 mceReq _                  = False
 
+-- | Extend UGen to specified degree.
 mceExtend :: Int -> UGen -> [UGen]
-mceExtend n (MCE l) = take n $ cycle l
+mceExtend n (MCE l) = take n (cycle l)
 mceExtend n u       = replicate n u
 
+-- | Apply MCE transformation.
 mceTransform :: UGen -> UGen
 mceTransform (UGen r n i o s uid) = MCE (map f i')
     where f j = UGen r n j o s uid
@@ -112,60 +118,75 @@ mceTransform (UGen r n i o s uid) = MCE (map f i')
           i'  = transpose $ map (mceExtend d) i
 mceTransform _                   = error "mceTransform: illegal ugen"
 
+-- | Apply MCE transformation if required.
 mced :: UGen -> UGen
 mced u = if mceReq u then mceTransform u else u
 
--- Constructors
+-- | Output channels of UGen as a list.
+mcel :: UGen -> [UGen]
+mcel (MCE l) = l
+mcel u       = [u]
 
+-- * UGen Constructors.
+
+-- | The nil identifier.
 zeroUId :: UId
 zeroUId = UId 0
 
+-- | Construct unique integer identifier.
 mkId :: IO Int
 mkId = liftM hashUnique newUnique
 
+-- | Construct unique UId.
 mkUId :: IO UId
 mkUId = liftM UId mkId
 
+-- | Transform UGen to have a unique identifier.
 uniquify :: UGen -> IO UGen
 uniquify (UGen r n i o s _) = liftM (UGen r n i o s) mkUId
 uniquify (MCE u)            = liftM MCE (mapM uniquify u)
 uniquify u                  = error ("uniquify: illegal value" ++ show u)
 
+-- | Construct proxied and multiple channel expanded UGen.
 consU :: Rate -> Name -> [UGen] -> [Output] -> Special -> UId -> UGen
 consU r n i o s uid = proxy (mced u)
     where u = UGen r n i o s uid
 
+-- | Ordinary oscillator constructor.
 mkOsc :: Rate -> Name -> [UGen] -> Int -> Special -> UGen
 mkOsc = mkOsc' zeroUId
 
+-- | Variant oscillator constructor with identifier.
 mkOsc' :: UId -> Rate -> Name -> [UGen] -> Int -> Special -> UGen
 mkOsc' uid r c i o s = consU r c i o' s uid
     where o' = replicate o r
 
+-- | Ordinary filter UGen constructor.
 mkFilter :: Name -> [UGen] -> Int -> Special -> UGen
 mkFilter = mkFilter' zeroUId
 
+-- | Variant filter constructor with identifier.
 mkFilter' :: UId -> Name -> [UGen] -> Int -> Special -> UGen
 mkFilter' uid c i o s = consU r c i o' s uid
     where r = maximum (map rateOf i)
           o'= replicate o r
 
-mcel :: UGen -> [UGen]
-mcel (MCE l) = l
-mcel u       = [u]
-
+-- | Variant oscillator constructor with MCE collapsing input.
 mkOscMCE :: Rate -> Name -> [UGen] -> UGen -> Int -> Special -> UGen
 mkOscMCE r c i j o s = mkOsc r c (i ++ mcel j) o s
 
+-- | Variant filter constructor with MCE collapsing input.
 mkFilterMCE :: Name -> [UGen] -> UGen -> Int -> Special -> UGen
 mkFilterMCE c i j o s = mkFilter c (i ++ mcel j) o s
 
--- Math instances.
+-- UGen math.
 
+-- | Unary math constructor with constant optimization.
 uop :: Unary -> (Double -> Double) -> UGen -> UGen
 uop _ f (Constant a) = Constant (f a) 
 uop i _ a            = mkFilter "UnaryOpUGen"  [a]   1 (fromEnum i)
 
+-- | Binary math constructor with constant optimization.
 binop :: Binary -> (Double -> Double -> Double) -> UGen -> UGen -> UGen
 binop _ f (Constant a) (Constant b) = Constant (f a b)
 binop i _ a            b            = mkFilter "BinaryOpUGen" [a,b] 1 (fromEnum i)
@@ -306,12 +327,14 @@ instance TernaryOp UGen where
     fold a b c = __ternaryop a b c
     clip i l h = mkFilter "Clip" [i,l,h] 1 0
 
--- Mix
+-- * Mix
 
+-- | Collapse MCE by summing.
 mix :: UGen -> UGen
 mix (MCE u)  = foldl1 (+) u
 mix u        = u
 
+-- | Construct and sum a set of UGens.
 mix_fill :: Int -> (Int -> UGen) -> UGen
 mix_fill n f = mix (MCE (map f [0..n-1]))
 
