@@ -27,8 +27,8 @@ rateOf (Constant _)        =  IR
 rateOf (Control r _ _)     =  r
 rateOf (UGen r _ _ _ _ _)  =  r
 rateOf (Proxy u _)         =  rateOf u
-rateOf (MCE u)             =  maximum $ map rateOf u
-rateOf _                   =  error "rateOf: illegal ugen"
+rateOf (MCE u)             =  maximum (map rateOf u)
+rateOf (MRG _)             =  error "rateOf: applied to MRG"
 
 -- | The list of all UGens referenced in a UGen graph.
 nodes :: UGen -> [UGen]
@@ -242,7 +242,7 @@ instance Enum UGen where
     pred u                = u - 1
     toEnum i              = Constant (fromIntegral i)
     fromEnum (Constant n) = truncate n
-    fromEnum _            = error "cannot enumerate non-consant UGens"
+    fromEnum _            = error "cannot enumerate non-constant UGens"
     enumFrom              = iterate (+1)
     enumFromThen n m      = iterate (+(m-n)) n
     enumFromTo n m        = takeWhile (<= m+1/2) (enumFrom n)
