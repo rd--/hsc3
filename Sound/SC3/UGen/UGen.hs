@@ -183,8 +183,8 @@ mkFilterMCE c i j o s = mkFilter c (i ++ mcel j) o s
 
 -- | Unary math constructor with constant optimization.
 uop :: Unary -> (Double -> Double) -> UGen -> UGen
-uop _ f (Constant a) = Constant (f a) 
-uop i _ a            = mkFilter "UnaryOpUGen"  [a]   1 (fromEnum i)
+uop _ f (Constant a) = Constant (f a)
+uop i _ a            = mkFilter "UnaryOpUGen" [a] 1 (fromEnum i)
 
 -- | Binary math constructor with constant optimization.
 binop :: Binary -> (Double -> Double -> Double) -> UGen -> UGen -> UGen
@@ -341,13 +341,13 @@ mix_fill n f = mix (MCE (map f [0..n-1]))
 -- Duplicate
 
 dupn :: Int -> UGen -> IO UGen
-dupn  n u = liftM MCE (replicateM n (uniquify u))
+dupn n u = liftM MCE (replicateM n (uniquify u))
 
 dupn' :: Int -> IO UGen -> IO UGen
 dupn' n u = u >>= dupn n
 
 dup :: UGen -> IO UGen
-dup       = dupn 2
+dup = dupn 2
 
 dup' :: IO UGen -> IO UGen
-dup'      = dupn' 2
+dup' = dupn' 2
