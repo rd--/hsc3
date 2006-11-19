@@ -1,6 +1,5 @@
 module Sound.SC3.UGen (module Sound.SC3.UGen.Buffer,
                        module Sound.SC3.UGen.Demand,
-                       module Sound.SC3.UGen.Dot,
                        module Sound.SC3.UGen.Envelope,
                        module Sound.SC3.UGen.FFT,
                        module Sound.SC3.UGen.Filter,
@@ -17,7 +16,6 @@ module Sound.SC3.UGen (module Sound.SC3.UGen.Buffer,
 
 import Sound.SC3.UGen.Buffer
 import Sound.SC3.UGen.Demand
-import Sound.SC3.UGen.Dot
 import Sound.SC3.UGen.Envelope
 import Sound.SC3.UGen.FFT
 import Sound.SC3.UGen.Filter
