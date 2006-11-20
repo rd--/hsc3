@@ -1,9 +1,11 @@
-module Sound.OpenSoundControl.UDP (UDP, Port, udp, send, recv, wait, close, withUDP) where
+module Sound.OpenSoundControl.UDP
+   (UDP, Port, udp, send, recv, wait, close, withUDP) where
 
 import Sound.OpenSoundControl.U8v (u8v_str, str_u8v)
 import Sound.OpenSoundControl.OSC (OSC(..), encode, decode)
 
-import Control.Exception(bracket)
+import Control.Exception (bracket)
+import Control.Monad (liftM)
 import qualified Network.Socket as N
 
 type UDP = N.Socket
@@ -19,22 +21,27 @@ udp host port = do fd <- N.socket N.AF_INET N.Datagram 0
 
 -- | Encode and send an OSC packet over a UDP connection. 
 send :: UDP -> OSC -> IO Int
-send fd o = N.send fd (u8v_str (encode o))
+send fd = N.send fd . u8v_str . encode
 
 -- | Receive and decode an OSC packet over a UDP connection. 
 recv :: UDP -> IO OSC
-recv fd = do b <- N.recv fd 8192
-             return (decode (str_u8v b))
+recv fd = liftM (decode . str_u8v) (N.recv fd 8192)
 
 -- | Does the OSC message have the specified address.
-hasAddress :: OSC -> String -> Bool
-hasAddress (Message s _) addr = s == addr
-hasAddress (Bundle _ _)  _    = False
+hasAddress :: String -> OSC -> Bool
+hasAddress addr (Message s _) = s == addr
+hasAddress _    (Bundle _ _)  = False
+
+untilM :: Monad m => (a -> Bool) -> m a -> m a
+untilM p act =
+   let recurse =
+         do r <- act
+            if p r then return r else recurse
+   in  recurse
 
 -- | Wait for an OSC message with the specified address, discard intervening messages.
 wait :: UDP -> String -> IO OSC
-wait fd s = do r <- recv fd
-	       if hasAddress r s then return r else wait fd s
+wait fd s = untilM (hasAddress s) (recv fd)
 
 -- | Close a UDP connection.
 close :: UDP -> IO ()
