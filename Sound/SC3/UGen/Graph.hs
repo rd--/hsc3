@@ -3,7 +3,7 @@ module Sound.SC3.UGen.Graph where
 import Sound.SC3.UGen.UGen (UGen(..), UId(UId), nodes, isConstant, isControl, isUGen)
 import Sound.SC3.UGen.Rate (Rate(KR))
 
-import Data.Maybe (fromJust)
+import Data.Maybe (fromMaybe)
 import Data.List (nub, elemIndex)
 
 data Graph = Graph [UGen] [UGen] [UGen]
@@ -27,9 +27,9 @@ graph root = Graph n c u'
         u' = if null c then u else implicit (length c) : u
 
 elemIndex' :: (Eq a, Show a) => a -> [a] -> Int
-elemIndex' e l | i == Nothing = error ("index search failed" ++ show (e,l))
-               | otherwise    = fromJust i
-    where i = elemIndex e l
+elemIndex' e l =
+   fromMaybe (error ("index search failed" ++ show (e,l)))
+             (elemIndex e l)
 
 uindex :: Graph -> UGen -> Int
 uindex (Graph _ _ u) x = elemIndex' x u

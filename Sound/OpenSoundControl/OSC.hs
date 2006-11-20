@@ -6,8 +6,8 @@ module Sound.OpenSoundControl.OSC (OSC(..),
 import Sound.OpenSoundControl.Time (utc_ntp)
 import Sound.OpenSoundControl.U8v
 
-import Data.List (elemIndex)
-import Data.Maybe (fromJust)
+import Data.List (elemIndex, mapAccumL)
+import Data.Maybe (fromMaybe)
 
 data Datum = Int Int
            | Float Double
@@ -68,18 +68,13 @@ instance Encodable OSC where
                           u64_u8v (utc_ntp t) ++
                           concatMap (encode . Blob . encode) l
 
--- | Variant that errors if no element is located.
-elemIndex' :: (Eq a, Show a) => a -> [a] -> Int
-elemIndex' e l | i == Nothing = error ("index search failed" ++ show (e,l))
-               | otherwise    = fromJust i
-    where i = elemIndex e l
-
 -- | The plain byte count of an OSC value.
 size :: Char -> [U8] -> Int
 size 'i' _ = 4
 size 'f' _ = 4
 size 'd' _ = 8
-size 's' b = elemIndex' 0 b
+size 's' b = fromMaybe (error ("no terminating zero found in " ++ show b))
+                       (elemIndex 0 b)
 size 'b' b = u8v_i32 (take 4 b)
 size _   _ = error "illegal osc type"
 
