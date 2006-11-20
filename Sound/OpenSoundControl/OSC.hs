@@ -92,11 +92,13 @@ decodeDatum 's' b = String $ u8v_str $ take n b where n = size 's' b
 decodeDatum 'b' b = Blob $ take n (drop 4 b) where n = size 'b' b
 decodeDatum _   _ = error "illegal osc type"
 
+swap :: (a,b) -> (b,a)
+swap (x,y) = (y,x)
+
 decodeData :: [Char] -> [U8] -> [Datum]
-decodeData []    _  = []
-decodeData (c:cs) b = decodeDatum c tb : decodeData cs db
-    where n       = storage c b
-          (tb,db) = splitAt n b
+decodeData cs b =
+   zipWith decodeDatum cs $ snd $
+   mapAccumL (\bRest c -> swap (splitAt (storage c bRest) bRest)) b cs
 
 instance Decodable OSC where
     decode b = Message cmd arg
