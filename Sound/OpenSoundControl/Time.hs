@@ -1,4 +1,4 @@
-module Sound.OpenSoundControl.Time (UTC, utc, ntp, utc_ntp) where
+module Sound.OpenSoundControl.Time (UTC, utc, NTP, ntp, utc_ntp) where
 
 import System.Time (ClockTime(TOD), getClockTime)
 import Control.Monad (liftM)
@@ -9,7 +9,7 @@ type NTP = Integer
 -- | Convert UTC timestamp to NTP timestamp.
 utc_ntp :: UTC -> NTP
 utc_ntp t = secntp (t + secdif)
-    where secntp i = round (i * 4294967296.0)
+    where secntp i = round (i * 2^(32::Int))
           secdif = (70 * 365 + 17) * 24 * 60 * 60
 
 -- | Read current UTC timestamp.

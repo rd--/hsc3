@@ -1,7 +1,9 @@
-module Sound.OpenSoundControl.OSC (OSC(..), 
-                                   Datum(..), 
-                                   encode, 
-                                   decode) where
+module Sound.OpenSoundControl.OSC
+   (OSC(..),
+    Datum(..),
+    Encodable, encode,
+    Decodable, decode,
+    ) where
 
 import Sound.OpenSoundControl.Time (utc_ntp)
 import Sound.OpenSoundControl.U8v
