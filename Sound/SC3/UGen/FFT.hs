@@ -1,7 +1,7 @@
 module Sound.SC3.UGen.FFT where
 
 import Sound.SC3.UGen.Rate (Rate(AR, KR))
-import Sound.SC3.UGen.UGen (UGen, UId, mkOsc, mkOsc', uniquify, zeroUId)
+import Sound.SC3.UGen.UGen (UGen, UId, mkOsc, mkOscUId, uniquify, zeroUId)
 
 fft  buf i = mkOsc KR "FFT"  [buf,i] 1 0
 ifft buf   = mkOsc AR "IFFT" [buf]   1 0

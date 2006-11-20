@@ -154,20 +154,20 @@ consU r n i o s uid = proxy (mced u)
 
 -- | Ordinary oscillator constructor.
 mkOsc :: Rate -> Name -> [UGen] -> Int -> Special -> UGen
-mkOsc = mkOsc' zeroUId
+mkOsc = mkOscUId zeroUId
 
 -- | Variant oscillator constructor with identifier.
-mkOsc' :: UId -> Rate -> Name -> [UGen] -> Int -> Special -> UGen
-mkOsc' uid r c i o s = consU r c i o' s uid
+mkOscUId :: UId -> Rate -> Name -> [UGen] -> Int -> Special -> UGen
+mkOscUId uid r c i o s = consU r c i o' s uid
     where o' = replicate o r
 
 -- | Ordinary filter UGen constructor.
 mkFilter :: Name -> [UGen] -> Int -> Special -> UGen
-mkFilter = mkFilter' zeroUId
+mkFilter = mkFilterUId zeroUId
 
 -- | Variant filter constructor with identifier.
-mkFilter' :: UId -> Name -> [UGen] -> Int -> Special -> UGen
-mkFilter' uid c i o s = consU r c i o' s uid
+mkFilterUId :: UId -> Name -> [UGen] -> Int -> Special -> UGen
+mkFilterUId uid c i o s = consU r c i o' s uid
     where r = maximum (map rateOf i)
           o'= replicate o r
 
