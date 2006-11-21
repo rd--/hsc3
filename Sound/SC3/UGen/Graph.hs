@@ -15,12 +15,9 @@ data Input = Input Int Int
 implicit :: Int -> UGen
 implicit n = UGen KR "Control" [] (replicate n KR) 0 (UId 0)
 
-nub' :: Eq a => [a] -> [a]
-nub' l = nub (reverse l)
-
 graph :: UGen -> Graph
 graph root = Graph n c u'
-  where e  = nub' $ nodes root
+  where e  = (nub . reverse) (nodes root)
         n  = filter isConstant e
         c  = filter isControl e
         u  = filter isUGen e
