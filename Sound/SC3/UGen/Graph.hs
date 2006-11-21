@@ -12,9 +12,11 @@ data Graph = Graph [UGen] [UGen] [UGen]
 data Input = Input Int Int
              deriving (Eq, Show)
 
+-- | Construct implicit control UGen (k-rate only).
 implicit :: Int -> UGen
 implicit n = UGen KR "Control" [] (replicate n KR) 0 (UId 0)
 
+-- | Construct a UGen graph.
 graph :: UGen -> Graph
 graph root = Graph n c u'
   where e  = (nub . reverse) (nodes root)
@@ -23,31 +25,27 @@ graph root = Graph n c u'
         u  = filter isUGen e
         u' = if null c then u else implicit (length c) : u
 
-elemIndex' :: (Eq a, Show a) => a -> [a] -> Int
-elemIndex' e l =
-   fromMaybe (error ("index search failed" ++ show (e,l)))
-             (elemIndex e l)
+-- | Determine index of a node in the Graph.
+nodeIndex :: (Eq a, Show a) => a -> [a] -> Int
+nodeIndex e l = fromMaybe (error ("node not in graph?" ++ show (e,l))) 
+                          (elemIndex e l)
 
-uindex :: Graph -> UGen -> Int
-uindex (Graph _ _ u) x = elemIndex' x u
+-- | Determine index of UGen in Graph.
+ugenIndex :: Graph -> UGen -> Int
+ugenIndex (Graph _ _ u) x = nodeIndex x u
 
-cindex :: Graph -> UGen -> Int
-cindex (Graph _ c _) x = elemIndex' x c
+-- | Determine index of Constant in Graph.
+constantIndex :: Graph -> UGen -> Int
+constantIndex (Graph n _ _) x = nodeIndex x n
 
-nindex :: Graph -> UGen -> Int
-nindex (Graph n _ _) x = elemIndex' x n
+-- | Determine index of Control in Graph.
+controlIndex :: Graph -> UGen -> Int
+controlIndex (Graph _ c _) x = nodeIndex x c
 
-mkInput :: Graph -> UGen -> Input
-mkInput g u@(UGen _ _ _ _ _ _) = Input (uindex g u) 0
-mkInput g u@(Constant _)       = Input (-1) (nindex g u)
-mkInput g u@(Control _ _ _)    = Input 0 (cindex g u)
-mkInput g (Proxy u n)          = Input (uindex g u) n
-mkInput g u                    = error ("mkInput: illegal input: " ++ show (g,u))
-
-nvalue :: UGen -> Double
-nvalue   (Constant n)    = n
-nvalue   _               = error "nvalue: non constant input"
-
-cdefault :: UGen -> Double
-cdefault (Control _ _ n) = n
-cdefault  _              = error "cdefault: non control input"
+-- | Construct Input value for UGen in Graph.
+makeInput :: Graph -> UGen -> Input
+makeInput g u@(UGen _ _ _ _ _ _) = Input (ugenIndex g u) 0
+makeInput g u@(Constant _)       = Input (-1) (constantIndex g u)
+makeInput g u@(Control _ _ _)    = Input 0 (controlIndex g u)
+makeInput g (Proxy u n)          = Input (ugenIndex g u) n
+makeInput g u                    = error ("makeInput: illegal input: " ++ show (g,u))
