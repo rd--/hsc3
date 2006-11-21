@@ -4,13 +4,17 @@ import Sound.SC3.UGen.UGen (UGen(..), mkOsc, mkFilter)
 import Sound.SC3.UGen.Rate (Rate)
 import Sound.SC3.UGen.Math ()
 
-doNothing   :: UGen
-pauseSynth  :: UGen
-removeSynth :: UGen
+data DoneAction = DoNothing
+                | PauseSynth
+                | RemoveSynth
+                | DoneAction UGen
+                  deriving (Eq, Show)
 
-doNothing   = Constant 0
-pauseSynth  = Constant 1
-removeSynth = Constant 2
+fromAction :: DoneAction -> UGen
+fromAction DoNothing      = Constant 0
+fromAction PauseSynth     = Constant 1
+fromAction RemoveSynth    = Constant 2
+fromAction (DoneAction u) = u
 
 data EnvCurve = EnvStep
               | EnvLin | EnvExp
@@ -63,15 +67,15 @@ dbl x = [x,x]
 
 -- UGens...
 
-envGen :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> [UGen] -> UGen
+envGen :: Rate -> UGen -> UGen -> UGen -> UGen -> DoneAction -> [UGen] -> UGen
 envGen r gate lvl bias scale done pts = mkOsc r "EnvGen" i 1 0
- where i = [gate,lvl,bias,scale,done] ++ pts
+ where i = [gate, lvl, bias, scale, fromAction done] ++ pts
 
-line :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-line r start end dur done = mkOsc r "Line" [start,end,dur,done] 1 0
+line :: Rate -> UGen -> UGen -> UGen -> DoneAction -> UGen
+line r start end dur done = mkOsc r "Line" [start, end, dur, fromAction done] 1 0
 
-xLine :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-xLine r start end dur done = mkOsc r "XLine" [start,end,dur,done] 1 0
+xLine :: Rate -> UGen -> UGen -> UGen -> DoneAction -> UGen
+xLine r start end dur done = mkOsc r "XLine" [start, end, dur, fromAction done] 1 0
 
 freeSelf :: UGen -> UGen
 freeSelf i = mkFilter "FreeSelf" [i] 0 0
