@@ -1,6 +1,6 @@
-mousebutton minval maxval lag
+mouseButton minval maxval lag
 
-Report the status of the first pointer button.  The button is
-either pressed, or not pressed.
+Report the status of the first pointer button.  The button is either
+pressed, or not pressed.
 
-> sinosc AR 800 0 * (mousebutton KR 0 0.1 0.1)
+> audition $ sinOsc AR 800 0 * mouseButton KR 0 0.1 0.1
