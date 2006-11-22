@@ -1,4 +1,8 @@
+;; freeSelf src
 
-> Mrg a b
->     where a = freeself (mousex KR (-1) 1 0 0.1)
->           b = out 0 (sinosc ar 440 0 * 0.1)
+;; Free enclosing synth when the input signal crosses from
+;; non-positive to positive.
+
+> let a = freeSelf (mouseX KR (-1) 1 Linear 0.1)
+> let b = out 0 (sinOsc AR 440 0 * 0.1)
+> audition $ MRG [a, b]
