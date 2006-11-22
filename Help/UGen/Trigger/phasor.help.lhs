@@ -13,7 +13,7 @@ resetPos   - determines where to jump to on recieving a trigger.  the
 
 phasor controls sine frequency: end frequency matches a second sine wave.
 
-> let rate = mouseX KR 0.2 2 1 0.1
+> let rate = mouseX KR 0.2 2 Exponential 0.1
 > let trig = impulse AR rate 0
 > let sr   = sampleRate
 > let x    = phasor AR trig (rate / sr) 0 1 0
