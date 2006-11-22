@@ -1,4 +1,4 @@
-fSinOsc freq iphase
+fSinOsc freq iPhase
 
 Very fast sine wave generator implemented using a ringing filter.
 This generates a much cleaner sine wave than a table lookup oscillator
@@ -10,14 +10,15 @@ WARNING: In the current implementation, the amplitude can blow up if
 the frequency is modulated by certain alternating signals.
 
 freq   - frequency in Hertz
-iphase - initial phase
+iPhase - initial phase
 
 Note the phase argument, which was not in the SC2 variant.
 
-> fSinOsc AR (MCE [440, 550]) 0 * 0.05
+> audition $ fSinOsc AR (MCE [440, 550]) 0 * 0.05
 
-> fSinOsc AR (xLine KR 200 4000 1 RemoveSynth) 0 * 0.1
+> audition $ fSinOsc AR (xLine KR 200 4000 1 RemoveSynth) 0 * 0.1
 
 Loses amplitude towards the end
 
-> fSinOsc AR (fsinosc AR (xLine KR 4 401 8 RemoveSynth) 0 * 200 + 800) 0 * 0.1
+> let f = fSinOsc AR (xLine KR 4 401 8 RemoveSynth)
+> audition $ fSinOsc AR (f 0 * 200 + 800) 0 * 0.1

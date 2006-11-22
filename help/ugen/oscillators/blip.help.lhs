@@ -1,4 +1,4 @@
-blip freq numharm
+blip freq numHarm
 
 Band Limited ImPulse generator. All harmonics have equal amplitude.
 
@@ -16,12 +16,12 @@ interpolated for better quality.
 The number of harmonics may be lowered internally if it would cause
 aliasing.
 
-> blip AR 440 200 * 0.1
+> audition $ blip AR 440 200 * 0.1
 
 Modulate frequency
 
-> blip AR (xLine KR 20000 200 6 RemoveSynth) 100 * 0.1
+> audition $ blip AR (xLine KR 20000 200 6 RemoveSynth) 100 * 0.1
 
 Modulate number of harmonics.
 
-> blip AR 200 (line KR 1 100 20 RemoveSynth) * 0.2
+> audition $ blip AR 200 (line KR 1 100 20 RemoveSynth) * 0.2

@@ -1,4 +1,4 @@
-syncsaw syncfreq sawfreq
+syncSaw syncFreq sawFreq
 
 A sawtooth wave that is hard synched to a fundamental pitch. This
 produces an effect similar to moving formants or pulse width
@@ -9,4 +9,4 @@ waveform, so it may alias.
 The frequency of the slave synched sawtooth wave should always be
 greater than the syncFreq.
 
-> syncsaw AR 100 (line KR 100 800 12 2) * 0.1
+> audition $ syncSaw AR 100 (line KR 100 800 12 RemoveSynth) * 0.1

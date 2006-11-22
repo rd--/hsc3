@@ -1,4 +1,4 @@
-tgrains numChannels trigger bufnum rate centerPos dur pan amp interp
+tGrains numChannels trigger bufnum rate centerPos dur pan amp interp
 
 Buffer granulator.  Triggers generate grains from a buffer. Each
 grain has a Hanning envelope (sin^2(x) for x from 0 to pi) and is
@@ -34,9 +34,10 @@ interp - 1, 2, or 4. Determines whether the grain uses (1) no
          interpolation, (2) linear interpolation, or (4) cubic
          interpolation.
 
-> sync' sc "/done" (b_allocRead 10 (rslv "audio/metal.wav") 0 0)
+> let sync fd msg = send fd msg >> wait fd "/done"
+> withSC3 (\fd -> sync fd (b_allocRead 10 "/home/rohan/sw/sw-01/audio/metal.wav" 0 0))
 
-> tgrains AR 2 (impulse AR trate) b 1 (mousex KR 0 (bufdur KR b)) dur 0 0.1 2
->            where b = 10
->                  trate = mousey KR 2 200 1
->                  dur = 4.0 / trate
+> let tRate = mouseY KR 2 200 1 0.1
+> let ctr   = mouseX KR 0 (bufDur KR 10) 0 0.1
+> let tr    = impulse AR tRate 0
+> audition $ tGrains 2 tr 10 1 ctr (4 / tRate) 0 0.1 2
