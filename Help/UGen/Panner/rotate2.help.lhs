@@ -21,9 +21,9 @@ right, +1 is behind.
 
 Rotation of stereo sound, via LFO.
 
-> rotate2 AR x y (lfsaw KR 0.1 0)
->     where x = pinknoise 0 AR * 0.4
->           y = lftri AR 800 0 * (lfpulse KR 3 0 * 0.3 + 0.2)
+> x <- pinkNoise AR
+> let y = lfTri AR 800 0 * (lfPulse KR 3 0 * 0.3 + 0.2)
+> audition $ rotate2 x y (lfSaw KR 0.1 0)
 
 Rotation of stereo sound, via mouse.
 
