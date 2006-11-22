@@ -1,4 +1,4 @@
-module Sound.SC3.Server.Play (play, stop, reset, withSC3) where
+module Sound.SC3.Server.Play (play, stop, reset, withSC3, audition) where
 
 import Sound.OpenSoundControl (OSC, UDP, udp, send, wait, withUDP)
 import Sound.SC3.UGen.UGen (UGen(..))
@@ -27,3 +27,7 @@ reset fd = do send fd (g_freeAll 0)
 -- | Bracket SC3 communication.
 withSC3 :: (UDP -> IO a) -> IO a
 withSC3 = withUDP (udp "127.0.0.1" 57110)
+
+-- | withSC3 . play
+audition :: UGen -> IO OSC
+audition = withSC3 . play
