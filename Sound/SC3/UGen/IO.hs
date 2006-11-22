@@ -3,6 +3,16 @@ module Sound.SC3.UGen.IO where
 import Sound.SC3.UGen.Rate (Rate(AR, KR))
 import Sound.SC3.UGen.UGen (UGen(Constant),  mkOsc,  mkOscMCE, mkFilterMCE, hasOutputs)
 
+data Warp = Linear
+          | Exponential
+          | Warp UGen
+            deriving (Eq, Show)
+
+fromWarp :: Warp -> UGen
+fromWarp Linear      = Constant 0
+fromWarp Exponential = Constant 1
+fromWarp (Warp u)    = u
+
 in' :: Rate -> UGen -> Int -> UGen
 in' r bus nc = mkOsc r "In" [bus] nc 0
 
@@ -45,14 +55,18 @@ keyState r key minVal maxVal lag = mkOsc r "KeyState" [key, minVal, maxVal, lag]
 mouseButton :: Rate -> UGen -> UGen -> UGen -> UGen
 mouseButton r minVal maxVal lag = mkOsc r "MouseButton" [minVal, maxVal, lag] 1 0
 
-mouseX :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-mouseX r minVal maxVal warp lag = mkOsc r "MouseX" [minVal, maxVal, warp, lag] 1 0
+mouseX :: Rate -> UGen -> UGen -> Warp -> UGen -> UGen
+mouseX r minVal maxVal warp lag = mkOsc r "MouseX" [minVal, maxVal, fromWarp warp, lag] 1 0
 
-mouseY :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-mouseY r minVal maxVal warp lag = mkOsc r "MouseY" [minVal, maxVal, warp, lag] 1 0
+mouseY :: Rate -> UGen -> UGen -> Warp -> UGen -> UGen
+mouseY r minVal maxVal warp lag = mkOsc r "MouseY" [minVal, maxVal, fromWarp warp, lag] 1 0
 
 -- * Utilities
 
 -- | If the UGen has output ports connect it to an 'out' UGen.
 addOut :: UGen -> UGen
 addOut u = if hasOutputs u then out (Constant 0) u else u
+
+-- Local Variables:
+-- truncate-lines:t
+-- End:
