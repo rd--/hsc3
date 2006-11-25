@@ -1,4 +1,4 @@
-linlin in srclo srchi dstlo dsthi
+linLin in srclo srchi dstlo dsthi
 
 Map a linear range to another linear range.
 
