@@ -24,6 +24,9 @@ coinGate prob i = uniquify (coinGateUId zeroUId prob i)
 coinGateUId :: UId -> UGen -> UGen -> UGen
 coinGateUId uid prob i = mkFilterUId uid "CoinGate" [prob,i] 1 0
 
+crackle :: Rate -> UGen -> UGen
+crackle r chaosParam = mkOsc r "Crackle" [chaosParam] 1 0
+
 dust2 :: Rate -> UGen -> IO UGen
 dust2 r density = uniquify (dust2UId zeroUId r density)
 
