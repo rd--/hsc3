@@ -1,6 +1,8 @@
-exprand id lo hi
+expRand lo hi
 
 Generates a single random float value in an exponential
 distributions from `lo' to `hi'.
 
-> fsinosc AR (exprand 0 IR 100.0 8000.0) 0 * (line KR 0.5 0 0.01 2)
+> let a = line KR 0.5 0 0.01 RemoveSynth
+> f <- expRand 100.0 8000.0
+> audition $ fSinOsc AR f 0 * a

@@ -1,5 +1,5 @@
-whitenoise id
+whiteNoise
 
 Generates noise whose spectrum has equal power at all frequencies.
 
-> whitenoise 0 AR * 0.15
+> audition . (* 0.15) =<< whiteNoise AR

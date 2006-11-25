@@ -5,4 +5,4 @@ according to a hash function. The same input value will always
 produce the same output value. The input need not be from zero to
 one.
 
-> hasher AR (line AR 0 1 1 2) * 0.2
+> audition $ hasher (line AR 0 1 1 RemoveSynth) * 0.2

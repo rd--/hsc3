@@ -1,9 +1,14 @@
-tirand id lo hi trig
+tiRand lo hi trig
 
 Generates a random integer value in uniform distribution from lo to
 hi each time the trig signal changes from nonpositive to positive
 values
 
-> pan2 AR (pinknoise 0 AR * 0.2) (tirand 0 KR (-1) 1 (dust 0 KR 10)) 1
+> t <- dust KR 10
+> l <- tiRand (-1) 1 t
+> n <- pinkNoise AR
+> audition $ pan2 (n * 0.2) l 1
 
-> sinosc AR (tirand 0 KR 4 12 (dust 0 KR 10) * 150 + (MCE [0,1])) 0 * 0.1
+> t <- dust KR 10
+> f <- tiRand 4 12 t
+> audition $ sinOsc AR (f * 150 + (MCE [0,1])) 0 * 0.1

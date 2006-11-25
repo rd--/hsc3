@@ -1,14 +1,17 @@
-lfnoise0 id freq
+lfNoise0 freq
 
 Step noise.  Generates random values at a rate given by the nearest
 integer division of the sample rate by the freq argument.
 
-> lfnoise0 0 AR 1000 * 0.25
+> audition . (* 0.15) =<< lfNoise0 AR 1000
 
 Modulate frequency.
 
-> lfnoise0 0 AR (xline KR 1000 10000 10 2) * 0.25
+> let f = xLine KR 1000 10000 10 RemoveSynth
+> n <- lfNoise0 AR f
+> audition (n * 0.15)
 
 Use as frequency control.
 
-> sinosc AR (lfnoise0 0 KR 4 * 400 + 450) 0 * 0.2
+> f <- lfNoise0 KR 4 
+> audition $ sinOsc AR (f * 400 + 450) 0 * 0.2

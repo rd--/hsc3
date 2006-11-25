@@ -1,7 +1,9 @@
-brownnoise id
+brownNoise
 
 Generates noise whose spectrum falls off in power by 6 dB per
 octave.
 
-> brownnoise r0 AR * 0.1
-> whitenoise r0 AR * 0.1
+> n <- brownNoise AR
+> audition (n * 0.1)
+
+> audition . (* 0.1) =<< whiteNoise AR
