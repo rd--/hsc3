@@ -1,4 +1,4 @@
-linpan2 in pos level
+linPan2 in pos level
 
 Two channel linear pan.  See Pan2.
 
