@@ -1,7 +1,10 @@
 module Sound.SC3.UGen.Noise where
 
 import Sound.SC3.UGen.Rate (Rate(IR))
-import Sound.SC3.UGen.UGen (UGen, UId, mkOsc, mkOscUId, mkFilterUId, uniquify, zeroUId)
+import Sound.SC3.UGen.UGen (UGen, UId,
+                            mkOsc, mkOscUId,
+                            mkFilter, mkFilterUId,
+                            uniquify, zeroUId)
 
 brownNoise :: Rate -> IO UGen
 brownNoise r = uniquify (brownNoiseUId zeroUId r)
@@ -45,8 +48,8 @@ grayNoise r = uniquify (grayNoiseUId zeroUId r)
 grayNoiseUId :: UId -> Rate -> UGen
 grayNoiseUId uid r = mkOscUId uid r "GrayNoise" [] 1 0
 
-hasher :: Rate -> UGen -> UGen
-hasher r i = mkOsc r "Hasher" [i] 1 0
+hasher :: UGen -> UGen
+hasher i = mkFilter "Hasher" [i] 1 0
 
 iRand :: UGen -> UGen -> IO UGen
 iRand lo hi = uniquify (iRandUId zeroUId lo hi)
@@ -96,8 +99,8 @@ linRand lo hi m = uniquify (linRandUId zeroUId lo hi m)
 linRandUId :: UId -> UGen -> UGen -> UGen -> UGen
 linRandUId uid lo hi m = mkOscUId uid IR "LinRand" [lo,hi,m] 1 0
 
-mantissaMask :: Rate -> UGen -> UGen -> UGen
-mantissaMask r i bits = mkOsc r "MantissaMask" [i,bits] 1 0
+mantissaMask :: UGen -> UGen -> UGen
+mantissaMask i bits = mkFilter "MantissaMask" [i,bits] 1 0
 
 nRand :: UGen -> UGen -> UGen -> IO UGen
 nRand lo hi n = uniquify (nRandUId zeroUId lo hi n)
