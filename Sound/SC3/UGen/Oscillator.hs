@@ -27,6 +27,10 @@ lfPulse r freq iphase width = mkOsc r "LFPulse" [freq, iphase, width] 1 0
 lfSaw :: Rate -> UGen -> UGen -> UGen
 lfSaw r freq phase = mkOsc r "LFSaw" [freq, phase] 1 0
 
+-- | Sawtooth oscillator (non band limited).
+lfTri :: Rate -> UGen -> UGen -> UGen
+lfTri r freq phase = mkOsc r "LFTri" [freq, phase] 1 0
+
 -- | Triggered linear ramp between two levels.
 phasor :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 phasor r t f s e p = mkOsc r "Phasor" [t, f, s, e, p] 1 0
