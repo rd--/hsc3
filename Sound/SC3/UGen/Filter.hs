@@ -148,6 +148,10 @@ median size i = mkFilter "Median" [size,i] 1 0
 mulAdd :: UGen -> UGen -> UGen -> UGen
 mulAdd s m a = mkFilter "MulAdd" [s,m,a] 1 0
 
+-- | Flattens dynamics.
+normalizer :: UGen -> UGen -> UGen -> UGen
+normalizer i level dur = mkFilter "Normalizer" [i,level,dur] 1 0
+
 -- | One pole filter.
 onePole :: UGen -> UGen -> UGen
 onePole i coef = mkFilter "OnePole" [i,coef] 1 0
