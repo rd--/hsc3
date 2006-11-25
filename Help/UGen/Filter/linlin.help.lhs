@@ -8,4 +8,5 @@ srchi - upper limit of input range.
 dstlo - lower limit of output range.
 dsthi - upper limit of output range.
 
-> sinosc AR (linlin KR (mousex KR 0 1 0 0.2) 0 1 440 660) 0 * 0.1
+> let f = linLin (mouseX KR 0 1 Linear 0.2) 0 1 440 660
+> audition $ sinOsc AR f 0 * 0.1

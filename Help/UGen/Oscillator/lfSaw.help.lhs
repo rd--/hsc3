@@ -1,4 +1,4 @@
-lfsaw freq iphase
+lfSaw freq iphase
 
 Sawtooth oscillator.  A non-band-limited sawtooth
 oscillator. Output ranges from -1 to +1.

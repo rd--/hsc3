@@ -2,5 +2,5 @@ lag in lagTime
 
 A simple averaging filter.
 
-> let x = mousex KR 220 440 0 0.2
-> in sinosc AR (MCE [x, lag KR x 1]) 0 * 0.1
+> let x = mouseX KR 220 440 Linear 0.2
+> audition $ sinOsc AR (MCE [x, lag x 1]) 0 * 0.1
