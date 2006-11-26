@@ -4,8 +4,6 @@ import Sound.OpenSoundControl (OSC(Message))
 import Sound.SC3.Server.Command (status)
 import Sound.OpenSoundControl.UDP (UDP, send, wait)
 
-import Data.List (transpose)
-
 statusFields :: [String]
 statusFields = ["# UGens                     ", 
                 "# Synths                    ", 
@@ -21,8 +19,8 @@ statusInfo (Message "status.reply" l) = map show (tail l)
 statusInfo _                          = error "non status.reply message"
 
 statusFormat :: OSC -> [String]
-statusFormat r = s : concat (transpose [statusFields, statusInfo r, replicate 8 "\n"])
-    where s = "***** SuperCollider Server Status *****\n"
+statusFormat r = s : zipWith (++) statusFields (statusInfo r)
+    where s = "***** SuperCollider Server Status *****"
 
 -- | Collect server status information.
 serverStatus :: UDP -> IO [String]
