@@ -95,7 +95,7 @@
 (defun hsc-status-scsynth ()
   "Status"
   (interactive)
-  (hsc-send-string "withSC3 serverStatus >>= mapM putStr"))
+  (hsc-send-string "withSC3 serverStatus >>= mapM putStrLn"))
 
 (defun hsc-quit-scsynth ()
   "Reset"
