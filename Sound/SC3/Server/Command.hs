@@ -120,6 +120,9 @@ b_fill nid i n f = Message "/b_fill" [Int nid, Int i, Int n, Float f]
 b_free :: Int -> OSC
 b_free nid = Message "/b_free" [Int nid]
 
+b_gen :: Int -> String -> [Double] -> OSC
+b_gen bid cmd arg = Message "/b_gen" (Int bid : String cmd : map Float arg)
+
 b_get :: Int -> Int -> OSC
 b_get nid i = Message "/b_get" [Int nid, Int i]
 
