@@ -41,7 +41,7 @@
     (hsc-see-output)))
 
 (defun hsc-see-output ()
-  "Show haskell interpreter output."
+  "Show haskell output."
   (interactive)
   (when (comint-check-proc hsc-buffer)
     (delete-other-windows)
@@ -98,14 +98,15 @@
   (hsc-send-string "withSC3 serverStatus >>= mapM putStrLn"))
 
 (defun hsc-quit-scsynth ()
-  "Reset"
+  "Quit"
   (interactive)
   (hsc-send-string "withSC3 (\fd -> send fd quit)"))
 
 (defvar hsc-mode-map nil
-  "Keymap for hsc mode.")
+  "hsc keymap.")
 
 (defun hsc-mode-keybindings (map)
+  "hsc keybindings."
   (define-key map "\C-c\C-s" 'hsc-start-haskell)
   (define-key map "\C-c\C-g" 'hsc-see-output)
   (define-key map "\C-c\C-x" 'hsc-quit-haskell)
@@ -116,6 +117,7 @@
   (define-key map "\C-c\C-h" 'hsc-help))
 
 (defun hsc-mode-menu (map)
+  "hsc menu."
   (define-key map [menu-bar hsc]
     (cons "Hsc" (make-sparse-keymap "Hsc")))
   (define-key map [menu-bar hsc help]
