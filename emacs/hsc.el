@@ -68,22 +68,17 @@
 				      (thing-at-point 'symbol)
 				      "\\.help\\.lhs"))))
 
-(defun hsc-write-statements (f r)
-  (with-temp-file f
-    (insert "> import Sound.OpenSoundControl\n")
-    (insert "> import Sound.SC3\n")
-    (insert "> main = do\n")
-    (insert r)))
-
 (defun hsc-send-string (s)
   (comint-send-string hsc-buffer (concat s "\n")))
 
 (defun hsc-run-region ()
   "Place the region in a do block and compile."
   (interactive)
-  (hsc-write-statements 
-   "/tmp/hsc.lhs"
-   (buffer-substring-no-properties (region-beginning) (region-end)))
+  (with-temp-file "/tmp/hsc.lhs"
+    (insert "> import Sound.OpenSoundControl\n")
+    (insert "> import Sound.SC3\n")
+    (insert "> main = do\n")
+    (insert (buffer-substring-no-properties (region-beginning) (region-end))))
   (hsc-send-string ":l \"/tmp/hsc.lhs\"")
   (hsc-send-string "main"))
 
