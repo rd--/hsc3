@@ -66,14 +66,30 @@ lfClipNoise r freq = uniquify (lfClipNoiseUId zeroUId r freq)
 lfClipNoiseUId :: UId -> Rate -> UGen -> UGen
 lfClipNoiseUId uid r freq = mkOscUId uid r "LFClipNoise" [freq] 1 0
 
+-- | Dynamic clip noise.
+lfdClipNoise :: Rate -> UGen -> IO UGen
+lfdClipNoise r freq = uniquify (lfdClipNoiseUId zeroUId r freq)
+
 lfdClipNoiseUId :: UId -> Rate -> UGen -> UGen
 lfdClipNoiseUId uid r freq = mkOscUId uid r "LFDClipNoise" [freq] 1 0
+
+-- | Dynamic step noise.
+lfdNoise0 :: Rate -> UGen -> IO UGen
+lfdNoise0 r freq = uniquify (lfdNoise0UId zeroUId r freq)
 
 lfdNoise0UId :: UId -> Rate -> UGen -> UGen
 lfdNoise0UId uid r freq = mkOscUId uid r "LFDNoise0" [freq] 1 0
 
+-- | Dynamic ramp noise. 
+lfdNoise1 :: Rate -> UGen -> IO UGen
+lfdNoise1 r freq = uniquify (lfdNoise1UId zeroUId r freq)
+
 lfdNoise1UId :: UId -> Rate -> UGen -> UGen
 lfdNoise1UId uid r freq = mkOscUId uid r "LFDNoise1" [freq] 1 0
+
+-- | Dynamic quadratic noise
+lfdNoise2 :: Rate -> UGen -> IO UGen
+lfdNoise2 r freq = uniquify (lfdNoise2UId zeroUId r freq)
 
 lfdNoise2UId :: UId -> Rate -> UGen -> UGen
 lfdNoise2UId uid r freq = mkOscUId uid r "LFDNoise2" [freq] 1 0
