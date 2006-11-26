@@ -194,6 +194,14 @@ resonz i freq bwr = mkFilter "Resonz" [i,freq,bwr] 1 0
 ringz :: UGen -> UGen -> UGen -> UGen
 ringz i freq dcy = mkFilter "Ringz" [i,freq,dcy] 1 0
 
+-- | Select output from array of inputs.
+select :: UGen -> UGen -> UGen
+select i a = mkFilterMCE "Select" [i] a 1 0
+
+-- | Wave shaper.
+shaper :: UGen -> UGen -> UGen
+shaper b s = mkFilter "Shaper" [b,s] 1 0
+
 slew :: UGen -> UGen -> UGen -> UGen
 slew i up dn = mkFilter "Slew" [i,up,dn] 1 0
 
