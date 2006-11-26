@@ -69,7 +69,9 @@
 				      "\\.help\\.lhs"))))
 
 (defun hsc-send-string (s)
-  (comint-send-string hsc-buffer (concat s "\n")))
+  (if (comint-check-proc hsc-buffer)
+      (comint-send-string hsc-buffer (concat s "\n"))
+    (error "no hsc process running?")))
 
 (defun hsc-run-region ()
   "Place the region in a do block and compile."
