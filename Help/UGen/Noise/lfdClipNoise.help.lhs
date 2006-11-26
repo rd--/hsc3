@@ -1,4 +1,4 @@
-lfdclipnoise id freq
+lfdClipNoise freq
 
 Like LFClipNoise, it generates the values -1 or +1 at a rate given
 by the freq argument, with two differences: no time quantization,
@@ -15,12 +15,18 @@ LFClipNoise is more efficient.
 Try wiggling mouse quickly; LFNoise frequently seems stuck,
 LFDNoise changes smoothly.
 
-> sinosc AR (lfclipnoise 0 AR (mousex KR 0.1 1000 1 0.2) * 200 + 500) 0 * 0.2
+> let x = mouseX KR 0.1 1000 Exponential 0.2
+> n <- lfdClipNoise AR x
+> audition $ sinOsc AR (n * 200 + 500) 0 * 0.2
 
-> sinosc AR (lfdclipnoise 0 AR (mousex KR 0.1 1000 1 0.2) * 200 + 500) 0 * 0.2
+> let x = mouseX KR 0.1 1000 Exponential 0.2
+> n <- lfClipNoise AR x
+> audition $ sinOsc AR (n * 200 + 500) 0 * 0.2
 
 LFNoise quantizes time steps at high freqs, LFDNoise does not:
 
-> lfclipnoise 0 AR (xline KR 1000 20000 10 2) * 0.1
+> let f = xLine KR 1000 20000 10 RemoveSynth
+> audition . (* 0.1) =<< lfdClipNoise AR f
 
-> lfdclipnoise 0 AR (xline KR 1000 20000 10 2) * 0.1
+> let f = xLine KR 1000 20000 10 RemoveSynth
+> audition . (* 0.1) =<< lfClipNoise AR f
