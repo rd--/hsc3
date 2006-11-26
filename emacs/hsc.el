@@ -73,14 +73,20 @@
       (comint-send-string hsc-buffer (concat s "\n"))
     (error "no hsc process running?")))
 
-(defun hsc-run-region ()
-  "Place the region in a do block and compile."
-  (interactive)
-  (with-temp-file "/tmp/hsc.lhs"
+(defun hsc-transform-and-store (f s)
+  "Transform example text into compilable form."
+  (with-temp-file f
     (insert "> import Sound.OpenSoundControl\n")
     (insert "> import Sound.SC3\n")
     (insert "> main = do\n")
-    (insert (buffer-substring-no-properties (region-beginning) (region-end))))
+    (insert s)))
+
+(defun hsc-run-region ()
+  "Place the region in a do block and compile."
+  (interactive)
+  (hsc-transform-and-store
+   "/tmp/hsc.lhs"
+   (buffer-substring-no-properties (region-beginning) (region-end)))
   (hsc-send-string ":l \"/tmp/hsc.lhs\"")
   (hsc-send-string "main"))
 
