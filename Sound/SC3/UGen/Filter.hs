@@ -101,6 +101,7 @@ hpz1 i = mkFilter "HPZ1" [i] 1 0
 hpz2 :: UGen -> UGen
 hpz2 i = mkFilter "HPZ2" [i] 1 0
 
+-- | Fixed resonator filter bank.
 klank :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 klank i fs fp d s = mkFilterMCE "Klank" [i,fs,fp,d] s 1 0
 
@@ -112,9 +113,11 @@ klankSpec f a p = MCE ((concat . transpose) [f, a, p])
 lag :: UGen -> UGen -> UGen
 lag i t = mkFilter "Lag" [i,t] 1 0
 
+-- | Nested lag filter.
 lag2 :: UGen -> UGen -> UGen
 lag2 i t = mkFilter "Lag2" [i,t] 1 0
 
+-- | Twice nested lag filter.
 lag3 :: UGen -> UGen -> UGen
 lag3 i t = mkFilter "Lag3" [i,t] 1 0
 
@@ -169,6 +172,7 @@ oneZero i coef = mkFilter "OneZero" [i,coef] 1 0
 pitchShift :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 pitchShift i w p d t = mkFilter "PitchShift" [i,w,p,d,t] 1 0
 
+-- | Pass every nth trigger.
 pulseDivider :: UGen -> UGen -> UGen -> UGen
 pulseDivider trig factor start = mkFilter "PulseDivider" [trig, factor, start] 1 0
 
@@ -208,6 +212,7 @@ select i a = mkFilterMCE "Select" [i] a 1 0
 shaper :: UGen -> UGen -> UGen
 shaper b s = mkFilter "Shaper" [b,s] 1 0
 
+-- | Remove transients and higher frequencies.
 slew :: UGen -> UGen -> UGen -> UGen
 slew i up dn = mkFilter "Slew" [i,up,dn] 1 0
 

@@ -24,7 +24,7 @@ impulse r freq phase = mkOsc r "Impulse" [freq, phase] 1 0
 klang :: Rate -> UGen -> UGen -> UGen -> UGen
 klang r fs fo a = mkOscMCE r "Klang" [fs, fo] a 1 0
 
--- | Format frequency, phase and amplitude data as required for klang.
+-- | Format frequency, amplitude and phase data as required for klang.
 klangSpec :: [UGen] -> [UGen] -> [UGen] -> UGen
 klangSpec f a p = MCE ((concat . transpose) [f, a, p])
 
