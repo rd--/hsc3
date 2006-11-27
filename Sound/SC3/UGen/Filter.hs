@@ -1,6 +1,8 @@
 module Sound.SC3.UGen.Filter where
 
-import Sound.SC3.UGen.UGen (UGen, Name, mkFilter, mkFilterMCE)
+import Sound.SC3.UGen.UGen (UGen(MCE), Name, mkFilter, mkFilterMCE)
+
+import Data.List (transpose)
 
 mkAllpass :: Name -> UGen -> UGen -> UGen -> UGen -> UGen
 mkAllpass c i maxTime dly dcy = mkFilter c [i, maxTime, dly, dcy] 1 0
@@ -101,6 +103,10 @@ hpz2 i = mkFilter "HPZ2" [i] 1 0
 
 klank :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 klank i fs fp d s = mkFilterMCE "Klank" [i,fs,fp,d] s 1 0
+
+-- | Format frequency, amplitude and decay time data as required for klank.
+klankSpec :: [UGen] -> [UGen] -> [UGen] -> UGen
+klankSpec f a p = MCE ((concat . transpose) [f, a, p])
 
 -- | Simple averaging filter.
 lag :: UGen -> UGen -> UGen
