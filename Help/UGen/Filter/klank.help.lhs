@@ -19,5 +19,5 @@ freqoffset - an offset added to all frequencies at initialization
 decayscale - a scale factor multiplied by all ring times at
              initialization time.
 
-> let s = klank_spec [800, 1071, 1153, 1723] [1, 1, 1, 1] [1, 1, 1, 1]
-> in klank AR (impulse AR 2 0 * 0.1) 1 0 1 s
+> let s = klankSpec [800, 1071, 1153, 1723] [1, 1, 1, 1] [1, 1, 1, 1]
+> audition $ klank (impulse AR 2 0 * 0.1) 1 0 1 s
