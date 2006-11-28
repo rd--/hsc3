@@ -129,10 +129,6 @@ latch i t = mkFilter "Latch" [i,t] 1 0
 leakDC :: UGen -> UGen -> UGen
 leakDC i coef = mkFilter "LeakDC" [i,coef] 1 0
 
--- | Linear envelope generator.
-linen :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-linen g at sl rt da = mkFilter "Linen" [g,at,sl,rt,da] 1 0
-
 -- | Map from one linear range to another linear range.
 linLin :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 linLin i sl sh dl dh = mkFilter "LinLin" [i,sl,sh,dl,dh] 1 0
