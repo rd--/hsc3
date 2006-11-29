@@ -1,4 +1,4 @@
-bufrd numChannels bufnum phase loop interpolation
+bufRd numChannels bufnum phase loop interpolation
 
 Plays the content of a buffer.
 
@@ -10,8 +10,10 @@ you have specified to the BufRd, it will fail silently.
 The interpolation type is an integer: 1 no interpolation, 2 linear
 interpolation, 4 cubic interpolation.
 
-> send' sc (b_allocRead 0 (resolve "audio/metal.wav"))
+> withSC3 (\fd -> send fd (b_allocRead 0 "/home/rohan/sw/sw-01/audio/metal.wav"))
 
-> bufrd AR 1 0 (sinosc AR 0.1 * bufframes IR 0) 0 0
+> audition $ bufRd 1 AR 0 (sinOsc AR 0.1 0 * bufFrames KR 0) 0 0
 
-> bufrd AR 1 0 (lfnoise1 0 AR 1 * bufframes IR 0)
+> let x = mouseX KR (MCE [5, 10]) 100 Linear 0.1
+> n <- lfNoise1 AR x
+> audition $ bufRd 1 AR 0 (n * bufFrames KR 0) 0 2
