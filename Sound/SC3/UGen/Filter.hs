@@ -89,6 +89,10 @@ formlet i f a d = mkFilter "Formlet" [i,f,a,d] 1 0
 fos :: UGen -> UGen -> UGen -> UGen -> UGen
 fos i a0 a1 b1 = mkFilter "FOS" [i,a0,a1,b1] 1 0
 
+-- | Gate.
+gate :: UGen -> UGen -> UGen
+gate i t = mkFilter "Gate" [i,t] 1 0
+
 -- | Highpass filter.
 hpf :: UGen -> UGen -> UGen
 hpf i f = mkFilter "HPF" [i,f] 1 0
@@ -100,6 +104,10 @@ hpz1 i = mkFilter "HPZ1" [i] 1 0
 -- | Two zero fixed highpass filter.
 hpz2 :: UGen -> UGen
 hpz2 i = mkFilter "HPZ2" [i] 1 0
+
+-- | Is signal within specified range.
+inRange :: UGen -> UGen -> UGen -> UGen
+inRange i lo hi = mkFilter "InRange" [i,lo,hi] 1 0
 
 -- | Fixed resonator filter bank.
 klank :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -120,6 +128,10 @@ lag2 i t = mkFilter "Lag2" [i,t] 1 0
 -- | Twice nested lag filter.
 lag3 :: UGen -> UGen -> UGen
 lag3 i t = mkFilter "Lag3" [i,t] 1 0
+
+-- | Last value before chang above threshhold.
+lastValue :: UGen -> UGen -> UGen
+lastValue i t = mkFilter "LastValue" [i,t] 1 0
 
 -- | Sample and hold.
 latch :: UGen -> UGen -> UGen
@@ -145,6 +157,10 @@ lpz1 i = mkFilter "LPZ1" [i] 1 0
 lpz2 :: UGen -> UGen
 lpz2 i = mkFilter "LPZ2" [i] 1 0
 
+-- | Most changed input.
+mostChange :: UGen -> UGen -> UGen
+mostChange a b = mkFilter "MostChange" [a,b] 1 0
+
 -- | Median filter.
 median :: UGen -> UGen -> UGen
 median size i = mkFilter "Median" [size,i] 1 0
@@ -165,12 +181,20 @@ onePole i coef = mkFilter "OnePole" [i,coef] 1 0
 oneZero :: UGen -> UGen -> UGen
 oneZero i coef = mkFilter "OneZero" [i,coef] 1 0
 
+-- | Maximum value.
+peak :: UGen -> UGen -> UGen
+peak t r = mkFilter "Peak" [t,r] 1 0
+
 pitchShift :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 pitchShift i w p d t = mkFilter "PitchShift" [i,w,p,d,t] 1 0
 
+-- | Trigger counter.
+pulseCount :: UGen -> UGen -> UGen
+pulseCount t r = mkFilter "PulseCount" [t,r] 1 0
+
 -- | Pass every nth trigger.
 pulseDivider :: UGen -> UGen -> UGen -> UGen
-pulseDivider trig factor start = mkFilter "PulseDivider" [trig, factor, start] 1 0
+pulseDivider t factor start = mkFilter "PulseDivider" [t, factor, start] 1 0
 
 mkQuad :: Name -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 mkQuad c' freq a b c xi = mkFilter c' [freq,a,b,c,xi] 1 0
@@ -200,6 +224,14 @@ resonz i freq bwr = mkFilter "Resonz" [i,freq,bwr] 1 0
 ringz :: UGen -> UGen -> UGen -> UGen
 ringz i freq dcy = mkFilter "Ringz" [i,freq,dcy] 1 0
 
+-- | Track maximum level.
+runningMax :: UGen -> UGen -> UGen
+runningMax i t = mkFilter "RunningMax" [i,t] 1 0
+
+-- | Track minimum level.
+runningMin :: UGen -> UGen -> UGen
+runningMin i t = mkFilter "RunningMin" [i,t] 1 0
+
 -- | Select output from array of inputs.
 select :: UGen -> UGen -> UGen
 select i a = mkFilterMCE "Select" [i] a 1 0
@@ -216,8 +248,36 @@ slew i up dn = mkFilter "Slew" [i,up,dn] 1 0
 sos :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 sos i a0 a1 a2 b1 b2 = mkFilter "SOS" [i,a0,a1,a2,b1,b2] 1 0
 
+-- | Set-reset flip flop.
+setResetFF :: UGen -> UGen -> UGen
+setResetFF t r = mkFilter "SetResetFF" [t,r] 1 0
+
 stepper :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 stepper t r minTime maxTime s v = mkFilter "Stepper" [t,r,minTime,maxTime,s,v] 1 0
+
+-- | Triggered linear ramp.
+sweep :: UGen -> UGen -> UGen
+sweep t r = mkFilter "Sweep" [t,r] 1 0
+
+-- | Delay trigger by specified interval. 
+tDelay :: UGen -> UGen -> UGen
+tDelay i d = mkFilter "TDelay" [i,d] 1 0
+
+-- | Time since last triggered.
+timer :: UGen -> UGen
+timer t = mkFilter "Timer" [t] 1 0
+ 
+-- | Toggle flip flop.
+toggleFF :: UGen -> UGen
+toggleFF t = mkFilter "ToggleFF" [t] 1 0
+
+-- | When triggered output trigger for specified duration.
+trig :: UGen -> UGen -> UGen
+trig i d = mkFilter "Trig" [i,d] 1 0
+
+-- | When triggered output unit signal for specified duration.
+trig1 :: UGen -> UGen -> UGen
+trig1 i d = mkFilter "Trig1" [i,d] 1 0
 
 -- | Two pole filter.
 twoPole :: UGen -> UGen -> UGen -> UGen
