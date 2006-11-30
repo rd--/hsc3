@@ -25,12 +25,12 @@ at the default block size and sample rate.
 
 Audio feedback modulation.
 
-> let f = inFeedback 1 AR 0 * 1300 + 300
+> let f = inFeedback 1 0 * 1300 + 300
 > audition $ sinOsc AR f 0 * 0.4
 
 Evaluate these in either order and hear both tones.
 
-> audition $ out 0 (inFeedback 1 AR 10)
+> audition $ out 0 (inFeedback 1 10)
 
 > let a = out 10 (sinOsc AR 440 0 * 0.1)
 >     b = out 0 (sinOsc AR 660 0 * 0.1)
@@ -38,4 +38,4 @@ Evaluate these in either order and hear both tones.
 
 Doubters consult this.
 
-> audition $ in' 1 ar 10
+> audition $ in' 1 AR 10
