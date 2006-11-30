@@ -2,7 +2,7 @@ module Sound.SC3.UGen.Demand where
 
 import Sound.SC3.UGen.Rate (Rate(DR))
 import Sound.SC3.UGen.UGen (UGen, UId,
-                            mkOscUId, mkOscUIdMCE, mkFilter,
+                            mkOscMCE, mkOscUId, mkOscUIdMCE, mkFilter,
                             uniquify, zeroUId)
 
 demand :: UGen -> UGen -> UGen -> UGen
@@ -84,3 +84,6 @@ dswitch1 l array = uniquify (dswitch1UId zeroUId l array)
 
 dswitch1UId :: UId -> UGen -> UGen -> UGen
 dswitch1UId uid l array = mkOscUIdMCE uid DR "Dswitch1" [l] array 1 0
+
+tDuty :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+tDuty r d rst a l = mkOscMCE r "TDuty" [d,rst,a] l 1 0
