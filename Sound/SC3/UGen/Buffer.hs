@@ -31,20 +31,20 @@ bufSamples r buf = mkOsc r "BufSamples" [buf] 1 0
 
 -- * Buffer filters and delays.
 
-mkBufAllPass :: Name -> UGen -> UGen -> UGen -> UGen -> UGen
-mkBufAllPass c buf i dly dcy = mkFilter c [buf,i,dly,dcy] 1 0
+mkBufAllpass :: Name -> UGen -> UGen -> UGen -> UGen -> UGen
+mkBufAllpass c buf i dly dcy = mkFilter c [buf,i,dly,dcy] 1 0
 
 -- | Allpass filter (cubic interpolation).
-bufAllPassC :: UGen -> UGen -> UGen -> UGen -> UGen
-bufAllPassC = mkBufAllPass "BufAllPassC"
+bufAllpassC :: UGen -> UGen -> UGen -> UGen -> UGen
+bufAllpassC = mkBufAllpass "BufAllpassC"
 
 -- | Allpass filter (linear interpolation).
-bufAllPassL :: UGen -> UGen -> UGen -> UGen -> UGen
-bufAllPassL = mkBufAllPass "BufAllPassL"
+bufAllpassL :: UGen -> UGen -> UGen -> UGen -> UGen
+bufAllpassL = mkBufAllpass "BufAllpassL"
 
 -- | Allpass filter (no interpolation).
-bufAllPassN :: UGen -> UGen -> UGen -> UGen -> UGen
-bufAllPassN = mkBufAllPass "BufAllPassN"
+bufAllpassN :: UGen -> UGen -> UGen -> UGen -> UGen
+bufAllpassN = mkBufAllpass "BufAllpassN"
 
 mkBufComb :: Name -> UGen -> UGen -> UGen -> UGen -> UGen
 mkBufComb c buf i dly dcy = mkFilter c [buf,i,dly,dcy] 1 0
