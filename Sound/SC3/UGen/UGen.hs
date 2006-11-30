@@ -161,6 +161,14 @@ mkOscUId :: UId -> Rate -> Name -> [UGen] -> Int -> Special -> UGen
 mkOscUId uid r c i o s = consU r c i o' s uid
     where o' = replicate o r
 
+-- | Variant oscillator constructor with MCE collapsing input.
+mkOscMCE :: Rate -> Name -> [UGen] -> UGen -> Int -> Special -> UGen
+mkOscMCE r c i j o s = mkOsc r c (i ++ mcel j) o s
+
+-- | Variant oscillator constructor with identifier and MCE collapsing input.
+mkOscUIdMCE :: UId -> Rate -> Name -> [UGen] -> UGen -> Int -> Special -> UGen
+mkOscUIdMCE uid r c i j o s = mkOscUId uid r c (i ++ mcel j) o s
+
 -- | Ordinary filter UGen constructor.
 mkFilter :: Name -> [UGen] -> Int -> Special -> UGen
 mkFilter = mkFilterUId zeroUId
@@ -170,10 +178,6 @@ mkFilterUId :: UId -> Name -> [UGen] -> Int -> Special -> UGen
 mkFilterUId uid c i o s = consU r c i o' s uid
     where r = maximum (map rateOf i)
           o'= replicate o r
-
--- | Variant oscillator constructor with MCE collapsing input.
-mkOscMCE :: Rate -> Name -> [UGen] -> UGen -> Int -> Special -> UGen
-mkOscMCE r c i j o s = mkOsc r c (i ++ mcel j) o s
 
 -- | Variant filter constructor with MCE collapsing input.
 mkFilterMCE :: Name -> [UGen] -> UGen -> Int -> Special -> UGen
