@@ -1,4 +1,4 @@
-combn in maxDelayTime delayTime decayTime
+combN in maxDelayTime delayTime decayTime
 
 Comb delay line. CombN uses no interpolation, CombL uses linear
 interpolation, CombC uses all pass interpolation.  All times are in
@@ -10,20 +10,27 @@ lower.
 Comb used as a resonator. The resonant fundamental is equal to
 reciprocal of the delay time.
 
-> combn AR (whitenoise 0 AR * 0.01) 0.01 (xline KR 0.0001 0.01 20 2) 0.2
+> n <- whiteNoise AR
+> let dt = xLine KR 0.0001 0.01 20 RemoveSynth
+> audition $ combN (n * 0.1) 0.01 dt 0.2
 
-> combl AR (whitenoise 0 AR * 0.01) 0.01 (xline KR 0.0001 0.01 20 2) 0.2
+> n <- whiteNoise AR
+> let dt = xLine KR 0.0001 0.01 20 RemoveSynth
+> audition $ combL (n * 0.1) 0.01 dt 0.2
 
-> combc AR (whitenoise 0 AR * 0.01) 0.01 (xline KR 0.0001 0.01 20 2) 0.2
+> n <- whiteNoise AR
+> let dt = xLine KR 0.0001 0.01 20 RemoveSynth
+> audition $ combC (n * 0.1) 0.01 dt 0.2
 
 With negative feedback:
 
-> combn AR (whitenoise 0 AR * 0.01) 0.01 (xline KR 0.0001 0.01 20 2) (-0.2)
-
-> combl AR (whitenoise 0 AR * 0.01) 0.01 (xline KR 0.0001 0.01 20 2) (-0.2)
-
-> combc AR (whitenoise 0 AR * 0.01) 0.01 (xline KR 0.0001 0.01 20 2) (-0.2)
+> n <- whiteNoise AR
+> let dt = xLine KR 0.0001 0.01 20 RemoveSynth
+> audition $ combC (n * 0.1) 0.01 dt (-0.2)
 
 Used as an echo.
 
-> combn AR (decay AR (dust 0 AR 1 * 0.5) 0.2 * (whitenoise 0 AR)) 0.2 0.2 3
+> d <- dust AR 1
+> n <- whiteNoise AR
+> let i = decay (d * 0.5) 0.2 * n
+> audition $ combC i 0.2 0.2 3

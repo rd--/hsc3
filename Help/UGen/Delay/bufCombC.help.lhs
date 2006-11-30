@@ -16,8 +16,8 @@ decaytime - time for the echoes to decay by 60 decibels. If this
             negative, thus emphasizing only odd harmonics at an
             octave lower.
 
-> withSC3 (\fd -> send fd (b_alloc 0 44100 1)
->                 wait fd "/done")
+> withSC3 (\fd -> do send fd (b_alloc 0 44100 1)
+>                    wait fd "/done")
 
 > d <- dust AR 1
 > n <- whiteNoise AR

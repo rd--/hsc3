@@ -11,5 +11,5 @@ mixed with the delay.
 
 > d <- dust AR 1
 > n <- whiteNoise AR
-> let z = decay AR d 0.3 * n
+> let z = decay d 0.3 * n
 > audition $ z + delayN z 0.2 0.2

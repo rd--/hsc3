@@ -14,10 +14,10 @@ buf       - buffer number.
 in        - the input signal.
 delaytime - delay time in seconds.
 
-> withSC3 (\fd -> send fd (b_alloc 0 44100 1)
->                 wait fd "/done")
+> withSC3 (\fd -> do send fd (b_alloc 0 44100 1)
+>                    wait fd "/done")
 
 > d <- dust AR 1
 > n <- whiteNoise AR
-> let x = decay d 0.2 * n * 0.25
-> audition $ bufDelayC 0 x 0.25 6
+> let x = decay d 0.5 * n * 0.3
+> audition $ bufDelayC 0 x 0.2 + x

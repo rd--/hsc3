@@ -10,7 +10,7 @@ you have specified to the BufRd, it will fail silently.
 The interpolation type is an integer: 1 no interpolation, 2 linear
 interpolation, 4 cubic interpolation.
 
-> withSC3 (\fd -> send fd (b_allocRead 0 "/home/rohan/sw/sw-01/audio/metal.wav"))
+> withSC3 (\fd -> send fd (b_allocRead 0 "/home/rohan/sw/sw-01/audio/metal.wav" 0 0))
 
 > audition $ bufRd 1 AR 0 (sinOsc AR 0.1 0 * bufFrames KR 0) 0 0
 

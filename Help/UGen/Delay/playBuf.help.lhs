@@ -30,27 +30,27 @@ loop        - 1 means true, 0 means false.  This is modulate-able.
 
 Allocate buffer.
 
-> withSC3 (\fd -> send fd (b_allocRead 10 "/home/rohan/sw/sw-01/audio/metal.wav" 0 0)
->                 wait fd "/done")
+> withSC3 (\fd -> do send fd (b_allocRead 10 "/home/rohan/sw/sw-01/audio/metal.wav" 0 0)
+>                    wait fd "/done")
 
 Play once only.
 
-> audition $ playBuf 1 AR 10 (bufRateScale KR b) 1 0 0
+> audition $ playBuf 1 AR 10 (bufRateScale KR 10) 1 0 0
 
 Play in infinite loop.
 
-> audition $ playBuf 1 AR 10 (bufRateScale KR b) 1 0 1
+> audition $ playBuf 1 AR 10 (bufRateScale KR 10) 1 0 1
 
 Trigger playback at each pulse.
 
 > let t = impulse KR 2 0
-> audition $ playBuf 1 AR 10 (bufRateScale KR b) t 0 0
+> audition $ playBuf 1 AR 10 (bufRateScale KR 10) t 0 0
 
 Trigger playback at each pulse (diminishing intervals).
 
 > let f = xLine KR 0.1 100 10 RemoveSynth
 >     t = impulse KR f 0
-> audition $ playBuf 1 AR 10 (bufRateScale KR b) t 0 0
+> audition $ playBuf 1 AR 10 (bufRateScale KR 10) t 0 0
 
 Loop playback, accelerating pitch.
 
@@ -61,7 +61,7 @@ Sine wave control of playback rate, negative rate plays backwards.
 
 > let f = xLine KR 0.2 8 30 RemoveSynth
 >     r = fSinOsc KR f 0 * 3 + 0.6
-> audition $ playBuf 1 AR 10 (bufRateScale KR b * r) 1 0 1
+> audition $ playBuf 1 AR 10 (bufRateScale KR 10 * r) 1 0 1
 
 Release buffer.
 

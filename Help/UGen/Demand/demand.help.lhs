@@ -1,4 +1,4 @@
-(Demand trig reset ugens)
+demand trig reset ugens
 
 Demand results from demand rate ugens.
 
