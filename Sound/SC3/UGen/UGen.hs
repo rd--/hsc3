@@ -118,6 +118,11 @@ mceTransform (UGen r n i o s uid) = MCE (map f i')
           i'  = transpose (map (mceExtend d) i)
 mceTransform _                    = error "mceTransform: illegal ugen"
 
+-- | Reverse order of channels at MCE.
+mceReverse :: UGen -> UGen
+mceReverse (MCE l) = MCE (reverse l)
+mceReverse _       = error "mceReverse: non MCE value"
+
 -- | Apply MCE transformation if required.
 mced :: UGen -> UGen
 mced u = if mceReq u then mceTransform u else u
