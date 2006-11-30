@@ -13,20 +13,20 @@ fromWarp Linear      = Constant 0
 fromWarp Exponential = Constant 1
 fromWarp (Warp u)    = u
 
-in' :: Rate -> UGen -> Int -> UGen
-in' r bus nc = mkOsc r "In" [bus] nc 0
+in' :: Int -> Rate -> UGen -> UGen
+in' nc r bus = mkOsc r "In" [bus] nc 0
 
-localIn :: Rate -> Int -> UGen
-localIn r nc = mkOsc r "In" [] nc 0
+localIn :: Int -> Rate -> UGen
+localIn nc r = mkOsc r "In" [] nc 0
 
-lagIn :: UGen -> Int -> UGen -> UGen
-lagIn bus nc lag = mkOsc KR "LagIn" [bus, lag] nc 0
+lagIn :: Int -> UGen -> UGen -> UGen
+lagIn nc bus lag = mkOsc KR "LagIn" [bus, lag] nc 0
 
-inFeedback :: UGen -> Int -> UGen
-inFeedback bus nc = mkOsc AR "InFeedback" [bus] nc 0
+inFeedback :: Int -> UGen -> UGen
+inFeedback nc bus = mkOsc AR "InFeedback" [bus] nc 0
 
-inTrig :: UGen -> Int -> UGen
-inTrig bus nc = mkOsc KR "InTrig" [bus] nc 0
+inTrig :: Int -> UGen -> UGen
+inTrig nc bus = mkOsc KR "InTrig" [bus] nc 0
 
 out :: UGen -> UGen -> UGen
 out bus i = mkFilterMCE "Out" [bus] i 0 0
@@ -46,8 +46,8 @@ xOut bus xfade i = mkFilterMCE "XOut" [bus, xfade] i 0 0
 sharedOut :: UGen -> UGen -> UGen
 sharedOut bus i = mkOscMCE KR "SharedOut" [bus] i 0 0
 
-sharedIn :: UGen -> Int -> UGen
-sharedIn bus nc = mkOsc KR "SharedIn" [bus] nc 0
+sharedIn :: Int -> UGen -> UGen
+sharedIn nc bus = mkOsc KR "SharedIn" [bus] nc 0
 
 keyState :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
 keyState r key minVal maxVal lag = mkOsc r "KeyState" [key, minVal, maxVal, lag] 1 0
