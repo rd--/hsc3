@@ -20,13 +20,13 @@ can hear the effect of the phase comb.
 > let dly = xLine KR 0.0001 0.01 20 RemoveSynth
 > audition $ n + allpassN (n * 0.1) 0.01 dly 0.2
 
-;; Linear variant
+Linear variant
 
 > n <- whiteNoise AR
 > let dly = xLine KR 0.0001 0.01 20 RemoveSynth
 > audition $ n + allpassL (n * 0.1) 0.01 dly 0.2
 
-;; Cubic variant
+Cubic variant
 
 > n <- whiteNoise AR
 > let dly = xLine KR 0.0001 0.01 20 RemoveSynth
