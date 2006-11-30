@@ -17,7 +17,7 @@ in' :: Int -> Rate -> UGen -> UGen
 in' nc r bus = mkOsc r "In" [bus] nc 0
 
 localIn :: Int -> Rate -> UGen
-localIn nc r = mkOsc r "In" [] nc 0
+localIn nc r = mkOsc r "LocalIn" [] nc 0
 
 lagIn :: Int -> UGen -> UGen -> UGen
 lagIn nc bus lag = mkOsc KR "LagIn" [bus, lag] nc 0
