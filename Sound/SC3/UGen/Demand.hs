@@ -2,8 +2,11 @@ module Sound.SC3.UGen.Demand where
 
 import Sound.SC3.UGen.Rate (Rate(DR))
 import Sound.SC3.UGen.UGen (UGen, UId,
-                            mkOscUId, mkOscUIdMCE,
+                            mkOscUId, mkOscUIdMCE, mkFilter,
                             uniquify, zeroUId)
+
+demand :: UGen -> UGen -> UGen -> UGen
+demand t r d = mkFilter "Demand" [t, r, d] 1 0
 
 -- | Demand rate white noise.
 dwhite :: UGen -> UGen -> UGen -> IO UGen
