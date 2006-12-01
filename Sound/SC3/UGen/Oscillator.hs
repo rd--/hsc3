@@ -16,6 +16,10 @@ formant r f0 f bw = mkOsc r "Formant" [f0, f, bw] 1 0
 fSinOsc :: Rate -> UGen -> UGen -> UGen
 fSinOsc r freq phase = mkOsc r "FSinOsc" [freq, phase] 1 0
 
+-- | Dynamic stochastic synthesis generator conceived by Iannis Xenakis.
+gendy1 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+gendy1 r ampDist durDist adParam ddParam minFreq maxFreq ampScale durScale initCPs kNum = mkOsc r "Gendy1" [ampDist, durDist, adParam, ddParam, minFreq, maxFreq, ampScale, durScale, initCPs, kNum] 1 0
+
 -- | Impulse oscillator (non band limited).
 impulse :: Rate -> UGen -> UGen -> UGen
 impulse r freq phase = mkOsc r "Impulse" [freq, phase] 1 0
@@ -75,3 +79,7 @@ vOsc3 r b f1 f2 f3 = mkOsc r "VOsc3" [b, f1, f2, f3] 1 0
 -- | Variable wavetable oscillator.
 vOsc :: Rate -> UGen -> UGen -> UGen -> UGen
 vOsc r b f phase = mkOsc r "VOsc" [b, f, phase] 1 0
+
+-- Local Variables:
+-- truncate-lines:t
+-- End:

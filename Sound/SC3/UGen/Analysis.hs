@@ -16,7 +16,6 @@ slope i = mkFilter "Slope" [i] 1 0
 zeroCrossing :: UGen -> UGen
 zeroCrossing i = mkFilter "ZeroCrossing" [i] 1 0
 
-
 -- Local Variables:
 -- truncate-lines:t
 -- End:
