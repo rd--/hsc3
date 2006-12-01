@@ -350,8 +350,8 @@ mix (MCE u)  = foldl1 (+) u
 mix u        = u
 
 -- | Construct and sum a set of UGens.
-mix_fill :: Int -> (Int -> UGen) -> UGen
-mix_fill n f = mix (MCE (map f [0..n-1]))
+mixFill :: Int -> (Int -> UGen) -> UGen
+mixFill n f = mix (MCE (map f [0..n-1]))
 
 -- Duplicate
 
