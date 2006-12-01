@@ -25,133 +25,135 @@ instance OrdE Double where
 
 class (Floating a) => UnaryOp a where
     notE           :: a -> a
-    isnil          :: a -> a
-    notnil         :: a -> a
-    bitnot         :: a -> a
-    asfloat        :: a -> a
-    asint          :: a -> a
+    isNil          :: a -> a
+    notNil         :: a -> a
+    bitNot         :: a -> a
+    asFloat        :: a -> a
+    asInt          :: a -> a
     ceil           :: a -> a
     floorE         :: a -> a
     frac           :: a -> a
     squared        :: a -> a
     cubed          :: a -> a
-    midicps        :: a -> a
-    cpsmidi        :: a -> a
-    midiratio      :: a -> a
-    ratiomidi      :: a -> a
-    dbamp          :: a -> a
-    ampdb          :: a -> a
-    octcps         :: a -> a
-    cpsoct         :: a -> a
+    midiCPS        :: a -> a
+    cpsMIDI        :: a -> a
+    midiRatio      :: a -> a
+    ratioMIDI      :: a -> a
+    dbAmp          :: a -> a
+    ampDb          :: a -> a
+    octCPS         :: a -> a
+    cpsOct         :: a -> a
     log2           :: a -> a
     log10          :: a -> a
-    softclip       :: a -> a
+    distort        :: a -> a
+    softClip       :: a -> a
 
 __uop :: Show a => a -> a
 __uop a = error ("unimplemented unary op" ++ show a)
 
 instance UnaryOp Double where
     notE a      = if a >  0.0 then 0.0 else 1.0
-    isnil a     = if a == 0.0 then 0.0 else 1.0
-    notnil a    = if a /= 0.0 then 0.0 else 1.0
-    bitnot a    = __uop a
-    asfloat a   = __uop a
-    asint a     = __uop a
+    isNil a     = if a == 0.0 then 0.0 else 1.0
+    notNil a    = if a /= 0.0 then 0.0 else 1.0
+    bitNot a    = __uop a
+    asFloat a   = __uop a
+    asInt a     = __uop a
     ceil a      = fromIntegral (ceiling a :: Integer)
     floorE a    = fromIntegral (floor a   :: Integer)
     frac a      = __uop a
     squared a   = a * a
     cubed   a   = a * a * a
-    midicps a   = 440.0 * (2.0 ** ((a - 69.0) * (1.0 / 12.0)))
-    cpsmidi a   = (log2 (a * (1.0 / 440.0)) * 12.0) + 69.0
-    midiratio a = 2.0 ** (a * (1.0 / 12.0))
-    ratiomidi a = 12.0 * (log2 a)
-    dbamp a     = __uop a
-    ampdb a     = __uop a
-    octcps a    = 440.0 * (2.0 ** (a - 4.75))
-    cpsoct a    = log2 (a * (1.0 / 440.0)) + 4.75
+    midiCPS a   = 440.0 * (2.0 ** ((a - 69.0) * (1.0 / 12.0)))
+    cpsMIDI a   = (log2 (a * (1.0 / 440.0)) * 12.0) + 69.0
+    midiRatio a = 2.0 ** (a * (1.0 / 12.0))
+    ratioMIDI a = 12.0 * (log2 a)
+    dbAmp a     = __uop a
+    ampDb a     = __uop a
+    octCPS a    = 440.0 * (2.0 ** (a - 4.75))
+    cpsOct a    = log2 (a * (1.0 / 440.0)) + 4.75
     log2 a      = logBase 2 a
     log10 a     = logBase 10 a
-    softclip a  = __uop a
+    distort a   = __uop a
+    softClip a  = __uop a
 
 class (Floating a) => BinaryOp a where
-    idiv           :: a -> a -> a
+    iDiv           :: a -> a -> a
     mod            :: a -> a -> a
-    bitand         :: a -> a -> a
-    bitor          :: a -> a -> a
-    bitxor         :: a -> a -> a
+    bitAnd         :: a -> a -> a
+    bitOr          :: a -> a -> a
+    bitXOr         :: a -> a -> a
     lcm            :: a -> a -> a
     gcd            :: a -> a -> a
     round          :: a -> a -> a
-    roundup        :: a -> a -> a
+    roundUp        :: a -> a -> a
     trunc          :: a -> a -> a
     atan2          :: a -> a -> a
     hypot          :: a -> a -> a
     hypotx         :: a -> a -> a
-    shiftleft      :: a -> a -> a
-    shiftright     :: a -> a -> a
-    unsignedshift  :: a -> a -> a
+    shiftLeft      :: a -> a -> a
+    shiftRight     :: a -> a -> a
+    unsignedShift  :: a -> a -> a
     fill           :: a -> a -> a
     ring1          :: a -> a -> a
     ring2          :: a -> a -> a
     ring3          :: a -> a -> a
     ring4          :: a -> a -> a
-    difsqr         :: a -> a -> a
-    sumsqr         :: a -> a -> a
-    sqrdif         :: a -> a -> a
-    sqrsum         :: a -> a -> a
-    absdif         :: a -> a -> a
+    difSqr         :: a -> a -> a
+    sumSqr         :: a -> a -> a
+    sqrDif         :: a -> a -> a
+    sqrSum         :: a -> a -> a
+    absDif         :: a -> a -> a
     thresh         :: a -> a -> a
-    amclip         :: a -> a -> a
-    scaleneg       :: a -> a -> a
+    amClip         :: a -> a -> a
+    scaleNeg       :: a -> a -> a
     clip2          :: a -> a -> a
     excess         :: a -> a -> a
     fold2          :: a -> a -> a
     wrap2          :: a -> a -> a
-    firstarg       :: a -> a -> a
-    randrange      :: a -> a -> a
-    exprandrange   :: a -> a -> a
+    firstArg       :: a -> a -> a
+    randRange      :: a -> a -> a
+    exprandRange   :: a -> a -> a
 
 __binop :: Show a => a -> a -> a
 __binop a b = error ("unimplemented binop" ++ show (a,b))
 
 instance BinaryOp Double where
-    idiv a b           = __binop a b
+    iDiv a b           = __binop a b
     mod a b            = __binop a b
-    bitand a b         = __binop a b
-    bitor a b          = __binop a b
-    bitxor a b         = __binop a b
+    bitAnd a b         = __binop a b
+    bitOr a b          = __binop a b
+    bitXOr a b         = __binop a b
     lcm a b            = __binop a b
     gcd a b            = __binop a b
     round a b          = if b == 0 then a else floorE (a/b + 0.5) * b
-    roundup a b        = if b == 0 then a else ceil (a/b + 0.5) * b
+    roundUp a b        = if b == 0 then a else ceil (a/b + 0.5) * b
     trunc a b          = __binop a b
     atan2 a b          = atan (b/a)
     hypot a b          = __binop a b
     hypotx a b         = __binop a b
-    shiftleft a b      = __binop a b
-    shiftright a b     = __binop a b
-    unsignedshift a b  = __binop a b
+    shiftLeft a b      = __binop a b
+    shiftRight a b     = __binop a b
+    unsignedShift a b  = __binop a b
     fill a b           = __binop a b
     ring1 a b          = a * b + a
     ring2 a b          = a * b + a + b
     ring3 a b          = a * a * b
     ring4 a b          = a * a * b - a * b * b
-    difsqr a b         = (a*a) - (b*b)
-    sumsqr a b         = (a*a) + (b*b)
-    sqrsum a b         = (a+b) * (a+b)
-    sqrdif a b         = (a-b) * (a-b)
-    absdif a b         = abs (a - b)
+    difSqr a b         = (a*a) - (b*b)
+    sumSqr a b         = (a*a) + (b*b)
+    sqrSum a b         = (a+b) * (a+b)
+    sqrDif a b         = (a-b) * (a-b)
+    absDif a b         = abs (a - b)
     thresh a b         = if a <  b then 0 else a
-    amclip a b         = if b <= 0 then 0 else a * b
-    scaleneg a b       = (abs a - a) * b' + a where b' = 0.5 * b + 0.5
+    amClip a b         = if b <= 0 then 0 else a * b
+    scaleNeg a b       = (abs a - a) * b' + a where b' = 0.5 * b + 0.5
     clip2 a b          = clip a (-b) b
     excess a b         = a - clip a (-b) b
     fold2 a b          = fold a (-b) b
     wrap2 a b          = wrap a (-b) b
-    firstarg a _       = a
-    randrange a b      = __binop a b
-    exprandrange a b   = __binop a b
+    firstArg a _       = a
+    randRange a b      = __binop a b
+    exprandRange a b   = __binop a b
 
 class (Floating a) => TernaryOp a where
     wrap :: a -> a -> a -> a
