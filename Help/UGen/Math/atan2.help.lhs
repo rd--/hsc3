@@ -15,4 +15,4 @@ at +/- 45 degrees and clip the direction to between those.
 >     s = rlpf (fSinOsc AR 200 0 * lfPulse AR 31.3 0 0.4) 400 0.3
 >     z = atan2 y x
 >     l = clip2 (z / (pi / 2)) 1
-> audition $ pan2 (delayL s (110 / 344) (d / 344) l a
+> audition $ pan2 (delayL s (110 / 344) (d / 344)) l a

@@ -12,4 +12,4 @@ Written out:
 
 > let a = fSinOsc AR 800 0
 >     b = fSinOsc AR (xLine KR 200 500 5 DoNothing) 0
-> audition $ (a * b - b * b) * 0.125
+> audition $ (a * a - b * b) * 0.125

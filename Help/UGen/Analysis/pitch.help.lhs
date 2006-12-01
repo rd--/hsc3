@@ -1,4 +1,5 @@
-pitch in initFreq minFreq maxFreq execFreq maxBinsPerOctave median ampThreshold peakThreshold downSample
+pitch in initFreq minFreq maxFreq execFreq maxBinsPerOctave median
+      ampThreshold peakThreshold downSample
 
 Autocorrelation pitch follower
 
@@ -18,12 +19,12 @@ ampThreshold = 0.01, peakThreshold = 0.5, downSample = 1.
 
 > let x = mouseX KR 220 660 Linear 0.1
 >     y = mouseY KR 0.05 0.25 Linear 0.1
->     s = sinOsc AR x 0
->     a = amplitude KR (s * y) 0.05 0.05
->     MCE [f:_] = pitch (s * y) 440 60 4000 100 16 7 0.02 0.5 1
-> audition $ MCE [s * y, sinOsc AR (f / 2) 0 * a]
+>     s = sinOsc AR x 0 * y
+>     a = amplitude KR s 0.05 0.05
+>     f = pitch s 440 60 4000 100 16 7 0.02 0.5 1
+> audition $ MCE [s, sinOsc AR (mceChannel 0 f / 2) 0 * a]
 
 > let s = in' 1 AR numOutputBuses
->     a = amplitude KR s 0.05 0.05
->     MCE [f:_] = pitch s 440 60 4000 100 16 7 0.02 0.5 1
-> audition $ MCE [s, sinOsc AR f 0 * a]
+>     a = amplitude KR s 0.1 0.1
+>     f = pitch s 440 60 4000 100 16 7 0.02 0.5 1
+> audition $ MCE [s, sinOsc AR (mceChannel 0 f) 0 * a]

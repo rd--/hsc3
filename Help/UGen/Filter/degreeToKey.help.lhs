@@ -19,8 +19,8 @@ octave - the number of steps per octave in the scale.
 > let x = mouseX KR 0 15 Linear 0.1
 >     k = degreeToKey 0 x 12
 >     f b = combN m 0.31 0.31 2 + m
->         where o = sinOsc AR (midicps (b + k + n)) 0 * 0.1
->               t = lfPulse AR (midicps (MCE [48, 55])) 0.15 0.5
->               d = rlpf t (midicps (sinOsc KR 0.1 0 * 10 + b)) 0.1 * 0.1
+>         where o = sinOsc AR (midiCPS (b + k + n * 0.04)) 0 * 0.1
+>               t = lfPulse AR (midiCPS (MCE [48, 55])) 0.15 0.5
+>               d = rlpf t (midiCPS (sinOsc KR 0.1 0 * 10 + b)) 0.1 * 0.1
 >               m = o + d
 > audition $ (f 48 + f 72) * 0.25
