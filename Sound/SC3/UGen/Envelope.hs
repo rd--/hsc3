@@ -86,6 +86,10 @@ freeSelf i = mkFilter "FreeSelf" [i] 0 0
 freeSelfWhenDone :: UGen -> UGen
 freeSelfWhenDone i = mkFilter "FreeSelfWhenDone" [i] 0 0
 
+-- | Pause specified node on trigger.
+pause :: UGen -> UGen -> UGen
+pause t n = mkFilter "Pause" [t, n] 1 0
+
 -- | Pause node on trigger.
 pauseSelf :: UGen -> UGen
 pauseSelf i = mkFilter "PauseSelf" [i] 0 0
