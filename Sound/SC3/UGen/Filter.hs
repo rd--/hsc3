@@ -50,6 +50,10 @@ combL = mkComb "CombL"
 combC :: UGen -> UGen -> UGen -> UGen -> UGen
 combC = mkComb "CombC"
 
+-- | Convert signal to modal pitch.
+degreeToKey :: UGen -> UGen -> UGen -> UGen
+degreeToKey b i o = mkFilter "DegreeToKey" [b, i, o] 1 0
+
 -- | Exponential decay.
 decay :: UGen -> UGen -> UGen
 decay i dcy = mkFilter "Decay" [i,dcy] 1 0
@@ -286,3 +290,8 @@ twoPole i freq radius = mkFilter "TwoPole" [i,freq,radius] 1 0
 -- | Two zero filter.
 twoZero :: UGen -> UGen -> UGen -> UGen
 twoZero i freq radius = mkFilter "TwoZero" [i,freq,radius] 1 0
+
+-- | Index into a table with a signal.
+wrapIndex :: UGen -> UGen -> UGen
+wrapIndex b i = mkFilter "WrapIndex" [b,i] 1 0
+
