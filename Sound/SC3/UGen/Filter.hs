@@ -236,6 +236,10 @@ runningMax i t = mkFilter "RunningMax" [i,t] 1 0
 runningMin :: UGen -> UGen -> UGen
 runningMin i t = mkFilter "RunningMin" [i,t] 1 0
 
+-- | Running sum.
+runningSum :: UGen -> UGen -> UGen
+runningSum i n = mkFilter "RunningSum" [i,n] 1 0
+
 -- | Select output from array of inputs.
 select :: UGen -> UGen -> UGen
 select i a = mkFilterMCE "Select" [i] a 1 0
