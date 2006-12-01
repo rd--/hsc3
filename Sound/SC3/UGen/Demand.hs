@@ -2,11 +2,17 @@ module Sound.SC3.UGen.Demand where
 
 import Sound.SC3.UGen.Rate (Rate(DR))
 import Sound.SC3.UGen.UGen (UGen, UId,
-                            mkOscMCE, mkOscUId, mkOscUIdMCE, mkFilter,
+                            mkOsc, mkOscMCE, mkOscUId, mkOscUIdMCE, mkFilter,
                             uniquify, zeroUId)
+import Sound.SC3.UGen.Envelope (DoneAction, fromAction)
 
+-- | Demand results from demand rate ugens.
 demand :: UGen -> UGen -> UGen -> UGen
 demand t r d = mkFilter "Demand" [t, r, d] 1 0
+
+-- | Demand results from demand rate ugens.
+duty :: Rate -> UGen -> UGen -> DoneAction -> UGen -> UGen
+duty rate d r act l = mkOsc rate "Duty" [d, r, fromAction act, l] 1 0
 
 -- | Demand rate white noise.
 dwhite :: UGen -> UGen -> UGen -> IO UGen
