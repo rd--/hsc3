@@ -1,4 +1,5 @@
-module Sound.SC3.UGen (module Sound.SC3.UGen.Buffer,
+module Sound.SC3.UGen (module Sound.SC3.UGen.Analysis,
+                       module Sound.SC3.UGen.Buffer,
                        module Sound.SC3.UGen.Demand,
                        module Sound.SC3.UGen.Envelope,
                        module Sound.SC3.UGen.FFT,
@@ -14,6 +15,7 @@ module Sound.SC3.UGen (module Sound.SC3.UGen.Buffer,
                        module Sound.SC3.UGen.Rate,
                        module Sound.SC3.UGen.UGen) where
 
+import Sound.SC3.UGen.Analysis
 import Sound.SC3.UGen.Buffer
 import Sound.SC3.UGen.Demand
 import Sound.SC3.UGen.Envelope
