@@ -123,6 +123,11 @@ mceReverse :: UGen -> UGen
 mceReverse (MCE l) = MCE (reverse l)
 mceReverse _       = error "mceReverse: non MCE value"
 
+-- | Reverse order of channels at MCE.
+mceChannel :: Int -> UGen -> UGen
+mceChannel n (MCE l) = l !! n
+mceChannel _ _       = error "mceChannel: non MCE value"
+
 -- | Apply MCE transformation if required.
 mced :: UGen -> UGen
 mced u = if mceReq u then mceTransform u else u
