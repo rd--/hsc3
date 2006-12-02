@@ -12,8 +12,11 @@ ifft buf = mkOsc AR "IFFT" [buf] 1 0
 pv_Add :: UGen -> UGen -> UGen
 pv_Add ba bb = mkOsc KR "PV_Add" [ba,bb] 1 0
 
-pv_BinScramble :: UGen -> UGen -> UGen -> UGen -> UGen
-pv_BinScramble buf wp width trg = mkOsc KR "PV_BinScramble" [buf,wp,width,trg] 1 0
+pv_BinScramble :: UGen -> UGen -> UGen -> UGen -> IO UGen
+pv_BinScramble buf wp width trg = uniquify (pv_BinScrambleUId zeroUId buf wp width trg)
+
+pv_BinScrambleUId :: UId -> UGen -> UGen -> UGen -> UGen -> UGen
+pv_BinScrambleUId uid buf wp width trg = mkOscUId uid KR "PV_BinScramble" [buf,wp,width,trg] 1 0
 
 pv_BinShift :: UGen -> UGen -> UGen -> UGen
 pv_BinShift buf str shift = mkOsc KR "PV_BinShift" [buf,str,shift] 1 0
