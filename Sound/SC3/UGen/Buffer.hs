@@ -1,7 +1,17 @@
 module Sound.SC3.UGen.Buffer where
 
 import Sound.SC3.UGen.Rate (Rate)
-import Sound.SC3.UGen.UGen (UGen, Name, mkFilter, mkFilterMCE, mkOsc)
+import Sound.SC3.UGen.UGen (UGen(Constant), Name, mkFilter, mkFilterMCE, mkOsc)
+
+data Loop = Loop
+          | NoLoop
+          | WithLoop UGen
+            deriving (Eq, Show)
+
+fromLoop :: Loop -> UGen
+fromLoop NoLoop       = Constant 0
+fromLoop Loop         = Constant 1
+fromLoop (WithLoop u) = u
 
 -- * Buffer query UGens.
 
@@ -79,20 +89,20 @@ bufDelayN = mkBufDelay "BufDelayN"
 -- * Buffer I\/O.
 
 -- | Buffer reader.
-bufRd :: Int -> Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-bufRd n r buf phs lp intp = mkOsc r "BufRd" [buf,phs,lp,intp] n 0
+bufRd :: Int -> Rate -> UGen -> UGen -> Loop -> UGen -> UGen
+bufRd n r buf phs lp intp = mkOsc r "BufRd" [buf,phs,fromLoop lp,intp] n 0
 
 -- | Buffer writer.
-bufWr :: UGen -> UGen -> UGen -> UGen -> UGen
-bufWr buf phs lp i = mkFilterMCE "BufWr" [buf,phs,lp] i 0 0
+bufWr :: UGen -> UGen -> Loop -> UGen -> UGen
+bufWr buf phs lp i = mkFilterMCE "BufWr" [buf,phs,fromLoop lp] i 0 0
 
 -- | Index into table with signal.
 index :: UGen -> UGen -> UGen
 index b i = mkFilter "Index" [b, i] 1 0
 
 -- | Buffer playback.
-playBuf :: Int -> Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-playBuf n r b r' t s l = mkOsc r "PlayBuf" [b,r',t,s,l] n 0
+playBuf :: Int -> Rate -> UGen -> UGen -> UGen -> UGen -> Loop -> UGen
+playBuf n r b r' t s l = mkOsc r "PlayBuf" [b,r',t,s,fromLoop l] n 0
 
 -- | Triggered buffer shuffler (grain generator).
 tGrains :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen

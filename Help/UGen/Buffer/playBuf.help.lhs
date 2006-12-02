@@ -35,33 +35,33 @@ Allocate buffer.
 
 Play once only.
 
-> audition $ playBuf 1 AR 10 (bufRateScale KR 10) 1 0 0
+> audition $ playBuf 1 AR 10 (bufRateScale KR 10) 1 0 NoLoop
 
 Play in infinite loop.
 
-> audition $ playBuf 1 AR 10 (bufRateScale KR 10) 1 0 1
+> audition $ playBuf 1 AR 10 (bufRateScale KR 10) 1 0 Loop
 
 Trigger playback at each pulse.
 
 > let t = impulse KR 2 0
-> audition $ playBuf 1 AR 10 (bufRateScale KR 10) t 0 0
+> audition $ playBuf 1 AR 10 (bufRateScale KR 10) t 0 NoLoop
 
 Trigger playback at each pulse (diminishing intervals).
 
 > let f = xLine KR 0.1 100 10 RemoveSynth
 >     t = impulse KR f 0
-> audition $ playBuf 1 AR 10 (bufRateScale KR 10) t 0 0
+> audition $ playBuf 1 AR 10 (bufRateScale KR 10) t 0 NoLoop
 
 Loop playback, accelerating pitch.
 
 > let r = xLine KR 0.1 100 60 RemoveSynth
-> audition $ playBuf 1 AR 10 r 1 0 1
+> audition $ playBuf 1 AR 10 r 1 0 Loop
 
 Sine wave control of playback rate, negative rate plays backwards.
 
 > let f = xLine KR 0.2 8 30 RemoveSynth
 >     r = fSinOsc KR f 0 * 3 + 0.6
-> audition $ playBuf 1 AR 10 (bufRateScale KR 10 * r) 1 0 1
+> audition $ playBuf 1 AR 10 (bufRateScale KR 10 * r) 1 0 Loop
 
 Release buffer.
 
