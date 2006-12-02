@@ -56,6 +56,10 @@ lfSaw r freq phase = mkOsc r "LFSaw" [freq, phase] 1 0
 lfTri :: Rate -> UGen -> UGen -> UGen
 lfTri r freq phase = mkOsc r "LFTri" [freq, phase] 1 0
 
+-- | Wavetable oscillator.
+osc :: Rate -> UGen -> UGen -> UGen -> UGen
+osc r bufnum freq phase = mkOsc r "Osc" [bufnum, freq, phase] 1 0
+
 -- | Triggered linear ramp between two levels.
 phasor :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 phasor r t f s e p = mkOsc r "Phasor" [t, f, s, e, p] 1 0
