@@ -36,6 +36,14 @@ klangSpec f a p = MCE ((concat . transpose) [f, a, p])
 k2A :: UGen -> UGen
 k2A i = mkOsc AR "K2A" [i] 1 0
 
+-- | A sine like shape made of two cubic pieces.
+lfCub :: Rate -> UGen -> UGen -> UGen
+lfCub r freq phase = mkOsc r "LFCub" [freq, phase] 1 0
+
+-- | A sine like shape made of two cubic pieces.
+lfPar :: Rate -> UGen -> UGen -> UGen
+lfPar r freq phase = mkOsc r "LFPar" [freq, phase] 1 0
+
 -- | Pulse oscillator (non band limited).
 lfPulse :: Rate -> UGen -> UGen -> UGen -> UGen
 lfPulse r freq iphase width = mkOsc r "LFPulse" [freq, iphase, width] 1 0
