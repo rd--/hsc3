@@ -8,6 +8,26 @@ import Data.List(transpose)
 blip :: Rate -> UGen -> UGen -> UGen
 blip r freq nharm = mkOsc r "Blip" [freq, nharm] 1 0
 
+-- | Cusp map chaotic generator (linear interpolation).
+cuspL :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+cuspL r freq a b xi = mkOsc r "CuspL" [freq, a, b, xi] 1 0
+
+-- | Cusp map chaotic generator (no interpolation).
+cuspN :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+cuspN r freq a b xi = mkOsc r "CuspN" [freq, a, b, xi] 1 0
+
+-- | Feedback sine with chaotic phase indexing (cubic interpolation).
+fbSineC :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+fbSineC r freq im fb a c xi yi = mkOsc r "FBSineC" [freq, im, fb, a, c, xi, yi] 1 0
+
+-- | Feedback sine with chaotic phase indexing (linear interpolation).
+fbSineL :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+fbSineL r freq im fb a c xi yi = mkOsc r "FBSineL" [freq, im, fb, a, c, xi, yi] 1 0
+
+-- | Feedback sine with chaotic phase indexing (no interpolation).
+fbSineN :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+fbSineN r freq im fb a c xi yi = mkOsc r "FBSineN" [freq, im, fb, a, c, xi, yi] 1 0
+
 -- | Formant oscillator.
 formant :: Rate -> UGen -> UGen -> UGen -> UGen
 formant r f0 f bw = mkOsc r "Formant" [f0, f, bw] 1 0
@@ -19,6 +39,18 @@ fSinOsc r freq phase = mkOsc r "FSinOsc" [freq, phase] 1 0
 -- | Dynamic stochastic synthesis generator conceived by Iannis Xenakis.
 gendy1 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 gendy1 r ampDist durDist adParam ddParam minFreq maxFreq ampScale durScale initCPs kNum = mkOsc r "Gendy1" [ampDist, durDist, adParam, ddParam, minFreq, maxFreq, ampScale, durScale, initCPs, kNum] 1 0
+
+-- | Henon map chaotic generator (cubic interpolation).
+henonC :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+henonC r freq a b x0 x1 = mkOsc r "HenonC" [freq, a, b, x0, x1] 1 0
+
+-- | Henon map chaotic generator (linear interpolation).
+henonL :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+henonL r freq a b x0 x1 = mkOsc r "HenonL" [freq, a, b, x0, x1] 1 0
+
+-- | Henon map chaotic generator (no interpolation).
+henonN :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+henonN r freq a b x0 x1 = mkOsc r "HenonN" [freq, a, b, x0, x1] 1 0
 
 -- | Impulse oscillator (non band limited).
 impulse :: Rate -> UGen -> UGen -> UGen
@@ -56,6 +88,10 @@ lfSaw r freq phase = mkOsc r "LFSaw" [freq, phase] 1 0
 lfTri :: Rate -> UGen -> UGen -> UGen
 lfTri r freq phase = mkOsc r "LFTri" [freq, phase] 1 0
 
+-- | Lorenz chaotic generator (linear interpolation).
+lorenzL :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+lorenzL rate freq s r b h xi yi zi = mkOsc rate "LorenzL" [freq, s, r, b, h, xi, yi, zi] 1 0
+
 -- | Wavetable oscillator.
 osc :: Rate -> UGen -> UGen -> UGen -> UGen
 osc r bufnum freq phase = mkOsc r "Osc" [bufnum, freq, phase] 1 0
@@ -67,6 +103,18 @@ phasor r t f s e p = mkOsc r "Phasor" [t, f, s, e, p] 1 0
 -- | Pulse wave generator (band limited).
 pulse :: Rate -> UGen -> UGen -> UGen
 pulse r freq width = mkOsc r "Pulse" [freq, width] 1 0
+
+-- | General quadratic map chaotic generator (cubic interpolation).
+quadC :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+quadC r freq a b c xi = mkOsc r "QuadC" [freq, a, b, c, xi] 1 0
+
+-- | General quadratic map chaotic generator (linear interpolation).
+quadL :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+quadL r freq a b c xi = mkOsc r "QuadL" [freq, a, b, c, xi] 1 0
+
+-- | General quadratic map chaotic generator (no interpolation).
+quadN :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+quadN r freq a b c xi = mkOsc r "QuadN" [freq, a, b, c, xi] 1 0
 
 -- | Sawtooth oscillator (band limited).
 saw :: Rate -> UGen -> UGen

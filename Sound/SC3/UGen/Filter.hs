@@ -200,18 +200,6 @@ pulseCount t r = mkFilter "PulseCount" [t,r] 1 0
 pulseDivider :: UGen -> UGen -> UGen -> UGen
 pulseDivider t factor start = mkFilter "PulseDivider" [t, factor, start] 1 0
 
-mkQuad :: Name -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-mkQuad c' freq a b c xi = mkFilter c' [freq,a,b,c,xi] 1 0
-
-quadC :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-quadC = mkQuad "QuadC"
-
-quadL :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-quadL = mkQuad "QuadL"
-
-quadN :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-quadN = mkQuad "QuadN"
-
 -- | Resonant highpass filter.
 rhpf :: UGen -> UGen -> UGen -> UGen
 rhpf i freq rq = mkFilter "RHPF" [i,freq,rq] 1 0
