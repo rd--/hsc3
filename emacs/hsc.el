@@ -78,6 +78,8 @@
   (with-temp-file f
     (insert "> import Sound.OpenSoundControl\n")
     (insert "> import Sound.SC3\n")
+    (insert "> import Control.Monad\n")
+    (insert "> import System.Random\n")
     (insert "> main = do\n")
     (insert s)))
 
