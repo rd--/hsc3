@@ -83,8 +83,12 @@ bufRd :: Int -> Rate -> UGen -> UGen -> UGen -> UGen -> UGen
 bufRd n r buf phs lp intp = mkOsc r "BufRd" [buf,phs,lp,intp] n 0
 
 -- | Buffer writer.
-bufWr buf phs lp i = mkFilterMCE "BufWr" [buf,phs,lp] i 0 0
 bufWr :: UGen -> UGen -> UGen -> UGen -> UGen
+bufWr buf phs lp i = mkFilterMCE "BufWr" [buf,phs,lp] i 0 0
+
+-- | Index into table with signal.
+index :: UGen -> UGen -> UGen
+index b i = mkFilter "Index" [b, i] 1 0
 
 -- | Buffer playback.
 playBuf :: Int -> Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
