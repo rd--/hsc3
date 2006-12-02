@@ -13,6 +13,18 @@ fromLoop NoLoop       = Constant 0
 fromLoop Loop         = Constant 1
 fromLoop (WithLoop u) = u
 
+data Interpolation = NoInterpolation
+                   | LinearInterpolation
+                   | CubicInterpolation
+                   | Interpolation UGen
+                     deriving (Eq, Show)
+
+fromInterpolation :: Interpolation -> UGen
+fromInterpolation NoInterpolation     = Constant 1
+fromInterpolation LinearInterpolation = Constant 2
+fromInterpolation CubicInterpolation  = Constant 4
+fromInterpolation (Interpolation u)   = u
+
 -- * Buffer query UGens.
 
 -- | Buffer channel count.
@@ -89,8 +101,20 @@ bufDelayN = mkBufDelay "BufDelayN"
 -- * Buffer I\/O.
 
 -- | Buffer reader.
-bufRd :: Int -> Rate -> UGen -> UGen -> Loop -> UGen -> UGen
-bufRd n r buf phs lp intp = mkOsc r "BufRd" [buf,phs,fromLoop lp,intp] n 0
+bufRd :: Int -> Rate -> UGen -> UGen -> Loop -> Interpolation -> UGen
+bufRd n r buf phs lp intp = mkOsc r "BufRd" [buf,phs,fromLoop lp,fromInterpolation intp] n 0
+
+-- | Buffer reader (no interpolation).
+bufRdN :: Int -> Rate -> UGen -> UGen -> Loop -> UGen
+bufRdN n r b p l = bufRd n r b p l NoInterpolation
+
+-- | Buffer reader (linear interpolation).
+bufRdL :: Int -> Rate -> UGen -> UGen -> Loop -> UGen
+bufRdL n r b p l = bufRd n r b p l LinearInterpolation
+
+-- | Buffer reader (cubic interpolation).
+bufRdC :: Int -> Rate -> UGen -> UGen -> Loop -> UGen
+bufRdC n r b p l = bufRd n r b p l CubicInterpolation
 
 -- | Buffer writer.
 bufWr :: UGen -> UGen -> Loop -> UGen -> UGen
@@ -107,3 +131,7 @@ playBuf n r b r' t s l = mkOsc r "PlayBuf" [b,r',t,s,fromLoop l] n 0
 -- | Triggered buffer shuffler (grain generator).
 tGrains :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 tGrains n t b r c d p a i = mkFilter "TGrains" [t,b,r,c,d,p,a,i] n 0
+
+-- Local Variables:
+-- truncate-lines:t
+-- End:

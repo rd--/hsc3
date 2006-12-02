@@ -7,4 +7,4 @@ Current duration of buffer.
 
 > let t = impulse AR (recip (bufDur KR 0)) 0
 >     p = sweep t (bufSampleRate KR 0)
-> audition $ bufRd 1 AR 0 p NoLoop 2
+> audition $ bufRdL 1 AR 0 p NoLoop

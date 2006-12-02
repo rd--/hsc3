@@ -15,7 +15,7 @@ Using sweep to index into a buffer
 
 > let x = mouseX KR 0.5 20 Exponential 0.1
 >     t = impulse AR x 0
-> audition $ bufRd 1 AR 0 (sweep t (bufSampleRate KR 0)) NoLoop 2
+> audition $ bufRdL 1 AR 0 (sweep t (bufSampleRate KR 0)) NoLoop
 
 Backwards, variable offset
 
@@ -24,11 +24,11 @@ Backwards, variable offset
 >     t = impulse AR x 0
 >     r = bufSampleRate KR 0
 >     p = sweep t (negate r) + (bufFrames KR 0 * n)
-> audition $ bufRd 1 AR 0 p NoLoop 2
+> audition $ bufRdL 1 AR 0 p NoLoop
 
 Raising rate
 
 > let x = mouseX KR 0.5 10 Exponential 0.1
 >     t = impulse AR x 0
 >     r = sweep t 2 + 0.5
-> audition $ bufRd 1 AR 0 (sweep t (bufSampleRate KR 0 * r)) NoLoop 2
+> audition $ bufRdL 1 AR 0 (sweep t (bufSampleRate KR 0 * r)) NoLoop
