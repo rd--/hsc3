@@ -287,6 +287,10 @@ trig i d = mkFilter "Trig" [i,d] 1 0
 trig1 :: UGen -> UGen -> UGen
 trig1 i d = mkFilter "Trig1" [i,d] 1 0
 
+-- Triggered windex.
+twindex :: UGen -> UGen -> UGen -> UGen
+twindex i n a = mkFilterMCE "TWindex" [i,n] a 1 0
+
 -- | Two pole filter.
 twoPole :: UGen -> UGen -> UGen -> UGen
 twoPole i freq radius = mkFilter "TwoPole" [i,freq,radius] 1 0
