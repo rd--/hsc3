@@ -8,6 +8,7 @@ import Prelude hiding (EQ, GT, LT)
 import Data.List (transpose)
 import Data.Unique (newUnique, hashUnique)
 import Control.Monad (liftM, replicateM)
+import System.Random (Random, randomR, random)
 
 type Name     = String
 type Output   = Rate
@@ -263,6 +264,12 @@ instance Enum UGen where
     enumFromThenTo n n' m = takeWhile p (enumFromThen n n')
         where p | n' >= n   = (<= m + (n'-n)/2)
                 | otherwise = (>= m + (n'-n)/2)
+
+instance Random UGen where
+    randomR (Constant l, Constant r) g = (Constant n, g') 
+        where (n, g') = randomR (l,r) g
+    randomR _                        _ = error "randomR: non constant (l,r)"
+    random g = randomR ((-1.0),1.0) g
 
 instance EqE UGen where
     (==*)  = binop EQ (==*)
