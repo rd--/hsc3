@@ -184,6 +184,12 @@ mkOscUIdMCE uid r c i j o s = mkOscUId uid r c (i ++ mcel j) o s
 mkFilter :: Name -> [UGen] -> Int -> Special -> UGen
 mkFilter = mkFilterUId zeroUId
 
+-- | Variant filter with rate derived from keyed input.
+mkFilterKeyed :: Name -> Int -> [UGen] -> Int -> Special -> UGen
+mkFilterKeyed c k i o s = consU r c i o' s zeroUId
+    where r = rateOf (i !! k)
+          o' = replicate o r
+
 -- | Variant filter constructor with identifier.
 mkFilterUId :: UId -> Name -> [UGen] -> Int -> Special -> UGen
 mkFilterUId uid c i o s = consU r c i o' s uid
