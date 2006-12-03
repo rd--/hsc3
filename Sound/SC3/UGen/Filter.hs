@@ -97,6 +97,10 @@ fos i a0 a1 b1 = mkFilter "FOS" [i,a0,a1,b1] 1 0
 gate :: UGen -> UGen -> UGen
 gate i t = mkFilter "Gate" [i,t] 1 0
 
+-- | Hash input values.
+hasher :: UGen -> UGen
+hasher i = mkFilter "Hasher" [i] 1 0
+
 -- | Highpass filter.
 hpf :: UGen -> UGen -> UGen
 hpf i f = mkFilter "HPF" [i,f] 1 0
@@ -160,6 +164,10 @@ lpz1 i = mkFilter "LPZ1" [i] 1 0
 -- | Two zero fixed lowpass filter.
 lpz2 :: UGen -> UGen
 lpz2 i = mkFilter "LPZ2" [i] 1 0
+
+-- | Masks off bits in the mantissa of signal.
+mantissaMask :: UGen -> UGen -> UGen
+mantissaMask i bits = mkFilter "MantissaMask" [i,bits] 1 0
 
 -- | Most changed input.
 mostChange :: UGen -> UGen -> UGen

@@ -2,8 +2,8 @@ module Sound.SC3.UGen.Noise where
 
 import Sound.SC3.UGen.Rate (Rate(IR))
 import Sound.SC3.UGen.UGen (UGen, UId,
-                            mkOsc, mkOscUId,
-                            mkFilter, mkFilterUId,
+                            mkOscUId,
+                            mkFilterUId,
                             uniquify, zeroUId)
 
 -- | Brown noise.
@@ -26,10 +26,6 @@ coinGate prob i = uniquify (coinGateUId zeroUId prob i)
 
 coinGateUId :: UId -> UGen -> UGen -> UGen
 coinGateUId uid prob i = mkFilterUId uid "CoinGate" [prob,i] 1 0
-
--- | Chaotic noise.
-crackle :: Rate -> UGen -> UGen
-crackle r chaosParam = mkOsc r "Crackle" [chaosParam] 1 0
 
 -- | Random impulses in (-1, 1).
 dust2 :: Rate -> UGen -> IO UGen
@@ -58,10 +54,6 @@ grayNoise r = uniquify (grayNoiseUId zeroUId r)
 
 grayNoiseUId :: UId -> Rate -> UGen
 grayNoiseUId uid r = mkOscUId uid r "GrayNoise" [] 1 0
-
--- | Hash input values.
-hasher :: UGen -> UGen
-hasher i = mkFilter "Hasher" [i] 1 0
 
 -- | Random integer in uniform distribution.
 iRand :: UGen -> UGen -> IO UGen
@@ -132,10 +124,6 @@ linRand lo hi m = uniquify (linRandUId zeroUId lo hi m)
 
 linRandUId :: UId -> UGen -> UGen -> UGen -> UGen
 linRandUId uid lo hi m = mkOscUId uid IR "LinRand" [lo,hi,m] 1 0
-
--- | Masks off bits in the mantissa of signal.
-mantissaMask :: UGen -> UGen -> UGen
-mantissaMask i bits = mkFilter "MantissaMask" [i,bits] 1 0
 
 -- | Random value in sum of n linear distribution.
 nRand :: UGen -> UGen -> UGen -> IO UGen
