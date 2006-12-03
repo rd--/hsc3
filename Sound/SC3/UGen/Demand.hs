@@ -15,6 +15,13 @@ demand t r d = mkFilterKeyed "Demand" 0 [t, r, d] 1 0
 duty :: Rate -> UGen -> UGen -> DoneAction -> UGen -> UGen
 duty rate d r act l = mkOsc rate "Duty" [d, r, fromAction act, l] 1 0
 
+-- | Buffer demand ugen.
+dbufrd :: UGen -> UGen -> UGen -> IO UGen
+dbufrd b p l = uniquify (dbufrdUId zeroUId b p l)
+
+dbufrdUId :: UId -> UGen -> UGen -> UGen -> UGen
+dbufrdUId uid b p l = mkOscUId uid DR "Dbufrd" [b, p, l] 1 0
+
 -- | Demand rate white noise.
 dwhite :: UGen -> UGen -> UGen -> IO UGen
 dwhite l lo hi = uniquify (dwhiteUId zeroUId l lo hi)
