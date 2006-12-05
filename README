@@ -1,0 +1,13 @@
+hsc - Haskell SuperCollider Client
+
+hsc [1] provides Haskell [2] modules, Sound.OpenSoundControl and
+Sound.SC3, that facilitate using Haskell as a client to the
+SuperCollider [3] synthesis server.  The hsc interaction environment
+is written for GNU Emacs [4].
+
+(c) rohan drape, 2006, hsc is copyleft, http://www.gnu.org/copyleft/
+
+[1] <http://www.slavepianos.org/rd/>
+[2] <http://www.haskell.org/>
+[3] <http://www.audiosynth.com/>
+[4] <http://www.gnu.org/software/emacs/>
