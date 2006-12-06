@@ -1,4 +1,9 @@
-module Sound.SC3.UGen.UGen where
+module Sound.SC3.UGen.UGen (UId(UId), zeroUId,
+                            Name, UGen(..),
+                            mkOsc, mkOscMCE, mkOscUId, mkOscUIdMCE,
+                            mkFilter, mkFilterMCE, mkFilterUId, mkFilterKeyed,
+                            isConstant, isControl, isUGen,
+                            nodes, uniquify, hasOutputs) where
 
 import Sound.SC3.UGen.Rate (Rate(IR))
 import Sound.SC3.UGen.Operator (Unary(..),Binary(..))

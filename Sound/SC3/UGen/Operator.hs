@@ -1,4 +1,5 @@
-module Sound.SC3.UGen.Operator where
+module Sound.SC3.UGen.Operator (Unary(..), unaryName,
+                                Binary(..), binaryName) where
 
 data Unary  = Neg
             | Not
