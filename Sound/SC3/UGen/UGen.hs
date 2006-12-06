@@ -107,9 +107,10 @@ mceDegree (MCE l) = length l
 mceDegree _       = error "mceDegree: illegal ugen"
 
 -- | Is expansion required, ie. are any inputs MCE values.
-mceReq :: UGen -> Bool
-mceReq (UGen _ _ i _ _ _) = not (null (filter isMCE i))
-mceReq _                  = False
+mceRequired :: UGen -> Bool
+mceRequired (UGen _ _ i _ _ _) = not (null (filter isMCE i))
+mceRequired (MCE l)            = any mceRequired l
+mceRequired _                  = False
 
 -- | Extend UGen to specified degree.
 mceExtend :: Int -> UGen -> [UGen]
@@ -124,24 +125,25 @@ mceTransform (UGen r n i o s uid) = MCE (map f i')
           i'  = transpose (map (mceExtend d) i)
 mceTransform _                    = error "mceTransform: illegal ugen"
 
+-- | Apply MCE transformation if required.
+mceExpand :: UGen -> UGen
+mceExpand (MCE l) = MCE (map mceExpand l)
+mceExpand u       = if mceRequired u then mceExpand (mceTransform u) else u
+
 -- | Reverse order of channels at MCE.
 mceReverse :: UGen -> UGen
 mceReverse (MCE l) = MCE (reverse l)
 mceReverse _       = error "mceReverse: non MCE value"
 
--- | Reverse order of channels at MCE.
+-- | Obtain indexed channel at MCE.
 mceChannel :: Int -> UGen -> UGen
 mceChannel n (MCE l) = l !! n
 mceChannel _ _       = error "mceChannel: non MCE value"
 
--- | Apply MCE transformation if required.
-mced :: UGen -> UGen
-mced u = if mceReq u then mceTransform u else u
-
 -- | Output channels of UGen as a list.
-mcel :: UGen -> [UGen]
-mcel (MCE l) = l
-mcel u       = [u]
+mceChannels :: UGen -> [UGen]
+mceChannels (MCE l) = l
+mceChannels u       = [u]
 
 -- * UGen Constructors.
 
@@ -164,8 +166,8 @@ uniquify (MCE u)            = liftM MCE (mapM uniquify u)
 uniquify u                  = error ("uniquify: illegal value" ++ show u)
 
 -- | Construct proxied and multiple channel expanded UGen.
-consU :: Rate -> Name -> [UGen] -> [Output] -> Special -> UId -> UGen
-consU r n i o s uid = proxy (mced u)
+mkUGen :: Rate -> Name -> [UGen] -> [Output] -> Special -> UId -> UGen
+mkUGen r n i o s uid = proxy (mceExpand u)
     where u = UGen r n i o s uid
 
 -- | Ordinary oscillator constructor.
@@ -174,16 +176,16 @@ mkOsc = mkOscUId zeroUId
 
 -- | Variant oscillator constructor with identifier.
 mkOscUId :: UId -> Rate -> Name -> [UGen] -> Int -> Special -> UGen
-mkOscUId uid r c i o s = consU r c i o' s uid
+mkOscUId uid r c i o s = mkUGen r c i o' s uid
     where o' = replicate o r
 
 -- | Variant oscillator constructor with MCE collapsing input.
 mkOscMCE :: Rate -> Name -> [UGen] -> UGen -> Int -> Special -> UGen
-mkOscMCE r c i j o s = mkOsc r c (i ++ mcel j) o s
+mkOscMCE r c i j o s = mkOsc r c (i ++ mceChannels j) o s
 
 -- | Variant oscillator constructor with identifier and MCE collapsing input.
 mkOscUIdMCE :: UId -> Rate -> Name -> [UGen] -> UGen -> Int -> Special -> UGen
-mkOscUIdMCE uid r c i j o s = mkOscUId uid r c (i ++ mcel j) o s
+mkOscUIdMCE uid r c i j o s = mkOscUId uid r c (i ++ mceChannels j) o s
 
 -- | Ordinary filter UGen constructor.
 mkFilter :: Name -> [UGen] -> Int -> Special -> UGen
@@ -191,19 +193,19 @@ mkFilter = mkFilterUId zeroUId
 
 -- | Variant filter with rate derived from keyed input.
 mkFilterKeyed :: Name -> Int -> [UGen] -> Int -> Special -> UGen
-mkFilterKeyed c k i o s = consU r c i o' s zeroUId
+mkFilterKeyed c k i o s = mkUGen r c i o' s zeroUId
     where r = rateOf (i !! k)
           o' = replicate o r
 
 -- | Variant filter constructor with identifier.
 mkFilterUId :: UId -> Name -> [UGen] -> Int -> Special -> UGen
-mkFilterUId uid c i o s = consU r c i o' s uid
+mkFilterUId uid c i o s = mkUGen r c i o' s uid
     where r = maximum (map rateOf i)
           o'= replicate o r
 
 -- | Variant filter constructor with MCE collapsing input.
 mkFilterMCE :: Name -> [UGen] -> UGen -> Int -> Special -> UGen
-mkFilterMCE c i j o s = mkFilter c (i ++ mcel j) o s
+mkFilterMCE c i j o s = mkFilter c (i ++ mceChannels j) o s
 
 -- UGen math.
 
