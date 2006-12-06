@@ -32,10 +32,21 @@ Evaluate these in either order and hear both tones.
 
 > audition $ out 0 (inFeedback 1 10)
 
-> let a = out 10 (sinOsc AR 440 0 * 0.1)
+> let a = out 10 (sinOsc AR 220 0 * 0.1)
 >     b = out 0 (sinOsc AR 660 0 * 0.1)
 > audition $ MRG [a, b]
 
 Doubters consult this.
 
 > audition $ in' 1 AR 10
+
+Resonator, see localOut for variant.
+
+> let p = inFeedback 1 10
+>     i = impulse AR 1 0
+>     d = delayC (i + (p * 0.995)) 1 (recip 440 - recip controlRate)
+> audition $ MRG [offsetOut 10 d, offsetOut 0 p]
+
+Compare with oscillator.
+
+> audition $ out 1 (sinOsc AR 440 0 * 0.2)

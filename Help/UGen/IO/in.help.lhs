@@ -4,11 +4,11 @@ Read signal from an audio or control bus.
  
 Patching input to output.
 
-> audition $ out 0 (in' 2 AR numInputBuses)
+> audition $ out 0 (in' 2 AR numOutputBuses)
 
 Patching input to output, with delay.
 
-> let i = in' 2 AR numInputBuses
+> let i = in' 2 AR numOututBuses
 >     d = delayN i 0.5 0.5
 > audition $ out 0 (i + d)
 
