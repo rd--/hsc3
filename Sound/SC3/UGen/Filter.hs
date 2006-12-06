@@ -197,6 +197,7 @@ oneZero i coef = mkFilter "OneZero" [i,coef] 1 0
 peak :: UGen -> UGen -> UGen
 peak t r = mkFilter "Peak" [t,r] 1 0
 
+-- | Simple time domain pitch shifter.
 pitchShift :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 pitchShift i w p d t = mkFilter "PitchShift" [i,w,p,d,t] 1 0
 
@@ -256,6 +257,7 @@ sos i a0 a1 a2 b1 b2 = mkFilter "SOS" [i,a0,a1,a2,b1,b2] 1 0
 setResetFF :: UGen -> UGen -> UGen
 setResetFF t r = mkFilter "SetResetFF" [t,r] 1 0
 
+-- | Stepper pulse counter.
 stepper :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 stepper t r minTime maxTime s v = mkFilter "Stepper" [t,r,minTime,maxTime,s,v] 1 0
 
