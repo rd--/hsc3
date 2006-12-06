@@ -2,7 +2,7 @@ module Sound.SC3.UGen.UGen (UId(UId), zeroUId,
                             Name, UGen(..),
                             mkOsc, mkOscMCE, mkOscUId, mkOscUIdMCE,
                             mkFilter, mkFilterMCE, mkFilterUId, mkFilterKeyed,
-                            isConstant, isControl, isUGen,
+                            isConstant, isControl, isUGen, isProxy,
                             nodes, uniquify, hasOutputs) where
 
 import Sound.SC3.UGen.Rate (Rate(IR))

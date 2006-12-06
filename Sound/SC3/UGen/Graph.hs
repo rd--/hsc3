@@ -1,6 +1,7 @@
 module Sound.SC3.UGen.Graph (Graph(..), Input(..),
                              graph,
-                             controlIndex, makeInput) where
+                             controlIndex, constantIndex, ugenIndex,
+                             makeInput) where
 
 import Sound.SC3.UGen.UGen (UGen(..), UId(UId), nodes, isConstant, isControl, isUGen)
 import Sound.SC3.UGen.Rate (Rate(KR))
