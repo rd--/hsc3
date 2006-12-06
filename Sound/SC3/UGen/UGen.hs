@@ -2,8 +2,11 @@ module Sound.SC3.UGen.UGen (UId(UId), zeroUId,
                             Name, UGen(..),
                             mkOsc, mkOscMCE, mkOscUId, mkOscUIdMCE,
                             mkFilter, mkFilterMCE, mkFilterUId, mkFilterKeyed,
-                            isConstant, isControl, isUGen, isProxy,
-                            nodes, uniquify, hasOutputs) where
+                            isConstant, isControl, isUGen, isProxy, isMRG, isMCE,
+                            mceChannel, mceReverse,
+                            nodes, uniquify, hasOutputs,
+                            mix, mixFill,
+                            clone) where
 
 import Sound.SC3.UGen.Rate (Rate(IR))
 import Sound.SC3.UGen.Operator (Unary(..),Binary(..))
@@ -43,14 +46,6 @@ nodes (Proxy u _)          =  u : nodes u
 nodes (MCE u)              =  concatMap nodes u
 nodes (MRG u)              =  concatMap nodes u
 nodes u                    =  [u]
-
--- | Depth first traversal of a UGen graph.
-traverseu :: (UGen -> UGen) -> UGen -> UGen
-traverseu f (UGen r n i o s uid) = f (UGen r n (map (traverseu f) i) o s uid)
-traverseu f (MCE l)              = f (MCE (map (traverseu f) l))
-traverseu f (MRG l)              = f (MRG (map (traverseu f) l))
-traverseu f (Proxy u n)          = f (Proxy (traverseu f u) n)
-traverseu f u                    = f u
 
 -- | Constant predicate.
 isConstant :: UGen -> Bool
@@ -373,16 +368,6 @@ mix u        = u
 mixFill :: Int -> (Int -> UGen) -> UGen
 mixFill n f = mix (MCE (map f [0..n-1]))
 
--- Duplicate
-
-dupn :: Int -> UGen -> IO UGen
-dupn n u = liftM MCE (replicateM n (uniquify u))
-
-dupn' :: Int -> IO UGen -> IO UGen
-dupn' n u = u >>= dupn n
-
-dup :: UGen -> IO UGen
-dup = dupn 2
-
-dup' :: IO UGen -> IO UGen
-dup' = dupn' 2
+-- | Clone UGen.
+clone :: Int -> IO UGen -> IO UGen
+clone n u = u >>= \u' -> liftM MCE (replicateM n (uniquify u'))
