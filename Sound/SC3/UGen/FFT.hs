@@ -3,21 +3,25 @@ module Sound.SC3.UGen.FFT where
 import Sound.SC3.UGen.Rate (Rate(AR, KR))
 import Sound.SC3.UGen.UGen (UGen, UId, mkOsc, mkOscUId, uniquify, zeroUId)
 
+-- | Fast fourier transform.
 fft :: UGen -> UGen -> UGen
 fft buf i = mkOsc KR "FFT" [buf,i] 1 0
 
+-- | Inverse Fast Fourier Transform.
 ifft :: UGen -> UGen
 ifft buf = mkOsc AR "IFFT" [buf] 1 0
 
 pv_Add :: UGen -> UGen -> UGen
 pv_Add ba bb = mkOsc KR "PV_Add" [ba,bb] 1 0
 
+-- | Randomize order of bins.
 pv_BinScramble :: UGen -> UGen -> UGen -> UGen -> IO UGen
 pv_BinScramble buf wp width trg = uniquify (pv_BinScrambleUId zeroUId buf wp width trg)
 
 pv_BinScrambleUId :: UId -> UGen -> UGen -> UGen -> UGen -> UGen
 pv_BinScrambleUId uid buf wp width trg = mkOscUId uid KR "PV_BinScramble" [buf,wp,width,trg] 1 0
 
+-- | Shift bins linear stretching.
 pv_BinShift :: UGen -> UGen -> UGen -> UGen
 pv_BinShift buf str shift = mkOsc KR "PV_BinShift" [buf,str,shift] 1 0
 
@@ -90,12 +94,14 @@ pv_PhaseShift90 buf = mkOsc KR "PV_PhaseShift90" [buf] 1 0
 pv_PhaseShift :: UGen -> UGen -> UGen
 pv_PhaseShift buf shift = mkOsc KR "PV_PhaseShift" [buf,shift] 1 0
 
+-- | Randomly clear bins.
 pv_RandComb :: UGen -> UGen -> UGen -> IO UGen
 pv_RandComb buf wp trg = uniquify (pv_RandCombUId zeroUId buf wp trg)
 
 pv_RandCombUId :: UId -> UGen -> UGen -> UGen -> UGen
 pv_RandCombUId uid buf wp trg = mkOscUId uid KR "PV_RandComb" [buf,wp,trg] 1 0
 
+-- | Cross fade, copying bins in random order.
 pv_RandWipe :: UGen -> UGen -> UGen -> UGen -> IO UGen
 pv_RandWipe ba bb wp trg = uniquify (pv_RandWipeUId zeroUId ba bb wp trg)
 
