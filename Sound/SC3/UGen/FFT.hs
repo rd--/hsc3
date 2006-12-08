@@ -11,6 +11,10 @@ fft buf i = mkOsc KR "FFT" [buf,i] 1 0
 ifft :: UGen -> UGen
 ifft buf = mkOsc AR "IFFT" [buf] 1 0
 
+-- | Strict convolution of two continuously changing inputs.
+convolution :: UGen -> UGen -> UGen -> UGen
+convolution i kernel frameSize = mkOsc AR "Convolution" [i, kernel, frameSize] 1 0
+
 pv_Add :: UGen -> UGen -> UGen
 pv_Add ba bb = mkOsc KR "PV_Add" [ba,bb] 1 0
 
