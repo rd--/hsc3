@@ -25,18 +25,24 @@ pv_BinScramble buf wp width trg = uniquify (pv_BinScrambleUId zeroUId buf wp wid
 pv_BinScrambleUId :: UId -> UGen -> UGen -> UGen -> UGen -> UGen
 pv_BinScrambleUId uid buf wp width trg = mkOscUId uid KR "PV_BinScramble" [buf,wp,width,trg] 1 0
 
--- | Shift bins linear stretching.
+-- | Shift and scale the bin positions.
 pv_BinShift :: UGen -> UGen -> UGen -> UGen
 pv_BinShift buf str shift = mkOsc KR "PV_BinShift" [buf,str,shift] 1 0
 
+-- | Combine low and high bins from two inputs.
 pv_BinWipe :: UGen -> UGen -> UGen -> UGen
 pv_BinWipe ba bb wp = mkOsc KR "PV_BinWipe" [ba,bb,wp] 1 0
 
+-- | Clear bins above or below a cutoff point.
 pv_BrickWall :: UGen -> UGen -> UGen
 pv_BrickWall buf wp = mkOsc KR "PV_BrickWall" [buf,wp] 1 0
 
 pv_ConformalMap :: UGen -> UGen -> UGen -> UGen
 pv_ConformalMap buf real imag = mkOsc KR "PV_ConformalMap" [buf,real,imag] 1 0
+
+-- | Copies spectral frame.
+pv_Copy :: UGen -> UGen -> UGen
+pv_Copy ba bb = mkOsc KR "PV_Copy" [ba,bb] 1 0
 
 pv_CopyPhase :: UGen -> UGen -> UGen
 pv_CopyPhase ba bb = mkOsc KR "PV_CopyPhase" [ba,bb] 1 0
