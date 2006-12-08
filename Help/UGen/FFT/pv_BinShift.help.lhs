@@ -1,7 +1,8 @@
 pv_BinShift buffer stretch shift
 
-Shifts the leftmost bin at `buffer' by `shift' places, the distance
-between subsequent bins is `stretch'.
+Shift and scale the positions of the bins.  Can be used as a very ;;
+crude frequency shifter/scaler.  Shifts the leftmost bin at `buffer'
+by `shift' places, the distance between subsequent bins is `stretch'.
 
 > withSC3 (\fd -> do send fd (b_alloc 10 2048 1)
 >                    wait fd "/done")
