@@ -1,8 +1,8 @@
-/b_get					get sample value(s)
+/b_get					Get sample value(s)
 
-int - buffer number
+int   - buffer number
 [
- int - a sample index
+  int - a sample index
 ] * N
 
 Replies to sender with the corresponding /b_set command.

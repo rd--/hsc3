@@ -1,4 +1,4 @@
-/quit Quit program
+/quit                                                Quit program
 
 No arguments.
 

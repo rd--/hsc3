@@ -1,8 +1,8 @@
-/b_alloc allocate buffer space.
+/b_alloc                                Allocate buffer space
 
-int - buffer number
-int - number of frames
-int - number of channels (optional. default = 1 channel)
+int   - buffer number
+int   - number of frames
+int   - number of channels (optional. default = 1 channel)
 bytes - an OSC message to execute upon completion. (optional)
 
 Allocates zero filled buffer to number of channels and samples.

@@ -1,9 +1,9 @@
-/b_getn                               get ranges of sample value(s)
+/b_getn                               Get ranges of sample value(s)
 
-int - buffer number
+int   - buffer number
 [
- int - starting sample index
- int - number of sequential samples to get (M)
+  int - starting sample index
+  int - number of sequential samples to get (M)
 ] * N
 
 Get contiguous ranges of samples. Replies to sender with the

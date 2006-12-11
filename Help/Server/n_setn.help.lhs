@@ -1,12 +1,12 @@
-/n_setn set ranges of a node's control value(s)
+/n_setn                       Set ranges of a node's control value(s)
 
 int - node ID
 [
-int or string - a control index or name
-int - number of sequential controls to change (M)
-[
-float - a control value
-] * M
+  int|string - a control index or name
+  int        - number of sequential controls to change (M)
+  [
+    float    - a control value
+  ] * M
 ] * N
 
 Set contiguous ranges of control indices to sets of values. For each

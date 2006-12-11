@@ -1,6 +1,6 @@
-/b_zero zero sample data
+/b_zero                                       Zero sample data
 
-int - buffer number
+int   - buffer number
 bytes - an OSC message to execute upon completion. (optional)
 
 Sets all samples in the buffer to zero.

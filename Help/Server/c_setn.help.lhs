@@ -1,11 +1,11 @@
-/c_setn set ranges of bus value(s)
+/c_setn                                    Set ranges of bus value(s)
 
 [
-int - starting bus index
-int - number of sequential buses to change (M)
-[
-float - a control value
-] * M
+  int     - starting bus index
+  int     - number of sequential buses to change (M)
+  [
+    float - a control value
+  ] * M
 ] * N
 
 Set contiguous ranges of buses to sets of values. For each range, the

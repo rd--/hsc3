@@ -1,4 +1,4 @@
-/c_get					get bus value(s)
+/c_get					           Get bus value(s)
 
 [
   int - a bus index

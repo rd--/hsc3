@@ -1,11 +1,10 @@
-/b_set					set sample value(s)
+/b_set					    Set sample value(s)
 
-int - buffer number
- [
-  int - a sample index
+int     - buffer number
+[
+  int   - a sample index
   float - a sample value
- ] * N
+] * N
 
 Takes a list of pairs of sample indices and values and sets the
 samples to those values.
-

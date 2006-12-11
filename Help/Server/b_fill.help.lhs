@@ -1,10 +1,10 @@
-/b_fill                              fill ranges of sample value(s)
+/b_fill                              Fill ranges of sample value(s)
 
-int - buffer number
+int     - buffer number
 [
- int - sample starting index
- int - number of samples to fill (M)
- float - value
+  int   - sample starting index
+  int   - number of samples to fill (M)
+  float - value
 ] * N
 
 Set contiguous ranges of sample indices to single values. For each

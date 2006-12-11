@@ -1,7 +1,7 @@
-/n_free delete a node.
+/n_free                                            Delete a node
 
 [
-int - node ID
+  int - node ID
 ] * N
 
 Stops a node abruptly, removes it from its group, and frees its

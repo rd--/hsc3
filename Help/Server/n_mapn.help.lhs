@@ -1,10 +1,10 @@
-/n_mapn map a node's controls to read from buses
+/n_mapn                       Map a node's controls to read from buses
 
-int - node ID
+int          - node ID
 [
-int or string - a control index or name
-int - control bus index
-int - number of controls to map
+  int|string - a control index or name
+  int        - control bus index
+  int        - number of controls to map
 ] * N
 
 Takes a list of triplets of control names or indices, bus indices, and
