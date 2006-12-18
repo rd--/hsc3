@@ -1,4 +1,4 @@
-playBuf numChannels bufnum rate trigger startPos loop
+playBuf numChannels rate bufnum rate trigger startPos loop
 
 Sample playback oscillator.  Plays back a memory resident sample.
 
@@ -30,7 +30,8 @@ loop        - 1 means true, 0 means false.  This is modulate-able.
 
 Allocate buffer.
 
-> withSC3 (\fd -> do send fd (b_allocRead 10 "/home/rohan/sw/sw-01/audio/metal.wav" 0 0)
+> let fileName = "/home/rohan/sw/sw-01/audio/metal.wav"
+> withSC3 (\fd -> do send fd (b_allocRead 10 fileName 0 0)
 >                    wait fd "/done")
 
 Play once only.

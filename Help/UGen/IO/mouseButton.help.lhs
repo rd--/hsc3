@@ -1,4 +1,4 @@
-mouseButton minval maxval lag
+mouseButton rate minval maxval lag
 
 Report the status of the first pointer button.  The button is either
 pressed, or not pressed.

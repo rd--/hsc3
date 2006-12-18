@@ -1,6 +1,6 @@
-fbSineC freq im fb a c xi yi
-fbSineL freq im fb a c xi yi
-fbSineN freq im fb a c xi yi
+fbSineC rate freq im fb a c xi yi
+fbSineL rate freq im fb a c xi yi
+fbSineN rate freq im fb a c xi yi
 
 Feedback sine with chaotic phase indexing.
 

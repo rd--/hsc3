@@ -1,4 +1,4 @@
-lorenzL freq s r b h xi yi zi
+lorenzL rate freq s r b h xi yi zi
 
 freq    - iteration frequency in Hertz
 s, r, b - equation variables

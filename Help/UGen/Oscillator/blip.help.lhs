@@ -1,4 +1,4 @@
-blip freq numHarm
+blip rate freq numHarm
 
 Band Limited ImPulse generator. All harmonics have equal amplitude.
 

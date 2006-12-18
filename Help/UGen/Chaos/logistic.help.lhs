@@ -1,4 +1,4 @@
-logistic chaosParam freq
+logistic rate chaosParam freq
 
 UNDOCUMENTED.
 

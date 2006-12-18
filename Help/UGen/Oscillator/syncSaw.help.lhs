@@ -1,4 +1,4 @@
-syncSaw syncFreq sawFreq
+syncSaw rate syncFreq sawFreq
 
 A sawtooth wave that is hard synched to a fundamental pitch. This
 produces an effect similar to moving formants or pulse width

@@ -1,4 +1,4 @@
-saw freq
+saw rate freq
 
 Band limited sawtooth wave generator.
 

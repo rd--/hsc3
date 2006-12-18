@@ -1,4 +1,4 @@
-bufRd numChannels bufnum phase loop interpolation
+bufRd numChannels rate bufnum phase loop interpolation
 
 Plays the content of a buffer.
 

@@ -1,4 +1,4 @@
-line start end dur doneAction
+line rate start end dur doneAction
 
 Generates a line from the start value to the end value.
 

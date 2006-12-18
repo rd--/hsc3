@@ -1,4 +1,4 @@
-klang freqScale freqOffset spec
+klang rate freqScale freqOffset spec
 
 Bank of fixed oscillators.  spec is constructed using klangSpec, which
 takes lists of frequency, amplitude and phase.

@@ -1,4 +1,4 @@
-xLine start end dur doneAction
+xLine rate start end dur doneAction
 
 Exponential line generator.  Generates an exponential curve from the
 start value to the end value. Both the start and end values must be

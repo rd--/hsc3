@@ -1,6 +1,6 @@
-latoocarfianC freq a b c d xi yi
-latoocarfianL freq a b c d xi yi
-latoocarfianN freq a b c d xi yi
+latoocarfianC rate freq a b c d xi yi
+latoocarfianL rate freq a b c d xi yi
+latoocarfianN rate freq a b c d xi yi
 
 This is a function given in Clifford Pickover's book Chaos In
 Wonderland, pg 26.  The function has four parameters a, b, c, and

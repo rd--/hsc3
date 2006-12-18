@@ -1,4 +1,4 @@
-impulse freq iPhase
+impulse rate freq iPhase
 
 Impulse oscillator.  Outputs non band limited single sample impulses.
 

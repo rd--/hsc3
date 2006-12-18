@@ -1,4 +1,4 @@
-oscN bufnum freq phase
+oscN rate bufnum freq phase
 
 Noninterpolating wavetable lookup oscillator with frequency and
 phase modulation inputs.  It is usually better to use the

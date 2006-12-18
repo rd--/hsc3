@@ -1,4 +1,4 @@
-mouseX minval maxval warp lag
+mouseX rate minval maxval warp lag
 
 Cursor UGen
 

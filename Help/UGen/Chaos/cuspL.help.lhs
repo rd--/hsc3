@@ -1,5 +1,5 @@
-cuspN freq a b xi
-cuspL freq a b xi
+cuspN rate freq a b xi
+cuspL rate freq a b xi
 
 freq - iteration frequency in Hertz
 a, b - equation variables

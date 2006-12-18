@@ -1,6 +1,6 @@
-quadN freq a b c xi
-quadL freq a b c xi
-quadC freq a b c xi
+quadN rate freq a b c xi
+quadL rate freq a b c xi
+quadC rate freq a b c xi
 
 freq    - iteration frequency in Hertz
 a, b, c - equation variables

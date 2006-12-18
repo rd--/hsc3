@@ -1,4 +1,4 @@
-tDuty duration reset doneAction level
+tDuty rate duration reset doneAction level
 
 Demand results as trigger from demand rate ugens.
 

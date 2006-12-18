@@ -1,4 +1,4 @@
-duty duration reset doneAction level
+duty rate duration reset doneAction level
 
 Demand results from demand rate ugens
 

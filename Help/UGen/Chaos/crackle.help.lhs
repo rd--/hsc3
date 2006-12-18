@@ -1,4 +1,4 @@
-crackle chaosParam
+crackle rate chaosParam
 
 A noise generator based on a chaotic function.  The parameter of
 the chaotic function has useful values from just below 1.0 to just

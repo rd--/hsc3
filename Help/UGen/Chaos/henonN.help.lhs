@@ -1,6 +1,6 @@
-henonN freq a b x0 x1
-henonL freq a b x0 x1
-henonC freq a b x0 x1
+henonN rate freq a b x0 x1
+henonL rate freq a b x0 x1
+henonC rate freq a b x0 x1
 
 Henon map chaotic generator.
 

@@ -1,6 +1,6 @@
-linCongC freq a c m xi
-linCongL freq a c m xi
-linCongN freq a c m xi
+linCongC rate freq a c m xi
+linCongL rate freq a c m xi
+linCongN rate freq a c m xi
 
 Linear congruential chaotic generator.
 
