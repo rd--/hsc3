@@ -1,6 +1,6 @@
 pv_BinShift buffer stretch shift
 
-Shift and scale the positions of the bins.  Can be used as a very ;;
+Shift and scale the positions of the bins.  Can be used as a very
 crude frequency shifter/scaler.  Shifts the leftmost bin at `buffer'
 by `shift' places, the distance between subsequent bins is `stretch'.
 

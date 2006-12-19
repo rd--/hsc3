@@ -1,4 +1,4 @@
-(Timer trig)
+timer trig
 
 Returns time since last triggered
 	

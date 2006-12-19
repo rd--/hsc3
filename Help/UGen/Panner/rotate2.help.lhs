@@ -8,8 +8,8 @@ outputs two channels (x, y).
 
 It computes:
 
-     xout = cos(angle) * xin + sin(angle) * yin;
-     yout = cos(angle) * yin - sin(angle) * xin;
+     xout = cos(angle) * xin + sin(angle) * yin
+     yout = cos(angle) * yin - sin(angle) * xin
 
 where angle = pos * pi, so that -1 becomes -pi and +1 becomes +pi.
 This allows you to use an LFSaw to do continuous rotation around a
