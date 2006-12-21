@@ -14,4 +14,5 @@ Run an oscillator with the trigger at bus 10.
 
 Set bus 10, each set will trigger a ping.
 
-> withSC3 (\fd -> send fd (c_set 10 0.1))
+> let c_set1 i n = c_set [(i,n)]
+> withSC3 (\fd -> send fd (c_set1 10 0.1))

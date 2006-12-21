@@ -13,5 +13,5 @@ nodeID - node to be freed
 >                    let b = MRG [out 1 (n0 * 0.1), free n1 1001]
 >                    send fd (d_recv (graphdef "b" (graph b)))
 >                    wait fd "/done"
->                    send fd (s_new "a" 1001 AddToTail 0)
->                    send fd (s_new "b" (-1) AddToTail 0))
+>                    send fd (s_new "a" 1001 AddToTail 0 [])
+>                    send fd (s_new "b" (-1) AddToTail 0 []))

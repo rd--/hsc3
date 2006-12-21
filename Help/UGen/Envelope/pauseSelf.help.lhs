@@ -8,4 +8,4 @@ positive.
 
 Run paused node (assuming no intermediate node is created).
 
-> withSC3 (\fd -> send fd (n_run (-1) True))
+> withSC3 (\fd -> send fd (n_run [(-1, True)]))
