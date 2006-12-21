@@ -1,4 +1,4 @@
-/b_close
+/b_close        Close attached soundfile and write header information
 
 int - buffer number
 

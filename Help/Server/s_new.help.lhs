@@ -1,4 +1,4 @@
-/s_new create a new synth
+/s_new                                             Create a new synth
 
 string - synth definition name
 int    - synth ID
