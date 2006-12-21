@@ -12,17 +12,17 @@ play :: UGen -> UDP -> IO OSC
 play u fd = do let g = graphdef "Anonymous" (graph (addOut u))
                send fd (d_recv g) 
                r <- wait fd "/done"
-               send fd (s_new "Anonymous" (-1) AddToTail 1)
+               send fd (s_new "Anonymous" (-1) AddToTail 1 [])
                return r
 
 -- | Free all nodes at the group with node id 1.
 stop :: UDP -> IO Int
-stop fd = send fd (g_freeAll 1)
+stop fd = send fd (g_freeAll [1])
 
 -- | Free all nodes and re-create group node with id 1.
 reset :: UDP -> IO Int
-reset fd = do send fd (g_freeAll 0)
-              send fd (g_new 1 AddToTail 0)
+reset fd = do send fd (g_freeAll [0])
+              send fd (g_new [(1, AddToTail, 0)])
 
 -- | Bracket SC3 communication.
 withSC3 :: (UDP -> IO a) -> IO a
