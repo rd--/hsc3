@@ -38,15 +38,15 @@ d_free n = Message "/d_free" (map String n)
 
 -- | Place a node after another.
 n_after :: [(Int, Int)] -> OSC
-n_after l = Message "/n_after" (prep2 Int Int l)
+n_after l = Message "/n_after" (mkDuples Int Int l)
 
 -- | Place a node before another.
 n_before :: [(Int, Int)] -> OSC
-n_before l = Message "/n_before" (prep2 Int Int l)
+n_before l = Message "/n_before" (mkDuples Int Int l)
 
 -- | Fill ranges of a node's control values.
 n_fill :: Int -> [(String, Int, Double)] -> OSC
-n_fill nid l = Message "/n_fill" (Int nid : prep3 String Int Float l)
+n_fill nid l = Message "/n_fill" (Int nid : mkTriples String Int Float l)
 
 -- | Delete a node.
 n_free :: [Int] -> OSC
@@ -54,11 +54,11 @@ n_free nid = Message "/n_free" (map Int nid)
 
 -- | Map a node's controls to read from a bus.
 n_map :: Int -> [(String, Int)] -> OSC
-n_map nid l = Message "/n_map" (Int nid : prep2 String Int l)
+n_map nid l = Message "/n_map" (Int nid : mkDuples String Int l)
 
 -- | Map a node's controls to read from buses.
 n_mapn :: Int -> [(String, Int, Int)] -> OSC
-n_mapn nid l = Message "/n_mapn" (Int nid : prep3 String Int Int l)
+n_mapn nid l = Message "/n_mapn" (Int nid : mkTriples String Int Int l)
 
 -- | Get info about a node.
 n_query :: [Int] -> OSC
@@ -66,11 +66,11 @@ n_query nid = Message "/n_query" (map Int nid)
 
 -- | Turn node on or off.
 n_run :: [(Int, Bool)] -> OSC
-n_run l = Message "/n_run" (prep2 Int (Int . fromEnum) l)
+n_run l = Message "/n_run" (mkDuples Int (Int . fromEnum) l)
 
 -- | Set a node's control values.
 n_set :: Int -> [(String, Double)] -> OSC
-n_set nid c = Message "/n_set" (Int nid : prep2 String Float c)
+n_set nid c = Message "/n_set" (Int nid : mkDuples String Float c)
 
 -- | Set ranges of a node's control values.
 n_setn :: Int -> [(String, [Double])] -> OSC
@@ -89,11 +89,11 @@ s_get nid i = Message "/s_get" (Int nid : map String i)
 
 -- | Get ranges of control values.
 s_getn :: Int -> [(String, Int)] -> OSC
-s_getn nid l = Message "/s_getn" (Int nid : prep2 String Int l)
+s_getn nid l = Message "/s_getn" (Int nid : mkDuples String Int l)
 
 -- | Create a new synth.
 s_new :: String -> Int -> AddAction -> Int -> [(String, Double)] -> OSC
-s_new n i a t c = Message "/s_new" (String n : Int i : Int (fromEnum a) : Int t : prep2 String Float c)
+s_new n i a t c = Message "/s_new" (String n : Int i : Int (fromEnum a) : Int t : mkDuples String Float c)
 
 -- | Auto-reassign synth's ID to a reserved value.
 s_noid :: [Int] -> OSC
@@ -111,15 +111,15 @@ g_freeAll nid = Message "/g_freeAll" (map Int nid)
 
 -- | Add node to head of group.
 g_head :: [(Int, Int)] -> OSC
-g_head l = Message "/g_head" (prep2 Int Int l)
+g_head l = Message "/g_head" (mkDuples Int Int l)
 
 -- | Create a new group.
 g_new :: [(Int, AddAction, Int)] -> OSC
-g_new l = Message "/g_new" (prep3 Int (Int . fromEnum) Int l)
+g_new l = Message "/g_new" (mkTriples Int (Int . fromEnum) Int l)
 
 -- | Add node to tail of group.
 g_tail :: [(Int, Int)] -> OSC
-g_tail l = Message "/g_tail" (prep2 Int Int l)
+g_tail l = Message "/g_tail" (mkDuples Int Int l)
 
 -- * Unit Generator commands.
 
@@ -143,7 +143,7 @@ b_close nid = Message "/b_close" [Int nid]
 
 -- | Fill ranges of sample values.
 b_fill :: Int -> [(Int, Int, Double)] -> OSC
-b_fill nid l = Message "/b_fill" (Int nid : prep3 Int Int Float l)
+b_fill nid l = Message "/b_fill" (Int nid : mkTriples Int Int Float l)
 
 -- | Free buffer data.
 b_free :: Int -> OSC
@@ -159,7 +159,7 @@ b_get nid i = Message "/b_get" (Int nid : map Int i)
 
 -- | Get ranges of sample values.
 b_getn :: Int -> [(Int, Int)] -> OSC
-b_getn nid l = Message "/b_getn" (Int nid : prep2 Int Int l)
+b_getn nid l = Message "/b_getn" (Int nid : mkDuples Int Int l)
 
 -- | Request /b_info messages.
 b_query :: [Int] -> OSC
@@ -171,7 +171,7 @@ b_read nid p f n f' z = Message "/b_read" [Int nid, String p, Int f, Int n, Int 
 
 -- | Set sample values.
 b_set :: Int -> [(Int, Double)] -> OSC
-b_set nid l = Message "/b_set" (Int nid : prep2 Int Float l)
+b_set nid l = Message "/b_set" (Int nid : mkDuples Int Float l)
 
 -- | Set ranges of sample values.
 b_setn :: Int -> [(Int, [Double])] -> OSC
@@ -190,7 +190,7 @@ b_zero nid = Message "/b_zero" [Int nid]
 
 -- |  Fill ranges of bus values.
 c_fill :: [(Int, Int, Double)] -> OSC
-c_fill l = Message "/c_fill" (prep3 Int Int Float l)
+c_fill l = Message "/c_fill" (mkTriples Int Int Float l)
 
 -- | Get bus values.
 c_get :: [Int] -> OSC
@@ -198,11 +198,11 @@ c_get nid = Message "/c_get" (map Int nid)
 
 -- | Get ranges of bus values.
 c_getn :: [(Int, Int)] -> OSC
-c_getn l = Message "/c_getn" (prep2 Int Int l)
+c_getn l = Message "/c_getn" (mkDuples Int Int l)
 
 -- | Set bus values.
 c_set :: [(Int, Double)] -> OSC
-c_set l = Message "/c_set" (prep2 Int Float l)
+c_set l = Message "/c_set" (mkDuples Int Float l)
 
 -- | Set ranges of bus values.
 c_setn :: [(Int, [Double])] -> OSC
@@ -237,11 +237,11 @@ sync sid = Message "/sync" [Int sid]
 
 -- * Local utility functions.
 
-prep2 :: (a -> c) -> (b -> c) -> [(a, b)] -> [c]
-prep2 a b = concatMap (\(x,y) -> [a x, b y])
+mkDuples :: (a -> c) -> (b -> c) -> [(a, b)] -> [c]
+mkDuples a b = concatMap (\(x,y) -> [a x, b y])
 
-prep3 :: (a -> d) -> (b -> d) -> (c -> d) -> [(a, b, c)] -> [d]
-prep3 a b c = concatMap (\(x,y,z) -> [a x, b y, c z])
+mkTriples :: (a -> d) -> (b -> d) -> (c -> d) -> [(a, b, c)] -> [d]
+mkTriples a b c = concatMap (\(x,y,z) -> [a x, b y, c z])
 
 -- Local Variables:
 -- truncate-lines:t
