@@ -128,7 +128,16 @@ To find help on a UGen or on a SuperCollider server command place the
 cursor over the identifier and type C-cC-h (Hsc -> Help -> Hsc help).
 This opens the help file, which ought to have working examples in it,
 the above graph is in the sinOsc help file, the s_new help file
-explains arguments are required.
+explains what arguments are required and what they mean.
+
+The Hsc help files are derived from the help files distributed with
+SuperCollider, the text is re-formatted to read well as plain text and
+examples are translated into Haskell.
+
+There is also partial haddock documentation for the Sound.SC3 and
+Sound.OpenSoundControl modules, to build type:
+
+  $ runhaskell Setup.hs haddock
 
 * References
 
