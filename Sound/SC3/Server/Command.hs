@@ -161,7 +161,7 @@ b_get nid i = Message "/b_get" (Int nid : map Int i)
 b_getn :: Int -> [(Int, Int)] -> OSC
 b_getn nid l = Message "/b_getn" (Int nid : mkDuples Int Int l)
 
--- | Request /b_info messages.
+-- | Request \/b_info messages.
 b_query :: [Int] -> OSC
 b_query nid = Message "/b_query" (map Int nid)
 
