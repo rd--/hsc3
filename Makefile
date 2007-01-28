@@ -1,5 +1,7 @@
 all:
-	ghc --make -Wall Sound.SC3
+	runhaskell Setup.hs configure --prefix ~
+	runhaskell Setup.hs build
+	runhaskell Setup.hs install --user
 
 clean:
-	rm -f *.aux *.log *.pdf *.tex */*.o */*.hi */*/*.o */*/*.hi */*/*/*.o */*/*/*.hi 
+	runhaskell Setup.hs clean
