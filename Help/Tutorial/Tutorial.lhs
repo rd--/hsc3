@@ -111,8 +111,8 @@ output window.
 
 To evaluate expressions that don't fit on one line select the region
 and type C-cC-e (Hsc -> Expression -> Run region).  To select a region
-use the mouse or place point at one end, type C-Space and move point
-to the other end.
+use the mouse or place the cursor at one end, type C-[Space] then move
+the cursor to the other end.
 
 > let f = sinOsc AR (xLine KR 1 1000 9 RemoveSynth) 0 * 200 + 800
 > audition (sinOsc AR f 0 * 0.1)
