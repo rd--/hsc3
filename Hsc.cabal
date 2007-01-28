@@ -1,10 +1,43 @@
 Name:             Hsc
 Version:          0.1
 License:          GPL
+Copyright:        Rohan Drape, 2006-2007
 Author:           Rohan Drape
+Maintainer:       rd@slavepianos.org
+Stability:        Experimental
 Homepage:         http://www.slavepianos.org/rd/f/207949/
-Category:         Audio Synthesis
+Synopsis:         Haskell SuperCollider
+Description:      Haskell client for the SuperCollider synthesis server
+Category:         Sound
+Tested-With:      GHC
 Build-Depends:    base, network
-Synopsis:         Haskell client for the SuperCollider synthesis server
 GHC-Options:      -Wall -O
-Exposed-modules:  Sound.OpenSoundControl Sound.SC3
+Exposed-modules:  Sound.OpenSoundControl
+                  Sound.OpenSoundControl.OSC
+                  Sound.OpenSoundControl.Time
+                  Sound.OpenSoundControl.U8v
+                  Sound.OpenSoundControl.UDP
+                  Sound.SC3
+                  Sound.SC3.UGen
+                  Sound.SC3.UGen.Analysis
+                  Sound.SC3.UGen.Buffer
+                  Sound.SC3.UGen.Chaos
+                  Sound.SC3.UGen.Demand
+                  Sound.SC3.UGen.Envelope
+                  Sound.SC3.UGen.FFT
+                  Sound.SC3.UGen.Filter
+                  Sound.SC3.UGen.Graph
+                  Sound.SC3.UGen.Information
+                  Sound.SC3.UGen.IO
+                  Sound.SC3.UGen.Math
+                  Sound.SC3.UGen.Noise
+                  Sound.SC3.UGen.Operator
+                  Sound.SC3.UGen.Oscillator
+                  Sound.SC3.UGen.Panner
+                  Sound.SC3.UGen.Rate
+                  Sound.SC3.UGen.UGen
+                  Sound.SC3.Server
+                  Sound.SC3.Server.Command
+                  Sound.SC3.Server.Graphdef
+                  Sound.SC3.Server.Play
+                  Sound.SC3.Server.Status
