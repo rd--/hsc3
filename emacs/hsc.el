@@ -1,4 +1,4 @@
-;; hsc.el - (c) rohan drape, 2006
+;; hsc.el - (c) rohan drape, 2006-2007
 
 ;; This mode is implemented as a derivation of `haskell' mode,
 ;; indentation and font locking is courtesy that mode.  The
@@ -38,7 +38,8 @@
      hsc-interpreter
      nil
      hsc-interpreter-arguments)
-    (hsc-see-output)))
+    (hsc-see-output))
+  (hsc-send-string ":m Sound.SC3"))
 
 (defun hsc-see-output ()
   "Show haskell output."
@@ -83,6 +84,16 @@
     (insert "> main = do\n")
     (insert s)))
 
+(defun hsc-run-line ()
+  "Send the current line to the interpreter."
+  (interactive)
+  (let* ((s (buffer-substring (line-beginning-position) 
+			      (line-end-position)))
+	 (s* (if (equal (elt s 0) ?>)
+		 (substring s 1)
+	       s)))
+    (hsc-send-string s*)))
+
 (defun hsc-run-region ()
   "Place the region in a do block and compile."
   (interactive)
@@ -117,6 +128,7 @@
   (define-key map "\C-c\C-x" 'hsc-quit-haskell)
   (define-key map "\C-c\C-k" 'hsc-reset-scsynth)
   (define-key map "\C-c\C-w" 'hsc-status-scsynth)
+  (define-key map "\C-c\C-c" 'hsc-run-line)
   (define-key map "\C-c\C-e" 'hsc-run-region)
   (define-key map "\C-c\C-o" 'hsc-quit-scsynth)
   (define-key map "\C-c\C-h" 'hsc-help))
@@ -131,8 +143,10 @@
     '("Hsc help" . hsc-help))
   (define-key map [menu-bar hsc expression]
     (cons "Expression" (make-sparse-keymap "Expression")))
-  (define-key map [menu-bar hsc expression run]
+  (define-key map [menu-bar hsc expression run-region]
     '("Run region" . hsc-run-region))
+  (define-key map [menu-bar hsc expression run-line]
+    '("Run line" . hsc-run-line))
   (define-key map [menu-bar hsc scsynth]
     (cons "SCSynth" (make-sparse-keymap "SCSynth")))
   (define-key map [menu-bar hsc scsynth quit]
