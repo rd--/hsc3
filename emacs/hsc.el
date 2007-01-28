@@ -39,7 +39,7 @@
      nil
      hsc-interpreter-arguments)
     (hsc-see-output))
-  (hsc-send-string ":m Sound.SC3"))
+  (hsc-send-string ":m Sound.SC3 Sound.OpenSoundControl"))
 
 (defun hsc-see-output ()
   "Show haskell output."
