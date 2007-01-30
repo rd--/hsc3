@@ -32,12 +32,14 @@ When the Hsc emacs mode is active there is an Hsc menu available.
 
 * Literate Haskell
 
-The documentation for Hsc is in a form of 'literate Haskell' using the
-'Bird' notation.
+The documentation for Hsc, both the Help file and this tutorial, is
+written in a form of 'literate Haskell' - in the 'Bird' notation lines
+starting with '>' are Haskell code, everything else is commentary.
 
-Lines starting with '>' are Haskell expressions and can be evaluated
-using editor commands, either by selecting from the Hsc menu or using
-the associated keybinding.
+Unlike ordinary literate programs the Hsc help files cannot be
+compiled to executables.  Each help file contains multiple independant
+examples that can be evaluated using editor commands, either by
+selecting from the Hsc menu or using the associated keybinding.
 
 * Interpreter Interaction
 
@@ -68,7 +70,7 @@ expression to do this is written below.  To run single line
 expressions move the cursor to the line and type C-cC-c (Hsc ->
 Expression -> Run line).
 
-> withSC3 (\fd -> do send fd (g_new [(1, AddToTail, 0)]))
+> withSC3 (\fd -> send fd (g_new [(1, AddToTail, 0)]))
 
 We can then audition a quiet sine oscillator at A440.
 
@@ -78,7 +80,7 @@ To stop the sound we can delete the group it is a part of, the
 audition function places the synthesis node into the group node with
 ID 1, the expression below deletes that group.
 
-> withSC3 (\fd -> do send fd (n_free [1]))
+> withSC3 (\fd -> send fd (n_free [1]))
 
 In order to audition another graph we need to re-create a group with
 ID 1.  Sound.SC3 includes a function 'reset' that sequences these two
