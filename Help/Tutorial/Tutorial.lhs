@@ -43,8 +43,10 @@ selecting from the Hsc menu or using the associated keybinding.
 
 * Interpreter Interaction
 
-To start ghci and load Sound.SC3 use C-cC-s (Hsc -> Haskell -> Start
-haskell).
+To start ghci and load the list of modules at the emacs variable
+'hsc-modules' use C-cC-s (Hsc -> Haskell -> Start haskell).  By
+default 'hsc-modules' contains Sound.OpenSoundControl, Sound.SC3,
+Control.Monad and System.Random.
 
 This splits the current window into two windows.  If the ghci output
 window becomes obscured during a session you can see it again by
@@ -121,9 +123,7 @@ the cursor to the other end.
 
 This writes the region in a do block in a procedure to a temporary
 file, /tmp/hsc.lhs, loads the file and then runs the procedure.  The
-preamble imports the modules listed at the emacs variable hsc-modules,
-by default Sound.OpenSoundControl, Sound.SC3, Control.Monad and
-System.Random.
+preamble imports the modules listed at the emacs variable hsc-modules.
 
 * Help Files
 
