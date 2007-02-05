@@ -23,9 +23,21 @@
   (list)
   "*Arguments to the haskell interpreter (default=none).")
 
+(defvar hsc-modules
+  (list "Sound.OpenSoundControl"
+	"Sound.SC3"
+	"System.Random"
+	"Control.Monad")
+  "*Modules to load into the haskell interpreter.")
+
 (defvar hsc-help-directory
   nil
   "*The directory containing the help files (default=nil).")
+
+(defun intersperse (e l)
+  (if (null l)
+      '()
+    (cons e (cons (car l) (intersperse e (cdr l))))))
 
 (defun hsc-start-haskell ()
   "Start haskell."
@@ -39,7 +51,8 @@
      nil
      hsc-interpreter-arguments)
     (hsc-see-output))
-  (hsc-send-string ":m Sound.SC3 Sound.OpenSoundControl"))
+  (hsc-send-string
+   (apply 'concat (cons ":m" (intersperse " " hsc-modules)))))
 
 (defun hsc-see-output ()
   "Show haskell output."
@@ -77,17 +90,16 @@
 (defun hsc-transform-and-store (f s)
   "Transform example text into compilable form."
   (with-temp-file f
-    (insert "> import Sound.OpenSoundControl\n")
-    (insert "> import Sound.SC3\n")
-    (insert "> import Control.Monad\n")
-    (insert "> import System.Random\n")
+    (mapc (lambda (module)
+	    (insert (concat "> import " module "\n")))
+	  hsc-modules)
     (insert "> main = do\n")
     (insert s)))
 
 (defun hsc-run-line ()
   "Send the current line to the interpreter."
   (interactive)
-  (let* ((s (buffer-substring (line-beginning-position) 
+  (let* ((s (buffer-substring (line-beginning-position)
 			      (line-end-position)))
 	 (s* (if (equal (elt s 0) ?>)
 		 (substring s 1)
