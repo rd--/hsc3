@@ -241,6 +241,14 @@ runningSum i n = mkFilter "RunningSum" [i,n] 1 0
 select :: UGen -> UGen -> UGen
 select i a = mkFilterMCE "Select" [i] a 1 0
 
+-- | Send a trigger message from the server back to the all registered clients.
+sendTrig :: UGen -> UGen -> UGen -> UGen
+sendTrig i k v = mkFilter "SendTrig" [i, k, v] 0 0
+
+-- | Set-reset flip flop.
+setResetFF :: UGen -> UGen -> UGen
+setResetFF t r = mkFilter "SetResetFF" [t,r] 1 0
+
 -- | Wave shaper.
 shaper :: UGen -> UGen -> UGen
 shaper b s = mkFilter "Shaper" [b,s] 1 0
@@ -252,10 +260,6 @@ slew i up dn = mkFilter "Slew" [i,up,dn] 1 0
 -- | Second order filter section (biquad). 
 sos :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 sos i a0 a1 a2 b1 b2 = mkFilter "SOS" [i,a0,a1,a2,b1,b2] 1 0
-
--- | Set-reset flip flop.
-setResetFF :: UGen -> UGen -> UGen
-setResetFF t r = mkFilter "SetResetFF" [t,r] 1 0
 
 -- | Stepper pulse counter.
 stepper :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
