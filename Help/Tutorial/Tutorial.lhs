@@ -2,57 +2,66 @@
 
 * Prerequisites
 
-Hsc requires that SuperCollider [1], GHC [2], Emacs [3] and the
-standard Haskell Emacs mode [4] are all installed and working
-properly.
+Haskell SuperCollider requires that SuperCollider [1], GHC [2], Emacs
+[3] and the standard Haskell Emacs mode [4] are all installed and
+working properly.
 
-* Setting up Hsc
+* Setting up Haskell SuperCollider
 
-Hsc is currently only available as a darcs repository.
+Haskell SuperCollider is currently only available as a set of darcs
+repositories, the first implementing the Sound.OpenSoundControl
+module, the second the Sound.SC3 module.
 
+  $ darcs get http://slavepianos.org/rd/sw/sw-78
   $ darcs get http://slavepianos.org/rd/sw/sw-69
 
-To build Hsc use the standard Cabal process:
+To build use the standard Cabal process in each repository in
+sequence.
 
   $ runhaskell Setup.hs configure --prefix ~
   $ runhaskell Setup.hs build
   $ runhaskell Setup.hs install --user
 
-* Setting up the Hsc emacs mode
+* Setting up the Haskell SuperCollider Emacs mode
 
 Add an appropriately modified variant of the following to ~/.emacs
 
   (push "~/sw/sw-69/emacs" load-path)
-  (setq hsc-interpreter "ghci")
-  (setq hsc-help-directory "~/sw/sw-69/Help/")
-  (require 'hsc)
+  (setq hsc3-interpreter "ghci")
+  (setq hsc3-help-directory "~/sw/sw-69/Help/")
+  (require 'hsc3)
 
-The Hsc mode associates itself with files having the extension '.lhs'.
-When the Hsc emacs mode is active there is an Hsc menu available.
+The hsc3 emacs mode associates itself with files having the extension
+'.lhs'.  When the hsc3 emacs mode is active there is a 'Haskell
+SuperCollider' menu available.
 
 * Literate Haskell
 
-The documentation for Hsc, including this tutorial, is written in
-'Bird' notation, a form of 'literate Haskell' where lines starting
-with '>' are Haskell code and everything else is commentary.
+The documentation for Haskell SuperCollider, including this tutorial,
+is written in 'Bird' notation, a form of 'literate Haskell' where
+lines starting with '>' are Haskell code and everything else is
+commentary.
 
-Unlike ordinary literate programs the Hsc help files cannot be
-compiled to executables.  Each help file contains multiple independant
-examples that can be evaluated using editor commands, either by
-selecting from the Hsc menu or using the associated keybinding.
+Unlike ordinary literate programs the Haskell SuperCollider help files
+cannot be compiled to executables.  Each help file contains multiple
+independant examples that can be evaluated using editor commands,
+either by selecting from the 'Haskell SuperCollider' menu or using the
+associated keybinding.
 
 * Interpreter Interaction
 
 To start ghci and load the list of modules at the emacs variable
-'hsc-modules' use C-cC-s (Hsc -> Haskell -> Start haskell).  By
-default 'hsc-modules' contains Sound.OpenSoundControl, Sound.SC3,
-Control.Monad and System.Random.
+'hsc3-modules' use C-cC-s (Haskell SuperCollider -> Haskell -> Start
+haskell).  By default 'hsc3-modules' contains Sound.OpenSoundControl,
+Sound.SC3, Control.Monad and System.Random.
 
-This splits the current window into two windows.  If the ghci output
-window becomes obscured during a session you can see it again by
-typing C-cC-g (Hsc -> Haskell -> See output).
+Starting the intpreter splits the current window into two windows.  If
+the ghci output window becomes obscured during a session you can see
+it again by typing C-cC-g (Haskell SuperCollider -> Haskell -> See
+output).
 
-To stop ghci type C-cC-x (Hsc -> Haskell -> Quit haskell).
+To stop ghci type C-cC-x (Haskell SuperCollider -> Haskell -> Quit
+haskell).
 
 * Starting the SuperCollider server
 
@@ -69,8 +78,8 @@ not created when scsynth starts.
 
 To create this node we need to send an OSC message to the server, the
 expression to do this is written below.  To run single line
-expressions move the cursor to the line and type C-cC-c (Hsc ->
-Expression -> Run line).
+expressions move the cursor to the line and type C-cC-c (Haskell
+SuperCollider -> Expression -> Run line).
 
 > withSC3 (\fd -> send fd (g_new [(1, AddToTail, 0)]))
 
@@ -92,14 +101,14 @@ group.
 > withSC3 reset
 
 Using this command is so common there is a keybinding for it, C-cC-k
-(Hsc -> SCSynth -> Reset scsynth).  After a reset we can audition a
-new graph.
+(Haskell SuperCollider -> SCSynth -> Reset scsynth).  After a reset we
+can audition a new graph.
 
 > audition (sinOsc AR 220 0 * 0.1)
 
-To see the server status type C-cC-w (Hsc -> SCSynth -> Display
-status).  This prints a table indicating server activity to the ghci
-output window.
+To see the server status type C-cC-w (Haskell SuperCollider -> SCSynth
+-> Display status).  This prints a table indicating server activity to
+the ghci output window.
 
   ***** SuperCollider Server Status *****
   # UGens                     3
@@ -114,28 +123,30 @@ output window.
 * Multiple line expressions
 
 To evaluate expressions that don't fit on one line select the region
-and type C-cC-e (Hsc -> Expression -> Run region).  To select a region
-use the mouse or place the cursor at one end, type C-[Space] then move
-the cursor to the other end.
+and type C-cC-e (Haskell SuperCollider -> Expression -> Run region).
+To select a region use the mouse or place the cursor at one end, type
+C-[Space] then move the cursor to the other end.
 
 > let f = sinOsc AR (xLine KR 1 1000 9 RemoveSynth) 0 * 200 + 800
 > audition (sinOsc AR f 0 * 0.1)
 
 This writes the region in a do block in a procedure to a temporary
-file, /tmp/hsc.lhs, loads the file and then runs the procedure.  The
-preamble imports the modules listed at the emacs variable hsc-modules.
+file, /tmp/hsc3.lhs, loads the file and then runs the procedure.  The
+preamble imports the modules listed at the emacs variable
+hsc3-modules.
 
 * Help Files
 
 To find help on a UGen or on a SuperCollider server command place the
-cursor over the identifier and type C-cC-h (Hsc -> Help -> Hsc help).
-This opens the help file, which ought to have working examples in it,
-the above graph is in the sinOsc help file, the s_new help file
-explains what arguments are required and what they mean.
+cursor over the identifier and type C-cC-h (Haskell SuperCollider ->
+Help -> Haskell SuperCollider help).  This opens the help file, which
+ought to have working examples in it, the above graph is in the sinOsc
+help file, the s_new help file explains what arguments are required
+and what they mean.
 
-The Hsc help files are derived from the help files distributed with
-SuperCollider, the text is re-formatted to read well as plain text and
-examples are translated into Haskell.
+The Haskell SuperCollider help files are derived from the help files
+distributed with SuperCollider, the text is re-formatted to read well
+as plain text and examples are translated into Haskell.
 
 There is also partial haddock documentation for the Sound.SC3 and
 Sound.OpenSoundControl modules, to build type:
