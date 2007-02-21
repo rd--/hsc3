@@ -1,7 +1,7 @@
 sendTrig in id value
 
 On receiving a trigger (0 to non-zero transition), send a trigger
-message from the server back to the all registered clients.  Clients
+message from the server back to all registered clients.  Clients
 register by sending a /notify message to the server.
 
 input - the trigger
