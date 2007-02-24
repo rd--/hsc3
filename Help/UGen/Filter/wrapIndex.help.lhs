@@ -11,7 +11,7 @@ in     - the input signal.
 
 > withSC3 (\fd -> do send fd (b_alloc 0 6 1)
 >                    wait fd "/done"
->                    send fd (b_setn 0 0 [200, 300, 400, 500, 600, 800]))
+>                    send fd (b_setn 0 [(0, [200, 300, 400, 500, 600, 800])]))
 
 > let x = mouseX KR 0 18 Linear 0.1
 >     f = wrapIndex 0 x

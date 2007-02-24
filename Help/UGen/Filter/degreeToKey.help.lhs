@@ -13,7 +13,7 @@ octave - the number of steps per octave in the scale.
 
 > withSC3 (\fd -> do send fd (b_alloc 0 7 1)
 >                    wait fd "/done"
->                    send fd (b_setn 0 0 [0, 2, 3.2, 5, 7, 9, 10]))
+>                    send fd (b_setn 0 [(0, [0, 2, 3.2, 5, 7, 9, 10])]))
 
 > n <- lfNoise1 KR (MCE [3, 3.05])
 > let x = mouseX KR 0 15 Linear 0.1
