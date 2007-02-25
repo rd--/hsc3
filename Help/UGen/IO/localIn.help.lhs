@@ -1,4 +1,4 @@
-localIn numChannels
+localIn numChannels rate
 
 Define and read from buses local to a SynthDef
 
