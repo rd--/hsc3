@@ -100,5 +100,5 @@ dswitch1UId :: UId -> UGen -> UGen -> UGen
 dswitch1UId uid l array = mkOscUIdMCE uid DR "Dswitch1" [l] array 1 0
 
 -- | Demand results as trigger from demand rate ugens.
-tDuty :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-tDuty r d rst a l = mkOscMCE r "TDuty" [d,rst,a] l 1 0
+tDuty :: Rate -> UGen -> UGen -> DoneAction -> UGen -> UGen
+tDuty r d rst act l = mkOscMCE r "TDuty" [d,rst,fromAction act] l 1 0
