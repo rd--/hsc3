@@ -7,8 +7,10 @@ of the SynthDef cannot change after it is compiled. NOTE: if you
 supply a bufnum of a buffer that has a different numChannels then
 you have specified to the BufRd, it will fail silently.
 
-The interpolation type is an integer: 1 no interpolation, 2 linear
-interpolation, 4 cubic interpolation.
+The interpolation value should be either NoInterpolation,
+LinearInterpolation, CubicInterpolation or (Interpolation UGen).
+There are constructors, bufRdN, bufRdL, and bufRdC for the fixed
+cases.
 
 > withSC3 (\fd -> send fd (b_allocRead 0 "/home/rohan/sw/sw-01/audio/metal.wav" 0 0))
 
