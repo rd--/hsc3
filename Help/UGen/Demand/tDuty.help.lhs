@@ -25,17 +25,27 @@ level      - demand ugen providing the output values.
 
 Play a little rhythm
 
-> d <- dseq 8192 (MCE [0.1, 0.2, 0.4, 0.3])
+> let inf = 1E+9
+> d <- dseq inf (MCE [0.1, 0.2, 0.4, 0.3])
 > audition $ tDuty AR d 0 DoNothing 1
 
 Amplitude changes
 
-> d0 <- dseq 8192 (MCE [0.1, 0.2, 0.4, 0.3])
-> d1 <- dseq 8192 (MCE [0.1, 0.4, 0.01, 0.5, 1.0])
+> let inf = 1E+9
+> d0 <- dseq inf (MCE [0.1, 0.2, 0.4, 0.3])
+> d1 <- dseq inf (MCE [0.1, 0.4, 0.01, 0.5, 1.0])
 > audition $ ringz (tDuty AR d0 0 DoNothing d1) 1000 0.1
 
 Mouse control.
 
-> d <- dseq 8192 (MCE [0.1, 0.4, 0.01, 0.5, 1.0])
+> let inf = 1E+9
+> d <- dseq inf (MCE [0.1, 0.4, 0.01, 0.5, 1.0])
 > let x = mouseX KR 0.001 1 Linear 0.1
 > audition $ ringz (tDuty AR x 0 DoNothing d) 1000 0.1
+
+Note that the 440 is the long pitch.
+
+> d0 <- dser 12 (MCE [0.1, 0.3])
+> d1 <- dser 12 (MCE [440, 880])
+> let t = tDuty AR d0 0 RemoveSynth d1
+> audition $ sinOsc AR (latch t t) 0 * 0.1
