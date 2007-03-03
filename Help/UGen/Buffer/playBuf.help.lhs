@@ -24,7 +24,7 @@ trigger       - a trigger causes a jump to the startPos.  A
               trigger occurs when a signal changes from <= 0
               to > 0.
 
-startPos    - sample frame to start playback.
+startPos    - sample frame to start playback (k-rate).
 
 loop        - 1 means true, 0 means false.  This is modulate-able.
 
