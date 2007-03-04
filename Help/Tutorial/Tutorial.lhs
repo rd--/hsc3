@@ -153,6 +153,18 @@ Sound.OpenSoundControl modules, to build type:
 
   $ runhaskell Setup.hs haddock
 
+* Monitoring incoming server messages
+
+To monitor what OSC messages scsynth is receiving use the 'dumpOSC'
+server command to request that scsynth print text traces of incoming
+messages to its standard output.
+
+> withSC3 ((flip send) (dumpOSC TextPrinter))
+
+To end printing send:
+
+> withSC3 ((flip send) (dumpOSC NoPrinter))
+
 * References
 
 [1] http://www.audiosynth.com/
