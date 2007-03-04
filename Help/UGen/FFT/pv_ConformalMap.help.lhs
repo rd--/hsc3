@@ -11,7 +11,7 @@ imag   - imaginary part of a.
 
 > withSC3 (\fd -> do send fd (b_alloc 10 1024 1)
 >                    wait fd "/done")
-> let i = in' 1 AR numInputBuses * 0.5
+> let i = in' 1 AR numOutputBuses * 0.5
 >     x = mouseX KR (-1) 1 Linear 0.1
 >     y = mouseY KR (-1) 1 Linear 0.1
 > audition $ pan2 (ifft (pv_ConformalMap (fft 10 i) x y)) 0 1
