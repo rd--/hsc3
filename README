@@ -1,8 +1,9 @@
 hsc3 - Haskell SuperCollider
 
-hsc3 provides a Haskell module that facilitates using Haskell as a
-client to the SuperCollider synthesis server.  The hsc interaction
-environment is written for GNU Emacs.
+hsc3 provides Sound.SC3, a Haskell module that facilitates using
+Haskell as a client to the SuperCollider synthesis server.  
+
+The hsc interaction environment is written for GNU Emacs.
 
   http://slavepianos.org/rd/
   http://haskell.org/
