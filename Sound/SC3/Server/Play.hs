@@ -8,8 +8,8 @@ import Sound.SC3.Server.Graphdef (graphdef)
 import Sound.SC3.Server.Command (AddAction(AddToTail), s_new, d_recv, g_new, g_freeAll)
 
 -- | Construct an instrument definition, send /d_recv and /s_new messages to scsynth.
-play :: UGen -> Transport -> IO OSC
-play u fd = do let g = graphdef "Anonymous" (graph (addOut u))
+play :: Transport -> UGen -> IO OSC
+play fd u = do let g = graphdef "Anonymous" (graph (addOut u))
                send fd (d_recv g) 
                r <- wait fd "/done"
                send fd (s_new "Anonymous" (-1) AddToTail 1 [])
@@ -30,4 +30,4 @@ withSC3 = withTransport (udp "127.0.0.1" 57110)
 
 -- | withSC3 . play
 audition :: UGen -> IO OSC
-audition = withSC3 . play
+audition = withSC3 . (flip play)
