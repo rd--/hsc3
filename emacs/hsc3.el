@@ -27,7 +27,8 @@
   (list "Sound.OpenSoundControl"
 	"Sound.SC3"
 	"System.Random"
-	"Control.Monad")
+	"Control.Monad"
+	"Control.Concurrent")
   "*Modules to load into the haskell interpreter.")
 
 (defvar hsc3-help-directory
