@@ -32,4 +32,10 @@ Percussive envelope
 
 > let p = envPerc 0.01 1 1 [EnvNum (-4), EnvNum (-4)]
 >     e = envGen KR 1 0.1 0 1 RemoveSynth p
-> audition $ e * sinOsc AR 440 0
+> audition (sinOsc AR 440 0 * e)
+
+Sine envelope
+
+> let s = envSine 9 0.1
+>     e = envGen KR 1 1 0 1 RemoveSynth s
+> audition (sinOsc AR 440 0 * e)
