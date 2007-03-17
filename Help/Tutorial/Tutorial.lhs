@@ -66,10 +66,10 @@ haskell).
 * Starting the SuperCollider server
 
 The SuperCollider server can be started from the command line.  The
-help files assume that scsynth is listening for TCP connections at the
+help files assume that scsynth is listening for UDP connections at the
 standard port on the local machine.
 
-  $ scsynth -t 57110
+  $ scsynth -u 57110
 
 * Basic SuperCollider Interaction
 
