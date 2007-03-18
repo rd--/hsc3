@@ -6,5 +6,6 @@ remains fixed for the duration of the synth's existence.
 
 > f <- rand 200 1200
 > l <- rand (-1) 1
-> let s = fSinOsc AR f 0 * (line KR 0.2 0 0.1 RemoveSynth)
-> audition $ pan2 s l 1
+> let e = line KR 0.2 0 0.1 RemoveSynth
+>     o = fSinOsc AR f 0
+> audition (pan2 (o * e) l 1)
