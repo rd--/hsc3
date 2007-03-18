@@ -2,7 +2,7 @@ module Sound.SC3.UGen.Envelope where
 
 import Sound.SC3.UGen.UGen (UGen(..), mkOsc, mkFilter)
 import Sound.SC3.UGen.Rate (Rate)
-import Sound.SC3.UGen.Math ()
+import Sound.SC3.UGen.Math ((>=*), (<=*))
 
 data DoneAction = DoNothing
                 | PauseSynth
@@ -44,6 +44,33 @@ env (l:vl) tms crv rls lp =
     where f l' t c = [l', t, env_curve c, env_value c]
           n       = length tms
           n'      = fromIntegral n
+
+d_dx :: (Num a) => [a] -> [a]
+d_dx [] = []
+d_dx [_] = []
+d_dx [x,y] = [y - x]
+d_dx (x:y:r) = y - x : d_dx (y:r)
+
+-- | Co-ordinate based static envelope generator.
+
+envCoord :: [(UGen, UGen)] -> UGen -> UGen -> EnvCurve -> [UGen]
+envCoord bp dur amp c = env l t (repeat c) (-1) (-1)
+    where l = map (* amp) (map snd bp)
+          t = map (* dur) (d_dx (map fst bp))
+
+-- | Trapezoidal envelope generator.  `shape' determines the sustain
+-- | time as a proportion of `dur', zero is a triangular envelope, one
+-- | a rectangular envelope.  `skew' determines the attack/decay
+-- | ratio, zero is an immediate attack and a slow decay, one a slow
+-- | attack and an immediate decay.
+
+envTrapezoid :: UGen -> UGen -> UGen -> UGen -> [UGen]
+envTrapezoid shape skew dur amp = envCoord bp dur amp EnvLin
+    where x1 = skew * (1 - shape)
+          bp = [ (0, skew <=* 0)
+               , (x1, 1)
+               , (shape + x1, 1)
+               , (1, skew >=* 1) ]
 
 envPerc :: UGen -> UGen -> UGen -> [EnvCurve] -> [UGen]
 envPerc atk rls lvl crv = env [0.0, lvl, 0.0] [atk, rls] crv (-1.0) (-1.0)
