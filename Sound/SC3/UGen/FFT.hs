@@ -18,13 +18,6 @@ convolution i kernel frameSize = mkOsc AR "Convolution" [i, kernel, frameSize] 1
 pv_Add :: UGen -> UGen -> UGen
 pv_Add ba bb = mkOsc KR "PV_Add" [ba,bb] 1 0
 
--- | Randomize order of bins.
-pv_BinScramble :: UGen -> UGen -> UGen -> UGen -> IO UGen
-pv_BinScramble buf wp width trg = uniquify (pv_BinScrambleUId zeroUId buf wp width trg)
-
-pv_BinScrambleUId :: UId -> UGen -> UGen -> UGen -> UGen -> UGen
-pv_BinScrambleUId uid buf wp width trg = mkOscUId uid KR "PV_BinScramble" [buf,wp,width,trg] 1 0
-
 -- | Shift and scale the bin positions.
 pv_BinShift :: UGen -> UGen -> UGen -> UGen
 pv_BinShift buf str shift = mkOsc KR "PV_BinShift" [buf,str,shift] 1 0
@@ -103,20 +96,6 @@ pv_PhaseShift90 buf = mkOsc KR "PV_PhaseShift90" [buf] 1 0
 
 pv_PhaseShift :: UGen -> UGen -> UGen
 pv_PhaseShift buf shift = mkOsc KR "PV_PhaseShift" [buf,shift] 1 0
-
--- | Randomly clear bins.
-pv_RandComb :: UGen -> UGen -> UGen -> IO UGen
-pv_RandComb buf wp trg = uniquify (pv_RandCombUId zeroUId buf wp trg)
-
-pv_RandCombUId :: UId -> UGen -> UGen -> UGen -> UGen
-pv_RandCombUId uid buf wp trg = mkOscUId uid KR "PV_RandComb" [buf,wp,trg] 1 0
-
--- | Cross fade, copying bins in random order.
-pv_RandWipe :: UGen -> UGen -> UGen -> UGen -> IO UGen
-pv_RandWipe ba bb wp trg = uniquify (pv_RandWipeUId zeroUId ba bb wp trg)
-
-pv_RandWipeUId :: UId -> UGen -> UGen -> UGen -> UGen -> UGen
-pv_RandWipeUId uid ba bb wp trg = mkOscUId uid KR "PV_RandWipe" [ba,bb,wp,trg] 1 0
 
 pv_RectComb2 :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 pv_RectComb2 ba bb teeth phase width = mkOsc KR "PV_RectComb2" [ba,bb,teeth,phase,width] 1 0
