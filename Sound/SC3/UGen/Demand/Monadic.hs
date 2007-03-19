@@ -1,8 +1,6 @@
 module Sound.SC3.UGen.Demand.Monadic where
 
-import Sound.SC3.UGen.Rate (Rate)
 import Sound.SC3.UGen.UGen (UGen, uniquify, zeroUId)
-import Sound.SC3.UGen.Envelope (DoneAction, fromAction)
 import qualified Sound.SC3.UGen.Demand.Pure as D
 
 -- | Buffer demand ugen.

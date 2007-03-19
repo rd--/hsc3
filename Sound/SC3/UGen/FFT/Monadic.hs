@@ -1,6 +1,5 @@
 module Sound.SC3.UGen.FFT.Monadic where
 
-import Sound.SC3.UGen.Rate (Rate)
 import Sound.SC3.UGen.UGen (UGen, uniquify, zeroUId)
 import qualified Sound.SC3.UGen.FFT.Pure as F
 
