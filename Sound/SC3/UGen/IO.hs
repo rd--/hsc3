@@ -2,16 +2,7 @@ module Sound.SC3.UGen.IO where
 
 import Sound.SC3.UGen.Rate (Rate(AR, KR))
 import Sound.SC3.UGen.UGen (UGen(Constant),  mkOsc,  mkOscMCE, mkFilterMCE, hasOutputs)
-
-data Warp = Linear
-          | Exponential
-          | Warp UGen
-            deriving (Eq, Show)
-
-fromWarp :: Warp -> UGen
-fromWarp Linear      = Constant 0
-fromWarp Exponential = Constant 1
-fromWarp (Warp u)    = u
+import Sound.SC3.UGen.Enum (Warp, fromWarp)
 
 -- | Read signal from an audio or control bus.
 in' :: Int -> Rate -> UGen -> UGen

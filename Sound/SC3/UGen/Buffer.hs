@@ -1,29 +1,8 @@
 module Sound.SC3.UGen.Buffer where
 
 import Sound.SC3.UGen.Rate (Rate)
-import Sound.SC3.UGen.UGen (UGen(Constant), Name, mkFilter, mkFilterMCE, mkOsc)
-
-data Loop = Loop
-          | NoLoop
-          | WithLoop UGen
-            deriving (Eq, Show)
-
-fromLoop :: Loop -> UGen
-fromLoop NoLoop       = Constant 0
-fromLoop Loop         = Constant 1
-fromLoop (WithLoop u) = u
-
-data Interpolation = NoInterpolation
-                   | LinearInterpolation
-                   | CubicInterpolation
-                   | Interpolation UGen
-                     deriving (Eq, Show)
-
-fromInterpolation :: Interpolation -> UGen
-fromInterpolation NoInterpolation     = Constant 1
-fromInterpolation LinearInterpolation = Constant 2
-fromInterpolation CubicInterpolation  = Constant 4
-fromInterpolation (Interpolation u)   = u
+import Sound.SC3.UGen.UGen (UGen, Name, mkFilter, mkFilterMCE, mkOsc)
+import Sound.SC3.UGen.Enum (Loop, fromLoop, Interpolation(..), fromInterpolation)
 
 -- * Buffer query UGens.
 

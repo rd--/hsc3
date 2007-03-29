@@ -1,4 +1,4 @@
-module Sound.SC3.UGen.Rate where
+module Sound.SC3.UGen.Rate (Rate(..), rateId) where
 
 data Rate = IR | KR | AR | DR deriving (Eq, Show, Enum)
 

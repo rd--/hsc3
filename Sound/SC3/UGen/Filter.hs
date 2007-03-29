@@ -1,7 +1,6 @@
 module Sound.SC3.UGen.Filter where
 
 import Sound.SC3.UGen.UGen (UGen(MCE), Name, mkFilter, mkFilterMCE)
-
 import Data.List (transpose)
 
 mkAllpass :: Name -> UGen -> UGen -> UGen -> UGen -> UGen

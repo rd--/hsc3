@@ -3,18 +3,7 @@ module Sound.SC3.UGen.Envelope where
 import Sound.SC3.UGen.UGen (UGen(..), mkOsc, mkFilter)
 import Sound.SC3.UGen.Rate (Rate)
 import Sound.SC3.UGen.Math ((>=*), (<=*))
-
-data DoneAction = DoNothing
-                | PauseSynth
-                | RemoveSynth
-                | DoneAction UGen
-                  deriving (Eq, Show)
-
-fromAction :: DoneAction -> UGen
-fromAction DoNothing      = Constant 0
-fromAction PauseSynth     = Constant 1
-fromAction RemoveSynth    = Constant 2
-fromAction (DoneAction u) = u
+import Sound.SC3.UGen.Enum (DoneAction, fromDoneAction)
 
 data EnvCurve = EnvStep
               | EnvLin | EnvExp
@@ -95,15 +84,15 @@ dbl x = [x,x]
 -- | Segment based envelope generator.
 envGen :: Rate -> UGen -> UGen -> UGen -> UGen -> DoneAction -> [UGen] -> UGen
 envGen r gate lvl bias scale act pts = mkOsc r "EnvGen" i 1 0
- where i = [gate, lvl, bias, scale, fromAction act] ++ pts
+ where i = [gate, lvl, bias, scale, fromDoneAction act] ++ pts
 
 -- | Line generator.
 line :: Rate -> UGen -> UGen -> UGen -> DoneAction -> UGen
-line r start end dur act = mkOsc r "Line" [start, end, dur, fromAction act] 1 0
+line r start end dur act = mkOsc r "Line" [start, end, dur, fromDoneAction act] 1 0
 
 -- | Exponential line generator.
 xLine :: Rate -> UGen -> UGen -> UGen -> DoneAction -> UGen
-xLine r start end dur act = mkOsc r "XLine" [start, end, dur, fromAction act] 1 0
+xLine r start end dur act = mkOsc r "XLine" [start, end, dur, fromDoneAction act] 1 0
 
 -- | Free node on trigger.
 freeSelf :: UGen -> UGen
@@ -131,7 +120,7 @@ done i = mkFilter "Done" [i] 1 0
 
 -- | Raise specified done action when input goes silent.
 detectSilence ::  UGen -> UGen -> UGen -> DoneAction -> UGen
-detectSilence i a t act = mkFilter "DetectSilence" [i, a, t, fromAction act] 0 0
+detectSilence i a t act = mkFilter "DetectSilence" [i, a, t, fromDoneAction act] 0 0
 
 -- | When triggered free specified node.
 free :: UGen -> UGen -> UGen
@@ -139,5 +128,5 @@ free i n = mkFilter "Free" [i, n] 1 0
 
 -- | Linear envelope generator.
 linen :: UGen -> UGen -> UGen -> UGen -> DoneAction -> UGen
-linen g at sl rt da = mkFilter "Linen" [g,at,sl,rt,fromAction da] 1 0
+linen g at sl rt da = mkFilter "Linen" [g,at,sl,rt,fromDoneAction da] 1 0
 
