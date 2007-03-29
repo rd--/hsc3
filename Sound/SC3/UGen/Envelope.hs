@@ -41,7 +41,6 @@ d_dx [x,y] = [y - x]
 d_dx (x:y:r) = y - x : d_dx (y:r)
 
 -- | Co-ordinate based static envelope generator.
-
 envCoord :: [(UGen, UGen)] -> UGen -> UGen -> EnvCurve -> [UGen]
 envCoord bp dur amp c = env l t (repeat c) (-1) (-1)
     where l = map (* amp) (map snd bp)
@@ -52,7 +51,6 @@ envCoord bp dur amp c = env l t (repeat c) (-1) (-1)
 -- | a rectangular envelope.  `skew' determines the attack/decay
 -- | ratio, zero is an immediate attack and a slow decay, one a slow
 -- | attack and an immediate decay.
-
 envTrapezoid :: UGen -> UGen -> UGen -> UGen -> [UGen]
 envTrapezoid shape skew dur amp = envCoord bp dur amp EnvLin
     where x1 = skew * (1 - shape)
@@ -67,14 +65,17 @@ envPerc atk rls lvl crv = env [0.0, lvl, 0.0] [atk, rls] crv (-1.0) (-1.0)
 envPerc' :: [UGen]
 envPerc' = envPerc 0.01 1.0 1.0 (dbl (EnvNum (-4.0)))
 
+-- Triangular envelope parameter constructor.
 envTriangle :: UGen -> UGen -> [UGen]
 envTriangle dur lvl =
    env [0.0, lvl, 0.0] (dbl (dur / 2.0)) (dbl EnvLin) (-1.0) (-1.0)
 
+-- Sine envelope parameter constructor.
 envSine :: UGen -> UGen -> [UGen]
 envSine dur lvl =
    env [0.0, lvl, 0.0] (dbl (dur / 2.0)) (dbl EnvSin) (-1.0) (-1.0)
 
+-- Linear envelope parameter constructor.
 envLinen :: UGen -> UGen -> UGen -> UGen -> [EnvCurve] -> [UGen]
 envLinen aT sT rT l c = env [0, l, l, 0] [aT, sT, rT] c (-1) (-1)
 
