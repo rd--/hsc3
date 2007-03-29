@@ -1,8 +1,7 @@
 module Sound.SC3.UGen.Demand.Pure where
 
 import Sound.SC3.UGen.Rate (Rate(DR))
-import Sound.SC3.UGen.UGen (UGen, UId,
-                            mkOscUId, mkOscUIdMCE)
+import Sound.SC3.UGen.UGen (UGen, UId, mkOscUId, mkOscUIdMCE)
 
 -- | Buffer demand ugen.
 dbufrd :: UId -> UGen -> UGen -> UGen -> UGen

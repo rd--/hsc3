@@ -1,8 +1,7 @@
 module Sound.SC3.UGen.Noise.Monadic where
 
 import Sound.SC3.UGen.Rate (Rate)
-import Sound.SC3.UGen.UGen (UGen,
-                            uniquify, zeroUId)
+import Sound.SC3.UGen.UGen (UGen, uniquify, zeroUId)
 import qualified Sound.SC3.UGen.Noise.Pure as N
 
 -- | Brown noise.
