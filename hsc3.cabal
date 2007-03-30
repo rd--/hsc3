@@ -21,6 +21,7 @@ Exposed-modules:  Sound.SC3
                   Sound.SC3.UGen.Demand.Monadic
                   Sound.SC3.UGen.Demand.Pure
                   Sound.SC3.UGen.Envelope
+                  Sound.SC3.UGen.Enum
                   Sound.SC3.UGen.FFT
                   Sound.SC3.UGen.FFT.Monadic
                   Sound.SC3.UGen.FFT.Pure
