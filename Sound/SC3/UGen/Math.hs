@@ -67,8 +67,8 @@ instance UnaryOp Double where
     cpsMIDI a   = (log2 (a * (1.0 / 440.0)) * 12.0) + 69.0
     midiRatio a = 2.0 ** (a * (1.0 / 12.0))
     ratioMIDI a = 12.0 * (log2 a)
-    dbAmp a     = __uop a
-    ampDb a     = __uop a
+    dbAmp a     = 10 ** (a * 0.05)
+    ampDb a     = (log10 a) * 20
     octCPS a    = 440.0 * (2.0 ** (a - 4.75))
     cpsOct a    = log2 (a * (1.0 / 440.0)) + 4.75
     log2 a      = logBase 2 a
