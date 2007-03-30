@@ -10,7 +10,7 @@ normalized values
 >     a = MCE [400, 500, 600]
 >     t = impulse KR 6 0
 >     f = select (twindex t 0.0 p) a
-> audition $ sinOsc AR f 0 * 0.2
+> audition $ sinOsc AR f 0 * 0.1
 
 Modulating probability values
 
@@ -18,4 +18,4 @@ Modulating probability values
 >     a = MCE [400, 500, 600]
 >     t = impulse KR 6 0
 >     f = select (twindex t 1.0 p) a
-> audition $ sinOsc AR f 0 * 0.2
+> audition $ sinOsc AR f 0 * 0.1
