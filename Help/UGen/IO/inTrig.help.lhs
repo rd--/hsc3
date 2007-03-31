@@ -1,4 +1,4 @@
-inTrig numChannels rate bus
+inTrig numChannels bus
 
 Generate a trigger anytime a bus is set.
 
