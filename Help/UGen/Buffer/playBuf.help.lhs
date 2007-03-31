@@ -1,4 +1,4 @@
-playBuf numChannels rate bufnum rate trigger startPos loop
+playBuf numChannels bufnum rate trigger startPos loop
 
 Sample playback oscillator.  Plays back a memory resident sample.
 
@@ -20,9 +20,8 @@ rate        - 1.0 is the server's sample rate, 2.0 is one octave up, 0.5
               returns this factor. See examples below. BufRateScale
               should be used in virtually every case.
 
-trigger       - a trigger causes a jump to the startPos.  A
-              trigger occurs when a signal changes from <= 0
-              to > 0.
+trigger     - a trigger causes a jump to the startPos.  A trigger occurs
+              when a signal changes from <= 0 to > 0.
 
 startPos    - sample frame to start playback (k-rate).
 
@@ -36,35 +35,34 @@ Allocate buffer.
 
 Play once only.
 
-> audition $ playBuf 1 AR 10 (bufRateScale KR 10) 1 0 NoLoop
+> audition $ playBuf 1 10 (bufRateScale KR 10) 1 0 NoLoop
 
 Play in infinite loop.
 
-> audition $ playBuf 1 AR 10 (bufRateScale KR 10) 1 0 Loop
+> audition $ playBuf 1 10 (bufRateScale KR 10) 1 0 Loop
 
 Trigger playback at each pulse.
 
 > let t = impulse KR 2 0
-> audition $ playBuf 1 AR 10 (bufRateScale KR 10) t 0 NoLoop
+> audition $ playBuf 1 10 (bufRateScale KR 10) t 0 NoLoop
 
 Trigger playback at each pulse (diminishing intervals).
 
 > let f = xLine KR 0.1 100 10 RemoveSynth
 >     t = impulse KR f 0
-> audition $ playBuf 1 AR 10 (bufRateScale KR 10) t 0 NoLoop
+> audition $ playBuf 1 10 (bufRateScale KR 10) t 0 NoLoop
 
 Loop playback, accelerating pitch.
 
 > let r = xLine KR 0.1 100 60 RemoveSynth
-> audition $ playBuf 1 AR 10 r 1 0 Loop
+> audition $ playBuf 1 10 r 1 0 Loop
 
 Sine wave control of playback rate, negative rate plays backwards.
 
 > let f = xLine KR 0.2 8 30 RemoveSynth
 >     r = fSinOsc KR f 0 * 3 + 0.6
-> audition $ playBuf 1 AR 10 (bufRateScale KR 10 * r) 1 0 Loop
+> audition $ playBuf 1 10 (bufRateScale KR 10 * r) 1 0 Loop
 
 Release buffer.
 
 > withSC3 (\fd -> send fd (b_free 10))
-
