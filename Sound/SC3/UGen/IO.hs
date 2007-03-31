@@ -65,6 +65,10 @@ mouseX r minVal maxVal warp lag = mkOsc r "MouseX" [minVal, maxVal, fromWarp war
 mouseY :: Rate -> UGen -> UGen -> Warp -> UGen -> UGen
 mouseY r minVal maxVal warp lag = mkOsc r "MouseY" [minVal, maxVal, fromWarp warp, lag] 1 0
 
+-- | Control variant.
+trigControl :: Int -> Rate -> UGen
+trigControl nc r = mkOsc r "TrigControl" [] nc 0
+
 -- * Utilities
 
 -- | If the UGen has output ports connect it to an 'out' UGen.
