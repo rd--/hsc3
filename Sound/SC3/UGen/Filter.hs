@@ -152,6 +152,10 @@ leakDC i coef = mkFilter "LeakDC" [i,coef] 1 0
 linLin :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 linLin i sl sh dl dh = mkFilter "LinLin" [i,sl,sh,dl,dh] 1 0
 
+-- | Map from a linear range to an exponential range.
+linExp :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+linExp i sl sh dl dh = mkFilter "LinExp" [i,sl,sh,dl,dh] 1 0
+
 -- | Lowpass filter.
 lpf :: UGen -> UGen -> UGen
 lpf i f = mkFilter "LPF" [i,f] 1 0
