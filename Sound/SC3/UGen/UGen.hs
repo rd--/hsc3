@@ -1,16 +1,16 @@
 module Sound.SC3.UGen.UGen (Name, UGen(..),
-                            mkOsc, mkOscMCE, mkOscUId, mkOscUIdMCE,
-                            mkFilter, mkFilterMCE, mkFilterUId, mkFilterKeyed,
+                            mkOsc, mkOscMCE,
+                            mkFilter, mkFilterMCE, mkFilterKeyed,
                             isConstant, isControl, isUGen, isProxy, isMRG, isMCE,
                             mceChannel, mceReverse,
-                            nodes, uniquify, hasOutputs,
+                            nodes, withUId, uniquify, hasOutputs,
                             mix, mixFill,
                             clone) where
 
 import Sound.SC3.UGen.Rate (Rate(IR))
 import Sound.SC3.UGen.Operator (Unary(..),Binary(..))
 import Sound.SC3.UGen.Math
-import Sound.SC3.UGen.UId (UIdGen, UId, uid, zeroUId)
+import Sound.SC3.UGen.UId (UIdGen, UId(UId), uid)
 
 import Prelude hiding (EQ, GT, LT)
 import Data.List (transpose)
@@ -112,11 +112,11 @@ mceExtend n u       = replicate n u
 
 -- | Apply MCE transformation.
 mceTransform :: UGen -> UGen
-mceTransform (UGen r n i o s uid_) = MCE (map f i')
-    where f j = UGen r n j o s uid_
-          d   = maximum (map mceDegree (filter isMCE i))
-          i'  = transpose (map (mceExtend d) i)
-mceTransform _                    = error "mceTransform: illegal ugen"
+mceTransform (UGen r n i o s d) = MCE (map f i')
+    where f j = UGen r n j o s d
+          upr = maximum (map mceDegree (filter isMCE i))
+          i'  = transpose (map (mceExtend upr) i)
+mceTransform _ = error "mceTransform: illegal ugen"
 
 -- | Apply MCE transformation if required.
 mceExpand :: UGen -> UGen
@@ -146,43 +146,35 @@ uniquify (UGen r n i o s _) = liftM (UGen r n i o s) uid
 uniquify (MCE u)            = liftM MCE (mapM uniquify u)
 uniquify u                  = error ("uniquify: illegal value" ++ show u)
 
+-- | Edit UId of UGen.
+withUId :: UId -> UGen -> UGen
+withUId d (UGen r n i o s _) = UGen r n i o s d
+withUId _ _ = error "withUId: non UGen"
+
 -- | Construct proxied and multiple channel expanded UGen.
-mkUGen :: Rate -> Name -> [UGen] -> [Output] -> Special -> UId -> UGen
-mkUGen r n i o s uid_ = proxy (mceExpand u)
-    where u = UGen r n i o s uid_
+mkUGen :: Rate -> Name -> [UGen] -> [Output] -> Special -> UGen
+mkUGen r n i o s = proxy (mceExpand u)
+    where u = UGen r n i o s (UId 0)
 
--- | Ordinary oscillator constructor.
+-- | Oscillator constructor.
 mkOsc :: Rate -> Name -> [UGen] -> Int -> Special -> UGen
-mkOsc = mkOscUId zeroUId
-
--- | Variant oscillator constructor with identifier.
-mkOscUId :: UId -> Rate -> Name -> [UGen] -> Int -> Special -> UGen
-mkOscUId uid_ r c i o s = mkUGen r c i o' s uid_
-    where o' = replicate o r
+mkOsc r c i o s = mkUGen r c i (replicate o r) s
 
 -- | Variant oscillator constructor with MCE collapsing input.
 mkOscMCE :: Rate -> Name -> [UGen] -> UGen -> Int -> Special -> UGen
 mkOscMCE r c i j o s = mkOsc r c (i ++ mceChannels j) o s
 
--- | Variant oscillator constructor with identifier and MCE collapsing input.
-mkOscUIdMCE :: UId -> Rate -> Name -> [UGen] -> UGen -> Int -> Special -> UGen
-mkOscUIdMCE uid_ r c i j o s = mkOscUId uid_ r c (i ++ mceChannels j) o s
-
--- | Ordinary filter UGen constructor.
+-- | Filter UGen constructor.
 mkFilter :: Name -> [UGen] -> Int -> Special -> UGen
-mkFilter = mkFilterUId zeroUId
+mkFilter c i o s = mkUGen r c i o' s
+    where r = maximum (map rateOf i)
+          o'= replicate o r
 
 -- | Variant filter with rate derived from keyed input.
 mkFilterKeyed :: Name -> Int -> [UGen] -> Int -> Special -> UGen
-mkFilterKeyed c k i o s = mkUGen r c i o' s zeroUId
+mkFilterKeyed c k i o s = mkUGen r c i o' s
     where r = rateOf (i !! k)
           o' = replicate o r
-
--- | Variant filter constructor with identifier.
-mkFilterUId :: UId -> Name -> [UGen] -> Int -> Special -> UGen
-mkFilterUId uid_ c i o s = mkUGen r c i o' s uid_
-    where r = maximum (map rateOf i)
-          o'= replicate o r
 
 -- | Variant filter constructor with MCE collapsing input.
 mkFilterMCE :: Name -> [UGen] -> UGen -> Int -> Special -> UGen

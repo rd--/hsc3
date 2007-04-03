@@ -11,10 +11,6 @@ class UIdGen m where
 instance UIdGen IO where
    uid = liftM (UId . hashUnique) newUnique
 
--- | The nil identifier.
-zeroUId :: UId
-zeroUId = UId 0
-
 n_uid :: (Monad m, UIdGen m) => Int -> m [UId]
 n_uid n = replicateM n uid
 

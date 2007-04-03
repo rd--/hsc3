@@ -18,11 +18,13 @@ Exposed-modules:  Sound.SC3
                   Sound.SC3.UGen.Buffer
                   Sound.SC3.UGen.Chaos
                   Sound.SC3.UGen.Demand
+                  Sound.SC3.UGen.Demand.Base
                   Sound.SC3.UGen.Demand.Monadic
                   Sound.SC3.UGen.Demand.Pure
                   Sound.SC3.UGen.Envelope
                   Sound.SC3.UGen.Enum
                   Sound.SC3.UGen.FFT
+                  Sound.SC3.UGen.FFT.Base
                   Sound.SC3.UGen.FFT.Monadic
                   Sound.SC3.UGen.FFT.Pure
                   Sound.SC3.UGen.Filter
@@ -30,6 +32,7 @@ Exposed-modules:  Sound.SC3
                   Sound.SC3.UGen.Information
                   Sound.SC3.UGen.IO
                   Sound.SC3.UGen.Math
+                  Sound.SC3.UGen.Noise.Base
                   Sound.SC3.UGen.Noise.Monadic
                   Sound.SC3.UGen.Noise.Pure
                   Sound.SC3.UGen.Operator
