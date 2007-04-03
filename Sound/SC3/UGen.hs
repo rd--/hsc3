@@ -17,7 +17,8 @@ module Sound.SC3.UGen (module Sound.SC3.UGen.Analysis,
                        module Sound.SC3.UGen.Oscillator,
                        module Sound.SC3.UGen.Panner,
                        module Sound.SC3.UGen.Rate,
-                       module Sound.SC3.UGen.UGen) where
+                       module Sound.SC3.UGen.UGen,
+                       module Sound.SC3.UGen.UId) where
 
 import Sound.SC3.UGen.Analysis
 import Sound.SC3.UGen.Buffer
@@ -39,3 +40,4 @@ import Sound.SC3.UGen.Oscillator
 import Sound.SC3.UGen.Panner
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
+import Sound.SC3.UGen.UId

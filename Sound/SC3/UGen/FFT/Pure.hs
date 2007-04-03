@@ -1,7 +1,8 @@
 module Sound.SC3.UGen.FFT.Pure where
 
 import Sound.SC3.UGen.Rate (Rate(KR))
-import Sound.SC3.UGen.UGen (UGen, UId, mkOscUId)
+import Sound.SC3.UGen.UGen (UGen, mkOscUId)
+import Sound.SC3.UGen.UId  (UId)
 
 -- | Randomize order of bins.
 pv_BinScramble :: UId -> UGen -> UGen -> UGen -> UGen -> UGen

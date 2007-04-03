@@ -1,7 +1,8 @@
 module Sound.SC3.UGen.Noise.Pure where
 
 import Sound.SC3.UGen.Rate (Rate(IR))
-import Sound.SC3.UGen.UGen (UGen, UId, mkOscUId, mkFilterUId,)
+import Sound.SC3.UGen.UGen (UGen, mkOscUId, mkFilterUId)
+import Sound.SC3.UGen.UId  (UId)
 
 -- | Brown noise.
 brownNoise :: UId -> Rate -> UGen

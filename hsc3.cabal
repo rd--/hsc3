@@ -37,6 +37,7 @@ Exposed-modules:  Sound.SC3
                   Sound.SC3.UGen.Panner
                   Sound.SC3.UGen.Rate
                   Sound.SC3.UGen.UGen
+                  Sound.SC3.UGen.UId
                   Sound.SC3.Server
                   Sound.SC3.Server.Command
                   Sound.SC3.Server.Graphdef

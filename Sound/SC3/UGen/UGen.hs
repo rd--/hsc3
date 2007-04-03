@@ -1,5 +1,4 @@
-module Sound.SC3.UGen.UGen (UId(UId), zeroUId,
-                            Name, UGen(..),
+module Sound.SC3.UGen.UGen (Name, UGen(..),
                             mkOsc, mkOscMCE, mkOscUId, mkOscUIdMCE,
                             mkFilter, mkFilterMCE, mkFilterUId, mkFilterKeyed,
                             isConstant, isControl, isUGen, isProxy, isMRG, isMCE,
@@ -11,17 +10,16 @@ module Sound.SC3.UGen.UGen (UId(UId), zeroUId,
 import Sound.SC3.UGen.Rate (Rate(IR))
 import Sound.SC3.UGen.Operator (Unary(..),Binary(..))
 import Sound.SC3.UGen.Math
+import Sound.SC3.UGen.UId (UIdGen, UId, uid, zeroUId)
 
 import Prelude hiding (EQ, GT, LT)
 import Data.List (transpose)
-import Data.Unique (newUnique, hashUnique)
 import Control.Monad (liftM, replicateM)
 import System.Random (Random, randomR, random)
 
 type Name     = String
 type Output   = Rate
 type Special  = Int
-data UId      = UId Int deriving (Eq, Show)
 data UGen     = Constant Double
               | Control Rate Name Double
               | UGen Rate Name [UGen] [Output] Special UId
@@ -114,8 +112,8 @@ mceExtend n u       = replicate n u
 
 -- | Apply MCE transformation.
 mceTransform :: UGen -> UGen
-mceTransform (UGen r n i o s uid) = MCE (map f i')
-    where f j = UGen r n j o s uid
+mceTransform (UGen r n i o s uid_) = MCE (map f i')
+    where f j = UGen r n j o s uid_
           d   = maximum (map mceDegree (filter isMCE i))
           i'  = transpose (map (mceExtend d) i)
 mceTransform _                    = error "mceTransform: illegal ugen"
@@ -142,28 +140,16 @@ mceChannels u       = [u]
 
 -- * UGen Constructors.
 
--- | The nil identifier.
-zeroUId :: UId
-zeroUId = UId 0
-
--- | Construct unique integer identifier.
-mkId :: IO Int
-mkId = liftM hashUnique newUnique
-
--- | Construct unique UId.
-mkUId :: IO UId
-mkUId = liftM UId mkId
-
 -- | Transform UGen to have a unique identifier.
-uniquify :: UGen -> IO UGen
-uniquify (UGen r n i o s _) = liftM (UGen r n i o s) mkUId
+uniquify :: (Monad m, UIdGen m) => UGen -> m UGen
+uniquify (UGen r n i o s _) = liftM (UGen r n i o s) uid
 uniquify (MCE u)            = liftM MCE (mapM uniquify u)
 uniquify u                  = error ("uniquify: illegal value" ++ show u)
 
 -- | Construct proxied and multiple channel expanded UGen.
 mkUGen :: Rate -> Name -> [UGen] -> [Output] -> Special -> UId -> UGen
-mkUGen r n i o s uid = proxy (mceExpand u)
-    where u = UGen r n i o s uid
+mkUGen r n i o s uid_ = proxy (mceExpand u)
+    where u = UGen r n i o s uid_
 
 -- | Ordinary oscillator constructor.
 mkOsc :: Rate -> Name -> [UGen] -> Int -> Special -> UGen
@@ -171,7 +157,7 @@ mkOsc = mkOscUId zeroUId
 
 -- | Variant oscillator constructor with identifier.
 mkOscUId :: UId -> Rate -> Name -> [UGen] -> Int -> Special -> UGen
-mkOscUId uid r c i o s = mkUGen r c i o' s uid
+mkOscUId uid_ r c i o s = mkUGen r c i o' s uid_
     where o' = replicate o r
 
 -- | Variant oscillator constructor with MCE collapsing input.
@@ -180,7 +166,7 @@ mkOscMCE r c i j o s = mkOsc r c (i ++ mceChannels j) o s
 
 -- | Variant oscillator constructor with identifier and MCE collapsing input.
 mkOscUIdMCE :: UId -> Rate -> Name -> [UGen] -> UGen -> Int -> Special -> UGen
-mkOscUIdMCE uid r c i j o s = mkOscUId uid r c (i ++ mceChannels j) o s
+mkOscUIdMCE uid_ r c i j o s = mkOscUId uid_ r c (i ++ mceChannels j) o s
 
 -- | Ordinary filter UGen constructor.
 mkFilter :: Name -> [UGen] -> Int -> Special -> UGen
@@ -194,7 +180,7 @@ mkFilterKeyed c k i o s = mkUGen r c i o' s zeroUId
 
 -- | Variant filter constructor with identifier.
 mkFilterUId :: UId -> Name -> [UGen] -> Int -> Special -> UGen
-mkFilterUId uid c i o s = mkUGen r c i o' s uid
+mkFilterUId uid_ c i o s = mkUGen r c i o' s uid_
     where r = maximum (map rateOf i)
           o'= replicate o r
 

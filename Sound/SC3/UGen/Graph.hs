@@ -3,8 +3,9 @@ module Sound.SC3.UGen.Graph (Graph(..), Input(..),
                              controlIndex, constantIndex, ugenIndex,
                              makeInput) where
 
-import Sound.SC3.UGen.UGen (UGen(..), UId(UId), nodes, isConstant, isControl, isUGen)
+import Sound.SC3.UGen.UGen (UGen(..), nodes, isConstant, isControl, isUGen)
 import Sound.SC3.UGen.Rate (Rate(KR))
+import Sound.SC3.UGen.UId  (UId(UId))
 
 import Data.Maybe (fromMaybe)
 import Data.List (nub, elemIndex)

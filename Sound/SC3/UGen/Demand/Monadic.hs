@@ -1,7 +1,8 @@
 module Sound.SC3.UGen.Demand.Monadic where
 
-import Sound.SC3.UGen.UGen (UGen, uniquify, zeroUId)
+import Sound.SC3.UGen.UGen (UGen, uniquify)
 import qualified Sound.SC3.UGen.Demand.Pure as D
+import Sound.SC3.UGen.UId  (zeroUId)
 
 -- | Buffer demand ugen.
 dbufrd :: UGen -> UGen -> UGen -> IO UGen

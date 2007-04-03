@@ -1,7 +1,8 @@
 module Sound.SC3.UGen.FFT.Monadic where
 
-import Sound.SC3.UGen.UGen (UGen, uniquify, zeroUId)
+import Sound.SC3.UGen.UGen (UGen, uniquify)
 import qualified Sound.SC3.UGen.FFT.Pure as F
+import Sound.SC3.UGen.UId  (zeroUId)
 
 -- | Randomize order of bins.
 pv_BinScramble :: UGen -> UGen -> UGen -> UGen -> IO UGen
