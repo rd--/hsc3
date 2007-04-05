@@ -23,7 +23,7 @@ CPU.
 sclang default initial parameters.
 
 > let x = mouseX KR 20 sampleRate Linear 0.1
-> audition $ latoocarfianC AR x 1 3 0.5 0.5 0.5 0.5 * 0.2
+> audition (out 0 (latoocarfianC AR x 1 3 0.5 0.5 0.5 0.5 * 0.2))
 
 Randomly modulate all parameters.
 
@@ -33,4 +33,4 @@ Randomly modulate all parameters.
 >     b = n1 * 1.5 + 1.5
 >     c = n2 * 0.5 + 1.5
 >     d = n2 * 0.5 + 1.5
-> audition $ latoocarfianC AR f a b c d 0.5 0.5 * 0.2
+> audition (out 0 (latoocarfianC AR f a b c d 0.5 0.5 * 0.2))

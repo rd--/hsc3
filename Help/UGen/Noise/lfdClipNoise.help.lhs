@@ -17,16 +17,16 @@ LFDNoise changes smoothly.
 
 > let x = mouseX KR 0.1 1000 Exponential 0.2
 > n <- lfdClipNoise AR x
-> audition $ sinOsc AR (n * 200 + 500) 0 * 0.2
+> audition (out 0 (sinOsc AR (n * 200 + 500) 0 * 0.2))
 
 > let x = mouseX KR 0.1 1000 Exponential 0.2
 > n <- lfClipNoise AR x
-> audition $ sinOsc AR (n * 200 + 500) 0 * 0.2
+> audition (out 0 (sinOsc AR (n * 200 + 500) 0 * 0.2))
 
 LFNoise quantizes time steps at high freqs, LFDNoise does not:
 
 > let f = xLine KR 1000 20000 10 RemoveSynth
-> audition . (* 0.1) =<< lfdClipNoise AR f
+> audition . (out 0) . (* 0.1) =<< lfdClipNoise AR f
 
 > let f = xLine KR 1000 20000 10 RemoveSynth
-> audition . (* 0.1) =<< lfClipNoise AR f
+> audition . (out 0) . (* 0.1) =<< lfClipNoise AR f

@@ -8,5 +8,5 @@ non-positive to positive.
 >     d = pulseDivider p (MCE [4,7]) 0
 >     a = sinOsc AR 1200 0 * decay2 p 0.005 0.1
 >     b = sinOsc AR 600  0 * decay2 d 0.005 0.5
-> audition (a + b * 0.4)
+> audition (out 0 (a + b * 0.4))
 

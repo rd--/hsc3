@@ -15,24 +15,24 @@ Try wiggling mouse quickly; LFNoise frequently seems stuck,
 LFDNoise changes smoothly.
 
 > let x = mouseX KR 0.1 1000 Exponential 0.2
-> audition . (* 0.1) =<< lfdNoise0 AR x
+> audition . (out 0) . (* 0.1) =<< lfdNoise0 AR x
 
 > let x = mouseX KR 0.1 1000 Exponential 0.2
-> audition . (* 0.1) =<< lfNoise0 AR x
+> audition . (out 0) . (* 0.1) =<< lfNoise0 AR x
 
 silent for 2 secs before going up in freq
 
 > let f = xLine KR 0.5 10000 3 RemoveSynth
-> audition . (* 0.1) =<< lfdNoise0 AR f
+> audition . (out 0) . (* 0.1) =<< lfdNoise0 AR f
 
 > let f = xLine KR 0.5 10000 3 RemoveSynth
-> audition . (* 0.1) =<< lfNoise0 AR f
+> audition . (out 0) . (* 0.1) =<< lfNoise0 AR f
 
 LFNoise quantizes time steps at high freqs, LFDNoise does not:
 
 > let f = xLine KR 1000 20000 10 RemoveSynth
-> audition . (* 0.1) =<< lfdNoise0 AR f
+> audition . (out 0) . (* 0.1) =<< lfdNoise0 AR f
 
 > let f = xLine KR 1000 20000 10 RemoveSynth
-> audition . (* 0.1) =<< lfNoise0 AR f
+> audition . (out 0) . (* 0.1) =<< lfNoise0 AR f
 

@@ -8,4 +8,4 @@ delayTime - delay time in seconds.
 
 > let z  = impulse AR 2 0
 >     z' = tDelay z 0.5
-> audition $ MCE [z * 0.1, toggleFF z' * sinOsc AR 440 0 * 0.1]
+> audition (out 0 (MCE [z * 0.1, toggleFF z' * sinOsc AR 440 0 * 0.1]))

@@ -23,10 +23,10 @@ Rotation of stereo sound, via LFO.
 
 > x <- pinkNoise AR
 > let y = lfTri AR 800 0 * lfPulse KR 3 0 0.3 * 0.2
-> audition $ rotate2 x y (lfSaw KR 0.1 0)
+> audition (out 0 (rotate2 x y (lfSaw KR 0.1 0)))
 
 Rotation of stereo sound, via mouse.
 
 > let x = mix $ lfSaw AR (MCE [198..201]) 0 * 0.1
 >     y = sinOsc AR 900 0 * lfPulse KR 3 0 0.3 * 0.2
-> audition $ rotate2 x y (mouseX KR 0 2 Linear 0.2)
+> audition (out 0 (rotate2 x y (mouseX KR 0 2 Linear 0.2)))

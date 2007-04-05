@@ -22,4 +22,4 @@ decaytime - time for the echoes to decay by 60 decibels. If this
 > d <- dust AR 1
 > n <- whiteNoise AR
 > let x = decay d 0.2 * n * 0.25
-> audition $ bufCombC 0 x 0.25 6
+> audition (out 0 (bufCombC 0 x 0.25 6))

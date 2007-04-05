@@ -7,10 +7,10 @@ in   - input signal to be processed
 coef - feedback coefficient. Should be between -1 and +1
 
 > n <- whiteNoise AR
-> audition $ onePole (n * 0.5) 0.95
+> audition (out 0 (onePole (n * 0.5) 0.95))
 
 > n <- whiteNoise AR
-> audition $ onePole (n * 0.5) (-0.95)
+> audition (out 0 (onePole (n * 0.5) (-0.95)))
 
 > n <- whiteNoise AR
-> audition $ onePole (n * 0.5) (line KR (-0.99) 0.99 10 RemoveSynth)
+> audition (out 0 (onePole (n * 0.5) (line KR (-0.99) 0.99 10 RemoveSynth)))

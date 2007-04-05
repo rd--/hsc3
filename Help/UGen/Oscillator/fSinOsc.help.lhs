@@ -14,11 +14,11 @@ iPhase - initial phase
 
 Note the phase argument, which was not in the SC2 variant.
 
-> audition $ fSinOsc AR (MCE [440, 550]) 0 * 0.05
+> audition (out 0 (fSinOsc AR (MCE [440, 550]) 0 * 0.05))
 
-> audition $ fSinOsc AR (xLine KR 200 4000 1 RemoveSynth) 0 * 0.1
+> audition (out 0 (fSinOsc AR (xLine KR 200 4000 1 RemoveSynth) 0 * 0.1))
 
 Loses amplitude towards the end
 
 > let f = fSinOsc AR (xLine KR 4 401 8 RemoveSynth)
-> audition $ fSinOsc AR (f 0 * 200 + 800) 0 * 0.1
+> audition (out 0 (fSinOsc AR (f 0 * 200 + 800) 0 * 0.1))

@@ -8,4 +8,4 @@ as a high pass filter.
 >                    wait fd "/done")
 > n <- whiteNoise AR
 > let x = mouseX KR (-1) 1 Linear 0.1
-> audition $ ifft (pv_BrickWall (fft 10 (n * 0.2)) x)
+> audition (out 0 (ifft (pv_BrickWall (fft 10 (n * 0.2)) x)))

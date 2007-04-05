@@ -15,4 +15,4 @@ in     - the input signal.
 
 > let x = mouseX KR 0 18 Linear 0.1
 >     f = wrapIndex 0 x
-> audition $ sinOsc AR f 0 * 0.5
+> audition (out 0 (sinOsc AR f 0 * 0.5))

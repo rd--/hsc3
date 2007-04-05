@@ -20,4 +20,4 @@ decayscale - a scale factor multiplied by all ring times at
              initialization time.
 
 > let s = klankSpec [800, 1071, 1153, 1723] [1, 1, 1, 1] [1, 1, 1, 1]
-> audition $ klank (impulse AR 2 0 * 0.1) 1 0 1 s
+> audition (out 0 (klank (impulse AR 2 0 * 0.1) 1 0 1 s))

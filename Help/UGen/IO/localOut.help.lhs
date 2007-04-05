@@ -21,15 +21,15 @@ resonator example below.
 > let a0 = decay (impulse AR 0.3 0) 0.1 * n * 0.2
 >     a1 = localIn 2 AR + MCE [a0, 0]
 >     a2 = delayN a1 0.2 0.2
-> audition $ MRG [localOut (mceReverse a2 * 0.8), out 0 a2]
+> audition (MRG [localOut (mceReverse a2 * 0.8), out 0 a2])
 
 Resonator, must subtract blockSize for correct tuning
 
 > let p = localIn 1 AR
 >     i = impulse AR 1 0
 >     d = delayC (i + (p * 0.995)) 1 (recip 440 - recip controlRate)
-> audition $ MRG [offsetOut 0 p, localOut d]
+> audition (MRG [offsetOut 0 p, localOut d])
 
 Compare with oscillator.
 
-> audition $ out 1 (sinOsc AR 440 0 * 0.2)
+> audition (out 1 (sinOsc AR 440 0 * 0.2))

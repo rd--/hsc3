@@ -14,4 +14,4 @@ segments, and c second derivative constant segments.
 > let s = 1/2
 >     b = slope a * s
 >     c = slope b * squared s
-> audition $ mix (sinOsc AR (MCE [a, b, c] * 220 + 220) 0 * (1/3))
+> audition (out 0 (mix (sinOsc AR (MCE [a, b, c] * 220 + 220) 0 * (1/3))))

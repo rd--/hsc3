@@ -10,4 +10,4 @@ framesize - size of FFT frame, must be a power of two
 
 > let i = in' 2 AR numOutputBuses
 > k <- whiteNoise AR
-> audition $ convolution i k 2048 * 0.1
+> audition (out 0 (convolution i k 2048 * 0.1))

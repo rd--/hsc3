@@ -18,4 +18,4 @@ Proof of concept, silence
 > i <- lfClipNoise AR 100
 > let c0 = fft 0 i
 >     c1 = pv_Copy c0 1
-> audition $ ifft c0 - ifft c1
+> audition (out 0 (ifft c0 - ifft c1))

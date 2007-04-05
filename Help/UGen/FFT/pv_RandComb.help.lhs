@@ -11,4 +11,4 @@ order (0, 1).  trig = select new random ordering.
 >     t = impulse KR 0.4 0
 > n <- whiteNoise AR
 > c <- pv_RandComb (fft 10 (n * 0.5)) x t
-> audition $ pan2 (ifft c) 0 1
+> audition (out 0 (pan2 (ifft c) 0 1))

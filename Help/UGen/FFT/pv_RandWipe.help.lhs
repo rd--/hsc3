@@ -23,4 +23,4 @@ random ordering.
 >     x  = mouseX KR 0 1 Linear 0.1
 >     y  = mouseY KR 0 1 Linear 0.1
 > h <- pv_RandWipe f g x (y >* 0.5)
-> audition $ pan2 (ifft h) 0 0.5
+> audition (out 0 (pan2 (ifft h) 0 0.5))

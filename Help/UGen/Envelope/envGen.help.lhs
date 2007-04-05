@@ -32,22 +32,22 @@ Percussive envelope
 
 > let p = envPerc 0.01 1 1 [EnvNum (-4), EnvNum (-4)]
 >     e = envGen KR 1 0.1 0 1 RemoveSynth p
-> audition (sinOsc AR 440 0 * e)
+> audition (out 0 (sinOsc AR 440 0 * e))
 
 Sine envelope
 
 > let s = envSine 9 0.1
 >     e = envGen KR 1 1 0 1 RemoveSynth s
-> audition (sinOsc AR 440 0 * e)
+> audition (out 0 (sinOsc AR 440 0 * e))
 
 Co-ordinate (break-point) envelope
 
 > let c = envCoord [(0,0), (0.5, 0.1), (0.55, 1), (1, 0)] 9 0.1 EnvLin
 >     e = envGen KR 1 1 0 1 RemoveSynth c
-> audition (sinOsc AR 440 0 * e)
+> audition (out 0 (sinOsc AR 440 0 * e))
 
 Trapezoidal envelope
 
 > let t = envTrapezoid 0.05 0.95 3 0.1
 >     e = envGen KR 1 1 0 1 RemoveSynth t
-> audition (sinOsc AR 440 0 * e)
+> audition (out 0 (sinOsc AR 440 0 * e))

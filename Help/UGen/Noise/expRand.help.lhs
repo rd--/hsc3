@@ -5,4 +5,4 @@ distributions from `lo' to `hi'.
 
 > let a = line KR 0.5 0 0.01 RemoveSynth
 > f <- expRand 100.0 8000.0
-> audition $ fSinOsc AR f 0 * a
+> audition (out 0 (fSinOsc AR f 0 * a))

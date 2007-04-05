@@ -13,7 +13,7 @@ dependant on the buffer size.
 >     f = fft 10 a
 >     x = mouseX KR 0 100 Linear 0.1
 >     h = pv_MagBelow f x
-> audition $ ifft h * 0.5
+> audition (out 0 (ifft h * 0.5))
 
 Synthesised input.
 
@@ -24,4 +24,4 @@ Synthesised input.
 >     f = fft 10 b
 >     x = mouseX KR 0 1024 Linear 0.1
 >     h = pv_MagBelow f x
-> audition $ ifft h * 0.5
+> audition (out 0 (ifft h * 0.5))

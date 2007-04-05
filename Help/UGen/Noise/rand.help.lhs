@@ -8,4 +8,4 @@ remains fixed for the duration of the synth's existence.
 > l <- rand (-1) 1
 > let e = line KR 0.2 0 0.1 RemoveSynth
 >     o = fSinOsc AR f 0
-> audition (pan2 (o * e) l 1)
+> audition (out 0 (pan2 (o * e) l 1))

@@ -24,17 +24,17 @@ sinewave results.
 
 sclang default values
 
-> audition $ fbSineC AR (sampleRate / 4) 1 0.1 1.1 0.5 0.1 0.1 * 0.2
+> audition (out 0 (fbSineC AR (sampleRate / 4) 1 0.1 1.1 0.5 0.1 0.1 * 0.2))
 
 Increase feedback
 
 > let fb = line KR 0.01 4 10 DoNothing
-> audition $ fbSineC AR sampleRate 1 fb 1.1 0.5 0.1 0.1 * 0.2
+> audition (out 0 (fbSineC AR sampleRate 1 fb 1.1 0.5 0.1 0.1 * 0.2))
 
 Increase phase multiplier
 
 > let a = line KR 1 2 10 DoNothing
-> audition $ fbSineC AR sampleRate 1 0 a 0.5 0.1 0.1 * 0.2
+> audition (out 0 (fbSineC AR sampleRate 1 0 a 0.5 0.1 0.1 * 0.2))
 
 Randomly modulate parameters
 
@@ -44,4 +44,4 @@ Randomly modulate parameters
 > n2 <- return . (+ 0)    . (* 0.5)  =<< lfNoise2 KR x
 > n3 <- return . (+ 1.05) . (* 0.05) =<< lfNoise2 KR x
 > n4 <- return . (+ 0.3)  . (* 0.3)  =<< lfNoise2 KR x
-> audition $ fbSineC AR n0 n1 n2 n3 n4 0.1 0.1 * 0.2
+> audition (out 0 (fbSineC AR n0 n1 n2 n3 n4 0.1 0.1 * 0.2))

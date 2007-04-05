@@ -3,4 +3,4 @@ hpz1 in
 Two point difference filter.
 
 > n <- whiteNoise AR
-> audition $ hpz1 (n * 0.25)
+> audition (out 0 (hpz1 (n * 0.25)))

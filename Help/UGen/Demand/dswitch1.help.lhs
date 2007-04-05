@@ -11,4 +11,4 @@ array	- array of values or other ugens
 > n <- dswitch1 x (MCE [1, 3, y, 2, w])
 > let t = impulse KR 3 0
 >     f = demand t 0 n * 30 + 340
-> audition $ sinOsc AR f 0 * 0.1
+> audition (out 0 (sinOsc AR f 0 * 0.1))

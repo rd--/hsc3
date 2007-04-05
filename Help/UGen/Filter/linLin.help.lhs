@@ -9,4 +9,4 @@ dstlo - lower limit of output range.
 dsthi - upper limit of output range.
 
 > let f = linLin (mouseX KR 0 1 Linear 0.2) 0 1 440 660
-> audition $ sinOsc AR f 0 * 0.1
+> audition (out 0 (sinOsc AR f 0 * 0.1))

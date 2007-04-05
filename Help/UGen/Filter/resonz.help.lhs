@@ -13,19 +13,19 @@ freq - resonant frequency in Hertz
 rq - bandwidth ratio (reciprocal of Q). rq = bandwidth / centerFreq
 
 > n <- whiteNoise AR
-> audition $ resonz (n * 0.5) 2000 0.1
+> audition (out 0 (resonz (n * 0.5) 2000 0.1))
 
 Modulate frequency
 
 > n <- whiteNoise AR
-> audition $ resonz (n * 0.5) (xLine KR 1000 8000 10 RemoveSynth) 0.05
+> audition (out 0 (resonz (n * 0.5) (xLine KR 1000 8000 10 RemoveSynth) 0.05))
 
 Modulate bandwidth
 
 > n <- whiteNoise AR
-> audition $ resonz (n * 0.5) 2000 (xLine KR 1 0.001 8 RemoveSynth)
+> audition (out 0 (resonz (n * 0.5) 2000 (xLine KR 1 0.001 8 RemoveSynth)))
 
 Modulate bandwidth opposite direction
 
 > n <- whiteNoise AR
-> audition $ resonz (n * 0.5) 2000 (xLine KR 0.001 1 8 RemoveSynth)
+> audition (out 0 (resonz (n * 0.5) 2000 (xLine KR 0.001 1 8 RemoveSynth)))

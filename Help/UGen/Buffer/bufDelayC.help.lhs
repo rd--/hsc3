@@ -20,4 +20,4 @@ delaytime - delay time in seconds.
 > d <- dust AR 1
 > n <- whiteNoise AR
 > let x = decay d 0.5 * n * 0.3
-> audition $ bufDelayC 0 x 0.2 + x
+> audition (out 0 (bufDelayC 0 x 0.2 + x))

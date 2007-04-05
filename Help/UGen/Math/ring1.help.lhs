@@ -8,4 +8,4 @@ See also Mul, Ring1, Ring2, Ring3, Ring4.
 
 > let a = fSinOsc AR 800 0
 >     b = fSinOsc AR (xLine KR 200 500 5 DoNothing) 0
-> audition $ ring1 a b * 0.125
+> audition (out 0 (ring1 a b * 0.125))

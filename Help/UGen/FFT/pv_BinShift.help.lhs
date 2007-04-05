@@ -12,4 +12,4 @@ by `shift' places, the distance between subsequent bins is `stretch'.
 >     s1 = sinOsc KR (squared s0) 0 * 100 + 800
 >     s2 = sinOsc AR s1 0
 >     pv = pv_BinShift (fft 10 s2) y x
-> audition $ pan2 (ifft pv) 0 0.5
+> audition (out 0 (pan2 (ifft pv) 0 0.5))

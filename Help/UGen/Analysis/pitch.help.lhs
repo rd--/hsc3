@@ -22,9 +22,9 @@ ampThreshold = 0.01, peakThreshold = 0.5, downSample = 1.
 >     s = sinOsc AR x 0 * y
 >     a = amplitude KR s 0.05 0.05
 >     f = pitch s 440 60 4000 100 16 7 0.02 0.5 1
-> audition $ MCE [s, sinOsc AR (mceChannel 0 f / 2) 0 * a]
+> audition (out 0 (MCE [s, sinOsc AR (mceChannel 0 f / 2) 0 * a]))
 
 > let s = in' 1 AR numOutputBuses
 >     a = amplitude KR s 0.1 0.1
 >     f = pitch s 440 60 4000 100 16 7 0.02 0.5 1
-> audition $ MCE [s, sinOsc AR (mceChannel 0 f) 0 * a]
+> audition (out 0 (MCE [s, sinOsc AR (mceChannel 0 f) 0 * a]))

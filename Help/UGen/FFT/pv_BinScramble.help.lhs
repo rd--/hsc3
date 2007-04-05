@@ -19,4 +19,4 @@ trig   - a trigger selects a new random ordering.
 >     x = mouseX KR 0.0 1.0 Linear 0.1
 >     y = mouseY KR 0.0 1.0 Linear 0.1
 > g <- pv_BinScramble f x y (impulse KR 4 0)
-> audition $ pan2 (ifft g) 0 0.5
+> audition (out 0 (pan2 (ifft g) 0 0.5))

@@ -5,4 +5,4 @@ synthesis server is running on.
 
 > let freq = mouseX KR 20 2000 Exponential 0.1
 > let ampl = mouseY KR 0.01 0.1 Linear 0.1
-> audition $ sinOsc AR freq 0 * ampl
+> audition (out 0 (sinOsc AR freq 0 * ampl))

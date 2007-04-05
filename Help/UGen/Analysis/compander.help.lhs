@@ -40,7 +40,7 @@ Example signal to process.
 
 > let e = decay2 (impulse AR 8 0 * lfSaw KR 0.3 0 * 0.3) 0.001 0.3
 >     p = mix (pulse AR (MCE [80, 81]) 0.3)
-> audition $ e * p
+> audition (out 0 (e * p))
 
 Noise gate
 
@@ -48,7 +48,7 @@ Noise gate
 >     p = mix (pulse AR (MCE [80, 81]) 0.3)
 >     z = e * p
 >     x = mouseX KR 0.01 1 Linear 0.1
-> audition $ MCE [z, compander z z x 10 1 0.01 0.01]
+> audition (out 0 (MCE [z, compander z z x 10 1 0.01 0.01]))
 
 Compressor
 
@@ -56,7 +56,7 @@ Compressor
 >     p = mix (pulse AR (MCE [80, 81]) 0.3)
 >     z = e * p
 >     x = mouseX KR 0.01 1 Linear 0.1
-> audition $ MCE [z, compander z z x 1 0.5 0.01 0.01]
+> audition (out 0 (MCE [z, compander z z x 1 0.5 0.01 0.01]))
 
 Limiter
 
@@ -64,7 +64,7 @@ Limiter
 >     p = mix (pulse AR (MCE [80, 81]) 0.3)
 >     z = e * p
 >     x = mouseX KR 0.01 1 Linear 0.1
-> audition $ MCE [z, compander z z x 1 0.1 0.01 0.01]
+> audition (out 0 (MCE [z, compander z z x 1 0.1 0.01 0.01]))
 
 Sustainer
 
@@ -72,4 +72,4 @@ Sustainer
 >     p = mix (pulse AR (MCE [80, 81]) 0.3)
 >     z = e * p
 >     x = mouseX KR 0.01 1 Linear 0.1
-> audition $ MCE [z, compander z z x 0.1 1.0 0.01 0.01]
+> audition (out 0 (MCE [z, compander z z x 0.1 1.0 0.01 0.01]))

@@ -11,4 +11,4 @@ hi - high threshold
 
 > n <- brownNoise AR
 > let x = mouseX KR 1 2 Linear 0.1
-> audition $ inRange (sinOsc KR x 0 * 0.2) (-0.15) 0.15 * n * 0.1
+> audition (out 0 (inRange (sinOsc KR x 0 * 0.2) (-0.15) 0.15 * n * 0.1))

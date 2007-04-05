@@ -8,4 +8,4 @@ ratio by which the playback of a soundfile is to be scaled.
 
 > let r = 1.25 * bufRateScale KR 0
 >     p = phasor AR 0 r 0 (bufFrames KR 0) 0
-> audition $ bufRdL 1 AR 0 p NoLoop
+> audition (out 0 (bufRdL 1 AR 0 p NoLoop))

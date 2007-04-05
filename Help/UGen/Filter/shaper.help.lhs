@@ -12,4 +12,4 @@ in     - the input signal.
 >                    wait fd "/done"
 >                    send fd (b_gen 10 "cheby" [0, 1, 0, 1, 1, 0, 1])
 >                    wait fd "/done")
-> audition $ shaper 10 (sinOsc AR 300 0 * line KR 0 1 6 RemoveSynth) * 0.5
+> audition (out 0 (shaper 10 (sinOsc AR 300 0 * line KR 0 1 6 RemoveSynth) * 0.5))

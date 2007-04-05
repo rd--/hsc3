@@ -5,9 +5,9 @@ First order filter section.
 Same as OnePole.
 
 > let x = lfTri AR 0.4 0 * 0.99
-> audition $ fos (lfSaw AR 200 0 * 0.2) (1 - (abs x)) 0 x
+> audition (out 0 (fos (lfSaw AR 200 0 * 0.2) (1 - (abs x)) 0 x))
 
 Same as OneZero
 
 > let x = lfTri AR 0.4 0 * 0.99
-> audition $ fos (lfSaw AR 200 0 * 0.2) (1 - (abs x)) x 0
+> audition (out 0 (fos (lfSaw AR 200 0 * 0.2) (1 - (abs x)) x 0))

@@ -9,4 +9,4 @@ trig - reset the output value to the current input value
 
 > n <- dust AR 20
 > let t = impulse AR 0.4 0
-> audition $ sinOsc AR (runningMax n t * 500 + 200) 0 * 0.2
+> audition (out 0 (sinOsc AR (runningMax n t * 500 + 200) 0 * 0.2))

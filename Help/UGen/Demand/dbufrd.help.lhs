@@ -17,7 +17,7 @@ Example
 > p <- dseq 8192 (MCE [s, b])
 > t <- dust KR 10
 > r <- dbufrd 10 p 1
-> audition $ sinOsc AR (demand t 0 r) 0 * 0.1
+> audition (out 0 (sinOsc AR (demand t 0 r) 0 * 0.1))
 
 Buffer as a time pattern (requires buffer 10 as allocated above).
 
@@ -32,7 +32,7 @@ Buffer as a time pattern (requires buffer 10 as allocated above).
 > j <- dseries 8192 0 1
 > d <- dbufrd 11 j 1
 > l <- dbufrd 10 p 1
-> audition $ sinOsc AR (duty KR (d * 0.5) 0 DoNothing l) 0 * 0.1
+> audition (out 0 (sinOsc AR (duty KR (d * 0.5) 0 DoNothing l) 0 * 0.1))
 
 Free buffers
 

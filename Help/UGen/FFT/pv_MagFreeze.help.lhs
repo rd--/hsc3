@@ -12,7 +12,7 @@ threshold.
 >     f = fft 10 a
 >     x = mouseX KR 0 1 Linear 0.1
 >     h = pv_MagFreeze f (x >* 0.5)
-> audition $ ifft h * 0.5
+> audition (out 0 (ifft h * 0.5))
 
 Synthesised input.
 
@@ -23,4 +23,4 @@ Synthesised input.
 >     f = fft 10 b
 >     x = mouseX KR 0 1 Linear 0.1
 >     h = pv_MagFreeze f (x >* 0.5)
-> audition $ ifft h * 0.5
+> audition (out 0 (ifft h * 0.5))

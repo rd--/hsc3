@@ -12,4 +12,4 @@ reset - trigger resets output to zero
 > n <- brownNoise AR
 > d0 <- dust AR 5
 > d1 <- dust AR 5
-> audition $ setResetFF d0 d1 * n * 0.2
+> audition (out 0 (setResetFF d0 d1 * n * 0.2))

@@ -67,34 +67,34 @@ minfreq=440, maxfreq=660, ampscale= 0.5, durscale=0.5, initCPs= 12,
 knum=12.
 
 > let g = gendy1 AR 1 1 1 1 440 660 0.5 0.5 12 12
-> audition $ pan2 g 0 0.15
+> audition (out 0 (pan2 g 0 0.15))
 
 Wandering bass
 
 > let g = gendy1 AR 1 1 1.0 1.0 30 100 0.3 0.05 5 5
-> audition $ pan2 g 0 0.15
+> audition (out 0 (pan2 g 0 0.15))
 
 Play me	
 
 > let x = mouseX KR 100 1000 Exponential 0.1
 >     g = gendy1 AR 1 1 1.0 1.0 30 100 0.3 0.05 5 5
-> audition $ pan2 (rlpf g 500 0.3 * 0.2) 0 0.25
+> audition (out 0 (pan2 (rlpf g 500 0.3 * 0.2) 0 0.25))
 
 Scream!
 
 > let x = mouseX KR 220 440 Exponential 0.1
 >     y = mouseY KR 0.0 1.0 Linear 0.1
-> audition $ pan2 (gendy1 AR 2 3 1 1 x (8 * x) y y 7 7) 0.0 0.3
+> audition (out 0 (pan2 (gendy1 AR 2 3 1 1 x (8 * x) y y 7 7) 0.0 0.3))
 
 1 CP = random noise
 
 > let g = gendy1 AR 1 1 1 1 440 660 0.5 0.5 1 1
-> audition $ pan2 g 0 0.15
+> audition (out 0 (pan2 g 0 0.15))
 
 2 CPs = an oscillator
 
 > let g = gendy1 AR 1 1 1 1 440 660 0.5 0.5 2 2 
-> audition $ pan2 g 0 0.15
+> audition (out 0 (pan2 g 0 0.15))
 
 Used as an LFO
 
@@ -103,12 +103,12 @@ Used as an LFO
 >     as = sinOsc KR 0.17 0 * 0.49 + 0.51
 >     ds = sinOsc KR 0.19 0 * 0.49 + 0.51
 >     g  = gendy1 KR 2 4 ad dd 3.4 3.5 as ds 10 10
-> audition $ pan2 (sinOsc AR (g * 50 + 350) 0) 0.0 0.3
+> audition (out 0 (pan2 (sinOsc AR (g * 50 + 350) 0) 0.0 0.3))
 
 Wasp
 
 > let ad = sinOsc KR 0.1 0 * 0.1 + 0.9
-> audition $ pan2 (gendy1 AR 0 0 ad 1.0 50 1000 1 0.005 12 12) 0.0 0.2
+> audition (out 0 (pan2 (gendy1 AR 0 0 ad 1.0 50 1000 1 0.005 12 12) 0.0 0.2))
 
 Modulate distributions. Change of pitch as distributions change
 the duration structure and spectrum
@@ -116,13 +116,13 @@ the duration structure and spectrum
 > let x = mouseX KR 0 7 Linear 0.1
 >     y = mouseY KR 0 7 Linear 0.1
 >     g = gendy1 AR x y 1 1 440 660 0.5 0.5 12 12
-> audition $ pan2 g 0 0.2
+> audition (out 0 (pan2 g 0 0.2))
 
 Modulate number of CPs.
 
 > let x = mouseX KR 1 13 Linear 0.1
 >     g = gendy1 AR 1 1 1 1 440 660 0.5 0.5 12 x
-> audition $ pan2 g 0 0.2
+> audition (out 0 (pan2 g 0 0.2))
 
 Self modulation.
 
@@ -130,7 +130,7 @@ Self modulation.
 >     y  = mouseY KR 0.1 10 Linear 0.1
 >     g0 = gendy1 AR 5 4 0.3 0.7 0.1 y 1.0 1.0 5 5
 >     g1 = gendy1 AR 1 1 1 1 440 (g0 * 500 + 600) 0.5 0.5 12 x
-> audition $ pan2 g1 0 0.2
+> audition (out 0 (pan2 g1 0 0.2))
 
 Use SINUS to track any oscillator and take CP positions from it use
 adParam and ddParam as the inputs to sample.
@@ -138,7 +138,7 @@ adParam and ddParam as the inputs to sample.
 > let p = lfPulse KR 100 0 0.4
 >     s = sinOsc KR 30 0 * 0.5
 >     g = gendy1 AR 6 6 p s 440 660 0.5 0.5 12 12
-> audition $ pan2 g 0 0.2
+> audition (out 0 (pan2 g 0 0.2))
 
 Near the corners are interesting.
 
@@ -147,7 +147,7 @@ Near the corners are interesting.
 >     p = lfPulse KR x 0 0.4
 >     s = sinOsc KR y 0 * 0.5
 >     g = gendy1 AR 6 6 p s 440 660 0.5 0.5 12 12
-> audition $ pan2 g 0 0.2
+> audition (out 0 (pan2 g 0 0.2))
 
 Texture
 
@@ -163,11 +163,11 @@ Texture
 >                  o  = sinOsc AR (g * 200 + 400) 0
 >              return (pan2 o l 0.1)
 > m <- mapM f [0..9]
-> audition $ mix (MCE m)
+> audition (out 0 (mix (MCE m)))
 
 Try durscale 10.0 and 0.0 too.
 
 > let x = mouseX KR 10 700 Linear 0.1
 >     y = mouseY KR 50 1000 Linear 0.1
 >     g = gendy1 AR 2 3 1 1 1 x 0.5 0.1 10 10
-> audition $ pan2 (combN (resonz g y 0.1) 0.1 0.1 5) 0.0 0.6
+> audition (out 0 (pan2 (combN (resonz g y 0.1) 0.1 0.1 5) 0.0 0.6))

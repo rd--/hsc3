@@ -1,4 +1,4 @@
-bufSampleRate bufnum
+bufSampleRate rate bufnum
 
 Buffer sample rate.
 
@@ -9,4 +9,4 @@ Compare a sine tone derived from sample rate of a buffer with a
 440Hz tone.
 
 > let f = MCE [bufSampleRate KR 0 * 0.01, 440]
-> audition $ sinOsc AR f 0 * 0.1
+> audition (out 0 (sinOsc AR f 0 * 0.1))
