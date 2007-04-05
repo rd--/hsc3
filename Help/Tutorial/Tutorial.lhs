@@ -87,13 +87,13 @@ SuperCollider -> Expression -> Run line).
 
 We can then audition a quiet sine oscillator at A440.
 
-> audition (sinOsc AR 440 0 * 0.1)
+> audition (out 0 (sinOsc AR 440 0 * 0.1))
 
 To stop the sound we can delete the group it is a part of, the
 audition function places the synthesis node into the group node with
 ID 1, the expression below deletes that group.
 
-> withSC3 (\fd -> send fd (n_free [1]))
+> withSC3 ((flip send) (n_free [1]))
 
 In order to audition another graph we need to re-create a group with
 ID 1.  Sound.SC3 includes a function 'reset' that sequences these two
@@ -106,7 +106,7 @@ Using this command is so common there is a keybinding for it, C-cC-k
 (Haskell SuperCollider -> SCSynth -> Reset scsynth).  After a reset we
 can audition a new graph.
 
-> audition (sinOsc AR 220 0 * 0.1)
+> audition (out 0 (sinOsc AR 220 0 * 0.1))
 
 To see the server status type C-cC-w (Haskell SuperCollider -> SCSynth
 -> Display status).  This prints a table indicating server activity to
@@ -130,7 +130,7 @@ To select a region use the mouse or place the cursor at one end, type
 C-[Space] then move the cursor to the other end.
 
 > let f = sinOsc AR (xLine KR 1 1000 9 RemoveSynth) 0 * 200 + 800
-> audition (sinOsc AR f 0 * 0.1)
+> audition (out 0 (sinOsc AR f 0 * 0.1))
 
 This writes the region in a do block in a procedure to a temporary
 file, /tmp/hsc3.lhs, loads the file and then runs the procedure.  The
