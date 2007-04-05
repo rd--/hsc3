@@ -1,8 +1,8 @@
 module Sound.SC3.UGen.IO where
 
-import Sound.SC3.UGen.Rate (Rate(AR, KR))
-import Sound.SC3.UGen.UGen (UGen(Constant),  mkOsc,  mkOscMCE, mkFilterMCE, hasOutputs)
-import Sound.SC3.UGen.Enum (Warp, fromWarp)
+import Sound.SC3.UGen.Rate
+import Sound.SC3.UGen.UGen
+import Sound.SC3.UGen.Enum
 
 -- | Read signal from an audio or control bus.
 in' :: Int -> Rate -> UGen -> UGen
@@ -68,12 +68,6 @@ mouseY r minVal maxVal warp lag = mkOsc r "MouseY" [minVal, maxVal, fromWarp war
 -- | Control variant.
 trigControl :: Int -> Rate -> UGen
 trigControl nc r = mkOsc r "TrigControl" [] nc 0
-
--- * Utilities
-
--- | If the UGen has output ports connect it to an 'out' UGen.
-addOut :: UGen -> UGen
-addOut u = if hasOutputs u then out (Constant 0) u else u
 
 -- Local Variables:
 -- truncate-lines:t
