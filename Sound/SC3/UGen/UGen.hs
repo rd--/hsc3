@@ -374,5 +374,5 @@ mixFill :: Int -> (Int -> UGen) -> UGen
 mixFill n f = mix (MCE (map f [0..n-1]))
 
 -- | Clone UGen.
-clone :: Int -> IO UGen -> IO UGen
+clone :: (UId m) => Int -> m UGen -> m UGen
 clone n u = u >>= \u' -> liftM MCE (replicateM n (uniquify u'))
