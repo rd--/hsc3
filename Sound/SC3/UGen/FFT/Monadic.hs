@@ -1,16 +1,17 @@
 module Sound.SC3.UGen.FFT.Monadic where
 
-import Sound.SC3.UGen.UGen (UGen, uniquify)
+import Sound.SC3.UGen.UGen
 import qualified Sound.SC3.UGen.FFT.Base as F
+import Sound.SC3.UGen.UId
 
 -- | Randomize order of bins.
-pv_BinScramble :: UGen -> UGen -> UGen -> UGen -> IO UGen
-pv_BinScramble buf wp width trg = uniquify (F.pv_BinScramble buf wp width trg)
+pv_BinScramble :: (UId m) => UGen -> UGen -> UGen -> UGen -> m UGen
+pv_BinScramble = liftU4 F.pv_BinScramble
 
 -- | Randomly clear bins.
-pv_RandComb :: UGen -> UGen -> UGen -> IO UGen
-pv_RandComb buf wp trg = uniquify (F.pv_RandComb buf wp trg)
+pv_RandComb :: (UId m) => UGen -> UGen -> UGen -> m UGen
+pv_RandComb = liftU3 F.pv_RandComb
 
 -- | Cross fade, copying bins in random order.
-pv_RandWipe :: UGen -> UGen -> UGen -> UGen -> IO UGen
-pv_RandWipe ba bb wp trg = uniquify (F.pv_RandWipe ba bb wp trg)
+pv_RandWipe :: (UId m) => UGen -> UGen -> UGen -> UGen -> m UGen
+pv_RandWipe = liftU4 F.pv_RandWipe

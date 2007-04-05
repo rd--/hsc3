@@ -1,53 +1,52 @@
 module Sound.SC3.UGen.Demand.Pure where
 
-import Sound.SC3.UGen.UGen (UGen, withUId)
-import Sound.SC3.UGen.UId  (UId)
+import Sound.SC3.UGen.UGen
 import qualified Sound.SC3.UGen.Demand.Base as D
 
 -- | Buffer demand ugen.
-dbufrd :: UId -> UGen -> UGen -> UGen -> UGen
-dbufrd d b p l = withUId d (D.dbufrd b p l)
+dbufrd :: UGenID -> UGen -> UGen -> UGen -> UGen
+dbufrd = liftD3 D.dbufrd
 
 -- | Demand rate white noise.
-dwhite :: UId -> UGen -> UGen -> UGen -> UGen
-dwhite d l lo hi = withUId d (D.dwhite l lo hi)
+dwhite :: UGenID -> UGen -> UGen -> UGen -> UGen
+dwhite = liftD3 D.dwhite
 
 -- | Demand rate integer white noise.
-diwhite :: UId -> UGen -> UGen -> UGen -> UGen
-diwhite d l lo hi = withUId d (D.diwhite l lo hi)
+diwhite :: UGenID -> UGen -> UGen -> UGen -> UGen
+diwhite = liftD3 D.diwhite
 
 -- | Demand rate brown noise.
-dbrown :: UId -> UGen -> UGen -> UGen -> UGen -> UGen
-dbrown d l lo hi step = withUId d (D.dbrown l lo hi step)
+dbrown :: UGenID -> UGen -> UGen -> UGen -> UGen -> UGen
+dbrown = liftD4 D.dbrown
 
 -- | Demand rate integer brown noise.
-dibrown :: UId -> UGen -> UGen -> UGen -> UGen -> UGen
-dibrown d l lo hi step = withUId d (D.dibrown l lo hi step)
+dibrown :: UGenID -> UGen -> UGen -> UGen -> UGen -> UGen
+dibrown = liftD4 D.dibrown
 
 -- | Demand rate random selection.
-drand :: UId -> UGen -> UGen -> UGen
-drand d l array = withUId d (D.drand l array)
+drand :: UGenID -> UGen -> UGen -> UGen
+drand = liftD2 D.drand
 
 -- | Demand rate random selection with no immediate repetition.
-dxrand :: UId -> UGen -> UGen -> UGen
-dxrand d l array = withUId d (D.dxrand l array)
+dxrand :: UGenID -> UGen -> UGen -> UGen
+dxrand = liftD2 D.dxrand
 
 -- | Demand rate arithmetic series.
-dseries :: UId -> UGen -> UGen -> UGen -> UGen
-dseries d l i n = withUId d (D.dseries l i n)
+dseries :: UGenID -> UGen -> UGen -> UGen -> UGen
+dseries = liftD3 D.dseries
 
 -- | Demand rate geometric series.
-dgeom :: UId -> UGen -> UGen -> UGen -> UGen
-dgeom d l i n = withUId d (D.dgeom l i n)
+dgeom :: UGenID -> UGen -> UGen -> UGen -> UGen
+dgeom = liftD3 D.dgeom
 
 -- | Demand rate sequence generator.
-dseq :: UId -> UGen -> UGen -> UGen
-dseq d l array = withUId d (D.dseq l array)
+dseq :: UGenID -> UGen -> UGen -> UGen
+dseq = liftD2 D.dseq
 
 -- | Demand rate series generator.
-dser :: UId -> UGen -> UGen -> UGen
-dser d l array = withUId d (D.dser l array)
+dser :: UGenID -> UGen -> UGen -> UGen
+dser = liftD2 D.dser
 
 -- | Demand rate input switching.
-dswitch1 :: UId -> UGen -> UGen -> UGen
-dswitch1 d l array = withUId d (D.dswitch1 l array)
+dswitch1 :: UGenID -> UGen -> UGen -> UGen
+dswitch1 = liftD2 D.dswitch1

@@ -1,16 +1,18 @@
-module Sound.SC3.UGen.UGen (Name, UGen(..),
+module Sound.SC3.UGen.UGen (Name, UGenID, UGen(..),
                             mkOsc, mkOscMCE,
                             mkFilter, mkFilterMCE, mkFilterKeyed,
                             isConstant, isControl, isUGen, isProxy, isMRG, isMCE,
                             mceChannel, mceReverse,
-                            nodes, withUId, uniquify, hasOutputs,
+                            nodes, hasOutputs,
+                            liftU, liftU2, liftU3, liftU4,
+                            liftD, liftD2, liftD3, liftD4,
                             mix, mixFill,
                             clone) where
 
 import Sound.SC3.UGen.Rate (Rate(IR))
 import Sound.SC3.UGen.Operator (Unary(..),Binary(..))
 import Sound.SC3.UGen.Math
-import Sound.SC3.UGen.UId (UIdGen, UId(UId), uid)
+import Sound.SC3.UGen.UId
 
 import Prelude hiding (EQ, GT, LT)
 import Data.List (transpose)
@@ -20,9 +22,10 @@ import System.Random (Random, randomR, random)
 type Name     = String
 type Output   = Rate
 type Special  = Int
+type UGenID   = Int
 data UGen     = Constant Double
               | Control Rate Name Double
-              | UGen Rate Name [UGen] [Output] Special UId
+              | UGen Rate Name [UGen] [Output] Special UGenID
               | Proxy UGen Int
               | MCE [UGen]
               | MRG [UGen]
@@ -141,20 +144,44 @@ mceChannels u       = [u]
 -- * UGen Constructors.
 
 -- | Transform UGen to have a unique identifier.
-uniquify :: (Monad m, UIdGen m) => UGen -> m UGen
+uniquify :: (UId m) => UGen -> m UGen
 uniquify (UGen r n i o s _) = liftM (UGen r n i o s) uid
 uniquify (MCE u)            = liftM MCE (mapM uniquify u)
-uniquify u                  = error ("uniquify: illegal value" ++ show u)
+uniquify u                  = error ("liftU: illegal value" ++ show u)
+
+liftU :: (UId m) => (a -> UGen) -> a -> m UGen
+liftU f = uniquify . f
+
+liftU2 :: (UId m) => (a -> b -> UGen) -> a -> b -> m UGen
+liftU2 f = \a b -> uniquify (f a b)
+
+liftU3 :: (UId m) => (a -> b -> c -> UGen) -> a -> b -> c -> m UGen
+liftU3 f = \a b c -> uniquify (f a b c)
+
+liftU4 :: (UId m) => (a -> b -> c -> d -> UGen) -> a -> b -> c -> d -> m UGen
+liftU4 f = \a b c d -> uniquify (f a b c d)
 
 -- | Edit UId of UGen.
-withUId :: UId -> UGen -> UGen
-withUId d (UGen r n i o s _) = UGen r n i o s d
-withUId _ _ = error "withUId: non UGen"
+withUGenID :: UGenID -> UGen -> UGen
+withUGenID d (UGen r n i o s _) = UGen r n i o s d
+withUGenID _ _ = error "withUGenID: non UGen"
+
+liftD :: (a -> UGen) -> UGenID -> a -> UGen
+liftD f = \d a -> withUGenID d (f a)
+
+liftD2 :: (a -> b -> UGen) -> UGenID -> a -> b -> UGen
+liftD2 f = \d a b -> withUGenID d (f a b)
+
+liftD3 :: (a -> b -> c -> UGen) -> UGenID -> a -> b -> c -> UGen
+liftD3 f = \d a b c -> withUGenID d (f a b c)
+
+liftD4 :: (a -> b -> c -> d -> UGen) -> UGenID -> a -> b -> c -> d -> UGen
+liftD4 f = \d a b c e -> withUGenID d (f a b c e)
 
 -- | Construct proxied and multiple channel expanded UGen.
 mkUGen :: Rate -> Name -> [UGen] -> [Output] -> Special -> UGen
 mkUGen r n i o s = proxy (mceExpand u)
-    where u = UGen r n i o s (UId 0)
+    where u = UGen r n i o s 0
 
 -- | Oscillator constructor.
 mkOsc :: Rate -> Name -> [UGen] -> Int -> Special -> UGen

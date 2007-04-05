@@ -1,101 +1,102 @@
 module Sound.SC3.UGen.Noise.Monadic where
 
-import Sound.SC3.UGen.Rate (Rate)
-import Sound.SC3.UGen.UGen (UGen, uniquify)
+import Sound.SC3.UGen.Rate
+import Sound.SC3.UGen.UGen
 import qualified Sound.SC3.UGen.Noise.Base as N
+import Sound.SC3.UGen.UId
 
 -- | Brown noise.
-brownNoise :: Rate -> IO UGen
-brownNoise r = uniquify (N.brownNoise r)
+brownNoise :: (UId m) => Rate -> m UGen
+brownNoise = liftU N.brownNoise
 
 -- | Clip noise.
-clipNoise :: Rate -> IO UGen
-clipNoise r = uniquify (N.clipNoise r)
+clipNoise :: (UId m) => Rate -> m UGen
+clipNoise = liftU N.clipNoise
 
 -- | Randomly pass or block triggers.
-coinGate :: UGen -> UGen -> IO UGen
-coinGate prob i = uniquify (N.coinGate prob i)
+coinGate :: (UId m) => UGen -> UGen -> m UGen
+coinGate = liftU2 N.coinGate
 
 -- | Random impulses in (-1, 1).
-dust2 :: Rate -> UGen -> IO UGen
-dust2 r density = uniquify (N.dust2 r density)
+dust2 :: (UId m) => Rate -> UGen -> m UGen
+dust2 = liftU2 N.dust2
 
 -- | Random impulse in (0,1).
-dust :: Rate -> UGen -> IO UGen
-dust r density = uniquify (N.dust r density)
+dust :: (UId m) => Rate -> UGen -> m UGen
+dust = liftU2 N.dust
 
 -- | Random value in exponential distribution.
-expRand :: UGen -> UGen -> IO UGen
-expRand lo hi = uniquify (N.expRand lo hi)
+expRand :: (UId m) => UGen -> UGen -> m UGen
+expRand = liftU2 N.expRand
 
 -- | Gray noise.
-grayNoise :: Rate -> IO UGen
-grayNoise r = uniquify (N.grayNoise r)
+grayNoise :: (UId m) => Rate -> m UGen
+grayNoise = liftU N.grayNoise
 
 -- | Random integer in uniform distribution.
-iRand :: UGen -> UGen -> IO UGen
-iRand lo hi = uniquify (N.iRand lo hi)
+iRand :: (UId m) => UGen -> UGen -> m UGen
+iRand = liftU2 N.iRand
 
 -- | Clip noise.
-lfClipNoise :: Rate -> UGen -> IO UGen
-lfClipNoise r freq = uniquify (N.lfClipNoise r freq)
+lfClipNoise :: (UId m) => Rate -> UGen -> m UGen
+lfClipNoise = liftU2 N.lfClipNoise
 
 -- | Dynamic clip noise.
-lfdClipNoise :: Rate -> UGen -> IO UGen
-lfdClipNoise r freq = uniquify (N.lfdClipNoise r freq)
+lfdClipNoise :: (UId m) => Rate -> UGen -> m UGen
+lfdClipNoise = liftU2 N.lfdClipNoise
 
 -- | Dynamic step noise.
-lfdNoise0 :: Rate -> UGen -> IO UGen
-lfdNoise0 r freq = uniquify (N.lfdNoise0 r freq)
+lfdNoise0 :: (UId m) => Rate -> UGen -> m UGen
+lfdNoise0 = liftU2 N.lfdNoise0
 
 -- | Dynamic ramp noise. 
-lfdNoise1 :: Rate -> UGen -> IO UGen
-lfdNoise1 r freq = uniquify (N.lfdNoise1 r freq)
+lfdNoise1 :: (UId m) => Rate -> UGen -> m UGen
+lfdNoise1 = liftU2 N.lfdNoise1
 
 -- | Dynamic quadratic noise
-lfdNoise2 :: Rate -> UGen -> IO UGen
-lfdNoise2 r freq = uniquify (N.lfdNoise2 r freq)
+lfdNoise2 :: (UId m) => Rate -> UGen -> m UGen
+lfdNoise2 = liftU2 N.lfdNoise2
 
 -- | Step noise.
-lfNoise0 :: Rate -> UGen -> IO UGen
-lfNoise0 r freq = uniquify (N.lfNoise0 r freq)
+lfNoise0 :: (UId m) => Rate -> UGen -> m UGen
+lfNoise0 = liftU2 N.lfNoise0
 
 -- | Ramp noise.
-lfNoise1 :: Rate -> UGen -> IO UGen
-lfNoise1 r freq = uniquify (N.lfNoise1 r freq)
+lfNoise1 :: (UId m) => Rate -> UGen -> m UGen
+lfNoise1 = liftU2 N.lfNoise1
 
 -- | Quadratic noise.
-lfNoise2 :: Rate -> UGen -> IO UGen
-lfNoise2 r freq = uniquify (N.lfNoise2 r freq)
+lfNoise2 :: (UId m) => Rate -> UGen -> m UGen
+lfNoise2 = liftU2 N.lfNoise2
 
 -- | Random value in skewed linear distribution.
-linRand :: UGen -> UGen -> UGen -> IO UGen
-linRand lo hi m = uniquify (N.linRand lo hi m)
+linRand :: (UId m) => UGen -> UGen -> UGen -> m UGen
+linRand = liftU3 N.linRand
 
 -- | Random value in sum of n linear distribution.
-nRand :: UGen -> UGen -> UGen -> IO UGen
-nRand lo hi n = uniquify (N.nRand lo hi n)
+nRand :: (UId m) => UGen -> UGen -> UGen -> m UGen
+nRand = liftU3 N.nRand
 
 -- | Pink noise.
-pinkNoise :: Rate -> IO UGen
-pinkNoise r = uniquify (N.pinkNoise r)
+pinkNoise :: (UId m) => Rate -> m UGen
+pinkNoise = liftU N.pinkNoise
 
 -- | Random value in uniform distribution.
-rand :: UGen -> UGen -> IO UGen
-rand lo hi = uniquify (N.rand lo hi)
+rand :: (UId m) => UGen -> UGen -> m UGen
+rand = liftU2 N.rand
 
 -- | Random value in exponential distribution on trigger.
-tExpRand :: UGen -> UGen -> UGen -> IO UGen
-tExpRand lo hi trig = uniquify (N.tExpRand lo hi trig)
+tExpRand :: (UId m) => UGen -> UGen -> UGen -> m UGen
+tExpRand = liftU3 N.tExpRand
 
 -- | Random integer in uniform distribution on trigger.
-tiRand :: UGen -> UGen -> UGen -> IO UGen
-tiRand lo hi trig = uniquify (N.tiRand lo hi trig)
+tiRand :: (UId m) => UGen -> UGen -> UGen -> m UGen
+tiRand = liftU3 N.tiRand
 
 -- | Random value in uniform distribution on trigger.
-tRand :: UGen -> UGen -> UGen -> IO UGen
-tRand lo hi trig = uniquify (N.tRand lo hi trig)
+tRand :: (UId m) => UGen -> UGen -> UGen -> m UGen
+tRand = liftU3 N.tRand
 
 -- | White noise.
-whiteNoise :: Rate -> IO UGen
-whiteNoise r = uniquify (N.whiteNoise r)
+whiteNoise :: (UId m) => Rate -> m UGen
+whiteNoise = liftU N.whiteNoise
