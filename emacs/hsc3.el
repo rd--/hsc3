@@ -37,10 +37,20 @@
   nil
   "*The directory containing the help files (default=nil).")
 
-(defun intersperse (e l)
+(defvar hsc3-literate-p
+  t
+  "*Flag to indicate if we are in literate mode (default=t).")
+
+(make-variable-buffer-local 'hsc3-literate-p)
+
+(defun hsc3-unlit (s)
+  "Remove bird literate marks"
+  (replace-regexp-in-string "^> " "" s))
+
+(defun hsc3-intersperse (e l)
   (if (null l)
       '()
-    (cons e (cons (car l) (intersperse e (cdr l))))))
+    (cons e (cons (car l) (hsc3-intersperse e (cdr l))))))
 
 (defun hsc3-start-haskell ()
   "Start haskell."
@@ -55,7 +65,7 @@
      hsc3-interpreter-arguments)
     (hsc3-see-output))
   (hsc3-send-string
-   (apply 'concat (cons ":m" (intersperse " " hsc3-modules)))))
+   (apply 'concat (cons ":m" (hsc3-intersperse " " hsc3-modules)))))
 
 (defun hsc3-see-output ()
   "Show haskell output."
@@ -94,18 +104,18 @@
   "Transform example text into compilable form."
   (with-temp-file f
     (mapc (lambda (module)
-	    (insert (concat "> import " module "\n")))
+	    (insert (concat "import " module "\n")))
 	  hsc3-modules)
-    (insert "> main = do\n")
-    (insert s)))
+    (insert "main = do\n")
+    (insert (if hsc3-literate-p (hsc3-unlit s) s))))
 
 (defun hsc3-run-line ()
   "Send the current line to the interpreter."
   (interactive)
   (let* ((s (buffer-substring (line-beginning-position)
 			      (line-end-position)))
-	 (s* (if (equal (elt s 0) ?>)
-		 (substring s 1)
+	 (s* (if hsc3-literate-p
+		 (substring s 2)
 	       s)))
     (hsc3-send-string s*)))
 
@@ -113,9 +123,9 @@
   "Place the region in a do block and compile."
   (interactive)
   (hsc3-transform-and-store
-   "/tmp/hsc3.lhs"
+   "/tmp/hsc3.hs"
    (buffer-substring-no-properties (region-beginning) (region-end)))
-  (hsc3-send-string ":l \"/tmp/hsc3.lhs\"")
+  (hsc3-send-string ":l \"/tmp/hsc3.hs\"")
   (hsc3-send-string "main"))
 
 (defun hsc3-reset-scsynth ()
@@ -187,12 +197,24 @@
     (setq hsc3-mode-map map)))
 
 (define-derived-mode
+  literate-hsc3-mode
   hsc3-mode
-  literate-haskell-mode
-  "Haskell SuperCollider"
+  "Literate Haskell SuperCollider"
   "Major mode for interacting with an inferior haskell process."
+  (setq hsc3-literate-p t)
+  (setq haskell-literate 'bird)
   (turn-on-haskell-font-lock))
 
-(add-to-list 'auto-mode-alist '("\\.lhs$" . hsc3-mode))
+(add-to-list 'auto-mode-alist '("\\.lhs$" . literate-hsc3-mode))
+
+(define-derived-mode
+  hsc3-mode
+  haskell-mode
+  "Haskell SuperCollider"
+  "Major mode for interacting with an inferior haskell process."
+  (setq hsc3-literate-p nil)
+  (turn-on-haskell-font-lock))
+
+(add-to-list 'auto-mode-alist '("\\.hs$" . hsc3-mode))
 
 (provide 'hsc3)
