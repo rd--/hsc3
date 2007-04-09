@@ -13,7 +13,7 @@
 
 (defvar hsc3-buffer
   "*hsc3*"
-  "*The name of the hsc process buffer (default=*hsc3*).")
+  "*The name of the hsc3 process buffer (default=*hsc3*).")
 
 (defvar hsc3-interpreter
   "ghci"
@@ -170,7 +170,7 @@
     (cons "Expression" (make-sparse-keymap "Expression")))
   (define-key map [menu-bar hsc3 expression run-region]
     '("Run region" . hsc3-run-region))
-  (define-key map [menu-bar hsc expression run-line]
+  (define-key map [menu-bar hsc3 expression run-line]
     '("Run line" . hsc3-run-line))
   (define-key map [menu-bar hsc3 scsynth]
     (cons "SCSynth" (make-sparse-keymap "SCSynth")))
