@@ -125,8 +125,26 @@
   (hsc3-transform-and-store
    "/tmp/hsc3.hs"
    (buffer-substring-no-properties (region-beginning) (region-end)))
-  (hsc3-send-string ":l \"/tmp/hsc3.hs\"")
+  (hsc3-send-string ":load \"/tmp/hsc3.hs\"")
   (hsc3-send-string "main"))
+
+(defun hsc3-load-buffer ()
+  "Load the current buffer."
+  (interactive)
+  (save-buffer)
+  (hsc3-send-string (format ":load \"%s\"" buffer-file-name)))
+
+(defun hsc3-run-main ()
+  "Run current main."
+  (interactive)
+  (hsc3-send-string "main"))
+
+(defun hsc3-interrupt-haskell ()
+  (interactive)
+  (if (comint-check-proc hsc3-buffer)
+      (with-current-buffer hsc3-buffer
+	(interrupt-process (get-buffer-process (current-buffer))))
+    (error "no hsc3 process running?")))
 
 (defun hsc3-reset-scsynth ()
   "Reset"
@@ -155,6 +173,9 @@
   (define-key map "\C-c\C-w" 'hsc3-status-scsynth)
   (define-key map "\C-c\C-c" 'hsc3-run-line)
   (define-key map "\C-c\C-e" 'hsc3-run-region)
+  (define-key map "\C-c\C-l" 'hsc3-load-buffer)
+  (define-key map "\C-c\C-i" 'hsc3-interrupt-haskell)
+  (define-key map "\C-c\C-m" 'hsc3-run-main)
   (define-key map "\C-c\C-o" 'hsc3-quit-scsynth)
   (define-key map "\C-c\C-h" 'hsc3-help))
 
@@ -168,6 +189,8 @@
     '("Haskell SuperCollider help" . hsc3-help))
   (define-key map [menu-bar hsc3 expression]
     (cons "Expression" (make-sparse-keymap "Expression")))
+  (define-key map [menu-bar hsc3 expression load-buffer]
+    '("Load buffer" . hsc3-load-buffer))
   (define-key map [menu-bar hsc3 expression run-region]
     '("Run region" . hsc3-run-region))
   (define-key map [menu-bar hsc3 expression run-line]
