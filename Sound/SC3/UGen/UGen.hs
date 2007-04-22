@@ -338,12 +338,12 @@ instance BinaryOp UGen where
     bitAnd         = binop BitAnd __binop
     bitOr          = binop BitOr __binop
     bitXOr         = binop BitXor __binop
-    lcm            = binop LCM __binop
-    gcd            = binop GCD __binop
-    round          = binop Round __binop
+    lcmE           = binop LCM __binop
+    gcdE           = binop GCD __binop
+    roundE         = binop Round __binop
     roundUp        = binop RoundUp __binop
     trunc          = binop Trunc __binop
-    atan2          = binop Atan2 __binop
+    atan2E         = binop Atan2 __binop
     hypot          = binop Hypot __binop
     hypotx         = binop Hypotx __binop
     shiftLeft      = binop ShiftLeft __binop

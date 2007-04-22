@@ -82,12 +82,12 @@ class (Floating a) => BinaryOp a where
     bitAnd         :: a -> a -> a
     bitOr          :: a -> a -> a
     bitXOr         :: a -> a -> a
-    lcm            :: a -> a -> a
-    gcd            :: a -> a -> a
-    round          :: a -> a -> a
+    lcmE           :: a -> a -> a
+    gcdE           :: a -> a -> a
+    roundE         :: a -> a -> a
     roundUp        :: a -> a -> a
     trunc          :: a -> a -> a
-    atan2          :: a -> a -> a
+    atan2E         :: a -> a -> a
     hypot          :: a -> a -> a
     hypotx         :: a -> a -> a
     shiftLeft      :: a -> a -> a
@@ -123,12 +123,12 @@ instance BinaryOp Double where
     bitAnd a b         = __binop a b
     bitOr a b          = __binop a b
     bitXOr a b         = __binop a b
-    lcm a b            = __binop a b
-    gcd a b            = __binop a b
-    round a b          = if b == 0 then a else floorE (a/b + 0.5) * b
+    lcmE a b           = __binop a b
+    gcdE a b           = __binop a b
+    roundE a b         = if b == 0 then a else floorE (a/b + 0.5) * b
     roundUp a b        = if b == 0 then a else ceil (a/b + 0.5) * b
     trunc a b          = __binop a b
-    atan2 a b          = atan (b/a)
+    atan2E a b         = atan (b/a)
     hypot a b          = __binop a b
     hypotx a b         = __binop a b
     shiftLeft a b      = __binop a b
