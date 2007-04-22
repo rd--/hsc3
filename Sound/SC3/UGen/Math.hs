@@ -78,7 +78,7 @@ instance UnaryOp Double where
 
 class (Floating a) => BinaryOp a where
     iDiv           :: a -> a -> a
-    mod            :: a -> a -> a
+    modE           :: a -> a -> a
     bitAnd         :: a -> a -> a
     bitOr          :: a -> a -> a
     bitXOr         :: a -> a -> a
@@ -119,7 +119,7 @@ __binop a b = error ("unimplemented binop" ++ show (a,b))
 
 instance BinaryOp Double where
     iDiv a b           = __binop a b
-    mod a b            = __binop a b
+    modE a b           = __binop a b
     bitAnd a b         = __binop a b
     bitOr a b          = __binop a b
     bitXOr a b         = __binop a b

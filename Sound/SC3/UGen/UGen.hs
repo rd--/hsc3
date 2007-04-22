@@ -321,7 +321,7 @@ instance UnaryOp UGen where
 
 instance BinaryOp UGen where
     iDiv           = binop IDiv __binop
-    mod            = binop Mod __binop
+    modE           = binop Mod __binop
     bitAnd         = binop BitAnd __binop
     bitOr          = binop BitOr __binop
     bitXOr         = binop BitXor __binop
