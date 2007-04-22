@@ -253,6 +253,19 @@ instance Floating UGen where
     acosh x        = log (sqrt (x*x-1) + x)
     atanh x        = (log (1+x) - log (1-x)) / 2
 
+instance Real UGen where
+    toRational (Constant n) = toRational n
+    toRational _ = error "toRational at non-constant UGen"
+
+instance Integral UGen where
+    quot = binop IDiv __binop
+    rem = binop Mod __binop
+    quotRem a b = (quot a b, rem a b)
+    div = binop IDiv __binop
+    mod = binop Mod __binop
+    toInteger (Constant n) = floor n
+    toInteger _ = error "toInteger at non-constant UGen"
+
 instance Ord UGen where
     (Constant a) <  (Constant b) = a <  b
     _            <  _            = error "< at UGen is partial, see <*"
