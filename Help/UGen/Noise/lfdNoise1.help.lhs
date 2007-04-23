@@ -1,4 +1,4 @@
-lfdNoise1 freq
+lfdNoise1 rate freq
 
 Dynamic ramp noise. 
 

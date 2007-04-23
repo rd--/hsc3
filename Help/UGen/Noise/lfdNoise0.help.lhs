@@ -1,4 +1,4 @@
-lfdNoise0 freq
+lfdNoise0 rate freq
 
 Dynamic step noise. Like lfNoise0, it generates random values at a
 rate given by the freq argument, with two differences: no time
@@ -35,4 +35,3 @@ LFNoise quantizes time steps at high freqs, LFDNoise does not:
 
 > let f = xLine KR 1000 20000 10 RemoveSynth
 > audition . (out 0) . (* 0.1) =<< lfNoise0 AR f
-

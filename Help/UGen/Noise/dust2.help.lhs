@@ -1,4 +1,4 @@
-dust2 density
+dust2 rate density
 
 Generates random impulses from -1 to +1.  The `density' is in
 impulses per second.

@@ -1,4 +1,4 @@
-lfNoise2 freq
+lfNoise2 rate freq
 
 Quadratic noise.  Generates quadratically interpolated random
 values at a rate given by the nearest integer division of the

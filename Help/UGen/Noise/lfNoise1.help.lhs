@@ -1,4 +1,4 @@
-lfNoise1 freq
+lfNoise1 rate freq
 
 Ramp noise.  Generates linearly interpolated random values at a
 rate given by the nearest integer division of the sample rate by
@@ -17,4 +17,4 @@ Modulate frequency.
 Use as frequency control.
 
 > f <- lfNoise1 KR 4 
-> audition (out 0 (sinOsc AR (f * 400 + 450) 0 * 0.2))
+> audition (out 0 (sinOsc AR (f * 400 + 450) 0 * 0.1))

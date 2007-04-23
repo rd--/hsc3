@@ -1,4 +1,4 @@
-lfdnoise3 id freq
+lfdnoise3 rate freq
 
 Dynamic cubic noise. 
 
