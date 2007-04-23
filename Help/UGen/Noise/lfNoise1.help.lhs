@@ -6,13 +6,13 @@ the freq argument.
 
 freq - approximate rate at which to generate random values.
 
-> audition . (out 0) . (* 0.15) =<< lfNoise1 AR 1000
+> audition . (out 0) . (* 0.05) =<< lfNoise1 AR 1000
 
 Modulate frequency.
 
 > let f = xLine KR 1000 10000 10 RemoveSynth
 > n <- lfNoise1 AR f
-> audition (out 0 (n * 0.15))
+> audition (out 0 (n * 0.05))
 
 Use as frequency control.
 

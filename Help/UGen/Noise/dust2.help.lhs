@@ -7,4 +7,4 @@ impulses per second.
 > audition (out 0 (n * 0.5))
 
 > let d = xLine KR 20000 2 10 RemoveSynth
-> audition . (out 0 ) . (* 0.25) =<< dust2 AR d
+> audition . (out 0 ) . (* 0.15) =<< dust2 AR d
