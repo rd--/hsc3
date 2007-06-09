@@ -2,9 +2,9 @@
 
 * Prerequisites
 
-Haskell SuperCollider requires that SuperCollider [1], GHC [2], Emacs
-[3] and the standard Haskell Emacs mode [4] are all installed and
-working properly.
+Haskell SuperCollider requires that SuperCollider [1], GHC [2], the
+GHC binary package[3], Emacs [4] and the standard Haskell Emacs mode
+[5] are all installed and working properly.
 
 * Setting up Haskell SuperCollider
 
@@ -18,9 +18,9 @@ module, the second the Sound.SC3 module.
 To build use the standard Cabal process in each repository in
 sequence.
 
-  $ runhaskell Setup.hs configure --prefix ~
-  $ runhaskell Setup.hs build
-  $ runhaskell Setup.hs install --user
+  $ runhaskell Setup.lhs configure --prefix ~
+  $ runhaskell Setup.lhs build
+  $ runhaskell Setup.lhs install --user
 
 * Setting up the Haskell SuperCollider Emacs mode
 
@@ -153,7 +153,7 @@ as plain text and examples are translated into Haskell.
 There is also partial haddock documentation for the Sound.SC3 and
 Sound.OpenSoundControl modules, to build type:
 
-  $ runhaskell Setup.hs haddock
+  $ runhaskell Setup.lhs haddock
 
 * Monitoring incoming server messages
 
@@ -171,5 +171,6 @@ To end printing send:
 
 [1] http://www.audiosynth.com/
 [2] http://www.haskell.org/ghc/
-[3] http://www.gnu.org/software/emacs/
-[4] http://www.haskell.org/haskell-mode/
+[3] http://hackage.haskell.org/cgi-bin/hackage-scripts/package/binary-0.3
+[4] http://www.gnu.org/software/emacs/
+[5] http://www.haskell.org/haskell-mode/
