@@ -46,12 +46,16 @@ envCoord bp dur amp c = env l t (repeat c) (-1) (-1)
     where l = map (* amp) (map snd bp)
           t = map (* dur) (d_dx (map fst bp))
 
--- | Trapezoidal envelope generator.  `shape' determines the sustain
--- | time as a proportion of `dur', zero is a triangular envelope, one
--- | a rectangular envelope.  `skew' determines the attack/decay
--- | ratio, zero is an immediate attack and a slow decay, one a slow
--- | attack and an immediate decay.
-envTrapezoid :: UGen -> UGen -> UGen -> UGen -> [UGen]
+-- | Trapezoidal envelope generator.
+envTrapezoid ::
+     UGen {- ^ @shape@ determines the sustain time as a proportion of @dur@:
+               zero is a triangular envelope, one a rectangular envelope. -}
+  -> UGen {- ^ @skew@ determines the attack\/decay ratio:
+               zero is an immediate attack and a slow decay,
+               one a slow attack and an immediate decay. -}
+  -> UGen {- ^ @dur@ -}
+  -> UGen {- ^ @amplitude@ -}
+  -> [UGen]
 envTrapezoid shape skew dur amp = envCoord bp dur amp EnvLin
     where x1 = skew * (1 - shape)
           bp = [ (0, skew <=* 0)
