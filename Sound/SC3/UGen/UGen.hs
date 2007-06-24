@@ -7,7 +7,10 @@ module Sound.SC3.UGen.UGen (Name, UGenID, UGen(..), UGenGen,
                             liftU, liftU2, liftU3, liftU4,
                             liftD, liftD2, liftD3, liftD4,
                             mix, mixFill,
-                            clone) where
+                            clone,
+
+                            Output, Special,
+                            ) where
 
 import Sound.SC3.UGen.Rate (Rate(IR))
 import Sound.SC3.UGen.Operator (Unary(..),Binary(..))
