@@ -1,4 +1,4 @@
-module Sound.SC3.UGen.UGen (Name, UGenID, UGen(..),
+module Sound.SC3.UGen.UGen (Name, UGenID, UGen(..), UGenGen,
                             mkOsc, mkOscMCE,
                             mkFilter, mkFilterMCE, mkFilterKeyed,
                             isConstant, isControl, isUGen, isProxy, isMRG, isMCE,
@@ -143,40 +143,39 @@ mceChannels u       = [u]
 
 -- * UGen Constructors.
 
--- | Transform UGen to have a unique identifier.
-uniquify :: (UId m) => UGen -> m UGen
-uniquify (UGen r n i o s _) = liftM (UGen r n i o s) uid
-uniquify (MCE u)            = liftM MCE (mapM uniquify u)
-uniquify u                  = error ("liftU: illegal value" ++ show u)
+type UGenGen = UGenID -> UGen
 
-liftU :: (UId m) => (a -> UGen) -> a -> m UGen
-liftU f = uniquify . f
+-- | Create a UGen with a unique id using a unique identifier generator.
+createUnique :: (UId m) => UGenGen -> m UGen
+createUnique u = liftM u uid
 
-liftU2 :: (UId m) => (a -> b -> UGen) -> a -> b -> m UGen
-liftU2 f = \a b -> uniquify (f a b)
+liftU :: (UId m) => (a -> UGenGen) -> a -> m UGen
+liftU f = createUnique . f
 
-liftU3 :: (UId m) => (a -> b -> c -> UGen) -> a -> b -> c -> m UGen
-liftU3 f = \a b c -> uniquify (f a b c)
+liftU2 :: (UId m) => (a -> b -> UGenGen) -> a -> b -> m UGen
+liftU2 f = liftU . f
 
-liftU4 :: (UId m) => (a -> b -> c -> d -> UGen) -> a -> b -> c -> d -> m UGen
-liftU4 f = \a b c d -> uniquify (f a b c d)
+liftU3 :: (UId m) => (a -> b -> c -> UGenGen) -> a -> b -> c -> m UGen
+liftU3 f = liftU2 . f
+
+liftU4 :: (UId m) => (a -> b -> c -> d -> UGenGen) -> a -> b -> c -> d -> m UGen
+liftU4 f = liftU3 . f
 
 -- | Edit UId of UGen.
-withUGenID :: UGenID -> UGen -> UGen
-withUGenID d (UGen r n i o s _) = UGen r n i o s d
-withUGenID _ _ = error "withUGenID: non UGen"
+withUGenID :: UGenID -> UGenGen -> UGen
+withUGenID = flip ($)
 
-liftD :: (a -> UGen) -> UGenID -> a -> UGen
-liftD f = \d a -> withUGenID d (f a)
+liftD :: (a -> UGenGen) -> UGenID -> a -> UGen
+liftD f d = withUGenID d . f
 
-liftD2 :: (a -> b -> UGen) -> UGenID -> a -> b -> UGen
-liftD2 f = \d a b -> withUGenID d (f a b)
+liftD2 :: (a -> b -> UGenGen) -> UGenID -> a -> b -> UGen
+liftD2 f d = flip liftD d . f
 
-liftD3 :: (a -> b -> c -> UGen) -> UGenID -> a -> b -> c -> UGen
-liftD3 f = \d a b c -> withUGenID d (f a b c)
+liftD3 :: (a -> b -> c -> UGenGen) -> UGenID -> a -> b -> c -> UGen
+liftD3 f d = flip liftD2 d . f
 
-liftD4 :: (a -> b -> c -> d -> UGen) -> UGenID -> a -> b -> c -> d -> UGen
-liftD4 f = \d a b c e -> withUGenID d (f a b c e)
+liftD4 :: (a -> b -> c -> d -> UGenGen) -> UGenID -> a -> b -> c -> d -> UGen
+liftD4 f d = flip liftD3 d . f
 
 -- | Construct proxied and multiple channel expanded UGen.
 mkUGen :: Rate -> Name -> [UGen] -> [Output] -> Special -> UGen
@@ -287,15 +286,14 @@ instance Enum UGen where
     enumFrom              = iterate (+1)
     enumFromThen n m      = iterate (+(m-n)) n
     enumFromTo n m        = takeWhile (<= m+1/2) (enumFrom n)
-    enumFromThenTo n n' m = takeWhile p (enumFromThen n n')
-        where p | n' >= n   = (<= m + (n'-n)/2)
-                | otherwise = (>= m + (n'-n)/2)
+    enumFromThenTo n n' m = takeWhile (p (m + (n'-n)/2)) (enumFromThen n n')
+        where p = if n' >= n then (>=) else (<=)
 
 instance Random UGen where
     randomR (Constant l, Constant r) g = (Constant n, g') 
         where (n, g') = randomR (l,r) g
     randomR _                        _ = error "randomR: non constant (l,r)"
-    random g = randomR ((-1.0),1.0) g
+    random g = randomR (-1.0,1.0) g
 
 instance EqE UGen where
     (==*)  = binop EQ (==*)
