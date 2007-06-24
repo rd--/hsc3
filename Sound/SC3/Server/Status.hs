@@ -22,7 +22,7 @@ statusFormat r = s : zipWith (++) statusFields (statusInfo r)
     where s = "***** SuperCollider Server Status *****"
 
 -- | Collect server status information.
-serverStatus :: Transport -> IO [String]
+serverStatus :: Transport t => t -> IO [String]
 serverStatus fd = do send fd status 
                      r <- wait fd "status.reply"
                      return (statusFormat r)
