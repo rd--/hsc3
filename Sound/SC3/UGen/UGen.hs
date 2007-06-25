@@ -149,8 +149,8 @@ mceChannels u       = [u]
 type UGenGen = UGenID -> UGen
 
 -- | Create a UGen with a unique id using a unique identifier generator.
-createUnique :: (UId m) => UGenGen -> m UGen
-createUnique u = liftM u uid
+createUnique :: (UId m) => (UGenID -> UGen) -> m UGen
+createUnique u = liftM u generateUId
 
 liftU :: (UId m) => (a -> UGenGen) -> a -> m UGen
 liftU f = createUnique . f
