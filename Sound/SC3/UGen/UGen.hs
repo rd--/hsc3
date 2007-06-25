@@ -1,16 +1,13 @@
-module Sound.SC3.UGen.UGen (Name, UGenID, UGen(..), UGenGen,
-                            mkOsc, mkOscMCE,
-                            mkFilter, mkFilterMCE, mkFilterKeyed,
-                            isConstant, isControl, isUGen, isProxy, isMRG, isMCE,
-                            mceChannel, mceReverse,
-                            nodes, hasOutputs,
-                            liftU, liftU2, liftU3, liftU4,
-                            liftD, liftD2, liftD3, liftD4,
-                            mix, mixFill,
-                            clone,
-
-                            Output, Special,
-                            ) where
+module Sound.SC3.UGen.UGen ( Name, UGenID, UGen(..), Output, Special
+                           , mkOsc, mkOscMCE
+                           , mkFilter, mkFilterMCE, mkFilterKeyed
+                           , isConstant, isControl, isUGen, isProxy, isMRG, isMCE
+                           , mceChannel, mceReverse
+                           , nodes, hasOutputs
+                           , liftU, liftU2, liftU3, liftU4
+                           , liftD, liftD2, liftD3, liftD4
+                           , mix, mixFill
+                           , clone ) where
 
 import Sound.SC3.UGen.Rate (Rate(IR))
 import Sound.SC3.UGen.Operator (Unary(..),Binary(..))
@@ -146,38 +143,36 @@ mceChannels u       = [u]
 
 -- * UGen Constructors.
 
-type UGenGen = UGenID -> UGen
-
 -- | Create a UGen with a unique id using a unique identifier generator.
 createUnique :: (UId m) => (UGenID -> UGen) -> m UGen
 createUnique u = liftM u generateUId
 
-liftU :: (UId m) => (a -> UGenGen) -> a -> m UGen
+liftU :: (UId m) => (a -> (UGenID -> UGen)) -> a -> m UGen
 liftU f = createUnique . f
 
-liftU2 :: (UId m) => (a -> b -> UGenGen) -> a -> b -> m UGen
+liftU2 :: (UId m) => (a -> b -> (UGenID -> UGen)) -> a -> b -> m UGen
 liftU2 f = liftU . f
 
-liftU3 :: (UId m) => (a -> b -> c -> UGenGen) -> a -> b -> c -> m UGen
+liftU3 :: (UId m) => (a -> b -> c -> (UGenID -> UGen)) -> a -> b -> c -> m UGen
 liftU3 f = liftU2 . f
 
-liftU4 :: (UId m) => (a -> b -> c -> d -> UGenGen) -> a -> b -> c -> d -> m UGen
+liftU4 :: (UId m) => (a -> b -> c -> d -> (UGenID -> UGen)) -> a -> b -> c -> d -> m UGen
 liftU4 f = liftU3 . f
 
 -- | Edit UId of UGen.
-withUGenID :: UGenID -> UGenGen -> UGen
+withUGenID :: UGenID -> (UGenID -> UGen) -> UGen
 withUGenID = flip ($)
 
-liftD :: (a -> UGenGen) -> UGenID -> a -> UGen
+liftD :: (a -> (UGenID -> UGen)) -> UGenID -> a -> UGen
 liftD f d = withUGenID d . f
 
-liftD2 :: (a -> b -> UGenGen) -> UGenID -> a -> b -> UGen
+liftD2 :: (a -> b -> (UGenID -> UGen)) -> UGenID -> a -> b -> UGen
 liftD2 f d = flip liftD d . f
 
-liftD3 :: (a -> b -> c -> UGenGen) -> UGenID -> a -> b -> c -> UGen
+liftD3 :: (a -> b -> c -> (UGenID -> UGen)) -> UGenID -> a -> b -> c -> UGen
 liftD3 f d = flip liftD2 d . f
 
-liftD4 :: (a -> b -> c -> d -> UGenGen) -> UGenID -> a -> b -> c -> d -> UGen
+liftD4 :: (a -> b -> c -> d -> (UGenID -> UGen)) -> UGenID -> a -> b -> c -> d -> UGen
 liftD4 f d = flip liftD3 d . f
 
 -- | Construct proxied and multiple channel expanded UGen.
