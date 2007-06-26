@@ -19,17 +19,25 @@ import Data.List (transpose)
 import Control.Monad (liftM, replicateM)
 import System.Random (Random, randomR, random)
 
-type Name     = String
-type Output   = Rate
-type Special  = Int
-type UGenID   = Int
-data UGen     = Constant Double
-              | Control Rate Name Double
-              | UGen Rate Name [UGen] [Output] Special UGenID
-              | Proxy UGen Int
-              | MCE [UGen]
-              | MRG [UGen]
-                deriving (Eq, Show)
+type Name    = String
+type Output  = Rate
+type Special = Int
+type UGenID  = Int
+data UGen    = Constant { constantValue :: Double }
+             | Control { controlRate_ :: Rate
+                       , controlName :: Name
+                       , controlDefault :: Double }
+             | UGen { ugenRate :: Rate
+                    , ugenName :: Name
+                    , ugenInputs :: [UGen]
+                    , ugenOuputs :: [Output]
+                    , ugenSpecial :: Special
+                    , ugenId :: UGenID }
+             | Proxy { proxySource :: UGen
+                     , proxyIndex :: Int }
+             | MCE { mceProxies :: [UGen] }
+             | MRG { mrgRoots :: [UGen] }
+               deriving (Eq, Show)
 
 -- | Determine the rate of a UGen.
 rateOf :: UGen -> Rate
