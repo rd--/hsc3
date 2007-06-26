@@ -13,44 +13,40 @@ import qualified Data.ByteString.Lazy as B
 encode_input :: Input -> B.ByteString
 encode_input (Input u p) = B.append (encode_i16 u) (encode_i16 p)
 
+-- | Byte-encode Control value.
+encode_control :: Graph -> UGen -> B.ByteString
+encode_control g c@(Control _ n _) = B.concat [ B.pack (str_pstr n)
+                                              , encode_i16 (controlIndex g c)]
+encode_control _ _  = error "encode_control: illegal input"
+
 -- | Byte-encode UGen value.
 encode_ugen :: Graph -> UGen -> B.ByteString
-encode_ugen g c@(Control _ n _) = B.concat [B.pack (str_pstr n),
-                                            encode_i16 (controlIndex g c)]
-encode_ugen g (UGen r n i o s _) = B.concat [B.pack (str_pstr n),
-                                             encode_i8 (rateId r),
-                                             encode_i16 (length i),
-                                             encode_i16 (length o),
-                                             encode_i16 s,
-                                             B.concat (map (encode_input . makeInput g) i),
-                                             B.concat (map (encode_i8 . rateId) o)]
-encode_ugen _ _  = error "illegal input"
-
--- | Value of Constant.
-constantValue :: UGen -> Double
-constantValue (Constant n) = n
-constantValue  _           = error "constantValue: non Constant input"
-
--- | Default value of Control.
-controlDefault :: UGen -> Double
-controlDefault (Control _ _ n) = n
-controlDefault  _              = error "controlDefault: non Control input"
+encode_ugen g (UGen r n i o s _) = B.concat [ B.pack (str_pstr n)
+                                            , encode_i8 (rateId r)
+                                            , encode_i16 (length i)
+                                            , encode_i16 (length o)
+                                            , encode_i16 s
+                                            , B.concat i'
+                                            , B.concat o' ]
+    where i' = map (encode_input . makeInput g) i
+          o' = map (encode_i8 . rateId) o
+encode_ugen _ _ = error "encode_ugen: illegal input"
 
 -- | Construct instrument definition bytecode.
 encode_graphdef :: String -> Graph -> B.ByteString
-encode_graphdef s g@(Graph n c u) = B.concat [
-                                     encode_str "SCgf",
-                                     encode_i32 0,
-                                     encode_i16 1,
-                                     B.pack (str_pstr s),
-                                     encode_i16 (length n),
-                                     B.concat (map (encode_f32 . constantValue) n),
-                                     encode_i16 (length c),
-                                     B.concat (map (encode_f32 . controlDefault) c),
-                                     encode_i16 (length c),
-                                     B.concat (map (encode_ugen g) c),
-                                     encode_i16 (length u),
-                                     B.concat (map (encode_ugen g) u)]
+encode_graphdef s g = B.concat [ encode_str "SCgf"
+                               , encode_i32 0
+                               , encode_i16 1
+                               , B.pack (str_pstr s)
+                               , encode_i16 (length n)
+                               , B.concat (map (encode_f32 . constantValue) n)
+                               , encode_i16 (length c)
+                               , B.concat (map (encode_f32 . controlDefault) c)
+                               , encode_i16 (length c)
+                               , B.concat (map (encode_control g) c)
+                               , encode_i16 (length u)
+                               , B.concat (map (encode_ugen g) u) ]
+    where (Graph n c u) = g
 
 -- | Construct instrument definition bytecode.
 graphdef :: String -> Graph -> [Word8]
