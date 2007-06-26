@@ -25,7 +25,7 @@ reset fd = do send fd (g_freeAll [0])
 
 -- | Bracket SC3 communication.
 withSC3 :: (UDP -> IO a) -> IO a
-withSC3 = withTransport (udp "127.0.0.1" 57110)
+withSC3 = withTransport (openUDP "127.0.0.1" 57110)
 
 -- | withSC3 . play
 audition :: UGen -> IO OSC
