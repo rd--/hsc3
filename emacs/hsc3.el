@@ -23,6 +23,10 @@
   (list)
   "*Arguments to the haskell interpreter (default=none).")
 
+(defvar hsc3-main-modules
+  (list)
+  "*Modules to load (using :l) into the haskell interpreter.")
+
 (defvar hsc3-modules
   (list "Sound.OpenSoundControl"
 	"Sound.SC3"
@@ -31,7 +35,7 @@
 	"Control.Concurrent"
 	"System.Directory"
 	"System.Random")
-  "*Modules to load into the haskell interpreter.")
+  "*Modules to bring into scope (using :m +) into the haskell interpreter.")
 
 (defvar hsc3-help-directory
   nil
@@ -64,8 +68,12 @@
      nil
      hsc3-interpreter-arguments)
     (hsc3-see-output))
-  (hsc3-send-string
-   (apply 'concat (cons ":m" (hsc3-intersperse " " hsc3-modules)))))
+  (if (not (null hsc3-main-modules))
+      (hsc3-send-string
+       (apply 'concat (cons ":l " (hsc3-intersperse " " hsc3-main-modules)))))
+  (if (not (null hsc3-modules))
+      (hsc3-send-string
+       (apply 'concat (cons ":m + " (hsc3-intersperse " " hsc3-modules))))))
 
 (defun hsc3-see-output ()
   "Show haskell output."
@@ -105,7 +113,7 @@
   (with-temp-file f
     (mapc (lambda (module)
 	    (insert (concat "import " module "\n")))
-	  hsc3-modules)
+	  (append hsc3-main-modules hsc3-modules))
     (insert "main = do\n")
     (insert (if hsc3-literate-p (hsc3-unlit s) s))))
 
