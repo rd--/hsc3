@@ -50,12 +50,14 @@ associated keybinding.
 
 * Interpreter Interaction
 
-To start ghci and load the list of modules at the emacs variable
-'hsc3-modules' use C-cC-s (Haskell SuperCollider -> Haskell -> Start
-haskell).  By default 'hsc3-modules' contains Sound.OpenSoundControl,
-Sound.SC3, Control.Monad and System.Random.
+To start ghci and load the list of modules at the emacs variables
+'hsc3-main-modules' and 'hsc3-modules' use C-cC-s (Haskell
+SuperCollider -> Haskell -> Start haskell).  By default
+'hsc3-main-modules' is empty and 'hsc3-modules' contains
+Sound.OpenSoundControl, Sound.SC3, Data.List, Control.Monad,
+Control.Concurrent, System.Directory and System.Random.
 
-Starting the intpreter splits the current window into two windows.  If
+Starting the interpreter splits the current window into two windows.  If
 the ghci output window becomes obscured during a session you can see
 it again by typing C-cC-g (Haskell SuperCollider -> Haskell -> See
 output).
@@ -154,6 +156,23 @@ There is also partial haddock documentation for the Sound.SC3 and
 Sound.OpenSoundControl modules, to build type:
 
   $ runhaskell Setup.lhs haddock
+
+* User configuration files
+
+It is straightforward to add configuration modules to the context in
+which the hsc3 emacs mode evaluates expressions using the
+'hsc3-main-modules' variable.  The search path for these modules can
+be set using 'hsc3-interpreter-arguments'.
+
+ (setq hsc3-interpreter-arguments (list "-i/home/rohan/.hsc3"))
+ (setq hsc3-main-modules (list "Config"))
+
+If scsynth is running on a local machine called 'alice' the
+configuration file might contain 'withSC3' and 'audition' variants:
+
+  module Config where
+  onAlice = withTransport (openUDP "alice" 57110)
+  atAlice = onAlice . flip play
 
 * Monitoring incoming server messages
 
