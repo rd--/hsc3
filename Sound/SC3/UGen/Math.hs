@@ -3,6 +3,7 @@ module Sound.SC3.UGen.Math where
 -- The Eq and Ord classes in the Prelude require Bool, hence the name
 -- mangling.  True is 1.0, False is 0.0
 
+-- | Variant on Eq class, result is of the same type as the values compared.
 class EqE a where
     (==*)  :: a -> a -> a
     (/=*)  :: a -> a -> a
@@ -11,6 +12,7 @@ instance EqE Double where
     a ==* b = if a == b then 1.0 else 0.0
     a /=* b = if a /= b then 1.0 else 0.0
 
+-- | Variant on Ord class, result is of the same type as the values compared.
 class OrdE a where
     (<*)  :: a -> a -> a
     (<=*) :: a -> a -> a

@@ -1,22 +1,19 @@
 module Sound.SC3.UGen.Filter where
 
-import Sound.SC3.UGen.UGen (UGen(MCE), Name, mkFilter, mkFilterMCE)
+import Sound.SC3.UGen.UGen (UGen(MCE), mkFilter, mkFilterMCE)
 import Data.List (transpose)
-
-mkAllpass :: Name -> UGen -> UGen -> UGen -> UGen -> UGen
-mkAllpass c i maxTime dly dcy = mkFilter c [i, maxTime, dly, dcy] 1 0
 
 -- | Allpass filter (no interpolation)
 allpassN :: UGen -> UGen -> UGen -> UGen -> UGen
-allpassN = mkAllpass "AllpassN"
+allpassN i maxTime dly dcy = mkFilter "AllpassN" [i, maxTime, dly, dcy] 1 0
 
 -- | Allpass filter (linear interpolation)
 allpassL :: UGen -> UGen -> UGen -> UGen -> UGen
-allpassL = mkAllpass "AllpassL"
+allpassL i maxTime dly dcy = mkFilter "AllpassL" [i, maxTime, dly, dcy] 1 0
 
 -- | Allpass filter (cubic interpolation)
 allpassC :: UGen -> UGen -> UGen -> UGen -> UGen
-allpassC = mkAllpass "AllpassC"
+allpassC i maxTime dly dcy = mkFilter "AllpassC" [i, maxTime, dly, dcy] 1 0
 
 -- | Bandpass filter
 bpf :: UGen -> UGen -> UGen -> UGen
@@ -34,20 +31,17 @@ brf i freq rq = mkFilter "BRF" [i,freq,rq] 1 0
 brz2 :: UGen -> UGen
 brz2 i = mkFilter "BRZ2" [i] 1 0
 
-mkComb :: Name -> UGen -> UGen -> UGen -> UGen -> UGen
-mkComb c i maxTime dly dcy = mkFilter c [i, maxTime, dly, dcy] 1 0
-
 -- | Comb filter (no interpolation)
 combN :: UGen -> UGen -> UGen -> UGen -> UGen
-combN = mkComb "CombN"
+combN i maxTime dly dcy = mkFilter "CombN" [i, maxTime, dly, dcy] 1 0
 
 -- | Comb filter (linear interpolation)
 combL :: UGen -> UGen -> UGen -> UGen -> UGen
-combL = mkComb "CombL"
+combL i maxTime dly dcy = mkFilter "CombL" [i, maxTime, dly, dcy] 1 0
 
 -- | Comb filter (cubic interpolation)
 combC :: UGen -> UGen -> UGen -> UGen -> UGen
-combC = mkComb "CombC"
+combC i maxTime dly dcy = mkFilter "CombC" [i, maxTime, dly, dcy] 1 0
 
 -- | Convert signal to modal pitch.
 degreeToKey :: UGen -> UGen -> UGen -> UGen
@@ -69,20 +63,17 @@ delay1 i = mkFilter "Delay1" [i] 1 0
 delay2 :: UGen -> UGen
 delay2 i = mkFilter "Delay2" [i] 1 0
 
-mkDelay :: Name -> UGen -> UGen -> UGen -> UGen
-mkDelay c i maxTime dly = mkFilter c [i,maxTime,dly] 1 0
-
 -- | Simple delay line (cubic interpolation).
 delayC :: UGen -> UGen -> UGen -> UGen
-delayC = mkDelay "DelayC"
+delayC i maxTime dly = mkFilter "DelayC" [i,maxTime,dly] 1 0
 
 -- | Simple delay line (linear interpolation).
 delayL :: UGen -> UGen -> UGen -> UGen
-delayL = mkDelay "DelayL"
+delayL i maxTime dly = mkFilter "DelayL" [i,maxTime,dly] 1 0
 
 -- | Simple delay line (no interpolation).
 delayN :: UGen -> UGen -> UGen -> UGen
-delayN = mkDelay "DelayN"
+delayN i maxTime dly = mkFilter "DelayN" [i,maxTime,dly] 1 0
 
 -- | FOF like filter.
 formlet :: UGen -> UGen -> UGen -> UGen -> UGen

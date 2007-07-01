@@ -262,6 +262,13 @@ instance Real UGen where
     toRational (Constant n) = toRational n
     toRational _ = error "toRational at non-constant UGen"
 
+instance RealFrac UGen where
+    properFraction = error "properFraction at UGen"
+--    truncate n = trunc n (Constant 1.0)
+--    round n = roundE n (Constant 1.0)
+--    ceiling = ceil
+--    floor = floorE
+
 instance Integral UGen where
     quot = binop IDiv __binop
     rem = binop Mod __binop

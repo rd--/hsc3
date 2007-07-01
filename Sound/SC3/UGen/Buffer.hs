@@ -1,8 +1,9 @@
 module Sound.SC3.UGen.Buffer where
 
 import Sound.SC3.UGen.Rate (Rate(AR))
-import Sound.SC3.UGen.UGen (UGen, Name, mkFilter, mkFilterMCE, mkOsc)
-import Sound.SC3.UGen.Enum (Loop, fromLoop, Interpolation(..), fromInterpolation)
+import Sound.SC3.UGen.UGen (UGen, mkFilter, mkFilterMCE, mkOsc)
+import Sound.SC3.UGen.Enum (Loop, Interpolation(..))
+import Sound.SC3.UGen.Private (fromLoop, fromInterpolation)
 
 -- * Buffer query UGens.
 
@@ -32,50 +33,41 @@ bufSamples r buf = mkOsc r "BufSamples" [buf] 1 0
 
 -- * Buffer filters and delays.
 
-mkBufAllpass :: Name -> UGen -> UGen -> UGen -> UGen -> UGen
-mkBufAllpass c buf i dly dcy = mkFilter c [buf,i,dly,dcy] 1 0
-
 -- | Allpass filter (cubic interpolation).
 bufAllpassC :: UGen -> UGen -> UGen -> UGen -> UGen
-bufAllpassC = mkBufAllpass "BufAllpassC"
+bufAllpassC buf i dly dcy = mkFilter "BufAllpassC" [buf,i,dly,dcy] 1 0
 
 -- | Allpass filter (linear interpolation).
 bufAllpassL :: UGen -> UGen -> UGen -> UGen -> UGen
-bufAllpassL = mkBufAllpass "BufAllpassL"
+bufAllpassL buf i dly dcy = mkFilter "BufAllpassL" [buf,i,dly,dcy] 1 0
 
 -- | Allpass filter (no interpolation).
 bufAllpassN :: UGen -> UGen -> UGen -> UGen -> UGen
-bufAllpassN = mkBufAllpass "BufAllpassN"
-
-mkBufComb :: Name -> UGen -> UGen -> UGen -> UGen -> UGen
-mkBufComb c buf i dly dcy = mkFilter c [buf,i,dly,dcy] 1 0
+bufAllpassN buf i dly dcy = mkFilter "BufAllpassN" [buf,i,dly,dcy] 1 0
 
 -- | Comb filter (cubic interpolation).
 bufCombC :: UGen -> UGen -> UGen -> UGen -> UGen
-bufCombC = mkBufComb "BufCombC"
+bufCombC buf i dly dcy = mkFilter "BufCombC" [buf,i,dly,dcy] 1 0
 
 -- | Comb filter (linear interpolation).
 bufCombL :: UGen -> UGen -> UGen -> UGen -> UGen
-bufCombL = mkBufComb "BufCombL"
+bufCombL buf i dly dcy = mkFilter "BufCombL" [buf,i,dly,dcy] 1 0
 
 -- | Comb filter (no interpolation).
 bufCombN :: UGen -> UGen -> UGen -> UGen -> UGen
-bufCombN = mkBufComb "BufCombN"
-
-mkBufDelay :: Name -> UGen -> UGen -> UGen -> UGen
-mkBufDelay c buf i dly = mkFilter c [buf,i,dly] 1 0
+bufCombN buf i dly dcy = mkFilter "BufCombN" [buf,i,dly,dcy] 1 0
 
 -- | Delay line (cubic interpolation).
 bufDelayC :: UGen -> UGen -> UGen -> UGen
-bufDelayC = mkBufDelay "BufDelayC"
+bufDelayC buf i dly = mkFilter "BufDelayC" [buf,i,dly] 1 0
 
 -- | Delay line (linear interpolation).
 bufDelayL :: UGen -> UGen -> UGen -> UGen
-bufDelayL = mkBufDelay "BufDelayL"
+bufDelayL buf i dly = mkFilter "BufDelayL" [buf,i,dly] 1 0
 
 -- | Delay line (no interpolation).
 bufDelayN :: UGen -> UGen -> UGen -> UGen
-bufDelayN = mkBufDelay "BufDelayN"
+bufDelayN buf i dly = mkFilter "BufDelayN" [buf,i,dly] 1 0
 
 -- * Buffer I\/O.
 

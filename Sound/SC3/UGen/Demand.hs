@@ -2,7 +2,8 @@ module Sound.SC3.UGen.Demand where
 
 import Sound.SC3.UGen.Rate (Rate)
 import Sound.SC3.UGen.UGen (UGen, mkOsc, mkOscMCE, mkFilterKeyed)
-import Sound.SC3.UGen.Enum (DoneAction, fromDoneAction)
+import Sound.SC3.UGen.Enum (DoneAction)
+import Sound.SC3.UGen.Private (fromDoneAction)
 
 -- | Demand results from demand rate ugens.
 demand :: UGen -> UGen -> UGen -> UGen

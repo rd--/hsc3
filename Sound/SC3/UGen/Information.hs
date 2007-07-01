@@ -2,9 +2,7 @@ module Sound.SC3.UGen.Information where
 
 import Sound.SC3.UGen.Rate (Rate(IR))
 import Sound.SC3.UGen.UGen (UGen, mkOsc)
-
-mkInfoUGen :: String -> UGen
-mkInfoUGen name = mkOsc IR name [] 1 0
+import Sound.SC3.UGen.Private (mkInfoUGen)
 
 -- | Sample rate of synthesis server, frames per second.
 sampleRate :: UGen
