@@ -8,9 +8,9 @@ instance Ord Rate where
 
 rateOrd :: Rate -> Int
 rateOrd IR = 0
-rateOrd DR = 1
-rateOrd KR = 2
-rateOrd AR = 3
+rateOrd KR = 1
+rateOrd AR = 2
+rateOrd DR = 3
 
 -- | Integer rate identifier, as required for scsynth bytecode.
 rateId :: Rate -> Int
