@@ -3,19 +3,6 @@ module Sound.SC3.Server.Command where
 import Sound.OpenSoundControl (OSC(..), Datum(..))
 import Data.Word (Word8)
 
-data AddAction = AddToHead
-               | AddToTail
-               | AddBefore
-               | AddAfter
-               | AddReplace
-                 deriving (Eq, Show, Enum)
-
-data PrintLevel = NoPrinter 
-                | TextPrinter
-                | HexPrinter
-                | AllPrinter
-                  deriving (Eq, Show, Enum)
-
 -- * Instrument definition commands.
 
 -- | Install a bytecode instrument definition. (Asynchronous)
@@ -90,6 +77,14 @@ s_get nid i = Message "/s_get" (Int nid : map String i)
 -- | Get ranges of control values.
 s_getn :: Int -> [(String, Int)] -> OSC
 s_getn nid l = Message "/s_getn" (Int nid : mkDuples String Int l)
+
+-- | Enumeration of possible locations to add new nodes (s_new and g_new).
+data AddAction = AddToHead
+               | AddToTail
+               | AddBefore
+               | AddAfter
+               | AddReplace
+                 deriving (Eq, Show, Enum)
 
 -- | Create a new synth.
 s_new :: String -> Int -> AddAction -> Int -> [(String, Double)] -> OSC
@@ -215,11 +210,18 @@ c_setn l = Message "/c_setn" (concatMap f l)
 clearSched :: OSC
 clearSched = Message "/clearSched" []
 
+-- | Enumeration of OSC printer types.
+data PrintLevel = NoPrinter
+                | TextPrinter
+                | HexPrinter
+                | AllPrinter
+                  deriving (Eq, Show, Enum)
+
 -- | Select printing of incoming Open Sound Control messages.
 dumpOSC :: PrintLevel -> OSC
 dumpOSC c = Message "/dumpOSC" [Int (fromEnum c)]
 
--- | Select reception of notification messages. (Asynchronous) 
+-- | Select reception of notification messages. (Asynchronous)
 notify :: Bool -> OSC
 notify c = Message "/notify" [Int (fromEnum c)]
 
