@@ -244,7 +244,7 @@
   "Haskell SuperCollider"
   "Major mode for interacting with an inferior haskell process."
   (setq hsc3-literate-p nil)
-  (turn-on-haskell-font-lock))
+  (turn-on-font-lock))
 
 (add-to-list 'auto-mode-alist '("\\.hs$" . hsc3-mode))
 
