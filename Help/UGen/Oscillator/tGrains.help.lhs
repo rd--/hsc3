@@ -38,6 +38,26 @@ interp - 1, 2, or 4. Determines whether the grain uses (1) no
 > withSC3 (\fd -> sync fd (b_allocRead 10 "/home/rohan/sw/sw-01/audio/metal.wav" 0 0))
 
 > let tRate = mouseY KR 2 200 Exponential 0.1
-> let ctr   = mouseX KR 0 (bufDur KR 10) Linear 0.1
-> let tr    = impulse AR tRate 0
+>     ctr   = mouseX KR 0 (bufDur KR 10) Linear 0.1
+>     tr    = impulse AR tRate 0
 > audition (out 0 (tGrains 2 tr 10 1 ctr (4 / tRate) 0 0.1 2))
+
+> let b = 10
+>     trate = mouseY KR 8 120 Exponential 0.1
+>     dur = 4 / trate
+> clk <- dust AR trate
+> r <- tRand 0 0.01 clk
+> let x = mouseX KR 0 (bufDur KR b) Linear 0.1
+>     pos = x + r
+> pan <- return . (* 0.6) =<< whiteNoise KR
+> audition (out 0 (tGrains 2 clk b 1 pos dur pan 0.1 2))
+
+> let b = 10
+>     trate = mouseY KR 2 120 Exponential 0.1
+>     dur = 1.2 / trate
+>     clk = impulse AR trate 0
+>     pos = mouseX KR 0 (bufDur KR b) Linear 0.1
+> pan <- return . (* 0.6) =<< whiteNoise KR
+> n <- whiteNoise KR
+> let rate = shiftLeft 1.2 (roundE (n * 3) 1)
+> audition (out 0 (tGrains 2 clk b rate pos dur pan 0.1 2))
