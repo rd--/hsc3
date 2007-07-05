@@ -1,4 +1,5 @@
-DemandEnvGen rate levels times shapes curves gate reset levelScale levelOffset timeScale doneAction
+demandEnvGen rate levels times shapes curves gate reset
+             levelScale levelOffset timeScale doneAction
 
 levels - a demand ugen or any other ugen
 
@@ -16,11 +17,19 @@ curves - a demand ugen or any other ugen, if shape is 5, this
 
 gate   - if gate is x >= 1, the ugen runs, if gate is 0 > x > 1,
          the ugen is released at the next level (doneAction), if
-         gate is x < 0, the ugen is sampled end held
+         gate is x < 0, the ugen is sampled and held
 
 reset  - if reset crosses from nonpositive to positive, the ugen
          is reset at the next level, if it is > 1, it is reset
          immediately.
+
+Frequency ramp, exponential curve.
+
+> let inf_sc = 9e8
+> l <- dseq inf_sc (MCE [440, 9600])
+> let y = mouseY KR 0.01 3 Exponential 0.1
+>     f = demandEnvGen AR l y 2 0 1 1 1 0 1 DoNothing
+> audition (out 0 (sinOsc AR f 0 * 0.1))
 
 Frequency envelope with random times.
 
