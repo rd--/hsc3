@@ -1,7 +1,7 @@
 module Sound.SC3.UGen.Buffer where
 
 import Sound.SC3.UGen.Rate (Rate(AR))
-import Sound.SC3.UGen.UGen (UGen, mkFilter, mkFilterMCE, mkOsc)
+import Sound.SC3.UGen.UGen (UGen, mkFilter, mkFilterMCE, mkOsc, mkOscMCE)
 import Sound.SC3.UGen.Enum (Loop, Interpolation(..))
 import Sound.SC3.UGen.Private (fromLoop, fromInterpolation)
 
@@ -98,6 +98,10 @@ index b i = mkFilter "Index" [b, i] 1 0
 -- | Buffer playback.
 playBuf :: Int -> UGen -> UGen -> UGen -> UGen -> Loop -> UGen
 playBuf n b r' t s l = mkOsc AR "PlayBuf" [b,r',t,s,fromLoop l] n 0
+
+-- | Buffer recording.
+recordBuf :: UGen -> UGen -> UGen -> UGen -> UGen -> Loop -> UGen -> UGen -> UGen
+recordBuf b o rl pl r l t i = mkOscMCE AR "RecordBuf" [b, o, rl, pl, r, fromLoop l, t] i 0 0
 
 -- | Triggered buffer shuffler (grain generator).
 tGrains :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
