@@ -3,9 +3,10 @@ module Sound.SC3.UGen.Demand.Monadic where
 import Sound.SC3.UGen.UGen
 import qualified Sound.SC3.UGen.Demand.Base as D
 import Sound.SC3.UGen.UId
+import Sound.SC3.UGen.Enum
 
 -- | Buffer demand ugen.
-dbufrd :: (UId m) => UGen -> UGen -> UGen -> m UGen
+dbufrd :: (UId m) => UGen -> UGen -> Loop -> m UGen
 dbufrd = liftU3 D.dbufrd
 
 -- | Demand rate white noise.

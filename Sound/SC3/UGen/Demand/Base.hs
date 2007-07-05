@@ -2,10 +2,12 @@ module Sound.SC3.UGen.Demand.Base where
 
 import Sound.SC3.UGen.Rate (Rate(DR))
 import Sound.SC3.UGen.UGen (UGen, UGenID, mkOsc, mkOscMCE)
+import Sound.SC3.UGen.Enum
+import Sound.SC3.UGen.Private
 
 -- | Buffer demand ugen.
-dbufrd :: UGen -> UGen -> UGen -> (UGenID -> UGen)
-dbufrd b p l = mkOsc DR "Dbufrd" [b, p, l] 1
+dbufrd :: UGen -> UGen -> Loop -> (UGenID -> UGen)
+dbufrd b p l = mkOsc DR "Dbufrd" [b, p, fromLoop l] 1
 
 -- | Demand rate white noise.
 dwhite :: UGen -> UGen -> UGen -> (UGenID -> UGen)

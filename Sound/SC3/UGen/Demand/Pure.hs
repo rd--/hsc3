@@ -2,9 +2,10 @@ module Sound.SC3.UGen.Demand.Pure where
 
 import Sound.SC3.UGen.UGen
 import qualified Sound.SC3.UGen.Demand.Base as D
+import Sound.SC3.UGen.Enum
 
 -- | Buffer demand ugen.
-dbufrd :: UGenID -> UGen -> UGen -> UGen -> UGen
+dbufrd :: UGenID -> UGen -> UGen -> Loop -> UGen
 dbufrd = liftD3 D.dbufrd
 
 -- | Demand rate white noise.
