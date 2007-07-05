@@ -2,7 +2,7 @@ module Sound.SC3.UGen.UGen ( Name, UGenID, UGen(..), Output, Special
                            , mkOsc, mkOscMCE
                            , mkFilter, mkFilterMCE, mkFilterKeyed
                            , isConstant, isControl, isUGen, isProxy, isMRG, isMCE
-                           , mceChannel, mceReverse
+                           , mceChannel, mceReverse, mceDegree
                            , nodes, hasOutputs
                            , liftU, liftU2, liftU3, liftU4
                            , liftD, liftD2, liftD3, liftD4
@@ -107,6 +107,7 @@ proxy _       = error "proxy: illegal ugen"
 
 -- | Number of channels to expand to.
 mceDegree :: UGen -> Int
+mceDegree (UGen _ _ _ _ _ _) = 1
 mceDegree (MCE l) = length l
 mceDegree _       = error "mceDegree: illegal ugen"
 
