@@ -234,7 +234,7 @@
   "Major mode for interacting with an inferior haskell process."
   (setq hsc3-literate-p t)
   (setq haskell-literate 'bird)
-  (turn-on-haskell-font-lock))
+  (turn-on-font-lock))
 
 (add-to-list 'auto-mode-alist '("\\.lhs$" . literate-hsc3-mode))
 
