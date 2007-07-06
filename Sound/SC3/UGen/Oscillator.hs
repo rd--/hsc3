@@ -1,7 +1,8 @@
 module Sound.SC3.UGen.Oscillator where
 
 import Sound.SC3.UGen.Rate (Rate(AR))
-import Sound.SC3.UGen.UGen (UGen(MCE), mkOsc, mkOscMCE)
+import Sound.SC3.UGen.UGen (UGen(MCE))
+import Sound.SC3.UGen.UGen.Construct (mkOsc, mkOscMCE)
 import Data.List(transpose)
 
 -- | Band Limited ImPulse generator.

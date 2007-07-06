@@ -1,7 +1,8 @@
 module Sound.SC3.UGen.Analysis where
 
 import Sound.SC3.UGen.Rate (Rate(KR))
-import Sound.SC3.UGen.UGen (UGen, mkOsc, mkFilter)
+import Sound.SC3.UGen.UGen (UGen)
+import Sound.SC3.UGen.UGen.Construct (mkFilter, mkOsc)
 
 -- | Amplitude follower.
 amplitude :: Rate -> UGen -> UGen -> UGen -> UGen

@@ -1,7 +1,8 @@
 module Sound.SC3.UGen.FFT where
 
 import Sound.SC3.UGen.Rate (Rate(AR, KR))
-import Sound.SC3.UGen.UGen (UGen, mkOsc)
+import Sound.SC3.UGen.UGen (UGen)
+import Sound.SC3.UGen.UGen.Construct (mkOsc)
 
 -- | Fast fourier transform.
 fft :: UGen -> UGen -> UGen

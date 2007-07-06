@@ -3,8 +3,9 @@ module Sound.SC3.UGen.Graph (Graph(..), Input(..),
                              controlIndex, constantIndex, ugenIndex,
                              makeInput) where
 
-import Sound.SC3.UGen.UGen (UGen(..), Special(..), UGenId(..), nodes, isConstant, isControl, isUGen)
 import Sound.SC3.UGen.Rate (Rate(KR))
+import Sound.SC3.UGen.UGen (UGen(..), Special(..), UGenId(..))
+import Sound.SC3.UGen.UGen.Predicate (isConstant, isControl, isUGen)
 
 import Data.Maybe (fromMaybe)
 import Data.List (nub, elemIndex)
@@ -14,6 +15,14 @@ data Graph = Graph [UGen] [UGen] [UGen]
 
 data Input = Input Int Int
              deriving (Eq, Show)
+
+-- | The list of all UGens referenced in a UGen graph.
+nodes :: UGen -> [UGen]
+nodes u@(UGen _ _ i _ _ _) =  u : concatMap nodes i
+nodes (Proxy u _)          =  u : nodes u
+nodes (MCE u)              =  concatMap nodes u
+nodes (MRG u)              =  concatMap nodes u
+nodes u                    =  [u]
 
 -- | Construct implicit control UGen (k-rate only).
 implicit :: Int -> UGen

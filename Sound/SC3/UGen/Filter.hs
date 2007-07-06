@@ -1,6 +1,7 @@
 module Sound.SC3.UGen.Filter where
 
-import Sound.SC3.UGen.UGen (UGen(MCE), mkFilter, mkFilterMCE)
+import Sound.SC3.UGen.UGen (UGen(MCE))
+import Sound.SC3.UGen.UGen.Construct (mkFilter, mkFilterMCE)
 import Data.List (transpose)
 
 -- | Allpass filter (no interpolation)
@@ -30,6 +31,10 @@ brf i freq rq = mkFilter "BRF" [i,freq,rq] 1
 -- | Two zero fixed midcut filter.
 brz2 :: UGen -> UGen
 brz2 i = mkFilter "BRZ2" [i] 1
+
+-- | Clip input between lower and upper bounds.
+clip :: UGen -> UGen -> UGen -> UGen
+clip i l h = mkFilter "Clip" [i,l,h] 1
 
 -- | Comb filter (no interpolation)
 combN :: UGen -> UGen -> UGen -> UGen -> UGen

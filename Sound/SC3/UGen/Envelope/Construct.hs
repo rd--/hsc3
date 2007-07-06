@@ -1,6 +1,7 @@
 module Sound.SC3.UGen.Envelope.Construct where
 
 import Sound.SC3.UGen.UGen (UGen(..))
+import Sound.SC3.UGen.UGen.Math ()
 import Sound.SC3.UGen.Math ((>=*), (<=*))
 import Sound.SC3.UGen.Enum (EnvCurve(..))
 import Sound.SC3.UGen.Private (dbl, d_dx, env_curve, env_value)

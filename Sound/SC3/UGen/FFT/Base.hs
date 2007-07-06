@@ -1,7 +1,8 @@
 module Sound.SC3.UGen.FFT.Base where
 
 import Sound.SC3.UGen.Rate (Rate(KR))
-import Sound.SC3.UGen.UGen (UGen, UGenId, mkOscId)
+import Sound.SC3.UGen.UGen (UGen, UGenId)
+import Sound.SC3.UGen.UGen.Construct (mkOscId)
 
 -- | Randomize order of bins.
 pv_BinScramble :: UGenId -> UGen -> UGen -> UGen -> UGen -> UGen

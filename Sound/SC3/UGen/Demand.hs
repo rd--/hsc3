@@ -1,7 +1,8 @@
 module Sound.SC3.UGen.Demand where
 
 import Sound.SC3.UGen.Rate (Rate)
-import Sound.SC3.UGen.UGen (UGen, mkOsc, mkOscMCE, mkFilterKeyed)
+import Sound.SC3.UGen.UGen (UGen)
+import Sound.SC3.UGen.UGen.Construct (mkOsc, mkOscMCE, mkFilterKeyed)
 import Sound.SC3.UGen.Enum (DoneAction)
 import Sound.SC3.UGen.Private (fromDoneAction)
 

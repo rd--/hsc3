@@ -1,6 +1,7 @@
 module Sound.SC3.UGen.Demand.Monadic where
 
 import Sound.SC3.UGen.UGen
+import Sound.SC3.UGen.UGen.Construct
 import qualified Sound.SC3.UGen.Demand.Base as D
 import Sound.SC3.UGen.UId
 import Sound.SC3.UGen.Enum

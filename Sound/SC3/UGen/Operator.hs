@@ -63,10 +63,10 @@ data Binary = Add
             | IDiv
             | FDiv
             | Mod
-            | EQ
+            | EQ_
             | NE
-            | LT
-            | GT
+            | LT_
+            | GT_
             | LE
             | GE
             | Min

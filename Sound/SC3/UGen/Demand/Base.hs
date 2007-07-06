@@ -1,7 +1,8 @@
 module Sound.SC3.UGen.Demand.Base where
 
 import Sound.SC3.UGen.Rate (Rate(DR))
-import Sound.SC3.UGen.UGen (UGen, UGenId, mkOscId, mkOscMCEId)
+import Sound.SC3.UGen.UGen (UGen, UGenId)
+import Sound.SC3.UGen.UGen.Construct (mkOscId, mkOscMCEId)
 import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Private
 
