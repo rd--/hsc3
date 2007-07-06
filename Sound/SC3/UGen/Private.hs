@@ -50,5 +50,5 @@ dbl :: a -> [a]
 dbl x = [x,x]
 
 mkInfoUGen :: String -> UGen
-mkInfoUGen name = mkOsc IR name [] 1 0
+mkInfoUGen name = mkOsc IR name [] 1
 

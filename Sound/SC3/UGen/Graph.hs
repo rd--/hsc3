@@ -3,7 +3,7 @@ module Sound.SC3.UGen.Graph (Graph(..), Input(..),
                              controlIndex, constantIndex, ugenIndex,
                              makeInput) where
 
-import Sound.SC3.UGen.UGen (UGen(..), nodes, isConstant, isControl, isUGen)
+import Sound.SC3.UGen.UGen (UGen(..), Special(..), UGenId(..), nodes, isConstant, isControl, isUGen)
 import Sound.SC3.UGen.Rate (Rate(KR))
 
 import Data.Maybe (fromMaybe)
@@ -17,7 +17,7 @@ data Input = Input Int Int
 
 -- | Construct implicit control UGen (k-rate only).
 implicit :: Int -> UGen
-implicit n = UGen KR "Control" [] (replicate n KR) 0 0
+implicit n = UGen KR "Control" [] (replicate n KR) (Special 0) (UGenId 0)
 
 -- | Construct a UGen graph.
 graph :: UGen -> Graph

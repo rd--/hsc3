@@ -1,100 +1,100 @@
 module Sound.SC3.UGen.Noise.Base where
 
 import Sound.SC3.UGen.Rate (Rate(IR))
-import Sound.SC3.UGen.UGen (UGen, UGenID, mkOsc, mkFilter)
+import Sound.SC3.UGen.UGen (UGen, UGenId, mkOscId, mkFilterId)
 
 -- | Brown noise.
-brownNoise :: Rate -> (UGenID -> UGen)
-brownNoise r = mkOsc r "BrownNoise" [] 1
+brownNoise :: UGenId -> Rate -> UGen
+brownNoise z r = mkOscId z r "BrownNoise" [] 1
 
 -- | Clip noise.
-clipNoise :: Rate -> (UGenID -> UGen)
-clipNoise r = mkOsc r "ClipNoise" [] 1
+clipNoise :: UGenId -> Rate -> UGen
+clipNoise z r = mkOscId z r "ClipNoise" [] 1
 
 -- | Randomly pass or block triggers.
-coinGate :: UGen -> UGen -> (UGenID -> UGen)
-coinGate prob i = mkFilter "CoinGate" [prob,i] 1
+coinGate :: UGenId -> UGen -> UGen -> UGen
+coinGate z prob i = mkFilterId z "CoinGate" [prob,i] 1
 
 -- | Random impulses in (-1, 1).
-dust2 :: Rate -> UGen -> (UGenID -> UGen)
-dust2 r density = mkOsc r "Dust2" [density] 1
+dust2 :: UGenId -> Rate -> UGen -> UGen
+dust2 z r density = mkOscId z r "Dust2" [density] 1
 
 -- | Random impulse in (0,1).
-dust :: Rate -> UGen -> (UGenID -> UGen)
-dust r density = mkOsc r "Dust" [density] 1
+dust :: UGenId -> Rate -> UGen -> UGen
+dust z r density = mkOscId z r "Dust" [density] 1
 
 -- | Random value in exponential distribution.
-expRand :: UGen -> UGen -> (UGenID -> UGen)
-expRand lo hi = mkOsc IR "ExpRand" [lo,hi] 1
+expRand :: UGenId -> UGen -> UGen -> UGen
+expRand z lo hi = mkOscId z IR "ExpRand" [lo,hi] 1
 
 -- | Gray noise.
-grayNoise :: Rate -> (UGenID -> UGen)
-grayNoise r = mkOsc r "GrayNoise" [] 1
+grayNoise :: UGenId -> Rate -> UGen
+grayNoise z r = mkOscId z r "GrayNoise" [] 1
 
 -- | Random integer in uniform distribution.
-iRand :: UGen -> UGen -> (UGenID -> UGen)
-iRand lo hi = mkOsc IR "IRand" [lo,hi] 1
+iRand :: UGenId -> UGen -> UGen -> UGen
+iRand z lo hi = mkOscId z IR "IRand" [lo,hi] 1
 
 -- | Clip noise.
-lfClipNoise :: Rate -> UGen -> (UGenID -> UGen)
-lfClipNoise r freq = mkOsc r "LFClipNoise" [freq] 1
+lfClipNoise :: UGenId -> Rate -> UGen -> UGen
+lfClipNoise z r freq = mkOscId z r "LFClipNoise" [freq] 1
 
 -- | Dynamic clip noise.
-lfdClipNoise :: Rate -> UGen -> (UGenID -> UGen)
-lfdClipNoise r freq = mkOsc r "LFDClipNoise" [freq] 1
+lfdClipNoise :: UGenId -> Rate -> UGen -> UGen
+lfdClipNoise z r freq = mkOscId z r "LFDClipNoise" [freq] 1
 
 -- | Dynamic step noise.
-lfdNoise0 :: Rate -> UGen -> (UGenID -> UGen)
-lfdNoise0 r freq = mkOsc r "LFDNoise0" [freq] 1
+lfdNoise0 :: UGenId -> Rate -> UGen -> UGen
+lfdNoise0 z r freq = mkOscId z r "LFDNoise0" [freq] 1
 
 -- | Dynamic ramp noise. 
-lfdNoise1 :: Rate -> UGen -> (UGenID -> UGen)
-lfdNoise1 r freq = mkOsc r "LFDNoise1" [freq] 1
+lfdNoise1 :: UGenId -> Rate -> UGen -> UGen
+lfdNoise1 z r freq = mkOscId z r "LFDNoise1" [freq] 1
 
 -- | Dynamic quadratic noise
-lfdNoise2 :: Rate -> UGen -> (UGenID -> UGen)
-lfdNoise2 r freq = mkOsc r "LFDNoise2" [freq] 1
+lfdNoise2 :: UGenId -> Rate -> UGen -> UGen
+lfdNoise2 z r freq = mkOscId z r "LFDNoise2" [freq] 1
 
 -- | Step noise.
-lfNoise0 :: Rate -> UGen -> (UGenID -> UGen)
-lfNoise0 r freq = mkOsc r "LFNoise0" [freq] 1
+lfNoise0 :: UGenId -> Rate -> UGen -> UGen
+lfNoise0 z r freq = mkOscId z r "LFNoise0" [freq] 1
 
 -- | Ramp noise.
-lfNoise1 :: Rate -> UGen -> (UGenID -> UGen)
-lfNoise1 r freq = mkOsc r "LFNoise1" [freq] 1
+lfNoise1 :: UGenId -> Rate -> UGen -> UGen
+lfNoise1 z r freq = mkOscId z r "LFNoise1" [freq] 1
 
 -- | Quadratic noise.
-lfNoise2 :: Rate -> UGen -> (UGenID -> UGen)
-lfNoise2 r freq = mkOsc r "LFNoise2" [freq] 1
+lfNoise2 :: UGenId -> Rate -> UGen -> UGen
+lfNoise2 z r freq = mkOscId z r "LFNoise2" [freq] 1
 
 -- | Random value in skewed linear distribution.
-linRand :: UGen -> UGen -> UGen -> (UGenID -> UGen)
-linRand lo hi m = mkOsc IR "LinRand" [lo,hi,m] 1
+linRand :: UGenId -> UGen -> UGen -> UGen -> UGen
+linRand z lo hi m = mkOscId z IR "LinRand" [lo,hi,m] 1
 
 -- | Random value in sum of n linear distribution.
-nRand :: UGen -> UGen -> UGen -> (UGenID -> UGen)
-nRand lo hi n = mkOsc IR "NRand" [lo,hi,n] 1
+nRand :: UGenId -> UGen -> UGen -> UGen -> UGen
+nRand z lo hi n = mkOscId z IR "NRand" [lo,hi,n] 1
 
 -- | Pink noise.
-pinkNoise :: Rate -> (UGenID -> UGen)
-pinkNoise r = mkOsc r "PinkNoise" [] 1
+pinkNoise :: UGenId -> Rate -> UGen
+pinkNoise z r = mkOscId z r "PinkNoise" [] 1
 
 -- | Random value in uniform distribution.
-rand :: UGen -> UGen -> (UGenID -> UGen)
-rand lo hi = mkOsc IR "Rand" [lo,hi] 1
+rand :: UGenId -> UGen -> UGen -> UGen
+rand z lo hi = mkOscId z IR "Rand" [lo,hi] 1
 
 -- | Random value in exponential distribution on trigger.
-tExpRand :: UGen -> UGen -> UGen -> (UGenID -> UGen)
-tExpRand lo hi trig = mkFilter "TExpRand" [lo,hi,trig] 1
+tExpRand :: UGenId -> UGen -> UGen -> UGen -> UGen
+tExpRand z lo hi trig = mkFilterId z "TExpRand" [lo,hi,trig] 1
 
 -- | Random integer in uniform distribution on trigger.
-tiRand :: UGen -> UGen -> UGen -> (UGenID -> UGen)
-tiRand lo hi trig = mkFilter "TIRand" [lo,hi,trig] 1
+tiRand :: UGenId -> UGen -> UGen -> UGen -> UGen
+tiRand z lo hi trig = mkFilterId z "TIRand" [lo,hi,trig] 1
 
 -- | Random value in uniform distribution on trigger.
-tRand :: UGen -> UGen -> UGen -> (UGenID -> UGen)
-tRand lo hi trig = mkFilter "TRand" [lo,hi,trig] 1
+tRand :: UGenId -> UGen -> UGen -> UGen -> UGen
+tRand z lo hi trig = mkFilterId z "TRand" [lo,hi,trig] 1
 
 -- | White noise.
-whiteNoise :: Rate -> (UGenID -> UGen)
-whiteNoise r = mkOsc r "WhiteNoise" [] 1
+whiteNoise :: UGenId -> Rate -> UGen
+whiteNoise z r = mkOscId z r "WhiteNoise" [] 1

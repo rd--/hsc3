@@ -2,7 +2,7 @@ module Sound.SC3.Server.Graphdef (graphdef) where
 
 import Sound.OpenSoundControl.Byte
 import Sound.OpenSoundControl.Cast
-import Sound.SC3.UGen.UGen (UGen(..))
+import Sound.SC3.UGen.UGen (UGen(..), Special(..))
 import Sound.SC3.UGen.Rate (rateId)
 import Sound.SC3.UGen.Graph
 
@@ -25,11 +25,12 @@ encode_ugen g (UGen r n i o s _) = B.concat [ B.pack (str_pstr n)
                                             , encode_i8 (rateId r)
                                             , encode_i16 (length i)
                                             , encode_i16 (length o)
-                                            , encode_i16 s
+                                            , encode_i16 s'
                                             , B.concat i'
                                             , B.concat o' ]
     where i' = map (encode_input . makeInput g) i
           o' = map (encode_i8 . rateId) o
+          (Special s') = s
 encode_ugen _ _ = error "encode_ugen: illegal input"
 
 -- | Construct instrument definition bytecode.

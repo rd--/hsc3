@@ -21,14 +21,12 @@ Exposed-modules:  Sound.SC3
                   Sound.SC3.UGen.Demand
                   Sound.SC3.UGen.Demand.Base
                   Sound.SC3.UGen.Demand.Monadic
-                  Sound.SC3.UGen.Demand.Pure
                   Sound.SC3.UGen.Envelope
                   Sound.SC3.UGen.Envelope.Construct
                   Sound.SC3.UGen.Enum
                   Sound.SC3.UGen.FFT
                   Sound.SC3.UGen.FFT.Base
                   Sound.SC3.UGen.FFT.Monadic
-                  Sound.SC3.UGen.FFT.Pure
                   Sound.SC3.UGen.Filter
                   Sound.SC3.UGen.Graph
                   Sound.SC3.UGen.Information
@@ -36,7 +34,6 @@ Exposed-modules:  Sound.SC3
                   Sound.SC3.UGen.Math
                   Sound.SC3.UGen.Noise.Base
                   Sound.SC3.UGen.Noise.Monadic
-                  Sound.SC3.UGen.Noise.Pure
                   Sound.SC3.UGen.Operator
                   Sound.SC3.UGen.Oscillator
                   Sound.SC3.UGen.Panner

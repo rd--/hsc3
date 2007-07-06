@@ -1,11 +1,12 @@
-module Sound.SC3.UGen.UGen ( Name, UGenID, UGen(..), Output, Special
+module Sound.SC3.UGen.UGen ( Name, UGenId(..), UGen(..), Output, Special(..)
                            , mkOsc, mkOscMCE
+                           , mkOscId, mkOscMCEId
                            , mkFilter, mkFilterMCE, mkFilterKeyed
+                           , mkFilterId
                            , isConstant, isControl, isUGen, isProxy, isMRG, isMCE
                            , mceChannel, mceReverse, mceDegree
                            , nodes, hasOutputs
                            , liftU, liftU2, liftU3, liftU4
-                           , liftD, liftD2, liftD3, liftD4
                            , mix, mixFill
                            , clone ) where
 
@@ -21,8 +22,8 @@ import System.Random (Random, randomR, random)
 
 type Name    = String
 type Output  = Rate
-type Special = Int
-type UGenID  = Int
+newtype Special = Special Int deriving (Eq, Show)
+newtype UGenId = UGenId Int deriving (Eq, Show)
 data UGen    = Constant { constantValue :: Double }
              | Control { controlRate_ :: Rate
                        , controlName :: Name
@@ -32,7 +33,7 @@ data UGen    = Constant { constantValue :: Double }
                     , ugenInputs :: [UGen]
                     , ugenOuputs :: [Output]
                     , ugenSpecial :: Special
-                    , ugenId :: UGenID }
+                    , ugenId :: UGenId }
              | Proxy { proxySource :: UGen
                      , proxyIndex :: Int }
              | MCE { mceProxies :: [UGen] }
@@ -152,78 +153,79 @@ mceChannels u       = [u]
 
 -- * UGen Constructors.
 
--- | Create a UGen with a unique id using a unique identifier generator.
-createUnique :: (UId m) => (UGenID -> UGen) -> m UGen
-createUnique u = liftM u generateUId
+liftU :: (UId m) => (UGenId -> a -> UGen) -> (a -> m UGen)
+liftU f a = do n <- generateUId
+               return (f (UGenId n) a)
 
-liftU :: (UId m) => (a -> (UGenID -> UGen)) -> a -> m UGen
-liftU f = createUnique . f
+liftU2 :: (UId m) => (UGenId -> a -> b -> UGen) -> (a -> b -> m UGen)
+liftU2 f a b = do n <- generateUId
+                  return (f (UGenId n) a b)
 
-liftU2 :: (UId m) => (a -> b -> (UGenID -> UGen)) -> a -> b -> m UGen
-liftU2 f = liftU . f
+liftU3 :: (UId m) => (UGenId -> a -> b -> c -> UGen) -> (a -> b -> c -> m UGen)
+liftU3 f a b c = do n <- generateUId
+                    return (f (UGenId n) a b c)
 
-liftU3 :: (UId m) => (a -> b -> c -> (UGenID -> UGen)) -> a -> b -> c -> m UGen
-liftU3 f = liftU2 . f
-
-liftU4 :: (UId m) => (a -> b -> c -> d -> (UGenID -> UGen)) -> a -> b -> c -> d -> m UGen
-liftU4 f = liftU3 . f
-
--- | Edit UId of UGen.
-withUGenID :: UGenID -> (UGenID -> UGen) -> UGen
-withUGenID = flip ($)
-
-liftD :: (a -> (UGenID -> UGen)) -> UGenID -> a -> UGen
-liftD f d = withUGenID d . f
-
-liftD2 :: (a -> b -> (UGenID -> UGen)) -> UGenID -> a -> b -> UGen
-liftD2 f d = flip liftD d . f
-
-liftD3 :: (a -> b -> c -> (UGenID -> UGen)) -> UGenID -> a -> b -> c -> UGen
-liftD3 f d = flip liftD2 d . f
-
-liftD4 :: (a -> b -> c -> d -> (UGenID -> UGen)) -> UGenID -> a -> b -> c -> d -> UGen
-liftD4 f d = flip liftD3 d . f
+liftU4 :: (UId m) => (UGenId -> a -> b -> c -> d -> UGen) -> (a -> b -> c -> d -> m UGen)
+liftU4 f a b c d = do n <- generateUId
+                      return (f (UGenId n) a b c d)
 
 -- | Construct proxied and multiple channel expanded UGen.
-mkUGen :: Rate -> Name -> [UGen] -> [Output] -> Special -> UGen
-mkUGen r n i o s = proxy (mceExpand u)
-    where u = UGen r n i o s 0
+mkUGen :: Rate -> Name -> [UGen] -> [Output] -> Special -> UGenId -> UGen
+mkUGen r n i o s z = proxy (mceExpand u)
+    where u = UGen r n i o s z
 
 -- | Oscillator constructor.
-mkOsc :: Rate -> Name -> [UGen] -> Int -> Special -> UGen
-mkOsc r c i o s = mkUGen r c i (replicate o r) s
+mkOscId :: UGenId -> Rate -> Name -> [UGen] -> Int -> UGen
+mkOscId z r c i o = mkUGen r c i (replicate o r) (Special 0) z
+
+-- | Oscillator constructor.
+mkOsc :: Rate -> Name -> [UGen] -> Int -> UGen
+mkOsc = mkOscId (UGenId 0)
 
 -- | Variant oscillator constructor with MCE collapsing input.
-mkOscMCE :: Rate -> Name -> [UGen] -> UGen -> Int -> Special -> UGen
-mkOscMCE r c i j o s = mkOsc r c (i ++ mceChannels j) o s
+mkOscMCEId :: UGenId -> Rate -> Name -> [UGen] -> UGen -> Int -> UGen
+mkOscMCEId z r c i j o = mkOscId z r c (i ++ mceChannels j) o
+
+-- | Variant oscillator constructor with MCE collapsing input.
+mkOscMCE :: Rate -> Name -> [UGen] -> UGen -> Int -> UGen
+mkOscMCE = mkOscMCEId (UGenId 0)
 
 -- | Filter UGen constructor.
-mkFilter :: Name -> [UGen] -> Int -> Special -> UGen
-mkFilter c i o s = mkUGen r c i o' s
+mkFilterId :: UGenId -> Name -> [UGen] -> Int -> UGen
+mkFilterId z c i o = mkUGen r c i o' (Special 0) z
     where r = maximum (map rateOf i)
           o'= replicate o r
 
+-- | Filter UGen constructor.
+mkFilter :: Name -> [UGen] -> Int -> UGen
+mkFilter = mkFilterId (UGenId 0)
+
 -- | Variant filter with rate derived from keyed input.
-mkFilterKeyed :: Name -> Int -> [UGen] -> Int -> Special -> UGen
-mkFilterKeyed c k i o s = mkUGen r c i o' s
+mkFilterKeyed :: Name -> Int -> [UGen] -> Int -> UGen
+mkFilterKeyed c k i o = mkUGen r c i o' (Special 0) (UGenId 0)
     where r = rateOf (i !! k)
           o' = replicate o r
 
 -- | Variant filter constructor with MCE collapsing input.
-mkFilterMCE :: Name -> [UGen] -> UGen -> Int -> Special -> UGen
-mkFilterMCE c i j o s = mkFilter c (i ++ mceChannels j) o s
+mkFilterMCE :: Name -> [UGen] -> UGen -> Int -> UGen
+mkFilterMCE c i j o = mkFilter c (i ++ mceChannels j) o
+
+-- | Operator UGen constructor.
+mkOperator :: Name -> [UGen] -> Int -> UGen
+mkOperator c i s = mkUGen r c i [r] (Special s) (UGenId 0)
+    where r = maximum (map rateOf i)
 
 -- UGen math.
 
 -- | Unary math constructor with constant optimization.
 uop :: Unary -> (Double -> Double) -> UGen -> UGen
 uop _ f (Constant a) = Constant (f a)
-uop i _ a            = mkFilter "UnaryOpUGen" [a] 1 (fromEnum i)
+uop i _ a = mkOperator "UnaryOpUGen" [a] (fromEnum i)
 
 -- | Binary math constructor with constant optimization.
 binop :: Binary -> (Double -> Double -> Double) -> UGen -> UGen -> UGen
 binop _ f (Constant a) (Constant b) = Constant (f a b)
-binop i _ a            b            = mkFilter "BinaryOpUGen" [a,b] 1 (fromEnum i)
+binop i _ a b = mkOperator "BinaryOpUGen" [a, b] (fromEnum i)
 
 instance Num UGen where
     negate         = uop Neg negate
@@ -262,13 +264,6 @@ instance Floating UGen where
 instance Real UGen where
     toRational (Constant n) = toRational n
     toRational _ = error "toRational at non-constant UGen"
-
-instance RealFrac UGen where
-    properFraction = error "properFraction at UGen"
---    truncate n = trunc n (Constant 1.0)
---    round n = roundE n (Constant 1.0)
---    ceiling = ceil
---    floor = floorE
 
 instance Integral UGen where
     quot = binop IDiv __binop
@@ -385,7 +380,7 @@ instance BinaryOp UGen where
 instance TernaryOp UGen where
     wrap a b c = __ternaryop a b c
     fold a b c = __ternaryop a b c
-    clip i l h = mkFilter "Clip" [i,l,h] 1 0
+    clip i l h = mkFilter "Clip" [i,l,h] 1
 
 -- * Mix
 
