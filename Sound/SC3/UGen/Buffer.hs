@@ -100,6 +100,10 @@ detectIndex b i = mkFilter "DetectIndex" [b, i] 1
 index :: UGen -> UGen -> UGen
 index b i = mkFilter "Index" [b, i] 1
 
+-- | Interpolating search in ordered table.
+indexInBetween :: UGen -> UGen -> UGen
+indexInBetween b i = mkFilter "IndexInBetween" [b, i] 1
+
 -- | Buffer playback.
 playBuf :: Int -> UGen -> UGen -> UGen -> UGen -> Loop -> UGen
 playBuf n b r' t s l = mkOsc AR "PlayBuf" [b,r',t,s,fromLoop l] n
