@@ -8,7 +8,6 @@ import Sound.SC3.UGen.UGen.Predicate
 
 -- | Number of channels to expand to.
 mceDegree :: UGen -> Int
-mceDegree (UGen _ _ _ _ _ _) = 1
 mceDegree (MCE l) = length l
 mceDegree _       = error "mceDegree: illegal ugen"
 
