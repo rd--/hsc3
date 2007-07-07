@@ -36,10 +36,13 @@ mceExpand :: UGen -> UGen
 mceExpand (MCE l) = MCE (map mceExpand l)
 mceExpand u       = if mceRequired u then mceExpand (mceTransform u) else u
 
+-- | Apply UGen list operation on MCE contents.
+mceEdit f (MCE l) = MCE (f l)
+mceEdit _ _ = error "mceEdit: non MCE value"
+
 -- | Reverse order of channels at MCE.
 mceReverse :: UGen -> UGen
-mceReverse (MCE l) = MCE (reverse l)
-mceReverse _       = error "mceReverse: non MCE value"
+mceReverse = mceEdit reverse
 
 -- | Obtain indexed channel at MCE.
 mceChannel :: Int -> UGen -> UGen
