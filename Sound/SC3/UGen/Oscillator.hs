@@ -57,10 +57,6 @@ lfSaw r freq phase = mkOsc r "LFSaw" [freq, phase] 1
 lfTri :: Rate -> UGen -> UGen -> UGen
 lfTri r freq phase = mkOsc r "LFTri" [freq, phase] 1
 
--- | Wavetable oscillator.
-osc :: Rate -> UGen -> UGen -> UGen -> UGen
-osc r bufnum freq phase = mkOsc r "Osc" [bufnum, freq, phase] 1
-
 -- | Triggered linear ramp between two levels.
 phasor :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 phasor r t f s e p = mkOsc r "Phasor" [t, f, s, e, p] 1
@@ -88,14 +84,6 @@ syncSaw r syncFreq sawFreq = mkOsc r "SyncSaw" [syncFreq, sawFreq] 1
 -- | Variable duty sawtooth oscillator.
 varSaw :: Rate -> UGen -> UGen -> UGen -> UGen
 varSaw r freq iphase width = mkOsc r "VarSaw" [freq, iphase, width] 1
-
--- | Three variable wavetable oscillator.
-vOsc3 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-vOsc3 r b f1 f2 f3 = mkOsc r "VOsc3" [b, f1, f2, f3] 1
-
--- | Variable wavetable oscillator.
-vOsc :: Rate -> UGen -> UGen -> UGen -> UGen
-vOsc r b f phase = mkOsc r "VOsc" [b, f, phase] 1
 
 -- Local Variables:
 -- truncate-lines:t

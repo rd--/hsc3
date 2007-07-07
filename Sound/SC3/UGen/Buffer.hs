@@ -104,6 +104,10 @@ index b i = mkFilter "Index" [b, i] 1
 indexInBetween :: UGen -> UGen -> UGen
 indexInBetween b i = mkFilter "IndexInBetween" [b, i] 1
 
+-- | Wavetable oscillator.
+osc :: Rate -> UGen -> UGen -> UGen -> UGen
+osc r bufnum freq phase = mkOsc r "Osc" [bufnum, freq, phase] 1
+
 -- | Buffer playback.
 playBuf :: Int -> UGen -> UGen -> UGen -> UGen -> Loop -> UGen
 playBuf n b r' t s l = mkOsc AR "PlayBuf" [b,r',t,s,fromLoop l] n
@@ -115,6 +119,14 @@ recordBuf b o rl pl r l t i = mkOscMCE AR "RecordBuf" [b, o, rl, pl, r, fromLoop
 -- | Triggered buffer shuffler (grain generator).
 tGrains :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 tGrains n t b r c d p a i = mkFilter "TGrains" [t,b,r,c,d,p,a,i] n
+
+-- | Three variable wavetable oscillator.
+vOsc3 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+vOsc3 r b f1 f2 f3 = mkOsc r "VOsc3" [b, f1, f2, f3] 1
+
+-- | Variable wavetable oscillator.
+vOsc :: Rate -> UGen -> UGen -> UGen -> UGen
+vOsc r b f phase = mkOsc r "VOsc" [b, f, phase] 1
 
 -- Local Variables:
 -- truncate-lines:t
