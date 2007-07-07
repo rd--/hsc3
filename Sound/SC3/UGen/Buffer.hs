@@ -92,6 +92,10 @@ bufRdC n r b p l = bufRd n r b p l CubicInterpolation
 bufWr :: UGen -> UGen -> Loop -> UGen -> UGen
 bufWr buf phs lp i = mkFilterMCE "BufWr" [buf,phs,fromLoop lp] i 0
 
+-- | Search a buffer for a value.
+detectIndex :: UGen -> UGen -> UGen
+detectIndex b i = mkFilter "DetectIndex" [b, i] 1
+
 -- | Index into table with signal.
 index :: UGen -> UGen -> UGen
 index b i = mkFilter "Index" [b, i] 1
