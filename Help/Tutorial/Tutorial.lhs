@@ -12,8 +12,8 @@ Haskell SuperCollider is currently only available as a set of darcs
 repositories, the first implementing the Sound.OpenSoundControl
 module, the second the Sound.SC3 module.
 
-  $ darcs get http://slavepianos.org/rd/sw/sw-78
-  $ darcs get http://slavepianos.org/rd/sw/sw-69
+  $ darcs get http://slavepianos.org/rd/sw/hosc
+  $ darcs get http://slavepianos.org/rd/sw/hsc3
 
 To build use the standard Cabal process in each repository in
 sequence.
@@ -26,9 +26,9 @@ sequence.
 
 Add an appropriately modified variant of the following to ~/.emacs
 
-  (push "~/sw/sw-69/emacs" load-path)
+  (push "~/sw/hsc3/emacs" load-path)
   (setq hsc3-interpreter "ghci")
-  (setq hsc3-help-directory "~/sw/sw-69/Help/")
+  (setq hsc3-help-directory "~/sw/hsc3/Help/")
   (require 'hsc3)
 
 The hsc3 emacs mode associates itself with files having the extension
