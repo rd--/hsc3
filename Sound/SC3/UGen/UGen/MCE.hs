@@ -36,6 +36,7 @@ mceExpand (MCE l) = MCE (map mceExpand l)
 mceExpand u       = if mceRequired u then mceExpand (mceTransform u) else u
 
 -- | Apply UGen list operation on MCE contents.
+mceEdit :: ([UGen] -> [UGen]) -> UGen -> UGen
 mceEdit f (MCE l) = MCE (f l)
 mceEdit _ _ = error "mceEdit: non MCE value"
 
