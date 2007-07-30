@@ -16,20 +16,21 @@ import Sound.SC3.UGen.UId
 -- | Apply proxy transformation if required.
 proxy :: UGen -> UGen
 proxy (MCE l) = MCE (map proxy l)
-proxy u@(UGen _ _ _ o _ _) =
-   case o of
-      (_:_:_) -> MCE (map (Proxy u) [0..(length o - 1)])
-      _       -> u
-proxy _       = error "proxy: illegal ugen"
+proxy u@(UGen _ _ _ o _ _) = case o of
+                               (_:_:_) -> MCE (map (Proxy u) [0..(length o - 1)])
+                               _       -> u
+proxy (MRG (x:xs)) = MRG (proxy x : xs)
+proxy _ = error "proxy: illegal ugen"
 
 -- | Determine the rate of a UGen.
 rateOf :: UGen -> Rate
-rateOf (Constant _)        =  IR
-rateOf (Control r _ _)     =  r
-rateOf (UGen r _ _ _ _ _)  =  r
-rateOf (Proxy u _)         =  rateOf u
-rateOf (MCE u)             =  maximum (map rateOf u)
-rateOf (MRG _)             =  error "rateOf: applied to MRG"
+rateOf (Constant _) = IR
+rateOf (Control r _ _) = r
+rateOf (UGen r _ _ _ _ _) = r
+rateOf (Proxy u _) = rateOf u
+rateOf (MCE u) = maximum (map rateOf u)
+rateOf (MRG (u:_)) = rateOf u
+rateOf _ = undefined
 
 -- | Construct proxied and multiple channel expanded UGen.
 mkUGen :: Rate -> Name -> [UGen] -> [Output] -> Special -> UGenId -> UGen

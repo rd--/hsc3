@@ -60,4 +60,5 @@ makeInput g u@(UGen _ _ _ _ _ _) = Input (ugenIndex g u) 0
 makeInput g u@(Constant _)       = Input (-1) (constantIndex g u)
 makeInput g u@(Control _ _ _)    = Input 0 (controlIndex g u)
 makeInput g (Proxy u n)          = Input (ugenIndex g u) n
+makeInput g (MRG (u:_))          = makeInput g u
 makeInput g u                    = error ("makeInput: illegal input: " ++ show (g,u))
