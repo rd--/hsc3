@@ -32,10 +32,21 @@ rateOf (MCE u) = maximum (map rateOf u)
 rateOf (MRG (u:_)) = rateOf u
 rateOf _ = undefined
 
+-- | True is input is a sink UGen, ie. has no outputs.
+isSink :: UGen -> Bool
+isSink (UGen _ _ _ o _ _) = null o
+isSink (MCE u) = all isSink u
+isSink (MRG (l:_)) = isSink l
+isSink _ = False
+
+-- | Ensure input UGen is valid, ie. not a sink.
+checkInput :: UGen -> UGen
+checkInput u = if isSink u then error ("illegal input" ++ show u) else u
+
 -- | Construct proxied and multiple channel expanded UGen.
 mkUGen :: Rate -> Name -> [UGen] -> [Output] -> Special -> UGenId -> UGen
 mkUGen r n i o s z = proxy (mceExpand u)
-    where u = UGen r n i o s z
+    where u = UGen r n (map checkInput i) o s z
 
 -- | Operator UGen constructor.
 mkOperator :: Name -> [UGen] -> Int -> UGen
