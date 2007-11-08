@@ -10,7 +10,7 @@ Synopsis:         Haskell SuperCollider
 Description:      Haskell client for the SuperCollider synthesis server
 Category:         Sound
 Tested-With:      GHC
-Build-Depends:    base, binary, network, hosc
+Build-Depends:    base, binary, bytestring, hosc, network, random
 GHC-Options:      -Wall -fno-warn-orphans -O2
 Exposed-modules:  Sound.SC3
                   Sound.SC3.UGen
