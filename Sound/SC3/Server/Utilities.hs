@@ -1,6 +1,4 @@
-module Sound.SC3.Server.Private where
-
--- * Local utility functions.
+module Sound.SC3.Server.Utilities where
 
 mkDuples :: (a -> c) -> (b -> c) -> [(a, b)] -> [c]
 mkDuples a b = concatMap (\(x,y) -> [a x, b y])

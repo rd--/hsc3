@@ -1,7 +1,7 @@
 module Sound.SC3.Server.Command where
 
 import Sound.OpenSoundControl (OSC(..), Datum(..))
-import Sound.SC3.Server.Private
+import Sound.SC3.Server.Utilities
 import Data.Word (Word8)
 
 -- * Instrument definition commands.

@@ -1,7 +1,7 @@
 module Sound.SC3.UGen.Information where
 
 import Sound.SC3.UGen.UGen (UGen)
-import Sound.SC3.UGen.Private (mkInfoUGen)
+import Sound.SC3.UGen.Utilities (mkInfoUGen)
 
 -- | Sample rate of synthesis server, frames per second.
 sampleRate :: UGen

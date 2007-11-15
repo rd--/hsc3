@@ -4,7 +4,7 @@ import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.UGen.Construct
 import Sound.SC3.UGen.Enum (Warp)
-import Sound.SC3.UGen.Private (fromWarp)
+import Sound.SC3.UGen.Utilities (fromWarp)
 
 -- | Read signal from an audio or control bus.
 in' :: Int -> Rate -> UGen -> UGen

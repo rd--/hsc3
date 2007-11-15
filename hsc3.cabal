@@ -52,5 +52,5 @@ Exposed-modules:  Sound.SC3
                   Sound.SC3.Server.Status
                   Sound.SC3.Server.NRT
 Other-modules:
-                  Sound.SC3.Server.Private
-                  Sound.SC3.UGen.Private
+                  Sound.SC3.Server.Utilities
+                  Sound.SC3.UGen.Utilities

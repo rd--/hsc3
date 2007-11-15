@@ -1,4 +1,4 @@
-module Sound.SC3.UGen.Private where
+module Sound.SC3.UGen.Utilities where
 
 import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.UGen (UGen(..))

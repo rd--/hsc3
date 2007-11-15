@@ -4,7 +4,7 @@ import Sound.SC3.UGen.Rate (Rate(AR))
 import Sound.SC3.UGen.UGen (UGen)
 import Sound.SC3.UGen.UGen.Construct (mkFilter, mkFilterMCE, mkOsc, mkOscMCE)
 import Sound.SC3.UGen.Enum (Loop, Interpolation(..))
-import Sound.SC3.UGen.Private (fromLoop, fromInterpolation)
+import Sound.SC3.UGen.Utilities (fromLoop, fromInterpolation)
 
 -- * Buffer query UGens.
 

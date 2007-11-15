@@ -4,7 +4,7 @@ import Sound.SC3.UGen.UGen (UGen(..))
 import Sound.SC3.UGen.UGen.Math ()
 import Sound.SC3.UGen.Math ((>=*), (<=*))
 import Sound.SC3.UGen.Enum (EnvCurve(..))
-import Sound.SC3.UGen.Private (dbl, d_dx, env_curve, env_value)
+import Sound.SC3.UGen.Utilities (dbl, d_dx, env_curve, env_value)
 
 -- | Basic envelope data constructor.
 env :: [UGen] -> [UGen] -> [EnvCurve] -> UGen -> UGen -> [UGen]

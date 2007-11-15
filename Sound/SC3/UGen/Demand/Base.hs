@@ -4,7 +4,7 @@ import Sound.SC3.UGen.Rate (Rate(DR))
 import Sound.SC3.UGen.UGen (UGen, UGenId)
 import Sound.SC3.UGen.UGen.Construct (mkOscId, mkOscMCEId)
 import Sound.SC3.UGen.Enum
-import Sound.SC3.UGen.Private
+import Sound.SC3.UGen.Utilities
 
 -- | Buffer demand ugen.
 dbufrd :: UGenId -> UGen -> UGen -> Loop -> UGen

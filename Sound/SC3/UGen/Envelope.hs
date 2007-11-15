@@ -4,7 +4,7 @@ import Sound.SC3.UGen.UGen (UGen(..))
 import Sound.SC3.UGen.UGen.Construct (mkOsc, mkFilter)
 import Sound.SC3.UGen.Rate (Rate)
 import Sound.SC3.UGen.Enum (DoneAction)
-import Sound.SC3.UGen.Private (fromDoneAction)
+import Sound.SC3.UGen.Utilities (fromDoneAction)
 
 -- | Segment based envelope generator.
 envGen :: Rate -> UGen -> UGen -> UGen -> UGen -> DoneAction -> [UGen] -> UGen
