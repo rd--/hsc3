@@ -115,14 +115,14 @@ To see the server status type C-cC-w (Haskell SuperCollider -> SCSynth
 the ghci output window.
 
   ***** SuperCollider Server Status *****
-  # UGens                     3
-  # Synths                    1
-  # Groups                    2
-  # Instruments               1
-  % CPU (Average)             2.6957032680511475
-  % CPU (Peak)                2.7786526679992676
-  Sample Rate (Nominal)       44100.0
-  Sample Rate (Actual)        44099.958404246536
+  # UGens                     Int 3
+  # Synths                    Int 1
+  # Groups                    Int 2
+  # Instruments               Int 1
+  % CPU (Average)             Float 2.6957032680511475
+  % CPU (Peak)                Float 2.7786526679992676
+  Sample Rate (Nominal)       Double 44100.0
+  Sample Rate (Actual)        Double 44099.958404246536
 
 * Multiple line expressions
 
