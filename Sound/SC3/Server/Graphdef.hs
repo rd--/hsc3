@@ -16,7 +16,7 @@ encode_input (Input u p) = B.append (encode_i16 u) (encode_i16 p)
 -- | Byte-encode Control value.
 encode_control :: Graph -> UGen -> B.ByteString
 encode_control g c@(Control _ n _) = B.concat [ B.pack (str_pstr n)
-                                              , encode_i16 (controlIndex g c)]
+                                              , encode_i16 (nodeIndex g c)]
 encode_control _ _  = error "encode_control: illegal input"
 
 -- | Byte-encode UGen value.
@@ -47,7 +47,7 @@ encode_graphdef s g = B.concat [ encode_str "SCgf"
                                , B.concat (map (encode_control g) c)
                                , encode_i16 (length u)
                                , B.concat (map (encode_ugen g) u) ]
-    where (Graph n c u) = g
+    where (Graph n c u _) = g
 
 -- | Construct instrument definition bytecode.
 graphdef :: String -> Graph -> [Word8]
