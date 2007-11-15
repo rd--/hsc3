@@ -17,7 +17,6 @@ Exposed-modules:  Sound.SC3
                   Sound.SC3.UGen.Analysis
                   Sound.SC3.UGen.Buffer
                   Sound.SC3.UGen.Chaos
-                  Sound.SC3.UGen.DB.Data
                   Sound.SC3.UGen.Demand
                   Sound.SC3.UGen.Demand.Base
                   Sound.SC3.UGen.Demand.Monadic
