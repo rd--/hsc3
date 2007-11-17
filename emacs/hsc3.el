@@ -214,6 +214,8 @@
     (cons "Expression" (make-sparse-keymap "Expression")))
   (define-key map [menu-bar hsc3 expression load-buffer]
     '("Load buffer" . hsc3-load-buffer))
+  (define-key map [menu-bar hsc3 expression run-main]
+    '("Run main" . hsc3-run-main))
   (define-key map [menu-bar hsc3 expression run-region]
     '("Run region" . hsc3-run-region))
   (define-key map [menu-bar hsc3 expression run-line]
