@@ -12,6 +12,7 @@ module Sound.SC3.UGen (module Sound.SC3.UGen.Analysis,
                        module Sound.SC3.UGen.Graph,
                        module Sound.SC3.UGen.Information,
                        module Sound.SC3.UGen.IO,
+                       module Sound.SC3.UGen.MachineListening,
                        module Sound.SC3.UGen.Math,
                        module Sound.SC3.UGen.Mix,
                        module Sound.SC3.UGen.Noise.Monadic,
@@ -41,6 +42,7 @@ import Sound.SC3.UGen.Graph
 import Sound.SC3.UGen.Information
 import Sound.SC3.UGen.IO
 import Sound.SC3.UGen.Math
+import Sound.SC3.UGen.MachineListening
 import Sound.SC3.UGen.Mix
 import Sound.SC3.UGen.Noise.Monadic
 import Sound.SC3.UGen.Operator
