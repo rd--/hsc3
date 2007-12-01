@@ -288,7 +288,7 @@ trig i d = mkFilter "Trig" [i,d] 1
 trig1 :: UGen -> UGen -> UGen
 trig1 i d = mkFilter "Trig1" [i,d] 1
 
--- Triggered windex.
+-- | Triggered windex.
 twindex :: UGen -> UGen -> UGen -> UGen
 twindex i n a = mkFilterMCE "TWindex" [i,n] a 1
 
