@@ -10,7 +10,7 @@ you have specified to the BufRd, it will fail silently.
 The interpolation value should be either NoInterpolation,
 LinearInterpolation, CubicInterpolation or (Interpolation UGen).
 
-> withSC3 (\fd -> send fd (b_allocRead 0 "/home/rohan/sw/sw-01/audio/metal.wav" 0 0))
+> withSC3 (\fd -> send fd (b_allocRead 0 "/home/rohan/audio/metal.wav" 0 0))
 
 > let phase = (sinOsc AR 0.1 0 * bufFrames KR 0)
 > audition (out 0 (bufRd 1 AR 0 phase Loop NoInterpolation))

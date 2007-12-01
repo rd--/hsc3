@@ -11,7 +11,7 @@ if wipe == 0 then the output is the same as inA.
 if  wipe > 0 then it begins replacing with bins from inB from the bottom up.
 if  wipe < 0 then it begins replacing with bins from inB from the top down.
 
-> let fileName = "/home/rohan/sw/sw-01/audio/metal.wav"
+> let fileName = "/home/rohan/audio/metal.wav"
 > withSC3 (\fd -> do send fd (b_alloc 10 2048 1)
 >                    wait fd "/done"
 >                    send fd (b_alloc 11 2048 1)

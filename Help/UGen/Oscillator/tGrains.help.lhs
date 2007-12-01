@@ -35,7 +35,7 @@ interp - 1, 2, or 4. Determines whether the grain uses (1) no
          interpolation.
 
 > let sync fd msg = send fd msg >> wait fd "/done"
-> withSC3 (\fd -> sync fd (b_allocRead 10 "/home/rohan/sw/sw-01/audio/metal.wav" 0 0))
+> withSC3 (\fd -> sync fd (b_allocRead 10 "/home/rohan/audio/metal.wav" 0 0))
 
 > let tRate = mouseY KR 2 200 Exponential 0.1
 >     ctr   = mouseX KR 0 (bufDur KR 10) Linear 0.1

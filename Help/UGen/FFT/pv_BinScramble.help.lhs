@@ -9,7 +9,7 @@ width  - a value from zero to one, indicating the maximum randomized
          distance of a bin from its original location in the spectrum.
 trig   - a trigger selects a new random ordering.
 
-> let fileName = "/home/rohan/sw/sw-01/audio/metal.wav"
+> let fileName = "/home/rohan/audio/metal.wav"
 > withSC3 (\fd -> do send fd (b_alloc 10 2048 1)
 >                    wait fd "/done"
 >                    send fd (b_allocRead 12 fileName 0 0)

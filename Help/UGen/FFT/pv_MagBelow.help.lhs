@@ -4,7 +4,7 @@ Pass bins below a threshold.  Pass only bands where the magnitude is
 below `threshold'.  This value is not normalized and is therefore
 dependant on the buffer size.
 
-> let fileName = "/home/rohan/sw/sw-01/audio/metal.wav"
+> let fileName = "/home/rohan/audio/metal.wav"
 > withSC3 (\fd -> do send fd (b_alloc 10 2048 1)
 >                    wait fd "/done"
 >                    send fd (b_allocRead 12 fileName 0 0)

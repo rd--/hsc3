@@ -11,7 +11,7 @@ Using sweep to modulate sine frequency
 
 Using sweep to index into a buffer
 
-> withSC3 (\fd -> send fd (b_allocRead 0 "/home/rohan/sw/sw-01/audio/metal.wav" 0 0))
+> withSC3 (\fd -> send fd (b_allocRead 0 "/home/rohan/audio/metal.wav" 0 0))
 
 > let x = mouseX KR 0.5 20 Exponential 0.1
 >     t = impulse AR x 0
