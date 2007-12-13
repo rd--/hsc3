@@ -20,8 +20,8 @@ if  wipe < 0 then it begins replacing with bins from inB from the top down.
 >                    wait fd "/done")
 > n <- whiteNoise AR
 > let b = playBuf 1 12 (bufRateScale KR 12) 0 0 Loop
->     f = fft 10 (n * 0.2)
->     g = fft 11 b
+>     f = fft' 10 (n * 0.2)
+>     g = fft' 11 b
 >     x = mouseX KR 0.0 1.0 Linear 0.1
 >     h = pv_BinWipe f g x
-> audition (out 0 (pan2 (ifft h) 0 0.5))
+> audition (out 0 (pan2 (ifft' h) 0 0.5))

@@ -9,10 +9,10 @@ threshold.
 >                    send fd (b_allocRead 12 fileName 0 0)
 >                    wait fd "/done")
 > let a = playBuf 1 12 (bufRateScale KR 12) 0 0 Loop
->     f = fft 10 a
+>     f = fft' 10 a
 >     x = mouseX KR 0 5 Linear 0.1
 >     h = pv_MagBelow f x
-> audition (out 0 (ifft h * 0.5))
+> audition (out 0 (ifft' h * 0.5))
 
 Synthesised input.
 
@@ -20,7 +20,7 @@ Synthesised input.
 >                    wait fd "/done")
 > let a = sinOsc KR (squared (sinOsc KR 0.08 0 * 6 + 6.2)) 0 * 100 + 800
 >     b = sinOsc AR a 0
->     f = fft 10 b
+>     f = fft' 10 b
 >     x = mouseX KR 0 128 Linear 0.1
 >     h = pv_MagClip f x
-> audition (out 0 (ifft h * 0.5))
+> audition (out 0 (ifft' h * 0.5))

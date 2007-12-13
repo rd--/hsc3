@@ -14,7 +14,7 @@ imag   - imaginary part of a.
 > let i = in' 1 AR numOutputBuses * 0.5
 >     x = mouseX KR (-1) 1 Linear 0.1
 >     y = mouseY KR (-1) 1 Linear 0.1
-> audition (out 0 (pan2 (ifft (pv_ConformalMap (fft 10 i) x y)) 0 1))
+> audition (out 0 (pan2 (ifft' (pv_ConformalMap (fft' 10 i) x y)) 0 1))
 
 With filtering.
 
@@ -25,6 +25,6 @@ With filtering.
 >     s = mix (lfSaw AR f 0) * 0.3
 >     x = mouseX KR 0.01  2.0 Linear 0.1
 >     y = mouseY KR 0.01 10.0 Linear 0.1
->     c = fft 0 s
->     m = ifft (pv_ConformalMap c x y)
+>     c = fft' 0 s
+>     m = ifft' (pv_ConformalMap c x y)
 > audition (out 0 (pan2 (combN m 0.1 0.1 10 * 0.5 + m) 0 1))

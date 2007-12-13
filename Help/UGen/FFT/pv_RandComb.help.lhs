@@ -10,5 +10,5 @@ order (0, 1).  trig = select new random ordering.
 > let x = mouseX KR 0.6 0.95 Linear 0.1
 >     t = impulse KR 0.4 0
 > n <- whiteNoise AR
-> c <- pv_RandComb (fft 10 (n * 0.5)) x t
-> audition (out 0 (pan2 (ifft c) 0 1))
+> c <- pv_RandComb (fft' 10 (n * 0.5)) x t
+> audition (out 0 (pan2 (ifft' c) 0 1))
