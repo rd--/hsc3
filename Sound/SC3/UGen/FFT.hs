@@ -37,6 +37,14 @@ packFFTSpec :: [UGen] -> [UGen] -> UGen
 packFFTSpec m p = MCE (interleave m p)
     where interleave x y = concat (zipWith (\a b -> [a,b]) x y)
 
+pvcollect :: UGen -> UGen -> (UGen -> UGen -> UGen -> (UGen, UGen)) -> UGen -> UGen -> UGen -> UGen
+pvcollect c nf f from to z = packFFT c nf from to z mp
+  where m = unpackFFT c nf from to 0
+	p = unpackFFT c nf from to 1
+	i = [from .. to]
+	e = zipWith3 f m p i
+        mp = (uncurry packFFTSpec) (unzip e)
+
 pv_Add :: UGen -> UGen -> UGen
 pv_Add ba bb = mkOsc KR "PV_Add" [ba,bb] 1
 
