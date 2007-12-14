@@ -28,6 +28,7 @@ Exposed-modules:  Sound.SC3
                   Sound.SC3.UGen.FFT.Monadic
                   Sound.SC3.UGen.Filter
                   Sound.SC3.UGen.Graph
+                  Sound.SC3.UGen.Granular
                   Sound.SC3.UGen.Information
                   Sound.SC3.UGen.IO
 		  Sound.SC3.UGen.MachineListening
