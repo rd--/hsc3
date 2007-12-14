@@ -184,6 +184,10 @@ mostChange a b = mkFilter "MostChange" [a,b] 1
 median :: UGen -> UGen -> UGen
 median size i = mkFilter "Median" [size,i] 1
 
+-- | Moog VCF implementation.
+moogFF :: UGen -> UGen -> UGen -> UGen -> UGen
+moogFF i f g r = mkFilter "MoogFF" [i, f, g, r] 1
+
 -- | Multiply add ternary operator.
 mulAdd :: UGen -> UGen -> UGen -> UGen
 mulAdd s m a = mkFilter "MulAdd" [s,m,a] 1
