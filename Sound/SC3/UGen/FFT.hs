@@ -32,6 +32,11 @@ packFFT :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 packFFT b sz from to z mp = mkOscMCE KR "PackFFT" [b, sz, from, to, z, n] mp 1
     where n = Constant (fromIntegral (mceDegree mp))
 
+-- | Format magnitude and phase data data as required for packFFT.
+packFFTSpec :: [UGen] -> [UGen] -> UGen
+packFFTSpec m p = MCE (interleave m p)
+    where interleave x y = concat (zipWith (\a b -> [a,b]) x y)
+
 pv_Add :: UGen -> UGen -> UGen
 pv_Add ba bb = mkOsc KR "PV_Add" [ba,bb] 1
 
