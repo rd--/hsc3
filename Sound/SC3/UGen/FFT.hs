@@ -4,6 +4,7 @@ import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.UGen.Construct
 import Sound.SC3.UGen.UGen.Math ()
+import Sound.SC3.UGen.UGen.MCE
 
 -- | Fast fourier transform.
 fft :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -25,6 +26,10 @@ ifft' buf = ifft buf 0
 -- | Strict convolution of two continuously changing inputs.
 convolution :: UGen -> UGen -> UGen -> UGen
 convolution i kernel frameSize = mkOsc AR "Convolution" [i, kernel, frameSize] 1
+
+packFFT :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+packFFT b sz from to z mp = mkOscMCE KR "PackFFT" [b, sz, from, to, z, n] mp 1
+    where n = Constant (fromIntegral (mceDegree mp))
 
 pv_Add :: UGen -> UGen -> UGen
 pv_Add ba bb = mkOsc KR "PV_Add" [ba,bb] 1
@@ -113,6 +118,9 @@ pv_RectComb2 ba bb teeth phase width = mkOsc KR "PV_RectComb2" [ba,bb,teeth,phas
 
 pv_RectComb :: UGen -> UGen -> UGen -> UGen -> UGen
 pv_RectComb buf teeth phase width = mkOsc KR "PV_RectComb" [buf,teeth,phase,width] 1
+
+unpack1FFT :: UGen -> UGen -> UGen -> UGen -> UGen
+unpack1FFT buf size index which = mkOsc DR "Unpack1FFT" [buf, size, index, which] 1
 
 -- Local Variables:
 -- truncate-lines:t
