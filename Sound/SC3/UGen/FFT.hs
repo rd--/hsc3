@@ -128,6 +128,9 @@ pv_RectComb buf teeth phase width = mkOsc KR "PV_RectComb" [buf,teeth,phase,widt
 unpack1FFT :: UGen -> UGen -> UGen -> UGen -> UGen
 unpack1FFT buf size index which = mkOsc DR "Unpack1FFT" [buf, size, index, which] 1
 
+unpackFFT :: UGen -> UGen -> UGen -> UGen -> UGen -> [UGen]
+unpackFFT c nf from to w = map (\i -> unpack1FFT c nf i w) [from .. to]
+
 -- Local Variables:
 -- truncate-lines:t
 -- End:
