@@ -104,6 +104,10 @@ gate i t = mkFilter "Gate" [i,t] 1
 hasher :: UGen -> UGen
 hasher i = mkFilter "Hasher" [i] 1
 
+-- | Hilbert transform.
+hilbert :: UGen -> UGen
+hilbert i = mkFilter "Hilbert" [i] 2
+
 -- | Highpass filter.
 hpf :: UGen -> UGen -> UGen
 hpf i f = mkFilter "HPF" [i,f] 1
