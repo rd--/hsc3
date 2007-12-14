@@ -16,6 +16,14 @@ allpassL i maxTime dly dcy = mkFilter "AllpassL" [i, maxTime, dly, dcy] 1
 allpassC :: UGen -> UGen -> UGen -> UGen -> UGen
 allpassC i maxTime dly dcy = mkFilter "AllpassC" [i, maxTime, dly, dcy] 1
 
+-- | Basic psychoacoustic amplitude compensation.
+ampComp :: UGen -> UGen -> UGen -> UGen
+ampComp f r e = mkFilter "AmpComp" [f, r, e] 1
+
+-- | ANSI A-weighting curve psychoacoustic amplitude compensation.
+ampCompA :: UGen -> UGen -> UGen -> UGen -> UGen
+ampCompA f r ma ra = mkFilter "AmpCompA" [f, r, ma, ra] 1
+
 -- | Bandpass filter
 bpf :: UGen -> UGen -> UGen -> UGen
 bpf i freq rq = mkFilter "BPF" [i,freq,rq] 1
