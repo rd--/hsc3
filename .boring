@@ -4,3 +4,5 @@ dist$
 ~$
 \.installed-pkg-config
 \.setup-config
+TAGS
+tags
