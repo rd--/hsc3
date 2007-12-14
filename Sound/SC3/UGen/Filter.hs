@@ -176,10 +176,6 @@ lpz2 i = mkFilter "LPZ2" [i] 1
 mantissaMask :: UGen -> UGen -> UGen
 mantissaMask i bits = mkFilter "MantissaMask" [i,bits] 1
 
--- | Most changed input.
-mostChange :: UGen -> UGen -> UGen
-mostChange a b = mkFilter "MostChange" [a,b] 1
-
 -- | Median filter.
 median :: UGen -> UGen -> UGen
 median size i = mkFilter "Median" [size,i] 1
@@ -187,6 +183,10 @@ median size i = mkFilter "Median" [size,i] 1
 -- | Moog VCF implementation.
 moogFF :: UGen -> UGen -> UGen -> UGen -> UGen
 moogFF i f g r = mkFilter "MoogFF" [i, f, g, r] 1
+
+-- | Most changed input.
+mostChange :: UGen -> UGen -> UGen
+mostChange a b = mkFilter "MostChange" [a,b] 1
 
 -- | Multiply add ternary operator.
 mulAdd :: UGen -> UGen -> UGen -> UGen
