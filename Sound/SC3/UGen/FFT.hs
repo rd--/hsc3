@@ -27,6 +27,7 @@ ifft' buf = ifft buf 0
 convolution :: UGen -> UGen -> UGen -> UGen
 convolution i kernel frameSize = mkOsc AR "Convolution" [i, kernel, frameSize] 1
 
+-- | Pack demand-rate FFT bin streams into an FFT chain.
 packFFT :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 packFFT b sz from to z mp = mkOscMCE KR "PackFFT" [b, sz, from, to, z, n] mp 1
     where n = Constant (fromIntegral (mceDegree mp))
