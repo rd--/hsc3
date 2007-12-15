@@ -157,7 +157,7 @@ class (Floating a) => BinaryOp a where
 
 instance BinaryOp Double where
     iDiv               = undefined
-    modE               = undefined
+    modE a b           = n - floorE n where n = a / b
     bitAnd             = undefined
     bitOr              = undefined
     bitXOr             = undefined
@@ -195,7 +195,7 @@ instance BinaryOp Double where
 
 instance BinaryOp UGen where
     iDiv           = mkBinaryOperator IDiv undefined
-    modE           = mkBinaryOperator Mod undefined
+    modE           = mkBinaryOperator Mod modE
     bitAnd         = mkBinaryOperator BitAnd undefined
     bitOr          = mkBinaryOperator BitOr undefined
     bitXOr         = mkBinaryOperator BitXor undefined
