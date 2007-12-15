@@ -19,18 +19,6 @@ processed are silenced.
 Note that this procedure can be relatively CPU-heavy, depending on
 how you use it.
 
-(define rand-phase
-  (lambda (m p _)
-    (list m (Rand 0 3.14))))
-
-(define noise-phase
-  (lambda (m p _)
-    (list m (range (LFNoise0 kr 3) 0 3.14))))
-
-(define noise-mag
-  (lambda (m p _)
-    (list (Mul (GT (LFNoise0 kr 10) 0) m) p)))
-
 > withSC3 (\fd -> do let async p m = send p m >> wait p "/done"
 >                    async fd (b_alloc 10 1024 1)
 >                    async fd (b_allocRead 11 "/home/rohan/audio/metal.wav" 0 0))
