@@ -28,5 +28,5 @@ withSC3 :: (UDP -> IO a) -> IO a
 withSC3 = withTransport (openUDP "127.0.0.1" 57110)
 
 -- | withSC3 . play
-audition :: UGen -> IO OSC
-audition = withSC3 . flip play
+audition :: UGen -> IO ()
+audition g = withSC3 (\fd -> play fd g) >> return ()
