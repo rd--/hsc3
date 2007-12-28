@@ -167,13 +167,6 @@ be set using 'hsc3-interpreter-arguments'.
  (setq hsc3-interpreter-arguments (list "-i/home/rohan/.hsc3"))
  (setq hsc3-main-modules (list "Config"))
 
-If scsynth is running on a local machine called 'alice' the
-configuration file might contain 'withSC3' and 'audition' variants:
-
-  module Config where
-  onAlice = withTransport (openUDP "alice" 57110)
-  atAlice = onAlice . flip play
-
 * Monitoring incoming server messages
 
 To monitor what OSC messages scsynth is receiving use the 'dumpOSC'
