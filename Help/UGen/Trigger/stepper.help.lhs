@@ -32,7 +32,7 @@ resetval - value to which the counter is reset when it receives a
 >               indx = stepper clock 0 0 15 1 0
 >               freq = bufRdN 1 KR 10 indx Loop
 >               ffreq = lag2 freq 0.1 + MCE [0, 0.3]
->               lfo = sinOsc KR 0.2 (MCE [0, (pi/2), 0.0024, 0.0025])
+>               lfo = sinOsc KR 0.2 (MCE [0, pi/2]) * 0.0024 + 0.0025
 >               top = mix (lfPulse AR (freq * MCE [1, 1.5, 2]) 0 0.3)
 >               chn = [ \s -> rlpf s ffreq 0.3 * envl
 >                     , \s -> rlpf s ffreq 0.3 * envl
