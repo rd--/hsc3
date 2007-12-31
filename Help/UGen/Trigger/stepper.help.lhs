@@ -36,7 +36,7 @@ resetval - value to which the counter is reset when it receives a
 >               top = mix (lfPulse AR (freq * MCE [1, 1.5, 2]) 0 0.3)
 >               chn = [ \s -> rlpf s ffreq 0.3 * envl
 >                     , \s -> rlpf s ffreq 0.3 * envl
->                     , \s -> s * 0.2
+>                     , \s -> s * 0.5
 >                     , \s -> combL s 1 (0.66 / rate) 2 * 0.8 + s
 >                     , \s -> s + (rvb' s * 0.3)
 >                     , \s -> leakDC s 0.1
