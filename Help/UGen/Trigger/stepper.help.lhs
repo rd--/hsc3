@@ -17,6 +17,9 @@ step - step value each trigger. May be negative.
 resetval - value to which the counter is reset when it receives a
            rreset trigger. If nil, then this is patched to min.
 
+> let f = stepper (impulse KR 10 0) 0 4 16 (-3) 4 * 100
+> audition (out 0 (sinOsc AR f 0 * 0.1))
+
 > let compose = foldl (flip (.)) id
 >     noisec n l r = map Constant (randomRs (l,r) (mkStdGen n))
 >     rvb s r0 r1 r2 = compose (take 5 (zipWith3 f r0 r1 r2)) s
