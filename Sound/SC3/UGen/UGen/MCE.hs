@@ -16,14 +16,14 @@ mceDegree _ = error "mceDegree: illegal ugen"
 mceExtend :: Int -> UGen -> [UGen]
 mceExtend n (MCE l) = take n (cycle l)
 mceExtend n (MRG x y) = (MRG r y : rs) where (r:rs) = mceExtend n x
-mceExtend n u       = replicate n u
+mceExtend n u = replicate n u
 
 -- | Apply MCE transformation.
 mceTransform :: UGen -> UGen
 mceTransform (UGen r n i o s d) = MCE (map f i')
     where f j = UGen r n j o s d
           upr = maximum (map mceDegree (filter isMCE i))
-          i'  = transpose (map (mceExtend upr) i)
+          i' = transpose (map (mceExtend upr) i)
 mceTransform _ = error "mceTransform: illegal ugen"
 
 -- | Apply MCE transformation if required.
@@ -47,7 +47,7 @@ mceReverse = mceEdit reverse
 -- | Obtain indexed channel at MCE.
 mceChannel :: Int -> UGen -> UGen
 mceChannel n (MCE l) = l !! n
-mceChannel _ _       = error "mceChannel: non MCE value"
+mceChannel _ _ = error "mceChannel: non MCE value"
 
 -- | Output channels of UGen as a list.
 mceChannels :: UGen -> [UGen]
