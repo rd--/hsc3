@@ -15,6 +15,7 @@ mceDegree _ = error "mceDegree: illegal ugen"
 -- | Extend UGen to specified degree.
 mceExtend :: Int -> UGen -> [UGen]
 mceExtend n (MCE l) = take n (cycle l)
+mceExtend n (MRG x y) = (MRG r y : rs) where (r:rs) = mceExtend n x
 mceExtend n u       = replicate n u
 
 -- | Apply MCE transformation.
@@ -51,5 +52,5 @@ mceChannel _ _       = error "mceChannel: non MCE value"
 -- | Output channels of UGen as a list.
 mceChannels :: UGen -> [UGen]
 mceChannels (MCE l) = l
-mceChannels u       = [u]
-
+mceChannels (MRG x y) = (MRG r y) : rs where (r:rs) = mceChannels x
+mceChannels u = [u]
