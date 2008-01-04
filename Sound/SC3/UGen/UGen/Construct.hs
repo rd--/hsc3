@@ -16,6 +16,7 @@ import Sound.SC3.UGen.UId
 -- | Apply proxy transformation if required.
 proxy :: UGen -> UGen
 proxy (MCE l) = MCE (map proxy l)
+proxy (MRG x y) = MRG (proxy x) y
 proxy u@(UGen _ _ _ o _ _) = case o of
                                (_:_:_) -> MCE (map (Proxy u) [0..(length o - 1)])
                                _       -> u
