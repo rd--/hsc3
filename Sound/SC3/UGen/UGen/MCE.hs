@@ -9,13 +9,8 @@ import Sound.SC3.UGen.UGen.Predicate
 -- | Number of channels to expand to.
 mceDegree :: UGen -> Int
 mceDegree (MCE l) = length l
-mceDegree _       = error "mceDegree: illegal ugen"
-
--- | Is expansion required, ie. are any inputs MCE values.
-mceRequired :: UGen -> Bool
-mceRequired (UGen _ _ i _ _ _) = not (null (filter isMCE i))
-mceRequired (MCE l)            = any mceRequired l
-mceRequired _                  = False
+mceDegree (MRG u _) = mceDegree u
+mceDegree _ = error "mceDegree: illegal ugen"
 
 -- | Extend UGen to specified degree.
 mceExtend :: Int -> UGen -> [UGen]
@@ -33,7 +28,11 @@ mceTransform _ = error "mceTransform: illegal ugen"
 -- | Apply MCE transformation if required.
 mceExpand :: UGen -> UGen
 mceExpand (MCE l) = MCE (map mceExpand l)
-mceExpand u       = if mceRequired u then mceExpand (mceTransform u) else u
+mceExpand (MRG x y) = MRG (mceExpand x) y
+mceExpand u = if required u then mceExpand (mceTransform u) else u
+    where required (UGen _ _ i _ _ _) = not (null (filter isMCE i))
+          required (MCE l) = any required l
+          required _ = False
 
 -- | Apply UGen list operation on MCE contents.
 mceEdit :: ([UGen] -> [UGen]) -> UGen -> UGen

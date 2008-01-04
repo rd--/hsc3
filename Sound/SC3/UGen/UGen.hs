@@ -22,7 +22,8 @@ data UGen = Constant { constantValue :: Double }
           | Proxy { proxySource :: UGen
                   , proxyIndex :: Int }
           | MCE { mceProxies :: [UGen] }
-          | MRG { mrgRoots :: [UGen] }
+          | MRG { mrgLeft :: UGen 
+                , mrgRight :: UGen }
             deriving (Eq, Show)
 
 -- | Clone UGen.

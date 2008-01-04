@@ -19,7 +19,6 @@ proxy (MCE l) = MCE (map proxy l)
 proxy u@(UGen _ _ _ o _ _) = case o of
                                (_:_:_) -> MCE (map (Proxy u) [0..(length o - 1)])
                                _       -> u
-proxy (MRG (x:xs)) = MRG (proxy x : xs)
 proxy _ = error "proxy: illegal ugen"
 
 -- | Determine the rate of a UGen.
@@ -29,14 +28,13 @@ rateOf (Control r _ _) = r
 rateOf (UGen r _ _ _ _ _) = r
 rateOf (Proxy u _) = rateOf u
 rateOf (MCE u) = maximum (map rateOf u)
-rateOf (MRG (u:_)) = rateOf u
-rateOf _ = undefined
+rateOf (MRG u _) = rateOf u
 
 -- | True is input is a sink UGen, ie. has no outputs.
 isSink :: UGen -> Bool
 isSink (UGen _ _ _ o _ _) = null o
 isSink (MCE u) = all isSink u
-isSink (MRG (l:_)) = isSink l
+isSink (MRG l _) = isSink l
 isSink _ = False
 
 -- | Ensure input UGen is valid, ie. not a sink.

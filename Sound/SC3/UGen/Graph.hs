@@ -20,7 +20,7 @@ nodes :: UGen -> [UGen]
 nodes u@(UGen _ _ i _ _ _) = u : concatMap nodes i
 nodes (Proxy u _)          = u : nodes u
 nodes (MCE u)              = concatMap nodes u
-nodes (MRG u)              = concatMap nodes u
+nodes (MRG x y)            = nodes x ++ nodes y
 nodes u                    = [u]
 
 -- | Construct implicit control UGen (k-rate only).
@@ -68,7 +68,7 @@ nodeIndex :: Graph -> UGen -> Int
 nodeIndex g u@(Constant _) = constantIndex g u
 nodeIndex g u@(Control _ _ _) = controlIndex g u
 nodeIndex g u@(UGen _ _ _ _ _ _) = ugenIndex g u
-nodeIndex g (MRG (u:_)) = ugenIndex g u
+nodeIndex g (MRG u _) = ugenIndex g u
 nodeIndex _ _ = error "nodeIndex: illegal input"
 
 -- | Construct Input value for UGen in Graph.
@@ -77,8 +77,8 @@ makeInput g u@(UGen _ _ _ _ _ _) = Input (ugenIndex g u) 0
 makeInput g u@(Constant _)       = Input (-1) (constantIndex g u)
 makeInput g u@(Control _ _ _)    = Input 0 (controlIndex g u)
 makeInput g (Proxy u n)          = Input (ugenIndex g u) n
-makeInput g (MRG (u:_))          = makeInput g u
-makeInput g u                    = error ("makeInput: illegal input: " ++ show (g,u))
+makeInput g (MRG u _)            = makeInput g u
+makeInput _ u                    = error ("makeInput: illegal input: " ++ show u)
 
 -- | Construct a terminal value, the port index is set for proxied
 -- | UGens.

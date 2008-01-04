@@ -29,6 +29,6 @@ isMCE _       = False
 
 -- | MRG predicate.
 isMRG :: UGen -> Bool
-isMRG (MRG _) = True
-isMRG _       = False
+isMRG (MRG _ _) = True
+isMRG _ = False
 
