@@ -17,7 +17,7 @@ Write noise to bus 10, then read it out.  The MRG is ordered.
 > n <- pinkNoise AR
 > let wr = out 10 (n * 0.3)
 >     rd = out 0 (in' 1 AR 10)
-> audition (MRG [rd, wr])
+> audition (MRG rd wr)
 
 Reading a control bus.
 

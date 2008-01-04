@@ -7,7 +7,7 @@ nodeID - node to be paused
 
 > let f  = Control KR "f" 440
 >     g  = Control KR "g" 1
->     a  = MRG [out 0 (sinOsc AR f 0 * 0.1), pause g 1001]
+>     a  = mrg [out 0 (sinOsc AR f 0 * 0.1), pause g 1001]
 >     a' = graphdef "a" (graph a)
 > withSC3 (\fd -> do send fd (d_recv a')
 >                    wait fd "/done"

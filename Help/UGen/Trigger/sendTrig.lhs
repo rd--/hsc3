@@ -16,7 +16,7 @@ value - a UGen or float that will be polled at the time of trigger,
 >                    wait fd "/done")
 
 > s <- lfNoise0 KR 10
-> audition (MRG [sendTrig s 0 s, out 0 (sinOsc AR (s * 200 + 500) 0 * 0.1)])
+> audition (mrg [sendTrig s 0 s, out 0 (sinOsc AR (s * 200 + 500) 0 * 0.1)])
 
 > withSC3 (\fd -> do tr <- wait fd "/tr"
 >                    putStrLn (show tr))

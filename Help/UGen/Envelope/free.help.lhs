@@ -10,7 +10,7 @@ nodeID - node to be freed
 >                    wait fd "/done"
 >                    n0 <- pinkNoise AR
 >                    n1 <- dust AR 2
->                    let b = MRG [out 1 (n0 * 0.1), free n1 1001]
+>                    let b = mrg [out 1 (n0 * 0.1), free n1 1001]
 >                    send fd (d_recv (graphdef "b" (graph b)))
 >                    wait fd "/done"
 >                    send fd (s_new "a" 1001 AddToTail 0 [])

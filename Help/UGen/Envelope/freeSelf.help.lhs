@@ -5,4 +5,4 @@ to positive.
 
 > let a = freeSelf (mouseX KR (-1) 1 Linear 0.1)
 > let b = out 0 (sinOsc AR 440 0 * 0.1)
-> audition (MRG [a, b])
+> audition (MRG a b)

@@ -38,7 +38,7 @@ Evaluate these in either order and hear both tones.
 > let b  = numInputBuses + numOutputBuses
 >     s0 = out b (sinOsc AR 220 0 * 0.1)
 >     s1 = out 0 (sinOsc AR 660 0 * 0.1)
-> audition (MRG [s0, s1])
+> audition (MRG s0 s1)
 
 Doubters consult this.
 
@@ -52,7 +52,7 @@ Resonator, see localOut for variant.
 >     p = inFeedback 1 b
 >     i = impulse AR 1 0
 >     d = delayC (i + (p * 0.995)) 1 (recip 440 - recip controlRate)
-> audition (MRG [offsetOut b d, offsetOut 0 p])
+> audition (mrg [offsetOut b d, offsetOut 0 p])
 
 Compare with oscillator.
 
