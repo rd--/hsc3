@@ -18,10 +18,10 @@ data Input = Input Int Int deriving (Eq, Show)
 -- | The list of all UGens referenced in a UGen graph.
 nodes :: UGen -> [UGen]
 nodes u@(UGen _ _ i _ _ _) = u : concatMap nodes i
-nodes (Proxy u _)          = u : nodes u
-nodes (MCE u)              = concatMap nodes u
-nodes (MRG x y)            = nodes x ++ nodes y
-nodes u                    = [u]
+nodes (Proxy u _) = u : nodes u
+nodes (MCE u) = concatMap nodes u
+nodes (MRG x y) = nodes x ++ nodes y
+nodes u = [u]
 
 -- | Construct implicit control UGen (k-rate only).
 implicit :: Int -> UGen
@@ -31,7 +31,7 @@ implicit n = UGen KR "Control" [] (replicate n KR) (Special 0) (UGenId 0)
 edges :: [UGen] -> [Edge]
 edges us = concatMap ugenEdges us
     where ugenEdges u@(UGen _ _ i _ _ _) = map f i'
-               where g (v,_) = or [isUGen v, isProxy v, isControl v, isMRG v]
+               where g (v, _) = or [isUGen v, isProxy v, isControl v, isMRG v]
                      n = length i - 1
                      i' = filter g $ zip i [0..n]
                      f (k, j) = Edge (terminal k) (Terminal u j)
@@ -40,10 +40,10 @@ edges us = concatMap ugenEdges us
 -- | Construct a UGen graph.
 graph :: UGen -> Graph
 graph root = Graph n c u' (edges u')
-  where e  = (nub . reverse) (nodes root)
-        n  = filter isConstant e
-        c  = filter isControl e
-        u  = filter isUGen e
+  where e = (nub . reverse) (nodes root)
+        n = filter isConstant e
+        c = filter isControl e
+        u = filter isUGen e
         u' = if null c then u else implicit (length c) : u
 
 -- | Determine index of a node in the Graph.
@@ -74,11 +74,11 @@ nodeIndex _ _ = error "nodeIndex: illegal input"
 -- | Construct Input value for UGen in Graph.
 makeInput :: Graph -> UGen -> Input
 makeInput g u@(UGen _ _ _ _ _ _) = Input (ugenIndex g u) 0
-makeInput g u@(Constant _)       = Input (-1) (constantIndex g u)
-makeInput g u@(Control _ _ _)    = Input 0 (controlIndex g u)
-makeInput g (Proxy u n)          = Input (ugenIndex g u) n
-makeInput g (MRG u _)            = makeInput g u
-makeInput _ u                    = error ("makeInput: illegal input: " ++ show u)
+makeInput g u@(Constant _) = Input (-1) (constantIndex g u)
+makeInput g u@(Control _ _ _) = Input 0 (controlIndex g u)
+makeInput g (Proxy u n) = Input (ugenIndex g u) n
+makeInput g (MRG u _) = makeInput g u
+makeInput _ u = error ("makeInput: illegal input: " ++ show u)
 
 -- | Construct a terminal value, the port index is set for proxied
 -- | UGens.
