@@ -1,5 +1,5 @@
 module Sound.SC3.UGen.UGen ( Name, UGenId(..), UGen(..), Output, Special(..)
-                           , clone ) where
+                           , clone, mrg ) where
 
 import Control.Monad (liftM, replicateM)
 import Sound.SC3.UGen.Rate (Rate)
@@ -25,6 +25,12 @@ data UGen = Constant { constantValue :: Double }
           | MRG { mrgLeft :: UGen 
                 , mrgRight :: UGen }
             deriving (Eq, Show)
+
+-- | Variant multiple root graph constructor.
+mrg :: [UGen] -> UGen
+mrg [] = undefined
+mrg [x] = x
+mrg (x:xs) = MRG x (mrg xs)
 
 -- | Clone UGen.
 clone :: (UId m) => Int -> m UGen -> m UGen
