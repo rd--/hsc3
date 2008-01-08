@@ -10,34 +10,34 @@ import Sound.SC3.UGen.UGen.Math ()
 
 -- | Variant on Eq class, result is of the same type as the values compared.
 class EqE a where
-    (==*)  :: a -> a -> a
-    (/=*)  :: a -> a -> a
+    (==*) :: a -> a -> a
+    (/=*) :: a -> a -> a
 
 instance EqE Double where
     a ==* b = if a == b then 1.0 else 0.0
     a /=* b = if a /= b then 1.0 else 0.0
 
 instance EqE UGen where
-    (==*)  = mkBinaryOperator EQ_ (==*)
-    (/=*)  = mkBinaryOperator NE (/=*)
+    (==*) = mkBinaryOperator EQ_ (==*)
+    (/=*) = mkBinaryOperator NE (/=*)
 
 -- | Variant on Ord class, result is of the same type as the values compared.
 class OrdE a where
-    (<*)  :: a -> a -> a
+    (<*) :: a -> a -> a
     (<=*) :: a -> a -> a
-    (>*)  :: a -> a -> a
+    (>*) :: a -> a -> a
     (>=*) :: a -> a -> a
 
 instance OrdE Double where
-    a <* b   = if a < b   then 1.0 else 0.0
-    a <=* b  = if a <= b  then 1.0 else 0.0
-    a >* b   = if a > b   then 1.0 else 0.0
-    a >=* b  = if a >= b  then 1.0 else 0.0
+    a <* b = if a < b   then 1.0 else 0.0
+    a <=* b = if a <= b  then 1.0 else 0.0
+    a >* b = if a > b   then 1.0 else 0.0
+    a >=* b = if a >= b  then 1.0 else 0.0
 
 instance OrdE UGen where
-    (<*)  = mkBinaryOperator LT_ (<*)
+    (<*) = mkBinaryOperator LT_ (<*)
     (<=*) = mkBinaryOperator LE (<=*)
-    (>*)  = mkBinaryOperator GT_ (>*)
+    (>*) = mkBinaryOperator GT_ (>*)
     (>=*) = mkBinaryOperator GE (>=*)
 
 -- | Unary operator class.
@@ -233,14 +233,14 @@ instance BinaryOp UGen where
 
 wrap :: (UnaryOp a, Ord a) => a -> a -> a -> a
 wrap a b c = if a >= b && a <= c then a else a - r * floorE (a-b)/r 
-        where r = c - b
+    where r = c - b
 
 fold :: (UnaryOp a, Ord a) => a -> a -> a -> a
 fold a b c = if a >= b && a <= c then a else y' + b
-    where r  = c - b
+    where r = c - b
           r' = r + r
-          x  = a - b
-          y  = x - r' * floorE x/r'
+          x = a - b
+          y = x - r' * floorE x/r'
           y' = if y >= r then r' - y else y
 
 clip_ :: (Ord a) => a -> a -> a -> a
