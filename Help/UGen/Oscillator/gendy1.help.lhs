@@ -163,7 +163,7 @@ Texture
 >                  o  = sinOsc AR (g * 200 + 400) 0
 >              return (pan2 o l 0.1)
 > m <- mapM f [0..9]
-> audition (out 0 (mix (MCE m)))
+> audition (out 0 (mix (mce m)))
 
 Try durscale 10.0 and 0.0 too.
 

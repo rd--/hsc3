@@ -23,7 +23,7 @@ resetval - value to which the counter is reset when it receives a
 > let compose = foldl (flip (.)) id
 >     noisec n l r = map Constant (randomRs (l,r) (mkStdGen n))
 >     rvb s r0 r1 r2 = compose (take 5 (zipWith3 f r0 r1 r2)) s
->         where f dl1 dl2 dc i = allpassN i 0.05 (MCE [dl1,dl2]) dc
+>         where f dl1 dl2 dc i = allpassN i 0.05 (mce [dl1,dl2]) dc
 >     rvb' s = rvb s (noisec 0 0 0.05) (noisec 1 0 0.05) (noisec 2 1.5 2.0)
 >     stpr = compose chn top
 >         where rate = mouseX KR 1 5 Exponential 0.1
@@ -31,9 +31,9 @@ resetval - value to which the counter is reset when it receives a
 >               envl = decay2 clock 0.002 2.5
 >               indx = stepper clock 0 0 15 1 0
 >               freq = bufRdN 1 KR 10 indx Loop
->               ffreq = lag2 freq 0.1 + MCE [0, 0.3]
->               lfo = sinOsc KR 0.2 (MCE [0, pi/2]) * 0.0024 + 0.0025
->               top = mix (lfPulse AR (freq * MCE [1, 1.5, 2]) 0 0.3)
+>               ffreq = lag2 freq 0.1 + mce [0, 0.3]
+>               lfo = sinOsc KR 0.2 (mce [0, pi/2]) * 0.0024 + 0.0025
+>               top = mix (lfPulse AR (freq * mce [1, 1.5, 2]) 0 0.3)
 >               chn = [ \s -> rlpf s ffreq 0.3 * envl
 >                     , \s -> rlpf s ffreq 0.3 * envl
 >                     , \s -> s * 0.5

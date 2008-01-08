@@ -20,14 +20,14 @@ doneAction - action evaluated when the duration stream ends.
 
 level - demand ugen providing the output values.
 
-> n0 <- drand 8192 (MCE [0.01, 0.2, 0.4])
-> n1 <- dseq 8192 (MCE [204, 400, 201, 502, 300, 200])
+> n0 <- drand 8192 (mce [0.01, 0.2, 0.4])
+> n1 <- dseq 8192 (mce [204, 400, 201, 502, 300, 200])
 > let f = duty KR n0 0 RemoveSynth n1
-> audition (out 0 (sinOsc AR (f * MCE [1, 1.01]) 0 * 0.1))
+> audition (out 0 (sinOsc AR (f * mce [1, 1.01]) 0 * 0.1))
 
 Using control rate signal, mouseX, to determine duration.
 
 > let x = mouseX KR 0.001 2 Linear 0.1
-> n <- dseq 8192 (MCE [204, 400, 201, 502, 300, 200])
+> n <- dseq 8192 (mce [204, 400, 201, 502, 300, 200])
 > let f = duty KR x 0 RemoveSynth n
-> audition (out 0 (sinOsc AR (f * MCE [1, 1.01]) 0 * 0.1))
+> audition (out 0 (sinOsc AR (f * mce [1, 1.01]) 0 * 0.1))

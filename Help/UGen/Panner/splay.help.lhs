@@ -12,5 +12,5 @@ center -    -1 = left, 1 = right
 > let ci = Constant . fromIntegral
 >     x = mouseX KR (-1) 1 Linear 0.1
 >     y = mouseY KR 1 0 Linear 0.1
->     o = sinOsc AR (n * 200 + (MCE [1 .. ci i] + 3 * 100)) 0
+>     o = sinOsc AR (n * 200 + (mce [1 .. ci i] + 3 * 100)) 0
 > audition (out 0 (splay o y 0.2 x))

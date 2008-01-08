@@ -8,5 +8,5 @@ n = 2 : triangular distribution
 n = 3 : smooth hump
 as n increases, distribution converges towards gaussian
 
-> n <- nRand 1200.0 4000.0 (MCE [2, 5])
+> n <- nRand 1200.0 4000.0 (mce [2, 5])
 > audition (out 0 (fSinOsc AR n 0 * line KR 0.2 0 0.01 RemoveSynth))

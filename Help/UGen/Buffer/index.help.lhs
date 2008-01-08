@@ -13,7 +13,7 @@ Allocate and set values at buffer 10.
 Index into the above buffer for frequency values.
 
 > let f = index 10 (lfSaw KR 2 3 * 4)
-> audition (out 0 (sinOsc AR (MCE [f, f * 9]) 0 * 0.1))
+> audition (out 0 (sinOsc AR (mce [f, f * 9]) 0 * 0.1))
 
 Free buffer.
 

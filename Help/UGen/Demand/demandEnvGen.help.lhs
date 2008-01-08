@@ -26,7 +26,7 @@ reset  - if reset crosses from nonpositive to positive, the ugen
 Frequency ramp, exponential curve.
 
 > let inf_sc = 9e8
-> l <- dseq inf_sc (MCE [440, 9600])
+> l <- dseq inf_sc (mce [440, 9600])
 > let y = mouseY KR 0.01 3 Exponential 0.1
 >     f = demandEnvGen AR l y 2 0 1 1 1 0 1 DoNothing
 > audition (out 0 (sinOsc AR f 0 * 0.1))
@@ -34,8 +34,8 @@ Frequency ramp, exponential curve.
 Frequency envelope with random times.
 
 > let inf_sc = 9e8
-> l <- dseq inf_sc (MCE [204, 400, 201, 502, 300, 200])
-> t <- drand inf_sc (MCE [1.01, 0.2, 0.1, 2.0])
+> l <- dseq inf_sc (mce [204, 400, 201, 502, 300, 200])
+> t <- drand inf_sc (mce [1.01, 0.2, 0.1, 2.0])
 > let y = mouseY KR 0.01 3 Exponential 0.1
 >     f = demandEnvGen AR l (t * y) 7 0 1 1 1 0 1 DoNothing
-> audition (out 0 (sinOsc AR (f * MCE [1, 1.01]) 0 * 0.1))
+> audition (out 0 (sinOsc AR (f * mce [1, 1.01]) 0 * 0.1))

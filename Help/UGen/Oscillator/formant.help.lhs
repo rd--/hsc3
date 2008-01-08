@@ -9,7 +9,7 @@ Modulate fundamental frequency, formant frequency stays constant.
 
 Modulate formant frequency, fundamental frequency stays constant.
 
-> let f = MCE [200, 300, 400, 500]
+> let f = mce [200, 300, 400, 500]
 > audition (out 0 (formant AR f (xLine KR 400 4000 8 RemoveSynth) 200 * 0.125))
 
 Modulate width frequency, other frequencies stay constant.

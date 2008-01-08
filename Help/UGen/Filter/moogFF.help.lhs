@@ -20,7 +20,7 @@ VCF. In Proc. ICMC07, Copenhagen, 25-31 August 2007
 > audition (out 0 (moogFF (n * 0.1) y x 0))
 
 > n <- lfNoise0 KR 0.43
-> let p = pulse AR (MCE [40, 121]) (MCE [0.3, 0.7])
+> let p = pulse AR (mce [40, 121]) (mce [0.3, 0.7])
 >     f = linLin (sinOsc KR (linLin n 0 1 0.001 2.2) 0) (-1) 1 30 4200
 >     y = mouseY KR 1 4 Linear 0.1
 > audition (out 0 (moogFF p f (0.83 * y) 0))

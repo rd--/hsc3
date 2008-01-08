@@ -36,7 +36,7 @@ Allocate and fill tables 0 to 7.
 Oscillator at buffers 0 through 7, mouse selects buffer.
 
 > let x = mouseX KR 0 7 Linear 0.1
-> audition (out 0 (vOsc AR x (MCE [120, 121]) 0 * 0.3))
+> audition (out 0 (vOsc AR x (mce [120, 121]) 0 * 0.3))
 
 Reallocate buffers while oscillator is running.
 

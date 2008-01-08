@@ -18,6 +18,6 @@ LinearInterpolation, CubicInterpolation or (Interpolation UGen).
 There are constructors, bufRdN, bufRdL, and bufRdC for the fixed
 cases.
 
-> let x = mouseX KR (MCE [5, 10]) 100 Linear 0.1
+> let x = mouseX KR (mce [5, 10]) 100 Linear 0.1
 > n <- lfNoise1 AR x
 > audition (out 0 (bufRdL 1 AR 0 (n * bufFrames KR 0) Loop))

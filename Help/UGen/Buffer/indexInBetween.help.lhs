@@ -15,7 +15,7 @@ Index into the above buffer for frequency values.
 >     l0 = index 10 i
 >     l1 = index 10 (i + 1)
 >     f1 = linLin (frac i) 0 1 l0 l1
-> audition (out 0 (sinOsc AR (MCE [f0, f1]) 0 * 0.1))
+> audition (out 0 (sinOsc AR (mce [f0, f1]) 0 * 0.1))
 
 Free buffer.
 

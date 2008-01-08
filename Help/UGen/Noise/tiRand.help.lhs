@@ -9,4 +9,4 @@ values
 > audition (out 0 (pan2 (n * 0.1) l 1))
 
 > f <- tiRand 4 12 =<< dust KR 10
-> audition (out 0 (sinOsc AR (f * 150 + (MCE [0,1])) 0 * 0.1))
+> audition (out 0 (sinOsc AR (f * 150 + (mce [0,1])) 0 * 0.1))

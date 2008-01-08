@@ -50,4 +50,4 @@ UnpackFFT first - essentially creating our FFT data from scratch.
 >     mkC = Constant . fromIntegral
 >     c2 = packFFT c1 512 0 (mkC n - 1) 1 (packFFTSpec m3 p)
 >     s = ifft' c2
-> audition (out 0 (MCE [s, s]))
+> audition (out 0 (mce [s, s]))

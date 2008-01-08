@@ -15,7 +15,7 @@ The median length can be increased for longer duration noise.
 Long Median filters begin chopping off the peaks of the waveform
 
 > let x = sinOsc AR 1000 0 * 0.2
-> audition (out 0 (MCE [x, median 31 x]))
+> audition (out 0 (mce [x, median 31 x]))
 
 Another noise reduction application. Use Median filter for high
 frequency noise.  Use LeakDC for low frequency noise.

@@ -11,4 +11,4 @@ phase - phase offset in cycles (0..1)
 > audition (out 0 (impulse AR f 0.0 * 0.1))
 
 > let f = mouseY KR 4 8 Linear 0.1
-> audition (out 0 (impulse AR f (MCE [0, mouseX KR 0 1 Linear 0.1]) * 0.1))
+> audition (out 0 (impulse AR f (mce [0, mouseX KR 0 1 Linear 0.1]) * 0.1))

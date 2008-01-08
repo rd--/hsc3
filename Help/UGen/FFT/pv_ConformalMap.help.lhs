@@ -20,8 +20,8 @@ With filtering.
 
 > withSC3 (\fd -> do send fd (b_alloc 0 2048 1)
 >                    wait fd "/done")
-> let o = MCE [1, 1.1, 1.5, 1.78, 2.45, 6.7, 8] * 220
->     f = sinOsc KR (MCE [0.16, 0.33, 0.41]) 0 * 10 + o
+> let o = mce [1, 1.1, 1.5, 1.78, 2.45, 6.7, 8] * 220
+>     f = sinOsc KR (mce [0.16, 0.33, 0.41]) 0 * 10 + o
 >     s = mix (lfSaw AR f 0) * 0.3
 >     x = mouseX KR 0.01  2.0 Linear 0.1
 >     y = mouseY KR 0.01 10.0 Linear 0.1

@@ -16,8 +16,8 @@ random ordering.
 >     o0 = map (\n -> lfSaw AR n 0 * 0.1) (take 6 n0)
 >     o1 = map (\n -> lfPulse AR n 0.0 0.2) (take 6 n1)
 >     o2 = map (\n -> sinOsc KR n 0 * 0.2) (take 6 n2)
->     a  = mix (MCE o0)
->     b  = mix (MCE (zipWith (\p s -> p * (max s 0.0)) o1 o2))
+>     a  = mix (mce o0)
+>     b  = mix (mce (zipWith (\p s -> p * (max s 0.0)) o1 o2))
 >     f  = fft' 10 a
 >     g  = fft' 11 b
 >     x  = mouseX KR 0 1 Linear 0.1

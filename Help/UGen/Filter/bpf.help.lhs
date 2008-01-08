@@ -12,4 +12,4 @@ rq    - the reciprocal of Q, ie. bandwidth / cutoffFreq
 > n <- whiteNoise AR
 > let x = mouseX KR 220 440 Exponential 0.1
 > let y = mouseY KR 0 0.01 Linear 0.1
-> audition (out 0 (bpf n (MCE [x, 550 - x]) y))
+> audition (out 0 (bpf n (mce [x, 550 - x]) y))
