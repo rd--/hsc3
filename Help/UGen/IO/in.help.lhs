@@ -12,7 +12,7 @@ Patching input to output, with delay.
 >     d = delayN i 0.5 0.5
 > audition (out 0 (i + d))
 
-Write noise to bus 10, then read it out.  The MRG is ordered.
+Write noise to bus 10, then read it out.  The multiple root graph is ordered.
 
 > n <- pinkNoise AR
 > let wr = out 10 (n * 0.3)
