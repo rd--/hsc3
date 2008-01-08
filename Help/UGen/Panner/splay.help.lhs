@@ -8,8 +8,8 @@ center -    -1 = left, 1 = right
 
 > let i = 6
 > r <- replicateM i (rand 10 20)
-> n <- lfNoise2 KR (MCE r)
-> let ci = Constant . fromIntegral
+> n <- lfNoise2 KR (mce r)
+> let ci = constant . fromIntegral
 >     x = mouseX KR (-1) 1 Linear 0.1
 >     y = mouseY KR 1 0 Linear 0.1
 >     o = sinOsc AR (n * 200 + (mce [1 .. ci i] + 3 * 100)) 0

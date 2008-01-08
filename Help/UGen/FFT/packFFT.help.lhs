@@ -47,7 +47,7 @@ UnpackFFT first - essentially creating our FFT data from scratch.
 > let m3 = zipWith (*) m2 i
 >     p = replicate n 0.0
 >     c1 = fft' 10 (fSinOsc AR 440 0)
->     mkC = Constant . fromIntegral
->     c2 = packFFT c1 512 0 (mkC n - 1) 1 (packFFTSpec m3 p)
+>     ci = constant . fromIntegral
+>     c2 = packFFT c1 512 0 (ci n - 1) 1 (packFFTSpec m3 p)
 >     s = ifft' c2
 > audition (out 0 (mce [s, s]))
