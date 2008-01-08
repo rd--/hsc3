@@ -21,7 +21,7 @@ resetval - value to which the counter is reset when it receives a
 > audition (out 0 (sinOsc AR f 0 * 0.1))
 
 > let compose = foldl (flip (.)) id
->     noisec n l r = map Constant (randomRs (l,r) (mkStdGen n))
+>     noisec n l r = randomRs (l,r) (mkStdGen n)
 >     rvb s r0 r1 r2 = compose (take 5 (zipWith3 f r0 r1 r2)) s
 >         where f dl1 dl2 dc i = allpassN i 0.05 (mce [dl1,dl2]) dc
 >     rvb' s = rvb s (noisec 0 0 0.05) (noisec 1 0 0.05) (noisec 2 1.5 2.0)
