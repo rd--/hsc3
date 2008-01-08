@@ -38,7 +38,7 @@ Evaluate these in either order and hear both tones.
 > let b  = numInputBuses + numOutputBuses
 >     s0 = out b (sinOsc AR 220 0 * 0.1)
 >     s1 = out 0 (sinOsc AR 660 0 * 0.1)
-> audition (MRG s0 s1)
+> audition (mrg [s0, s1])
 
 Doubters consult this.
 
