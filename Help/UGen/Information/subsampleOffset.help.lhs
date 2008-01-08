@@ -18,7 +18,7 @@ move one relative to the other.  When cursor is at the left, the
 impulses are adjacent, on the right, they are exactly 1 sample apart.
 View this with an oscilloscope.
 
-> let a = Control KR "a" 0
+> let a = control KR "a" 0
 >     i = impulse AR 2000 0 * 0.3
 >     d = sampleDur
 >     x = 4

@@ -5,8 +5,8 @@ When triggered pauses a node.
 gate   - when gate is 0,  node is paused, when 1 it runs
 nodeID - node to be paused
 
-> let f  = Control KR "f" 440
->     g  = Control KR "g" 1
+> let f  = control KR "f" 440
+>     g  = control KR "g" 1
 >     a  = mrg [out 0 (sinOsc AR f 0 * 0.1), pause g 1001]
 >     a' = graphdef "a" (graph a)
 > withSC3 (\fd -> do send fd (d_recv a')
