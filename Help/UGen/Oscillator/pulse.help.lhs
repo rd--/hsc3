@@ -13,4 +13,4 @@ Modulate pulse width
 Two band limited square waves thru a resonant low pass filter
 
 > let p = pulse AR (mce [100, 250]) 0.5 * 0.1
-> audition (out 0 (rlpf p (xLine KR 8000 400 5 RemoveSynth) 0.05))
+> in audition (out 0 (rlpf p (xLine KR 8000 400 5 RemoveSynth) 0.05))

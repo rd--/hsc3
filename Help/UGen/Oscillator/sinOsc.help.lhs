@@ -15,9 +15,9 @@ Modulate freq
 Modulate freq
 
 > let f = sinOsc AR (xLine KR 1 1000 9 RemoveSynth) 0 * 200 + 800
-> audition (out 0 (sinOsc AR f 0 * 0.1))
+> in audition (out 0 (sinOsc AR f 0 * 0.1))
 
 Modulate phase
 
 > let p = sinOsc AR (xLine KR 20 8000 10 RemoveSynth) 0 * 2 * pi
-> audition (out 0 (sinOsc AR 800 p * 0.1))
+> in audition (out 0 (sinOsc AR 800 p * 0.1))
