@@ -135,9 +135,8 @@ layout rules select the region and type C-cC-r (Haskell SuperCollider
 mouse or place the cursor at one end, type C-[Space] then move the
 cursor to the other end.
 
-> let { f0 = xLine KR 1 1000 9 RemoveSynth ;
->       f1 = sinOsc AR f0 0 * 200 + 800 ;
->     }     
+> let { f0 = xLine KR 1 1000 9 RemoveSynth
+>     ; f1 = sinOsc AR f0 0 * 200 + 800 }
 > in audition (out 0 (sinOsc AR f1 0 * 0.1))
 
 To evaluate a multiple line expression written using the layout rules
