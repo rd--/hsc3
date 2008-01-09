@@ -12,14 +12,15 @@ id    - an integer that will be passed with the trigger message.  This
 value - a UGen or float that will be polled at the time of trigger,
         and its value passed with the trigger message
 
-> withSC3 (\fd -> do send fd (notify True)
->                    wait fd "/done")
+> withSC3 (\fd -> do { send fd (notify True)
+>                    ; wait fd "/done" })
 
-> s <- lfNoise0 KR 10
-> audition (mrg [sendTrig s 0 s, out 0 (sinOsc AR (s * 200 + 500) 0 * 0.1)])
+> do { s <- lfNoise0 KR 10
+>    ; let o = sinOsc AR (s * 200 + 500) 0 * 0.1
+>      in audition (mrg [sendTrig s 0 s, out 0 o]) }
 
-> withSC3 (\fd -> do tr <- wait fd "/tr"
->                    putStrLn (show tr))
+> withSC3 (\fd -> do { tr <- wait fd "/tr"
+>                    ; putStrLn (show tr) })
 
-> withSC3 (\fd -> do send fd (notify False)
->                    wait fd "/done")
+> withSC3 (\fd -> do { send fd (notify False)
+>                    ; wait fd "/done" })

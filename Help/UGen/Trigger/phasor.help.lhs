@@ -13,8 +13,9 @@ resetPos   - determines where to jump to on recieving a trigger.  the
 
 phasor controls sine frequency: end frequency matches a second sine wave.
 
-> let rate = mouseX KR 0.2 2 Exponential 0.1
->     trig = impulse AR rate 0
->     sr   = sampleRate
->     x    = phasor AR trig (rate / sr) 0 1 0
-> audition (out 0 (sinOsc AR (mce [linLin x 0 1 600 1000, 1000]) 0 * 0.2))
+> let { rate = mouseX KR 0.2 2 Exponential 0.1
+>     ; tr = impulse AR rate 0
+>     ; sr = sampleRate
+>     ; x = phasor AR tr (rate / sr) 0 1 0 
+>     ; f = mce [linLin x 0 1 600 1000, 1000] }
+> in audition (out 0 (sinOsc AR f 0 * 0.2))

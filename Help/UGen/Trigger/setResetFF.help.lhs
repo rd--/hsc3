@@ -9,7 +9,7 @@ precipitating event cause something to happen until you reset it.
 trig  - trigger sets output to one
 reset - trigger resets output to zero
 
-> n <- brownNoise AR
-> d0 <- dust AR 5
-> d1 <- dust AR 5
-> audition (out 0 (setResetFF d0 d1 * n * 0.2))
+> do { n <- brownNoise AR
+>    ; d0 <- dust AR 5
+>    ; d1 <- dust AR 5
+>    ; audition (out 0 (setResetFF d0 d1 * n * 0.2)) }

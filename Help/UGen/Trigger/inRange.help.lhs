@@ -9,6 +9,7 @@ in - signal to be tested
 lo - low threshold
 hi - high threshold
 
-> n <- brownNoise AR
-> let x = mouseX KR 1 2 Linear 0.1
-> audition (out 0 (inRange (sinOsc KR x 0 * 0.2) (-0.15) 0.15 * n * 0.1))
+> do { n <- brownNoise AR
+>      ; let { x = mouseX KR 1 2 Linear 0.1 
+>            ; o = sinOsc KR x 0 * 0.2 }
+>      in audition (out 0 (inRange o (-0.15) 0.15 * n * 0.1)) }
