@@ -8,8 +8,8 @@ bufnum - the number of a buffer filled in wavetable format
 
 in     - the input signal.
 
-> withSC3 (\fd -> do send fd (b_alloc 10 512 1)
->                    wait fd "/done"
->                    send fd (b_gen 10 "cheby" [0, 1, 0, 1, 1, 0, 1])
->                    wait fd "/done")
-> audition (out 0 (shaper 10 (sinOsc AR 300 0 * line KR 0 1 6 RemoveSynth) * 0.5))
+> let { s = sinOsc AR 300 0 * line KR 0 1 6 RemoveSynth
+>     ; async h m = send h m >> wait h "/done" }
+> in withSC3 (\fd -> do { async fd (b_alloc 10 512 1)
+>                       ; async fd (b_gen 10 "cheby" [0, 1, 0, 1, 1, 0, 1])
+>                       ; audition (out 0 (shaper 10 s * 0.5)) })

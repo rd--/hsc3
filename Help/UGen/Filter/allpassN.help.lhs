@@ -11,33 +11,33 @@ Since the allpass delay has no audible effect as a resonator on steady
 state sound ...
 
 > let dly = xLine KR 0.0001 0.01 20 RemoveSynth
-> n <- whiteNoise AR
-> audition (out 0 (allpassC (n * 0.1) 0.01 dly 0.2))
+> in do { n <- whiteNoise AR
+>       ; audition (out 0 (allpassC (n * 0.1) 0.01 dly 0.2)) }
 
 ...these examples add the input to the effected sound so that you
 can hear the effect of the phase comb.
 
-> n <- whiteNoise AR
-> let dly = xLine KR 0.0001 0.01 20 RemoveSynth
-> audition (out 0 ((n + allpassN (n * 0.1) 0.01 dly 0.2) * 0.1))
+> do { n <- whiteNoise AR
+>    ; let dly = xLine KR 0.0001 0.01 20 RemoveSynth
+>      in audition (out 0 ((n + allpassN (n * 0.1) 0.01 dly 0.2) * 0.1)) }
 
 Linear variant
 
-> n <- whiteNoise AR
-> let dly = xLine KR 0.0001 0.01 20 RemoveSynth
-> audition (out 0 ((n + allpassL (n * 0.1) 0.01 dly 0.2) * 0.1))
+> do { n <- whiteNoise AR
+>    ; let dly = xLine KR 0.0001 0.01 20 RemoveSynth
+>      in audition (out 0 ((n + allpassL (n * 0.1) 0.01 dly 0.2) * 0.1)) }
 
 Cubic variant
 
-> n <- whiteNoise AR
-> let dly = xLine KR 0.0001 0.01 20 RemoveSynth
-> audition (out 0 ((n + allpassC (n * 0.1) 0.01 dly 0.2) * 0.1))
+> do { n <- whiteNoise AR
+>    ; let dly = xLine KR 0.0001 0.01 20 RemoveSynth
+>      in audition (out 0 ((n + allpassC (n * 0.1) 0.01 dly 0.2) * 0.1)) }
 
 Used as an echo - doesn't really sound different than Comb, but it
 outputs the input signal immediately (inverted) and the echoes are
 lower in amplitude.
 
-> n <- whiteNoise AR
-> d <- dust AR 1
-> let src = decay (d * 0.5) 0.2 * n
-> audition (out 0 (allpassN src 0.2 0.2 3))
+> do { n <- whiteNoise AR
+>    ; d <- dust AR 1
+>    ; let src = decay (d * 0.5) 0.2 * n
+>      in audition (out 0 (allpassN src 0.2 0.2 3)) }

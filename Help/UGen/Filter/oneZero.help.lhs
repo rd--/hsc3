@@ -2,11 +2,12 @@ oneZero in coef
 
 One zero filter
 
-> n <- whiteNoise AR
-> audition (out 0 (oneZero (n * 0.5) 0.5))
+> do { n <- whiteNoise AR
+>    ; audition (out 0 (oneZero (n * 0.5) 0.5)) }
 
-> n <- whiteNoise AR
-> audition (out 0 (oneZero (n * 0.5) (-0.5)))
+> do { n <- whiteNoise AR
+>    ; audition (out 0 (oneZero (n * 0.5) (-0.5))) }
 
-> n <- whiteNoise AR
-> audition (out 0 (oneZero (n * 0.5) (line KR (-0.5) 0.5 10 RemoveSynth)))
+> do { n <- whiteNoise AR
+>    ; let c = line KR (-0.5) 0.5 10 RemoveSynth
+>      in audition (out 0 (oneZero (n * 0.5) c)) }
