@@ -123,7 +123,7 @@
   (let* ((s (buffer-substring (line-beginning-position)
 			      (line-end-position)))
 	 (s* (if hsc3-literate-p
-		 (substring s 2)
+		 (hsc3-unlit s)
 	       s)))
     (hsc3-send-string s*)))
 
