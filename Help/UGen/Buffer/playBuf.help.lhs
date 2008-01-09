@@ -30,8 +30,8 @@ loop        - 1 means true, 0 means false.  This is modulate-able.
 Allocate buffer.
 
 > let fileName = "/home/rohan/audio/metal.wav"
-> withSC3 (\fd -> do send fd (b_allocRead 10 fileName 0 0)
->                    wait fd "/done")
+> in withSC3 (\fd -> do { send fd (b_allocRead 10 fileName 0 0)
+>                       ; wait fd "/done" })
 
 Play once only.
 
@@ -44,24 +44,24 @@ Play in infinite loop.
 Trigger playback at each pulse.
 
 > let t = impulse KR 2 0
-> audition (out 0 (playBuf 1 10 (bufRateScale KR 10) t 0 NoLoop))
+> in audition (out 0 (playBuf 1 10 (bufRateScale KR 10) t 0 NoLoop))
 
 Trigger playback at each pulse (diminishing intervals).
 
-> let f = xLine KR 0.1 100 10 RemoveSynth
->     t = impulse KR f 0
-> audition (out 0 (playBuf 1 10 (bufRateScale KR 10) t 0 NoLoop))
+> let { f = xLine KR 0.1 100 10 RemoveSynth
+>     ; t = impulse KR f 0 }
+> in audition (out 0 (playBuf 1 10 (bufRateScale KR 10) t 0 NoLoop))
 
 Loop playback, accelerating pitch.
 
 > let r = xLine KR 0.1 100 60 RemoveSynth
-> audition (out 0 (playBuf 1 10 r 1 0 Loop))
+> in audition (out 0 (playBuf 1 10 r 1 0 Loop))
 
 Sine wave control of playback rate, negative rate plays backwards.
 
-> let f = xLine KR 0.2 8 30 RemoveSynth
->     r = fSinOsc KR f 0 * 3 + 0.6
-> audition (out 0 (playBuf 1 10 (bufRateScale KR 10 * r) 1 0 Loop))
+> let { f = xLine KR 0.2 8 30 RemoveSynth
+>     ; r = fSinOsc KR f 0 * 3 + 0.6 }
+> in audition (out 0 (playBuf 1 10 (bufRateScale KR 10 * r) 1 0 Loop))
 
 Release buffer.
 

@@ -23,25 +23,25 @@ to be ON.
 
 Allocate and fill tables 0 to 7.
 
-> let square a = a * a
->     harmonics i = map f [0 .. n - 1]
->         where n = square (i + 1)
->               f j = square ((n - j) / n)
->     setup fd i = do let i' = fromIntegral i
->                     send fd (b_alloc i 1024 1)
->                     wait fd "/done"
->                     send fd (b_gen i "sine1" (1 + 2 + 4 : harmonics i'))
-> withSC3 (\fd -> mapM_ (setup fd) [0 .. 7])
+> let { square a = a * a
+>     ; harmonics i = let { n = square (i + 1)
+>                         ; f j = square ((n - j) / n) }
+>                     in map f [0 .. n - 1]
+>     ; setup fd i = do { i' <- return (fromIntegral i)
+>                       ; send fd (b_alloc i 1024 1)
+>                       ; wait fd "/done"
+>                       ; send fd (b_gen i "sine1" (1 + 2 + 4 : harmonics i')) } }
+> in withSC3 (\fd -> mapM_ (setup fd) [0 .. 7])
 
 Oscillator at buffers 0 through 7, mouse selects buffer.
 
 > let x = mouseX KR 0 7 Linear 0.1
-> audition (out 0 (vOsc AR x (mce [120, 121]) 0 * 0.3))
+> in audition (out 0 (vOsc AR x (mce [120, 121]) 0 * 0.3))
 
 Reallocate buffers while oscillator is running.
 
-> let rrand l r = getStdRandom (randomR (l,r))
->     rrandl n l r = replicateM n (rrand l r)
->     resetTable fd i = do h <- rrandl 12 0 1
->                          send fd (b_gen i "sine1" (1 + 2 + 4 : h))
-> withSC3 (\fd -> mapM_ (resetTable fd) [0 .. 7])
+> let { rrand l r = getStdRandom (randomR (l,r))
+>     ; rrandl n l r = replicateM n (rrand l r)
+>     ; resetTable fd i = do { h <- rrandl 12 0 1
+>                            ; send fd (b_gen i "sine1" (1 + 2 + 4 : h)) } }
+> in withSC3 (\fd -> mapM_ (resetTable fd) [0 .. 7])

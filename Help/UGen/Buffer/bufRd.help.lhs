@@ -13,11 +13,11 @@ LinearInterpolation, CubicInterpolation or (Interpolation UGen).
 > withSC3 (\fd -> send fd (b_allocRead 0 "/home/rohan/audio/metal.wav" 0 0))
 
 > let phase = (sinOsc AR 0.1 0 * bufFrames KR 0)
-> audition (out 0 (bufRd 1 AR 0 phase Loop NoInterpolation))
+> in audition (out 0 (bufRd 1 AR 0 phase Loop NoInterpolation))
 
 There are constructors, bufRdN, bufRdL, and bufRdC for the fixed
 cases.
 
 > let x = mouseX KR (mce [5, 10]) 100 Linear 0.1
-> n <- lfNoise1 AR x
-> audition (out 0 (bufRdL 1 AR 0 (n * bufFrames KR 0) Loop))
+> in do { n <- lfNoise1 AR x
+>       ; audition (out 0 (bufRdL 1 AR 0 (n * bufFrames KR 0) Loop)) }
