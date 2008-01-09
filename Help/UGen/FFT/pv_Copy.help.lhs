@@ -11,11 +11,12 @@ bufferB - destination buffer.
 
 Proof of concept, silence
 
-> withSC3 (\fd -> do send fd (b_alloc 0 2048 1)
->                    wait fd "/done"
->                    send fd (b_alloc 1 2048 1)
->                    wait fd "/done")
-> i <- lfClipNoise AR 100
-> let c0 = fft' 0 i
->     c1 = pv_Copy c0 1
-> audition (out 0 (ifft' c0 - ifft' c1))
+> withSC3 (\fd -> do { send fd (b_alloc 0 2048 1)
+>                    ; wait fd "/done"
+>                    ; send fd (b_alloc 1 2048 1)
+>                    ; wait fd "/done" })
+
+> do { i <- lfClipNoise AR 100
+>    ; let { c0 = fft' 0 i
+>          ; c1 = pv_Copy c0 1 }
+>      in audition (out 0 (ifft' c0 - ifft' c1)) }

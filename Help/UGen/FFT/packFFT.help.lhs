@@ -32,6 +32,7 @@ Here's an unusual example which uses PackFFT without using
 UnpackFFT first - essentially creating our FFT data from scratch.
 
 > withSC3 (\fd -> send fd (b_alloc 10 512 1))
+
 > let n = 100
 >     range :: UGen -> UGen -> UGen -> UGen
 >     range u l r = linLin u (-1) 1 l r

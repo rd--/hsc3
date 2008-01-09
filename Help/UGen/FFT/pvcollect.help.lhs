@@ -19,17 +19,21 @@ processed are silenced.
 Note that this procedure can be relatively CPU-heavy, depending on
 how you use it.
 
-> withSC3 (\fd -> do let async p m = send p m >> wait p "/done"
->                    async fd (b_alloc 10 1024 1)
->                    async fd (b_allocRead 11 "/home/rohan/audio/metal.wav" 0 0))
-> let no_op m p _ = (m, p)
->     combf m p i = ((modE i 7.0 ==* 0) * m, p)
->     spectral_delay m p _ = (m + delayN m 1 v, p)
->         where v = linLin (lfPar KR 0.5 0) (-1) 1 0.1 1
->     bpf_sweep nf m p i = ((e <* 10) * m, p)
->         where e = abs (i - (linLin (lfPar KR 0.1 0) (-1) 1 2 (nf / 20)))
->     nf = 1024
->     sf = playBuf 1 11 (bufRateScale KR 11) 1 0 Loop
->     c1 = fft' 10 sf
->     c2 = pvcollect c1 nf spectral_delay 0 250 0
-> audition (out 0 (0.1 * ifft' c2))
+> let { fileName = "/home/rohan/audio/metal.wav"
+>     ; async p m = send p m >> wait p "/done" }
+> in withSC3 (\fd -> do { async fd (b_alloc 10 1024 1)
+>                       ; async fd (b_allocRead 11 fileName 0 0) })
+
+> let { no_op m p _ = (m, p)
+>     ; combf m p i = ((modE i 7.0 ==* 0) * m, p)
+>     ; spectral_delay m p _ = let { l = lfPar KR 0.5 0
+>                                  ; v = linLin l (-1) 1 0.1 1 }
+>                              in (m + delayN m 1 v, p)
+>     ; nf = 1024
+>     ; bpf_sweep m p i = let { l = lfPar KR 0.1 0
+>                             ; e = abs (i - (linLin l (-1) 1 2 (nf / 20))) }
+>                         in ((e <* 10) * m, p)
+>     ; sf = playBuf 1 11 (bufRateScale KR 11) 1 0 Loop
+>     ; c1 = fft' 10 sf
+>     ; c2 = pvcollect c1 nf spectral_delay 0 250 0 }
+> in audition (out 0 (0.1 * ifft' c2))
