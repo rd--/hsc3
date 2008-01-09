@@ -8,16 +8,16 @@ Patching input to output.
 
 Patching input to output, with delay.
 
-> let i = in' 2 AR numOutputBuses
->     d = delayN i 0.5 0.5
-> audition (out 0 (i + d))
+> let { i = in' 2 AR numOutputBuses
+>     ; d = delayN i 0.5 0.5 }
+> in audition (out 0 (i + d))
 
 Write noise to bus 10, then read it out.  The multiple root graph is ordered.
 
-> n <- pinkNoise AR
-> let wr = out 10 (n * 0.3)
->     rd = out 0 (in' 1 AR 10)
-> audition (mrg [rd, wr])
+> do { n <- pinkNoise AR
+>    ; let { wr = out 10 (n * 0.3)
+>          ; rd = out 0 (in' 1 AR 10) }
+>      in audition (mrg [rd, wr]) }
 
 Reading a control bus.
 

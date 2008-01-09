@@ -25,34 +25,34 @@ at the default block size and sample rate.
 
 Audio feedback modulation.
 
-> let f = inFeedback 1 0 * 1300 + 300
->     s = sinOsc AR f 0 * 0.4
-> audition (out 0 s)
+> let { f = inFeedback 1 0 * 1300 + 300
+>     ; s = sinOsc AR f 0 * 0.4 }
+> in audition (out 0 s)
 
 Evaluate these in either order and hear both tones.
 
-> let b = numInputBuses + numOutputBuses
->     s = inFeedback 1 b
-> audition (out 0 s)
+> let { b = numInputBuses + numOutputBuses
+>     ; s = inFeedback 1 b }
+> in audition (out 0 s)
 
-> let b  = numInputBuses + numOutputBuses
->     s0 = out b (sinOsc AR 220 0 * 0.1)
->     s1 = out 0 (sinOsc AR 660 0 * 0.1)
-> audition (mrg [s0, s1])
+> let { b  = numInputBuses + numOutputBuses
+>     ; s0 = out b (sinOsc AR 220 0 * 0.1)
+>     ; s1 = out 0 (sinOsc AR 660 0 * 0.1) }
+> in audition (mrg [s0, s1])
 
 Doubters consult this.
 
-> let b = numInputBuses + numOutputBuses
->     s = in' 1 AR b
-> audition (out 0 s)
+> let { b = numInputBuses + numOutputBuses
+>     ; s = in' 1 AR b }
+> in audition (out 0 s)
 
 Resonator, see localOut for variant.
 
-> let b = numInputBuses + numOutputBuses
->     p = inFeedback 1 b
->     i = impulse AR 1 0
->     d = delayC (i + (p * 0.995)) 1 (recip 440 - recip controlRate)
-> audition (mrg [offsetOut b d, offsetOut 0 p])
+> let { b = numInputBuses + numOutputBuses
+>     ; p = inFeedback 1 b
+>     ; i = impulse AR 1 0
+>     ; d = delayC (i + (p * 0.995)) 1 (recip 440 - recip controlRate) }
+> in audition (mrg [offsetOut b d, offsetOut 0 p])
 
 Compare with oscillator.
 
