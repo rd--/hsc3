@@ -29,14 +29,14 @@ pan - a value from -1 to 1. Determines where to pan the output in
 envb - the buffer number containing a singal to use for the
        grain envelope. -1 uses a built-in Hanning envelope.
 
-> withSC3 (\fd -> send fd (b_allocRead 10 "/home/rohan/audio/metal.wav" 0 0))
-> n1 <- lfNoise1 KR 500
-> n2 <- lfNoise2 KR 0.1
-> let b = 10
->     e = -1
->     x = mouseX KR (-1) 1 Linear 0.1
->     y = mouseY KR 10 45 Linear 0.1
->     i = impulse KR y 0
->     r = linLin n1 (-1) 1 0.5 2
->     p = linLin n2 (-1) 1 0 1
-> audition (out 0 (grainBuf 2 i 0.1 b r p 2 x e))
+> do { withSC3 (\fd -> send fd (b_allocRead 10 "/home/rohan/audio/metal.wav" 0 0))
+>    ; n1 <- lfNoise1 KR 500
+>    ; n2 <- lfNoise2 KR 0.1
+>    ; let { b = 10
+>          ; e = -1
+>          ; x = mouseX KR (-1) 1 Linear 0.1
+>          ; y = mouseY KR 10 45 Linear 0.1
+>          ; i = impulse KR y 0
+>          ; r = linLin n1 (-1) 1 0.5 2
+>          ; p = linLin n2 (-1) 1 0 1 }
+>      in audition (out 0 (grainBuf 2 i 0.1 b r p 2 x e)) }

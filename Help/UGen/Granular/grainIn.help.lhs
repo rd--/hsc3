@@ -20,8 +20,9 @@ pan - a value from -1 to 1. Determines where to pan the output in
 envbuf - the buffer number containing a singal to use for the
          grain envelope. -1 uses a built-in Hanning envelope.
 
-> n <- pinkNoise AR
-> let x = mouseX KR (-0.5) 0.5 Linear 0.1
->     y = mouseY KR 5 25 Linear 0.1
->     t = impulse KR y 0
-> audition (out 0 (grainIn 2 t 0.1 n x (-1) * 0.1))
+> do { n <- pinkNoise AR
+>    ; let { x = mouseX KR (-0.5) 0.5 Linear 0.1
+>          ; y = mouseY KR 5 25 Linear 0.1
+>          ; t = impulse KR y 0 
+>          ; g = grainIn 2 t 0.1 n x (-1) * 0.1 }
+>      in audition (out 0 g) }
