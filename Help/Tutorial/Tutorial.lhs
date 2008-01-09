@@ -130,7 +130,7 @@ There are two variants for expressions that are written over multiple
 lines.
 
 To evaluate an expression that is written without using the Haskell
-layout rules select the region and type C-cC-r (Haskell SuperCollider
+layout rules select the region and type C-cC-e (Haskell SuperCollider
 -> Expression -> Run multiple lines).  To select a region use the
 mouse or place the cursor at one end, type C-[Space] then move the
 cursor to the other end.
@@ -140,7 +140,7 @@ cursor to the other end.
 > in audition (out 0 (sinOsc AR f1 0 * 0.1))
 
 To evaluate a multiple line expression written using the layout rules
-as applicable within a do block, select the region and type C-cC-e
+as applicable within a do block, select the region and type C-cC-r
 (Haskell SuperCollider -> Expression -> Run region).
 
 > let f0 = xLine KR 1 1000 9 RemoveSynth
