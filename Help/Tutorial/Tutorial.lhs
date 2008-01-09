@@ -126,13 +126,27 @@ the ghci output window.
 
 * Multiple line expressions
 
-To evaluate expressions that don't fit on one line select the region
-and type C-cC-e (Haskell SuperCollider -> Expression -> Run region).
-To select a region use the mouse or place the cursor at one end, type
-C-[Space] then move the cursor to the other end.
+There are two variants for expressions that are written over multiple
+lines.
 
-> let f = sinOsc AR (xLine KR 1 1000 9 RemoveSynth) 0 * 200 + 800
-> audition (out 0 (sinOsc AR f 0 * 0.1))
+To evaluate an expression that is written without using the Haskell
+layout rules select the region and type C-cC-r (Haskell SuperCollider
+-> Expression -> Run multiple lines).  To select a region use the
+mouse or place the cursor at one end, type C-[Space] then move the
+cursor to the other end.
+
+> let { f0 = xLine KR 1 1000 9 RemoveSynth ;
+>       f1 = sinOsc AR f0 0 * 200 + 800 ;
+>     }     
+> in audition (out 0 (sinOsc AR f1 0 * 0.1))
+
+To evaluate a multiple line expression written using the layout rules
+as applicable within a do block, select the region and type C-cC-e
+(Haskell SuperCollider -> Expression -> Run region).
+
+> let f0 = xLine KR 1 1000 9 RemoveSynth
+>     f1 = sinOsc AR f0 0 * 200 + 800
+> audition (out 0 (sinOsc AR f1 0 * 0.1))
 
 This writes the region in a do block in a procedure to a temporary
 file, /tmp/hsc3.lhs, loads the file and then runs the procedure.  The
