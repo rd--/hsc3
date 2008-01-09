@@ -30,24 +30,24 @@ doneAction - an integer representing an action to be executed when
 
 Percussive envelope
 
-> let p = envPerc 0.01 1 1 [EnvNum (-4), EnvNum (-4)]
->     e = envGen KR 1 0.1 0 1 RemoveSynth p
-> audition (out 0 (sinOsc AR 440 0 * e))
+> let { p = envPerc 0.01 1 1 [EnvNum (-4), EnvNum (-4)]
+>     ; e = envGen KR 1 0.1 0 1 RemoveSynth p }
+> in audition (out 0 (sinOsc AR 440 0 * e))
 
 Sine envelope
 
-> let s = envSine 9 0.1
->     e = envGen KR 1 1 0 1 RemoveSynth s
-> audition (out 0 (sinOsc AR 440 0 * e))
+> let { s = envSine 9 0.1
+>     ; e = envGen KR 1 1 0 1 RemoveSynth s }
+> in audition (out 0 (sinOsc AR 440 0 * e))
 
 Co-ordinate (break-point) envelope
 
-> let c = envCoord [(0,0), (0.5, 0.1), (0.55, 1), (1, 0)] 9 0.1 EnvLin
->     e = envGen KR 1 1 0 1 RemoveSynth c
-> audition (out 0 (sinOsc AR 440 0 * e))
+> let { c = envCoord [(0,0), (0.5, 0.1), (0.55, 1), (1, 0)] 9 0.1 EnvLin
+>     ; e = envGen KR 1 1 0 1 RemoveSynth c }
+> in audition (out 0 (sinOsc AR 440 0 * e))
 
 Trapezoidal envelope
 
-> let t = envTrapezoid 0.05 0.95 3 0.1
->     e = envGen KR 1 1 0 1 RemoveSynth t
-> audition (out 0 (sinOsc AR 440 0 * e))
+> let { t = envTrapezoid 0.05 0.95 3 0.1
+>     ; e = envGen KR 1 1 0 1 RemoveSynth t }
+> in audition (out 0 (sinOsc AR 440 0 * e))

@@ -13,4 +13,6 @@ doneAction - a doneAction to be evaluated when the XLine is
 Note: The sclang interface reorders the mul and add inputs to precede
 the doneAction input.
 
-> audition (out 0 (sinOsc AR (xLine KR 200 17000 10 RemoveSynth) 0 * 0.1))
+> let { f = xLine KR 200 17000 10 RemoveSynth
+>     ; o = sinOsc AR f 0 * 0.1 }
+> in audition (out 0 o)

@@ -3,8 +3,9 @@ pauseSelf src
 Pause enclosing synth when input signal crosses from non-positive to
 positive.
 
-> let x = mouseX KR (-1) 1 Linear 0.1
-> audition (mrg [pauseSelf x, out 0 (sinOsc AR 440 0 * 0.1)])
+> let { x = mouseX KR (-1) 1 Linear 0.1
+>     ; o = sinOsc AR 440 0 * 0.1 }
+> in audition (mrg [pauseSelf x, out 0 o])
 
 Run paused node (assuming no intermediate node is created).
 
