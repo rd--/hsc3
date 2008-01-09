@@ -6,4 +6,4 @@ density argument.
 > audition . (out 0) . (* 0.25) =<< dust AR 200
 
 > let d = xLine KR 20000 2 10 RemoveSynth
-> audition . (out 0) . (* 0.15) =<< dust AR d
+> in audition . (out 0) . (* 0.15) =<< dust AR d

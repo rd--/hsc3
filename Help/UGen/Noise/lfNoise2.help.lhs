@@ -9,10 +9,10 @@ sample rate by the freq argument.
 Modulate frequency.
 
 > let f = xLine KR 1000 10000 10 RemoveSynth
-> n <- lfNoise2 AR f
-> audition (out 0 (n * 0.05))
+> in do { n <- lfNoise2 AR f
+>       ; audition (out 0 (n * 0.05)) }
 
 Use as frequency control.
 
-> f <- lfNoise2 KR 4 
-> audition (out 0 (sinOsc AR (f * 400 + 450) 0 * 0.1))
+> do { f <- lfNoise2 KR 4 
+>    ; audition (out 0 (sinOsc AR (f * 400 + 450) 0 * 0.1)) }

@@ -11,10 +11,11 @@ freq - approximate rate at which to generate random values.
 Modulate frequency.
 
 > let f = xLine KR 1000 10000 10 RemoveSynth
-> n <- lfNoise1 AR f
-> audition (out 0 (n * 0.05))
+> in do { n <- lfNoise1 AR f
+>       ; audition (out 0 (n * 0.05)) }
 
 Use as frequency control.
 
-> f <- lfNoise1 KR 4 
-> audition (out 0 (sinOsc AR (f * 400 + 450) 0 * 0.1))
+> do { n <- lfNoise1 KR 4 
+>    ; let f = n * 400 + 450
+>      in audition (out 0 (sinOsc AR f 0 * 0.1)) }

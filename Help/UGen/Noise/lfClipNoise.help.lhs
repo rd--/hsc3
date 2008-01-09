@@ -10,9 +10,9 @@ the approximate rate at which to generate random values.
 Modulate frequency
 
 > let f = xLine KR 1000 10000 10 RemoveSynth
-> audition . (out 0) . (* 0.05) =<< lfClipNoise AR f
+> in audition . (out 0) . (* 0.05) =<< lfClipNoise AR f
 
 Use as frequency control
 
-> n <- lfClipNoise KR 4 
-> audition (out 0 (sinOsc AR (n * 200 + 600) 0 * 0.1))
+> do { n <- lfClipNoise KR 4 
+>    ; audition (out 0 (sinOsc AR (n * 200 + 600) 0 * 0.1)) }

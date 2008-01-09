@@ -8,8 +8,8 @@ integer division of the sample rate by the freq argument.
 Modulate frequency.
 
 > let f = xLine KR 1000 10000 10 RemoveSynth
-> n <- lfNoise0 AR f
-> audition (out 0 (n * 0.05))
+> in do { n <- lfNoise0 AR f
+>       ; audition (out 0 (n * 0.05)) }
 
 Use as frequency control.
 
