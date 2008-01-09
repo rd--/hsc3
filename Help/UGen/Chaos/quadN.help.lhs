@@ -13,8 +13,8 @@ xn+1 = axn2 + bxn + c
 > audition (out 0 (quadC AR 4000 1 (-1) (-0.75) 0 * 0.2))
 
 > let x = mouseX KR 3.5441 4 Linear 0.1
-> audition (out 0 (quadC AR 4000 (negate x) x 0 0.1 * 0.4))
+> in audition (out 0 (quadC AR 4000 (negate x) x 0 0.1 * 0.4))
 
-> let x = mouseX KR 3.5441 4 Linear 0.1
->     f = quadC AR 4 (negate x) x 0 0.1 * 800 + 900
-> audition (out 0 (sinOsc AR f 0 * 0.4))
+> let { x = mouseX KR 3.5441 4 Linear 0.1
+>     ; f = quadC AR 4 (negate x) x 0 0.1 * 800 + 900 }
+> in audition (out 0 (sinOsc AR f 0 * 0.4))

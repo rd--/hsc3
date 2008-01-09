@@ -29,19 +29,21 @@ sclang default values
 Increase feedback
 
 > let fb = line KR 0.01 4 10 DoNothing
-> audition (out 0 (fbSineC AR sampleRate 1 fb 1.1 0.5 0.1 0.1 * 0.2))
+> in audition (out 0 (fbSineC AR sampleRate 1 fb 1.1 0.5 0.1 0.1 * 0.2))
 
 Increase phase multiplier
 
 > let a = line KR 1 2 10 DoNothing
-> audition (out 0 (fbSineC AR sampleRate 1 0 a 0.5 0.1 0.1 * 0.2))
+> in audition (out 0 (fbSineC AR sampleRate 1 0 a 0.5 0.1 0.1 * 0.2))
 
 Randomly modulate parameters
 
-> let x = mouseX KR 1 12 Linear 0.1
-> n0 <- return . (+ 1e4)  . (* 1e4)  =<< lfNoise2 KR x
-> n1 <- return . (+ 33)   . (* 32)   =<< lfNoise2 KR x
-> n2 <- return . (+ 0)    . (* 0.5)  =<< lfNoise2 KR x
-> n3 <- return . (+ 1.05) . (* 0.05) =<< lfNoise2 KR x
-> n4 <- return . (+ 0.3)  . (* 0.3)  =<< lfNoise2 KR x
-> audition (out 0 (fbSineC AR n0 n1 n2 n3 n4 0.1 0.1 * 0.2))
+> let { madd a m = return . (+ a) . (* m)
+>     ; x = mouseX KR 1 12 Linear 0.1 
+>     ; n = lfNoise2 KR x }
+> in do { n0 <- madd 1e4 1e4 =<< n
+>       ; n1 <- madd 33 32 =<< n
+>       ; n2 <- madd 0 0.5 =<< n
+>       ; n3 <- madd 1.05 0.05 =<< n
+>       ; n4 <- madd 0.3 0.3 =<< n
+>       ; audition (out 0 (fbSineC AR n0 n1 n2 n3 n4 0.1 0.1 * 0.2)) }

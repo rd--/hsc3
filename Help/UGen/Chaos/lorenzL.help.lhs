@@ -22,17 +22,19 @@ instability.  A safe choice is the default amount of 0.05.
 Vary frequency
 
 > let x = mouseX KR 20 sampleRate Linear 0.1
-> audition (out 0 (lorenzL AR x 10 27 2.667 0.05 0.1 0 0 * 0.3))
+> in audition (out 0 (lorenzL AR x 10 27 2.667 0.05 0.1 0 0 * 0.3))
 
 Randomly modulate params
 
-> n0 <- return . (+ 10) . (* 2)   =<< lfNoise0 KR 1
-> n1 <- return . (+ 38) . (* 20)  =<< lfNoise0 KR 1
-> n2 <- return . (+ 2)  . (* 1.5) =<< lfNoise0 KR 1
-> audition (out 0 (lorenzL AR sampleRate n0 n1 n2 0.05 0.1 0 0 * 0.2))
+> let { madd a m = return . (+ a) . (* m)
+>     ; n = lfNoise0 KR 1 }
+> in do { n0 <- madd 10 2 =<< n
+>       ; n1 <- madd 38 20 =<< n
+>       ; n2 <- madd 2 1.5 =<< n
+>       ; audition (out 0 (lorenzL AR sampleRate n0 n1 n2 0.05 0.1 0 0 * 0.2)) }
 
 As frequency control
 
-> let x = mouseX KR 1 200 Linear 0.1
->     n = lorenzL AR x 10 28 2.667 0.05 0.1 0 0 
-> audition (out 0 (sinOsc AR (lag n 0.003 * 800 + 900) 0 * 0.4))
+> let { x = mouseX KR 1 200 Linear 0.1
+>     ; n = lorenzL AR x 10 28 2.667 0.05 0.1 0 0 }
+> in audition (out 0 (sinOsc AR (lag n 0.003 * 800 + 900) 0 * 0.4))
