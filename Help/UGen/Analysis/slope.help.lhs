@@ -10,8 +10,10 @@ in - input signal to measure.
 In the example below a is quadratic noise, b first derivative line
 segments, and c second derivative constant segments.
 
-> a <- lfNoise2 KR 2
-> let s = 1/2
->     b = slope a * s
->     c = slope b * squared s
-> audition (out 0 (mix (sinOsc AR (mce [a, b, c] * 220 + 220) 0 * (1/3))))
+> do { a <- lfNoise2 KR 2
+>    ; let { s = 1/2
+>          ; b = slope a * s
+>          ; c = slope b * squared s 
+>          ; f = mce [a, b, c] * 220 + 220
+>          ; o = sinOsc AR f 0 * (1/3) }
+>      in audition (out 0 (mix o)) }

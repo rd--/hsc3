@@ -8,4 +8,4 @@ numsamp - How many samples to take the running sum over
           (initialisation rate)
 
 > let a = runningSum (in' 1 AR numOutputBuses) 40 * (1/40)
-> audition (out 0 (sinOsc AR 440 0 * a))
+> in audition (out 0 (sinOsc AR 440 0 * a))
