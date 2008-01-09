@@ -127,6 +127,16 @@
 	       s)))
     (hsc3-send-string s*)))
 
+(defun hsc3-run-multiple-lines ()
+  "Send the current region to the interpreter as a single line."
+  (interactive)
+  (let* ((s (buffer-substring-no-properties (region-beginning)
+					    (region-end)))
+	 (s* (if hsc3-literate-p
+		 (hsc3-unlit s)
+	       s)))
+    (hsc3-send-string (replace-regexp-in-string "\n" " " s*))))
+
 (defun hsc3-run-region ()
   "Place the region in a do block and compile."
   (interactive)
@@ -180,6 +190,7 @@
   (define-key map [?\C-c ?\C-k] 'hsc3-reset-scsynth)
   (define-key map [?\C-c ?\C-w] 'hsc3-status-scsynth)
   (define-key map [?\C-c ?\C-c] 'hsc3-run-line)
+  (define-key map [?\C-c ?\C-r] 'hsc3-run-multiple-lines)
   (define-key map [?\C-c ?\C-e] 'hsc3-run-region)
   (define-key map [?\C-c ?\C-l] 'hsc3-load-buffer)
   (define-key map [?\C-c ?\C-i] 'hsc3-interrupt-haskell)
@@ -195,6 +206,7 @@
   (local-set-key [?\C-c ?\C-k] 'hsc3-reset-scsynth)
   (local-set-key [?\C-c ?\C-w] 'hsc3-status-scsynth)
   (local-set-key [?\C-c ?\C-c] 'hsc3-run-line)
+  (local-set-key [?\C-c ?\C-r] 'hsc3-run-multiple-lines)
   (local-set-key [?\C-c ?\C-e] 'hsc3-run-region)
   (local-set-key [?\C-c ?\C-l] 'hsc3-load-buffer)
   (local-set-key [?\C-c ?\C-i] 'hsc3-interrupt-haskell)
@@ -218,6 +230,8 @@
     '("Run main" . hsc3-run-main))
   (define-key map [menu-bar hsc3 expression run-region]
     '("Run region" . hsc3-run-region))
+  (define-key map [menu-bar hsc3 expression run-multiple-lines]
+    '("Run multiple lines" . hsc3-run-multiple-lines))
   (define-key map [menu-bar hsc3 expression run-line]
     '("Run line" . hsc3-run-line))
   (define-key map [menu-bar hsc3 scsynth]
