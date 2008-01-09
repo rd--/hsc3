@@ -14,14 +14,16 @@ trig  - Trigger can be any signal. A trigger happens when
 
 reset - Resets the list of ugens when triggered.
 
-> r <- dust KR 1
-> s <- dgeom 64 (midiCPS 72) (midiRatio 1)
-> let t = impulse KR 10 0
->     f = demand t r s
-> audition (out 0 (max (cubed (sinOsc AR (mce [f, f + 0.7]) 0)) 0 * 0.1))
+> do { r <- dust KR 1
+>    ; s <- dgeom 64 (midiCPS 72) (midiRatio 1)
+>    ; let { t = impulse KR 10 0
+>          ; f = demand t r s 
+>          ; o = sinOsc AR (mce [f, f + 0.7]) 0 }
+>      in audition (out 0 (max (cubed o) 0 * 0.1)) }
 
-> n <- diwhite 8192 60 72
-> let t = impulse KR 10 0
->     s = midiCPS n
->     f = demand t 0 s
-> audition (out 0 (cubed (cubed (sinOsc AR (mce [f, f + 0.7]) 0)) * 0.1))
+> do { n <- diwhite 8192 60 72
+>    ; let { t = impulse KR 10 0
+>          ; s = midiCPS n
+>          ; f = demand t 0 s
+>          ; o = sinOsc AR (mce [f, f + 0.7]) 0 }
+>      in audition (out 0 (cubed (cubed o) * 0.1)) }
