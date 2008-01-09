@@ -25,7 +25,7 @@ freeSelf i = mkFilter "FreeSelf" [i] 0
 
 -- | Free node on done action at source.
 freeSelfWhenDone :: UGen -> UGen
-freeSelfWhenDone i = mkFilter "FreeSelfWhenDone" [i] 0
+freeSelfWhenDone i = mkFilter "FreeSelfWhenDone" [i] 1
 
 -- | Pause specified node on trigger.
 pause :: UGen -> UGen -> UGen
