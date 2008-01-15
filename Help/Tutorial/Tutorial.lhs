@@ -152,6 +152,17 @@ file, /tmp/hsc3.lhs, loads the file and then runs the procedure.  The
 preamble imports the modules listed at the emacs variable
 hsc3-modules.
 
+ghci understands import expressions, so to add a module to
+the current scope it is enough to type C-cC-c at an appropriate
+location.  If hsc3-dot is installed, the following lines will
+make a drawing.
+
+> import Sound.SC3.UGen.Dot
+
+> let { o = control KR "bus" 0
+>     ; f = mouseX KR 440 880 Exponential 0.1 }
+> in draw (out o (sinOsc AR f 0))
+
 * Help Files
 
 To find help on a UGen or on a SuperCollider server command place the
