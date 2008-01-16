@@ -1,5 +1,5 @@
 module Sound.SC3.UGen.UGen ( Name, UGenId(..), UGen(..), Output, Special(..)
-                           , constant, constanti, control, mce, mrg
+                           , constant, control, mce, mrg
                            , clone ) where
 
 import Control.Monad (liftM, replicateM)
@@ -30,11 +30,6 @@ data UGen = Constant { constantValue :: Double }
 -- | Constant value constructor.
 constant :: (Real a) => a -> UGen
 constant = Constant . realToFrac
-
--- | Constant value constructor from integral values.
-constanti :: (Integral a) => a -> UGen
-constanti x = let x' = fromIntegral x :: Integer
-              in constant x'
 
 -- | Control input constructor.
 control :: Rate -> Name -> Double -> UGen
