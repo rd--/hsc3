@@ -1,7 +1,7 @@
 module Sound.SC3.UGen.FFT where
 
 import Sound.SC3.UGen.Rate
-import Sound.SC3.UGen.UGen
+import Sound.SC3.UGen.UGen (UGen, constant, mce)
 import Sound.SC3.UGen.UGen.Construct
 import Sound.SC3.UGen.UGen.Math ()
 import Sound.SC3.UGen.UGen.MCE
@@ -13,7 +13,7 @@ fft buf i h wt a = mkOsc KR "FFT" [buf,i,h,wt,a] 1
 -- | Variant FFT constructor with default values for hop size, window
 -- | type, and active status.
 fft' :: UGen -> UGen -> UGen
-fft' buf i = fft buf i (Constant 0.5) 0 1
+fft' buf i = fft buf i (constant 0.5) 0 1
 
 -- | Inverse Fast Fourier Transform.
 ifft :: UGen -> UGen -> UGen
@@ -30,11 +30,11 @@ convolution i kernel frameSize = mkOsc AR "Convolution" [i, kernel, frameSize] 1
 -- | Pack demand-rate FFT bin streams into an FFT chain.
 packFFT :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 packFFT b sz from to z mp = mkOscMCE KR "PackFFT" [b, sz, from, to, z, n] mp 1
-    where n = Constant (fromIntegral (mceDegree mp))
+    where n = constant (mceDegree mp)
 
 -- | Format magnitude and phase data data as required for packFFT.
 packFFTSpec :: [UGen] -> [UGen] -> UGen
-packFFTSpec m p = MCE (interleave m p)
+packFFTSpec m p = mce (interleave m p)
     where interleave x y = concat (zipWith (\a b -> [a,b]) x y)
 
 pvcollect :: UGen -> UGen -> (UGen -> UGen -> UGen -> (UGen, UGen)) -> UGen -> UGen -> UGen -> UGen

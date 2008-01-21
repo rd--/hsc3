@@ -1,6 +1,6 @@
 module Sound.SC3.UGen.Envelope where
 
-import Sound.SC3.UGen.UGen (UGen(..))
+import Sound.SC3.UGen.UGen (UGen)
 import Sound.SC3.UGen.UGen.Construct (mkOsc, mkFilter)
 import Sound.SC3.UGen.Rate (Rate)
 import Sound.SC3.UGen.Enum (DoneAction)

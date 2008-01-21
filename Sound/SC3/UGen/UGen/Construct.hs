@@ -9,34 +9,40 @@ import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.UGen.MCE
+import Sound.SC3.UGen.UGen.Predicate
 import Sound.SC3.UGen.UId
 
 -- * UGen Constructors.
 
 -- | Apply proxy transformation if required.
-proxy :: UGen -> UGen
-proxy (MCE l) = MCE (map proxy l)
-proxy (MRG x y) = MRG (proxy x) y
-proxy u@(UGen _ _ _ o _ _) = case o of
-                               (_:_:_) -> MCE (map (Proxy u) [0..(length o - 1)])
-                               _       -> u
-proxy _ = error "proxy: illegal ugen"
+proxify :: UGen -> UGen
+proxify u 
+    | isMCE u = mce (map proxify (mceProxies u))
+    | isMRG u = mrg [proxify (mrgLeft u), mrgRight u]
+    | isUGen u = let o = ugenOutputs u
+                 in case o of
+                      (_:_:_) -> mce (map (proxy u) [0..(length o - 1)])
+                      _ -> u
+    | otherwise = error "proxify: illegal ugen"
 
 -- | Determine the rate of a UGen.
 rateOf :: UGen -> Rate
-rateOf (Constant _) = IR
-rateOf (Control r _ _) = r
-rateOf (UGen r _ _ _ _ _) = r
-rateOf (Proxy u _) = rateOf u
-rateOf (MCE u) = maximum (map rateOf u)
-rateOf (MRG u _) = rateOf u
+rateOf u
+    | isConstant u = IR
+    | isControl u = controlRate_ u
+    | isUGen u = ugenRate u
+    | isProxy u = rateOf (proxySource u)
+    | isMCE u = maximum (map rateOf (mceProxies u))
+    | isMRG u = rateOf (mrgLeft u)
+    | otherwise = undefined
 
 -- | True is input is a sink UGen, ie. has no outputs.
 isSink :: UGen -> Bool
-isSink (UGen _ _ _ o _ _) = null o
-isSink (MCE u) = all isSink u
-isSink (MRG l _) = isSink l
-isSink _ = False
+isSink u
+    | isUGen u = null (ugenOutputs u)
+    | isMCE u = all isSink (mceProxies u)
+    | isMRG u = isSink (mrgLeft u)
+    | otherwise = False
 
 -- | Ensure input UGen is valid, ie. not a sink.
 checkInput :: UGen -> UGen
@@ -44,7 +50,7 @@ checkInput u = if isSink u then error ("illegal input" ++ show u) else u
 
 -- | Construct proxied and multiple channel expanded UGen.
 mkUGen :: Rate -> Name -> [UGen] -> [Output] -> Special -> UGenId -> UGen
-mkUGen r n i o s z = proxy (mceExpand u)
+mkUGen r n i o s z = proxify (mceExpand u)
     where u = UGen r n (map checkInput i) o s z
 
 -- | Operator UGen constructor.
@@ -54,13 +60,17 @@ mkOperator c i s = mkUGen r c i [r] (Special s) (UGenId 0)
 
 -- | Unary math constructor with constant optimization.
 mkUnaryOperator :: Unary -> (Double -> Double) -> UGen -> UGen
-mkUnaryOperator _ f (Constant a) = Constant (f a)
-mkUnaryOperator i _ a = mkOperator "UnaryOpUGen" [a] (fromEnum i)
+mkUnaryOperator i f a 
+    | isConstant a = constant (f (constantValue a))
+    | otherwise = mkOperator "UnaryOpUGen" [a] (fromEnum i)
 
 -- | Binary math constructor with constant optimization.
 mkBinaryOperator :: Binary -> (Double -> Double -> Double) -> UGen -> UGen -> UGen
-mkBinaryOperator _ f (Constant a) (Constant b) = Constant (f a b)
-mkBinaryOperator i _ a b = mkOperator "BinaryOpUGen" [a, b] (fromEnum i)
+mkBinaryOperator i f a b 
+    | isConstant a && isConstant b = let a' = constantValue a
+                                         b' = constantValue b
+                                     in constant (f a' b')
+    | otherwise = mkOperator "BinaryOpUGen" [a, b] (fromEnum i)
 
 -- | Oscillator constructor.
 mkOscId :: UGenId -> Rate -> Name -> [UGen] -> Int -> UGen

@@ -1,5 +1,5 @@
 module Sound.SC3.UGen.UGen ( Name, UGenId(..), UGen(..), Output, Special(..)
-                           , constant, control, mce, mrg
+                           , constant, control, mce, mrg, proxy
                            , clone ) where
 
 import Control.Monad (liftM, replicateM)
@@ -17,7 +17,7 @@ data UGen = Constant { constantValue :: Double }
           | UGen { ugenRate :: Rate
                  , ugenName :: Name
                  , ugenInputs :: [UGen]
-                 , ugenOuputs :: [Output]
+                 , ugenOutputs :: [Output]
                  , ugenSpecial :: Special
                  , ugenId :: UGenId }
           | Proxy { proxySource :: UGen
@@ -44,6 +44,9 @@ mrg :: [UGen] -> UGen
 mrg [] = undefined
 mrg [x] = x
 mrg (x:xs) = MRG x (mrg xs)
+
+proxy :: UGen -> Int -> UGen
+proxy = Proxy
 
 -- | Clone UGen.
 clone :: (UId m) => Int -> m UGen -> m UGen

@@ -1,7 +1,7 @@
 module Sound.SC3.UGen.Oscillator where
 
 import Sound.SC3.UGen.Rate (Rate(AR))
-import Sound.SC3.UGen.UGen (UGen(MCE))
+import Sound.SC3.UGen.UGen (UGen, mce)
 import Sound.SC3.UGen.UGen.Construct (mkOsc, mkOscMCE)
 import Data.List(transpose)
 
@@ -31,7 +31,7 @@ klang r fs fo a = mkOscMCE r "Klang" [fs, fo] a 1
 
 -- | Format frequency, amplitude and phase data as required for klang.
 klangSpec :: [UGen] -> [UGen] -> [UGen] -> UGen
-klangSpec f a p = MCE ((concat . transpose) [f, a, p])
+klangSpec f a p = mce ((concat . transpose) [f, a, p])
 
 -- | Upsample control rate signal to audio rate.
 k2A :: UGen -> UGen

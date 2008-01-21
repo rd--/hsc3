@@ -1,7 +1,7 @@
 module Sound.SC3.UGen.Topological (tsort) where
 
 import Data.List
-import Sound.SC3.UGen.UGen
+import Sound.SC3.UGen.UGen (UGen)
 import Sound.SC3.UGen.UGen.Predicate
 
 -- Topological sort.

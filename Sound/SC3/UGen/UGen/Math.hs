@@ -12,15 +12,15 @@ instance Num UGen where
     (*)            = mkBinaryOperator Mul (*)
     abs            = mkUnaryOperator Abs abs
     signum         = mkUnaryOperator Sign signum
-    fromInteger a  = Constant (fromInteger a)
+    fromInteger    = constant . fromInteger
 
 instance Fractional UGen where
     recip          = mkUnaryOperator Recip recip
     (/)            = mkBinaryOperator FDiv (/)
-    fromRational a = Constant (fromRational a)
+    fromRational   = constant . fromRational
 
 instance Floating UGen where
-    pi             = Constant pi
+    pi             = constant pi
     exp            = mkUnaryOperator Exp exp
     log            = mkUnaryOperator Log log
     sqrt           = mkUnaryOperator Sqrt sqrt
@@ -67,7 +67,7 @@ instance Ord UGen where
 instance Enum UGen where
     succ u                = u + 1
     pred u                = u - 1
-    toEnum i              = Constant (fromIntegral i)
+    toEnum i              = constant i
     fromEnum (Constant n) = truncate n
     fromEnum _            = error "cannot enumerate non-constant UGens"
     enumFrom              = iterate (+1)
@@ -77,7 +77,7 @@ instance Enum UGen where
         where p = if n' >= n then (>=) else (<=)
 
 instance Random UGen where
-    randomR (Constant l, Constant r) g = (Constant n, g') 
-        where (n, g') = randomR (l,r) g
-    randomR _                        _ = error "randomR: non constant (l,r)"
-    random g = randomR (-1.0,1.0) g
+    randomR (Constant l, Constant r) g = let (n, g') = randomR (l,r) g
+                                         in (constant n, g')
+    randomR _ _ = error "randomR: non constant (l,r)"
+    random g = randomR (-1.0, 1.0) g

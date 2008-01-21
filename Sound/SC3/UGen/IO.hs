@@ -1,7 +1,7 @@
 module Sound.SC3.UGen.IO where
 
-import Sound.SC3.UGen.Rate
-import Sound.SC3.UGen.UGen
+import Sound.SC3.UGen.Rate (Rate(KR,AR))
+import Sound.SC3.UGen.UGen (UGen)
 import Sound.SC3.UGen.UGen.Construct
 import Sound.SC3.UGen.Enum (Warp)
 import Sound.SC3.UGen.Utilities (fromWarp)

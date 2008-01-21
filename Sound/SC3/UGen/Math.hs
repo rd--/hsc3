@@ -1,7 +1,7 @@
 module Sound.SC3.UGen.Math where
 
 import Sound.SC3.UGen.Operator
-import Sound.SC3.UGen.UGen
+import Sound.SC3.UGen.UGen (UGen)
 import Sound.SC3.UGen.UGen.Construct
 import Sound.SC3.UGen.UGen.Math ()
 
