@@ -54,7 +54,8 @@ Exposed-modules:  Sound.SC3
                   Sound.SC3.Server.NRT
 Other-modules:    Sound.SC3.Server.Utilities
                   Sound.SC3.UGen.Utilities
-Data-files:       emacs/hsc3.el
+Data-files:       README
+                  emacs/hsc3.el
                   Help/Server/b_alloc.help.lhs
                   Help/Server/b_allocRead.help.lhs
                   Help/Server/b_close.help.lhs
