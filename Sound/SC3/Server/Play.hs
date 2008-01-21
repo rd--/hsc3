@@ -2,7 +2,7 @@ module Sound.SC3.Server.Play ( play, stop, reset
                              , withSC3, audition, auditionG ) where
 
 import Sound.OpenSoundControl
-import Sound.SC3.UGen.UGen
+import Sound.SC3.UGen.UGen (UGen)
 import Sound.SC3.UGen.Graph
 import Sound.SC3.Server.Graphdef
 import Sound.SC3.Server.Command
