@@ -40,9 +40,9 @@ packFFTSpec m p = mce (interleave m p)
 pvcollect :: UGen -> UGen -> (UGen -> UGen -> UGen -> (UGen, UGen)) -> UGen -> UGen -> UGen -> UGen
 pvcollect c nf f from to z = packFFT c nf from to z mp
   where m = unpackFFT c nf from to 0
-	p = unpackFFT c nf from to 1
-	i = [from .. to]
-	e = zipWith3 f m p i
+        p = unpackFFT c nf from to 1
+        i = [from .. to]
+        e = zipWith3 f m p i
         mp = (uncurry packFFTSpec) (unzip e)
 
 pv_Add :: UGen -> UGen -> UGen
