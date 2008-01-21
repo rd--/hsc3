@@ -11,7 +11,7 @@ Description:      Haskell client for the SuperCollider synthesis server
 Category:         Sound
 Tested-With:      GHC
 Build-Depends:    base, binary, bytestring, hosc, network, random
-GHC-Options:      -Wall -fno-warn-orphans -O2
+GHC-Options:      -Wall -fno-warn-orphans -fno-warn-type-defaults -fwarn-tabs -O2
 Exposed-modules:  Sound.SC3
                   Sound.SC3.UGen
                   Sound.SC3.UGen.Analysis
