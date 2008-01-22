@@ -14,12 +14,12 @@ data UGen = Constant { constantValue :: Double }
           | Control { controlRate_ :: Rate
                     , controlName :: Name
                     , controlDefault :: Double }
-          | UGen { ugenRate :: Rate
-                 , ugenName :: Name
-                 , ugenInputs :: [UGen]
-                 , ugenOutputs :: [Output]
-                 , ugenSpecial :: Special
-                 , ugenId :: UGenId }
+          | Primitive { ugenRate :: Rate
+                      , ugenName :: Name
+                      , ugenInputs :: [UGen]
+                      , ugenOutputs :: [Output]
+                      , ugenSpecial :: Special
+                      , ugenId :: UGenId }
           | Proxy { proxySource :: UGen
                   , proxyIndex :: Int }
           | MCE { mceProxies :: [UGen] }

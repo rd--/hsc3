@@ -14,8 +14,8 @@ isControl _               = False
 
 -- | UGen predicate.
 isUGen :: UGen -> Bool
-isUGen (UGen _ _ _ _ _ _) = True
-isUGen _                  = False
+isUGen (Primitive _ _ _ _ _ _) = True
+isUGen _ = False
 
 -- | Proxy predicate.
 isProxy :: UGen -> Bool

@@ -20,8 +20,8 @@ mceExtend n u = replicate n u
 
 -- | Apply MCE transformation.
 mceTransform :: UGen -> UGen
-mceTransform (UGen r n i o s d) = MCE (map f i')
-    where f j = UGen r n j o s d
+mceTransform (Primitive r n i o s d) = MCE (map f i')
+    where f j = Primitive r n j o s d
           upr = maximum (map mceDegree (filter isMCE i))
           i' = transpose (map (mceExtend upr) i)
 mceTransform _ = error "mceTransform: illegal ugen"
@@ -31,7 +31,7 @@ mceExpand :: UGen -> UGen
 mceExpand (MCE l) = MCE (map mceExpand l)
 mceExpand (MRG x y) = MRG (mceExpand x) y
 mceExpand u = if required u then mceExpand (mceTransform u) else u
-    where required (UGen _ _ i _ _ _) = not (null (filter isMCE i))
+    where required (Primitive _ _ i _ _ _) = not (null (filter isMCE i))
           required (MCE l) = any required l
           required _ = False
 

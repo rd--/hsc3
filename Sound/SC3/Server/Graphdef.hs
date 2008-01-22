@@ -21,13 +21,13 @@ encode_control _ _  = error "encode_control: illegal input"
 
 -- | Byte-encode UGen value.
 encode_ugen :: Graph -> UGen -> B.ByteString
-encode_ugen g (UGen r n i o s _) = B.concat [ B.pack (str_pstr n)
-                                            , encode_i8 (rateId r)
-                                            , encode_i16 (length i)
-                                            , encode_i16 (length o)
-                                            , encode_i16 s'
-                                            , B.concat i'
-                                            , B.concat o' ]
+encode_ugen g (Primitive r n i o s _) = B.concat [ B.pack (str_pstr n)
+                                                 , encode_i8 (rateId r)
+                                                 , encode_i16 (length i)
+                                                 , encode_i16 (length o)
+                                                 , encode_i16 s'
+                                                 , B.concat i'
+                                                 , B.concat o' ]
     where i' = map (encode_input . makeInput g) i
           o' = map (encode_i8 . rateId) o
           (Special s') = s

@@ -17,7 +17,7 @@ data Input = Input Int Int deriving (Eq, Show)
 
 -- | The list of all UGens referenced in a UGen graph.
 nodes :: UGen -> [UGen]
-nodes u@(UGen _ _ i _ _ _) = u : concatMap nodes i
+nodes u@(Primitive _ _ i _ _ _) = u : concatMap nodes i
 nodes (Proxy u _) = u : nodes u
 nodes (MCE u) = concatMap nodes u
 nodes (MRG x y) = nodes x ++ nodes y
@@ -25,12 +25,12 @@ nodes u = [u]
 
 -- | Construct implicit control UGen (k-rate only).
 implicit :: Int -> UGen
-implicit n = UGen KR "Control" [] (replicate n KR) (Special 0) (UGenId 0)
+implicit n = Primitive KR "Control" [] (replicate n KR) (Special 0) (UGenId 0)
 
 -- | Generate the set of edges given the complete set of UGens.
 edges :: [UGen] -> [Edge]
 edges us = concatMap ugenEdges us
-    where ugenEdges u@(UGen _ _ i _ _ _) = map f i'
+    where ugenEdges u@(Primitive _ _ i _ _ _) = map f i'
                where g (v, _) = or [isUGen v, isProxy v, isControl v, isMRG v]
                      n = length i - 1
                      i' = filter g $ zip i [0..n]
@@ -67,13 +67,13 @@ controlIndex (Graph _ c _ _) x = elemIndex' x c
 nodeIndex :: Graph -> UGen -> Int
 nodeIndex g u@(Constant _) = constantIndex g u
 nodeIndex g u@(Control _ _ _) = controlIndex g u
-nodeIndex g u@(UGen _ _ _ _ _ _) = ugenIndex g u
+nodeIndex g u@(Primitive _ _ _ _ _ _) = ugenIndex g u
 nodeIndex g (MRG u _) = ugenIndex g u
 nodeIndex _ _ = error "nodeIndex: illegal input"
 
 -- | Construct Input value for UGen in Graph.
 makeInput :: Graph -> UGen -> Input
-makeInput g u@(UGen _ _ _ _ _ _) = Input (ugenIndex g u) 0
+makeInput g u@(Primitive _ _ _ _ _ _) = Input (ugenIndex g u) 0
 makeInput g u@(Constant _) = Input (-1) (constantIndex g u)
 makeInput g u@(Control _ _ _) = Input 0 (controlIndex g u)
 makeInput g (Proxy u n) = Input (ugenIndex g u) n

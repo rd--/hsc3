@@ -51,7 +51,7 @@ checkInput u = if isSink u then error ("illegal input" ++ show u) else u
 -- | Construct proxied and multiple channel expanded UGen.
 mkUGen :: Rate -> Name -> [UGen] -> [Output] -> Special -> UGenId -> UGen
 mkUGen r n i o s z = proxify (mceExpand u)
-    where u = UGen r n (map checkInput i) o s z
+    where u = Primitive r n (map checkInput i) o s z
 
 -- | Operator UGen constructor.
 mkOperator :: Name -> [UGen] -> Int -> UGen
