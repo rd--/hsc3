@@ -13,7 +13,7 @@ fft buf i h wt a = mkOsc KR "FFT" [buf,i,h,wt,a] 1
 -- | Variant FFT constructor with default values for hop size, window
 -- | type, and active status.
 fft' :: UGen -> UGen -> UGen
-fft' buf i = fft buf i (constant 0.5) 0 1
+fft' buf i = fft buf i 0.5 0 1
 
 -- | Inverse Fast Fourier Transform.
 ifft :: UGen -> UGen -> UGen

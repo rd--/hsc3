@@ -12,15 +12,15 @@ instance Num UGen where
     (*)            = mkBinaryOperator Mul (*)
     abs            = mkUnaryOperator Abs abs
     signum         = mkUnaryOperator Sign signum
-    fromInteger    = constant . fromInteger
+    fromInteger    = Constant . fromInteger
 
 instance Fractional UGen where
     recip          = mkUnaryOperator Recip recip
     (/)            = mkBinaryOperator FDiv (/)
-    fromRational   = constant . fromRational
+    fromRational   = Constant . fromRational
 
 instance Floating UGen where
-    pi             = constant pi
+    pi             = Constant pi
     exp            = mkUnaryOperator Exp exp
     log            = mkUnaryOperator Log log
     sqrt           = mkUnaryOperator Sqrt sqrt
@@ -78,6 +78,6 @@ instance Enum UGen where
 
 instance Random UGen where
     randomR (Constant l, Constant r) g = let (n, g') = randomR (l,r) g
-                                         in (constant n, g')
+                                         in (Constant n, g')
     randomR _ _ = error "randomR: non constant (l,r)"
     random g = randomR (-1.0, 1.0) g
