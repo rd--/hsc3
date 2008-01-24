@@ -50,4 +50,4 @@ proxy = Proxy
 
 -- | Clone UGen.
 clone :: (UId m) => Int -> m UGen -> m UGen
-clone n u = liftM MCE (replicateM n u)
+clone n u = liftM mce (replicateM n u)
