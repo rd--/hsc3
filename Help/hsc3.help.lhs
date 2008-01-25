@@ -26,6 +26,20 @@ the computer music language are an expressive
 notation for music structures and tolerable
 efficiency.
 
+* What needs to be done
+
+The requirements are rather minimal.
+
+An open sound control protocol implementation and
+a usable notation for server commands.
+
+A unit generator graph protocol implementation and
+a usable notation for writing graphs.
+
+For interactive use a suitably responsive run time
+system, where suitable is a function of the kind
+of work being done.
+
 * Questions, San Dimas, 1965
 
 | (1) What are declarative languages? 
