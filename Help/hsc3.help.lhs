@@ -304,10 +304,14 @@ where UId is defined as:
 
 The signature indicates that whiteNoise is a
 function from a Rate value to an (m UGen)
-value. It is quite clear that an (m UGen) is not a
-UGen.
+value. 
 
-Compare this with the signature for the
+* Non-determinism, monadic structure, do notation
+
+It is quite clear that a value of type (m UGen) is
+not of type UGen.
+
+Compare the whiteNoise signature with that of the
 deterministic sin oscillator:
 
 > sinOsc :: Rate -> UGen -> UGen -> UGen
