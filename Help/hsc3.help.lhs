@@ -142,8 +142,8 @@ the clone function:
 which is defined in relation to the standard 
 monad functions replicateM and liftM.
 
-> clone :: (UId m) => Int -> m UGen -> m UGen
-> clone n u = liftM mce (replicateM n u)
+| clone :: (UId m) => Int -> m UGen -> m UGen
+| clone n u = liftM mce (replicateM n u)
 
 * Multiple Root Graphs
 
