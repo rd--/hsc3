@@ -340,7 +340,7 @@ It is the type of audition that determines the
 type of a, the type is inferred so there is no
 need to write it.
 
-* Demand Rate, Sharing
+* Demand Rate, Sharing Again
 
 Demand rate UGens are similarly not functions only
 of their arguments.
@@ -355,8 +355,31 @@ generator.
 | ; var f = Demand.kr(t, 0, [a, a]) * 30 + 340
 | ; Out.ar(0, SinOsc.ar(f, 0) * 0.1) }.play
 
-The distintion here concerns multiple nodes
-reading from a single demand rate source.
+The distintion here concerns multiple
+reads from a single demand rate source, ie. 
+it is not that the source is non-deterministic,
+it is rather that each read request consumes 
+the value it reads.
+
+Therefore in haskell demand rate unit generators have 
+similar constructor functions to non-deterministic
+unit generators, in order that we can distinguish:
+
+> do { a <- dseq 3 (mce [1, 3, 2, 7, 8])
+>    ; let { t = impulse KR 5 0
+>          ; f = demand t 0 (mce [a, a]) * 30 + 340 }
+>      in audition (out 0 (sinOsc AR f 0 * 0.1)) }
+
+which is the same graph as given in supercollider
+language above, from:
+
+> do { a <- clone 2 (dseq 3 (mce [1, 3, 2, 7, 8]))
+>    ; let { t = impulse KR 5 0
+>          ; f = demand t 0 a * 30 + 340 }
+>      in audition (out 0 (sinOsc AR f 0 * 0.1)) }
+
+which gives an equal sequence of tones in each 
+channel.
 
 * References
 
