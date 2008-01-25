@@ -7,24 +7,40 @@ server.
 This document does not contain introductory 
 materials for haskell or supercollider. 
 
-* Questions, Dartmouth, 2000
+* Questions, Dartmouth, 2002
 
 | What should a computer music language do?
 | ...
 | Is a specialized computer music language 
-| even necessary? (McCartney, 2000)
+| even necessary? (McCartney, 2002)
 
-If we have a well designed, highly efficient and
-musically neutral real-time synthesiser (such as
-the paper above describes) the computer music
-language is relieved of many of the most onerous
-tasks that are required for providing real-time
-music synthesis.
+These questions are asked in a paper that
+documents a reimplementation of the supercollider
+language for real time audio synthesis (McCartney,
+1998).
 
-In such a system the primary tasks that fall to
-the computer music language are an expressive
-notation for music structures and tolerable
-efficiency.
+The redesigned system consists of two parts, an
+elegant, efficient, and musically neutral real
+time audio synthesiser in the music-n family
+(Mathews, 1961), and a language interpreter in the
+smalltalk family (Goldberg, 1983).
+
+The interpreter and synthesiser communicate using
+the open sound control protocol (Wright & Freed,
+1997).
+
+Using this model of discrete communicating
+processes, the computer music language is relieved
+of many onerous tasks.
+
+It is precisely the existence of an appropriate
+synthesis engine that allows us to consider using
+haskell for real time musical work.
+
+* Notations, equivalence, reactivity
+
+| Computer music composition is a specification
+| problem.  (McCartney, 1998)
 
 * What needs to be done
 
@@ -408,7 +424,11 @@ channel.
 
 * References
 
-+ P. Hudak, J. Hughes, S.P. Jones, and P. Wadler.
++ A. Goldberg and D. Robson.  Smalltalk-80: The
+  language and its implementation.
+  Addison-Wesley, Reading, MA, 1983.
+
++ P. Hudak, J. Hughes, S. P. Jones, and P. Wadler.
   A History of Haskell: being lazy with class.  In
   The Third ACM SIGPLAN History of Programming
   Languages Conference, San Diego, California,
@@ -419,9 +439,20 @@ channel.
   1966.  Presented at the ACM Programming and
   Pragmatics Conference, August 1965.
 
++ M. V. Mathews.  An Acoustical Compiler for Music
+  and Psychological Stimuli.  AT&T Bell
+  Laboratories Technical Journal, 40:677-694,
+  1961.
+
 + J. McCarthy.  Recursive functions of symbolic
   expressions and their computation by machine.
   Communications of the ACM, 3(4):184-195, 1960.
+
++ J. McCartney.  Continued evolution of the
+  SuperCollider real time synthesis environment.
+  In Proceedings of the International Computer
+  Music Conference, pages 133-136. International
+  Computer Music Association, 1998.
 
 + J. McCartney.  Rethinking the Computer Music
   Language: SuperCollider.  Computer Music
