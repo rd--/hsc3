@@ -5,8 +5,7 @@ bindings to the supercollider synthesis
 server.
 
 This document does not contain introductory 
-materials for haskell or supercollider, for
-each of these there are numerous resources. 
+materials for haskell or supercollider. 
 
 * Questions, Dartmouth, 2000
 
