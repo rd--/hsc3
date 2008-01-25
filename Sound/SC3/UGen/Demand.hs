@@ -3,12 +3,14 @@ module Sound.SC3.UGen.Demand where
 import Sound.SC3.UGen.Rate (Rate)
 import Sound.SC3.UGen.UGen (UGen)
 import Sound.SC3.UGen.UGen.Construct (mkOsc, mkOscMCE, mkFilterKeyed)
+import Sound.SC3.UGen.UGen.MCE (mceChannels)
 import Sound.SC3.UGen.Enum (DoneAction)
 import Sound.SC3.UGen.Utilities (fromDoneAction)
 
 -- | Demand results from demand rate ugens.
 demand :: UGen -> UGen -> UGen -> UGen
-demand t r d = mkFilterKeyed "Demand" 0 [t, r, d] 1
+demand t r d = mkFilterKeyed "Demand" 0 (t : r : d') (length d')
+    where d' = mceChannels d
 
 -- | Demand envlope generator.
 demandEnvGen :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> DoneAction -> UGen
