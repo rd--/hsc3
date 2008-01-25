@@ -194,7 +194,8 @@ It is for this reason that we can write:
 > sinOsc AR 440.0 0 * 0.1
 
 but must explicity construct constants from values
-of a concrete numerical type.
+of a concrete numerical type using the constant 
+function.
 
 > let { f = 440.0 :: Double
 >     ; p = 0 :: Int 
