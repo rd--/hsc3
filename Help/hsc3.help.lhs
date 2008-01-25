@@ -261,10 +261,17 @@ In supercollider language, the graph
 does not describe silence, it describes white
 noise.
 
+We read WhiteNoise.ar as a computation that
+constructs an value, not as an expression that
+denotes a value.
+
 In procedural languages we are familiar with many
-different types of equality, and read
-WhiteNoise.ar as a computation that creates an
-object, not as an expression that denotes a value.
+different types of equality.  Scheme has eq?, eqv?
+and equal?, supercollider language has == and ===.
+
+| { var a = "x"
+| ; var b = "x"
+| ; [a == b, a === b] }.value
 
 In a purely functional language expressions denote
 values, and equal expressions denote the same
@@ -279,9 +286,9 @@ expression:
 > in audition (out 0 (c * 0.1))
 
 describes silence.  To describe white noise we
-would need to distinguish a and b, which could be
-done by providing non-equal identifiers in place
-of z.
+would need to distinguish a and b, which can only
+be done by providing non-equal identifiers in
+place of z.
 
 The whiteNoise function used above is written
 using a fully qualified name because it is not the
