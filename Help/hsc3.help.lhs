@@ -63,7 +63,7 @@ language (Strachey, 1967).
 
 Since unit generators are a sort of numerical
 value, we wish to make their representation
-ammenable to the standard haskell numerical type
+amenable to the standard haskell numerical type
 classes.
 
 These give signatures such as:
@@ -81,7 +81,7 @@ generators operating at varying rates and with
 varying numbers of input and output ports.
 
 This leads us to a representation that is simple
-but somewhat uniformative, and delays evaluating
+but somewhat uninformative, and delays evaluating
 unit generator graph correctness to run-time.
 
 We note that a more rigorous type representation
@@ -207,7 +207,7 @@ It is for this reason that we can write:
 
 > sinOsc AR 440.0 0 * 0.1
 
-but must explicity construct constants from values
+but must explicitly construct constants from values
 of a concrete numerical type using the constant 
 function.
 
@@ -369,7 +369,7 @@ generator.
 | ; var f = Demand.kr(t, 0, [a, a]) * 30 + 340
 | ; Out.ar(0, SinOsc.ar(f, 0) * 0.1) }.play
 
-The distintion here concerns multiple
+The distinction here concerns multiple
 reads from a single demand rate source, ie. 
 it is not that the source is non-deterministic,
 it is rather that each read request consumes 
