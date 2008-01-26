@@ -1,4 +1,4 @@
-module Sound.SC3.Server.Play ( play, stop, reset
+module Sound.SC3.Server.Play ( play, stop, reset, async
                              , withSC3, audition, auditionG ) where
 
 import Sound.OpenSoundControl
@@ -22,6 +22,10 @@ play fd = playG fd . graph
 -- | Free all nodes at the group with node id 1.
 stop :: Transport t => t -> IO ()
 stop fd = send fd (g_freeAll [1])
+
+-- | Send an osc message and wait for a reply.
+async :: Transport t => t -> OSC -> IO OSC
+async fd m = send fd m >> wait fd "/done"
 
 -- | Free all nodes and re-create group node with id 1.
 reset :: Transport t => t -> IO ()
