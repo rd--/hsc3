@@ -21,16 +21,13 @@ envCoord bp dur amp c = env l t (repeat c) (-1) (-1)
     where l = map (* amp) (map snd bp)
           t = map (* dur) (d_dx (map fst bp))
 
--- | Trapezoidal envelope generator.
-envTrapezoid ::
-     UGen {- ^ @shape@ determines the sustain time as a proportion of @dur@:
-               zero is a triangular envelope, one a rectangular envelope. -}
-  -> UGen {- ^ @skew@ determines the attack\/decay ratio:
-               zero is an immediate attack and a slow decay,
-               one a slow attack and an immediate decay. -}
-  -> UGen {- ^ @dur@ -}
-  -> UGen {- ^ @amplitude@ -}
-  -> [UGen]
+{- | Trapezoidal envelope generator.  The arguments are: 1. @shape@
+determines the sustain time as a proportion of @dur@, zero is a
+triangular envelope, one a rectangular envelope; 2. @skew@ determines
+the attack\/decay ratio, zero is an immediate attack and a slow decay,
+one a slow attack and an immediate decay; 3. @duration@ in seconds;
+4. @amplitude@ as linear gain.  -}
+envTrapezoid :: UGen -> UGen -> UGen -> UGen -> [UGen]
 envTrapezoid shape skew dur amp = envCoord bp dur amp EnvLin
     where x1 = skew * (1 - shape)
           bp = [ (0, skew <=* 0)
@@ -38,22 +35,23 @@ envTrapezoid shape skew dur amp = envCoord bp dur amp EnvLin
                , (shape + x1, 1)
                , (1, skew >=* 1) ]
 
+-- | Percussive envelope, with attack, release, level and curve inputs.
 envPerc :: UGen -> UGen -> UGen -> [EnvCurve] -> [UGen]
 envPerc atk rls lvl crv = env [0.0, lvl, 0.0] [atk, rls] crv (-1.0) (-1.0)
 
 envPerc' :: [UGen]
 envPerc' = envPerc 0.01 1.0 1.0 (dbl (EnvNum (-4.0)))
 
--- Triangular envelope parameter constructor.
+-- | Triangular envelope, with duration and level inputs.
 envTriangle :: UGen -> UGen -> [UGen]
 envTriangle dur lvl =
    env [0.0, lvl, 0.0] (dbl (dur / 2.0)) (dbl EnvLin) (-1.0) (-1.0)
 
--- Sine envelope parameter constructor.
+-- | Sine envelope, with duration and level inputs.
 envSine :: UGen -> UGen -> [UGen]
 envSine dur lvl =
    env [0.0, lvl, 0.0] (dbl (dur / 2.0)) (dbl EnvSin) (-1.0) (-1.0)
 
--- Linear envelope parameter constructor.
+-- | Linear envelope parameter constructor.
 envLinen :: UGen -> UGen -> UGen -> UGen -> [EnvCurve] -> [UGen]
 envLinen aT sT rT l c = env [0, l, l, 0] [aT, sT, rT] c (-1) (-1)
