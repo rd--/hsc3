@@ -1,4 +1,4 @@
-module Sound.SC3.UGen.Mix (mix, mixFill, freqShift, splay) where
+module Sound.SC3.UGen.Composite (mix, mixFill, freqShift, splay) where
 
 import Sound.SC3.UGen.Filter
 import Sound.SC3.UGen.Oscillator

@@ -17,6 +17,7 @@ Exposed-modules:  Sound.SC3
                   Sound.SC3.UGen.Analysis
                   Sound.SC3.UGen.Buffer
                   Sound.SC3.UGen.Chaos
+                  Sound.SC3.UGen.Composite
                   Sound.SC3.UGen.Demand
                   Sound.SC3.UGen.Demand.Base
                   Sound.SC3.UGen.Demand.Monadic
@@ -33,7 +34,6 @@ Exposed-modules:  Sound.SC3
                   Sound.SC3.UGen.IO
 		  Sound.SC3.UGen.MachineListening
                   Sound.SC3.UGen.Math
-                  Sound.SC3.UGen.Mix
                   Sound.SC3.UGen.Noise.Base
                   Sound.SC3.UGen.Noise.Monadic
                   Sound.SC3.UGen.Operator
