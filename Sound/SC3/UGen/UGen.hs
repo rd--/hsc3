@@ -1,5 +1,6 @@
 module Sound.SC3.UGen.UGen ( Name, UGenId(..), UGen(..), Output, Special(..)
-                           , constant, control, mce, mrg, proxy
+                           , constant, control
+                           , mce, mce2, mrg, proxy
                            , clone ) where
 
 import Control.Monad (liftM, replicateM)
@@ -38,6 +39,10 @@ control = Control
 -- | Multiple channel expansion constructor.
 mce :: [UGen] -> UGen
 mce = MCE
+
+-- | Multiple channel expansion for two inputs.
+mce2 :: UGen -> UGen -> UGen
+mce2 x y = mce [x, y]
 
 -- | Variant multiple root graph constructor.
 mrg :: [UGen] -> UGen
