@@ -9,9 +9,9 @@ import Sound.SC3.UGen.UGen.Math ()
 import Sound.SC3.UGen.UGen.MCE
 import Sound.SC3.UGen.UGen.Predicate
 
--- | Collapse MCE by summing.
+-- | Collapse multiple channel expansion by summing.
 mix :: UGen -> UGen
-mix u | isMCE u = foldl1 (+) (mceProxies u)
+mix u | isMCE u = sum (mceProxies u)
       | otherwise = u
 
 -- | Construct and sum a set of UGens.
