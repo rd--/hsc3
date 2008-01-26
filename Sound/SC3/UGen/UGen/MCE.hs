@@ -54,3 +54,6 @@ mceChannels :: UGen -> [UGen]
 mceChannels (MCE l) = l
 mceChannels (MRG x y) = (MRG r y) : rs where (r:rs) = mceChannels x
 mceChannels u = [u]
+
+mceInterleave :: UGen -> UGen -> UGen
+mceInterleave x y = mce (zipWith mce2 (mceChannels x) (mceChannels y))
