@@ -20,7 +20,7 @@ wind metals
 ; var r0 = exprand(0.125, 0.5)
 ; var n1 = LFNoise1.kr(r0, 0.75, 0.25)
 ; var exc = n0 * max(0, n1)
-; var f = Array.fill(n, {linrand(range) + base})
+; var f = Array.fill(n, { linrand(range) + base })
 ; var dt = Array.fill(n, { rrand(0.1, 2.0) })
 ; var s = Klank.ar(`[f, nil, dt], exc)
 ; Out.ar(0, (s * 0.1).softclip) }.play

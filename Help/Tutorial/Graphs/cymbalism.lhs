@@ -18,7 +18,7 @@ cymbalism
 { var p = 15
 ; var f1 = 500 + 2000.0.rand
 ; var f2 = 8000.0.rand
-; var y = { var f = Array.fill(p, { f1 + f2.rand} )
+; var y = { var f = Array.fill(p, { f1 + f2.rand } )
           ; var rt = Array.fill(p, { 1.0 + 4.0.rand })
           ; `[f, nil, rt] }
 ; var z = Array.fill(2, y)
