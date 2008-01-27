@@ -294,8 +294,8 @@ values, and equal expressions denote the same
 value.  Therefore the graph given by the haskell
 expression:
 
-> let { z = UGenId 0
->     ; n = Sound.SC3.UGen.Noise.Base.whiteNoise z
+> let { z = uid 0
+>     ; n = Sound.SC3.UGen.Base.whiteNoise z
 >     ; a = n AR
 >     ; b = n AR
 >     ; c = a - b }

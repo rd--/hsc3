@@ -1,12 +1,12 @@
 sample and hold liquidities
 
-> let { wn = Sound.SC3.UGen.Noise.Base.whiteNoise
+> let { wn = Sound.SC3.UGen.Base.whiteNoise
 >     ; r = mouseX KR 1 200 Exponential 0.1
 >     ; t = recip r
 >     ; c = impulse KR r 0.4
 >     ; cf = mouseY KR 100 8000 Exponential 0.1
->     ; f = latch (wn (UGenId 0) KR * cf * 0.5 + cf) c
->     ; p = latch (wn (UGenId 1) KR) c
+>     ; f = latch (wn (uid 0) KR * cf * 0.5 + cf) c
+>     ; p = latch (wn (uid 1) KR) c
 >     ; i = pan2 (sinOsc AR f 0 * decay2 c (t * 0.1) (t * 0.9)) p 1 }
 > in audition (out 0 (combN i 0.3 0.3 2))
 
