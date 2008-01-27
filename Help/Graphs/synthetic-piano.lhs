@@ -1,4 +1,4 @@
-piano
+synthetic piano
 
 > let { s = do { f <- rand 0.1 0.5
 >              ; p <- rand 0 (pi * 2)
