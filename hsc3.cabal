@@ -15,6 +15,7 @@ GHC-Options:      -Wall -fno-warn-orphans -fwarn-tabs -O2
 Exposed-modules:  Sound.SC3
                   Sound.SC3.UGen
                   Sound.SC3.UGen.Analysis
+                  Sound.SC3.UGen.Base
                   Sound.SC3.UGen.Buffer
                   Sound.SC3.UGen.Chaos
                   Sound.SC3.UGen.Composite
