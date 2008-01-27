@@ -5,7 +5,10 @@ bindings to the supercollider synthesis
 server.
 
 This document does not contain introductory 
-materials for haskell or supercollider. 
+materials for haskell or supercollider, see
+
+  http://haskell.org/
+  http://audiosynth.com/
 
 * Questions, Dartmouth, 2002
 
