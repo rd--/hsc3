@@ -1,7 +1,7 @@
 module Sound.SC3.UGen.UGen ( Name, UGenId(..), UGen(..), Output, Special(..)
                            , constant, control
                            , mce, mce2, mrg, proxy
-                           , clone ) where
+                           , clone, uid ) where
 
 import Control.Monad (liftM, replicateM)
 import Sound.SC3.UGen.Rate (Rate)
@@ -27,6 +27,10 @@ data UGen = Constant { constantValue :: Double }
           | MRG { mrgLeft :: UGen 
                 , mrgRight :: UGen }
             deriving (Eq, Show)
+
+-- | UGen identifier constructor.
+uid :: Int -> UGenId
+uid = UGenId
 
 -- | Constant value constructor.
 constant :: (Real a) => a -> UGen
