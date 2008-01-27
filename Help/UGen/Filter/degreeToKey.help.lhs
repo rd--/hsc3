@@ -11,8 +11,7 @@ bufnum - index of the buffer which contains the steps for each
 in     - the input signal.
 octave - the number of steps per octave in the scale.
 
-> withSC3 (\fd -> do { send fd (b_alloc 0 7 1)
->                    ; wait fd "/done"
+> withSC3 (\fd -> do { async fd (b_alloc 0 7 1)
 >                    ; send fd (b_setn 0 [(0, [0, 2, 3.2, 5, 7, 9, 10])]) })
 
 > do { n <- lfNoise1 KR (mce [3, 3.05])
