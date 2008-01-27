@@ -47,8 +47,7 @@ resetval - value to which the counter is reset when it receives a
 >                             , 233.082, 87.307, 391.995, 87.307, 261.626
 >                             , 195.998, 77.782, 233.082, 195.998, 97.999
 >                             , 155.563]
->                     in do { send fd (b_alloc 10 128 1)
->                           ; wait fd "/done"
+>                     in do { async fd (b_alloc 10 128 1)
 >                           ; send fd (b_setn 10 [(0, n)]) } }
 > in withSC3 (\fd -> do { stprInit fd
 >                       ; audition (out 0 stpr) })

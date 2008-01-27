@@ -28,8 +28,7 @@ Allocate and fill tables 0 to 7.
 >                         ; f j = square ((n - j) / n) }
 >                     in map f [0 .. n - 1]
 >     ; setup fd i = do { i' <- return (fromIntegral i)
->                       ; send fd (b_alloc i 1024 1)
->                       ; wait fd "/done"
+>                       ; async fd (b_alloc i 1024 1)
 >                       ; send fd (b_gen i "sine1" (1 + 2 + 4 : harmonics i')) } }
 > in withSC3 (\fd -> mapM_ (setup fd) [0 .. 7])
 

@@ -1,7 +1,6 @@
 pv_RectComb buffer numTeeth phase width
 
-> let async h m = send h m >> wait h "/done"
-> in withSC3 (\fd -> do async fd (b_alloc 10 2048 1))
+> withSC3 (\fd -> async fd (b_alloc 10 2048 1))
 
 > do { n <- whiteNoise AR
 >    ; let { x = mouseX KR 0 0.5 Linear 0.1

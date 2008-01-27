@@ -6,9 +6,8 @@ bufferA = fft buffer A.  bufferB = fft buffer B.  wipe = copies
 bins from bufferB in a random order (0, 1).  trig = select new
 random ordering.
 
-> let async h m = send h m >> wait h "/done"
-> in withSC3 (\fd -> do { async fd (b_alloc 10 2048 1)
->                       ; async fd (b_alloc 11 2048 1) })
+> withSC3 (\fd -> do { async fd (b_alloc 10 2048 1)
+>                    ; async fd (b_alloc 11 2048 1) })
 
 > let { n0 = randomRs (400.0, 1000.0) (mkStdGen 0)
 >     ; n1 = randomRs (80.0, 400.0) (mkStdGen 1)

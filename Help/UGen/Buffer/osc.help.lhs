@@ -15,8 +15,7 @@ flag set to true.
 Note about wavetables: OscN requires the b_gen sine1 wavetable flag
 to be OFF.  Osc requires the b_gen sine1 wavetable flag to be ON.
 
-> withSC3 (\fd -> do { send fd (b_alloc 10 512 1)
->                    ; wait fd "/done"
+> withSC3 (\fd -> do { async fd (b_alloc 10 512 1)
 >                    ; send fd (b_gen 10 "sine1" [1 + 2 + 4, 1, 1/2, 1/3, 1/4, 1/5]) })
 
 > audition (out 0 (osc AR 10 220 0 * 0.1))

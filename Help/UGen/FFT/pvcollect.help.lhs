@@ -19,8 +19,7 @@ processed are silenced.
 Note that this procedure can be relatively CPU-heavy, depending on
 how you use it.
 
-> let { fileName = "/home/rohan/audio/metal.wav"
->     ; async p m = send p m >> wait p "/done" }
+> let fileName = "/home/rohan/audio/metal.wav"
 > in withSC3 (\fd -> do { async fd (b_alloc 10 1024 1)
 >                       ; async fd (b_allocRead 11 fileName 0 0) })
 

@@ -14,7 +14,7 @@ buf       - buffer number.
 in        - the input signal.
 delaytime - delay time in seconds.
 
-> withSC3 (\fd -> do send fd (b_alloc 0 44100 1) >> wait fd "/done")
+> withSC3 (\fd -> async fd (b_alloc 0 44100 1))
 
 > do { d <- dust AR 1
 >    ; n <- whiteNoise AR

@@ -8,8 +8,7 @@ audio signal.
 The fft and pv_* UGens run at control rate, the ifft UGen at audio
 rate.
 
-> withSC3 (\fd -> do { send fd (b_alloc 10 2048 1)
->                    ; wait fd "/done" })
+> withSC3 (\fd -> async fd (b_alloc 10 2048 1))
 
 > do { n <- whiteNoise AR
 >    ; audition (out 0 (ifft' (fft' 10 (n * 0.05)))) }

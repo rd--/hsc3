@@ -5,8 +5,7 @@ located.
 
 Allocate and set values at buffer 10.
 
-> withSC3 (\fd -> do { send fd (b_alloc 10 6 1)
->                    ; wait fd "/done"
+> withSC3 (\fd -> do { async fd (b_alloc 10 6 1)
 >                    ; send fd (b_setn 10 [(0, [2, 3, 4, 0, 1, 5])]) })
 
 Find indexes and map to an audible frequency range.

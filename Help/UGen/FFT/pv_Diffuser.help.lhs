@@ -6,8 +6,7 @@ The trigger will select a new set of random phases.
 buffer - fft buffer.
 trig   - a trigger selects a new set of random values.
 
-> let { fileName = "/home/rohan/audio/metal.wav"
->     ; async h m = send h m >> wait h "/done" }
+> let fileName = "/home/rohan/audio/metal.wav"
 > in withSC3 (\fd -> do { async fd (b_alloc 10 2048 1)
 >                       ; async fd (b_allocRead 12 fileName 0 0) })
 

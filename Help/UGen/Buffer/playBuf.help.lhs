@@ -30,8 +30,7 @@ loop        - 1 means true, 0 means false.  This is modulate-able.
 Allocate buffer.
 
 > let fileName = "/home/rohan/audio/metal.wav"
-> in withSC3 (\fd -> do { send fd (b_allocRead 10 fileName 0 0)
->                       ; wait fd "/done" })
+> in withSC3 (\fd -> async fd (b_allocRead 10 fileName 0 0))
 
 Play once only.
 

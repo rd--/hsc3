@@ -11,10 +11,8 @@ bufferB - destination buffer.
 
 Proof of concept, silence
 
-> withSC3 (\fd -> do { send fd (b_alloc 0 2048 1)
->                    ; wait fd "/done"
->                    ; send fd (b_alloc 1 2048 1)
->                    ; wait fd "/done" })
+> withSC3 (\fd -> do { async fd (b_alloc 0 2048 1)
+>                    ; async fd (b_alloc 1 2048 1) })
 
 > do { i <- lfClipNoise AR 100
 >    ; let { c0 = fft' 0 i

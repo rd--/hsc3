@@ -5,8 +5,7 @@ Randomly clear bins.
 buffer = fft buffer.  wipe = clear bins from input in a random
 order (0, 1).  trig = select new random ordering.
 
-> let async h m = send h m >> wait h "/done"
-> in withSC3 (\fd -> do async fd (b_alloc 10 2048 1))
+> withSC3 (\fd -> async fd (b_alloc 10 2048 1))
 
 > let { x = mouseX KR 0.6 0.95 Linear 0.1
 >     ; t = impulse KR 0.4 0 }

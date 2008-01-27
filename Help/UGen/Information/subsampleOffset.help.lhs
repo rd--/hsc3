@@ -25,8 +25,7 @@ View this with an oscilloscope.
 >     ; o = (1 - subsampleOffset) + mouseX KR 0 a Linear 0.1
 >     ; r = delayC i (d * (1 + x)) (d * (o + x))
 >     ; g = offsetOut 0 r }
-> in withSC3 (\fd -> do { send fd (d_recv (graphdef "s" (graph g)))
->                       ; wait fd "/done"
+> in withSC3 (\fd -> do { async fd (d_recv (graphdef "s" (graph g)))
 >                       ; t <- utc
 >                       ; let { t' = t + 0.2
 >                             ; dt = 1 / 44100.0

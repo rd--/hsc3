@@ -9,8 +9,7 @@ nodeID - node to be paused
 >     ; g  = control KR "g" 1
 >     ; a  = mrg [out 0 (sinOsc AR f 0 * 0.1), pause g 1001]
 >     ; a' = graphdef "a" (graph a) }
-> in withSC3 (\fd -> do { send fd (d_recv a')
->                       ; wait fd "/done"
+> in withSC3 (\fd -> do { async fd (d_recv a')
 >                       ; send fd (s_new "a" 1001 AddToTail 0 [])
 >                       ; send fd (s_new "a" 1002 AddToTail 0 [("f", 880)]) } )
 

@@ -9,8 +9,7 @@ buffer - buffer number of buffer to act on, passed in through a chain
 real   - real part of a.
 imag   - imaginary part of a.
 
-> withSC3 (\fd -> do { send fd (b_alloc 10 1024 1)
->                    ; wait fd "/done" })
+> withSC3 (\fd -> async fd (b_alloc 10 1024 1))
 
 > let { i = in' 1 AR numOutputBuses * 0.5
 >     ; x = mouseX KR (-1) 1 Linear 0.1
@@ -19,8 +18,7 @@ imag   - imaginary part of a.
 
 With filtering.
 
-> withSC3 (\fd -> do { send fd (b_alloc 0 2048 1)
->                    ; wait fd "/done" })
+> withSC3 (\fd -> async fd (b_alloc 0 2048 1))
 
 > let { o = mce [1, 1.1, 1.5, 1.78, 2.45, 6.7, 8] * 220
 >     ; f = sinOsc KR (mce [0.16, 0.33, 0.41]) 0 * 10 + o

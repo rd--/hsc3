@@ -9,8 +9,7 @@ cyclically to the valid range.
 bufnum - index of the buffer
 in     - the input signal.
 
-> withSC3 (\fd -> do { send fd (b_alloc 0 6 1)
->                    ; wait fd "/done"
+> withSC3 (\fd -> do { async fd (b_alloc 0 6 1)
 >                    ; send fd (b_setn 0 [(0, [200, 300, 400, 500, 600, 800])]) })
 
 > let { x = mouseX KR 0 18 Linear 0.1

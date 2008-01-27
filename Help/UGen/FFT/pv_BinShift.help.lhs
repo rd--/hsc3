@@ -4,8 +4,7 @@ Shift and scale the positions of the bins.  Can be used as a very
 crude frequency shifter/scaler.  Shifts the leftmost bin at `buffer'
 by `shift' places, the distance between subsequent bins is `stretch'.
 
-> withSC3 (\fd -> do { send fd (b_alloc 10 2048 1)
->                    ; wait fd "/done" })
+> withSC3 (\fd -> async fd (b_alloc 10 2048 1))
 
 > let { x  = mouseX KR (-10) 100 Linear 0.1
 >     ; y  = mouseY KR 1 4 Linear 0.1
