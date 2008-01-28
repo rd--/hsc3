@@ -181,6 +181,14 @@ Sound.OpenSoundControl modules, to build type:
 
   $ runhaskell Setup.lhs haddock
 
+* Example Unit Generator Graphs
+
+The Help/Graphs directory contains example unit generator graphs.  The
+graphs are self contained, selecting the graph and typing C-cC-e will
+audition it.  In many cases both supercollider language and haskell
+versions are given, switch the emacs buffer to sclang-mode to run the
+supercollider language versions.
+
 * User configuration files
 
 It is straightforward to add configuration modules to the context in
