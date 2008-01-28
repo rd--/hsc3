@@ -124,38 +124,38 @@ class (Floating a, Ord a) => BinaryOp a where
     amClip a b = if b <= 0 then 0 else a * b
     atan2E :: a -> a -> a
     atan2E a b = atan (b/a)
-    bitAnd = undefined
     bitAnd :: a -> a -> a
-    bitOr = undefined
+    bitAnd = undefined
     bitOr :: a -> a -> a
-    bitXOr = undefined
+    bitOr = undefined
     bitXOr :: a -> a -> a
+    bitXOr = undefined
     clip2 :: a -> a -> a
     clip2 a b = clip_ a (-b) b
     difSqr :: a -> a -> a
     difSqr a b = (a*a) - (b*b)
     excess :: a -> a -> a
     excess a b = a - clip_ a (-b) b
-    exprandRange = undefined
     exprandRange :: a -> a -> a
-    fill = undefined
+    exprandRange = undefined
     fill :: a -> a -> a
+    fill = undefined
     firstArg :: a -> a -> a
     firstArg a _ = a
     fold2 :: a -> a -> a
-    gcdE = undefined
     gcdE :: a -> a -> a
-    hypot = undefined
+    gcdE = undefined
     hypot :: a -> a -> a
-    hypotx = undefined
+    hypot = undefined
     hypotx :: a -> a -> a
-    iDiv = undefined
+    hypotx = undefined
     iDiv :: a -> a -> a
-    lcmE = undefined
+    iDiv = undefined
     lcmE :: a -> a -> a
+    lcmE = undefined
     modE :: a -> a -> a
-    randRange = undefined
     randRange :: a -> a -> a
+    randRange = undefined
     ring1 :: a -> a -> a
     ring1 a b = a * b + a
     ring2 :: a -> a -> a
@@ -168,10 +168,10 @@ class (Floating a, Ord a) => BinaryOp a where
     roundUp :: a -> a -> a
     scaleNeg :: a -> a -> a
     scaleNeg a b = (abs a - a) * b' + a where b' = 0.5 * b + 0.5
-    shiftLeft = undefined
     shiftLeft :: a -> a -> a
-    shiftRight = undefined
+    shiftLeft = undefined
     shiftRight :: a -> a -> a
+    shiftRight = undefined
     sqrDif :: a -> a -> a
     sqrDif a b = (a-b) * (a-b)
     sqrSum :: a -> a -> a
@@ -180,10 +180,10 @@ class (Floating a, Ord a) => BinaryOp a where
     sumSqr a b = (a*a) + (b*b)
     thresh :: a -> a -> a
     thresh a b = if a <  b then 0 else a
-    trunc = undefined
     trunc :: a -> a -> a
-    unsignedShift = undefined
+    trunc = undefined
     unsignedShift :: a -> a -> a
+    unsignedShift = undefined
     wrap2 :: a -> a -> a
 
 instance BinaryOp Double where
