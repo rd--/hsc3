@@ -58,6 +58,10 @@ lfdNoise1 = liftU2 N.lfdNoise1
 lfdNoise2 :: (UId m) => Rate -> UGen -> m UGen
 lfdNoise2 = liftU2 N.lfdNoise2
 
+-- | Dynamic cubic noise
+lfdNoise3 :: (UId m) => Rate -> UGen -> m UGen
+lfdNoise3 = liftU2 N.lfdNoise3
+
 -- | Step noise.
 lfNoise0 :: (UId m) => Rate -> UGen -> m UGen
 lfNoise0 = liftU2 N.lfNoise0

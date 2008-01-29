@@ -56,6 +56,10 @@ lfdNoise1 z r freq = mkOscId z r "LFDNoise1" [freq] 1
 lfdNoise2 :: UGenId -> Rate -> UGen -> UGen
 lfdNoise2 z r freq = mkOscId z r "LFDNoise2" [freq] 1
 
+-- | Dynamic cubic noise
+lfdNoise3 :: UGenId -> Rate -> UGen -> UGen
+lfdNoise3 z r freq = mkOscId z r "LFDNoise3" [freq] 1
+
 -- | Step noise.
 lfNoise0 :: UGenId -> Rate -> UGen -> UGen
 lfNoise0 z r freq = mkOscId z r "LFNoise0" [freq] 1
