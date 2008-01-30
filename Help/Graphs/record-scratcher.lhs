@@ -24,5 +24,6 @@ record scratcher (Josh Parmenter)
 ; var bdx = MouseButton.kr(1, 0, 0.3) + dx
 ; var bdxr = bdx * BufRateScale.kr(b)
 ; var scr = PlayBuf.ar(1, b, bdxr, 0, 0, 1)
+; var s = Server.default
 ; s.sendMsg("/b_allocRead", b, fn, 0, 0)
 ; Out.ar(0, (scr * env).dup ) }.play
