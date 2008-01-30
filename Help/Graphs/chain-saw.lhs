@@ -3,7 +3,7 @@ chain saw (jrhb)
 > let { rrand l r = getStdRandom (randomR (l, r)) :: IO Double
 >     ; coin n a b = do { m <- rrand 0.0 1.0
 >                       ; return (if m > n then a else b) }
->     ; exprange s l r = linExp s 0 1 l r
+>     ; exprange s l r = linExp s (-1) 1 l r
 >     ; chain n fn = foldr (<=<) return (replicate n fn)
 >     ; mceProduct = mceEdit (\l -> [product l])
 >     ; clipu s = clip2 s 1
@@ -20,7 +20,7 @@ chain saw (jrhb)
 >                   in return . clipu =<< coin 0.5 (u1 * s2) (u1 * u2) }
 >     ; inp = lfSaw KR (0.2 * mce2 1 1.1) 0
 >     ; b_freq = mce [70, 800, 9000, 5242] }
-> in do { ff <- chain 16 f inp
+> in do { ff <- chain 8 f inp
 >       ; let { c_saw = mceProduct (saw AR (exprange ff 6 11000))
 >             ; b_saw = dup (mix (bpf c_saw b_freq 0.2)) }
 >         in audition (out 0 (b_saw * 0.3)) }
