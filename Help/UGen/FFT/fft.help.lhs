@@ -1,4 +1,5 @@
-fft buffer in
+fft buffer in hopSize windowType active
+fft' buffer in
 
 Fast fourier transform.  The fast fourier transform analyzes the
 frequency content of a signal.  fft uses a local buffer for holding
@@ -7,6 +8,9 @@ audio signal.
 
 The fft and pv_* UGens run at control rate, the ifft UGen at audio
 rate.
+
+fft' is a variant FFT constructor with default values for hop size,
+window type, and active status
 
 > withSC3 (\fd -> async fd (b_alloc 10 2048 1))
 
