@@ -1,4 +1,4 @@
-pulsing bottles
+pulsing bottles (jmcc)
 
 > let { r = do { n <- whiteNoise AR
 >              ; r0 <- rand 4 14

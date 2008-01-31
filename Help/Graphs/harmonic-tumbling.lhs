@@ -1,4 +1,4 @@
-harmonic tumbling
+harmonic tumbling (jmcc)
 
 > let { t = xLine KR (mce2 10 10) 0.1 60 DoNothing
 >     ; o h = do { n <- dust KR t

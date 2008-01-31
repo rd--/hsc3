@@ -1,4 +1,4 @@
-reverberated sine percussion
+reverberated sine percussion (jmcc)
 
 > let { d = 6
 >     ; c = 5

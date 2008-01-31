@@ -1,4 +1,4 @@
-plucked strings
+plucked strings (jmcc)
 
 > let { s = do { n0 <- pinkNoise AR
 >              ; r1 <- rand (-1) 1

@@ -1,4 +1,4 @@
-noise burst sweep
+noise burst sweep (jmcc)
 
 > do { n <- clone 2 (whiteNoise AR)
 >    ; let { lfoRate = mouseX KR 10 60 Exponential 0.2

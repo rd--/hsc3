@@ -1,4 +1,4 @@
-discretion
+discretion (rd)
 
 > let { mkls bp t = envGen KR 1 1 0 1 RemoveSynth (envCoord bp t 1 EnvLin)
 >     ; rrand l r = getStdRandom (randomR (l, r))

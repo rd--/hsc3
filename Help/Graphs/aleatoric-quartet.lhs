@@ -1,4 +1,4 @@
-aleatoric quartet
+aleatoric quartet (jmcc)
 
 > let { chain n f = foldl (>=>) return (replicate n f)
 >     ; rapf i = do { r <- clone 2 (rand 0 0.05)

@@ -1,4 +1,4 @@
-cymbalism
+cymbalism (jmcc)
 
 > let p = 15
 > in do { f1 <- rand 500 2500

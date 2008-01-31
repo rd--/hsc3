@@ -1,4 +1,4 @@
-record scratcher (Josh Parmenter)
+record scratcher (josh parmenter)
 
 > let { dup a = mce2 a a
 >     ; fn = "/home/rohan/audio/metal.wav"

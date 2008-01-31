@@ -1,4 +1,4 @@
-harmonic swimming
+harmonic swimming (jmcc)
 
 > let { a = 0.02
 >     ; f = 50

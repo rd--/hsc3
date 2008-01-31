@@ -1,4 +1,4 @@
-sample and hold liquidities
+sample and hold liquidities (jmcc)
 
 > let { wn = Sound.SC3.UGen.Base.whiteNoise
 >     ; r = mouseX KR 1 200 Exponential 0.1

@@ -1,4 +1,4 @@
-moto rev
+moto rev (jmcc)
 
 > let { f = sinOsc KR 0.2 0 * 10 + 21
 >     ; s = lfPulse AR f (mce2 0 0.1) 0.1 }

@@ -1,4 +1,4 @@
-mouse clatter
+mouse clatter (rd)
 
 > let { x = mouseX KR 100 12000 Linear 0.1
 >     ; y = mouseY KR 0.01 0.15 Linear 0.1 }

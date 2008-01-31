@@ -1,4 +1,4 @@
-strummable guitar
+strummable guitar (jmcc)
 
 > let { scale = [ 52, 57, 62, 67, 71, 76 ]
 >     ; str i = let { x = mouseX KR 0 1 Linear 0.2

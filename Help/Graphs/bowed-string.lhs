@@ -1,4 +1,4 @@
-bowed string
+bowed string (jmcc)
 
 > do { n0 <- brownNoise AR
 >    ; r0 <- expRand 0.125 0.5

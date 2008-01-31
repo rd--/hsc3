@@ -1,4 +1,4 @@
-police state
+police state (jmcc)
 
 > let node = do { r0 <- rand 0.02 0.1
 >               ; r1 <- rand 0 (pi*2)

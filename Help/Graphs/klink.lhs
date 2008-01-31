@@ -1,4 +1,4 @@
-klink
+klink (rd)
 
 > do { n1 <- lfNoise0 KR (mce2 0.5 1.5)
 >    ; let { o = sinOsc KR n1 0

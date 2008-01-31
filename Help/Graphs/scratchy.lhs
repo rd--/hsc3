@@ -1,4 +1,4 @@
-scratchy 
+scratchy (jmcc)
 
 > do { n <- clone 2 (brownNoise AR)
 >    ; let f = max (n * 0.5 - 0.49) 0 * 20

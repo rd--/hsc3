@@ -1,4 +1,4 @@
-what was i thinking?
+what was i thinking? (jmcc)
 
 > let { z = do { n0 <- lfNoise1 KR 0.2
 >              ; n1 <- lfNoise1 KR 0.157

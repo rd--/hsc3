@@ -1,5 +1,4 @@
-babbling brook
-http://lists.create.ucsb.edu/pipermail/sc-users/2007-April/033239.html
+babbling brook (jmcc)
 
 > let b f m a g = do { n1 <- brownNoise AR
 >                    ; n2 <- brownNoise AR
@@ -15,3 +14,5 @@ http://lists.create.ucsb.edu/pipermail/sc-users/2007-April/033239.html
 ; var x = b.value(14, 400, 500, 0.006) ! 2
 ; var y = b.value(20, 800, 1000, 0.010) ! 2
 ; Out.ar(0, x + y) }.play
+
+http://lists.create.ucsb.edu/pipermail/sc-users/2007-April/033239.html

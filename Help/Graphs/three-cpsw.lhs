@@ -1,4 +1,4 @@
-three-cpsw
+three-cpsw (rd)
 
 > do { t <- dust KR (mce2 12 18)
 >    ; f0 <- tRand 1 64 t

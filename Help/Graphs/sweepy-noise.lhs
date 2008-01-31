@@ -1,4 +1,4 @@
-sweepy noise
+sweepy noise (jmcc)
 
 > do { n <- clone 2 (whiteNoise AR)
 >    ; let { lfoDepth = mouseY KR 200 8000 Exponential 0.1

@@ -1,4 +1,4 @@
-wind metals
+wind metals (jmcc)
 
 > let n = 6
 > in do { base <- expRand 60 4000

@@ -1,4 +1,4 @@
-sprinkler
+sprinkler (jmcc)
 
 > do { n <- whiteNoise AR
 >    ;  let { f = lfPulse KR 0.09 0 0.16 * 10 + 7

@@ -1,4 +1,4 @@
-lfo modulation of pulse waves and resonant filters
+lfo modulation (jmcc)
 
 > let { o = fSinOsc KR 0.05 0 * 80 + 160
 >     ; p = fSinOsc KR (mce2 0.6 0.7) 0 * 3600 + 4000

@@ -1,4 +1,4 @@
-analog bubbles
+analog bubbles (jmcc)
 
 > let { o = lfSaw KR (mce2 8 7.23) 0 * 3 + 80
 >     ; f = lfSaw KR 0.4 0 * 24 + o
