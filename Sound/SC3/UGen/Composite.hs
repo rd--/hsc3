@@ -36,3 +36,7 @@ dynKlank :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 dynKlank i fs fo ds s = gen (mceChannels s)
     where gen (f:a:d:xs) = ringz i (f * fs + fo) (d * ds) * a + gen xs
           gen _ = 0
+
+-- | PM oscillator.
+pmOsc :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+pmOsc r cf mf pm mp = sinOsc r cf (sinOsc r mf mp * pm)
