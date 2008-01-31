@@ -1,4 +1,4 @@
-module Sound.SC3.UGen.Composite (mix, mixFill, freqShift, splay) where
+module Sound.SC3.UGen.Composite where
 
 import Sound.SC3.UGen.Filter
 import Sound.SC3.UGen.Oscillator
@@ -30,3 +30,9 @@ splay i s l c = mix (pan2 i (mce p * s + c) 1) * l * (sqrt (1 / n))
     where n = fromIntegral (mceDegree i)
           m = n - 1
           p = map ( (+ (-1.0)) . (* (2 / m)) ) [0 .. m]
+
+-- | Dynamic klank, set of non-fixed resonating filters.
+dynKlank :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dynKlank i fs fo ds s = gen (mceChannels s)
+    where gen (f:a:d:xs) = ringz i (f * fs + fo) (d * ds) * a + gen xs
+          gen _ = 0
