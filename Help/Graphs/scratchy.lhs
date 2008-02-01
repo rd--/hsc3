@@ -8,6 +8,10 @@ scratchy (jmcc)
 ; var f = (n - 0.49).max(0) * 20
 ; Out.ar(0, RHPF.ar(f, 5000, 1)) }.play
 
+(let* ((n (Mul (dupn 2 (BrownNoise ar)) 0.5))
+       (f (Mul (Max (Sub n 0.49) 0) 20)))
+  (Out 0 (RHPF f 5000 1)))
+
 with non-monadic noise
 
 > let { bn = Sound.SC3.UGen.Base.brownNoise

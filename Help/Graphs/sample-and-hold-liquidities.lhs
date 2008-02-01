@@ -18,3 +18,12 @@ sample and hold liquidities (jmcc)
 ; var p = Latch.kr(WhiteNoise.kr, c)
 ; var i = Pan2.ar(SinOsc.ar(f, 0, Decay2.kr(c, 0.1 * t, 0.9 * t)), p, 1)
 ; Out.ar(0, CombN.ar(i, 0.3, 0.3, 2)) }.play
+
+(let* ((r (MouseX kr 1 200 1 0.1))
+       (t (Recip r))
+       (c (Impulse kr r 0.4))
+       (cf (MouseY kr 100 8000 1 0.1))
+       (f (Latch (MulAdd (WhiteNoise kr) (Mul cf 0.5) cf) c))
+       (p (Latch (WhiteNoise kr) c))
+       (i (Pan2 (Mul (SinOsc ar f 0) (Decay2 c (Mul 0.1 t) (Mul 0.9 t))) p 1)))
+  (Out 0 (CombN i 0.3 0.3 2)))
