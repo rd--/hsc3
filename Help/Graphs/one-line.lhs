@@ -9,3 +9,8 @@ one-line (lance putnam)
 ; var lfs_t = lfs.trunc([400, 600]) * [1, -1]
 ; var f = OnePole.ar(Mix(lfs_t), 0.98)
 ; Out.ar(0, Pan2.ar(SinOsc.ar(f, 0), 0, 0.1)) }.play
+
+(let* ((lfs (MulAdd (LFSaw ar (Mce 1 0.99) (Mce 0 0.6)) 2000 2000))
+       (lfs_t (Mul (Trunc lfs (Mce 400 600)) (Mce 1 -1)))
+       (f (OnePole (mix lfs_t) 0.98)))
+  (audition (Out 0 (Pan2 (SinOsc ar f 0) 0 0.1))))
