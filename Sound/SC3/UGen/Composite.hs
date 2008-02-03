@@ -18,6 +18,10 @@ mix u | isMCE u = sum (mceProxies u)
 mixFill :: Int -> (Int -> UGen) -> UGen
 mixFill n f = mix (mce (map f [0..n-1]))
 
+-- | Monadic variant on mixFill.
+mixFillM :: (Monad m) => Int -> (Int -> m UGen) -> m UGen
+mixFillM n f = mapM f [0 .. n - 1] >>= return . sum
+
 -- | Frequency shifter, in terms of Hilbert UGen.
 freqShift :: UGen -> UGen -> UGen -> UGen
 freqShift i f p = mix (h * o)
