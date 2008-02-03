@@ -1,15 +1,30 @@
 synthetic piano (jmcc)
 
-> let { s = do { f <- rand 0.1 0.5
->              ; p <- rand 0 (pi * 2)
->              ; return (impulse AR f p * 0.1) }
->     ; c e n o = do { n0 <- lfNoise2 AR 3000
->                    ; let dt = 1 / (midiCPS (n + o))
->                      in return (combL (n0 * e) dt dt 6) }
->     ; l n = ((n - 36) / 27) - 1
->     ; p = do { s' <- s
->              ; n <- iRand 36 90
->              ; let e = decay2 s' 0.008 0.04
->                in do { c' <- c e n (mce [-0.05, 0, 0.04])
->                      ; return (pan2 (mix c') (l n) 1) } } }
-> in audition . out 0 . mix =<< clone 2 p
+> let p = do { n <- iRand 36 90
+>            ; f <- rand 0.1 0.5
+>            ; ph <- rand 0 (pi * 2)
+>            ; let { s = impulse AR f ph * 0.1
+>                  ; e = decay2 s 0.008 0.04
+>                  ; c i = do { n0 <- lfNoise2 AR 3000
+>                             ; let { o = [-0.05, 0, 0.04] !! i
+>                                   ; dt = 1 / (midiCPS (n + o)) }
+>                               in return (combL (n0 * e) dt dt 6) }
+>                  ; l = ((n - 36) / 27) - 1 }
+>              in do { c_ <- mixFillM 3 c
+>                    ; return (pan2 c_ l 1) } }
+> in audition . out 0 =<< mixFillM 6 (const p)
+
+{ var p = { var n = IRand(36, 90)
+          ; var f = Rand(0.1, 0.5)
+          ; var ph = Rand(0, pi * 2)
+          ; var s = Impulse.ar(f, ph) * 0.1
+          ; var e = Decay2.ar(s, 0.008, 0.04)
+          ; var c = { arg i
+                    ; var o = #[-0.05, 0, 0.04].at(i)
+                    ; var dt = 1 / (n + o).midicps
+                    ; var n0 = LFNoise2.ar(3000)
+                    ; CombL.ar(n0 * e, dt, dt, 6) }
+          ; var l = ((n - 36) / 27) - 1
+          ; Pan2.ar(Mix.fill(3, c), l, 1) }
+; Out.ar(0, Mix.fill(6, p)) }.play
+
