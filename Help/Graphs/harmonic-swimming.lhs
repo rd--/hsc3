@@ -13,12 +13,24 @@ harmonic swimming (jmcc)
 { var a = 0.02
 ; var f = 50
 ; var p = 20
-; var z = 0
 ; var l = Line.kr(0, a.neg, 60, 0)
-; var r = 6 + [4.0.rand2, 4.0.rand2]
-; p.do({ 
-    arg i
-  ; var n = LFNoise1.kr(r)
-  ; var e = max(0, n * a + l)
-  ; z = FSinOsc.ar(f * (i + 1), 0, e, z) })
-; Out.ar(0, z) }.play
+; var o = { arg h
+          ; var r = 6 + [4.0.rand2, 4.0.rand2]
+          ; var n = LFNoise1.kr(r)
+          ; var e = max(0, n * a + l)
+          ; FSinOsc.ar(f * (h + 1), 0) * e }
+; Out.ar(0, (0..p).collect(o).sum) }.play
+
+(require (only-in srfi/1 iota))
+
+(let* ((a 0.02)
+       (f 50)
+       (p 20)
+       (z 0)
+       (l (Line kr 0 (- a) 60 0))
+       (o (lambda (h)
+	    (let* ((r (dupn 2 (Rand 2 8)))
+		   (n (LFNoise1 kr r))
+		   (e (Max 0 (MulAdd n a l))))
+	      (Mul (FSinOsc ar (* f (+ h 1)) 0) e)))))
+  (audition (Out 0 (mix (make-mce (map o (iota p)))))))
