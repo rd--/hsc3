@@ -14,8 +14,10 @@ statusFields = ["# UGens                     ",
                 "Sample Rate (Actual)        "]
 
 statusInfo :: OSC -> [String]
-statusInfo (Message "status.reply" l) = map show (tail l)
-statusInfo _                          = error "non status.reply message"
+statusInfo o = maybe [] f (address o)
+    where f a = if a == "status.reply" 
+                then maybe [] (map show) (arguments o) 
+                else []
 
 statusFormat :: OSC -> [String]
 statusFormat r = s : zipWith (++) statusFields (statusInfo r)
