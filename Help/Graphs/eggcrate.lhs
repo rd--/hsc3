@@ -1,7 +1,7 @@
 eggcrate (rd)
 
-> let { cosu = cos . (/ pi) 
->     ; sinu = sin . (/ pi)
+> let { cosu = cos . (* pi) 
+>     ; sinu = sin . (* pi)
 >     ; eggcrate u v = cosu u * sinu v
 >     ; tChoose t a = do { n <- tiRand 0 (fromIntegral (length a)) t
 >                        ; return (select n (mce a)) }
