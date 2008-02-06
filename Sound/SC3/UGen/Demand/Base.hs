@@ -10,6 +10,10 @@ import Sound.SC3.UGen.Utilities
 dbufrd :: UGenId -> UGen -> UGen -> Loop -> UGen
 dbufrd z b p l = mkOscId z DR "Dbufrd" [b, p, fromLoop l] 1
 
+-- | Buffer write on demand unit generator.
+dbufwr :: UGenId -> UGen -> UGen -> UGen -> Loop -> UGen
+dbufwr z b p i l = mkOscId z DR "Dbufwr" [b, p, i, fromLoop l] 1
+
 -- | Demand rate white noise.
 dwhite :: UGenId -> UGen -> UGen -> UGen -> UGen
 dwhite z l lo hi = mkOscId z DR "Dwhite" [l, lo, hi] 1

@@ -10,6 +10,10 @@ import Sound.SC3.UGen.Enum
 dbufrd :: (UId m) => UGen -> UGen -> Loop -> m UGen
 dbufrd = liftU3 D.dbufrd
 
+-- | Buffer write on demand unit generator.
+dbufwr :: (UId m) => UGen -> UGen -> UGen -> Loop -> m UGen
+dbufwr = liftU4 D.dbufwr
+
 -- | Demand rate white noise.
 dwhite :: (UId m) => UGen -> UGen -> UGen -> m UGen
 dwhite = liftU3 D.dwhite
