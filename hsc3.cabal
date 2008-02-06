@@ -60,7 +60,7 @@ Other-modules:    Sound.SC3.Server.Utilities
 Data-files:       README
                   emacs/hsc3.el
                   -- The below is appended by:
-                  -- ls Help/*.*hs Help/*/*.*hs Help/*/*/*.*hs | \
+                  -- find Help -name "*.*hs" | sort | \
                   -- sed "s/^/                  /" >> hsc3.cabal
                   Help/Graphs/aleatoric-quartet.lhs
                   Help/Graphs/analog-bubbles.lhs
