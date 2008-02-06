@@ -1,4 +1,4 @@
-;; hsc3.el - (c) rohan drape, 2006-2007
+;; hsc3.el - (c) rohan drape, 2006-2008
 
 ;; This mode is implemented as a derivation of `haskell' mode,
 ;; indentation and font locking is courtesy that mode.  The
