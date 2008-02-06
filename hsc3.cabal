@@ -55,8 +55,65 @@ Exposed-modules:  Sound.SC3
                   Sound.SC3.Server.NRT
 Other-modules:    Sound.SC3.Server.Utilities
                   Sound.SC3.UGen.Utilities
+
 Data-files:       README
                   emacs/hsc3.el
+                  -- The below is appended by:
+                  -- ls Help/*.*hs Help/*/*.*hs Help/*/*/*.*hs | \
+                  -- sed "s/^/                  /" >> hsc3.cabal
+                  Help/Graphs/aleatoric-quartet.lhs
+                  Help/Graphs/analog-bubbles.lhs
+                  Help/Graphs/babbling-brook.lhs
+                  Help/Graphs/bit-reduction.lhs
+                  Help/Graphs/bowed-string.lhs
+                  Help/Graphs/ccomb.lhs
+                  Help/Graphs/chain-saw.lhs
+                  Help/Graphs/chrd.lhs
+                  Help/Graphs/cricket.lhs
+                  Help/Graphs/crotale.lhs
+                  Help/Graphs/cut-outs.lhs
+                  Help/Graphs/cymbalism.lhs
+                  Help/Graphs/deep-sea.lhs
+                  Help/Graphs/dial-history.lhs
+                  Help/Graphs/discretion.lhs
+                  Help/Graphs/drummer.lhs
+                  Help/Graphs/eggcrate.lhs
+                  Help/Graphs/fwalk.lhs
+                  Help/Graphs/half-life.lhs
+                  Help/Graphs/harmonic-swimming.lhs
+                  Help/Graphs/harmonic-tumbling.lhs
+                  Help/Graphs/h-chatter.lhs
+                  Help/Graphs/implosion.lhs
+                  Help/Graphs/klink.lhs
+                  Help/Graphs/k-ppr.lhs
+                  Help/Graphs/lfo-modulation.lhs
+                  Help/Graphs/lf-pulses.lhs
+                  Help/Graphs/modal-space.lhs
+                  Help/Graphs/moto-rev.lhs
+                  Help/Graphs/mouse-clatter.lhs
+                  Help/Graphs/noise-burst-sweep.lhs
+                  Help/Graphs/one-line.lhs
+                  Help/Graphs/oscillator-cluster.lhs
+                  Help/Graphs/pattern-buffer.lhs
+                  Help/Graphs/plucked-strings.lhs
+                  Help/Graphs/police-state.lhs
+                  Help/Graphs/pulsing-bottles.lhs
+                  Help/Graphs/record-scratcher.lhs
+                  Help/Graphs/reverberated-sine-percussion.lhs
+                  Help/Graphs/sample-and-hold-liquidities.lhs
+                  Help/Graphs/s-chirp.lhs
+                  Help/Graphs/scratchy.lhs
+                  Help/Graphs/scritto.lhs
+                  Help/Graphs/shifting-pulses.lhs
+                  Help/Graphs/sprinkler.lhs
+                  Help/Graphs/strummable-guitar.lhs
+                  Help/Graphs/sweepy-noise.lhs
+                  Help/Graphs/synthetic-piano.lhs
+                  Help/Graphs/three-cpsw.lhs
+                  Help/Graphs/what-was-i-thinking.lhs
+                  Help/Graphs/wind-metals.lhs
+                  Help/Graphs/xy-interference.lhs
+                  Help/hsc3.help.lhs
                   Help/Server/b_alloc.help.lhs
                   Help/Server/b_allocRead.help.lhs
                   Help/Server/b_close.help.lhs
@@ -158,6 +215,7 @@ Data-files:       README
                   Help/UGen/Chaos/rossler.help.lhs
                   Help/UGen/Demand/dbrown.help.lhs
                   Help/UGen/Demand/dbufrd.help.lhs
+                  Help/UGen/Demand/dbufwr.help.lhs
                   Help/UGen/Demand/demandEnvGen.help.lhs
                   Help/UGen/Demand/demand.help.lhs
                   Help/UGen/Demand/dgeom.help.lhs
@@ -365,6 +423,7 @@ Data-files:       README
                   Help/UGen/Trigger/runningMin.help.lhs
                   Help/UGen/Trigger/sendTrig.lhs
                   Help/UGen/Trigger/setResetFF.help.lhs
+                  Help/UGen/Trigger/stepper.help.lhs
                   Help/UGen/Trigger/sweep.help.lhs
                   Help/UGen/Trigger/tDelay.help.lhs
                   Help/UGen/Trigger/timer.help.lhs
