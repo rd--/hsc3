@@ -9,8 +9,7 @@ input  - single channel input
 loop   - when phase exceeds number of frames in buffer, 
          loops when set to 1 (default :1)
 
-> do { dinf <- return 1E9
->    ; s1 <- dseries 30 0 3
+> do { s1 <- dseries 30 0 3
 >    ; s2 <- dseries 30 0 1
 >    ; s3 <- dseries 16 1 1
 >    ; s4 <- dwhite 8 1 16 

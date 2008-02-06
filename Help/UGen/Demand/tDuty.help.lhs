@@ -25,18 +25,18 @@ level      - demand ugen providing the output values.
 
 Play a little rhythm
 
-> do { d <- dseq 1E+9 (mce [0.1, 0.2, 0.4, 0.3])
+> do { d <- dseq dinf (mce [0.1, 0.2, 0.4, 0.3])
 >    ; audition (out 0 (tDuty AR d 0 DoNothing 1)) }
 
 Amplitude changes
 
-> do { d0 <- dseq 1E+9 (mce [0.1, 0.2, 0.4, 0.3])
->    ; d1 <- dseq 1E+9 (mce [0.1, 0.4, 0.01, 0.5, 1.0])
+> do { d0 <- dseq dinf (mce [0.1, 0.2, 0.4, 0.3])
+>    ; d1 <- dseq dinf (mce [0.1, 0.4, 0.01, 0.5, 1.0])
 >    ; audition (out 0 (ringz (tDuty AR d0 0 DoNothing d1) 1000 0.1)) }
 
 Mouse control.
 
-> do { d <- dseq 1E+9 (mce [0.1, 0.4, 0.01, 0.5, 1.0])
+> do { d <- dseq dinf (mce [0.1, 0.4, 0.01, 0.5, 1.0])
 >    ; let x = mouseX KR 0.001 1 Linear 0.1
 >      in audition (out 0 (ringz (tDuty AR x 0 DoNothing d) 1000 0.1)) }
 

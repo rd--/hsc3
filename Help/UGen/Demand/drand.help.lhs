@@ -9,7 +9,7 @@ array	- array of values or other ugens
 Dxrand never plays the same value twice, whereas Drand chooses any
 value in the list.
 
-> do { n <- drand 32 (mce [1,3,2,7,8])
+> do { n <- drand dinf (mce [1, 3, 2, 7, 8])
 >    ; let { x = mouseX KR 1 400 Exponential 0.1
 >          ; t = impulse KR x 0
 >          ; f = demand t 0 n * 30 + 340 }
