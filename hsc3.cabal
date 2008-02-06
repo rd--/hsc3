@@ -9,7 +9,8 @@ Homepage:         http://slavepianos.org/rd/f/207949/
 Synopsis:         Haskell SuperCollider
 Description:      Haskell client for the SuperCollider synthesis server
 Category:         Sound
-Tested-With:      GHC
+Tested-With:      GHC==6.8.2
+Build-Type:       Simple
 Build-Depends:    base, binary, bytestring, hosc == 0.2, network, random
 GHC-Options:      -Wall -fno-warn-orphans -fwarn-tabs -O2
 Exposed-modules:  Sound.SC3
