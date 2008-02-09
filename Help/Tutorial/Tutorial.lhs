@@ -181,6 +181,22 @@ Sound.OpenSoundControl modules, to build type:
 
   $ runhaskell Setup.lhs haddock
 
+* Identifier lookup & hasktags
+
+The emacs command M-. (find-tag) looks up an identifier in
+a 'tags' table.  The hasktags utility can generate tags files 
+from haskell source files that are usable with emacs.
+
+To generate the a tags file for hsc3, visit the hsc3 directory 
+and type:
+
+  $ find Sound -name '*.*hs' | xargs hasktags -e
+
+To use the hsc3 tags table type `M-x visit-tags-table', or add
+an entry to ~/.emacs:
+
+  (setq tags-table-list '("~/sw/hsc3"))
+
 * Example Unit Generator Graphs
 
 The Help/Graphs directory contains example unit generator graphs.  The
