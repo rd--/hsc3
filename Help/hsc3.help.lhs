@@ -166,7 +166,7 @@ second.
 The supercollider language provides optional multiply
 and add inputs for most unit generator constructors.
 
-Optional arguments do not interact well with the 
+Optional arguments do not interact well with the
 haskell behaviour of treating functions as monadic.
 
 That is, one way to write the number thirteen is:
@@ -201,15 +201,15 @@ and a single PinkNoise node.
 We note that this distinction is only relevant
 for non-deterministic unit generators.
 
-To write this simple graph in haskell we can use 
+To write this simple graph in haskell we can use
 the clone function:
 
 > let f = liftM (* mce [0.1, 0.05])
 > in do { a <- f (clone 2 (whiteNoise AR))
->       ; b <- f (pinkNoise AR) 
+>       ; b <- f (pinkNoise AR)
 >       ; audition (out 0 (a + b)) }
 
-which is defined in relation to the standard 
+which is defined in relation to the standard
 monad functions replicateM and liftM.
 
 | clone :: (UId m) => Int -> m UGen -> m UGen
@@ -230,14 +230,14 @@ Consider the freeSelf unit generator:
 
 In order to allow multiple root graphs to be
 freely composed we implement a leftmost rule,
-whereby the leftmost root need not be a sink 
-node, in which case the mrg node may be used 
+whereby the leftmost root need not be a sink
+node, in which case the mrg node may be used
 as an input node.
 
 Consider a simple ping pong delay filter:
 
 > let ppd s = let { a = localIn 2 AR + mce [s, 0]
->                 ; b = delayN a 0.2 0.2 
+>                 ; b = delayN a 0.2 0.2
 >                 ; c = mceEdit reverse b * 0.8 }
 >             in mrg [b, localOut c]
 > in do { n <- whiteNoise AR
@@ -264,11 +264,11 @@ It is for this reason that we can write:
 > sinOsc AR 440.0 0 * 0.1
 
 but must explicitly construct constants from values
-of a concrete numerical type using the constant 
+of a concrete numerical type using the constant
 function.
 
 > let { f = 440.0 :: Double
->     ; p = 0 :: Int 
+>     ; p = 0 :: Int
 >     ; a = 0.1 :: Float }
 > in sinOsc AR (constant f) (constant p) * (constant a)
 
@@ -360,7 +360,7 @@ where UId is defined as:
 
 The signature indicates that whiteNoise is a
 function from a Rate value to an (m UGen)
-value. 
+value.
 
 * Non-determinism, monadic structure, do notation
 
@@ -437,12 +437,12 @@ generator.
 | ; Out.ar(0, SinOsc.ar(f, 0) * 0.1) }.play
 
 The distinction here concerns multiple
-reads from a single demand rate source, ie. 
+reads from a single demand rate source, ie.
 it is not that the source is non-deterministic,
-it is rather that each read request consumes 
+it is rather that each read request consumes
 the value it reads.
 
-Therefore in haskell demand rate unit generators have 
+Therefore in haskell demand rate unit generators have
 similar constructor functions to non-deterministic
 unit generators, in order that we can distinguish:
 
@@ -459,7 +459,7 @@ language above, from:
 >          ; f = demand t 0 a * 30 + 340 }
 >      in audition (out 0 (sinOsc AR f 0 * 0.1)) }
 
-which gives an equal sequence of tones in each 
+which gives an equal sequence of tones in each
 channel.
 
 * References
