@@ -12,7 +12,11 @@ import Data.List (nub, elemIndex)
 
 data Terminal = Terminal UGen Int deriving (Eq, Show)
 data Edge = Edge Terminal Terminal deriving (Eq, Show)
-data Graph = Graph [UGen] [UGen] [UGen] [Edge] deriving (Eq, Show)
+data Graph = Graph { constants :: [UGen]
+                   , controls :: [UGen]
+                   , primitives :: [UGen]
+                   , edges :: [Edge] }
+             deriving (Eq, Show)
 data Input = Input Int Int deriving (Eq, Show)
 
 -- | The list of all UGens referenced in a UGen graph.
@@ -28,8 +32,8 @@ implicit :: Int -> UGen
 implicit n = Primitive KR "Control" [] (replicate n KR) (Special 0) Nothing
 
 -- | Generate the set of edges given the complete set of UGens.
-edges :: [UGen] -> [Edge]
-edges us = concatMap ugenEdges us
+make_edges :: [UGen] -> [Edge]
+make_edges us = concatMap ugenEdges us
     where ugenEdges u@(Primitive _ _ i _ _ _) = map f i'
                where g (v, _) = or [isUGen v, isProxy v, isControl v, isMRG v]
                      n = length i - 1
@@ -39,7 +43,7 @@ edges us = concatMap ugenEdges us
 
 -- | Construct a UGen graph.
 graph :: UGen -> Graph
-graph root = Graph n c u' (edges u')
+graph root = Graph n c u' (make_edges u')
   where e = (nub . reverse) (nodes root)
         n = filter isConstant e
         c = filter isControl e
