@@ -49,13 +49,13 @@ checkInput :: UGen -> UGen
 checkInput u = if isSink u then error ("illegal input" ++ show u) else u
 
 -- | Construct proxied and multiple channel expanded UGen.
-mkUGen :: Rate -> Name -> [UGen] -> [Output] -> Special -> UGenId -> UGen
+mkUGen :: Rate -> Name -> [UGen] -> [Output] -> Special -> Maybe UGenId -> UGen
 mkUGen r n i o s z = proxify (mceExpand u)
     where u = Primitive r n (map checkInput i) o s z
 
 -- | Operator UGen constructor.
 mkOperator :: Name -> [UGen] -> Int -> UGen
-mkOperator c i s = mkUGen r c i [r] (Special s) (UGenId 0)
+mkOperator c i s = mkUGen r c i [r] (Special s) Nothing
     where r = maximum (map rateOf i)
 
 -- | Unary math constructor with constant optimization.
@@ -72,35 +72,39 @@ mkBinaryOperator i f a b
                                      in constant (f a' b')
     | otherwise = mkOperator "BinaryOpUGen" [a, b] (fromEnum i)
 
--- | Oscillator constructor.
-mkOscId :: UGenId -> Rate -> Name -> [UGen] -> Int -> UGen
-mkOscId z r c i o = mkUGen r c i (replicate o r) (Special 0) z
+withId :: UGenId -> UGen -> UGen
+withId z u | isUGen u = u { ugenId = Just z }
+           | otherwise = u
 
 -- | Oscillator constructor.
 mkOsc :: Rate -> Name -> [UGen] -> Int -> UGen
-mkOsc = mkOscId (UGenId 0)
+mkOsc r c i o = mkUGen r c i (replicate o r) (Special 0) Nothing
 
--- | Variant oscillator constructor with MCE collapsing input.
-mkOscMCEId :: UGenId -> Rate -> Name -> [UGen] -> UGen -> Int -> UGen
-mkOscMCEId z r c i j o = mkOscId z r c (i ++ mceChannels j) o
+-- | Oscillator constructor, setting identifier.
+mkOscId :: UGenId -> Rate -> Name -> [UGen] -> Int -> UGen
+mkOscId z r c i o = withId z (mkOsc r c i o)
 
 -- | Variant oscillator constructor with MCE collapsing input.
 mkOscMCE :: Rate -> Name -> [UGen] -> UGen -> Int -> UGen
-mkOscMCE = mkOscMCEId (UGenId 0)
+mkOscMCE r c i j o = mkOsc r c (i ++ mceChannels j) o
+
+-- | Variant oscillator constructor with MCE collapsing input.
+mkOscMCEId :: UGenId -> Rate -> Name -> [UGen] -> UGen -> Int -> UGen
+mkOscMCEId z r c i j o = withId z (mkOscMCE r c i j o)
 
 -- | Filter UGen constructor.
-mkFilterId :: UGenId -> Name -> [UGen] -> Int -> UGen
-mkFilterId z c i o = mkUGen r c i o' (Special 0) z
+mkFilter :: Name -> [UGen] -> Int -> UGen
+mkFilter c i o = mkUGen r c i o' (Special 0) Nothing
     where r = maximum (map rateOf i)
           o'= replicate o r
 
 -- | Filter UGen constructor.
-mkFilter :: Name -> [UGen] -> Int -> UGen
-mkFilter = mkFilterId (UGenId 0)
+mkFilterId :: UGenId -> Name -> [UGen] -> Int -> UGen
+mkFilterId z c i o = withId z (mkFilter c i o)
 
 -- | Variant filter with rate derived from keyed input.
 mkFilterKeyed :: Name -> Int -> [UGen] -> Int -> UGen
-mkFilterKeyed c k i o = mkUGen r c i o' (Special 0) (UGenId 0)
+mkFilterKeyed c k i o = mkUGen r c i o' (Special 0) Nothing
     where r = rateOf (i !! k)
           o' = replicate o r
 

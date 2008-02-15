@@ -20,7 +20,7 @@ data UGen = Constant { constantValue :: Double }
                       , ugenInputs :: [UGen]
                       , ugenOutputs :: [Output]
                       , ugenSpecial :: Special
-                      , ugenId :: UGenId }
+                      , ugenId :: Maybe UGenId }
           | Proxy { proxySource :: UGen
                   , proxyIndex :: Int }
           | MCE { mceProxies :: [UGen] }

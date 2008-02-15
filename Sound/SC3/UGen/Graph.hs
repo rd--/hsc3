@@ -4,7 +4,7 @@ module Sound.SC3.UGen.Graph ( Graph(..), Input(..), Terminal(..), Edge(..)
                             , makeInput ) where
 
 import Sound.SC3.UGen.Rate (Rate(KR))
-import Sound.SC3.UGen.UGen (UGen(..), Special(..), UGenId(..))
+import Sound.SC3.UGen.UGen (UGen(..), Special(..))
 import Sound.SC3.UGen.UGen.Predicate
 
 import Data.Maybe (fromMaybe)
@@ -25,7 +25,7 @@ nodes u = [u]
 
 -- | Construct implicit control UGen (k-rate only).
 implicit :: Int -> UGen
-implicit n = Primitive KR "Control" [] (replicate n KR) (Special 0) (UGenId 0)
+implicit n = Primitive KR "Control" [] (replicate n KR) (Special 0) Nothing
 
 -- | Generate the set of edges given the complete set of UGens.
 edges :: [UGen] -> [Edge]
