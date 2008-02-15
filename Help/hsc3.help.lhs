@@ -318,7 +318,7 @@ does not describe silence, it describes white
 noise.
 
 We read WhiteNoise.ar as a computation that
-constructs an value, not as an expression that
+constructs a value, not as an expression that
 denotes a value.
 
 In procedural languages we are familiar with many
