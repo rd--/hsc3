@@ -1,11 +1,17 @@
-* Abstract, Disclaimer
+* Abstract
 
-This document describes the hsc3 haskell 
-bindings to the supercollider synthesis 
+This document describes the hsc3 haskell
+bindings to the supercollider synthesis
 server.
 
-This document does not contain introductory 
-materials for haskell or supercollider, see
+The bindings allow haskell to be used
+to write unit generator graphs, to control
+the supercollider synthesier interactively
+while it is running, and to write scores for
+offline rendering.
+
+For detailed introductory materials on
+haskell and supercollider, see
 
   http://haskell.org/
   http://audiosynth.com/
