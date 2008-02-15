@@ -20,7 +20,7 @@ haskell and supercollider, see
 
 | What should a computer music language do?
 | ...
-| Is a specialized computer music language 
+| Is a specialized computer music language
 | even necessary? (McCartney, 2002)
 
 These questions are asked in a paper that
@@ -42,14 +42,10 @@ Using this model of discrete communicating
 processes, the computer music language is relieved
 of many onerous tasks.
 
-It is precisely the existence of an appropriate
-synthesis engine that allows us to consider using
-haskell for real time musical work.
-
-* Notations, equivalence, reactivity
-
-| Computer music composition is a specification
-| problem.  (McCartney, 1998)
+In part the question is rhetorical, given an
+appropriately designed and implemented
+synthesiser, the control language need not be
+particularly specialised.
 
 * What needs to be done
 
