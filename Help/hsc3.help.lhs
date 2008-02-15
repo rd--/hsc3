@@ -126,6 +126,41 @@ allows us to implement the multiple channel
 expansion model in much the same way as in the
 supercollider language
 
+Unit generators with multiple outputs, such
+as pan2, are represented as a specific kind
+of unit generator value, an ordered set of
+proxies.
+
+We can also write these sets directly using
+the 'mce' function.
+
+Multiple channel expansion flows downward
+through unit generator graphs. 
+
+In the expression below, the frequency input
+causes two sinOsc unit generators to be created.
+
+> let { x = mouseX KR (-1) 1 Linear 0.1
+>     ; o1 = pulse AR 440 0.1
+>     ; o2 = sinOsc AR (mce [110, 2300]) 0 * 0.1 }
+> in audition (out 0 (pan2 o1 x 0.1 + o2))
+
+This is turn causes the (*) function to
+expands and perform channel matching, that is
+to duplicate the right hand side input as
+required.
+
+The (+) function is also expanded, since the
+left and right hand sides are of equal degree
+there is not replication of inputs.
+
+The out function does not expand, since it is
+defined to flatten one layer of mce values at
+it's second input to support a variable number
+of input channels; it would however expand on
+mce at the first argument, or nested mce at the
+second.
+
 * Multiply add inputs, Haskell Curry, and cloning
 
 The supercollider language provides optional multiply
