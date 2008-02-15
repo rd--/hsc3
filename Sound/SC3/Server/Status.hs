@@ -16,7 +16,7 @@ statusFields = ["# UGens                     ",
 statusInfo :: OSC -> [String]
 statusInfo o = maybe [] f (address o)
     where f a = if a == "status.reply" 
-                then maybe [] (map show) (arguments o) 
+                then maybe [] (map show . tail) (arguments o) 
                 else []
 
 statusFormat :: OSC -> [String]
