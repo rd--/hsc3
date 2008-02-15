@@ -63,15 +63,15 @@ of work being done.
 
 * Questions, San Dimas, 1965
 
-| (1) What are declarative languages? 
-| ... 
-| (4) How can we use them to program? 
-| (5) How can we implement them? 
+| (1) What are declarative languages?
+| ...
+| (4) How can we use them to program?
+| (5) How can we implement them?
 | (Strachey, in Landin, 1966)
 
 Haskell is a non-strict and purely functional
-language that is one result of many years of
-research into these questions (Hudak et al, 2007).
+language, one result of many years of research
+into these questions (Hudak et al, 2007).
 
 * Types, Unit Generators, Parametric Polymorphism
 
