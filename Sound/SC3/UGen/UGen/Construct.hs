@@ -3,7 +3,8 @@ module Sound.SC3.UGen.UGen.Construct ( mkUnaryOperator, mkBinaryOperator
                                      , mkOscMCEId, mkOscMCE
                                      , mkFilterId, mkFilter, mkFilterKeyed
                                      , mkFilterMCE
-                                     , liftU, liftU2, liftU3, liftU4 ) where
+                                     , liftU, liftU2, liftU3, liftU4
+                                     , withUniqueId ) where
 
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Rate
@@ -111,6 +112,11 @@ mkFilterKeyed c k i o = mkUGen r c i o' (Special 0) Nothing
 -- | Variant filter constructor with MCE collapsing input.
 mkFilterMCE :: Name -> [UGen] -> UGen -> Int -> UGen
 mkFilterMCE c i j o = mkFilter c (i ++ mceChannels j) o
+
+-- | Assign a unique identifier to a UGen.
+withUniqueId :: (UId m) => UGen -> m UGen
+withUniqueId u = do n <- generateUId
+                    return (withId (UGenId n) u)
 
 -- | Lifting UGenId requiring UGens to UId
 liftU :: (UId m) => (UGenId -> a -> UGen) -> (a -> m UGen)
