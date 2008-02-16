@@ -1,8 +1,8 @@
-module Sound.SC3.UGen.Graph ( Graph(..)
-                            , Input(..)
-                            , graph
-                            , nodeIndex
-                            , makeInput ) where
+module Sound.SC3.UGen.Graph.Naive ( Graph(..)
+                                  , Input(..)
+                                  , graph
+                                  , nodeIndex
+                                  , makeInput ) where
 
 import Sound.SC3.UGen.Rate (Rate(KR))
 import Sound.SC3.UGen.UGen (UGen(..), Special(..))
