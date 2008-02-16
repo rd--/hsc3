@@ -1,4 +1,5 @@
-module Sound.SC3.Server.Synthdef (synth, synthdef) where
+module Sound.SC3.Server.Synthdef ( Node(..), FromPort(..), Graph(..)
+                                  , synth, synthdef ) where
 
 import qualified Data.ByteString.Lazy as B
 import qualified Data.IntMap as M
@@ -18,18 +19,25 @@ data FromPort = C NodeId
               | U NodeId PortIndex
                 deriving (Eq, Show)
 
-{-
-data ToPort = ToPort NodeId PortIndex
-              deriving (Eq, Show)
--}
-
 data Input = Input Int Int
              deriving (Eq, Show)
 
-data Node = NodeC NodeId Double
-          | NodeK NodeId Rate Name Double
-          | NodeU NodeId Rate Name [FromPort] [Output] Special (Maybe UGenId)
-          | NodeP NodeId Node PortIndex
+data Node = NodeC { node_id :: NodeId
+                  , node_c_value :: Double }
+          | NodeK { node_id :: NodeId
+                  , node_k_rate :: Rate
+                  , node_k_name :: Name
+                  , node_k_default :: Double }
+          | NodeU { node_id :: NodeId
+                  , node_u_rate :: Rate
+                  , node_u_name :: Name
+                  , node_u_inputs :: [FromPort]
+                  , node_u_outputs :: [Output]
+                  , node_u_special :: Special
+                  , node_u_ugenid :: Maybe UGenId }
+          | NodeP { node_id :: NodeId 
+                  , node_p_node :: Node
+                  , node_p_index :: PortIndex }
             deriving (Eq, Show)
 
 data Graph = Graph { nextId :: NodeId
@@ -40,12 +48,6 @@ data Graph = Graph { nextId :: NodeId
 
 type Map = M.IntMap Int
 type Maps = (Map, Map, Map)
-
-node_id :: Node -> NodeId
-node_id (NodeC n _) = n
-node_id (NodeK n _ _ _) = n
-node_id (NodeU n _ _ _ _ _ _) = n
-node_id (NodeP n _ _) = n
 
 as_from_port :: Node -> FromPort
 as_from_port (NodeC n _) = C n
@@ -167,14 +169,6 @@ encode_node_u m (NodeU _ r nm i o s _) =
           (Special s') = s
 encode_node_u _ _ = error "encode_ugen: illegal input"
 
-node_c_value :: Node -> Double
-node_c_value (NodeC _ x) = x
-node_c_value _ = error "node_c_value"
-
-node_k_default :: Node -> Double
-node_k_default (NodeK _ _ _ x) = x
-node_k_default _ = error "node_k_default"
-
 -- | Construct instrument definition bytecode.
 encode_graphdef :: String -> Graph -> B.ByteString
 encode_graphdef s g =
@@ -201,10 +195,3 @@ synth u = let (_, g) = mk_node u empty_graph
 synthdef :: String -> UGen -> [Word8]
 synthdef s u = B.unpack (encode_graphdef s (synth u))
 
-{-
-type Edges = [(FromPort, ToPort)]
-
-edges :: Graph -> Edges
-edges g = concatMap f (ugens g)
-    where f (NodeU x _ _ i _ _ _) = zip i (map (\n -> ToPort x n) [0..])
--}
