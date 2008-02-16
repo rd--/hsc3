@@ -3,8 +3,8 @@ dial history (jrhb)
 > let { mfv = [[697, 770, 852, 941], [1209, 1336, 1477, 1633]]
 >     ; numbers = [[3, 1]] ++ [[a, b] | a <- [0..2], b <- [0..2]]
 >     ; range s l r = linLin s 0 1 l r
->     ; mce_r = mce . map mce
->     ; dinf = 1E9 }
+>     ; mce_r = mce . map mce 
+>     ; mce_mrg = mrg . mceProxies }
 > in do { n <- dwhite dinf 7 12
 >       ; w <- dwhite 1 2 7
 >       ; b <- dbrown n 0.1 0.2 0.01
@@ -24,7 +24,7 @@ dial history (jrhb)
 >             ; dsig = delayN sig 0.2 (range d 0 0.01)
 >             ; hiss = g1 * 0.01 + hpf (g2 * 0.02) 3000
 >             ; z = silent 1 }
->         in audition (out 0 (mce2 z (dsig + hiss))) }
+>         in audition (mce_mrg (out 0 (mce2 z (dsig + hiss)))) }
 
 { var mfv = [[697, 770, 852, 941], [1209, 1336, 1477, 1633]]
 ; var numbers = [[3, 1]] ++ {: [a, b], a <- (0..2), b <- (0..2) }.all
