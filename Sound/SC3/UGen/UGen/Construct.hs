@@ -3,8 +3,7 @@ module Sound.SC3.UGen.UGen.Construct ( mkUnaryOperator, mkBinaryOperator
                                      , mkOscMCEId, mkOscMCE
                                      , mkFilterId, mkFilter, mkFilterKeyed
                                      , mkFilterMCE
-                                     , liftU, liftU2, liftU3, liftU4
-                                     , withUniqueId ) where
+                                     , liftU, liftU2, liftU3, liftU4 ) where
 
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Rate
@@ -73,35 +72,40 @@ mkBinaryOperator i f a b
                                      in constant (f a' b')
     | otherwise = mkOperator "BinaryOpUGen" [a, b] (fromEnum i)
 
-withId :: UGenId -> UGen -> UGen
-withId z u | isUGen u = u { ugenId = Just z }
-           | otherwise = u
+mkOsc_ :: Maybe UGenId -> Rate -> Name -> [UGen] -> Int -> UGen
+mkOsc_ z r c i o = mkUGen r c i (replicate o r) (Special 0) z
 
 -- | Oscillator constructor.
 mkOsc :: Rate -> Name -> [UGen] -> Int -> UGen
-mkOsc r c i o = mkUGen r c i (replicate o r) (Special 0) Nothing
+mkOsc = mkOsc_ Nothing
 
 -- | Oscillator constructor, setting identifier.
 mkOscId :: UGenId -> Rate -> Name -> [UGen] -> Int -> UGen
-mkOscId z r c i o = withId z (mkOsc r c i o)
+mkOscId z = mkOsc_ (Just z)
+
+mkOscMCE_ :: Maybe UGenId -> Rate -> Name -> [UGen] -> UGen -> Int -> UGen
+mkOscMCE_ z r c i j o = mkOsc_ z r c (i ++ mceChannels j) o
 
 -- | Variant oscillator constructor with MCE collapsing input.
 mkOscMCE :: Rate -> Name -> [UGen] -> UGen -> Int -> UGen
-mkOscMCE r c i j o = mkOsc r c (i ++ mceChannels j) o
+mkOscMCE = mkOscMCE_ Nothing
 
 -- | Variant oscillator constructor with MCE collapsing input.
 mkOscMCEId :: UGenId -> Rate -> Name -> [UGen] -> UGen -> Int -> UGen
-mkOscMCEId z r c i j o = withId z (mkOscMCE r c i j o)
+mkOscMCEId z = mkOscMCE_ (Just z)
 
--- | Filter UGen constructor.
-mkFilter :: Name -> [UGen] -> Int -> UGen
-mkFilter c i o = mkUGen r c i o' (Special 0) Nothing
+mkFilter_ :: Maybe UGenId -> Name -> [UGen] -> Int -> UGen
+mkFilter_ z c i o = mkUGen r c i o' (Special 0) z
     where r = maximum (map rateOf i)
           o'= replicate o r
 
 -- | Filter UGen constructor.
+mkFilter :: Name -> [UGen] -> Int -> UGen
+mkFilter = mkFilter_ Nothing
+
+-- | Filter UGen constructor.
 mkFilterId :: UGenId -> Name -> [UGen] -> Int -> UGen
-mkFilterId z c i o = withId z (mkFilter c i o)
+mkFilterId z = mkFilter_ (Just z)
 
 -- | Variant filter with rate derived from keyed input.
 mkFilterKeyed :: Name -> Int -> [UGen] -> Int -> UGen
@@ -112,11 +116,6 @@ mkFilterKeyed c k i o = mkUGen r c i o' (Special 0) Nothing
 -- | Variant filter constructor with MCE collapsing input.
 mkFilterMCE :: Name -> [UGen] -> UGen -> Int -> UGen
 mkFilterMCE c i j o = mkFilter c (i ++ mceChannels j) o
-
--- | Assign a unique identifier to a UGen.
-withUniqueId :: (UId m) => UGen -> m UGen
-withUniqueId u = do n <- generateUId
-                    return (withId (UGenId n) u)
 
 -- | Lifting UGenId requiring UGens to UId
 liftU :: (UId m) => (UGenId -> a -> UGen) -> (a -> m UGen)
