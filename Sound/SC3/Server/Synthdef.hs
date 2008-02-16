@@ -13,17 +13,17 @@ import Sound.SC3.UGen.Rate
 type NodeId = Int
 type PortIndex = Int
 
-data FromPort = C NodeId 
-              | K NodeId 
+data FromPort = C NodeId
+              | K NodeId
               | U NodeId PortIndex
                 deriving (Eq, Show)
-                         
+
 {-
 data ToPort = ToPort NodeId PortIndex
               deriving (Eq, Show)
 -}
 
-data Input = Input Int Int 
+data Input = Input Int Int
              deriving (Eq, Show)
 
 data Node = NodeC NodeId Double
@@ -66,7 +66,7 @@ push_c x g = let n = NodeC (nextId g) x
                       , nextId = nextId g + 1 })
 
 mk_node_c :: UGen -> Graph -> (Node, Graph)
-mk_node_c (Constant x) g = 
+mk_node_c (Constant x) g =
     let y = find (find_c_p x) (constants g)
     in maybe (push_c x g) (\y' -> (y', g)) y
 mk_node_c _ _ = error "mk_node_c"
@@ -77,13 +77,13 @@ find_k_p x (NodeK _ _ y _) = x == y
 find_k_p _ _ = error "find_k_p"
 
 push_k :: (Rate, Name, Double) -> Graph -> (Node, Graph)
-push_k (r, nm, d) g = 
+push_k (r, nm, d) g =
     let n = NodeK (nextId g) r nm d
     in (n, g { controls = n : controls g
              , nextId = nextId g + 1 })
 
 mk_node_k :: UGen -> Graph -> (Node, Graph)
-mk_node_k (Control r nm d) g = 
+mk_node_k (Control r nm d) g =
     let y = find (find_k_p nm) (controls g)
     in maybe (push_k (r, nm, d) g) (\y' -> (y', g)) y
 mk_node_k _ _ = error "mk_node_k"
@@ -94,7 +94,7 @@ acc (x:xs) ys g = let (y, g') = mk_node x g
                   in acc xs (y:ys) g'
 
 find_u_p :: (Rate, Name, [FromPort], [Output], Special, Maybe UGenId) -> Node -> Bool
-find_u_p (r, n, i, o, s, d) (NodeU _ r' n' i' o' s' d') 
+find_u_p (r, n, i, o, s, d) (NodeU _ r' n' i' o' s' d')
     = r == r' && n == n' && i == i' && o == o' && s == s' && d == d'
 find_u_p _ _ = error "find_u_p"
 
@@ -105,7 +105,7 @@ push_u (r, nm, i, o, s, d) g =
              , nextId = nextId g + 1 })
 
 mk_node_u :: UGen -> Graph -> (Node, Graph)
-mk_node_u (Primitive r nm i o s d) g = 
+mk_node_u (Primitive r nm i o s d) g =
     let (i', g') = acc i [] g
         i'' = map as_from_port i'
         u = (r, nm, i'', o, s, d)
@@ -147,14 +147,14 @@ encode_input (Input u p) = B.append (encode_i16 u) (encode_i16 p)
 
 -- | Byte-encode Control value.
 encode_node_k :: Maps -> Node -> B.ByteString
-encode_node_k (_, ks, _) (NodeK n _ nm _) = 
+encode_node_k (_, ks, _) (NodeK n _ nm _) =
     B.concat [ B.pack (str_pstr nm)
              , encode_i16 (fetch n ks) ]
 encode_node_k _ _ = error "encode_node_k"
 
 -- | Byte-encode UGen value.
 encode_node_u :: Maps -> Node -> B.ByteString
-encode_node_u m (NodeU _ r nm i o s _) = 
+encode_node_u m (NodeU _ r nm i o s _) =
     B.concat [ B.pack (str_pstr nm)
              , encode_i8 (rateId r)
              , encode_i16 (length i)
@@ -192,7 +192,7 @@ encode_graphdef s g =
              , B.concat (map (encode_node_u mm) us) ]
     where (Graph _ cs ks us) = g
           mm = mk_maps g
-          
+
 synth :: UGen -> Graph
 synth u = let (_, g) = mk_node u empty_graph
               (Graph _ cs ks us) = g
@@ -201,7 +201,6 @@ synth u = let (_, g) = mk_node u empty_graph
 synthdef :: String -> UGen -> [Word8]
 synthdef s u = B.unpack (encode_graphdef s (synth u))
 
-
 {-
 type Edges = [(FromPort, ToPort)]
 
@@ -209,4 +208,3 @@ edges :: Graph -> Edges
 edges g = concatMap f (ugens g)
     where f (NodeU x _ _ i _ _ _) = zip i (map (\n -> ToPort x n) [0..])
 -}
-
