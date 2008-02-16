@@ -17,7 +17,7 @@ chain saw (jrhb)
 >                 ; let { f2 = linExp s1 (-1) 1 f1 (f1 * exprange n3 2 10)
 >                       ; u1 = lfSaw KR f2 0 
 >                       ; u2 = lfSaw KR (f1 * 0.1) 0 * 0.1 + 1 }
->                   in withUniqueId . clipu =<< coin 0.5 (u1 * s2) (u1 * u2) }
+>                   in return . clipu =<< coin 0.5 (u1 * s2) (u1 * u2) }
 >     ; inp = lfSaw KR (0.2 * mce2 1 1.1) 0
 >     ; b_freq = mce [70, 800, 9000, 5242] }
 > in do { ff <- chain 16 f inp
