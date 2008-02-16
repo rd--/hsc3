@@ -10,7 +10,6 @@ module Sound.SC3.UGen (module Sound.SC3.UGen.Analysis,
                        module Sound.SC3.UGen.FFT,
                        module Sound.SC3.UGen.FFT.Monadic,
                        module Sound.SC3.UGen.Filter,
-                       module Sound.SC3.UGen.Graph,
                        module Sound.SC3.UGen.Granular,
                        module Sound.SC3.UGen.Information,
                        module Sound.SC3.UGen.IO,
@@ -40,7 +39,6 @@ import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.FFT
 import Sound.SC3.UGen.FFT.Monadic
 import Sound.SC3.UGen.Filter
-import Sound.SC3.UGen.Graph
 import Sound.SC3.UGen.Granular
 import Sound.SC3.UGen.Information
 import Sound.SC3.UGen.IO
