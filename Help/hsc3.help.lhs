@@ -161,6 +161,13 @@ of input channels; it would however expand on
 mce at the first argument, or nested mce at the
 second.
 
+Equal inputs do also push the expansion 
+downwards, however in complex graphs this
+seems occasionally unreliable.
+
+> let f = (mce2 440 440)
+> in audition (out 0 (sinOsc AR f 0 * 0.1))
+
 * Multiply add inputs, Haskell Curry, and cloning
 
 The supercollider language provides optional multiply
