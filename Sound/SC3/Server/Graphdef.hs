@@ -47,7 +47,7 @@ encode_graphdef s g = B.concat [ encode_str "SCgf"
                                , B.concat (map (encode_control g) c)
                                , encode_i16 (length u)
                                , B.concat (map (encode_ugen g) u) ]
-    where (Graph n c u _) = g
+    where (Graph n c u) = g
 
 -- | Construct instrument definition bytecode.
 graphdef :: String -> Graph -> [Word8]
