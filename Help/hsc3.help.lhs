@@ -279,6 +279,37 @@ function.
 >     ; a = 0.1 :: Float }
 > in sinOsc AR (constant f) (constant p) * (constant a)
 
+* Unit generators are comparable
+
+In haskell the Eq and Ord type classes define
+equality and ordering operators.  
+
+In unit generator graphs these operators have a
+somewhat different meaning, and require a different 
+type signature.  
+
+For instance the greater-than operator defines a 
+unit generator that is zero for sample values 
+where the comparison fails, and one when it
+succeeds.
+
+Since the Ord type gives the signature:
+
+| (>) :: a -> a -> Bool
+
+we define a variant with a star suffix, such 
+that:
+
+> let { x = mouseX KR 3 45 Exponential 0.1
+>     ; t = sinOsc AR x 0 >* 0
+>     ; d = envTriangle 0.01 0.1
+>     ; e = envGen AR t 1 0 1 DoNothing d 
+>     ; f = 220 + 880 * (toggleFF t)
+>     ; o = sinOsc AR f 0 }
+> in audition (out 0 (o * e))
+
+is a sequence of low and high tones.
+
 * Observable Sharing, Pure Noise
 
 The haskell expression:
