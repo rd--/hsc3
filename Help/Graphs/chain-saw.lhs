@@ -1,5 +1,8 @@
 chain saw (jrhb)
 
+[this graph generates long chains of unit generators and may require
+increasing the stack limit of the haskell run time system]
+
 > let { rrand l r = getStdRandom (randomR (l, r)) :: IO Double
 >     ; coin n a b = do { m <- rrand 0.0 1.0
 >                       ; return (if m > n then a else b) }
