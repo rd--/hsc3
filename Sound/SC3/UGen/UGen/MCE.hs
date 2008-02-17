@@ -55,5 +55,10 @@ mceChannels (MCE l) = l
 mceChannels (MRG x y) = (MRG r y) : rs where (r:rs) = mceChannels x
 mceChannels u = [u]
 
-mceInterleave :: UGen -> UGen -> UGen
-mceInterleave x y = mce (zipWith mce2 (mceChannels x) (mceChannels y))
+-- | Transpose rows and columns, ie. {{a,b},{c,d}} to {{a,c},{b,d}}.
+mceTranspose :: UGen -> UGen
+mceTranspose u = mce (map mce (transpose (map mceChannels (mceChannels u))))
+
+-- | The root node of a graph is not allowed to be an mce value.
+mceToMRG :: UGen -> UGen
+mceToMRG = mrg . mceProxies
