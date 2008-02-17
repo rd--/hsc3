@@ -1,6 +1,8 @@
 module Sound.SC3.UGen.UGen ( Name, UGenId(..), UGen(..), Output, Special(..)
                            , constant, control
-                           , mce, mce2, mrg, proxy
+                           , mce, mce2
+                           , mrg, mrg2
+                           , proxy
                            , clone, uid ) where
 
 import Control.Monad (liftM, replicateM)
@@ -48,11 +50,15 @@ mce = MCE
 mce2 :: UGen -> UGen -> UGen
 mce2 x y = mce [x, y]
 
--- | Variant multiple root graph constructor.
+-- | Multiple root graph constructor.
 mrg :: [UGen] -> UGen
 mrg [] = undefined
 mrg [x] = x
 mrg (x:xs) = MRG x (mrg xs)
+
+-- | Multiple root graph with two inputs.
+mrg2 :: UGen -> UGen -> UGen
+mrg2 = MRG
 
 proxy :: UGen -> Int -> UGen
 proxy = Proxy
@@ -60,3 +66,4 @@ proxy = Proxy
 -- | Clone UGen.
 clone :: (UId m) => Int -> m UGen -> m UGen
 clone n u = liftM mce (replicateM n u)
+
