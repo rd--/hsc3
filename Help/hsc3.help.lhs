@@ -295,7 +295,7 @@ succeeds.
 
 Since the Ord type gives the signature:
 
-| (>) :: a -> a -> Bool
+| (>) :: (Ord a) => a -> a -> Bool
 
 we define a variant with a star suffix, such 
 that:
@@ -309,6 +309,16 @@ that:
 > in audition (out 0 (o * e))
 
 is a sequence of low and high tones.
+
+For functions where the signature is 
+consistent with the meaning of the unit
+generator operator we use the haskell name.
+
+| max :: (Ord a) => a -> a -> a
+
+> let { l = fSinOsc AR 500 0 * 0.25
+>     ; r = fSinOsc AR 0.5 0 * 0.23 }
+> in audition (out 0 (l `max` r))
 
 * Observable Sharing, Pure Noise
 
