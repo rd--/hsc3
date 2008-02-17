@@ -58,7 +58,3 @@ mceChannels u = [u]
 -- | Transpose rows and columns, ie. {{a,b},{c,d}} to {{a,c},{b,d}}.
 mceTranspose :: UGen -> UGen
 mceTranspose u = mce (map mce (transpose (map mceChannels (mceChannels u))))
-
--- | The root node of a graph is not allowed to be an mce value.
-mceToMRG :: UGen -> UGen
-mceToMRG = mrg . mceProxies
