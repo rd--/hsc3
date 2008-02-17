@@ -138,7 +138,7 @@ mk_node u g
                   in mk_node_p n (proxyIndex u) g'
     | isMRG u = let (_, g') = mk_node (mrgRight u) g
                 in mk_node (mrgLeft u) g'
-    | otherwise = error ("mk_node" ++ show u)
+    | otherwise = error "mk_node"
 
 type Map = M.IntMap Int
 type Maps = (Map, Map, Map)
@@ -211,9 +211,16 @@ encode_graphdef s g =
 implicit :: Int -> Node
 implicit n = NodeU (-1) KR "Control" [] (replicate n KR) (Special 0) Nothing
 
+-- Transform mce nodes to mrg nodes
+prepare_root :: UGen -> UGen
+prepare_root u 
+    | isMCE u = mrg (mceProxies u)
+    | isMRG u = MRG (prepare_root (mrgLeft u)) (prepare_root (mrgRight u))
+    | otherwise = u
+
 -- | Transform a unit generator into a graph.
 synth :: UGen -> Graph
-synth u = let (_, g) = mk_node u empty_graph
+synth u = let (_, g) = mk_node (prepare_root u) empty_graph
               (Graph _ cs ks us) = g
               us' = if null ks 
                     then reverse us
