@@ -6,13 +6,12 @@ cymbalism (jmcc)
 >       ; let y = do { f <- replicateM p (rand f1 (f1 + f2))
 >                    ; rt <- replicateM p (rand 1 5)
 >                    ; return (klankSpec f (replicate p 1) rt) }
->         in do { z1 <- y
->               ; z2 <- y
+>         in do { z <- clone 2 y
 >               ; n <- liftM (* 0.03) (whiteNoise AR)
 >               ; tf <- rand 0.5 3.5
 >               ; let { t = impulse AR tf 0
 >                     ; s = decay t 0.004 * n
->                     ; k = klank s 1 0 1 (mceInterleave z1 z2) }
+>                     ; k = klank s 1 0 1 (mceTranspose z) }
 >                 in audition (out 0 k) } }
 
 { var p = 15
