@@ -207,11 +207,18 @@ encode_graphdef s g =
     where (Graph _ cs ks us) = g
           mm = mk_maps g
 
+-- Construct implicit control unit generator node (k-rate only).
+implicit :: Int -> Node
+implicit n = NodeU (-1) KR "Control" [] (replicate n KR) (Special 0) Nothing
+
 -- | Transform a unit generator into a graph.
 synth :: UGen -> Graph
 synth u = let (_, g) = mk_node u empty_graph
               (Graph _ cs ks us) = g
-          in Graph (-1) cs ks (reverse us)
+              us' = if null ks 
+                    then reverse us
+                    else implicit (length ks) : reverse us
+          in Graph (-1) cs ks us'
 
 -- | Transform a unit generator into bytecode.
 synthdef :: String -> UGen -> [Word8]
