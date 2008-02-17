@@ -56,7 +56,7 @@ interp - 1, 2, or 4. Determines whether the grain uses (1) no
 >     ; dur = 1.2 / trate
 >     ; clk = impulse AR trate 0
 >     ; pos = mouseX KR 0 (bufDur KR b) Linear 0.1 }
-> in do { pan <- return . (* 0.6) =<< whiteNoise KR
->       ; n <- whiteNoise KR
->       ; let rate = shiftLeft 1.2 (roundE (n * 3) 1)
->         in audition (out 0 (tGrains 2 clk b rate pos dur pan 0.1 2)) }
+> in do { n0 <- whiteNoise KR
+>       ; n1 <- whiteNoise KR
+>       ; let rate = shiftLeft 1.2 (roundE (n0 * 3) 1)
+>         in audition (out 0 (tGrains 2 clk b rate pos dur (n1 * 0.6) 0.25 2)) }
