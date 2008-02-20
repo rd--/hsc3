@@ -9,7 +9,7 @@ fwalk (rd)
 >           , 42.0, 35.0, 48.0, 47.0, 43.0
 >           , 40.0, 59.0, 45.0, 47.0, 52.0 ] 
 >     ; a = map (\b -> b_alloc b 20 1) [0, 1]
->     ; s = map (\(b, d) -> b_setn b [(0, d)]) [(0, n), (1, m)]
+>     ; s = map (\(b, d) -> b_setn1 b 0 d) [(0, n), (1, m)]
 >     ; fwalk r = do { t <- dust KR 3
 >                    ; r1 <- tiRand 0 6 t
 >                    ; r2 <- tRand (-0.0001) 0.0001 t

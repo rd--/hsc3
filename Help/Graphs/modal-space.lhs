@@ -11,7 +11,7 @@ modal space (jmcc)
 >               in combN m 0.31 0.31 2 + m }
 > in do { n <- clone 2 (lfNoise1 KR 3)
 >       ; withSC3 (\fd -> do { async fd (b_alloc b (length p) 1)
->                            ; send fd (b_setn b [(0, p)]) })
+>                            ; send fd (b_setn1 b 0 p) })
 >       ; audition (out 0 ((f n 48 + f n 72) * 0.25)) }
 
 { var s = Server.default
