@@ -238,6 +238,16 @@ status = message "/status" []
 sync :: Int -> OSC
 sync sid = message "/sync" [int sid]
 
+-- * Variants to simplify common cases.
+
+-- | Set single sample value.
+b_set1 :: Int -> Int -> Double -> OSC
+b_set1 nid i x = b_set nid [(i,x)]
+
+-- | Set a range of sample values.
+b_setn1 :: Int -> Int -> [Double] -> OSC
+b_setn1 nid i xs = b_setn nid [(i,xs)]
+
 -- Local Variables:
 -- truncate-lines:t
 -- End:
