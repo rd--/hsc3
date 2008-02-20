@@ -4,7 +4,7 @@ spe (jmcc)
 >     ; rapf i = do { r <- clone 2 (rand 0 0.05)
 >                   ; return (allpassN i 0.05 r 4) }
 >     ; src = let { t = impulse KR 9 0
->                 ; e = envGen KR t 0.1 0 1 DoNothing envPerc'
+>                 ; e = envGen KR t 0.1 0 1 DoNothing (envPerc 0.1 1)
 >                 ; s = mce [ 00, 03, 02, 07
 >                           , 08, 32, 16, 18
 >                           , 00, 12, 24, 32 ] }

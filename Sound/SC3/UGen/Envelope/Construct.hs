@@ -35,12 +35,12 @@ envTrapezoid shape skew dur amp = envCoord bp dur amp EnvLin
                , (shape + x1, 1)
                , (1, skew >=* 1) ]
 
--- | Percussive envelope, with attack, release, level and curve inputs.
-envPerc :: UGen -> UGen -> UGen -> [EnvCurve] -> [UGen]
-envPerc atk rls lvl crv = env [0.0, lvl, 0.0] [atk, rls] crv (-1.0) (-1.0)
+envPerc' :: UGen -> UGen -> UGen -> [EnvCurve] -> [UGen]
+envPerc' atk rls lvl crv = env [0.0, lvl, 0.0] [atk, rls] crv (-1.0) (-1.0)
 
-envPerc' :: [UGen]
-envPerc' = envPerc 0.01 1.0 1.0 (dbl (EnvNum (-4.0)))
+-- | Percussive envelope, with attack, release, level and curve inputs.
+envPerc :: UGen -> UGen -> [UGen]
+envPerc atk rls = envPerc' atk rls 1.0 (dbl (EnvNum (-4.0)))
 
 -- | Triangular envelope, with duration and level inputs.
 envTriangle :: UGen -> UGen -> [UGen]
