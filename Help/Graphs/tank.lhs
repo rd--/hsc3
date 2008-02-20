@@ -3,12 +3,12 @@ tank (jmcc)
 > let { r_allpass i = do { r <- clone 2 (rand 0.005 0.02)
 >                        ; return (allpassN i 0.03 r 1) }
 >     ; chain n f = foldl (>=>) return (replicate n f)
->     ; pling _ = do { d <- dust AR 0.2
->                    ; f <- expRand 300 2200
->                    ; p <- rand (-1) 1
->                    ; let { s1 = cubed (fSinOsc AR f 0)
->                          ; s2 = decay2 d 0.1 0.5 * 0.1 * s1 }
->                      in return (pan2 s2 p 1) }
+>     ; pling = do { d <- dust AR 0.2
+>                  ; f <- expRand 300 2200
+>                  ; p <- rand (-1) 1
+>                  ; let { s1 = cubed (fSinOsc AR f 0)
+>                        ; s2 = decay2 d 0.1 0.5 * 0.1 * s1 }
+>                    in return (pan2 s2 p 1) }
 >     ; bang = do { d <- dust AR 0.01
 >                 ; n <- brownNoise AR
 >                 ; return (pan2 (decay2 d 0.04 0.3 * n) 0 1) }
@@ -24,7 +24,7 @@ tank (jmcc)
 >                         ; l6 = leakDC l5 0.995
 >                         ; l7 = l6 + i }
 >                     in return (mrg [l7, localOut l7]) }
->     ; signal = do { s <- liftM2 (+) bang (mixFillM 8 pling)
+>     ; signal = do { s <- liftM2 (+) bang (mixFillM 8 (const pling))
 >                   ; chain 4 r_allpass s } }
 > in audition . out 0 =<< tank =<< signal
 
