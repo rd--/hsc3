@@ -17,7 +17,7 @@ hh-808 (ryan at wabdo.com)
 >                       ; e = env [0, 1, 0.4, 0, 0] [2, time, 50, 500] c 0 0 }
 >                   in a * envGen AR 1 1 0 (1/1000) RemoveSynth e
 >           , \a -> mce [a, delayN a 0.005 0.005] ]
->     ; compose = foldl1 (flip (.)) }
-> in audition (out 0 (compose f s * 2))
+>     ; (>>>) = flip (.) }
+> in audition (out 0 (foldl1 (>>>) f s * 2))
 
 http://www.create.ucsb.edu/pipermail/sc-users/2007-August/036131.html
