@@ -9,10 +9,10 @@ modal space (jmcc)
 >                   ; d = rlpf t (midiCPS (sinOsc KR 0.1 0 * 10 + r)) 0.1 * 0.1
 >                   ; m = o + d }
 >               in combN m 0.31 0.31 2 + m }
-> in do { n <- clone 2 (lfNoise1 KR 3)
->       ; withSC3 (\fd -> do { async fd (b_alloc b (length p) 1)
->                            ; send fd (b_setn1 b 0 p) })
->       ; audition (out 0 ((f n 48 + f n 72) * 0.25)) }
+> in withSC3 (\fd -> do { async fd (b_alloc b (length p) 1)
+>                       ; send fd (b_setn1 b 0 p)
+>                       ; n <- clone 2 (lfNoise1 KR 3)
+>                       ; play fd (out 0 ((f n 48 + f n 72) * 0.25)) })
 
 { var s = Server.default
 ; var b = 0
