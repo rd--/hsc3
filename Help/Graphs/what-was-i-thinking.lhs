@@ -23,7 +23,7 @@ what was i thinking? (jmcc)
 ; var p = Pulse.ar(f, n1) * 0.04
 ; var z = RLPF.ar(p, n0, 0.2)
 ; var c = { arg i
-          ; var r = 0.3.rand
+          ; var r = Rand.new(0, 0.3)
           ; var n = LFNoise1.kr(r, 0.025, 0.035)
           ; CombL.ar(i, 0.06, n, 1) }
 ; var y = z * 0.6

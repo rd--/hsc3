@@ -1,6 +1,6 @@
 police state (jmcc)
 
-> let node = do { r0 <- rand 0.020 0.102
+> let node = do { r0 <- rand 0.02 0.12
 >               ; r1 <- rand 0 (pi*2)
 >               ; r2 <- rand 0 600
 >               ; r3 <- rand 700 1300
@@ -16,15 +16,15 @@ police state (jmcc)
 >       ; let e = n1 * (n2 * 0.15 + 0.18)
 >         in audition (out 0 (combL (mix nodes + e) 0.3 0.3 3)) }
 
-{ var node = { var r0 = 0.1.rand + 0.02
-             ; var r1 = 2pi.rand
-             ; var r2 = 600.rand
-             ; var r3 = 1000 + 300.rand2
-             ; var r4 = 1.0.rand2
-             ; var r5 = 100 + 20.0.rand2
+{ var node = { var r0 = Rand.new(0.02, 0.12)
+             ; var r1 = Rand.new(0, 2pi)
+             ; var r2 = Rand.new(0, 600)
+             ; var r3 = 1000 + Rand.new(-300, 300)
+             ; var r4 = Rand.new(-1, 1)
+             ; var r5 = 100 + Rand.new(-20, 20)
              ; var n0 = LFNoise2.ar(r5)
              ; var f = SinOsc.kr(r0, r1, r2, r3)
-             ; Pan2.ar(SinOsc.ar(f, 0, n0 * 0.1), r4, 1) }
+             ; Pan2.ar(SinOsc.ar(f, 0) * n0 * 0.1, r4, 1) }
 ; var n0 = LFNoise2.kr([0.4, 0.4])
 ; var n1 = LFNoise2.ar(n0 * 90 + 620)
 ; var n2 = LFNoise2.kr([0.3,0.3])

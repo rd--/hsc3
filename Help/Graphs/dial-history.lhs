@@ -28,11 +28,11 @@ dial history (jrhb)
 
 { var mfv = [[697, 770, 852, 941], [1209, 1336, 1477, 1633]]
 ; var numbers = [[3, 1]] ++ {: [a, b], a <- (0..2), b <- (0..2) }.all
-; var n = Dwhite(7, 12, inf)
-; var w = Dwhite(2, 7, 1)
-; var b = Dbrown(0.1, 0.2, 0.01, n)
-; var rate = Dseq([w, b], inf)
-; var q = Dseq((1..10), inf)
+; var n = Dwhite.new(7, 12, inf)
+; var w = Dwhite.new(2, 7, 1)
+; var b = Dbrown.new(0.1, 0.2, 0.01, n)
+; var rate = Dseq.new([w, b], inf)
+; var q = Dseq.new((1..10), inf)
 ; var trig = Trig.kr(TDuty.kr(rate, 0, q), 0.09)
 ; var pat = Latch.kr(trig, trig)
 ; var x = MouseX.kr(0, 1, 'linear', 0.2)
@@ -46,5 +46,5 @@ dial history (jrhb)
 ; var g1 = GrayNoise.ar
 ; var g2 = GrayNoise.ar
 ; var z = Silent.ar(1)
-; var hiss = (g1 * 0.01) + HPF.ar(g2 * 0.02, 3000)
+; var hiss = g1 * 0.01 + HPF.ar(g2 * 0.02, 3000)
 ; Out.ar(0, [z, dsig + hiss]) }.play

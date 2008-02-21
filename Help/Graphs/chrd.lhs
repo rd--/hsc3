@@ -15,11 +15,11 @@ chrd (rd)
 >                 in return (mix (pan2 o p e)) }
 > in audition . out 0 . mix =<< clone 9 chrd
 
-{ var chrd = { var r0 = Rand(0.05, 0.5)
-             ; var r1 = Rand(-1, 1)
-             ; var r2 = Rand(-1, 1)
-             ; var r3 = Rand(0.15, 0.35)
-             ; var r4 = Rand(0.005, 0.01)
+{ var chrd = { var r0 = Rand.new(0.05, 0.5)
+             ; var r1 = Rand.new(-1, 1)
+             ; var r2 = Rand.new(-1, 1)
+             ; var r3 = Rand.new(0.15, 0.35)
+             ; var r4 = Rand.new(0.005, 0.01)
              ; var m = [60, 65, 72, 77, 79, 84]
              ; var ds = 3
              ; var d = [5, 4, 5, 7, 4, 5] * ds

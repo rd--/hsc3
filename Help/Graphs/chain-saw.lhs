@@ -29,7 +29,7 @@ increasing the stack limit of the haskell run time system]
 >         in audition (out 0 (b_saw * 0.3)) }
 
 { var f = { arg s1
-          ; var rate = ExpRand(0.1, 2).dup
+          ; var rate = ExpRand.new(0.1, 2).dup
           ; var n1 = { LFNoise1.kr(rate).exprange(0.01, 10) }
           ; var n2 = { LFNoise1.kr(rate).exprange(10, 50) }
           ; var n3 = LFNoise1.kr(rate).exprange(2, 10)
@@ -38,7 +38,7 @@ increasing the stack limit of the haskell run time system]
           ; var f2 = LinExp.kr(s1, -1, 1, f1, f1 * n3)
           ; var u1 = LFSaw.kr(f2, 0)
           ; var u2 = LFSaw.kr(f1 * 0.1, 0, 0.1, 1)
-          ; var u3 = if(0.5.coin) {u1 * s2} {u1 * u2}
+          ; var u3 = if(0.5.coin) { u1 * s2 } { u1 * u2 }
           ; u3.clip2(1) }
 ; var g = { arg func, n
           ; n.do { func = func <> func }

@@ -17,7 +17,7 @@ record scratcher (josh parmenter)
 { var fn = "/home/rohan/audio/metal.wav"
 ; var b = 0
 ; var gate = 1
-; var e = Env([0, 1, 0], [0.1, 0.1], \sin, 1, nil)
+; var e = Env.new([0, 1, 0], [0.1, 0.1], \sin, 1, nil)
 ; var env = EnvGen.kr(e, gate, doneAction: 2)
 ; var x = MouseX.kr(-10, 10, 'linear', 0.2)
 ; var dx = x - DelayN.kr(x, 0.1, 0.1)

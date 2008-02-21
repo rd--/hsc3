@@ -22,7 +22,7 @@ k-ppr (rd)
 ; var tf = ti.range(100, 200)
 ; var t = Impulse.ar(tf, 0)
 ; var stream = { arg lf, rf, ld, rd, g
-               ; { var r1 = Rand(9, 18)
+               ; { var r1 = Rand.new(9, 18)
                  ; var t_ = PulseDivider.ar(t, r1, 0)
                  ; var r2 = TRand.ar(lf, ti.range(lf, rf), t_)
                  ; var r3 = TRand.ar(ld, rd, t_)
