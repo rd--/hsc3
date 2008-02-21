@@ -26,5 +26,8 @@ modal space (jmcc)
           ; var d = RLPF.ar(t, SinOsc.kr(0.1, 0, 10, r).midicps, 0.1, 0.1)
           ; var m = o + d
           ; CombN.ar(m, 0.31, 0.31, 2) + m }
-; s.sendMsg("/b_alloc", b, p.size, 1, ["/b_setn", b, 0, p].asRawOSC)
-; Out.ar(0, (f.value(48) + f.value(72)) * 0.25) }.play
+; var n = LFNoise1.kr([3, 3])
+; var b_setn1 = { arg b, i, p
+                ; ["/b_setn", b, i, p.size] ++ p }
+; s.sendMsg("/b_alloc", b, p.size, 1, b_setn1.value(b, 0, p).asRawOSC)
+; Out.ar(0, (f.value(n, 48) + f.value(n, 72)) * 0.25) }.play
