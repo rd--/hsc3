@@ -1,4 +1,4 @@
-phasor trig rate start end resetPos
+phasor rate trig rate start end resetPos
 
 Triggered linear ramp between two levels.  Starts a linear ramp
 when trig input crosses from non-positive to positive.
