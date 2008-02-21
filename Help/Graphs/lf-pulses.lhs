@@ -13,3 +13,10 @@ lf pulses (rd)
 ; var f = Formlet.ar(Blip.ar(10, 12), n0 * 43 + 700, 0.005, x)
 ; var o = SinOsc.ar(40, 0) * n1
 ; Out.ar(0, LeakDC.ar(f + o, 0.995).clip2(0.75)) }.play
+
+(let* ((n0 (LFNoise0 ar (Mce 20 40)))
+       (n1 (LFNoise0 ar (Mce 5 10)))
+       (x (MouseX kr 0.012 0.19 1 0.1))
+       (f (Formlet (Blip ar 10 12) (MulAdd n0 43 700) 0.005 x))
+       (o (Mul (SinOsc ar 40 0) n1)))
+  (audition (Out 0 (Clip2 (Add f o) 1))))
