@@ -216,6 +216,10 @@ peak t r = mkFilter "Peak" [t,r] 1
 pitchShift :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 pitchShift i w p d t = mkFilter "PitchShift" [i,w,p,d,t] 1
 
+-- | Karplus-Strong synthesis.
+pluck :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+pluck i tr mdl dl dc coef = mkFilter "Pluck" [i, tr, mdl, dl, dc, coef] 1
+
 -- | Trigger counter.
 pulseCount :: UGen -> UGen -> UGen
 pulseCount t r = mkFilter "PulseCount" [t,r] 1
