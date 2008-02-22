@@ -21,3 +21,12 @@ drummer (thor magnusson)
 ; var hihat = HPF.ar(n, 10000) * Decay2.ar(tr, 0.005, 0.5)
 ; Out.ar(0, Pan2.ar(snare + bass + hihat, 0, 0.4)) }.play
 
+(let* ((tempo 4)
+       (n (WhiteNoise ar))
+       (tr (Impulse ar tempo 0))
+       (tr_2 (PulseDivider tr 4 2))
+       (tr_4 (PulseDivider tr 4 0))
+       (snare (Mul n (Decay2 tr_2 0.005 0.5)))
+       (bass (Mul (SinOsc ar 60 0) (Decay2 tr_4 0.005 0.5)))
+       (hihat (Mul (HPF n 10000) (Decay2 tr 0.005 0.5))))
+  (audition (Out 0 (Pan2 (Add* snare bass hihat) 0 0.4))))
