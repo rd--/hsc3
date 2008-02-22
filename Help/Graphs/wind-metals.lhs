@@ -25,8 +25,6 @@ wind metals (jmcc)
 ; var s = Klank.ar(`[f, nil, dt], exc)
 ; Out.ar(0, (s * 0.1).softclip) }.play
 
-(require srfi/1)
-
 (let* ((n 6)
        (base (ExpRand 60 4000))
        (range (Rand 500 8000))

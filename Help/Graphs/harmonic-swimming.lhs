@@ -21,8 +21,6 @@ harmonic swimming (jmcc)
           ; FSinOsc.ar(f * (h + 1), 0) * e }
 ; Out.ar(0, (0..p).collect(o).sum) }.play
 
-(require (only-in srfi/1 iota))
-
 (let* ((a 0.02)
        (f 50)
        (p 20)
