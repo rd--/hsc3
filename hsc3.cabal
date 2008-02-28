@@ -1,5 +1,5 @@
 Name:             hsc3
-Version:          0.2
+Version:          0.3
 License:          GPL
 Copyright:        Rohan Drape, 2006-2008
 Author:           Rohan Drape
@@ -11,7 +11,7 @@ Description:      Haskell client for the SuperCollider synthesis server
 Category:         Sound
 Tested-With:      GHC==6.8.2
 Build-Type:       Simple
-Build-Depends:    base, binary, bytestring, containers, hosc == 0.2,
+Build-Depends:    base, binary, bytestring, containers, hosc == 0.3,
                   network, random
 GHC-Options:      -Wall -fno-warn-orphans -fwarn-tabs -O2
 Exposed-modules:  Sound.SC3
