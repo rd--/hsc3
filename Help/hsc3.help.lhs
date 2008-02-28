@@ -6,7 +6,7 @@ server.
 
 The bindings allow haskell to be used
 to write unit generator graphs, to control
-the supercollider synthesier interactively
+the supercollider synthesiser interactively
 while it is running, and to write scores for
 offline rendering.
 
@@ -69,9 +69,26 @@ of work being done.
 | (5) How can we implement them?
 | (Strachey, in Landin, 1966)
 
-Haskell is a non-strict and purely functional
-language, one result of many years of research
-into these questions (Hudak et al, 2007).
+(1) Haskell is a non-strict (Wadler, 1996) and
+    purely functional (Sabry, 1993) language, one
+    result of many years of research into these
+    questions (Hudak et al, 2007).
+
+(4) Computation in haskell is structured using a
+    small number of simple type classes; monads
+    (Wadler, 1990), applicative functors (McBride
+    and Paterson, 2007) & arrows (Hughes, 2000).
+
+(5) The glasgow haskell system includes both an
+    optimizing compiler generating efficient
+    machine programs and a bytecode generator and
+    intepreter for interative use.
+
+In the authors experience the glasgow run-time
+system is adequate for real-time control of the
+supercollider synthesiser, capable of generating
+high density & low latency control streams such as
+those required for waveset synthesis etc.
 
 * Types, Unit Generators, Parametric Polymorphism
 
