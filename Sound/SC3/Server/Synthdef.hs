@@ -3,10 +3,10 @@ module Sound.SC3.Server.Synthdef ( Node(..), FromPort(..), Graph(..)
 
 import qualified Data.ByteString.Lazy as B
 import qualified Data.IntMap as M
+import Data.Char (ord)
 import Data.List
 import Data.Word
 import Sound.OpenSoundControl.Byte
-import Sound.OpenSoundControl.Cast
 import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.UGen.Predicate
 import Sound.SC3.UGen.Rate
@@ -166,6 +166,10 @@ make_input (_, _, us) (U n p) = Input (fetch n us) p
 -- Byte-encode input value.
 encode_input :: Input -> B.ByteString
 encode_input (Input u p) = B.append (encode_i16 u) (encode_i16 p)
+
+-- Pascal strings are length prefixed byte strings.
+str_pstr :: String -> [Word8]
+str_pstr s = (fromIntegral (length s)) : map (fromIntegral . ord) s
 
 -- Byte-encode control node.
 encode_node_k :: Maps -> Node -> B.ByteString
