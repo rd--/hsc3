@@ -152,7 +152,7 @@ We can also write these sets directly using
 the 'mce' function.
 
 Multiple channel expansion flows downward
-through unit generator graphs. 
+through unit generator graphs.
 
 In the expression below, the frequency input
 causes two sinOsc unit generators to be created.
@@ -178,7 +178,7 @@ of input channels; it would however expand on
 mce at the first argument, or nested mce at the
 second.
 
-Equal inputs do also push the expansion 
+Equal inputs do also push the expansion
 downwards, however in complex graphs this
 seems occasionally unreliable.
 
@@ -299,14 +299,14 @@ function.
 * Unit generators are comparable
 
 In haskell the Eq and Ord type classes define
-equality and ordering operators.  
+equality and ordering operators.
 
 In unit generator graphs these operators have a
-somewhat different meaning, and require a different 
-type signature.  
+somewhat different meaning, and require a different
+type signature.
 
-For instance the greater-than operator defines a 
-unit generator that is zero for sample values 
+For instance the greater-than operator defines a
+unit generator that is zero for sample values
 where the comparison fails, and one when it
 succeeds.
 
@@ -314,20 +314,20 @@ Since the Ord type gives the signature:
 
 | (>) :: (Ord a) => a -> a -> Bool
 
-we define a variant with a star suffix, such 
+we define a variant with a star suffix, such
 that:
 
 > let { x = mouseX KR 3 45 Exponential 0.1
 >     ; t = sinOsc AR x 0 >* 0
 >     ; d = envTriangle 0.01 0.1
->     ; e = envGen AR t 1 0 1 DoNothing d 
+>     ; e = envGen AR t 1 0 1 DoNothing d
 >     ; f = 220 + 880 * (toggleFF t)
 >     ; o = sinOsc AR f 0 }
 > in audition (out 0 (o * e))
 
 is a sequence of low and high tones.
 
-For functions where the signature is 
+For functions where the signature is
 consistent with the meaning of the unit
 generator operator we use the haskell name.
 
