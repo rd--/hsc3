@@ -539,6 +539,9 @@ channel.
   Languages Conference, San Diego, California,
   June 2007.  Association for Computing Machinery.
 
++ John Hughes. Generalising monads to arrows.
+  Sci. Comput. Program., 37(1-3):67-111, 2000.
+
 + P. Landin.  The next 700 programming languages.
   Communications of the ACM, 9(3):157-164, March
   1966.  Presented at the ACM Programming and
@@ -548,6 +551,10 @@ channel.
   and Psychological Stimuli.  AT&T Bell
   Laboratories Technical Journal, 40:677-694,
   1961.
+
++ C. McBride and R. Paterson.  Applicative
+  Programming with Effects.  Journal of Functional
+  Programming, 17(4), 2007.
 
 + J. McCarthy.  Recursive functions of symbolic
   expressions and their computation by machine.
@@ -563,9 +570,19 @@ channel.
   Language: SuperCollider.  Computer Music
   Journal, 26(4):61-68, 2002.
 
++ Amr Sabry. What is a Purely Functional Language?
+  Journal of Functional Programming, 1(1), 1993.
+
 + C. Strachey.  Fundamental Concepts in
   Programming Languages.  Higher-Order and
   Symbolic Computation, 13:11-49, 2000.
+
++ Philip Wadler. Lazy versus strict.  ACM
+  Comput. Surv., 28(2):318-320, 1996.
+
++ P. Wadler.  Comprehending Monads.  In Conference
+  on Lisp and Funcional Programming, Nice, France,
+  June 1990. ACM.
 
 + P. Wadler and S. Blott.  How to make ad hoc
   polymorphism less ad hoc.  In Proceedings of
