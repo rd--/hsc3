@@ -76,16 +76,20 @@ Data-files:       README
                   Help/Graphs/cut-outs.lhs
                   Help/Graphs/cymbalism.lhs
                   Help/Graphs/deep-sea.lhs
+                  Help/Graphs/demanding-studies.lhs
                   Help/Graphs/dial-history.lhs
                   Help/Graphs/discretion.lhs
                   Help/Graphs/drummer.lhs
                   Help/Graphs/eggcrate.lhs
+                  Help/Graphs/forest-sounds.lhs
                   Help/Graphs/fwalk.lhs
                   Help/Graphs/half-life.lhs
                   Help/Graphs/harmonic-swimming.lhs
                   Help/Graphs/harmonic-tumbling.lhs
                   Help/Graphs/h-chatter.lhs
+                  Help/Graphs/hh-808.lhs
                   Help/Graphs/implosion.lhs
+                  Help/Graphs/karplus-strong.lhs
                   Help/Graphs/klink.lhs
                   Help/Graphs/k-ppr.lhs
                   Help/Graphs/lfo-modulation.lhs
@@ -101,17 +105,24 @@ Data-files:       README
                   Help/Graphs/police-state.lhs
                   Help/Graphs/pulsing-bottles.lhs
                   Help/Graphs/record-scratcher.lhs
+                  Help/Graphs/red-frik.lhs
                   Help/Graphs/reverberated-sine-percussion.lhs
                   Help/Graphs/sample-and-hold-liquidities.lhs
                   Help/Graphs/s-chirp.lhs
                   Help/Graphs/scratchy.lhs
                   Help/Graphs/scritto.lhs
+                  Help/Graphs/shepard-tones.lhs
                   Help/Graphs/shifting-pulses.lhs
+                  Help/Graphs/snare-909.lhs
+                  Help/Graphs/spe.lhs
                   Help/Graphs/sprinkler.lhs
                   Help/Graphs/strummable-guitar.lhs
                   Help/Graphs/sweepy-noise.lhs
                   Help/Graphs/synthetic-piano.lhs
+                  Help/Graphs/tank.lhs
+                  Help/Graphs/theremin.lhs
                   Help/Graphs/three-cpsw.lhs
+                  Help/Graphs/tsort.lhs
                   Help/Graphs/what-was-i-thinking.lhs
                   Help/Graphs/wind-metals.lhs
                   Help/Graphs/xy-interference.lhs
@@ -308,6 +319,7 @@ Data-files:       README
                   Help/UGen/Filter/onePole.help.lhs
                   Help/UGen/Filter/oneZero.help.lhs
                   Help/UGen/Filter/pitchShift.help.lhs
+                  Help/UGen/Filter/pluck.help.lhs
                   Help/UGen/Filter/resonz.help.lhs
                   Help/UGen/Filter/rhpf.help.lhs
                   Help/UGen/Filter/ringz.help.lhs
