@@ -1,13 +1,15 @@
 module Sound.SC3.UGen.Composite where
 
+import Sound.SC3.UGen.Demand.Monadic
 import Sound.SC3.UGen.Filter
 import Sound.SC3.UGen.Oscillator
 import Sound.SC3.UGen.Panner
 import Sound.SC3.UGen.Rate
-import Sound.SC3.UGen.UGen (UGen, mce, mceProxies)
+import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.UGen.Math ()
 import Sound.SC3.UGen.UGen.MCE
 import Sound.SC3.UGen.UGen.Predicate
+import Sound.SC3.UGen.UId
 
 -- | Collapse multiple channel expansion by summing.
 mix :: UGen -> UGen
@@ -44,3 +46,9 @@ dynKlank i fs fo ds s = gen (mceChannels s)
 -- | PM oscillator.
 pmOsc :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
 pmOsc r cf mf pm mp = sinOsc r cf (sinOsc r mf mp * pm)
+
+-- | Demand rate (:) function.
+dcons :: (UId m) => UGen -> UGen -> m UGen
+dcons x xs = do i <- dseq 1 (mce2 0 1)
+                a <- dseq 1 (mce2 x xs)
+                dswitch i a
