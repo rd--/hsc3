@@ -13,7 +13,7 @@ dial history (jrhb)
 >       ; g1 <- grayNoise AR
 >       ; g2 <- grayNoise AR
 >       ; d <- lfdNoise3 KR 0.5
->       ; let { tr = trig (tDuty KR rate 0 DoNothing q) 0.09
+>       ; let { tr = trig (tDuty KR rate 0 DoNothing q 1) 0.09
 >             ; pat = latch tr tr
 >             ; x = mouseX KR 0 1 Linear 0.2
 >             ; h = hasher (pat * x)

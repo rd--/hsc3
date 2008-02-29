@@ -2,7 +2,7 @@ module Sound.SC3.UGen.Demand where
 
 import Sound.SC3.UGen.Rate (Rate)
 import Sound.SC3.UGen.UGen (UGen(Constant))
-import Sound.SC3.UGen.UGen.Construct (mkOsc, mkOscMCE, mkFilterKeyed)
+import Sound.SC3.UGen.UGen.Construct (mkOsc, mkFilterKeyed)
 import Sound.SC3.UGen.UGen.MCE (mceChannels)
 import Sound.SC3.UGen.Enum (DoneAction)
 import Sound.SC3.UGen.Utilities (fromDoneAction)
@@ -25,5 +25,5 @@ duty :: Rate -> UGen -> UGen -> DoneAction -> UGen -> UGen
 duty rate d r act l = mkOsc rate "Duty" [d, r, fromDoneAction act, l] 1
 
 -- | Demand results as trigger from demand rate ugens.
-tDuty :: Rate -> UGen -> UGen -> DoneAction -> UGen -> UGen
-tDuty r d rst act l = mkOscMCE r "TDuty" [d,rst,fromDoneAction act] l 1
+tDuty :: Rate -> UGen -> UGen -> DoneAction -> UGen -> UGen -> UGen
+tDuty r d rst act l gap = mkOsc r "TDuty" [d,rst,fromDoneAction act, l, gap] 1

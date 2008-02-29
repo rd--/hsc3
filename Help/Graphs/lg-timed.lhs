@@ -4,7 +4,7 @@ lg-timed (rd)
 >       do { d0 <- dser r p
 >          ; d1 <- dcons 0 d0
 >          ; d2 <- dser r y
->          ; let t = tDuty AR d1 0 RemoveSynth d2
+>          ; let t = tDuty AR d1 0 RemoveSynth d2 1
 >            in return (latch t t) }
 >     ; lg u = return (lag u 0.03)
 >     ; n = mce [52, 76, 66, 67, 68, 69]
