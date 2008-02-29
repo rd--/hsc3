@@ -57,3 +57,7 @@ dser z l array = mkOscMCEId z DR "Dser" [l] array 1
 -- | Demand rate input switching.
 dswitch1 :: UGenId -> UGen -> UGen -> UGen
 dswitch1 z l array = mkOscMCEId z DR "Dswitch1" [l] array 1
+
+-- | Demand rate input switching.
+dswitch :: UGenId -> UGen -> UGen -> UGen
+dswitch z l array = mkOscMCEId z DR "Dswitch" [l] array 1

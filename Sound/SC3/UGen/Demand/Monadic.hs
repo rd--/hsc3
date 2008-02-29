@@ -57,3 +57,7 @@ dser = liftU2 D.dser
 -- | Demand rate input switching.
 dswitch1 :: (UId m) => UGen -> UGen -> m UGen
 dswitch1 = liftU2 D.dswitch1
+
+-- | Demand rate input switching.
+dswitch :: (UId m) => UGen -> UGen -> m UGen
+dswitch = liftU2 D.dswitch
