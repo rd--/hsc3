@@ -1,6 +1,6 @@
 bufDur rate bufnum
 
-Current duration of buffer.
+Current duration of buffer (in seconds).
 
 > withSC3 (\fd -> async fd (b_allocRead 0 "/home/rohan/audio/metal.wav" 0 0))
 
