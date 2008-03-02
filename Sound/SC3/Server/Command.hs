@@ -248,6 +248,10 @@ b_set1 nid i x = b_set nid [(i,x)]
 b_setn1 :: Int -> Int -> [Double] -> OSC
 b_setn1 nid i xs = b_setn nid [(i,xs)]
 
+-- | Set single bus values.
+c_set1 :: Int -> Double -> OSC
+c_set1 i x = c_set [(i, x)]
+
 -- Local Variables:
 -- truncate-lines:t
 -- End:
