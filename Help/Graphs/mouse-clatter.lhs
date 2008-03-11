@@ -31,7 +31,7 @@ mouse clatter (rd)
        (s (Add (Mul o 0.05) (IFFT* n7))))
   (with-sc3
    (lambda (fd)
-     (->< fd (/b_alloc 10 2048 1))
+     (async fd (/b_alloc 10 2048 1))
      (play fd (Out 0 s)))))
 
 

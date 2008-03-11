@@ -38,6 +38,6 @@ s-chirp (rd)
        (o (MulAdd m 0.5 (AllpassC m 0.15 r0 r1))))
   (with-sc3
    (lambda (fd)
-     (->< fd (/b_alloc 0 7 1))
-     (-> fd (/b_setn* 0 0 scl))
+     (async fd (/b_alloc 0 7 1))
+     (send fd (/b_setn* 0 0 scl))
      (audition (Out 0 o)))))
