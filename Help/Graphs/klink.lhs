@@ -24,9 +24,9 @@ klink (rd)
 ; var n3 = TRand.ar(0.005, 0.275, t)
 ; Out.ar(0, Ringz.ar(i, n2, n3 * y)) }.play
 
-(let* ((n1 (LFNoise0 kr (Mce 0.5 1.5)))
+(let* ((n1 (LFNoise0 kr (mce2 0.5 1.5)))
        (o (SinOsc kr n1 0))
-       (f (Mce 2 3))
+       (f (mce2 2 3))
        (a (Mul (Abs (Slope o)) f))
        (t (Impulse ar a 0))
        (i (Decay2 t 0.01 0.1))

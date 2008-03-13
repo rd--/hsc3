@@ -18,7 +18,7 @@ mouse clatter (rd)
 
 (let* ((x (MouseX kr 100 12000 0 0.1))
        (y (MouseY kr 0.01 0.15 0 0.1))
-       (n1 (LFNoise0 kr (Mce 3 3.25)))
+       (n1 (LFNoise0 kr (mce2 3 3.25)))
        (t (Impulse kr (MulAdd n1 16 18) 0))
        (n2 (TRand 0.005 y t))
        (n3 (WhiteNoise ar))
