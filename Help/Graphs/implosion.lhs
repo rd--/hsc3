@@ -19,7 +19,8 @@ implosion (rd)
 >       ; audition (out 0 (pan2 (saw AR f) l a)) }
 
 (let* ((mkls (lambda (bp t)
-	       (EnvGen kr 1 1 0 1 removeSynth (env/bp bp t 1))))
+	       (let ((c (replicate (/ (length bp) 2) 1)))
+		 (EnvGen kr 1 1 0 1 removeSynth (env/bp bp t 1 c)))))
        (mkrmp (lambda (l r t)
 		(mkls (list 0 l 1 r) t)))
        (wrp (lambda (i l r)

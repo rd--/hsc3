@@ -17,7 +17,7 @@ would otherwise be loaded.)
 > in audition (out 0 (s * e))
 
 (let* ((n 122)
-       (c (env/bp '(0 0 0.15 1 6 0) 1 1))
+       (c (env/bp '(0 0 0.15 1 6 0) 1 1 '(1 1 1)))
        (e (EnvGen kr 1 1 0 1 removeSynth c))
        (f (lambda (o) (Mul (SinOsc ar (Add 440 o) 0) 0.001)))
        (s (mix/fill n f)))

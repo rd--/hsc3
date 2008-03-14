@@ -12,7 +12,8 @@ discretion (rd)
 > in audition . out 0 . mix =<< clone 8 part
 
 (let* ((mkls (lambda (bp t)
-	       (EnvGen kr 1 1 0 1 removeSynth (env/bp bp t 1))))
+	       (let ((c (replicate (/ (length bp) 2) 1)))
+		 (EnvGen kr 1 1 0 1 removeSynth (env/bp bp t 1 c)))))
        (part (lambda (_)
 	       (let* ((f1 (clone 2 (Rand 50 55)))
 		      (f2 (clone 2 (Rand 50 65)))
