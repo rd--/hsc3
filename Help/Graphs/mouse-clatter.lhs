@@ -33,5 +33,3 @@ mouse clatter (rd)
    (lambda (fd)
      (async fd (/b_alloc 10 2048 1))
      (play fd (Out 0 s)))))
-
-

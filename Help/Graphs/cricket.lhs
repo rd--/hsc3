@@ -30,4 +30,3 @@ cricket (rd)
        (f (Mul3 (SinOsc kr r2 0) e r3))
        (r4 (mTRand 2220 2227 t)))
   (audition (Out 0 (Mul3 (SinOsc ar r4 0) f 0.25))))
-
