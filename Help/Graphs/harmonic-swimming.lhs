@@ -20,15 +20,3 @@ harmonic swimming (jmcc)
           ; var e = max(0, n * a + l)
           ; FSinOsc.ar(f * (h + 1), 0) * e }
 ; Out.ar(0, (0..p).collect(o).sum) }.play
-
-(let* ((a 0.02)
-       (f 50)
-       (p 20)
-       (z 0)
-       (l (Line kr 0 (- a) 60 0))
-       (o (lambda (h)
-	    (let* ((r (clone 2 (Rand 2 8)))
-		   (n (LFNoise1 kr r))
-		   (e (Max 0 (MulAdd n a l))))
-	      (Mul (FSinOsc ar (* f (+ h 1)) 0) e)))))
-  (audition (Out 0 (mix (make-mce (map o (iota p)))))))

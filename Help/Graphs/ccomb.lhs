@@ -23,16 +23,3 @@ ccomb (rd)
                 ; CombC.ar(x, flwr.reciprocal, f.reciprocal, m.range(1, 8)) } }
 ; var t = Dust.kr([0.75, 0.35])
 ; Out.ar(0, Mix.fill(12, spart.value(t)) * 0.1) }.play
-
-(let* ((rng (lambda (u l r) (LinLin u -1 1 l r)))
-       (lwr 48)
-       (flwr (midicps 48))
-       (spart (lambda (t)
-		(let* ((n (rng (LFNoise2 kr 0.1) lwr 72))
-		       (e (Decay2 t 0.01 (TRand 0.05 0.75 t)))
-		       (x (Mul (WhiteNoise ar) e))
-		       (m (LFNoise2 kr 0.1))
-		       (f (Lag (MIDICPS n) 0.25)))
-		  (CombC x (Recip flwr) (Recip f) (rng m 1.0 8.0)))))
-       (t (Dust ar (mce2 0.9 0.8))))
-  (audition (Out 0 (mix/fill 7 (lambda (_) (Mul (spart t) 0.1))))))

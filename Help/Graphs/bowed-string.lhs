@@ -31,23 +31,3 @@ bowed string (jmcc)
 ; var d = `[Array.series(12, f, f), Array.geom(12, 1, r1), r2]
 ; var k = Klank.ar(d, x)
 ; Out.ar(0, (k * 0.1).softclip) }.play
-
-(letrec ((series
-	  (lambda (f n x i) 
-	    (if (= n 0)
-		nil
-		(cons x (series f (- n 1) (f x i) i))))))
-  (let* ((root 5)
-	 (scale (map (lambda (n) (+ n root)) (list 0 2 4 5 7 9 11)))
-	 (oct (list 24 36 48 60 72 84))
-	 (choose (lambda (l) (Select (IRand 0 (length l)) (make-mce l))))
-	 (f (MIDICPS (Add (choose scale) (choose oct))))
-	 (n0 (clone 2 (BrownNoise ar)))
-	 (r0 (ExpRand 0.125 0.5))
-	 (n1 (LFNoise1 kr r0))
-	 (r1 (Rand 0.7 0.9))
-	 (r2 (replicate-m 12 (Rand 1.0 3.0)))
-	 (x (Mul3 n0 0.007 (Max 0 (MulAdd n1 0.6 0.4))))
-	 (d (klank-data (series Add 12 f f) (series Mul 12 1 r1) r2))
-	 (k (Klank x 1 0 1 d)))
-    (audition (Out 0 (SoftClip (Mul k 0.1))))))
