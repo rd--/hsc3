@@ -12,7 +12,7 @@ demanding studies (jmcc)
 >      in audition (out 0 (o3 * 0.1)) }
 
 { var s1 = Drand.new([72, 75, 79, 82], inf)
-; var s2 = Drand.new([82, 84, 86])
+; var s2 = Drand.new([82, 84, 86], 1)
 ; var s3 = Dseq.new([72, 75, 79, s2], inf)
 ; var x = MouseX.kr(5, 13, 'linear', 0.2)
 ; var tr = Impulse.kr(x, 0)

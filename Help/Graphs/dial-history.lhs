@@ -22,9 +22,8 @@ dial history (jrhb)
 >             ; dial = select both (mce_r (transpose mfv))
 >             ; sig = sinOsc AR dial 0 * 0.05 * tr
 >             ; dsig = delayN sig 0.2 (range d 0 0.01)
->             ; hiss = g1 * 0.01 + hpf (g2 * 0.02) 3000
->             ; z = silent 1 }
->         in audition (mce_mrg (out 0 (mce2 z (dsig + hiss)))) }
+>             ; hiss = g1 * 0.01 + hpf (g2 * 0.02) 3000 }
+>         in audition (out 0 (dsig + hiss)) }
 
 { var mfv = [[697, 770, 852, 941], [1209, 1336, 1477, 1633]]
 ; var numbers = [[3, 1]] ++ {: [a, b], a <- (0..2), b <- (0..2) }.all

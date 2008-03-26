@@ -21,6 +21,7 @@ cymbalism (jmcc)
           ; var rt = Array.fill(p, { 1 + Rand.new(0, 4) })
           ; `[f, nil, rt] }
 ; var z = Array.fill(2, y)
-; var t = Impulse.ar(Rand.new(0, 3) + 0.5)
-; var n = WhiteNoise.ar(0.03)
-; Out.ar(0, Klank.ar(z, Decay.ar(t, 0.004, n))) }.play
+; var t = Impulse.ar(Rand.new(0, 3) + 0.5, 0)
+; var n = WhiteNoise.ar() * 0.03
+; var s = Decay.ar(t, 0.004) * n
+; Out.ar(0, Klank.ar(z, s)) }.play
