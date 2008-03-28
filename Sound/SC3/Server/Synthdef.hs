@@ -138,6 +138,7 @@ mk_node u g
                   in mk_node_p n (proxyIndex u) g'
     | isMRG u = let (_, g') = mk_node (mrgRight u) g
                 in mk_node (mrgLeft u) g'
+    | isMCE u = error "mk_node: mce"
     | otherwise = error "mk_node"
 
 type Map = M.IntMap Int
