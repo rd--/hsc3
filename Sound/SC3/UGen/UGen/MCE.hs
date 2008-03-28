@@ -32,7 +32,6 @@ mceExpand (MCE l) = MCE (map mceExpand l)
 mceExpand (MRG x y) = MRG (mceExpand x) y
 mceExpand u = if required u then mceExpand (mceTransform u) else u
     where required (Primitive _ _ i _ _ _) = not (null (filter isMCE i))
-          required (MCE l) = any required l
           required _ = False
 
 -- | Apply UGen list operation on MCE contents.
