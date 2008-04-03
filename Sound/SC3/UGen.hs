@@ -7,6 +7,7 @@ module Sound.SC3.UGen (module Sound.SC3.UGen.Analysis,
                        module Sound.SC3.UGen.Envelope,
                        module Sound.SC3.UGen.Envelope.Construct,
                        module Sound.SC3.UGen.Enum,
+                       module Sound.SC3.UGen.External,
                        module Sound.SC3.UGen.FFT,
                        module Sound.SC3.UGen.FFT.Monadic,
                        module Sound.SC3.UGen.Filter,
@@ -36,6 +37,7 @@ import Sound.SC3.UGen.Demand.Monadic
 import Sound.SC3.UGen.Envelope
 import Sound.SC3.UGen.Envelope.Construct
 import Sound.SC3.UGen.Enum
+import Sound.SC3.UGen.External
 import Sound.SC3.UGen.FFT
 import Sound.SC3.UGen.FFT.Monadic
 import Sound.SC3.UGen.Filter
