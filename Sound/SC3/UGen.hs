@@ -8,6 +8,7 @@ module Sound.SC3.UGen (module Sound.SC3.UGen.Analysis,
                        module Sound.SC3.UGen.Envelope.Construct,
                        module Sound.SC3.UGen.Enum,
                        module Sound.SC3.UGen.External,
+                       module Sound.SC3.UGen.External.ATS,
                        module Sound.SC3.UGen.External.LPC,
                        module Sound.SC3.UGen.FFT,
                        module Sound.SC3.UGen.FFT.Monadic,
@@ -39,6 +40,7 @@ import Sound.SC3.UGen.Envelope
 import Sound.SC3.UGen.Envelope.Construct
 import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.External
+import Sound.SC3.UGen.External.ATS
 import Sound.SC3.UGen.External.LPC
 import Sound.SC3.UGen.FFT
 import Sound.SC3.UGen.FFT.Monadic
