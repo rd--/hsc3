@@ -5,5 +5,5 @@ pv_Invert buffer
 >     ; i = s + n
 >     ; c0 = fft' 10 i
 >     ; c1 = pv_Invert c0 }
-> in withSC3 (\fd -> do { send fd (b_alloc 10 2048 1)
+> in withSC3 (\fd -> do { async fd (b_alloc 10 2048 1)
 >                       ; audition (out 0 (mce2 i (ifft' c1) * 0.5)) })

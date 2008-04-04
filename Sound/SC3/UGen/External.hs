@@ -16,6 +16,12 @@ membraneCircle i t l = mkOsc AR "MembraneCircle" [i, t, l] 1
 membraneHexagon :: UGen -> UGen -> UGen -> UGen
 membraneHexagon i t l = mkOsc AR "MembraneHexagon" [i, t, l] 1
 
+lpcVals :: Rate -> UGen -> UGen -> UGen
+lpcVals r b ptr = mkOsc r "LPCVals" [b, ptr] 3
+
+lpcSynth :: UGen -> UGen -> UGen -> UGen
+lpcSynth b s ptr = mkOsc AR "LPCSynth" [b, s, ptr] 1
+
 pv_Invert :: UGen -> UGen
 pv_Invert b = mkOsc KR "PV_Invert" [b] 1
 
