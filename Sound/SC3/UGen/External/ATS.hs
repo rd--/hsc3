@@ -10,6 +10,12 @@ import Data.List
 import Sound.OpenSoundControl
 import System.IO
 
+-- | ATS analysis data.
+data ATS = ATS { atsHeader :: ATSHeader
+               , atsFrames :: [ATSFrame] }
+           deriving (Eq, Show)
+
+-- | ATS analysis meta-data.
 data ATSHeader = ATSHeader { atsSampleRate :: Double
                            , atsFrameSize :: Int
                            , atsWindowSize :: Int
@@ -21,11 +27,8 @@ data ATSHeader = ATSHeader { atsSampleRate :: Double
                            , atsFileType :: Int
                            } deriving (Eq, Show)
 
+-- | ATS analysis frame data. 
 type ATSFrame = [Double]
-
-data ATS = ATS { atsHeader :: ATSHeader
-               , atsFrames :: [ATSFrame] }
-           deriving (Eq, Show)
 
 -- | Read an ATS data file.
 atsRead :: FilePath -> IO ATS
@@ -37,7 +40,7 @@ atsRead fn = do
   let f j = hdr_r !! (j - 1)
       g = floor . f
       ft = g 9
-      (n, x) = ftypeN ft
+      (n, x) = ftype_n ft
       np = g 4
       nf = g 5
       fl = np * n + x
@@ -47,7 +50,7 @@ atsRead fn = do
   hClose h
   return (ATS hdr d)
 
--- | Return data in format required by the SC3 ATS UGens.
+-- | Analysis data in format required by the sc3 ATS UGens.
 atsSC3 :: ATS -> [Double]
 atsSC3 (ATS h d) = 
     let f = fromIntegral
@@ -73,12 +76,12 @@ get_reader v = if decode_f64 v == 123.0
                else read_f64LE
 
 -- Calculate partial depth and frame constant.
-ftypeN :: Int -> (Int, Int)
-ftypeN 1 = (2, 1)
-ftypeN 2 = (3, 1)
-ftypeN 3 = (2, 26)
-ftypeN 4 = (3, 26)
-ftypeN _ = undefined
+ftype_n :: Int -> (Int, Int)
+ftype_n 1 = (2, 1)
+ftype_n 2 = (3, 1)
+ftype_n 3 = (2, 26)
+ftype_n 4 = (3, 26)
+ftype_n _ = undefined
 
 -- Indices for track data in the order required by sc3.
 atsSC3Indices :: ATSHeader -> [Int]
@@ -89,4 +92,6 @@ atsSC3Indices h =
         f = map (+ 1) a
         p = map (+ 1) f
         n = map (+ (4+o)) [0..24]
-    in a ++ f ++ p ++ n
+    in if atsFileType h == 4
+       then a ++ f ++ p ++ n
+       else error "atsSC3Indices: illegal ATS file type (/= 4)"

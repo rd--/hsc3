@@ -1,4 +1,4 @@
-AY tonea toneb tonec noise ctl vola volb volc envfreq envstyle chiptype
+ay tonea toneb tonec noise ctl vola volb volc envfreq envstyle chiptype
 
 Emulates the General Instrument AY-3-8910 (a.k.a. the Yamaha
 YM2149) 3-voice sound chip, as found in the ZX Spectrum
