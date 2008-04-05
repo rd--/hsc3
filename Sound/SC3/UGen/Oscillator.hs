@@ -1,9 +1,9 @@
 module Sound.SC3.UGen.Oscillator where
 
-import Sound.SC3.UGen.Rate (Rate(AR))
-import Sound.SC3.UGen.UGen (UGen, mce)
-import Sound.SC3.UGen.UGen.Construct (mkOsc, mkOscMCE)
-import Data.List(transpose)
+import Sound.SC3.UGen.Rate
+import Sound.SC3.UGen.UGen
+import Sound.SC3.UGen.UGen.Construct
+import Data.List
 
 -- | Band Limited ImPulse generator.
 blip :: Rate -> UGen -> UGen -> UGen
@@ -77,7 +77,7 @@ silent nc = mkOsc AR "Silent" [] nc
 sinOsc :: Rate -> UGen -> UGen -> UGen
 sinOsc r freq phase = mkOsc r "SinOsc" [freq, phase] 1
 
--- | Sawtooth oscillator hard synched to a fundamental. 
+-- | Sawtooth oscillator hard synched to a fundamental.
 syncSaw :: Rate -> UGen -> UGen -> UGen
 syncSaw r syncFreq sawFreq = mkOsc r "SyncSaw" [syncFreq, sawFreq] 1
 

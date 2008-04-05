@@ -2,8 +2,8 @@ module Sound.SC3.Server.Synthdef ( Node(..), FromPort(..), Graph(..)
                                   , synth, synthdef ) where
 
 import qualified Data.ByteString.Lazy as B
+import qualified Data.Char as C
 import qualified Data.IntMap as M
-import Data.Char (ord)
 import Data.List
 import Data.Word
 import Sound.OpenSoundControl.Byte
@@ -11,7 +11,10 @@ import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.UGen.Predicate
 import Sound.SC3.UGen.Rate
 
+-- | Node identifier.
 type NodeId = Int
+
+-- | Port index.
 type PortIndex = Int
 
 -- | Type to represent unit generator graph.
@@ -26,11 +29,11 @@ data Node = NodeC { node_id :: NodeId
                   , node_c_value :: Double }
           | NodeK { node_id :: NodeId
                   , node_k_rate :: Rate
-                  , node_k_name :: Name
+                  , node_k_name :: String
                   , node_k_default :: Double }
           | NodeU { node_id :: NodeId
                   , node_u_rate :: Rate
-                  , node_u_name :: Name
+                  , node_u_name :: String
                   , node_u_inputs :: [FromPort]
                   , node_u_outputs :: [Output]
                   , node_u_special :: Special
@@ -46,6 +49,19 @@ data FromPort = C NodeId
               | K NodeId
               | U NodeId PortIndex
                 deriving (Eq, Show)
+
+-- | Transform a unit generator into a graph.
+synth :: UGen -> Graph
+synth u = let (_, g) = mk_node (prepare_root u) empty_graph
+              (Graph _ cs ks us) = g
+              us' = if null ks 
+                    then reverse us
+                    else implicit (length ks) : reverse us
+          in Graph (-1) cs ks us'
+
+-- | Transform a unit generator into bytecode.
+synthdef :: String -> UGen -> [Word8]
+synthdef s u = B.unpack (encode_graphdef s (synth u))
 
 as_from_port :: Node -> FromPort
 as_from_port (NodeC n _) = C n
@@ -76,12 +92,12 @@ mk_node_c (Constant x) g =
 mk_node_c _ _ = error "mk_node_c"
 
 -- Predicate to locate control, names must be unique.
-find_k_p :: Name -> Node -> Bool
+find_k_p :: String -> Node -> Bool
 find_k_p x (NodeK _ _ y _) = x == y
 find_k_p _ _ = error "find_k_p"
 
 -- Insert a control node into the graph.
-push_k :: (Rate, Name, Double) -> Graph -> (Node, Graph)
+push_k :: (Rate, String, Double) -> Graph -> (Node, Graph)
 push_k (r, nm, d) g =
     let n = NodeK (nextId g) r nm d
     in (n, g { controls = n : controls g
@@ -99,7 +115,7 @@ acc [] n g = (reverse n, g)
 acc (x:xs) ys g = let (y, g') = mk_node x g
                   in acc xs (y:ys) g'
 
-type UGenParts = (Rate, Name, [FromPort], [Output], Special, Maybe UGenId)
+type UGenParts = (Rate, String, [FromPort], [Output], Special, Maybe UGenId)
 
 -- Predicate to locate primitive, names must be unique.
 find_u_p :: UGenParts -> Node -> Bool
@@ -170,7 +186,7 @@ encode_input (Input u p) = B.append (encode_i16 u) (encode_i16 p)
 
 -- Pascal strings are length prefixed byte strings.
 str_pstr :: String -> [Word8]
-str_pstr s = (fromIntegral (length s)) : map (fromIntegral . ord) s
+str_pstr s = (fromIntegral (length s)) : map (fromIntegral . C.ord) s
 
 -- Byte-encode control node.
 encode_node_k :: Maps -> Node -> B.ByteString
@@ -222,16 +238,3 @@ prepare_root u
     | isMCE u = mrg (mceProxies u)
     | isMRG u = MRG (prepare_root (mrgLeft u)) (prepare_root (mrgRight u))
     | otherwise = u
-
--- | Transform a unit generator into a graph.
-synth :: UGen -> Graph
-synth u = let (_, g) = mk_node (prepare_root u) empty_graph
-              (Graph _ cs ks us) = g
-              us' = if null ks 
-                    then reverse us
-                    else implicit (length ks) : reverse us
-          in Graph (-1) cs ks us'
-
--- | Transform a unit generator into bytecode.
-synthdef :: String -> UGen -> [Word8]
-synthdef s u = B.unpack (encode_graphdef s (synth u))

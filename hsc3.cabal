@@ -13,7 +13,7 @@ Tested-With:      GHC==6.8.2
 Build-Type:       Simple
 Build-Depends:    base, binary, bytestring, containers, hosc == 0.3,
                   network, random
-GHC-Options:      -Wall -fno-warn-orphans -fwarn-tabs -O2
+GHC-Options:      -Wall -fwarn-tabs -O2
 Exposed-modules:  Sound.SC3
                   Sound.SC3.UGen
                   Sound.SC3.UGen.Analysis
@@ -84,6 +84,7 @@ Data-files:       README
                   Help/Graphs/discretion.lhs
                   Help/Graphs/drummer.lhs
                   Help/Graphs/eggcrate.lhs
+                  Help/Graphs/fm-iter.lhs
                   Help/Graphs/forest-sounds.lhs
                   Help/Graphs/fwalk.lhs
                   Help/Graphs/half-life.lhs
@@ -97,9 +98,12 @@ Data-files:       README
                   Help/Graphs/k-ppr.lhs
                   Help/Graphs/lfo-modulation.lhs
                   Help/Graphs/lf-pulses.lhs
+                  Help/Graphs/lg-timed.lhs
+                  Help/Graphs/lin-sosc.lhs
                   Help/Graphs/modal-space.lhs
                   Help/Graphs/moto-rev.lhs
                   Help/Graphs/mouse-clatter.lhs
+                  Help/Graphs/nharm.lhs
                   Help/Graphs/noise-burst-sweep.lhs
                   Help/Graphs/one-line.lhs
                   Help/Graphs/oscillator-cluster.lhs
@@ -125,8 +129,11 @@ Data-files:       README
                   Help/Graphs/tank.lhs
                   Help/Graphs/theremin.lhs
                   Help/Graphs/three-cpsw.lhs
+                  Help/Graphs/tipnso.lhs
+                  Help/Graphs/tr-out.lhs
                   Help/Graphs/tsort.lhs
                   Help/Graphs/what-was-i-thinking.lhs
+                  Help/Graphs/wial.lhs
                   Help/Graphs/wind-metals.lhs
                   Help/Graphs/xy-interference.lhs
                   Help/hsc3.help.lhs
@@ -229,6 +236,7 @@ Data-files:       README
                   Help/UGen/Chaos/quadL.help.lhs
                   Help/UGen/Chaos/quadN.help.lhs
                   Help/UGen/Chaos/rossler.help.lhs
+                  Help/UGen/Control/mrg2.help.lhs
                   Help/UGen/Demand/dbrown.help.lhs
                   Help/UGen/Demand/dbufrd.help.lhs
                   Help/UGen/Demand/dbufwr.help.lhs
@@ -242,6 +250,7 @@ Data-files:       README
                   Help/UGen/Demand/dser.help.lhs
                   Help/UGen/Demand/dseries.help.lhs
                   Help/UGen/Demand/dswitch1.help.lhs
+                  Help/UGen/Demand/dswitch.help.lhs
                   Help/UGen/Demand/duty.help.lhs
                   Help/UGen/Demand/dwhite.help.lhs
                   Help/UGen/Demand/dxrand.help.lhs
@@ -258,6 +267,20 @@ Data-files:       README
                   Help/UGen/Envelope/pauseSelf.help.lhs
                   Help/UGen/Envelope/pauseSelfWhenDone.help.lhs
                   Help/UGen/Envelope/xLine.help.lhs
+                  Help/UGen/External/atsNoiSynth.help.lhs
+                  Help/UGen/External/atsSynth.help.lhs
+                  Help/UGen/External/ay.help.lhs
+                  Help/UGen/External/lpcSynth.help.lhs
+                  Help/UGen/External/lpcVals.help.lhs
+                  Help/UGen/External/membraneCircle.help.lhs
+                  Help/UGen/External/membraneHexagon.help.lhs
+                  Help/UGen/External/pv_Invert.help.lhs
+                  Help/UGen/External/stkBowed.help.lhs
+                  Help/UGen/External/stkFlute.help.lhs
+                  Help/UGen/External/stkMandolin.help.lhs
+                  Help/UGen/External/stkModalBar.help.lhs
+                  Help/UGen/External/stkShakers.help.lhs
+                  Help/UGen/External/vosim.help.lhs
                   Help/UGen/FFT/convolution.help.lhs
                   Help/UGen/FFT/fft.help.lhs
                   Help/UGen/FFT/ifft.help.lhs
@@ -354,7 +377,7 @@ Data-files:       README
                   Help/UGen/IO/in.help.lhs
                   Help/UGen/IO/inTrig.help.lhs
                   Help/UGen/IO/keyState.help.lhs
-                  Help/UGen/IO/lagIn.lhs
+                  Help/UGen/IO/lagIn.help.lhs
                   Help/UGen/IO/localIn.help.lhs
                   Help/UGen/IO/localOut.help.lhs
                   Help/UGen/IO/mouseButton.help.lhs
@@ -363,7 +386,10 @@ Data-files:       README
                   Help/UGen/IO/offsetOut.help.lhs
                   Help/UGen/IO/out.help.lhs
                   Help/UGen/IO/replaceOut.help.lhs
+                  Help/UGen/IO/soundIn.help.lhs
                   Help/UGen/IO/xOut.help.lhs
+                  Help/UGen/MachineListening/beatTrack.help.lhs
+                  Help/UGen/MachineListening/onsets.help.lhs
                   Help/UGen/Math/absDif.help.lhs
                   Help/UGen/Math/abs.help.lhs
                   Help/UGen/Math/amClip.help.lhs
@@ -438,7 +464,7 @@ Data-files:       README
                   Help/UGen/Trigger/pulseDivider.help.lhs
                   Help/UGen/Trigger/runningMax.help.lhs
                   Help/UGen/Trigger/runningMin.help.lhs
-                  Help/UGen/Trigger/sendTrig.lhs
+                  Help/UGen/Trigger/sendTrig.help.lhs
                   Help/UGen/Trigger/setResetFF.help.lhs
                   Help/UGen/Trigger/stepper.help.lhs
                   Help/UGen/Trigger/sweep.help.lhs

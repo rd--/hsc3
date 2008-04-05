@@ -1,23 +1,23 @@
 module Sound.SC3.UGen.Envelope where
 
-import Sound.SC3.UGen.UGen (UGen)
-import Sound.SC3.UGen.UGen.Construct (mkOsc, mkFilter)
-import Sound.SC3.UGen.Rate (Rate)
-import Sound.SC3.UGen.Enum (DoneAction)
-import Sound.SC3.UGen.Utilities (fromDoneAction)
+import Sound.SC3.UGen.UGen
+import Sound.SC3.UGen.UGen.Construct
+import Sound.SC3.UGen.Rate
+import Sound.SC3.UGen.Enum
+import Sound.SC3.UGen.Utilities
 
 -- | Segment based envelope generator.
 envGen :: Rate -> UGen -> UGen -> UGen -> UGen -> DoneAction -> [UGen] -> UGen
 envGen r gate lvl bias scale act pts = mkOsc r "EnvGen" i 1
- where i = [gate, lvl, bias, scale, fromDoneAction act] ++ pts
+ where i = [gate, lvl, bias, scale, from_done_action act] ++ pts
 
 -- | Line generator.
 line :: Rate -> UGen -> UGen -> UGen -> DoneAction -> UGen
-line r start end dur act = mkOsc r "Line" [start, end, dur, fromDoneAction act] 1
+line r start end dur act = mkOsc r "Line" [start, end, dur, from_done_action act] 1
 
 -- | Exponential line generator.
 xLine :: Rate -> UGen -> UGen -> UGen -> DoneAction -> UGen
-xLine r start end dur act = mkOsc r "XLine" [start, end, dur, fromDoneAction act] 1
+xLine r start end dur act = mkOsc r "XLine" [start, end, dur, from_done_action act] 1
 
 -- | Free node on trigger.
 freeSelf :: UGen -> UGen
@@ -45,7 +45,7 @@ done i = mkFilter "Done" [i] 1
 
 -- | Raise specified done action when input goes silent.
 detectSilence ::  UGen -> UGen -> UGen -> DoneAction -> UGen
-detectSilence i a t act = mkFilter "DetectSilence" [i, a, t, fromDoneAction act] 0
+detectSilence i a t act = mkFilter "DetectSilence" [i, a, t, from_done_action act] 0
 
 -- | When triggered free specified node.
 free :: UGen -> UGen -> UGen
@@ -53,5 +53,4 @@ free i n = mkFilter "Free" [i, n] 1
 
 -- | Linear envelope generator.
 linen :: UGen -> UGen -> UGen -> UGen -> DoneAction -> UGen
-linen g at sl rt da = mkFilter "Linen" [g,at,sl,rt,fromDoneAction da] 1
-
+linen g at sl rt da = mkFilter "Linen" [g, at, sl, rt, from_done_action da] 1

@@ -2,9 +2,9 @@ module Sound.SC3.Server.Play ( play, stop, reset, async
                              , withSC3, audition ) where
 
 import Sound.OpenSoundControl
-import Sound.SC3.UGen.UGen (UGen)
-import Sound.SC3.Server.Synthdef
 import Sound.SC3.Server.Command
+import Sound.SC3.Server.Synthdef
+import Sound.SC3.UGen.UGen
 
 -- | Construct an instrument definition, send /d_recv and /s_new
 -- | messages to scsynth.

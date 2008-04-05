@@ -1,18 +1,18 @@
 module Sound.SC3.UGen.Demand.Base where
 
-import Sound.SC3.UGen.Rate (Rate(DR))
-import Sound.SC3.UGen.UGen (UGen, UGenId)
-import Sound.SC3.UGen.UGen.Construct (mkOscId, mkOscMCEId)
+import Sound.SC3.UGen.Rate
+import Sound.SC3.UGen.UGen
+import Sound.SC3.UGen.UGen.Construct
 import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Utilities
 
 -- | Buffer demand ugen.
 dbufrd :: UGenId -> UGen -> UGen -> Loop -> UGen
-dbufrd z b p l = mkOscId z DR "Dbufrd" [b, p, fromLoop l] 1
+dbufrd z b p l = mkOscId z DR "Dbufrd" [b, p, from_loop l] 1
 
 -- | Buffer write on demand unit generator.
 dbufwr :: UGenId -> UGen -> UGen -> UGen -> Loop -> UGen
-dbufwr z b p i l = mkOscId z DR "Dbufwr" [b, p, i, fromLoop l] 1
+dbufwr z b p i l = mkOscId z DR "Dbufwr" [b, p, i, from_loop l] 1
 
 -- | Demand rate white noise.
 dwhite :: UGenId -> UGen -> UGen -> UGen -> UGen

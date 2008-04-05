@@ -1,10 +1,10 @@
 module Sound.SC3.UGen.IO where
 
-import Sound.SC3.UGen.Rate (Rate(KR,AR))
-import Sound.SC3.UGen.UGen (UGen)
+import Sound.SC3.UGen.Rate
+import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.UGen.Construct
-import Sound.SC3.UGen.Enum (Warp)
-import Sound.SC3.UGen.Utilities (fromWarp)
+import Sound.SC3.UGen.Enum
+import Sound.SC3.UGen.Utilities
 
 -- | Read signal from an audio or control bus.
 in' :: Int -> Rate -> UGen -> UGen
@@ -14,6 +14,7 @@ in' nc r bus = mkOsc r "In" [bus] nc
 localIn :: Int -> Rate -> UGen
 localIn nc r = mkOsc r "LocalIn" [] nc
 
+-- | Control rate bus input with lag.
 lagIn :: Int -> UGen -> UGen -> UGen
 lagIn nc bus lag = mkOsc KR "LagIn" [bus, lag] nc
 
@@ -57,15 +58,15 @@ keyState r key minVal maxVal lag = mkOsc r "KeyState" [key, minVal, maxVal, lag]
 
 -- | Report the status of the first pointer button.
 mouseButton :: Rate -> UGen -> UGen -> UGen -> UGen
-mouseButton r minVal maxVal lag = mkOsc r "MouseButton" [minVal, maxVal, lag] 1
+mouseButton r ll rl lag = mkOsc r "MouseButton" [ll, rl, lag] 1
 
 -- | Cursor UGen, X axis.
 mouseX :: Rate -> UGen -> UGen -> Warp -> UGen -> UGen
-mouseX r minVal maxVal warp lag = mkOsc r "MouseX" [minVal, maxVal, fromWarp warp, lag] 1
+mouseX r ll rl w lag = mkOsc r "MouseX" [ll, rl, from_warp w, lag] 1
 
 -- | Cursor UGen, Y axis.
 mouseY :: Rate -> UGen -> UGen -> Warp -> UGen -> UGen
-mouseY r minVal maxVal warp lag = mkOsc r "MouseY" [minVal, maxVal, fromWarp warp, lag] 1
+mouseY r ll rl w lag = mkOsc r "MouseY" [ll, rl, from_warp w, lag] 1
 
 -- | Control variant.
 trigControl :: Int -> Rate -> UGen

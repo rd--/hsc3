@@ -1,10 +1,11 @@
 module Sound.SC3.UGen.UGen.Math () where
 
-import System.Random (Random, randomR, random)
-import Sound.SC3.UGen.Operator (Unary(..),Binary(..))
+import System.Random
+import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.UGen.Construct
 
+-- | Unit generators are numbers.
 instance Num UGen where
     negate         = mkUnaryOperator Neg negate
     (+)            = mkBinaryOperator Add (+)
@@ -14,11 +15,13 @@ instance Num UGen where
     signum         = mkUnaryOperator Sign signum
     fromInteger    = Constant . fromInteger
 
+-- | Unit generators are fractional.
 instance Fractional UGen where
     recip          = mkUnaryOperator Recip recip
     (/)            = mkBinaryOperator FDiv (/)
     fromRational   = Constant . fromRational
 
+-- | Unit generators are floating point.
 instance Floating UGen where
     pi             = Constant pi
     exp            = mkUnaryOperator Exp exp
@@ -39,10 +42,12 @@ instance Floating UGen where
     acosh x        = log (sqrt (x*x-1) + x)
     atanh x        = (log (1+x) - log (1-x)) / 2
 
+-- | Unit generators are real.
 instance Real UGen where
     toRational (Constant n) = toRational n
     toRational _ = error "toRational at non-constant UGen"
 
+-- | Unit generators are integral.
 instance Integral UGen where
     quot = mkBinaryOperator IDiv undefined
     rem = mkBinaryOperator Mod undefined
@@ -52,6 +57,7 @@ instance Integral UGen where
     toInteger (Constant n) = floor n
     toInteger _ = error "toInteger at non-constant UGen"
 
+-- | Unit generators are orderable.
 instance Ord UGen where
     (Constant a) <  (Constant b) = a <  b
     _            <  _            = error "< at UGen is partial, see <*"
@@ -61,9 +67,10 @@ instance Ord UGen where
     _            >  _            = error "> at UGen is partial, see >*"
     (Constant a) >= (Constant b) = a >= b
     _            >= _            = error ">= at UGen is partial, see >=*"
-    min  = mkBinaryOperator Min min
-    max  = mkBinaryOperator Max max
+    min = mkBinaryOperator Min min
+    max = mkBinaryOperator Max max
 
+-- | Unit generators are enumerable.
 instance Enum UGen where
     succ u                = u + 1
     pred u                = u - 1
@@ -76,6 +83,7 @@ instance Enum UGen where
     enumFromThenTo n n' m = takeWhile (p (m + (n'-n)/2)) (enumFromThen n n')
         where p = if n' >= n then (>=) else (<=)
 
+-- | Unit generators are stochastic.
 instance Random UGen where
     randomR (Constant l, Constant r) g = let (n, g') = randomR (l,r) g
                                          in (Constant n, g')

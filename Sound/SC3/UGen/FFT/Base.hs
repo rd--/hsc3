@@ -1,8 +1,8 @@
 module Sound.SC3.UGen.FFT.Base where
 
-import Sound.SC3.UGen.Rate (Rate(KR))
-import Sound.SC3.UGen.UGen (UGen, UGenId)
-import Sound.SC3.UGen.UGen.Construct (mkOscId)
+import Sound.SC3.UGen.Rate
+import Sound.SC3.UGen.UGen
+import Sound.SC3.UGen.UGen.Construct
 
 -- | Randomize order of bins.
 pv_BinScramble :: UGenId -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -15,3 +15,7 @@ pv_RandComb z buf wp trg = mkOscId z KR "PV_RandComb" [buf,wp,trg] 1
 -- | Cross fade, copying bins in random order.
 pv_RandWipe :: UGenId -> UGen -> UGen -> UGen -> UGen -> UGen
 pv_RandWipe z ba bb wp trg = mkOscId z KR "PV_RandWipe" [ba,bb,wp,trg] 1
+
+-- Local Variables:
+-- truncate-lines:t
+-- End:

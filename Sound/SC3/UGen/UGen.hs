@@ -1,24 +1,21 @@
-module Sound.SC3.UGen.UGen ( Name, UGenId(..), UGen(..), Output, Special(..)
+module Sound.SC3.UGen.UGen ( UGenId(..), UGen(..), Output, Special(..)
                            , constant, control
                            , mce, mce2
                            , mrg, mrg2
                            , proxy
                            , clone, uid ) where
 
-import Control.Monad (liftM, replicateM)
-import Sound.SC3.UGen.Rate (Rate)
+import Control.Monad
+import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UId
 
-type Name = String
-type Output = Rate
-newtype Special = Special Int deriving (Eq, Show)
-newtype UGenId = UGenId Int deriving (Eq, Show)
+-- | Unit generator.
 data UGen = Constant { constantValue :: Double }
-          | Control { controlRate_ :: Rate
-                    , controlName :: Name
+          | Control { controlOperatingRate :: Rate
+                    , controlName :: String
                     , controlDefault :: Double }
           | Primitive { ugenRate :: Rate
-                      , ugenName :: Name
+                      , ugenName :: String
                       , ugenInputs :: [UGen]
                       , ugenOutputs :: [Output]
                       , ugenSpecial :: Special
@@ -30,6 +27,17 @@ data UGen = Constant { constantValue :: Double }
                 , mrgRight :: UGen }
             deriving (Eq, Show)
 
+-- | Unit generator output descriptor.
+type Output = Rate
+
+-- | Operating mode of unary and binary operators.
+newtype Special = Special Int 
+    deriving (Eq, Show)
+
+-- | Identifier for non-functional unit generators.
+newtype UGenId = UGenId Int 
+    deriving (Eq, Show)
+
 -- | UGen identifier constructor.
 uid :: Int -> UGenId
 uid = UGenId
@@ -39,7 +47,7 @@ constant :: (Real a) => a -> UGen
 constant = Constant . realToFrac
 
 -- | Control input constructor.
-control :: Rate -> Name -> Double -> UGen
+control :: Rate -> String -> Double -> UGen
 control = Control
 
 -- | Multiple channel expansion constructor.
@@ -60,10 +68,10 @@ mrg (x:xs) = MRG x (mrg xs)
 mrg2 :: UGen -> UGen -> UGen
 mrg2 = MRG
 
+-- | Unit generator proxy constructor.
 proxy :: UGen -> Int -> UGen
 proxy = Proxy
 
 -- | Clone UGen.
 clone :: (UId m) => Int -> m UGen -> m UGen
 clone n u = liftM mce (replicateM n u)
-

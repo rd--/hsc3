@@ -1,8 +1,8 @@
 module Sound.SC3.Server.NRT ( encodeNRT 
                             , writeNRT ) where
 
-import Sound.OpenSoundControl
 import qualified Data.ByteString.Lazy as B
+import Sound.OpenSoundControl
 
 -- | Encode and prefix with encoded length.
 oscWithSize :: OSC -> B.ByteString

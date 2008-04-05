@@ -1,8 +1,8 @@
 module Sound.SC3.Server.Utilities where
 
-mkDuples :: (a -> c) -> (b -> c) -> [(a, b)] -> [c]
-mkDuples a b = concatMap (\(x,y) -> [a x, b y])
+mk_duples :: (a -> c) -> (b -> c) -> [(a, b)] -> [c]
+mk_duples a b = concatMap (\(x,y) -> [a x, b y])
 
-mkTriples :: (a -> d) -> (b -> d) -> (c -> d) -> [(a, b, c)] -> [d]
-mkTriples a b c = concatMap (\(x,y,z) -> [a x, b y, c z])
+mk_triples :: (a -> d) -> (b -> d) -> (c -> d) -> [(a, b, c)] -> [d]
+mk_triples a b c = concatMap (\(x,y,z) -> [a x, b y, c z])
 

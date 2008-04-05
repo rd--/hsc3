@@ -1,6 +1,6 @@
 module Sound.SC3.UGen.Enum where
 
-import Sound.SC3.UGen.UGen (UGen)
+import Sound.SC3.UGen.UGen
 
 -- | Loop indicator input.
 data Loop = Loop

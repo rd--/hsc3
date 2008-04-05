@@ -1,7 +1,7 @@
 module Sound.SC3.UGen.Noise.Monadic where
 
-import Sound.SC3.UGen.Rate (Rate)
-import Sound.SC3.UGen.UGen (UGen)
+import Sound.SC3.UGen.Rate
+import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.UGen.Construct
 import qualified Sound.SC3.UGen.Noise.Base as N
 import Sound.SC3.UGen.UId
@@ -50,7 +50,7 @@ lfdClipNoise = liftU2 N.lfdClipNoise
 lfdNoise0 :: (UId m) => Rate -> UGen -> m UGen
 lfdNoise0 = liftU2 N.lfdNoise0
 
--- | Dynamic ramp noise. 
+-- | Dynamic ramp noise.
 lfdNoise1 :: (UId m) => Rate -> UGen -> m UGen
 lfdNoise1 = liftU2 N.lfdNoise1
 

@@ -1,6 +1,6 @@
 module Sound.SC3.UGen.UGen.MCE where
 
-import Data.List (transpose)
+import Data.List
 import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.UGen.Predicate
 

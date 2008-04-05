@@ -1,7 +1,13 @@
 module Sound.SC3.Server.Status (serverStatus) where
 
 import Sound.OpenSoundControl
-import Sound.SC3.Server.Command (status)
+import Sound.SC3.Server.Command
+
+-- | Collect server status information.
+serverStatus :: Transport t => t -> IO [String]
+serverStatus fd = do send fd status 
+                     r <- wait fd "status.reply"
+                     return (statusFormat r)
 
 statusFields :: [String]
 statusFields = ["# UGens                     ", 
@@ -22,9 +28,3 @@ statusInfo o = maybe [] f (address o)
 statusFormat :: OSC -> [String]
 statusFormat r = s : zipWith (++) statusFields (statusInfo r)
     where s = "***** SuperCollider Server Status *****"
-
--- | Collect server status information.
-serverStatus :: Transport t => t -> IO [String]
-serverStatus fd = do send fd status 
-                     r <- wait fd "status.reply"
-                     return (statusFormat r)
