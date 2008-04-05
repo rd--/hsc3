@@ -2,7 +2,7 @@ module Sound.SC3.UGen.UGen.Construct ( mkUnaryOperator, mkBinaryOperator
                                      , mkOscId, mkOsc
                                      , mkOscMCEId, mkOscMCE
                                      , mkFilterId, mkFilter, mkFilterKeyed
-                                     , mkFilterMCE
+                                     , mkFilterMCEId, mkFilterMCE
                                      , mkInfo
                                      , liftU, liftU2, liftU3, liftU4 ) where
 
@@ -114,9 +114,16 @@ mkFilterKeyed c k i o = mkUGen r c i o' (Special 0) Nothing
     where r = rateOf (i !! k)
           o' = replicate o r
 
+mkFilterMCE_ :: Maybe UGenId -> String -> [UGen] -> UGen -> Int -> UGen
+mkFilterMCE_ z c i j o = mkFilter_ z c (i ++ mceChannels j) o
+
 -- | Variant filter constructor with MCE collapsing input.
 mkFilterMCE :: String -> [UGen] -> UGen -> Int -> UGen
-mkFilterMCE c i j o = mkFilter c (i ++ mceChannels j) o
+mkFilterMCE = mkFilterMCE_ Nothing
+
+-- | Variant filter constructor with MCE collapsing input.
+mkFilterMCEId :: UGenId -> String -> [UGen] -> UGen -> Int -> UGen
+mkFilterMCEId z = mkFilterMCE_ (Just z)
 
 -- | Information unit generators are very specialized.
 mkInfo :: String -> UGen

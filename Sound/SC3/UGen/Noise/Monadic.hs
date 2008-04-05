@@ -102,6 +102,10 @@ tiRand = liftU3 N.tiRand
 tRand :: (UId m) => UGen -> UGen -> UGen -> m UGen
 tRand = liftU3 N.tRand
 
+-- | Triggered windex.
+twindex :: (UId m) => UGen -> UGen -> UGen -> m UGen
+twindex = liftU3 N.twindex
+
 -- | White noise.
 whiteNoise :: (UId m) => Rate -> m UGen
 whiteNoise = liftU N.whiteNoise

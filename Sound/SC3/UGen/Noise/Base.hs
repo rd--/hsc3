@@ -100,6 +100,10 @@ tiRand z lo hi trig = mkFilterId z "TIRand" [lo, hi, trig] 1
 tRand :: UGenId -> UGen -> UGen -> UGen -> UGen
 tRand z lo hi trig = mkFilterId z "TRand" [lo, hi, trig] 1
 
+-- | Triggered windex.
+twindex :: UGenId -> UGen -> UGen -> UGen -> UGen
+twindex z i n a = mkFilterMCEId z "TWindex" [i, n] a 1
+
 -- | White noise.
 whiteNoise :: UGenId -> Rate -> UGen
 whiteNoise z r = mkOscId z r "WhiteNoise" [] 1
