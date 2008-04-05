@@ -8,7 +8,7 @@ loss are k-rate.
 The variants are named after the shape made out of triangular 
 meshes.
 
-Excite the mesh with some pink noise, triggered by the an 
+Excite the mesh with some pink noise, triggered by an 
 impulse generator.  mouseX is tension and impulse frequency, 
 mouseY is duration of excitation, release-time and amplitude.
 

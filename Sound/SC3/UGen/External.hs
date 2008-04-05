@@ -40,6 +40,10 @@ lpcSynth b s ptr = mkOsc AR "LPCSynth" [b, s, ptr] 1
 pv_Invert :: UGen -> UGen
 pv_Invert b = mkOsc KR "PV_Invert" [b] 1
 
+-- | Vocal simulation due to W. Kaegi.
+vosim :: UGen -> UGen -> UGen -> UGen -> UGen
+vosim t f nc d = mkOsc AR "VOSIM" [t, f, nc, d] 1
+
 -- Local Variables:
 -- truncate-lines:t
 -- End:
