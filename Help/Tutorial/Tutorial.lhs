@@ -197,6 +197,14 @@ an entry to ~/.emacs:
 
   (setq tags-table-list '("~/sw/hsc3"))
 
+* External Unit Generators
+
+hsc3 includes bindings and help files for some unit generators
+not in the standard supercollider distribution.  In order to
+use these unit generators they must be installed, see:
+
+  http://sf.net/projects/sc3-plugins/
+
 * Example Unit Generator Graphs
 
 The Help/Graphs directory contains example unit generator graphs.  The
