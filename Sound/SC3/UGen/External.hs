@@ -40,6 +40,26 @@ lpcSynth b s ptr = mkOsc AR "LPCSynth" [b, s, ptr] 1
 pv_Invert :: UGen -> UGen
 pv_Invert b = mkOsc KR "PV_Invert" [b] 1
 
+-- | STK flute model.
+stkFlute :: Rate-> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+stkFlute rt f jd ng vf vg bp tr = mkOsc rt "StkFlute" [f, jd, ng, vf, vg, bp, tr] 1
+
+-- | STK modal bar models.
+stkModalBar :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+stkModalBar rt f i sh sp vg vf mx v tr = mkOsc rt "StkModalBar" [f, i, sh, sp, vg, vf, mx, v, tr] 1
+
+-- | STK bowed string model.
+stkBowed :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+stkBowed rt f pr po vf vg l g = mkOsc rt "StkBowed" [f, pr, po, vf, vg, l, g] 1
+
+-- | STK mandolin model.
+stkMandolin :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+stkMandolin rt f bs pp dm dt at tr = mkOsc rt "StkMandolin" [f, bs, pp, dm, dt, at, tr] 1 
+
+-- | STK shaker models.
+stkShakers :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+stkShakers rt i e d o rf tr = mkOsc rt "StkShakers" [i, e, d, o, rf, tr] 1
+
 -- | Vocal simulation due to W. Kaegi.
 vosim :: UGen -> UGen -> UGen -> UGen -> UGen
 vosim t f nc d = mkOsc AR "VOSIM" [t, f, nc, d] 1
