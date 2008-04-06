@@ -2,7 +2,7 @@ module Sound.SC3.UGen.Noise.Monadic where
 
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.UGen.Construct
+import Sound.SC3.UGen.UGen.Lift
 import qualified Sound.SC3.UGen.Noise.Base as N
 import Sound.SC3.UGen.UId
 
