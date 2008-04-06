@@ -96,6 +96,14 @@ formlet i f a d = mkFilter "Formlet" [i, f, a, d] 1
 fos :: UGen -> UGen -> UGen -> UGen -> UGen
 fos i a0 a1 b1 = mkFilter "FOS" [i, a0, a1, b1] 1
 
+-- | A simple reverb.
+freeVerb :: UGen -> UGen -> UGen -> UGen -> UGen
+freeVerb i mx room damp = mkFilter "FreeVerb" [i, mx, room, damp] 1
+
+-- | A simple reverb (two channel).
+freeVerb2 :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+freeVerb2 i1 i2 mx room damp = mkFilter "FreeVerb2" [i1, i2, mx, room, damp] 2
+
 -- | Gate.
 gate :: UGen -> UGen -> UGen
 gate i t = mkFilter "Gate" [i, t] 1

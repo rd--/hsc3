@@ -1,7 +1,6 @@
 hh-808 (ryan at wabdo.com)
 
-> let { freeVerb i mx room damp = mkFilter "FreeVerb" [i, mx, room, damp] 1
->     ; time = 250
+> let { time = 250
 >     ; freqs = [205.35, 304.41, 369.64, 522.71, 540.54, 812.21]
 >     ; pulseEnv = let e = env [1.0, 0.6] [time] [EnvNum (-0.5)] 0 0
 >                  in envGen AR 1 1 0 (1/1000) DoNothing e
