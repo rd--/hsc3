@@ -1,8 +1,6 @@
 vlc-distrtn (rd)
 caution - audio feedback graph
 
-> import System.IO.Unsafe
-
 > let { rrand l r = getStdRandom (randomR (l, r))
 >     ; choose l = return . (l !!) =<< rrand 0 (length l - 1)
 >     ; threadPause :: Double -> IO ()
