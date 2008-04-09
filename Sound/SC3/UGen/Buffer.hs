@@ -1,9 +1,8 @@
 module Sound.SC3.UGen.Buffer where
 
+import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.UGen.Construct
-import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Utilities
 
 -- * Buffer query UGens.

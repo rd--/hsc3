@@ -8,7 +8,6 @@ import Data.List
 import Data.Word
 import Sound.OpenSoundControl.Byte
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.UGen.Predicate
 import Sound.SC3.UGen.Rate
 
 -- | Node identifier.

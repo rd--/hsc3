@@ -4,8 +4,6 @@ import Data.List
 import Data.Maybe
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.Math ()
-import Sound.SC3.UGen.UGen.Construct
 
 -- | Autocorrelation beat tracker.
 beatTrack :: UGen -> UGen -> UGen

@@ -2,8 +2,6 @@ module Sound.SC3.UGen.Math where
 
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.UGen.Construct
-import Sound.SC3.UGen.UGen.Math ()
 
 -- The Eq and Ord classes in the Prelude require Bool, hence the name
 -- mangling.  True is 1.0, False is 0.0

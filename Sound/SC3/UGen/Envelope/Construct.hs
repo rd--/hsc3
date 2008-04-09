@@ -1,7 +1,6 @@
 module Sound.SC3.UGen.Envelope.Construct where
 
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.UGen.Math
 import Sound.SC3.UGen.Math
 import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Utilities

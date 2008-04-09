@@ -9,9 +9,6 @@ import Sound.SC3.UGen.Noise.Monadic
 import Sound.SC3.UGen.Panner
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.UGen.Math ()
-import Sound.SC3.UGen.UGen.MCE
-import Sound.SC3.UGen.UGen.Predicate
 import Sound.SC3.UGen.UId
 
 -- | Demand rate (:) function.

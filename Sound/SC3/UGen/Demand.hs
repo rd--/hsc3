@@ -1,10 +1,8 @@
 module Sound.SC3.UGen.Demand where
 
+import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.UGen.Construct
-import Sound.SC3.UGen.UGen.MCE
-import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Utilities
 
 -- | Infinte repeat counter for demand rate unit generators.

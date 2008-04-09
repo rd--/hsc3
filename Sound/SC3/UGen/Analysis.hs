@@ -2,7 +2,6 @@ module Sound.SC3.UGen.Analysis where
 
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.UGen.Construct
 
 -- | Amplitude follower.
 amplitude :: Rate -> UGen -> UGen -> UGen -> UGen

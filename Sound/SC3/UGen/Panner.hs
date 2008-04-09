@@ -1,7 +1,6 @@
 module Sound.SC3.UGen.Panner where
 
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.UGen.Construct
 
 -- | Two channel equal power panner.
 pan2 :: UGen -> UGen -> UGen -> UGen

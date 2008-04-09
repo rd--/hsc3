@@ -2,7 +2,6 @@ module Sound.SC3.UGen.External where
 
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.UGen.Construct
 
 -- | Resynthesize sinusoidal ATS analysis data.
 atsSynth :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen

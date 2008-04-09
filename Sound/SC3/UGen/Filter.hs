@@ -1,8 +1,7 @@
 module Sound.SC3.UGen.Filter where
 
-import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.UGen.Construct
 import Data.List
+import Sound.SC3.UGen.UGen
 
 -- | Allpass filter (no interpolation)
 allpassN :: UGen -> UGen -> UGen -> UGen -> UGen

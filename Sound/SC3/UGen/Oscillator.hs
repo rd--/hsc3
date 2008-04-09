@@ -1,9 +1,8 @@
 module Sound.SC3.UGen.Oscillator where
 
+import Data.List
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.UGen.Construct
-import Data.List
 
 -- | Band Limited ImPulse generator.
 blip :: Rate -> UGen -> UGen -> UGen

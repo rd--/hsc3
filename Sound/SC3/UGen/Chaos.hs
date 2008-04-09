@@ -2,7 +2,6 @@ module Sound.SC3.UGen.Chaos where
 
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.UGen.Construct
 
 -- | Chaotic noise.
 crackle :: Rate -> UGen -> UGen

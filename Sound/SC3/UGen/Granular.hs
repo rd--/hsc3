@@ -2,7 +2,6 @@ module Sound.SC3.UGen.Granular where
 
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.UGen.Construct
 
 -- | Granular synthesis with sound stored in a buffer.
 grainBuf :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen

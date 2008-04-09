@@ -24,10 +24,6 @@ module Sound.SC3.UGen (module Sound.SC3.UGen.Analysis,
                        module Sound.SC3.UGen.Panner,
                        module Sound.SC3.UGen.Rate,
                        module Sound.SC3.UGen.UGen,
-                       module Sound.SC3.UGen.UGen.Construct,
-                       module Sound.SC3.UGen.UGen.Math,
-                       module Sound.SC3.UGen.UGen.MCE,
-                       module Sound.SC3.UGen.UGen.Predicate,
                        module Sound.SC3.UGen.UId) where
 
 import Sound.SC3.UGen.Analysis
@@ -56,8 +52,4 @@ import Sound.SC3.UGen.Oscillator
 import Sound.SC3.UGen.Panner
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.UGen.Construct
-import Sound.SC3.UGen.UGen.Math
-import Sound.SC3.UGen.UGen.MCE
-import Sound.SC3.UGen.UGen.Predicate
 import Sound.SC3.UGen.UId

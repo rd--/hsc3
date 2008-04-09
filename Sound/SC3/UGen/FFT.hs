@@ -2,9 +2,6 @@ module Sound.SC3.UGen.FFT where
 
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.UGen.Construct
-import Sound.SC3.UGen.UGen.Math ()
-import Sound.SC3.UGen.UGen.MCE
 
 -- | Fast fourier transform.
 fft :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
