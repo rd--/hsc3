@@ -36,67 +36,55 @@ newtype Special = Special Int
 newtype UGenId = UGenId Int 
     deriving (Eq, Show)
 
--- | UGen identifier constructor.
+-- * Unit generator node constructors.
+
+-- | Unit generator identifier constructor.
 uid :: Int -> UGenId
 uid = UGenId
 
--- | Constant value constructor.
+-- | Constant value node constructor.
 constant :: (Real a) => a -> UGen
 constant = Constant . realToFrac
 
--- | Control input constructor.
+-- | Control input node constructor.
 control :: Rate -> String -> Double -> UGen
 control = Control
 
--- | Multiple channel expansion constructor.
+-- | Multiple channel expansion node constructor.
 mce :: [UGen] -> UGen
 mce = MCE
 
--- | Multiple channel expansion for two inputs.
-mce2 :: UGen -> UGen -> UGen
-mce2 x y = mce [x, y]
-
--- | Multiple root graph constructor.
-mrg :: [UGen] -> UGen
-mrg [] = undefined
-mrg [x] = x
-mrg (x:xs) = MRG x (mrg xs)
-
--- | Multiple root graph with two inputs.
+-- | Multiple root graph node constructor.
 mrg2 :: UGen -> UGen -> UGen
 mrg2 = MRG
 
--- | Unit generator proxy constructor.
+-- | Unit generator proxy node constructor.
 proxy :: UGen -> Int -> UGen
 proxy = Proxy
 
--- | Clone UGen.
-clone :: (UId m) => Int -> m UGen -> m UGen
-clone n u = liftM mce (replicateM n u)
+-- * Unit generator node predicates.
 
--- * Unit generator predicates
-
--- | Constant predicate.
+-- | Constant node predicate.
 isConstant :: UGen -> Bool
 isConstant (Constant _) = True
 isConstant _            = False
 
--- | Control predicate.
+-- | Control node predicate.
 isControl :: UGen -> Bool
 isControl (Control _ _ _) = True
 isControl _               = False
 
--- | UGen predicate.
+-- | Unit generator primitive node predicate.
 isUGen :: UGen -> Bool
 isUGen (Primitive _ _ _ _ _ _) = True
 isUGen _ = False
 
--- | Proxy predicate.
+-- | Proxy node predicate.
 isProxy :: UGen -> Bool
 isProxy (Proxy _ _) = True
 isProxy _           = False
 
--- | MCE predicate.
+-- | Multiple channel expansion node predicate.
 isMCE :: UGen -> Bool
 isMCE (MCE _) = True
 isMCE _       = False
@@ -106,7 +94,15 @@ isMRG :: UGen -> Bool
 isMRG (MRG _ _) = True
 isMRG _ = False
 
--- * Multiple channel expansion
+-- * Multiple channel expansion.
+
+-- | Multiple channel expansion for two inputs.
+mce2 :: UGen -> UGen -> UGen
+mce2 x y = mce [x, y]
+
+-- | Clone a unit generator (mce . replicateM).
+clone :: (UId m) => Int -> m UGen -> m UGen
+clone n u = liftM mce (replicateM n u)
 
 -- | Number of channels to expand to.
 mceDegree :: UGen -> Int
@@ -160,7 +156,15 @@ mceChannels u = [u]
 mceTranspose :: UGen -> UGen
 mceTranspose u = mce (map mce (transpose (map mceChannels (mceChannels u))))
 
--- * Unit generator constructors.
+-- * Multiple root graphs.
+
+-- | Multiple root graph constructor.
+mrg :: [UGen] -> UGen
+mrg [] = undefined
+mrg [x] = x
+mrg (x:xs) = MRG x (mrg xs)
+
+-- * Unit generator function builders.
 
 -- | Apply proxy transformation if required.
 proxify :: UGen -> UGen
@@ -184,22 +188,24 @@ rateOf u
     | isMRG u = rateOf (mrgLeft u)
     | otherwise = undefined
 
--- | True is input is a sink UGen, ie. has no outputs.
-isSink :: UGen -> Bool
-isSink u
+-- True is input is a sink UGen, ie. has no outputs.
+is_sink :: UGen -> Bool
+is_sink u
     | isUGen u = null (ugenOutputs u)
-    | isMCE u = all isSink (mceProxies u)
-    | isMRG u = isSink (mrgLeft u)
+    | isMCE u = all is_sink (mceProxies u)
+    | isMRG u = is_sink (mrgLeft u)
     | otherwise = False
 
--- | Ensure input UGen is valid, ie. not a sink.
-checkInput :: UGen -> UGen
-checkInput u = if isSink u then error ("illegal input" ++ show u) else u
+-- Ensure input UGen is valid, ie. not a sink.
+check_input :: UGen -> UGen
+check_input u = if is_sink u 
+                then error ("illegal input" ++ show u) 
+                else u
 
 -- | Construct proxied and multiple channel expanded UGen.
 mkUGen :: Rate -> String -> [UGen] -> [Output] -> Special -> Maybe UGenId -> UGen
 mkUGen r n i o s z = proxify (mceExpand u)
-    where u = Primitive r n (map checkInput i) o s z
+    where u = Primitive r n (map check_input i) o s z
 
 -- | Operator UGen constructor.
 mkOperator :: String -> [UGen] -> Int -> UGen
@@ -220,40 +226,40 @@ mkBinaryOperator i f a b
                                      in constant (f a' b')
     | otherwise = mkOperator "BinaryOpUGen" [a, b] (fromEnum i)
 
-mkOsc_ :: Maybe UGenId -> Rate -> String -> [UGen] -> Int -> UGen
-mkOsc_ z r c i o = mkUGen r c i (replicate o r) (Special 0) z
+mk_osc :: Maybe UGenId -> Rate -> String -> [UGen] -> Int -> UGen
+mk_osc z r c i o = mkUGen r c i (replicate o r) (Special 0) z
 
 -- | Oscillator constructor.
 mkOsc :: Rate -> String -> [UGen] -> Int -> UGen
-mkOsc = mkOsc_ Nothing
+mkOsc = mk_osc Nothing
 
 -- | Oscillator constructor, setting identifier.
 mkOscId :: UGenId -> Rate -> String -> [UGen] -> Int -> UGen
-mkOscId z = mkOsc_ (Just z)
+mkOscId z = mk_osc (Just z)
 
-mkOscMCE_ :: Maybe UGenId -> Rate -> String -> [UGen] -> UGen -> Int -> UGen
-mkOscMCE_ z r c i j o = mkOsc_ z r c (i ++ mceChannels j) o
+mk_osc_mce :: Maybe UGenId -> Rate -> String -> [UGen] -> UGen -> Int -> UGen
+mk_osc_mce z r c i j o = mk_osc z r c (i ++ mceChannels j) o
 
 -- | Variant oscillator constructor with MCE collapsing input.
 mkOscMCE :: Rate -> String -> [UGen] -> UGen -> Int -> UGen
-mkOscMCE = mkOscMCE_ Nothing
+mkOscMCE = mk_osc_mce Nothing
 
 -- | Variant oscillator constructor with MCE collapsing input.
 mkOscMCEId :: UGenId -> Rate -> String -> [UGen] -> UGen -> Int -> UGen
-mkOscMCEId z = mkOscMCE_ (Just z)
+mkOscMCEId z = mk_osc_mce (Just z)
 
-mkFilter_ :: Maybe UGenId -> String -> [UGen] -> Int -> UGen
-mkFilter_ z c i o = mkUGen r c i o' (Special 0) z
+mk_filter :: Maybe UGenId -> String -> [UGen] -> Int -> UGen
+mk_filter z c i o = mkUGen r c i o' (Special 0) z
     where r = maximum (map rateOf i)
           o'= replicate o r
 
 -- | Filter UGen constructor.
 mkFilter :: String -> [UGen] -> Int -> UGen
-mkFilter = mkFilter_ Nothing
+mkFilter = mk_filter Nothing
 
 -- | Filter UGen constructor.
 mkFilterId :: UGenId -> String -> [UGen] -> Int -> UGen
-mkFilterId z = mkFilter_ (Just z)
+mkFilterId z = mk_filter (Just z)
 
 -- | Variant filter with rate derived from keyed input.
 mkFilterKeyed :: String -> Int -> [UGen] -> Int -> UGen
@@ -261,24 +267,22 @@ mkFilterKeyed c k i o = mkUGen r c i o' (Special 0) Nothing
     where r = rateOf (i !! k)
           o' = replicate o r
 
-mkFilterMCE_ :: Maybe UGenId -> String -> [UGen] -> UGen -> Int -> UGen
-mkFilterMCE_ z c i j o = mkFilter_ z c (i ++ mceChannels j) o
+mk_filter_mce :: Maybe UGenId -> String -> [UGen] -> UGen -> Int -> UGen
+mk_filter_mce z c i j o = mk_filter z c (i ++ mceChannels j) o
 
 -- | Variant filter constructor with MCE collapsing input.
 mkFilterMCE :: String -> [UGen] -> UGen -> Int -> UGen
-mkFilterMCE = mkFilterMCE_ Nothing
+mkFilterMCE = mk_filter_mce Nothing
 
 -- | Variant filter constructor with MCE collapsing input.
 mkFilterMCEId :: UGenId -> String -> [UGen] -> UGen -> Int -> UGen
-mkFilterMCEId z = mkFilterMCE_ (Just z)
+mkFilterMCEId z = mk_filter_mce (Just z)
 
 -- | Information unit generators are very specialized.
 mkInfo :: String -> UGen
 mkInfo name = mkOsc IR name [] 1
 
--- * Standard type class instances.
-
--- | Unit generators are numbers.
+-- Unit generators are numbers.
 instance Num UGen where
     negate         = mkUnaryOperator Neg negate
     (+)            = mkBinaryOperator Add (+)
@@ -288,13 +292,13 @@ instance Num UGen where
     signum         = mkUnaryOperator Sign signum
     fromInteger    = Constant . fromInteger
 
--- | Unit generators are fractional.
+-- Unit generators are fractional.
 instance Fractional UGen where
     recip          = mkUnaryOperator Recip recip
     (/)            = mkBinaryOperator FDiv (/)
     fromRational   = Constant . fromRational
 
--- | Unit generators are floating point.
+-- Unit generators are floating point.
 instance Floating UGen where
     pi             = Constant pi
     exp            = mkUnaryOperator Exp exp
@@ -315,12 +319,12 @@ instance Floating UGen where
     acosh x        = log (sqrt (x*x-1) + x)
     atanh x        = (log (1+x) - log (1-x)) / 2
 
--- | Unit generators are real.
+-- Unit generators are real.
 instance Real UGen where
     toRational (Constant n) = toRational n
     toRational _ = error "toRational at non-constant UGen"
 
--- | Unit generators are integral.
+-- Unit generators are integral.
 instance Integral UGen where
     quot = mkBinaryOperator IDiv undefined
     rem = mkBinaryOperator Mod undefined
@@ -330,7 +334,7 @@ instance Integral UGen where
     toInteger (Constant n) = floor n
     toInteger _ = error "toInteger at non-constant UGen"
 
--- | Unit generators are orderable.
+-- Unit generators are orderable.
 instance Ord UGen where
     (Constant a) <  (Constant b) = a <  b
     _            <  _            = error "< at UGen is partial, see <*"
@@ -343,7 +347,7 @@ instance Ord UGen where
     min = mkBinaryOperator Min min
     max = mkBinaryOperator Max max
 
--- | Unit generators are enumerable.
+-- Unit generators are enumerable.
 instance Enum UGen where
     succ u                = u + 1
     pred u                = u - 1
@@ -356,7 +360,7 @@ instance Enum UGen where
     enumFromThenTo n n' m = takeWhile (p (m + (n'-n)/2)) (enumFromThen n n')
         where p = if n' >= n then (>=) else (<=)
 
--- | Unit generators are stochastic.
+-- Unit generators are stochastic.
 instance Random UGen where
     randomR (Constant l, Constant r) g = let (n, g') = randomR (l,r) g
                                          in (Constant n, g')
