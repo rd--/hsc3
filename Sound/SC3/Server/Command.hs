@@ -252,6 +252,10 @@ b_setn1 nid i xs = b_setn nid [(i,xs)]
 c_set1 :: Int -> Double -> OSC
 c_set1 i x = c_set [(i, x)]
 
+-- | Set a signle node control value.
+n_set1 :: Int -> String -> Double -> OSC
+n_set1 nid k n = n_set nid [(k, n)]
+
 -- Local Variables:
 -- truncate-lines:t
 -- End:
