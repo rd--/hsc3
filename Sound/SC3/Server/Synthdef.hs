@@ -6,7 +6,7 @@ import qualified Data.Char as C
 import qualified Data.IntMap as M
 import Data.List
 import Data.Word
-import Sound.OpenSoundControl.Byte
+import Sound.OpenSoundControl
 import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.Rate
 
@@ -164,7 +164,7 @@ mk_maps :: Graph -> Maps
 mk_maps (Graph _ cs ks us) = 
     ( M.fromList (zip (map node_id cs) [0..])
     , M.fromList (zip (map node_id ks) [0..])
-    , M.fromList (zip (map node_id (us)) [0..]) )
+    , M.fromList (zip (map node_id us) [0..]) )
 
 -- Locate index in map give node identifer.
 fetch :: NodeId -> Map -> Int
@@ -182,10 +182,6 @@ make_input (_, _, us) (U n p) = Input (fetch n us) p
 -- Byte-encode input value.
 encode_input :: Input -> B.ByteString
 encode_input (Input u p) = B.append (encode_i16 u) (encode_i16 p)
-
--- Pascal strings are length prefixed byte strings.
-str_pstr :: String -> [Word8]
-str_pstr s = (fromIntegral (length s)) : map (fromIntegral . C.ord) s
 
 -- Byte-encode control node.
 encode_node_k :: Maps -> Node -> B.ByteString

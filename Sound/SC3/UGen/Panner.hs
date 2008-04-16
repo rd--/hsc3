@@ -38,7 +38,7 @@ panAz :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 panAz nc i p l w o = mkFilterMCE "PanAz" [i, p, l, w, o] nc 0
 
 xFade2 :: UGen -> UGen -> UGen -> UGen -> UGen
-xFade2 inA inB pan level = mkFilter "XFade" [inA, inB, pan, level] 2
+xFade2 inA inB pan level = mkFilter "XFade2" [inA, inB, pan, level] 2
 
 linXFade2 :: UGen -> UGen -> UGen -> UGen
-linXFade2 inA inB pan = mkFilter "XFade" [inA, inB, pan] 2
+linXFade2 inA inB pan = mkFilter "LinXFade2" [inA, inB, pan] 2

@@ -8,76 +8,76 @@ import Sound.SC3.Server.Utilities
 
 -- | Install a bytecode instrument definition. (Asynchronous)
 d_recv :: [Word8] -> OSC
-d_recv b = message "/d_recv" [blob b]
+d_recv b = Message "/d_recv" [Blob b]
 
 -- | Load an instrument definition from a named file. (Asynchronous)
 d_load :: String -> OSC
-d_load p = message "/d_load" [string p]
+d_load p = Message "/d_load" [String p]
 
 -- | Load a directory of instrument definitions files. (Asynchronous)
 d_loadDir :: String -> OSC
-d_loadDir p = message "/d_loadDir" [string p]
+d_loadDir p = Message "/d_loadDir" [String p]
 
 -- | Remove definition once all nodes using it have ended.
 d_free :: [String] -> OSC
-d_free n = message "/d_free" (map string n)
+d_free n = Message "/d_free" (map String n)
 
 -- * Node commands.
 
 -- | Place a node after another.
 n_after :: [(Int, Int)] -> OSC
-n_after l = message "/n_after" (mk_duples int int l)
+n_after l = Message "/n_after" (mk_duples Int Int l)
 
 -- | Place a node before another.
 n_before :: [(Int, Int)] -> OSC
-n_before l = message "/n_before" (mk_duples int int l)
+n_before l = Message "/n_before" (mk_duples Int Int l)
 
 -- | Fill ranges of a node's control values.
 n_fill :: Int -> [(String, Int, Double)] -> OSC
-n_fill nid l = message "/n_fill" (int nid : mk_triples string int float l)
+n_fill nid l = Message "/n_fill" (Int nid : mk_triples String Int Float l)
 
 -- | Delete a node.
 n_free :: [Int] -> OSC
-n_free nid = message "/n_free" (map int nid)
+n_free nid = Message "/n_free" (map Int nid)
 
 -- | Map a node's controls to read from a bus.
 n_map :: Int -> [(String, Int)] -> OSC
-n_map nid l = message "/n_map" (int nid : mk_duples string int l)
+n_map nid l = Message "/n_map" (Int nid : mk_duples String Int l)
 
 -- | Map a node's controls to read from buses.
 n_mapn :: Int -> [(String, Int, Int)] -> OSC
-n_mapn nid l = message "/n_mapn" (int nid : mk_triples string int int l)
+n_mapn nid l = Message "/n_mapn" (Int nid : mk_triples String Int Int l)
 
 -- | Get info about a node.
 n_query :: [Int] -> OSC
-n_query nid = message "/n_query" (map int nid)
+n_query nid = Message "/n_query" (map Int nid)
 
 -- | Turn node on or off.
 n_run :: [(Int, Bool)] -> OSC
-n_run l = message "/n_run" (mk_duples int (int . fromEnum) l)
+n_run l = Message "/n_run" (mk_duples Int (Int . fromEnum) l)
 
 -- | Set a node's control values.
 n_set :: Int -> [(String, Double)] -> OSC
-n_set nid c = message "/n_set" (int nid : mk_duples string float c)
+n_set nid c = Message "/n_set" (Int nid : mk_duples String Float c)
 
 -- | Set ranges of a node's control values.
 n_setn :: Int -> [(String, [Double])] -> OSC
-n_setn nid l = message "/n_setn" (int nid : concatMap f l)
-    where f (s,d) = string s : int (length d) : (map float d)
+n_setn nid l = Message "/n_setn" (Int nid : concatMap f l)
+    where f (s,d) = String s : Int (length d) : (map Float d)
 
 -- | Trace a node.
 n_trace :: [Int] -> OSC
-n_trace nid = message "/n_trace" (map int nid)
+n_trace nid = Message "/n_trace" (map Int nid)
 
 -- * Synthesis node commands.
 
 -- | Get control values.
 s_get :: Int -> [String] -> OSC
-s_get nid i = message "/s_get" (int nid : map string i)
+s_get nid i = Message "/s_get" (Int nid : map String i)
 
 -- | Get ranges of control values.
 s_getn :: Int -> [(String, Int)] -> OSC
-s_getn nid l = message "/s_getn" (int nid : mk_duples string int l)
+s_getn nid l = Message "/s_getn" (Int nid : mk_duples String Int l)
 
 -- | Enumeration of possible locations to add new nodes (s_new and g_new).
 data AddAction = AddToHead
@@ -89,127 +89,127 @@ data AddAction = AddToHead
 
 -- | Create a new synth.
 s_new :: String -> Int -> AddAction -> Int -> [(String, Double)] -> OSC
-s_new n i a t c = message "/s_new" (string n : int i : int (fromEnum a) : int t : mk_duples string float c)
+s_new n i a t c = Message "/s_new" (String n : Int i : Int (fromEnum a) : Int t : mk_duples String Float c)
 
 -- | Auto-reassign synth's ID to a reserved value.
 s_noid :: [Int] -> OSC
-s_noid nid = message "/s_noid" (map int nid)
+s_noid nid = Message "/s_noid" (map Int nid)
 
 -- * Group node commands.
 
 -- | Free all synths in this group and all its sub-groups.
 g_deepFree :: [Int] -> OSC
-g_deepFree nid = message "/g_deepFree" (map int nid)
+g_deepFree nid = Message "/g_deepFree" (map Int nid)
 
 -- | Delete all nodes in a group.
 g_freeAll :: [Int] -> OSC
-g_freeAll nid = message "/g_freeAll" (map int nid)
+g_freeAll nid = Message "/g_freeAll" (map Int nid)
 
 -- | Add node to head of group.
 g_head :: [(Int, Int)] -> OSC
-g_head l = message "/g_head" (mk_duples int int l)
+g_head l = Message "/g_head" (mk_duples Int Int l)
 
 -- | Create a new group.
 g_new :: [(Int, AddAction, Int)] -> OSC
-g_new l = message "/g_new" (mk_triples int (int . fromEnum) int l)
+g_new l = Message "/g_new" (mk_triples Int (Int . fromEnum) Int l)
 
 -- | Add node to tail of group.
 g_tail :: [(Int, Int)] -> OSC
-g_tail l = message "/g_tail" (mk_duples int int l)
+g_tail l = Message "/g_tail" (mk_duples Int Int l)
 
 -- * Unit Generator commands.
 
 -- | Send a command to a unit generator.
 u_cmd :: Int -> Int -> String -> [Datum] -> OSC
-u_cmd nid uid cmd arg = message "/u_cmd" ([int nid, int uid, string cmd] ++ arg)
+u_cmd nid uid cmd arg = Message "/u_cmd" ([Int nid, Int uid, String cmd] ++ arg)
 
 -- * Buffer commands.
 
 -- | Allocates zero filled buffer to number of channels and samples. (Asynchronous)
 b_alloc :: Int -> Int -> Int -> OSC
-b_alloc nid frames channels = message "/b_alloc" [int nid, int frames, int channels]
+b_alloc nid frames channels = Message "/b_alloc" [Int nid, Int frames, Int channels]
 
 -- | Allocate buffer space and read a sound file.
 b_allocRead :: Int -> String -> Int -> Int -> OSC
-b_allocRead nid p f n = message "/b_allocRead" [int nid, string p, int f, int n]
+b_allocRead nid p f n = Message "/b_allocRead" [Int nid, String p, Int f, Int n]
 
 -- | Close attached soundfile and write header information.
 b_close :: Int -> OSC
-b_close nid = message "/b_close" [int nid]
+b_close nid = Message "/b_close" [Int nid]
 
 -- | Fill ranges of sample values.
 b_fill :: Int -> [(Int, Int, Double)] -> OSC
-b_fill nid l = message "/b_fill" (int nid : mk_triples int int float l)
+b_fill nid l = Message "/b_fill" (Int nid : mk_triples Int Int Float l)
 
 -- | Free buffer data.
 b_free :: Int -> OSC
-b_free nid = message "/b_free" [int nid]
+b_free nid = Message "/b_free" [Int nid]
 
 -- | Call a command to fill a buffer.
 b_gen :: Int -> String -> [Double] -> OSC
-b_gen bid cmd arg = message "/b_gen" (int bid : string cmd : map float arg)
+b_gen bid cmd arg = Message "/b_gen" (Int bid : String cmd : map Float arg)
 
 -- | Get sample values.
 b_get :: Int -> [Int] -> OSC
-b_get nid i = message "/b_get" (int nid : map int i)
+b_get nid i = Message "/b_get" (Int nid : map Int i)
 
 -- | Get ranges of sample values.
 b_getn :: Int -> [(Int, Int)] -> OSC
-b_getn nid l = message "/b_getn" (int nid : mk_duples int int l)
+b_getn nid l = Message "/b_getn" (Int nid : mk_duples Int Int l)
 
 -- | Request \/b_info messages.
 b_query :: [Int] -> OSC
-b_query nid = message "/b_query" (map int nid)
+b_query nid = Message "/b_query" (map Int nid)
 
 -- | Read sound file data into an existing buffer.
 b_read :: Int -> String -> Int -> Int -> Int -> Int -> OSC
-b_read nid p f n f' z = message "/b_read" [int nid, string p, int f, int n, int f', int z]
+b_read nid p f n f' z = Message "/b_read" [Int nid, String p, Int f, Int n, Int f', Int z]
 
 -- | Set sample values.
 b_set :: Int -> [(Int, Double)] -> OSC
-b_set nid l = message "/b_set" (int nid : mk_duples int float l)
+b_set nid l = Message "/b_set" (Int nid : mk_duples Int Float l)
 
 -- | Set ranges of sample values.
 b_setn :: Int -> [(Int, [Double])] -> OSC
-b_setn nid l = message "/b_setn" (int nid : concatMap f l)
-    where f (i,d) = int i : int (length d) : map float d
+b_setn nid l = Message "/b_setn" (Int nid : concatMap f l)
+    where f (i,d) = Int i : Int (length d) : map Float d
 
 -- | Write sound file data.
 b_write :: Int -> String -> Int -> Int -> Int -> Int -> Int -> OSC
-b_write nid p h t f s z = message "/b_write" [int nid, string p, int h, int t, int f, int s, int z]
+b_write nid p h t f s z = Message "/b_write" [Int nid, String p, Int h, Int t, Int f, Int s, Int z]
 
 -- | Zero sample data.
 b_zero :: Int -> OSC
-b_zero nid = message "/b_zero" [int nid]
+b_zero nid = Message "/b_zero" [Int nid]
 
 -- * Control bus commands.
 
 -- |  Fill ranges of bus values.
 c_fill :: [(Int, Int, Double)] -> OSC
-c_fill l = message "/c_fill" (mk_triples int int float l)
+c_fill l = Message "/c_fill" (mk_triples Int Int Float l)
 
 -- | Get bus values.
 c_get :: [Int] -> OSC
-c_get nid = message "/c_get" (map int nid)
+c_get nid = Message "/c_get" (map Int nid)
 
 -- | Get ranges of bus values.
 c_getn :: [(Int, Int)] -> OSC
-c_getn l = message "/c_getn" (mk_duples int int l)
+c_getn l = Message "/c_getn" (mk_duples Int Int l)
 
 -- | Set bus values.
 c_set :: [(Int, Double)] -> OSC
-c_set l = message "/c_set" (mk_duples int float l)
+c_set l = Message "/c_set" (mk_duples Int Float l)
 
 -- | Set ranges of bus values.
 c_setn :: [(Int, [Double])] -> OSC
-c_setn l = message "/c_setn" (concatMap f l)
-    where f (i,d) = int i : int (length d) : map float d
+c_setn l = Message "/c_setn" (concatMap f l)
+    where f (i,d) = Int i : Int (length d) : map Float d
 
 -- * Server operation commands.
 
 -- | Remove all bundles from the scheduling queue.
 clearSched :: OSC
-clearSched = message "/clearSched" []
+clearSched = Message "/clearSched" []
 
 -- | Enumeration of OSC printer types.
 data PrintLevel = NoPrinter
@@ -220,23 +220,23 @@ data PrintLevel = NoPrinter
 
 -- | Select printing of incoming Open Sound Control messages.
 dumpOSC :: PrintLevel -> OSC
-dumpOSC c = message "/dumpOSC" [int (fromEnum c)]
+dumpOSC c = Message "/dumpOSC" [Int (fromEnum c)]
 
 -- | Select reception of notification messages. (Asynchronous)
 notify :: Bool -> OSC
-notify c = message "/notify" [int (fromEnum c)]
+notify c = Message "/notify" [Int (fromEnum c)]
 
 -- | Stop synthesis server.
 quit :: OSC
-quit = message "/quit" []
+quit = Message "/quit" []
 
 -- | Request \/status.reply message.
 status :: OSC
-status = message "/status" []
+status = Message "/status" []
 
--- | Request \/synced message when all current asynchronous commands complete.
+-- | Request \/synced Message when all current asynchronous commands complete.
 sync :: Int -> OSC
-sync sid = message "/sync" [int sid]
+sync sid = Message "/sync" [Int sid]
 
 -- * Variants to simplify common cases.
 

@@ -16,7 +16,7 @@ module, the second the Sound.SC3 module.
   $ darcs get http://slavepianos.org/rd/sw/hsc3
 
 To build use the standard Cabal process in each repository in
-sequence.
+sequence.  To install to the user package database type:
 
   $ runhaskell Setup.lhs configure --prefix ~
   $ runhaskell Setup.lhs build
@@ -28,7 +28,7 @@ Add an appropriately modified variant of the following to ~/.emacs
 
   (push "~/sw/hsc3/emacs" load-path)
   (setq hsc3-interpreter "ghci")
-  (setq hsc3-help-directory "~/sw/hsc3/Help/")
+  (setq hsc3-help-directory "~/sw/hsc3/ Help/")
   (require 'hsc3)
 
 The hsc3 emacs mode associates itself with files having the extension
@@ -184,10 +184,10 @@ Sound.OpenSoundControl modules, to build type:
 * Identifier lookup & hasktags
 
 The emacs command M-. (find-tag) looks up an identifier in
-a 'tags' table.  The hasktags utility can generate tags files 
+a 'tags' table.  The hasktags utility can generate tags files
 from haskell source files that are usable with emacs.
 
-To generate the a tags file for hsc3, visit the hsc3 directory 
+To generate a tags file for hsc3, visit the hsc3 directory
 and type:
 
   $ find Sound -name '*.*hs' | xargs hasktags -e
@@ -207,7 +207,7 @@ use these unit generators they must be installed, see:
 
 * Example Unit Generator Graphs
 
-The Help/Graphs directory contains example unit generator graphs.  The
+The  Help/ directory contains example unit generator graphs.  The
 graphs are self contained, selecting the graph and typing C-cC-e will
 audition it.  In many cases both supercollider language and haskell
 versions are given, switch the emacs buffer to sclang-mode to run the

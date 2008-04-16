@@ -7,7 +7,7 @@ import Sound.OpenSoundControl
 -- | Encode and prefix with encoded length.
 oscWithSize :: OSC -> B.ByteString
 oscWithSize o = B.append l b
-    where b = encodeOSC_NTP o
+    where b = encodeOSCNTP o
           l = encode_i32 (fromIntegral (B.length b))
 
 -- | Encode a list of OSC bundles as an NRT score.
