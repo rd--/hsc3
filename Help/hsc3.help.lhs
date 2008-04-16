@@ -266,7 +266,7 @@ Consider a simple ping pong delay filter:
 >             in mrg [b, localOut c]
 > in do { n <- whiteNoise AR
 >       ; let s = decay (impulse AR 0.3 0) 0.1 * n * 0.2
->         in audition (out 0 (ping_pong s)) }
+>         in audition (out 0 (ppd s)) }
 
 * Literals, Overloading, Coercion, Constants
 
@@ -485,6 +485,40 @@ since IO is an instance of the UId class.
 It is the type of audition that determines the
 type of a, the type is inferred so there is no
 need to write it.
+
+* Unsafe unit generator constructors
+
+Haskell provides a mechanism to force values
+from the IO monad, unsafePerformIO.
+
+Using this we can write unit generator graphs
+that have non-deterministic nodes using only
+orindary let binding.
+
+> import System.IO.Unsafe
+
+> let { u = unsafePerformIO
+>     ; a = u (whiteNoise AR)
+>     ; b = u (whiteNoise AR)
+>     ; c = a - b }
+> in audition (out 0 (c * 0.1))
+
+This is hardly more convenient than do notation,
+however we can also insert non-determinstic nodes
+directly into function arguments.
+
+> let { n = Sound.SC3.UGen.Unsafe.whiteNoise
+>     ; x = n AR - n AR }
+> in audition (out 0 (x * 0.1))
+
+The above uses the unsafe unit generator functions
+provided at Sound.SC3.UGen.Unsafe, and avoids the
+lifting operations which, for functions of many
+arguments, can be cumbersome.
+
+> let n = whiteNoise
+> in do { x <- liftM2 (-) (n AR) (n AR)
+>       ; audition (out 0 (x * 0.1)) }
 
 * Demand Rate, Sharing Again
 
