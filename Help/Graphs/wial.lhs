@@ -13,8 +13,7 @@ wial (rd)
 >                , (1, 3, f * 256,  0.15)
 >                , (2, 3, f * 512,  0.35) ]
 >     ; plss c (d0, d1, f, a) = liftM (* a) (pls c (mce2 d0 d1) f)
->     ; clk = impulse AR 16 0
->     ; twchoose t a w n = select (twindex t n w) a }
+>     ; clk = impulse AR 16 0 }
 > in do { n0 <- dust KR 2
->       ; let f = twchoose n0 (mce2 (20 * 0.66) 20) (mce2 0.25 0.75) 0
->         in audition . out 0 . sum =<< mapM (plss clk) (smpl f) }
+>       ; f <- twChoose n0 (mce2 (20 * 0.66) 20) (mce2 0.25 0.75) 0
+>       ; audition . out 0 . sum =<< mapM (plss clk) (smpl f) }

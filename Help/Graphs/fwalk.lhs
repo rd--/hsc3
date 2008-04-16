@@ -13,7 +13,7 @@ fwalk (rd)
 >     ; fwalk r = do { t <- dust KR 3
 >                    ; r1 <- tiRand 0 6 t
 >                    ; r2 <- tRand (-0.0001) 0.0001 t
->                    ; let { f = bufRdL 1 KR (MCE [0, 1]) r1 NoLoop
+>                    ; let { f = bufRdL 1 KR (mce2 0 1) r1 NoLoop
 >                          ; f' = f + r2
 >                          ; o1 = blip AR (midiCPS (r + f)) 12
 >                          ; o2 = blip AR (midiCPS (r + f')) 12 }

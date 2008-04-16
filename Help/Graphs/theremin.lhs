@@ -1,11 +1,11 @@
 theremin (jmcc)
 
-> let { mod = 7
+> let { m = 7
 >     ; detune = 0
 >     ; x = mouseX KR 0 0.9 Linear 0.2
 >     ; y = mouseY KR 4000 200 Exponential 0.8
 >     ; f = y + detune
->     ; f' = f + f * sinOsc AR mod 0 * 0.02
+>     ; f' = f + f * sinOsc AR m 0 * 0.02
 >     ; a = sinOsc AR f' 0 * x }
 > in audition (out 0 (pan2 a 0 1))
 

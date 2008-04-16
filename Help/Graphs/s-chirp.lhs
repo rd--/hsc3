@@ -1,12 +1,10 @@
 s-chirp (rd)
 
-> let { tChoose t a = do { n <- tiRand 0 (fromIntegral (length a)) t
->                        ; return (select n (mce a)) }
->     ; x = mouseX KR 15 0 Linear 0.1
+> let { x = mouseX KR 15 0 Linear 0.1
 >     ; y = mouseY KR 15 27 Linear 0.1
 >     ; scl = [0, 2, 3.2, 5, 7, 9, 10] }
 > in do { t <- dust KR 9
->       ; b <- tChoose t [36, 48, 60, 72]
+>       ; b <- tChoose t (mce [36, 48, 60, 72])
 >       ; n <- liftM (* 0.04) (lfNoise1 KR (mce2 3 3.05))
 >       ; d <- tiRand x y t
 >       ; e <- liftM (decay2 t 0.005) (tRand 0.02 0.15 t)

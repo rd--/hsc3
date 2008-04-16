@@ -1,6 +1,6 @@
 rm-octaver (andrea valle, miller puckette)
 
-> let { defaultPitch i = pitch i 440 60 4000 100 16 1 0.01 0.5 1
+> let { defaultPitch x = pitch x 440 60 4000 100 16 1 0.01 0.5 1
 >     ; i = soundIn 0
 >     ; p = defaultPitch i
 >     ; f = mceChannel 0 p }

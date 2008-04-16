@@ -2,10 +2,10 @@ demanding studies (jmcc)
 
 > do { s1 <- drand dinf (mce [72, 75, 79, 82])
 >    ; s2 <- drand 1 (mce [82, 84, 86])
->    ; s2 <- dseq dinf (mce [72, 75, 79, s2])
+>    ; s3 <- dseq dinf (mce [72, 75, 79, s2])
 >    ; let { x = mouseX KR 5 13 Linear 0.2
 >          ; tr = impulse KR x 0
->          ; f = demand tr 0 (mce [midiCPS (s1 - 12), midiCPS s2])
+>          ; f = demand tr 0 (mce [midiCPS (s1 - 12), midiCPS s3])
 >          ; o1 = sinOsc AR (f + mce2 0 0.7) 0
 >          ; o2 = saw AR (f + mce2 0 0.7) * 0.3
 >          ; o3 = cubed (distort (log (distort (o1 + o2)))) }

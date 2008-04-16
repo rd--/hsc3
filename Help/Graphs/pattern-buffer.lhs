@@ -3,7 +3,7 @@ pattern buffer (rd)
 > let { nf = 2 * 48000
 >     ; c = 24
 >     ; tseq l = let n = fromIntegral (length l) / 2.0
->                in select (lfSaw KR 0.5 0 * n + n) (MCE l)
+>                in select (lfSaw KR 0.5 0 * n + n) (mce l)
 >     ; rrand l r = getStdRandom (randomR (l, r))
 >     ; p = phasor AR 0 (bufRateScale KR 10) 0 (bufFrames KR 10) 0
 >     ; t = bufRdC 1 AR 10 p Loop 
