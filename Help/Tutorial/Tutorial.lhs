@@ -28,7 +28,7 @@ Add an appropriately modified variant of the following to ~/.emacs
 
   (push "~/sw/hsc3/emacs" load-path)
   (setq hsc3-interpreter "ghci")
-  (setq hsc3-help-directory "~/sw/hsc3/ Help/")
+  (setq hsc3-help-directory "~/sw/hsc3/Help/")
   (require 'hsc3)
 
 The hsc3 emacs mode associates itself with files having the extension
@@ -48,14 +48,15 @@ independant examples that can be evaluated using editor commands,
 either by selecting from the 'Haskell SuperCollider' menu or using the
 associated keybinding.
 
-* Interpreter Interaction
+* Interpreter Interaction & User Configuration
 
-To start ghci and load the list of modules at the emacs variables
-'hsc3-main-modules' and 'hsc3-modules' use C-cC-s (Haskell
-SuperCollider -> Haskell -> Start haskell).  By default
-'hsc3-main-modules' is empty and 'hsc3-modules' contains
-Sound.OpenSoundControl, Sound.SC3, Data.List, Control.Monad,
-Control.Concurrent, System.Directory and System.Random.
+To start ghci and load the file at 'hsc3-run-control' file use C-cC-s
+(Haskell SuperCollider -> Haskell -> Start haskell).  
+
+If there is no file at 'hsc3-run-control' one will be created and the
+modules at 'hsc3-modules' will be imported.  By default this list
+contains the hosc and hsc3 modules as well as Control.Concurrent,
+Control.Monad, Data.List, and System.Random.
 
 Starting the interpreter splits the current window into two windows.  If
 the ghci output window becomes obscured during a session you can see
@@ -212,16 +213,6 @@ graphs are self contained, selecting the graph and typing C-cC-e will
 audition it.  In many cases both supercollider language and haskell
 versions are given, switch the emacs buffer to sclang-mode to run the
 supercollider language versions.
-
-* User configuration files
-
-It is straightforward to add configuration modules to the context in
-which the hsc3 emacs mode evaluates expressions using the
-'hsc3-main-modules' variable.  The search path for these modules can
-be set using 'hsc3-interpreter-arguments'.
-
- (setq hsc3-interpreter-arguments (list "-i/home/rohan/.hsc3"))
- (setq hsc3-main-modules (list "Config"))
 
 * Monitoring incoming server messages
 
