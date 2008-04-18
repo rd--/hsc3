@@ -1,21 +1,12 @@
 module Sound.SC3.UGen.Composite where
 
-import Sound.SC3.UGen.Demand.Monadic
 import Sound.SC3.UGen.Filter
 import Sound.SC3.UGen.Information
 import Sound.SC3.UGen.IO
 import Sound.SC3.UGen.Oscillator
-import Sound.SC3.UGen.Noise.Monadic
 import Sound.SC3.UGen.Panner
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.UId
-
--- | Demand rate (:) function.
-dcons :: (UId m) => UGen -> UGen -> m UGen
-dcons x xs = do i <- dseq 1 (mce2 0 1)
-                a <- dseq 1 (mce2 x xs)
-                dswitch i a
 
 -- | Dynamic klank, set of non-fixed resonating filters.
 dynKlank :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -56,11 +47,3 @@ splay i s l c = mix (pan2 i (mce p * s + c) 1) * l * (sqrt (1 / n))
     where n = fromIntegral (mceDegree i)
           m = n - 1
           p = map ( (+ (-1.0)) . (* (2 / m)) ) [0 .. m]
-
-tChoose :: (UId m) => UGen -> UGen -> m UGen
-tChoose t a = do r <- tiRand 0 (constant (length (mceChannels a))) t
-                 return (select r a)
-
-twChoose :: (UId m) => UGen -> UGen -> UGen -> UGen -> m UGen
-twChoose t a w n = do i <- twindex t n w
-                      return (select i a)
