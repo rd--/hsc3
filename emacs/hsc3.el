@@ -23,19 +23,21 @@
   (list)
   "*Arguments to the haskell interpreter (default=none).")
 
-(defvar hsc3-main-modules
-  (list)
-  "*Modules to load (using :l) into the haskell interpreter.")
+(defvar hsc3-run-control
+  "~/.hsc3.hs"
+  "*Run control file (default=~/.hsc3.hs)")
 
 (defvar hsc3-modules
-  (list "Sound.OpenSoundControl"
-	"Sound.SC3"
-	"Data.List"
-	"Control.Monad"
-	"Control.Concurrent"
-	"System.Directory"
-	"System.Random")
-  "*Modules to bring into scope (using :m +) into the haskell interpreter.")
+  (list "import Control.Concurrent"
+        "import Control.Monad"
+        "import Data.List"
+        "import Sound.OpenSoundControl"
+        "import Sound.SC3"
+        "import qualified Sound.SC3.UGen.Base as B"
+        "import qualified Sound.SC3.UGen.Monadic as M"
+        "import qualified Sound.SC3.UGen.Unsafe as U"
+        "import System.Random")
+  "*List of modules (possibly qualified) to bring into interpreter context.")
 
 (defvar hsc3-help-directory
   nil
@@ -56,6 +58,16 @@
       '()
     (cons e (cons (car l) (hsc3-intersperse e (cdr l))))))
 
+(defun hsc3-write-default-run-control ()
+  "Write default run control file if no file exists."
+  (if (not (file-exists-p hsc3-run-control))
+      (with-temp-file
+          hsc3-run-control
+        (mapc 
+         (lambda (s)
+           (insert (concat s "\n")))
+         hsc3-modules))))
+
 (defun hsc3-start-haskell ()
   "Start haskell."
   (interactive)
@@ -68,12 +80,8 @@
      nil
      hsc3-interpreter-arguments)
     (hsc3-see-output))
-  (if (not (null hsc3-main-modules))
-      (hsc3-send-string
-       (apply 'concat (cons ":l " (hsc3-intersperse " " hsc3-main-modules)))))
-  (if (not (null hsc3-modules))
-      (hsc3-send-string
-       (apply 'concat (cons ":m + " (hsc3-intersperse " " hsc3-modules))))))
+  (hsc3-write-default-run-control)
+  (hsc3-send-string (concat ":l " hsc3-run-control)))
 
 (defun hsc3-see-output ()
   "Show haskell output."
@@ -112,8 +120,8 @@
   "Transform example text into compilable form."
   (with-temp-file f
     (mapc (lambda (module)
-	    (insert (concat "import " module "\n")))
-	  (append hsc3-main-modules hsc3-modules))
+	    (insert (concat module "\n")))
+	  hsc3-modules)
     (insert "main = do\n")
     (insert (if hsc3-literate-p (hsc3-unlit s) s))))
 
