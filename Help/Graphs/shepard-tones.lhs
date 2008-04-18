@@ -13,11 +13,11 @@ shepard tones (alberto de campo)
 >     ; freqTable = map amp_f (indxs 1024 0 10)
 >     ; ratescale = 1024 / 44100 / 10
 >     ; rate = 0.1
->     ; ph = phasor AR 0 (rate * ratescale) 0 1024 0
+>     ; ph = phasor ar 0 (rate * ratescale) 0 1024 0
 >     ; phases = mce (map (\n -> n * 0.1 * 1024 + ph) [0..9])
->     ; freqs = bufRdC 1 AR 1 phases Loop
->     ; amps = bufRdC 1 AR 2 phases Loop
->     ; tone = mix (sinOsc AR freqs 0 * amps) * 0.1 }
+>     ; freqs = bufRdC 1 ar 1 phases Loop
+>     ; amps = bufRdC 1 ar 2 phases Loop
+>     ; tone = mix (sinOsc ar freqs 0 * amps) * 0.1 }
 > in withSC3 (\fd -> do { async fd (b_alloc 1 1024 1)
 >                       ; async fd (b_alloc 2 1024 1)
 >                       ; send fd (b_setn1 1 0 freqTable)

@@ -5,12 +5,12 @@ bowed string (jmcc)
 >     ; root = 5
 >     ; scale = map (+ root) [0, 2, 4, 5, 7, 9, 11] 
 >     ; oct = [24, 36, 48, 60, 72, 84] }
-> in do { n0 <- clone 2 (brownNoise AR)
->       ; r0 <- expRand 0.125 0.5
->       ; r1 <- rand 0.7 0.9
->       ; r2 <- replicateM 12 (rand 1.0 3.0)
->       ; f <- fmap midiCPS (liftM2 (+) (choose scale) (choose oct))
->       ; n1 <- lfNoise1 KR r0
+> in do { n0 <- clone 2 (M.brownNoise ar)
+>       ; r0 <- M.expRand 0.125 0.5
+>       ; r1 <- M.rand 0.7 0.9
+>       ; r2 <- replicateM 12 (M.rand 1.0 3.0)
+>       ; f <- liftM midiCPS (liftM2 (+) (choose scale) (choose oct))
+>       ; n1 <- M.lfNoise1 kr r0
 >       ; let { x = n0 * 0.007 * max 0 (n1 * 0.6 + 0.4)
 >             ; geom n i z = take n (iterate (* z) i)
 >             ; iota n i z = take n (iterate (+ z) i)

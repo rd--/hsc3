@@ -3,11 +3,11 @@ record scratcher (josh parmenter)
 > let { dup a = mce2 a a
 >     ; fn = "/home/rohan/audio/metal.wav"
 >     ; d = env [0, 1, 0] [0.1, 0.1] [EnvSin] 1 0
->     ; e = envGen KR 1 1 0 1 RemoveSynth d
->     ; x = mouseX KR (-10) 10 Linear 0.2
+>     ; e = envGen kr 1 1 0 1 RemoveSynth d
+>     ; x = mouseX kr (-10) 10 Linear 0.2
 >     ; dx = x - delayN x 0.1 0.1
->     ; bdx = mouseButton KR 1 0 0.3 + dx
->     ; bdxr = bdx * bufRateScale KR 0
+>     ; bdx = mouseButton kr 1 0 0.3 + dx
+>     ; bdxr = bdx * bufRateScale kr 0
 >     ; scr = playBuf 1 0 bdxr 0 0 Loop }
 > in withSC3 (\fd -> do { async fd (b_allocRead 0 fn 0 0)
 >                       ; play fd (out 0 (dup (scr * e))) })

@@ -2,11 +2,11 @@ harmonic tumbling (jmcc)
 
 > let { f = 80
 >     ; p = 10
->     ; t = xLine KR (mce2 10 11) 0.1 60 DoNothing
->     ; o h = do { n <- dust KR t
->                ; r <- rand 0 0.5
+>     ; t = xLine kr (mce2 10 11) 0.1 60 DoNothing
+>     ; o h = do { n <- M.dust kr t
+>                ; r <- M.rand 0 0.5
 >                ; let e = decay2 (n * 0.02) 0.005 r
->                  in return (fSinOsc AR (f * (h + 1)) 0 * e) } }
+>                  in return (fSinOsc ar (f * (h + 1)) 0 * e) } }
 > in audition . out 0 . sum =<< mapM o [0..p]
 
 { var f = 80

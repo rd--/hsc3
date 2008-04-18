@@ -1,9 +1,7 @@
 voscil (rd)
 
-> import System.IO.Unsafe
-
 > let { rrand l r = getStdRandom (randomR (l, r))
->     ; lfn r = unsafePerformIO (lfNoise0 kr r)
+>     ; lfn r = U.lfNoise0 kr r
 >     ; b = 32
 >     ; hb = (constant b - 1) / 2
 >     ; bn = 8192 * 4

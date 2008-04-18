@@ -1,8 +1,8 @@
 sosc-lp (rd)
 
-> let { dustR r lo hi = do { n1 <- dwhite 1 lo hi
->                          ; n2 <- whiteNoise r
->                          ; d <- dseq dinf n1
+> let { dustR r lo hi = do { n1 <- M.dwhite 1 lo hi
+>                          ; n2 <- M.whiteNoise r
+>                          ; d <- M.dseq dinf n1
 >                          ; return (tDuty r d 0 DoNothing (abs n2) 1) }
 >     ; a = [60, 71, 89, 65, 36, 57, 92, 97, 92, 97]
 >     ; b = [71, 89, 60, 57, 65, 36, 95, 92, 93, 97]
@@ -20,7 +20,7 @@ sosc-lp (rd)
 >     ; o2 t n = sinOsc ar (f2 t n) 0 * d_env t
 >     ; sosc_lp t n = out 0 ((o1 t + o2 t n) * 0.2) }
 > in do { clk <- dustR kr 0.2 0.9
->       ; n <- lfNoise0 kr (mce2 1 3)
+>       ; n <- M.lfNoise0 kr (mce2 1 3)
 >       ; audition (sosc_lp clk n) }
 
 > let { a = [71, 60, 65, 89, 36, 57, 95, 97, 92, 97]

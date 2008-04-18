@@ -1,10 +1,10 @@
 lin-sosc (rd)
 
 > let { n = 1024
->     ; x = mouseX KR 0.001 1.0 Linear 0.1
->     ; tblM b = playBuf 1 b (x * bufRateScale KR b) 0 0 Loop
->     ; tblC b c = playBuf 1 b (in' 1 KR c * bufRateScale KR b) 0 0 Loop
->     ; o = sinOsc AR (tblM 0) 0 * tblM 1 
+>     ; x = mouseX kr 0.001 1.0 Linear 0.1
+>     ; tblM b = playBuf 1 b (x * bufRateScale kr b) 0 0 Loop
+>     ; tblC b c = playBuf 1 b (in' 1 kr c * bufRateScale kr b) 0 0 Loop
+>     ; o = sinOsc ar (tblM 0) 0 * tblM 1 
 >     ; co = clip2 (pan2 o (tblC 1 0) 0.025) 0.25
 >     ; rrand (a, b) = getStdRandom (randomR (a,b))
 >     ; choose l = liftM (l !!) (rrand (0, length l - 1))

@@ -5,22 +5,22 @@ dial history (jrhb)
 >     ; range s l r = linLin s 0 1 l r
 >     ; mce_r = mce . map mce 
 >     ; mce_mrg = mrg . mceProxies }
-> in do { n <- dwhite dinf 7 12
->       ; w <- dwhite 1 2 7
->       ; b <- dbrown n 0.1 0.2 0.01
->       ; rate <- dseq dinf (mce2 w b)
->       ; q <- dseq dinf (mce [1..10])
->       ; g1 <- grayNoise AR
->       ; g2 <- grayNoise AR
->       ; d <- lfdNoise3 KR 0.5
->       ; let { tr = trig (tDuty KR rate 0 DoNothing q 1) 0.09
+> in do { n <- M.dwhite dinf 7 12
+>       ; w <- M.dwhite 1 2 7
+>       ; b <- M.dbrown n 0.1 0.2 0.01
+>       ; rate <- M.dseq dinf (mce2 w b)
+>       ; q <- M.dseq dinf (mce [1..10])
+>       ; g1 <- M.grayNoise ar
+>       ; g2 <- M.grayNoise ar
+>       ; d <- M.lfdNoise3 kr 0.5
+>       ; let { tr = trig (tDuty kr rate 0 DoNothing q 1) 0.09
 >             ; pat = latch tr tr
->             ; x = mouseX KR 0 1 Linear 0.2
+>             ; x = mouseX kr 0 1 Linear 0.2
 >             ; h = hasher (pat * x)
 >             ; which = trunc (range h 0 (constant (length numbers))) 1
 >             ; both = select which (mce_r numbers)
 >             ; dial = select both (mce_r (transpose mfv))
->             ; sig = sinOsc AR dial 0 * 0.05 * tr
+>             ; sig = sinOsc ar dial 0 * 0.05 * tr
 >             ; dsig = delayN sig 0.2 (range d 0 0.01)
 >             ; hiss = g1 * 0.01 + hpf (g2 * 0.02) 3000 }
 >         in audition (out 0 (dsig + hiss)) }

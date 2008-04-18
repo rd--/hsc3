@@ -1,7 +1,7 @@
 babbling brook (jmcc)
 
-> let b f m a g = do { n1 <- brownNoise AR
->                    ; n2 <- brownNoise AR
+> let b f m a g = do { n1 <- M.brownNoise ar
+>                    ; n2 <- M.brownNoise ar
 >                    ; let n3 = lpf n2 f * m + a
 >                      in return (rhpf (onePole n1 0.99) n3 0.03 * g) }
 > in do { x <- clone 2 (b 14 400 500 0.006)

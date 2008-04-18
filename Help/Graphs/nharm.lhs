@@ -9,10 +9,10 @@ nharm (rd)
 >                    ; l <- replicateM n (rrand 0.01 0.02)
 >                    ; p <- rrand (-1.0) 1.0
 >                    ; let { a = 0.5
->                          ; e = envGen KR 1 0.9 0 1 RemoveSynth (envSine d a)
+>                          ; e = envGen kr 1 0.9 0 1 RemoveSynth (envSine d a)
 >                          ; nh = nharm n (midiCPS f)
 >                          ; s = klangSpec nh l (replicate n 0.0) }
->                      in return (pan2 (klang AR 1 0 s) p e) }
+>                      in return (pan2 (klang ar 1 0 s) p e) }
 >     ; ply :: Int -> (Double, Double) -> UGen -> Int -> IO ()
 >     ; ply n (l,r) m u = replicateM_ n (do { threadPause =<< rrand l r
 >                                           ; audition . out 0 =<< klg m u }) }

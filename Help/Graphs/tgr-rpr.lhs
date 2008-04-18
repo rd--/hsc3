@@ -7,11 +7,11 @@ tgr-rpr (rd)
 >                , 0.2, 0.3
 >                , 0.7, 0.9
 >                , -1.0, 1.0 ]
->     ; dustR r lo hi = do { n1 <- dwhite 1 lo hi
->                          ; n2 <- whiteNoise r
->                          ; d <- dseq dinf n1
+>     ; dustR r lo hi = do { n1 <- M.dwhite 1 lo hi
+>                          ; n2 <- M.whiteNoise r
+>                          ; d <- M.dseq dinf n1
 >                          ; return (tDuty r d 0 DoNothing (abs n2) 1) }
->     ; rpr n t = tRand (in' 1 KR n) (in' 1 KR (n + 1)) t
+>     ; rpr n t = tRand (in' 1 kr n) (in' 1 kr (n + 1)) t
 >     ; rrand l r = getStdRandom (randomR (l, r))
 >     ; rSet = [ (0.005, 0.025), (0.05, 0.25)
 >              , (0.75,  0.95) , (1.05, 1.25)
@@ -22,10 +22,10 @@ tgr-rpr (rd)
 >     ; edit fd = do { s <- mapM (\(l,r) -> rrand l r) rSet
 >                    ; send fd (c_setn [(0, s)])
 >                    ; threadDelay 350000 } }
-> in do { clk <- dustR AR (in' 1 KR 0) (in' 1 KR 1)
+> in do { clk <- dustR ar (in' 1 kr 0) (in' 1 kr 1)
 >       ; rat <- rpr 2 clk
 >       ; dur <- rpr 4 clk
->       ; pos <- liftM (* (bufDur KR 10)) (rpr 8 clk)
+>       ; pos <- liftM (* (bufDur kr 10)) (rpr 8 clk)
 >       ; pan <- rpr 10 clk
 >       ; amp <- rpr 6 clk
 >       ; withSC3 (\fd -> do { async fd (b_allocRead 10 sf 0 0)

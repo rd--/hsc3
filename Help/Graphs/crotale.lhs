@@ -150,19 +150,15 @@ crotale (rd)
 >                   , 11.498942375183105
 >                   , 10.465788841247559
 >                   , 24.93169593811035 ] )
->     ; pinkNoise' = Sound.SC3.UGen.Base.pinkNoise
->     ; tRand' = Sound.SC3.UGen.Base.tRand
->     ; tiRand' = Sound.SC3.UGen.Base.tiRand
->     ; dust' = Sound.SC3.UGen.Base.dust
 >     ; (cf, ca, cd) = crotale
 >     ; ps = mce [-12, -5, 0, 2, 4, 5, 7, 12]
->     ; n = pinkNoise' (uid 0) AR
->     ; t = dust' (uid 0) KR 3
->     ; fs = select (tiRand' (uid 0) 0 7 t) ps
->     ; g = tRand' (uid 0) 0 1 t
->     ; fo = tRand' (uid 1) 0 1 t
->     ; ds = tRand' (uid 2) 2 7 t
->     ; p = tRand' (uid 3) (-1) 1 t
+>     ; n = B.pinkNoise (uid 0) ar
+>     ; t = B.dust (uid 0) kr 3
+>     ; fs = select (B.tiRand (uid 0) 0 7 t) ps
+>     ; g = B.tRand (uid 0) 0 1 t
+>     ; fo = B.tRand (uid 1) 0 1 t
+>     ; ds = B.tRand (uid 2) 2 7 t
+>     ; p = B.tRand (uid 3) (-1) 1 t
 >     ; s = decay2 t 0.06 0.01 * n * g
 >     ; k = dynKlank s (midiRatio fs) fo ds (klankSpec cf ca (map recip cd)) }
 > in audition (out 0 (pan2 k p 1))

@@ -2,22 +2,22 @@ h-chatter (rd)
 
 > let { wrp i l r = linLin i (-1) 1 l r
 >     ; mma m a = return . (+ a)  . (* m)
->     ; h0 = do { n <- mma 5 5 =<< lfNoise0 KR 1
->               ; a <- mma 0.2 1.2 =<< lfNoise2 KR n
->               ; b <- mma 0.15 0.15 =<< lfNoise2 KR n
+>     ; h0 = do { n <- mma 5 5 =<< M.lfNoise0 kr 1
+>               ; a <- mma 0.2 1.2 =<< M.lfNoise2 kr n
+>               ; b <- mma 0.15 0.15 =<< M.lfNoise2 kr n
 >               ; let { f = 40
->                     ; h = henonN AR (mce2 f (f * 0.5)) a b 0 0 }
->                 in return (saw AR (h * 3200 + 1600) * 0.35) }
->     ; h1 = do { n0 <- lfNoise0 KR 32
->               ; n1 <- lfNoise0 KR 2
->               ; let { a = mouseX KR 1.2 1.4 Linear 0.1
->                     ; b = mouseY KR 0.2 0.3 Linear 0.1
+>                     ; h = henonN ar (mce2 f (f * 0.5)) a b 0 0 }
+>                 in return (saw ar (h * 3200 + 1600) * 0.35) }
+>     ; h1 = do { n0 <- M.lfNoise0 kr 32
+>               ; n1 <- M.lfNoise0 kr 2
+>               ; let { a = mouseX kr 1.2 1.4 Linear 0.1
+>                     ; b = mouseY kr 0.2 0.3 Linear 0.1
 >                     ; h = wrp n0 1 32
 >                     ; p = wrp n1 2400 3200
 >                     ; l = wrp n1 (-0.75) 0.75
 >                     ; g = wrp n1 0.55 0.85
 >                     ; f = 40
->                     ; o = blip AR (wrp (henonN AR f a b 0 0) p (p * 2)) h }
+>                     ; o = blip ar (wrp (henonN ar f a b 0 0) p (p * 2)) h }
 >                 in return (pan2 o l g * 0.35) } }
 > in audition . out 0 =<< liftM2 (+) h0 h1
 

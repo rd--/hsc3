@@ -1,6 +1,6 @@
 scratchy (jmcc)
 
-> do { n <- clone 2 (brownNoise AR)
+> do { n <- clone 2 (M.brownNoise ar)
 >    ; let f = max (n * 0.5 - 0.49) 0 * 20
 >      in audition (out 0 (rhpf f 5000 1)) }
 
@@ -10,7 +10,6 @@ scratchy (jmcc)
 
 with non-monadic noise
 
-> let { bn = Sound.SC3.UGen.Base.brownNoise
->     ; f m = bn (uid m) AR * 0.5 - 0.49
+> let { f m = B.brownNoise (uid m) ar * 0.5 - 0.49
 >     ; n = mce [f 0, f 1] }
 > in audition (out 0 (rhpf (max n 0 * 20) 5000 1))

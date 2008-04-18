@@ -11,20 +11,20 @@ increasing the stack limit of the haskell run time system]
 >     ; mceProduct = mceEdit (\l -> [product l])
 >     ; clipu s = clip2 s 1
 >     ; dup a = mce2 a a
->     ; f s1 = do { xr <- liftM dup (expRand 0.1 2)
->                 ; n1 <- lfNoise1 KR xr
->                 ; n2 <- lfNoise1 KR xr
->                 ; n3 <- lfNoise1 KR xr
+>     ; f s1 = do { xr <- liftM dup (M.expRand 0.1 2)
+>                 ; n1 <- M.lfNoise1 kr xr
+>                 ; n2 <- M.lfNoise1 kr xr
+>                 ; n3 <- M.lfNoise1 kr xr
 >                 ; f1 <- coin 0.6 (exprange n1 0.01 10) (exprange n2 10 50)
 >                 ; s2 <- coin 0.5 (1 - s1) (mceReverse s1)
 >                 ; let { f2 = linExp s1 (-1) 1 f1 (f1 * exprange n3 2 10)
->                       ; u1 = lfSaw KR f2 0 
->                       ; u2 = lfSaw KR (f1 * 0.1) 0 * 0.1 + 1 }
+>                       ; u1 = lfSaw kr f2 0 
+>                       ; u2 = lfSaw kr (f1 * 0.1) 0 * 0.1 + 1 }
 >                   in return . clipu =<< coin 0.5 (u1 * s2) (u1 * u2) }
->     ; inp = lfSaw KR (0.2 * mce2 1 1.1) 0
+>     ; inp = lfSaw kr (0.2 * mce2 1 1.1) 0
 >     ; b_freq = mce [70, 800, 9000, 5242] }
-> in do { ff <- chain 16 f inp
->       ; let { c_saw = mceProduct (saw AR (exprange ff 6 11000))
+> in do { ff <- chain 8 f inp
+>       ; let { c_saw = mceProduct (saw ar (exprange ff 6 11000))
 >             ; b_saw = dup (mix (bpf c_saw b_freq 0.2)) }
 >         in audition (out 0 (b_saw * 0.3)) }
 

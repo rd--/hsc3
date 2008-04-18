@@ -4,9 +4,9 @@ warning: input/output feedback loop
 > let { delayWr b i = recordBuf b 0 1 0 1 Loop 0 i
 >     ; tap nc b dt = playBuf nc b 1 0 (dt * (- sampleRate)) Loop
 >     ; dl = 6
->     ; feedr n = do { t <- replicateM n (rand 0.0 (constant dl))
->                    ; g <- replicateM n (rand 0.4 1.0)
->                    ; f <- replicateM n (rand 0.9 0.95)
+>     ; feedr n = do { t <- replicateM n (M.rand 0.0 (constant dl))
+>                    ; g <- replicateM n (M.rand 0.4 1.0)
+>                    ; f <- replicateM n (M.rand 0.9 0.95)
 >                    ; let { d = zipWith (\p q -> tap 2 10 p * q) t g
 >                          ; x = mouseX kr 0.02 1.0 Exponential 0.1
 >                          ; s = clip2 (leakDC (hpf (sum d) 20) 0.995) 1

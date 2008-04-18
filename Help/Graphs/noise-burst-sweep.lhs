@@ -1,10 +1,10 @@
 noise burst sweep (jmcc)
 
-> do { n <- clone 2 (whiteNoise AR)
->    ; let { lfoRate = mouseX KR 10 60 Exponential 0.2
->          ; amp = max 0 (lfSaw KR lfoRate (-1))
->          ; cfreq = mouseY KR 400 8000 Exponential 0.2
->          ; freq = sinOsc KR 0.2 0 * cfreq + (1.05 * cfreq) }
+> do { n <- clone 2 (M.whiteNoise ar)
+>    ; let { lfoRate = mouseX kr 10 60 Exponential 0.2
+>          ; amp = max 0 (lfSaw kr lfoRate (-1))
+>          ; cfreq = mouseY kr 400 8000 Exponential 0.2
+>          ; freq = sinOsc kr 0.2 0 * cfreq + (1.05 * cfreq) }
 >      in audition (out 0 (resonz (n * amp) freq 0.1)) }
 
 { var n = WhiteNoise.ar ! 2
