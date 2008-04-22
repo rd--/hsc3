@@ -39,7 +39,10 @@ pmOsc r cf mf pm mp = sinOsc r cf (sinOsc r mf mp * pm)
 
 -- | Zero indexed audio input buses.
 soundIn :: UGen -> UGen
-soundIn n = in' 1 AR (numOutputBuses + n)
+soundIn (MCE ns) | all (==1) $ zipWith (-) (tail ns) ns =
+    in' (length ns) AR (numOutputBuses + head ns)
+soundIn n =
+    in' 1 AR (numOutputBuses + n)
 
 -- | Pan a set of channels across the stereo field.
 splay :: UGen -> UGen -> UGen -> UGen -> UGen
