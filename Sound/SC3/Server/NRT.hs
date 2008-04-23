@@ -14,6 +14,6 @@ oscWithSize o = B.append l b
 encodeNRT :: [OSC] -> B.ByteString
 encodeNRT s = B.concat (map oscWithSize s)
 
--- | Write an list of OSC bundles as an NRT score.
+-- | Write a list of OSC bundles as an NRT score.
 writeNRT :: FilePath -> [OSC] -> IO ()
 writeNRT fn s = B.writeFile fn (encodeNRT s)
