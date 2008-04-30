@@ -27,7 +27,6 @@ sequence.  To install to the user package database type:
 Add an appropriately modified variant of the following to ~/.emacs
 
   (push "~/sw/hsc3/emacs" load-path)
-  (setq hsc3-interpreter "ghci")
   (setq hsc3-help-directory "~/sw/hsc3/Help/")
   (require 'hsc3)
 
