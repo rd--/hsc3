@@ -163,7 +163,7 @@ causes two sinOsc unit generators to be created.
 > in audition (out 0 (pan2 o1 x 0.1 + o2))
 
 This is turn causes the (*) function to
-expands and perform channel matching, that is
+expand and perform channel matching, that is
 to duplicate the right hand side input as
 required.
 
@@ -182,7 +182,7 @@ Equal inputs do also push the expansion
 downwards, however in complex graphs this
 seems occasionally unreliable.
 
-> let f = (mce2 440 440)
+> let f = mce2 440 440
 > in audition (out 0 (sinOsc AR f 0 * 0.1))
 
 * Multiply add inputs, Haskell Curry, and cloning
@@ -236,8 +236,8 @@ the clone function:
 which is defined in relation to the standard
 monad functions replicateM and liftM.
 
-| clone :: (UId m) => Int -> m UGen -> m UGen
-| clone n u = liftM mce (replicateM n u)
+> clone :: (UId m) => Int -> m UGen -> m UGen
+> clone n u = liftM mce (replicateM n u)
 
 * Multiple Root Graphs
 
@@ -296,6 +296,12 @@ function.
 >     ; a = 0.1 :: Float }
 > in sinOsc AR (constant f) (constant p) * (constant a)
 
+The most common case requiring constant annotations
+is buffer numbers, which must be provided to unit
+generator graphs as values of type 'UGen' and to
+the server command constructors as values of type
+'Int'.
+
 * Unit generators are comparable
 
 In haskell the Eq and Ord type classes define
@@ -312,7 +318,7 @@ succeeds.
 
 Since the Ord type gives the signature:
 
-| (>) :: (Ord a) => a -> a -> Bool
+> (>) :: (Ord a) => a -> a -> Bool
 
 we define a variant with a star suffix, such
 that:
@@ -369,8 +375,8 @@ value.
 This is acceptable for deterministic unit
 generators, such as sinOsc, but of course fails
 for non-deterministic unit generators such as
-whiteNoise, and for demand rate sources such as
-dseq.
+whiteNoise, and also for demand rate sources
+such as dseq.
 
 In supercollider language, the graph
 
@@ -418,7 +424,7 @@ function has the signature:
 
 > whiteNoise :: (UId m) => Rate -> m UGen
 
-where UId is defined as:
+where the type-class UId is defined as:
 
 > class (Monad m) => UId m where
 >     generateUId :: m Int
@@ -438,7 +444,7 @@ deterministic sin oscillator:
 > sinOsc :: Rate -> UGen -> UGen -> UGen
 
 We can write a white noise graph using this
-function as:
+function and the haskell 'do' notation as:
 
 > do { a <- whiteNoise AR
 >    ; b <- whiteNoise AR
@@ -465,9 +471,9 @@ The above expression is equal to:
 > in audition (out 0 (c * 0.1))
 
 where (>>=) is the monadic bind function, and (\x
--> y) is the syntax for function definition
-(ie. {|x| y} in supercollider language.  The
-signature for bind is:
+-> y) is the notation for lambda expressions
+(ie. for function definition, ie. {|x| y} in
+supercollider language).  The signature for bind is:
 
 > (>>=) :: (Monad m) => m a -> (a -> m b) -> m b
 
