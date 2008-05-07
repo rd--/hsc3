@@ -95,7 +95,7 @@ To stop the sound we can delete the group it is a part of, the
 audition function places the synthesis node into the group node with
 ID 1, the expression below deletes that group.
 
-> withSC3 ((flip send) (n_free [1]))
+> withSC3 (\fd -> send fd (n_free [1]))
 
 In order to audition another graph we need to re-create a group with
 ID 1.  Sound.SC3 includes a function 'reset' that sequences these two
@@ -154,8 +154,8 @@ hsc3-modules.
 
 ghci understands import expressions, so to add a module to
 the current scope it is enough to type C-cC-c at an appropriate
-location.  If hsc3-dot is installed, the following lines will
-make a drawing.
+location.  If hsc3-dot is installed, the following two 
+expressions will load the module and make a drawing.
 
 > import Sound.SC3.UGen.Dot
 
