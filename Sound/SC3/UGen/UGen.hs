@@ -52,7 +52,8 @@ control = Control
 
 -- | Multiple channel expansion node constructor.
 mce :: [UGen] -> UGen
-mce = MCE
+mce [] = error "mce: empty list"
+mce xs = MCE xs
 
 -- | Multiple root graph node constructor.
 mrg2 :: UGen -> UGen -> UGen

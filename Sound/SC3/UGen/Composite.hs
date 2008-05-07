@@ -39,8 +39,6 @@ pmOsc r cf mf pm mp = sinOsc r cf (sinOsc r mf mp * pm)
 
 -- | Zero indexed audio input buses.
 soundIn :: UGen -> UGen
-soundIn mce@(MCE []) =
-    check_input mce
 soundIn (MCE ns) | all (==1) $ zipWith (-) (tail ns) ns =
     in' (length ns) AR (numOutputBuses + head ns)
 soundIn n =
