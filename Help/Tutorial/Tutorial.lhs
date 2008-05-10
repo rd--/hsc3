@@ -62,6 +62,9 @@ the ghci output window becomes obscured during a session you can see
 it again by typing C-cC-g (Haskell SuperCollider -> Haskell -> See
 output).
 
+To interrupt ghci type C-cC-i (Haskell SuperCollider -> Haskell ->
+Interrupt haskell).
+
 To stop ghci type C-cC-x (Haskell SuperCollider -> Haskell -> Quit
 haskell).
 
