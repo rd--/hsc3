@@ -492,6 +492,15 @@ It is the type of audition that determines the
 type of a, the type is inferred so there is no
 need to write it.
 
+> let { (|>) = flip (.)
+>     ; a >>=* b = a >>= b |> return
+>     ; u1 = sinOsc ar 440 0 * 0.1
+>     ; u2 = pinkNoise ar >>=* (* 0.1)
+>     ; u3 = B.pinkNoise (uid 0) ar * 1
+>     ; u4 = resonz u3 (440 * 4) 0.1
+>     ; g = u2 >>=* (+ (u1 + u4)) }
+> in g >>= out 0 |> audition
+
 * Unsafe unit generator constructors
 
 Haskell provides a mechanism to force values
