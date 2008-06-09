@@ -15,7 +15,7 @@ beatTrack2 b mf ws pa lk w = mkOsc KR "BeatTrack2" [b, mf, ws, pa, lk, w] 6
 
 -- | Extraction of instantaneous loudness in sones.
 loudness :: UGen -> UGen -> UGen -> UGen
-loudness fft smask tmask = mkOsc KR "Compander" [fft, smask, tmask] 1
+loudness fft smask tmask = mkOsc KR "Loudness" [fft, smask, tmask] 1
 
 -- | Translate onset type string to constant UGen value.
 onsetType :: String -> UGen
