@@ -81,7 +81,8 @@
      hsc3-interpreter-arguments)
     (hsc3-see-output))
   (hsc3-write-default-run-control)
-  (hsc3-send-string (concat ":l " hsc3-run-control)))
+  (hsc3-send-string (concat ":l " hsc3-run-control))
+  (hsc3-send-string ":set prompt \"hsc3> \""))
 
 (defun hsc3-see-output ()
   "Show haskell output."
