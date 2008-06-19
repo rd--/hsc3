@@ -6,7 +6,7 @@ Description:       hsc3 provides Sound.SC3, a haskell module that
                    SuperCollider synthesis server.  
 License:           GPL
 Category:          Sound
-Copyright:         (c) Rohan Drape, 2006-2008
+Copyright:         (c) Rohan Drape and others, 2006-2008
 Author:            Rohan Drape
 Maintainer:        rd@slavepianos.org
 Stability:         Experimental
