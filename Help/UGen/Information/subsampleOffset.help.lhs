@@ -25,11 +25,10 @@ View this with an oscilloscope.
 >     ; o = (1 - subsampleOffset) + mouseX KR 0 a Linear 0.1
 >     ; r = delayC i (d * (1 + x)) (d * (o + x))
 >     ; g = offsetOut 0 r }
-> in withSC3 (\fd -> do { async fd (d_recv (graphdef "s" (graph g)))
->                       ; t <- utc
+> in withSC3 (\fd -> do { async fd (d_recv (synthdef "s" g))
+>                       ; t <- utcr
 >                       ; let { t' = t + 0.2
 >                             ; dt = 1 / 44100.0
 >                             ; m n = s_new "s" (-1) AddToTail 1 [("a", n)] }
->                         in do { send fd (Bundle t' [m 3])
->                                 ; send fd (Bundle (t' + dt) [m 0]) } })
-
+>                         in do { send fd (Bundle (UTCr t') [m 3])
+>                               ; send fd (Bundle (UTCr (t' + dt)) [m 0]) } })

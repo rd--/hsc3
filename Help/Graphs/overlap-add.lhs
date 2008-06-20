@@ -3,7 +3,7 @@ overlap-add (jmcc, rd)
 > let { pauseThread n 
 >       = when (n > 1e-3) (threadDelay (floor (n * 1e6)))
 >     ; pauseThreadUntil t 
->       = pauseThread . (t -) =<< utc
+>       = pauseThread . (t -) =<< utcr
 >     ; at t f 
 >       = let at' t' f' = do { n <- f' t'
 >                            ; pauseThreadUntil (t' + n)
@@ -17,7 +17,7 @@ overlap-add (jmcc, rd)
 >     ; with_env g a s 
 >       = out 0 (g * (mk_env a s))
 >     ; overlap_add fd n o a s g 
->       = do { t <- utc
+>       = do { t <- utcr
 >            ; let { g' = with_env g (constant a) (constant s)
 >                  ; dt = (a + s + a) / o 
 >                  ; f _ = do { send fd (s_new n (-1) AddToTail 1 [])

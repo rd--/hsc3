@@ -48,8 +48,8 @@ pause_thread :: Double -> IO ()
 pause_thread n = when (n > 1e-3) (threadDelay (floor (n * 1e6)))
 
 -- | Pause until specified utc time.
-pause_thread_until :: UTC -> IO ()
-pause_thread_until t = pause_thread . (t -) =<< utc
+pause_thread_until :: Double -> IO ()
+pause_thread_until t = pause_thread . (t -) =<< utcr
 
 -- | Interval to schedule in advance.
 latency :: Double
@@ -57,20 +57,20 @@ latency = 0.15
 
 -- | Add t to timestamp.
 offset :: Double -> OSC -> OSC
-offset t (Bundle t0 m) = Bundle (t + t0) m
-offset _ (Message _ _) = undefined
+offset t (Bundle (UTCr t0) m) = Bundle (UTCr (t + t0)) m
+offset _ _ = undefined
 
 -- | Play non-empty set of osc bundles.
 play_set :: Transport t => t -> [OSC] -> IO ()
 play_set _ [] = undefined
-play_set fd (x:xs) = do let (Bundle t _) = x
+play_set fd (x:xs) = do let (Bundle (UTCr t) _) = x
                         pause_thread_until (t - latency)
                         mapM_ (\e -> send fd e) (x:xs)
 
 -- | Play grouped score.
 play_sets :: Transport t => t -> [[OSC]] -> IO ()
 play_sets _ [] = return ()
-play_sets fd s = do t <- utc
+play_sets fd s = do t <- utcr
                     mapM_ (play_set fd) (map (\g -> map (offset t) g) s)
 
 -- | Split l into chunks of at most n elements.
@@ -145,7 +145,7 @@ mk_score :: Double -> [Double] -> [(Double, Double)] -> [OSC]
 mk_score sr repeats w = zipWith3 mk_elem w start_times durations
     where durations = zipWith (\(s, e) r -> (e - s) * r / sr) w repeats
           start_times = scanl (+) 0 durations
-          mk_elem (s,e) t d = Bundle t [mk_msg 10 s e d]
+          mk_elem (s,e) t d = Bundle (UTCr t) [mk_msg 10 s e d]
 
 -- | n randomly chosen elements of w.
 mk_randomness :: Int -> [a] -> [a]

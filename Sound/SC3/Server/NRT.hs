@@ -9,7 +9,7 @@ import System.IO
 -- | Encode and prefix with encoded length.
 oscWithSize :: OSC -> B.ByteString
 oscWithSize o = B.append l b
-    where b = encodeOSCNTP o
+    where b = encodeOSC o
           l = encode_i32 (fromIntegral (B.length b))
 
 -- | Encode a list of OSC bundles as an NRT score.

@@ -1,6 +1,7 @@
 e-lamell (rd)
 
-> let { rrand l r = getStdRandom (randomR (l, r))
+> let { now = NTPi 1
+>     ; rrand l r = getStdRandom (randomR (l, r))
 >     ; i_rrand l r = return . floorE =<< rrand l r
 >     ; exp_rrand a b = do { n <- rrand 0 1
 >                          ; let r = b / a 
@@ -44,7 +45,7 @@ e-lamell (rd)
 >                                 ; a <- choose [0, 0.25, 0.5, 1]
 >                                 ; l <- rrand (-1) 1
 >                                 ; return (mk_s_new f n d a l) }
->                       ; send fd (Bundle (-1) [p, q]) 
+>                       ; send fd (Bundle now [p, q]) 
 >                       ; threadPause 0.1 } }
 > in withSC3 (\fd -> do { sendSynth fd "blip" =<< e_lamell
 >                       ; replicateM_ 64 (pattern fd) })
