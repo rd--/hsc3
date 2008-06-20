@@ -449,7 +449,7 @@ Data-files:        README
 Library
   Build-Depends:   base, binary, bytestring, containers, hosc == 0.5,
                    network, process, random
-  GHC-Options:     -Wall -fwarn-tabs -O
+  GHC-Options:     -Wall -fwarn-tabs
   Exposed-modules: Sound.SC3
                    Sound.SC3.Server
                    Sound.SC3.Server.Command
