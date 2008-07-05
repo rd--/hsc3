@@ -4,7 +4,7 @@ Sawtooth oscillator.  A non-band-limited sawtooth
 oscillator. Output ranges from -1 to +1.
 
 freq   - frequency in Hertz
-iphase - phase in radians
+iphase - initial phase [0,2]
 
 > audition (out 0 (lfSaw AR 500 1 * 0.1))
 
