@@ -53,6 +53,10 @@ dseq z l array = mkOscMCEId z DR "Dseq" [l] array 1
 dser :: UGenId -> UGen -> UGen -> UGen
 dser z l array = mkOscMCEId z DR "Dser" [l] array 1
 
+-- | Demand input replication
+dstutter :: UGenId -> UGen -> UGen -> UGen
+dstutter z n i = mkOscId z DR "Dstutter" [n,i] 1
+
 -- | Demand rate input switching.
 dswitch1 :: UGenId -> UGen -> UGen -> UGen
 dswitch1 z l array = mkOscMCEId z DR "Dswitch1" [l] array 1

@@ -53,6 +53,10 @@ dseq = liftP2 D.dseq
 dser :: UGen -> UGen -> UGen
 dser = liftP2 D.dser
 
+-- | Demand input replication
+dstutter :: UGen -> UGen -> UGen
+dstutter = liftP2 D.dstutter
+
 -- | Demand rate input switching.
 dswitch1 :: UGen -> UGen -> UGen
 dswitch1 = liftP2 D.dswitch1
