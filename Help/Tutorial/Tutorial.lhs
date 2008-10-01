@@ -8,7 +8,12 @@ GHC binary package[3], Emacs [4] and the standard Haskell Emacs mode
 
 * Setting up Haskell SuperCollider
 
-Haskell SuperCollider is currently only available as a set of darcs
+Haskell SuperCollider is available through the haskell community
+library system Hackage [6].  To install type:
+
+  $ cabal install hsc3
+
+Haskell SuperCollider is also available as a set of darcs [7]
 repositories, the first implementing the Sound.OpenSoundControl
 module, the second the Sound.SC3 module.
 
@@ -230,8 +235,10 @@ To end printing send:
 
 * References
 
-[1] http://www.audiosynth.com/
-[2] http://www.haskell.org/ghc/
+[1] http://audiosynth.com/
+[2] http://haskell.org/ghc/
 [3] http://hackage.haskell.org/cgi-bin/hackage-scripts/package/binary-0.3
-[4] http://www.gnu.org/software/emacs/
-[5] http://www.haskell.org/haskell-mode/
+[4] http://gnu.org/software/emacs/
+[5] http://haskell.org/haskell-mode/
+[6] http://hackage.haskell.org/
+[7] http://darcs.net/
