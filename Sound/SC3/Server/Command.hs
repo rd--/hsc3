@@ -91,6 +91,10 @@ data AddAction = AddToHead
 s_new :: String -> Int -> AddAction -> Int -> [(String, Double)] -> OSC
 s_new n i a t c = Message "/s_new" (String n : Int i : Int (fromEnum a) : Int t : mk_duples String Float c)
 
+-- | Create a new synth.
+s_newargs :: String -> Int -> AddAction -> Int -> [(String, [Double])] -> OSC
+s_newargs n i a t c = Message "/s_newargs" (String n : Int i : Int (fromEnum a) : Int t : mk_duples_l Int String Float c)
+
 -- | Auto-reassign synth's ID to a reserved value.
 s_noid :: [Int] -> OSC
 s_noid nid = Message "/s_noid" (map Int nid)
