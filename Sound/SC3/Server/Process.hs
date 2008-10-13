@@ -268,6 +268,9 @@ pipeOutput f h = hIsEOF h >>= flip unless (hGetLine h >>= f >> pipeOutput f h)
 
 -- | Execute a realtime instance of @scsynth@ with 'Transport' t and return
 -- 'ExitCode' when the process exists.
+--
+-- /NOTE/: When compiling executables with GHC, the @-threaded@ option should be
+-- passed, otherwise the I\/O handlers will not work correctly.
 withSynth :: (Transport t, OpenTransport t) =>
     ServerOptions
  -> RTOptions t
