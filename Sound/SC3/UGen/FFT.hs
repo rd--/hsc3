@@ -1,5 +1,7 @@
 module Sound.SC3.UGen.FFT where
 
+import Sound.OpenSoundControl (OSC)
+import Sound.SC3.Server.Command (b_gen)
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
 
@@ -135,6 +137,24 @@ unpack1FFT buf size index which = mkOsc DR "Unpack1FFT" [buf, size, index, which
 
 unpackFFT :: UGen -> UGen -> UGen -> UGen -> UGen -> [UGen]
 unpackFFT c nf from to w = map (\i -> unpack1FFT c nf i w) [from .. to]
+
+-- * Partitioned convolution
+
+pc_calcNumPartitions :: Int -> Int -> Int
+pc_calcNumPartitions fftsize nframes =
+    let partitionsize = fftsize `div` 2
+    in (nframes `div` partitionsize) + 1
+
+pc_calcAccumSize :: Int -> Int -> Int
+pc_calcAccumSize fftsize nframes =
+    fftsize * pc_calcNumPartitions fftsize nframes
+
+pc_preparePartConv :: Int -> Int -> Int -> OSC
+pc_preparePartConv b irb fft_size =
+    b_gen b "PreparePartConv" (map fromIntegral [irb, fft_size])
+
+partConv :: UGen -> UGen -> UGen -> UGen -> UGen
+partConv i sz ib ab = mkOsc AR "PartConv" [i,sz,ib,ab] 1
 
 -- Local Variables:
 -- truncate-lines:t
