@@ -46,7 +46,6 @@ soundfiles.
 >     ; ir_file = "/home/rohan/audio/church.ir.wav"
 >     ; ir_length = 82756
 >     ; accum_size = pc_calcAccumSize fft_size ir_length
->     ; num_partitions= pc_calcNumPartitions fft_size ir_length
 >     ; ir_td_b = 10 {- time domain -}
 >     ; ir_fd_b = 11 {- frequency domain -}
 >     ; accum_b = 12  {- internal accumulator -}

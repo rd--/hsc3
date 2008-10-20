@@ -140,19 +140,19 @@ unpackFFT c nf from to w = map (\i -> unpack1FFT c nf i w) [from .. to]
 
 -- * Partitioned convolution
 
-pc_calcNumPartitions :: Int -> Int -> Int
-pc_calcNumPartitions fftsize nframes =
-    let partitionsize = fftsize `div` 2
-    in (nframes `div` partitionsize) + 1
-
+-- | Calculate size of accumulation buffer given FFT and IR sizes.
 pc_calcAccumSize :: Int -> Int -> Int
-pc_calcAccumSize fftsize nframes =
-    fftsize * pc_calcNumPartitions fftsize nframes
+pc_calcAccumSize fft_size ir_length =
+    let partition_size = fft_size `div` 2
+        num_partitions = (ir_length `div` partition_size) + 1
+    in fft_size * num_partitions
 
+-- | Generate accumulation buffer given time-domain IR buffer and FFT size.
 pc_preparePartConv :: Int -> Int -> Int -> OSC
 pc_preparePartConv b irb fft_size =
     b_gen b "PreparePartConv" (map fromIntegral [irb, fft_size])
 
+-- | Partitioned convolution.
 partConv :: UGen -> UGen -> UGen -> UGen -> UGen
 partConv i sz ib ab = mkOsc AR "PartConv" [i,sz,ib,ab] 1
 
