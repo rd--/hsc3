@@ -19,6 +19,10 @@ ay ta tb tc n c va vb vc ef es ct = mkOsc AR "AY" [ta, tb, tc, n, c, va, vb, vc,
 ayFreqToTone :: Fractional a => a -> a
 ayFreqToTone f = 110300 / (f - 0.5)
 
+-- | Phase modulation oscillator matrix.
+fm7 :: [[UGen]] -> [[UGen]] -> UGen
+fm7 ctl m0d = mkOsc AR "FM7" (concat ctl ++ concat m0d) 6
+
 -- | Triangular waveguide mesh of a drum-like membrane.
 membraneCircle :: UGen -> UGen -> UGen -> UGen
 membraneCircle i t l = mkOsc AR "MembraneCircle" [i, t, l] 1
