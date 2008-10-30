@@ -9,3 +9,5 @@ iphase - initial phase offset in cycles ( 0..1 )
 width - pulse width duty cycle from zero to one.
 
 > audition (out 0 (lfPulse AR (lfPulse KR 3 0 0.3 * 200 + 200) 0 0.2 * 0.1))
+
+> audition (out 0 (lfPulse AR 220 0 (mouseX KR 0 1 Linear 0.2) * 0.1))
