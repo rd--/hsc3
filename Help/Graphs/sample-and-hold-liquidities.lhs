@@ -1,5 +1,7 @@
 sample and hold liquidities (jmcc)
 
+> import Sound.SC3
+
 > let { r = mouseX kr 1 200 Exponential 0.1
 >     ; t = recip r
 >     ; c = impulse kr r 0.4

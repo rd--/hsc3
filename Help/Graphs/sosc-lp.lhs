@@ -1,5 +1,8 @@
 sosc-lp (rd)
 
+> import Sound.OpenSoundControl
+> import Sound.SC3
+
 > let { dustR r lo hi = do { n1 <- M.dwhite 1 lo hi
 >                          ; n2 <- M.whiteNoise r
 >                          ; d <- M.dseq dinf n1

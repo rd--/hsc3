@@ -1,5 +1,7 @@
 snare-909 (jmcc)
 
+> import Sound.SC3
+
 > let { snr tr n v =
 >       let { e a b = envGen ar tr 1 0 1 DoNothing (envPerc a b)
 >           ; e1 = e 0.0005 0.055

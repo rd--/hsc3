@@ -1,5 +1,7 @@
 train (th.list at gmail.com)
 
+> import Sound.SC3
+
 > let { time = 24
 >     ; steam n1 n2 = let { piston = lfSaw AR (xLine AR 1 7 time DoNothing) 0
 >                         ; air = lpf (n1 * piston + n2 * piston) 5000 

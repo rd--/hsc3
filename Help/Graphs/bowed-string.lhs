@@ -1,5 +1,9 @@
 bowed string (jmcc)
 
+> import Control.Monad
+> import Sound.SC3
+> import System.Random
+
 > let { rrand l r = getStdRandom (randomR (l, r)) 
 >     ; choose l = fmap (l !!) (rrand 0 (length l - 1))
 >     ; root = 5
@@ -8,8 +12,8 @@ bowed string (jmcc)
 > in do { n0 <- clone 2 (M.brownNoise ar)
 >       ; r0 <- M.expRand 0.125 0.5
 >       ; r1 <- M.rand 0.7 0.9
->       ; r2 <- replicateM 12 (M.rand 1.0 3.0)
->       ; f <- liftM midiCPS (liftM2 (+) (choose scale) (choose oct))
+>       ; r2 <- sequence (replicate 12 (M.rand 1.0 3.0))
+>       ; f <- fmap midiCPS (liftM2 (+) (choose scale) (choose oct))
 >       ; n1 <- M.lfNoise1 kr r0
 >       ; let { x = n0 * 0.007 * max 0 (n1 * 0.6 + 0.4)
 >             ; geom n i z = take n (iterate (* z) i)

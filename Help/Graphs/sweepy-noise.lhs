@@ -1,5 +1,7 @@
 sweepy noise (jmcc)
 
+> import Sound.SC3
+
 > do { n <- clone 2 (M.whiteNoise ar)
 >    ; let { lfoDepth = mouseY kr 200 8000 Exponential 0.1
 >          ; lfoRate = mouseX kr 4 60 Exponential 0.1

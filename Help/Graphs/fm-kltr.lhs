@@ -1,8 +1,10 @@
 fm-kltr (rd)
 
+> import Sound.OpenSoundControl
+> import Sound.SC3
+> import System.Random
+
 > let { rrand l r = getStdRandom (randomR (l, r))
->     ; threadPause :: Double -> IO ()
->     ; threadPause t = when (t>0) (threadDelay (floor (t * 1e6)))
 >     ; gr =
 >           do { r1 <- rand 0.975 1.025
 >              ; r2 <- rand 0.5 1.5
@@ -40,7 +42,7 @@ fm-kltr (rd)
 >            ; i <- rrand 240 1480
 >            ; t <- rrand 0.15 1.25
 >            ; fm fd 53 ff a d i
->            ; threadPause t } }
+>            ; pauseThread t } }
 > in withSC3 (\fd -> do { u <- gr
 >                       ; async fd (d_recv (synthdef "fm" u))
->                       ; replicateM 32 (nd fd) })
+>                       ; sequence (replicate 32 (nd fd)) })

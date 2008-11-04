@@ -1,5 +1,7 @@
 synthetic piano (jmcc)
 
+> import Sound.SC3
+
 > let p = do { n <- M.iRand 36 90
 >            ; f <- M.rand 0.1 0.5
 >            ; ph <- M.rand 0 (pi * 2)

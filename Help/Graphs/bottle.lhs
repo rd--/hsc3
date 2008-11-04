@@ -1,5 +1,8 @@
 bottle (sc)
 
+> import Control.Monad
+> import Sound.SC3
+
 > do { freq <- M.rand 220 880
 >    ; wn <- M.whiteNoise ar
 >    ; pn <- M.pinkNoise ar

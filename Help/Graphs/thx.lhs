@@ -1,5 +1,8 @@
 thx (perry cook)
 
+> import Sound.SC3
+> import System.Random
+
 > let { rvb i rT 
 >         = let { d = mce [0.0297, 0.0371, 0.0411, 0.0437]
 >               ; c = mix (combN i 0.05 d rT * 0.25)

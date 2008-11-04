@@ -1,13 +1,16 @@
 s-chirp (rd)
 
+> import Sound.OpenSoundControl
+> import Sound.SC3
+
 > let { x = mouseX kr 15 0 Linear 0.1
 >     ; y = mouseY kr 15 27 Linear 0.1
 >     ; scl = [0, 2, 3.2, 5, 7, 9, 10] }
 > in do { t <- M.dust kr 9
 >       ; b <- M.tChoose t (mce [36, 48, 60, 72])
->       ; n <- liftM (* 0.04) (M.lfNoise1 kr (mce2 3 3.05))
+>       ; n <- fmap (* 0.04) (M.lfNoise1 kr (mce2 3 3.05))
 >       ; d <- M.tiRand x y t
->       ; e <- liftM (decay2 t 0.005) (M.tRand 0.02 0.15 t)
+>       ; e <- fmap (decay2 t 0.005) (M.tRand 0.02 0.15 t)
 >       ; o <- let { k = degreeToKey 0 d 12
 >                  ; f = midiCPS (b + k + n)
 >                  ; m = e * sinOsc ar f 0 * 0.2

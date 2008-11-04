@@ -1,5 +1,8 @@
 shepard tones (alberto de campo)
 
+> import Sound.OpenSoundControl
+> import Sound.SC3
+
 > let { indxs n l r = let i = (r - l) / n 
 >                     in [l, l + i .. r - i]
 >     ; hanningWindow n = 

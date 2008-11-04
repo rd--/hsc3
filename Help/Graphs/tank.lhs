@@ -1,5 +1,8 @@
 tank (jmcc)
 
+> import Control.Monad
+> import Sound.SC3
+
 > let { r_allpass i = do { r <- clone 2 (M.rand 0.005 0.02)
 >                        ; return (allpassN i 0.03 r 1) }
 >     ; chain n f = foldl (>=>) return (replicate n f)

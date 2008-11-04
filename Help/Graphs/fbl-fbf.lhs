@@ -1,5 +1,7 @@
 fbl-fbf (rd)
 
+> import Sound.SC3
+
 > let { fbl l i d g = let { a0 = l + mce i
 >                         ; a1 = delayL a0 (maximum d) (mce d) }
 >                     in (localOut (a1 * mce g), a1)

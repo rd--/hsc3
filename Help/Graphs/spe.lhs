@@ -1,5 +1,7 @@
 spe (jmcc)
 
+> import Sound.SC3
+
 > let { chain n f = foldl (>=>) return (replicate n f)
 >     ; rapf i = do { r <- clone 2 (M.rand 0 0.05)
 >                   ; return (allpassN i 0.05 r 4) }

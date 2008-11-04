@@ -1,7 +1,9 @@
 chrd (rd)
 
+> import Sound.SC3
+
 > let chrd = do { r0 <- M.rand 0.05 0.5
->               ; [r1, r2] <- replicateM 2 (M.rand (-1) 1)
+>               ; [r1, r2] <- sequence (replicate 2 (M.rand (-1) 1))
 >               ; r3 <- M.rand 0.15 0.35
 >               ; r4 <- M.rand 0.005 0.01
 >               ; let { m = mce [60, 65, 72, 77, 79, 84]

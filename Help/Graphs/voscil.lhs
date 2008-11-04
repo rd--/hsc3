@@ -1,5 +1,10 @@
 voscil (rd)
 
+> import Sound.OpenSoundControl
+> import Sound.SC3
+> import qualified Sound.SC3.UGen.Unsafe as U
+> import System.Random
+
 > let { rrand l r = getStdRandom (randomR (l, r))
 >     ; lfn r = U.lfNoise0 kr r
 >     ; b = 32
@@ -17,8 +22,8 @@ voscil (rd)
 >           in p + q
 >     ; run fd = let r_set i = 
 >                        do { m <- rrand 2 512
->                           ; j <- replicateM m (rrand 0 bn)
->                           ; k <- replicateM m (rrand (-1) 1)
+>                           ; j <- sequence (replicate m (rrand 0 bn))
+>                           ; k <- sequence (replicate m (rrand (-1) 1))
 >                           ; async fd (b_alloc i bn 1)
 >                           ; send fd (b_set i (zip j k)) }
 >                in do { mapM_ r_set [0 .. (b - 1)]

@@ -1,5 +1,7 @@
 f-lets (rd)
 
+> import Sound.SC3
+
 > let { f_let t g j n f = 
 >       let pd = pulseDivider t j 0
 >       in do { r0 <- M.tiRand (mce2 2 1) n pd

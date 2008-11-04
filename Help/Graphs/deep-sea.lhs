@@ -1,5 +1,7 @@
 deep sea (jrhb)
 
+> import Sound.SC3
+
 > let { range s l r = let m = (r - l) * 0.5 in mulAdd s m (m + l)
 >     ; amp = 1
 >     ; pan = 0

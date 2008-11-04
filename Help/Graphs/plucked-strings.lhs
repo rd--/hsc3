@@ -1,5 +1,7 @@
 plucked strings (jmcc)
 
+> import Sound.SC3
+
 > let { s = do { n0 <- M.pinkNoise ar
 >              ; r1 <- M.rand (-1) 1
 >              ; im <- i
@@ -17,4 +19,4 @@ plucked strings (jmcc)
 >                in return (select r3 (mce [s0, s1, s2])) }
 >     ; dt = do { r0 <- M.rand 60 90
 >               ; return (1 / (midiCPS (floorE r0))) } }
-> in audition . out 0 . sum =<< replicateM 5 s
+> in audition . out 0 . sum =<< sequence (replicate 5 s)

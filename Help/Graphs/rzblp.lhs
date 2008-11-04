@@ -1,5 +1,8 @@
 rzblp (rd)
 
+> import Sound.SC3
+> import qualified Sound.SC3.UGen.Unsafe as U
+
 > let { wrp i l r = let m = (r - l) / 2
 >                   in i * m + l + m
 >     ; lfn f l r = wrp (U.lfNoise0 kr f) l r

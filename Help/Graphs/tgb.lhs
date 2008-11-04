@@ -1,5 +1,9 @@
 tgb (rd)
 
+> import Sound.OpenSoundControl
+> import Sound.SC3
+> import System.Random
+
 > let { mkls bp t = envGen kr 1 1 0 1 RemoveSynth (envCoord bp t 1 EnvLin)
 >     ; pm_t l r d t = let { le = mkls l d
 >                          ; re = mkls r d }

@@ -1,5 +1,8 @@
 modal space (jmcc)
 
+> import Sound.OpenSoundControl
+> import Sound.SC3
+
 > let { b = 0
 >     ; p = [0, 2, 3.2, 5, 7, 9, 10] 
 >     ; x = mouseX kr 0 15 Linear 0.1

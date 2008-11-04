@@ -1,5 +1,8 @@
 trmlo (rd)
 
+> import Sound.SC3
+> import qualified Sound.SC3.UGen.Unsafe as U
+
 > let { mWrp i l r = linLin i (-1) 1 (midiCPS l) (midiCPS r)
 >     ; mWrp1 i m = mWrp i m (m + 1)
 >     ; mWrpN i m n = mWrp i m (m + n)

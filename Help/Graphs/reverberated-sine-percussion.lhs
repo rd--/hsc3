@@ -1,5 +1,8 @@
 reverberated sine percussion (jmcc)
 
+> import Control.Monad
+> import Sound.SC3
+
 > let { d = 6
 >     ; c = 5
 >     ; a = 4
@@ -9,7 +12,7 @@ reverberated sine percussion (jmcc)
 >     ; x_ i = do { r <- clone 2 (M.rand 0 0.05)
 >                 ; return (allpassN i 0.05 r 1) } 
 >     ; chain n f = foldl (>=>) return (replicate n f) }
-> in do { s <- liftM sum (replicateM d s_)
+> in do { s <- fmap sum (sequence (replicate d s_))
 >       ; y <- let z = delayN s 0.048 0.48
 >              in do { r <- clone c (M.rand 0 0.1)
 >                    ; n <- M.lfNoise1 kr r

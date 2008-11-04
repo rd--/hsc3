@@ -1,5 +1,8 @@
 h-chatter (rd)
 
+> import Control.Monad
+> import Sound.SC3
+
 > let { wrp i l r = linLin i (-1) 1 l r
 >     ; mma m a = return . (+ a)  . (* m)
 >     ; h0 = do { n <- mma 5 5 =<< M.lfNoise0 kr 1

@@ -1,5 +1,7 @@
 forest sounds (paul jones)
 
+> import Sound.SC3
+
 > let insects = do { n1 <- M.brownNoise ar
 >                  ; n2 <- M.lfNoise2 kr 50
 >                  ; let o = sinOsc kr (n2 * 50 + 50) 0 * 100 + 2000

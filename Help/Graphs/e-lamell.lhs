@@ -1,5 +1,10 @@
 e-lamell (rd)
 
+> import Control.Monad
+> import Sound.OpenSoundControl
+> import Sound.SC3
+> import System.Random
+
 > let { now = NTPi 1
 >     ; rrand l r = getStdRandom (randomR (l, r))
 >     ; i_rrand l r = return . floorE =<< rrand l r
@@ -7,8 +12,6 @@ e-lamell (rd)
 >                          ; let r = b / a 
 >                            in return ((r ** n) * a) }
 >     ; choose l = return . (l !!) =<< rrand 0 (length l - 1)
->     ; threadPause :: Double -> IO ()
->     ; threadPause t = when (t>0) (threadDelay (floor (t * 1e6)))
 >     ; sendSynth fd n u = async fd (d_recv (synthdef n u))
 >     ; e_lamell = let { ctl s v = Control kr s v
 >                      ; f = ctl "f" 440
@@ -46,6 +49,6 @@ e-lamell (rd)
 >                                 ; l <- rrand (-1) 1
 >                                 ; return (mk_s_new f n d a l) }
 >                       ; send fd (Bundle now [p, q]) 
->                       ; threadPause 0.1 } }
+>                       ; pauseThread 0.1 } }
 > in withSC3 (\fd -> do { sendSynth fd "blip" =<< e_lamell
 >                       ; replicateM_ 64 (pattern fd) })

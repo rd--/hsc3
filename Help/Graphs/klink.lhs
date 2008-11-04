@@ -1,5 +1,7 @@
 klink (rd)
 
+> import Sound.SC3
+
 > do { n1 <- M.lfNoise0 kr (mce2 0.5 1.5)
 >    ; let { o = sinOsc kr n1 0
 >          ; f = mce2 2 3

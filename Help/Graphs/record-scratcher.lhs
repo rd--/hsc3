@@ -1,5 +1,7 @@
 record scratcher (josh parmenter)
 
+> import Sound.SC3
+
 > let { dup a = mce2 a a
 >     ; fn = "/home/rohan/audio/metal.wav"
 >     ; d = env [0, 1, 0] [0.1, 0.1] [EnvSin] 1 0

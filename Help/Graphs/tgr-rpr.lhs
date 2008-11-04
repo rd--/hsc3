@@ -1,5 +1,8 @@
 tgr-rpr (rd)
 
+> import Sound.OpenSoundControl
+> import Sound.SC3
+
 > let { sf = "/home/rohan/audio/text.snd"
 >     ; preset = [ 0.01, 0.02
 >                , 0.95, 1.05
@@ -21,17 +24,17 @@ tgr-rpr (rd)
 >              , (-1.0,  0.0)  , (0.0, 1.0) ]
 >     ; edit fd = do { s <- mapM (\(l,r) -> rrand l r) rSet
 >                    ; send fd (c_setn [(0, s)])
->                    ; threadDelay 350000 } }
+>                    ; pauseThread 0.35 } }
 > in do { clk <- dustR ar (in' 1 kr 0) (in' 1 kr 1)
 >       ; rat <- rpr 2 clk
 >       ; dur <- rpr 4 clk
->       ; pos <- liftM (* (bufDur kr 10)) (rpr 8 clk)
+>       ; pos <- fmap (* (bufDur kr 10)) (rpr 8 clk)
 >       ; pan <- rpr 10 clk
 >       ; amp <- rpr 6 clk
 >       ; withSC3 (\fd -> do { async fd (b_allocRead 10 sf 0 0)
 >                            ; send fd (c_setn [(0, preset)])
 >                            ; let o = tGrains 2 clk 10 rat pos dur pan amp 2
 >                              in play fd (out 0 o)
->                            ; threadDelay 3000000
->                            ; replicateM_ 16 (edit fd)
+>                            ; pauseThread 0.3
+>                            ; sequence (replicate 16 (edit fd))
 >                            ; reset fd }) }

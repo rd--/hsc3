@@ -1,5 +1,7 @@
 fm-iter (rd)
 
+> import Sound.SC3
+
 > let { t0 = impulse ar (recip 0.30) 0
 >     ; t1 = tDelay t0 0.15
 >     ; t = mce2 t0 t1 }

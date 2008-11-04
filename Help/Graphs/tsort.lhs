@@ -9,6 +9,8 @@ The below 369 node graph works with 'scsynth -u 57110 -w 2'.
 of interconnect buffers, so to test this we must delete all graphs that
 would otherwise be loaded.)
 
+> import Sound.SC3
+
 > let { n = 122
 >     ; c = envCoord [(0,0), (0.15, 1), (6, 0)] 1 1 EnvLin
 >     ; e = envGen kr 1 1 0 1 RemoveSynth c

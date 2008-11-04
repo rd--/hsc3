@@ -1,5 +1,11 @@
 nharm (rd)
 
+> import Control.Concurrent
+> import Control.Monad
+> import Sound.OpenSoundControl
+> import Sound.SC3
+> import System.Random
+
 > let { nharm n f = map ((* f) . fromIntegral) [1..n]
 >     ; rrand l r = getStdRandom (randomR (l, r))
 >     ; threadPause n = when (n>0) (threadDelay (floor (n * 1e6)))

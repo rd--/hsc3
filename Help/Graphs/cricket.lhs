@@ -1,5 +1,7 @@
 cricket (rd)
 
+> import Sound.SC3
+
 > do { r1 <- clone 2 (M.rand 10 13)
 >    ; r2 <- clone 2 (M.rand 10 13)
 >    ; r3 <- clone 2 (M.rand 4 7)

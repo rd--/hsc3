@@ -1,5 +1,9 @@
 default (jmcc)
 
+> import Sound.SC3
+> import Sound.OpenSoundControl
+> import System.Random
+
 > let { def = do { r0 <- rand (-0.4) 0.0
 >                ; r1 <- rand 0.0 0.4
 >                ; r2 <- rand 4000 5000
@@ -14,7 +18,6 @@ default (jmcc)
 >                      ; z = lpf (mix (varSaw AR f3 0 0.3)) l * e }
 >                  in return (pan2 z p 1) }
 >     ; rrand lr = getStdRandom (randomR lr)
->     ; pauseThread n = when (n > 1e-3) (threadDelay (floor (n * 1e6)))
 >     ; tone fd nid = do { pan <- rrand (-1, 1)
 >                        ; amp <- rrand (0.1, 0.3)
 >                        ; indx <- rrand (0, 7)

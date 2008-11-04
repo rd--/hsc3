@@ -1,5 +1,7 @@
 babbling brook (jmcc)
 
+> import Sound.SC3
+
 > let b f m a g = do { n1 <- M.brownNoise ar
 >                    ; n2 <- M.brownNoise ar
 >                    ; let n3 = lpf n2 f * m + a

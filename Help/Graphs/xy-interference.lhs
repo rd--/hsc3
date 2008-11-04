@@ -1,12 +1,14 @@
 xy-interference (rd)
 
+> import Sound.SC3
+
 > let { x = mouseX kr 20 22000 Linear (mce2 0.005 0.025)
 >     ; y = mouseY kr 20 22000 Linear (mce2 0.005 0.075)
 >     ; nd = do { n <- M.lfNoise0 kr (mce2 5 9)
 >               ; let { a = sinOsc ar (x + n) 0
 >                     ; b = sinOsc ar y 0 }
 >                 in return (a * b) } }
-> in audition . (out 0) . sum =<< replicateM 3 nd
+> in audition . (out 0) . sum =<< sequence (replicate 3 nd)
 
 > let { x = mouseX kr 20 22000 Linear (mce2 0.005 0.025)
 >     ; y = mouseY kr 20 22000 Linear (mce2 0.005 0.075)

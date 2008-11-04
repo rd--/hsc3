@@ -1,10 +1,12 @@
 oscillator cluster (rd)
 
+> import Sound.SC3
+
 > let { rng i l r = linLin i (-1) 1 l r
 >     ; ln a b d = line kr a b d RemoveSynth
 >     ; xln a b d = xLine kr a b d RemoveSynth
->     ; rln r a b d = liftM (\n -> ln (a + n) b d) (M.rand 0 r)
->     ; rxln r a b d = liftM (\n -> xln (a + n) b d) (M.rand 0 r)
+>     ; rln r a b d = fmap (\n -> ln (a + n) b d) (M.rand 0 r)
+>     ; rxln r a b d = fmap (\n -> xln (a + n) b d) (M.rand 0 r)
 >     ; prt d a cf = do { r1 <- M.rand cf (cf + 2)
 >                       ; r2 <- rln 1 5 0.01 d
 >                       ; r3 <- rln 10 20 0 d
@@ -14,7 +16,7 @@ oscillator cluster (rd)
 >                             ; e = decay2 (impulse ar 0 0) r4 d * a }
 >                        in return (o * e) }
 >     ; np = 12
->     ; fp = replicateM np (rand 220 660) }
+>     ; fp = sequence (replicate np (rand 220 660)) }
 > in do { d <- M.rand 4 7
 >       ; a <- M.rand 0.01 0.05
 >       ; audition . (out 0) . sum =<< mapM (prt d a) =<< fp }

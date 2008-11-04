@@ -2,6 +2,8 @@ bit reduction (adc)
 
 sample rate decrease
 
+> import Sound.SC3
+
 > do { f <- M.lfNoise2 kr 8
 >    ; nh <- M.lfNoise2 kr 3
 >    ; let { src = blip ar (f * 200 + 300) (nh * 10 + 20)

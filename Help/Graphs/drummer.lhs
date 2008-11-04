@@ -1,5 +1,7 @@
 drummer (thor magnusson)
 
+> import Sound.SC3
+
 > do { n <- M.whiteNoise ar
 >    ; let { tempo = 4
 >          ; dup a = mce2 a a 

@@ -1,6 +1,8 @@
 shifting pulses (rd)
 
-> do { [n0, n1, n2] <- replicateM 3 (clone 2 (M.brownNoise kr))
+> import Sound.SC3
+
+> do { [n0, n1, n2] <- sequence (replicate 3 (clone 2 (M.brownNoise kr)))
 >    ; t <- M.dust kr 0.75
 >    ; let { warp i = linLin i (-1) 1
 >          ; l = latch t t

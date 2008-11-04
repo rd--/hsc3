@@ -1,5 +1,7 @@
 harmonic tumbling (jmcc)
 
+> import Sound.SC3
+
 > let { f = 80
 >     ; p = 10
 >     ; t = xLine kr (mce2 10 11) 0.1 60 DoNothing

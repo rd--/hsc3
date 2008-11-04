@@ -1,5 +1,8 @@
 scritto (rd)
 
+> import Sound.OpenSoundControl
+> import Sound.SC3
+
 > let { scritto = [ ( "sA" 
 >                   , [800, 1150, 2900, 3900, 4950]
 >                   , [0, -6,  -32, -20, -50]

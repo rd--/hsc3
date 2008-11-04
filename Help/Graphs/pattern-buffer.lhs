@@ -1,5 +1,7 @@
 pattern buffer (rd)
 
+> import Sound.SC3
+
 > let { nf = 2 * 48000
 >     ; c = 24
 >     ; tseq l = let n = fromIntegral (length l) / 2.0

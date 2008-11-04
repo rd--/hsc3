@@ -1,5 +1,8 @@
 aleatoric quartet (jmcc)
 
+> import Control.Monad
+> import Sound.SC3
+
 > let { amp = 0.07
 >     ; density = mouseX kr 0.01 1 Linear 0.1
 >     ; dmul = recip density * 0.5 * amp
@@ -13,13 +16,13 @@ aleatoric quartet (jmcc)
 >                         ; n0 <- M.lfNoise0 kr r0
 >                         ; let m = lag (roundE (n0 * 7 + 66 + r1) 1) 0.2
 >                           in return (midiCPS m) } }
->     ; mk_s = do { f <- liftM recip mk_f
+>     ; mk_s = do { f <- fmap recip mk_f
 >                 ; r <- M.rand (-1) 1
 >                 ; x <- do { n0 <- M.pinkNoise ar
 >                           ; n1 <- M.lfNoise1 kr 8
 >                           ; return (n0 * max 0 (n1 * dmul + dadd)) }
 >                 ; return (pan2 (combL x 0.02 f 3) r 1) } }
-> in do { g <- chain 5 rapf =<< fmap sum (replicateM 4 mk_s)
+> in do { g <- chain 5 rapf =<< fmap sum (sequence (replicate 4 mk_s))
 >       ; audition (out 0 (leakDC g 0.995)) }
 
 { var amp = 0.07

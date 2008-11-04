@@ -1,5 +1,7 @@
 harmonic swimming (jmcc)
 
+> import Sound.SC3
+
 > let { a = 0.02
 >     ; f = 50
 >     ; p = 20

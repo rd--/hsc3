@@ -1,5 +1,7 @@
 implosion (rd)
 
+> import Sound.SC3
+
 > let { mkls bp t = let e = envCoord bp t 1 EnvLin
 >                   in envGen kr 1 1 0 1 RemoveSynth e
 >     ; mkrmp l r t = mkls [(0, l), (1, r)] t

@@ -1,5 +1,8 @@
 dial history (jrhb)
 
+> import Data.List
+> import Sound.SC3
+
 > let { mfv = [[697, 770, 852, 941], [1209, 1336, 1477, 1633]]
 >     ; numbers = [[3, 1]] ++ [[a, b] | a <- [0..2], b <- [0..2]]
 >     ; range s l r = linLin s 0 1 l r

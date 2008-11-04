@@ -1,5 +1,11 @@
 lin-sosc (rd)
 
+> import Control.Concurrent
+> import Control.Monad
+> import Sound.OpenSoundControl
+> import Sound.SC3
+> import System.Random
+
 > let { n = 1024
 >     ; x = mouseX kr 0.001 1.0 Linear 0.1
 >     ; tblM b = playBuf 1 b (x * bufRateScale kr b) 0 0 Loop
@@ -7,8 +13,7 @@ lin-sosc (rd)
 >     ; o = sinOsc ar (tblM 0) 0 * tblM 1 
 >     ; co = clip2 (pan2 o (tblC 1 0) 0.025) 0.25
 >     ; rrand (a, b) = getStdRandom (randomR (a,b))
->     ; choose l = liftM (l !!) (rrand (0, length l - 1))
->     ; pauseThread n = when (n > 1e-3) (threadDelay (floor (n * 1e6)))
+>     ; choose l = fmap (l !!) (rrand (0, length l - 1))
 >     ; iota 0 _ _ = []
 >     ; iota n l s = l : iota (n - 1) (l + s) s
 >     ; geom 0 _ _ = []

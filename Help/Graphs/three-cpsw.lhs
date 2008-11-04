@@ -1,5 +1,7 @@
 three-cpsw (rd)
 
+> import Sound.SC3
+
 > do { t <- M.dust kr (mce2 12 18)
 >    ; f0 <- M.tRand 1 64 t
 >    ; f1 <- M.lfNoise0 kr f0

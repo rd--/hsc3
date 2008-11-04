@@ -1,5 +1,7 @@
 half-life (jrhb)
 
+> import Sound.SC3
+
 > let { t_half = 3.92
 >     ; n_atoms = 1e+5
 >     ; n = max 0 (n_atoms - pulseCount (localIn 2 ar) 0) }

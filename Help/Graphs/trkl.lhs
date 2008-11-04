@@ -1,5 +1,7 @@
 trkl (rd)
 
+> import Sound.SC3
+
 > let trkl d ul fu dy la fy =
 >         let { tf = xLine kr 1 ul d RemoveSynth
 >             ; st = impulse ar (tf * 8) 0

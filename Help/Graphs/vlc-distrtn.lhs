@@ -1,10 +1,12 @@
 vlc-distrtn (rd)
 caution - audio feedback graph
 
+> import Sound.OpenSoundControl
+> import Sound.SC3
+> import System.Random
+
 > let { rrand l r = getStdRandom (randomR (l, r))
 >     ; choose l = return . (l !!) =<< rrand 0 (length l - 1)
->     ; threadPause :: Double -> IO ()
->     ; threadPause t = when (t>0) (threadDelay (floor (t * 1e6)))
 >     ; prep (ampl, phase) = [dbAmp ampl, phase]
 >     ; vlc = [ (0.00000, 1.85550)
 >             , (-9.92383, -0.65147)
@@ -122,7 +124,7 @@ caution - audio feedback graph
 >                                  ,("ampl", a)
 >                                  ,("detune", d)
 >                                  ,("fall", fl)])
->            ; threadPause =<< choose [0.25, 0.5, 0.75, 1.5] } }
+>            ; pauseThread =<< choose [0.25, 0.5, 0.75, 1.5] } }
 > in withSC3 (\fd -> do { async fd (b_alloc 0 (length vlc * 2) 1)
 >                       ; send fd (b_setn1 0 0 (concatMap prep vlc))
 >                       ; async fd . d_recv . synthdef "plyr48" =<< plyr 48

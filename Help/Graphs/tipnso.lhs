@@ -1,5 +1,7 @@
 tipnso (rd)
 
+> import Sound.SC3
+
 > let { x = mouseX kr 1 32 Linear 0.1
 >     ; t = impulse ar x 0 }
 > in do { n1 <- M.tiRand 16 72 t

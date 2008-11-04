@@ -1,5 +1,7 @@
 noise burst sweep (jmcc)
 
+> import Sound.SC3
+
 > do { n <- clone 2 (M.whiteNoise ar)
 >    ; let { lfoRate = mouseX kr 10 60 Exponential 0.2
 >          ; amp = max 0 (lfSaw kr lfoRate (-1))

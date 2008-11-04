@@ -1,5 +1,8 @@
 tr-out (rd)
 
+> import Sound.OpenSoundControl
+> import Sound.SC3
+
 > let node n = do { t <- M.dust kr 1.6
 >                 ; r1 <- M.tRand 0 6 t
 >                 ; r2 <- M.tRand 0 6 t

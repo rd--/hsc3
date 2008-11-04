@@ -1,5 +1,7 @@
 theremin (jmcc)
 
+> import Sound.SC3
+
 > let { m = 7
 >     ; detune = 0
 >     ; x = mouseX kr 0 0.9 Linear 0.2

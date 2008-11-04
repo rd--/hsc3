@@ -1,10 +1,10 @@
 overlap-add (jmcc, rd)
 
-> let { pauseThread n 
->       = when (n > 1e-3) (threadDelay (floor (n * 1e6)))
->     ; pauseThreadUntil t 
->       = pauseThread . (t -) =<< utcr
->     ; at t f 
+> import Control.Concurrent
+> import Sound.OpenSoundControl
+> import Sound.SC3
+
+> let { at t f 
 >       = let at' t' f' = do { n <- f' t'
 >                            ; pauseThreadUntil (t' + n)
 >                            ; at' (t' + n) f' }

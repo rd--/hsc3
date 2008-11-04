@@ -1,5 +1,8 @@
 tgrn (rd)
 
+> import Sound.OpenSoundControl
+> import Sound.SC3
+
 > let { fn = "/home/rohan/audio/text.snd"
 >     ; tgrn b = let { trate = mouseY kr 2 120 Exponential 0.1
 >                    ; dur = 1.2 / trate

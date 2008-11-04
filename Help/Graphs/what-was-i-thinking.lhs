@@ -1,5 +1,7 @@
 what was i thinking? (jmcc)
 
+> import Sound.SC3
+
 > do { n0 <- M.lfNoise1 kr 0.2
 >    ; n1 <- M.lfNoise1 kr 0.157
 >    ; let { p = pulse ar f (n1 * 0.4 + 0.5) * 0.04

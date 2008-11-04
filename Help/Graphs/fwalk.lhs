@@ -1,5 +1,8 @@
 fwalk (rd)
 
+> import Sound.OpenSoundControl
+> import Sound.SC3
+
 > let { n = [ 40.0, 47.0, 42.0, 40.0, 50.0
 >           , 43.0, 35.0, 43.0, 40.0, 47.0
 >           , 45.0, 35.0, 43.0, 42.0, 59.0

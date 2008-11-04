@@ -1,5 +1,8 @@
 karplus strong (alex mclean)
 
+> import Sound.OpenSoundControl
+> import Sound.SC3
+
 > let { aA = ( "aA" 
 >            , [800, 1150, 2800, 3500, 4950]
 >            , [0, -4  , -20, -36 , -60]

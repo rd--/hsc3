@@ -1,5 +1,7 @@
 lg-timed (rd)
 
+> import Sound.SC3
+
 > let { timed r y p =
 >       do { d0 <- M.dser r p
 >          ; d1 <- M.dcons 0 d0

@@ -1,5 +1,7 @@
 analog bubbles (jmcc)
 
+> import Sound.SC3
+
 > let { o = lfSaw kr (mce2 8 7.23) 0 * 3 + 80
 >     ; f = lfSaw kr 0.4 0 * 24 + o
 >     ; s = sinOsc ar (midiCPS f) 0 * 0.04 }

@@ -1,5 +1,7 @@
 demanding studies (jmcc)
 
+> import Sound.SC3
+
 > do { s1 <- M.drand dinf (mce [72, 75, 79, 82])
 >    ; s2 <- M.drand 1 (mce [82, 84, 86])
 >    ; s3 <- M.dseq dinf (mce [72, 75, 79, s2])
