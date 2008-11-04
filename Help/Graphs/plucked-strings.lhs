@@ -1,6 +1,7 @@
 plucked strings (jmcc)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { s = do { n0 <- M.pinkNoise ar
 >              ; r1 <- M.rand (-1) 1

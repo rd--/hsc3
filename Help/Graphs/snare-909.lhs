@@ -1,6 +1,7 @@
 snare-909 (jmcc)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { snr tr n v =
 >       let { e a b = envGen ar tr 1 0 1 DoNothing (envPerc a b)

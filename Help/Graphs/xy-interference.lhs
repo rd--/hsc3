@@ -1,6 +1,7 @@
 xy-interference (rd)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { x = mouseX kr 20 22000 Linear (mce2 0.005 0.025)
 >     ; y = mouseY kr 20 22000 Linear (mce2 0.005 0.075)

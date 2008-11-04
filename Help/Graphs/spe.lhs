@@ -1,6 +1,7 @@
 spe (jmcc)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { chain n f = foldl (>=>) return (replicate n f)
 >     ; rapf i = do { r <- clone 2 (M.rand 0 0.05)

@@ -1,6 +1,7 @@
 pattern buffer (rd)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { nf = 2 * 48000
 >     ; c = 24

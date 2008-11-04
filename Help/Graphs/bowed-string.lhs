@@ -2,6 +2,7 @@ bowed string (jmcc)
 
 > import Control.Monad
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 > import System.Random
 
 > let { rrand l r = getStdRandom (randomR (l, r)) 

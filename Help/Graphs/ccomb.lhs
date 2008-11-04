@@ -1,6 +1,7 @@
 ccomb (rd)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { rng l r i = linLin i (-1) 1 l r
 >     ; lwr = 48

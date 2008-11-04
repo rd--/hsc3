@@ -1,6 +1,7 @@
 tipnso (rd)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { x = mouseX kr 1 32 Linear 0.1
 >     ; t = impulse ar x 0 }

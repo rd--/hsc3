@@ -1,6 +1,7 @@
 harmonic swimming (jmcc)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { a = 0.02
 >     ; f = 50

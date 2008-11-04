@@ -1,6 +1,7 @@
 drummer (thor magnusson)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > do { n <- M.whiteNoise ar
 >    ; let { tempo = 4

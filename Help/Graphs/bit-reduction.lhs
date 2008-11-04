@@ -3,6 +3,7 @@ bit reduction (adc)
 sample rate decrease
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > do { f <- M.lfNoise2 kr 8
 >    ; nh <- M.lfNoise2 kr 3

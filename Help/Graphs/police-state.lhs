@@ -1,6 +1,7 @@
 police state (jmcc)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let node = do { r0 <- M.rand 0.02 0.12
 >               ; r1 <- M.rand 0 (pi*2)

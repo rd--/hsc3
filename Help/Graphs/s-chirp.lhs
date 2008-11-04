@@ -2,6 +2,7 @@ s-chirp (rd)
 
 > import Sound.OpenSoundControl
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { x = mouseX kr 15 0 Linear 0.1
 >     ; y = mouseY kr 15 27 Linear 0.1

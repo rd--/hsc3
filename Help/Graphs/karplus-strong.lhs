@@ -2,6 +2,7 @@ karplus strong (alex mclean)
 
 > import Sound.OpenSoundControl
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { aA = ( "aA" 
 >            , [800, 1150, 2800, 3500, 4950]

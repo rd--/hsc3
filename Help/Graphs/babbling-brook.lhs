@@ -1,6 +1,7 @@
 babbling brook (jmcc)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let b f m a g = do { n1 <- M.brownNoise ar
 >                    ; n2 <- M.brownNoise ar

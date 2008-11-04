@@ -1,6 +1,7 @@
 cymbalism (jmcc)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let p = 15
 > in do { f1 <- M.rand 500 2500

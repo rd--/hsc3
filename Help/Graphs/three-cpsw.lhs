@@ -1,6 +1,7 @@
 three-cpsw (rd)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > do { t <- M.dust kr (mce2 12 18)
 >    ; f0 <- M.tRand 1 64 t

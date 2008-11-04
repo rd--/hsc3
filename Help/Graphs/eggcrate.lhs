@@ -1,6 +1,7 @@
 eggcrate (rd)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { cosu = cos . (* pi) 
 >     ; sinu = sin . (* pi)

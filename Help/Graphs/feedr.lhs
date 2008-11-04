@@ -3,6 +3,7 @@ warning: input/output feedback loop
 
 > import Sound.OpenSoundControl
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { delayWr b i = recordBuf b 0 1 0 1 Loop 0 i
 >     ; tap nc b dt = playBuf nc b 1 0 (dt * (- sampleRate)) Loop

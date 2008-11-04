@@ -2,6 +2,7 @@ bottle (sc)
 
 > import Control.Monad
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > do { freq <- M.rand 220 880
 >    ; wn <- M.whiteNoise ar

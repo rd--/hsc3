@@ -1,6 +1,7 @@
 red frik (f0)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let red tr n = 
 >     do { r1 <- M.tRand 0.3 3 tr

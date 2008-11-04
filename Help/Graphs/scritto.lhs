@@ -2,6 +2,7 @@ scritto (rd)
 
 > import Sound.OpenSoundControl
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { scritto = [ ( "sA" 
 >                   , [800, 1150, 2900, 3900, 4950]

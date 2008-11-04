@@ -1,6 +1,7 @@
 lf pulses (rd)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > do { n0 <- M.lfNoise0 ar (mce2 20 40)
 >    ; n1 <- M.lfNoise0 ar (mce2 5 10)

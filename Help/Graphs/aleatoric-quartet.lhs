@@ -2,6 +2,7 @@ aleatoric quartet (jmcc)
 
 > import Control.Monad
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { amp = 0.07
 >     ; density = mouseX kr 0.01 1 Linear 0.1

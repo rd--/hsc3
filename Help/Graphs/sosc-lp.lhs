@@ -2,6 +2,7 @@ sosc-lp (rd)
 
 > import Sound.OpenSoundControl
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { dustR r lo hi = do { n1 <- M.dwhite 1 lo hi
 >                          ; n2 <- M.whiteNoise r

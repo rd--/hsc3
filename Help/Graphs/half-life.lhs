@@ -1,6 +1,7 @@
 half-life (jrhb)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { t_half = 3.92
 >     ; n_atoms = 1e+5

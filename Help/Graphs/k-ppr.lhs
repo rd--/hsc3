@@ -2,6 +2,7 @@ k-ppr (rd)
 
 > import Control.Monad
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { wrp i l r = linLin i (-1) 1 l r
 >     ; x = mouseX kr 0.05 0.35 Linear 0.1

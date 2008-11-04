@@ -1,6 +1,7 @@
 wind metals (jmcc)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let n = 6
 > in do { base <- M.expRand 60 4000

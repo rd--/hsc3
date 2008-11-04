@@ -2,6 +2,7 @@ modal space (jmcc)
 
 > import Sound.OpenSoundControl
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { b = 0
 >     ; p = [0, 2, 3.2, 5, 7, 9, 10] 

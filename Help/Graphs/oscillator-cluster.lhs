@@ -1,6 +1,7 @@
 oscillator cluster (rd)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { rng i l r = linLin i (-1) 1 l r
 >     ; ln a b d = line kr a b d RemoveSynth

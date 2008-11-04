@@ -1,6 +1,7 @@
 f-lets (rd)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { f_let t g j n f = 
 >       let pd = pulseDivider t j 0

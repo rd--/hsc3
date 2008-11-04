@@ -1,6 +1,7 @@
 discretion (rd)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { mkls bp t = envGen kr 1 1 0 1 RemoveSynth (envCoord bp t 1 EnvLin)
 >     ; part = do { f1 <- clone 2 (M.rand 50 55)

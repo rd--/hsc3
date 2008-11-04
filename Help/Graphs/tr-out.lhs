@@ -2,6 +2,7 @@ tr-out (rd)
 
 > import Sound.OpenSoundControl
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let node n = do { t <- M.dust kr 1.6
 >                 ; r1 <- M.tRand 0 6 t

@@ -1,6 +1,7 @@
 forest sounds (paul jones)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let insects = do { n1 <- M.brownNoise ar
 >                  ; n2 <- M.lfNoise2 kr 50

@@ -2,6 +2,7 @@ fwalk (rd)
 
 > import Sound.OpenSoundControl
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { n = [ 40.0, 47.0, 42.0, 40.0, 50.0
 >           , 43.0, 35.0, 43.0, 40.0, 47.0

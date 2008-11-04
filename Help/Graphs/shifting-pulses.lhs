@@ -1,6 +1,7 @@
 shifting pulses (rd)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > do { [n0, n1, n2] <- sequence (replicate 3 (clone 2 (M.brownNoise kr)))
 >    ; t <- M.dust kr 0.75

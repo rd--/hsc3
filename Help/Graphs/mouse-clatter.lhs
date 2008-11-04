@@ -1,6 +1,7 @@
 mouse clatter (rd)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { x = mouseX kr 100 12000 Linear 0.1
 >     ; y = mouseY kr 0.01 0.15 Linear 0.1 }

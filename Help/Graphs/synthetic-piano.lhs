@@ -1,6 +1,7 @@
 synthetic piano (jmcc)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let p = do { n <- M.iRand 36 90
 >            ; f <- M.rand 0.1 0.5

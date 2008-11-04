@@ -1,6 +1,7 @@
 trkl (rd)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let trkl d ul fu dy la fy =
 >         let { tf = xLine kr 1 ul d RemoveSynth

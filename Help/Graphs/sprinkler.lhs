@@ -1,6 +1,7 @@
 sprinkler (jmcc)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > do { n <- M.whiteNoise ar
 >    ; let { f = lfPulse kr 0.09 0 0.16 * 10 + 7

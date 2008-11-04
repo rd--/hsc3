@@ -1,6 +1,7 @@
 what was i thinking? (jmcc)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > do { n0 <- M.lfNoise1 kr 0.2
 >    ; n1 <- M.lfNoise1 kr 0.157

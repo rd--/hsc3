@@ -1,6 +1,7 @@
 klink (rd)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > do { n1 <- M.lfNoise0 kr (mce2 0.5 1.5)
 >    ; let { o = sinOsc kr n1 0

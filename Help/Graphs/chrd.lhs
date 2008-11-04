@@ -1,6 +1,7 @@
 chrd (rd)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let chrd = do { r0 <- M.rand 0.05 0.5
 >               ; [r1, r2] <- sequence (replicate 2 (M.rand (-1) 1))

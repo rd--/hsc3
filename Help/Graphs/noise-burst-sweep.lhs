@@ -1,6 +1,7 @@
 noise burst sweep (jmcc)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > do { n <- clone 2 (M.whiteNoise ar)
 >    ; let { lfoRate = mouseX kr 10 60 Exponential 0.2

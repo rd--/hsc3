@@ -2,6 +2,7 @@ dial history (jrhb)
 
 > import Data.List
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { mfv = [[697, 770, 852, 941], [1209, 1336, 1477, 1633]]
 >     ; numbers = [[3, 1]] ++ [[a, b] | a <- [0..2], b <- [0..2]]

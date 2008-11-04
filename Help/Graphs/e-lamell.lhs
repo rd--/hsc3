@@ -4,6 +4,7 @@ e-lamell (rd)
 > import Sound.OpenSoundControl
 > import Sound.SC3
 > import System.Random
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { now = NTPi 1
 >     ; rrand l r = getStdRandom (randomR (l, r))

@@ -1,6 +1,7 @@
 lg-timed (rd)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { timed r y p =
 >       do { d0 <- M.dser r p

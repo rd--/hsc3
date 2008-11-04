@@ -2,6 +2,7 @@ h-chatter (rd)
 
 > import Control.Monad
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { wrp i l r = linLin i (-1) 1 l r
 >     ; mma m a = return . (+ a)  . (* m)

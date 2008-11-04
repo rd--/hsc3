@@ -2,6 +2,7 @@ reverberated sine percussion (jmcc)
 
 > import Control.Monad
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { d = 6
 >     ; c = 5

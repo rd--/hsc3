@@ -1,6 +1,7 @@
 cricket (rd)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > do { r1 <- clone 2 (M.rand 10 13)
 >    ; r2 <- clone 2 (M.rand 10 13)

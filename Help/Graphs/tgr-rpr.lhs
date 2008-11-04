@@ -2,6 +2,7 @@ tgr-rpr (rd)
 
 > import Sound.OpenSoundControl
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { sf = "/home/rohan/audio/text.snd"
 >     ; preset = [ 0.01, 0.02

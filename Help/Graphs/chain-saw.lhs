@@ -5,6 +5,7 @@ increasing the stack limit of the haskell run time system]
 
 > import Control.Monad
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 > import System.Random
 
 > let { rrand l r = getStdRandom (randomR (l, r)) :: IO Double

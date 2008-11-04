@@ -1,6 +1,7 @@
 harmonic tumbling (jmcc)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { f = 80
 >     ; p = 10
