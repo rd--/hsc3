@@ -1,6 +1,5 @@
 {- A simple waveset synthesiser (rd) -}
 
-import Control.Concurrent
 import Control.Monad
 import Data.Array
 import qualified Data.Array.Storable as A
@@ -43,14 +42,6 @@ sf_channel fn n =
 
 -- * Score model.
 
--- | Pause current thread
-pause_thread :: Double -> IO ()
-pause_thread n = when (n > 1e-3) (threadDelay (floor (n * 1e6)))
-
--- | Pause until specified utc time.
-pause_thread_until :: Double -> IO ()
-pause_thread_until t = pause_thread . (t -) =<< utcr
-
 -- | Interval to schedule in advance.
 latency :: Double
 latency = 0.15
@@ -64,7 +55,7 @@ offset _ _ = undefined
 play_set :: Transport t => t -> [OSC] -> IO ()
 play_set _ [] = undefined
 play_set fd (x:xs) = do let (Bundle (UTCr t) _) = x
-                        pause_thread_until (t - latency)
+                        pauseThreadUntil (t - latency)
                         mapM_ (\e -> send fd e) (x:xs)
 
 -- | Play grouped score.
@@ -162,7 +153,7 @@ run_waveset fd fn =
        (nc, nf, sr) <- sf_info fn 
        b <- sf_channel fn 0
        let w = ws (prune 64 0 (fzc 0 b))
-           pl s = play_score 10 fd s >> pause_thread 1
+           pl s = play_score 10 fd s >> pauseThread 1
        putStrLn ("#f: " ++ show (nc, nf, sr))
        putStrLn ("#w: " ++ show (length w)) -- force w
        pl (mk_score sr (repeat 1) w)
