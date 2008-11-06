@@ -1,3 +1,4 @@
+-- | Envelope generators.
 module Sound.SC3.UGen.Envelope where
 
 import Sound.SC3.UGen.Enum

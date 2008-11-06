@@ -1,3 +1,4 @@
+-- | Request and display status information from the synthesis server.
 module Sound.SC3.Server.Status ( serverStatus
                                , serverSampleRateNominal
                                , serverSampleRateActual ) where

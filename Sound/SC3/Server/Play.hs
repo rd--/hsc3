@@ -1,3 +1,4 @@
+-- | Basic user interaction with the scsynth server.
 module Sound.SC3.Server.Play ( play, stop, reset, async
                              , withSC3, audition ) where
 

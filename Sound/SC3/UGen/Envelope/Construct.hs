@@ -1,3 +1,4 @@
+-- | Functions to generate break point data for standard envelope types.
 module Sound.SC3.UGen.Envelope.Construct where
 
 import Sound.SC3.UGen.UGen

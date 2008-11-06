@@ -1,3 +1,4 @@
+-- | Frequency domain unit generators.
 module Sound.SC3.UGen.FFT where
 
 import Sound.OpenSoundControl (OSC)

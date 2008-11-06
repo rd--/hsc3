@@ -1,3 +1,4 @@
+-- | Signal analysis unit generators.
 module Sound.SC3.UGen.Analysis where
 
 import Sound.SC3.UGen.Rate

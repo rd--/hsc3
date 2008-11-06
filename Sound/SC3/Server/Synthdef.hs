@@ -1,3 +1,5 @@
+-- | The unit-generator graph structure implemented by the
+--   SuperCollider synthesis server.
 module Sound.SC3.Server.Synthdef ( Node(..), FromPort(..), Graph(..)
                                   , synth, synthdef ) where
 

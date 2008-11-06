@@ -1,3 +1,4 @@
+-- | Common unit generator graphs.
 module Sound.SC3.UGen.Composite where
 
 import Sound.SC3.UGen.Filter

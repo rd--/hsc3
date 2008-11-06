@@ -1,3 +1,4 @@
+-- | Collection of modules for writing unit-generator graphs.
 module Sound.SC3.UGen (module Sound.SC3.UGen.Analysis,
                        module Sound.SC3.UGen.Buffer,
                        module Sound.SC3.UGen.Chaos,

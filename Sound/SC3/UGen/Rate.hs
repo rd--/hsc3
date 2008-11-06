@@ -1,3 +1,4 @@
+-- | Operating rate definitions and utilities.
 module Sound.SC3.UGen.Rate ( Rate(..)
                            , rateId
                            , ar, kr, ir, dr ) where
@@ -9,7 +10,8 @@ data Rate = IR | KR | AR | DR
 instance Ord Rate where
     compare a b = compare (rate_ord a) (rate_ord b)
 
--- | Rate constructors.
+-- | Rate constructors (lower case aliases of upper case data
+--   constructors).
 ar, kr, ir, dr :: Rate
 ar = AR
 kr = KR

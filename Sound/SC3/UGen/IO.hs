@@ -1,3 +1,4 @@
+-- | Audio bus, control bus and input device unit generators.
 module Sound.SC3.UGen.IO where
 
 import Sound.SC3.UGen.Enum

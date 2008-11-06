@@ -1,3 +1,5 @@
+-- | Bindings to unit generators not distributed with SuperCollider
+--   proper.
 module Sound.SC3.UGen.External where
 
 import Sound.SC3.UGen.Rate

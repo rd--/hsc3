@@ -1,3 +1,4 @@
+-- | Reader for LPC analysis data files.
 module Sound.SC3.UGen.External.LPC ( LPC(..)
                                    , LPCHeader(..)
                                    , LPCFrame

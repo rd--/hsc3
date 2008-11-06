@@ -1,3 +1,5 @@
+-- | Collection of modules for communicating with the SuperCollider
+--   synthesis server.
 module Sound.SC3.Server ( module Sound.SC3.Server.Command
                         , module Sound.SC3.Server.Synthdef
                         , module Sound.SC3.Server.Play

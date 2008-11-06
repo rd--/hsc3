@@ -1,10 +1,12 @@
+-- | Constructors for the command set implemented by the SuperCollider
+--   synthesis server.
 module Sound.SC3.Server.Command where
 
 import Data.Word
 import Sound.OpenSoundControl
 import Sound.SC3.Server.Utilities
 
--- * Instrument definition commands.
+-- * Instrument definition commands
 
 -- | Install a bytecode instrument definition. (Asynchronous)
 d_recv :: [Word8] -> OSC
@@ -22,7 +24,7 @@ d_loadDir p = Message "/d_loadDir" [String p]
 d_free :: [String] -> OSC
 d_free n = Message "/d_free" (map String n)
 
--- * Node commands.
+-- * Node commands
 
 -- | Place a node after another.
 n_after :: [(Int, Int)] -> OSC
@@ -69,7 +71,7 @@ n_setn nid l = Message "/n_setn" (Int nid : concatMap f l)
 n_trace :: [Int] -> OSC
 n_trace nid = Message "/n_trace" (map Int nid)
 
--- * Synthesis node commands.
+-- * Synthesis node commands
 
 -- | Get control values.
 s_get :: Int -> [String] -> OSC
@@ -99,7 +101,7 @@ s_newargs n i a t c = Message "/s_newargs" (String n : Int i : Int (fromEnum a) 
 s_noid :: [Int] -> OSC
 s_noid nid = Message "/s_noid" (map Int nid)
 
--- * Group node commands.
+-- * Group node commands
 
 -- | Free all synths in this group and all its sub-groups.
 g_deepFree :: [Int] -> OSC
@@ -121,13 +123,13 @@ g_new l = Message "/g_new" (mk_triples Int (Int . fromEnum) Int l)
 g_tail :: [(Int, Int)] -> OSC
 g_tail l = Message "/g_tail" (mk_duples Int Int l)
 
--- * Unit Generator commands.
+-- * Unit Generator commands
 
 -- | Send a command to a unit generator.
 u_cmd :: Int -> Int -> String -> [Datum] -> OSC
 u_cmd nid uid cmd arg = Message "/u_cmd" ([Int nid, Int uid, String cmd] ++ arg)
 
--- * Buffer commands.
+-- * Buffer commands
 
 -- | Allocates zero filled buffer to number of channels and samples. (Asynchronous)
 b_alloc :: Int -> Int -> Int -> OSC
@@ -186,7 +188,7 @@ b_write nid p h t f s z = Message "/b_write" [Int nid, String p, Int h, Int t, I
 b_zero :: Int -> OSC
 b_zero nid = Message "/b_zero" [Int nid]
 
--- * Control bus commands.
+-- * Control bus commands
 
 -- |  Fill ranges of bus values.
 c_fill :: [(Int, Int, Double)] -> OSC
@@ -209,7 +211,7 @@ c_setn :: [(Int, [Double])] -> OSC
 c_setn l = Message "/c_setn" (concatMap f l)
     where f (i,d) = Int i : Int (length d) : map Float d
 
--- * Server operation commands.
+-- * Server operation commands
 
 -- | Remove all bundles from the scheduling queue.
 clearSched :: OSC
@@ -242,7 +244,7 @@ status = Message "/status" []
 sync :: Int -> OSC
 sync sid = Message "/sync" [Int sid]
 
--- * Variants to simplify common cases.
+-- * Variants to simplify common cases
 
 -- | Set single sample value.
 b_set1 :: Int -> Int -> Double -> OSC

@@ -36,7 +36,7 @@ newtype Special = Special Int
 newtype UGenId = UGenId Int 
     deriving (Eq, Show)
 
--- * Unit generator node constructors.
+-- * Unit generator node constructors
 
 -- | Unit generator identifier constructor.
 uid :: Int -> UGenId
@@ -63,7 +63,7 @@ mrg2 = MRG
 proxy :: UGen -> Int -> UGen
 proxy = Proxy
 
--- * Unit generator node predicates.
+-- * Unit generator node predicates
 
 -- | Constant node predicate.
 isConstant :: UGen -> Bool
@@ -95,7 +95,7 @@ isMRG :: UGen -> Bool
 isMRG (MRG _ _) = True
 isMRG _ = False
 
--- * Multiple channel expansion.
+-- * Multiple channel expansion
 
 -- | Multiple channel expansion for two inputs.
 mce2 :: UGen -> UGen -> UGen
@@ -157,7 +157,7 @@ mceChannels u = [u]
 mceTranspose :: UGen -> UGen
 mceTranspose u = mce (map mce (transpose (map mceChannels (mceChannels u))))
 
--- * Multiple root graphs.
+-- * Multiple root graphs
 
 -- | Multiple root graph constructor.
 mrg :: [UGen] -> UGen
@@ -165,7 +165,7 @@ mrg [] = undefined
 mrg [x] = x
 mrg (x:xs) = MRG x (mrg xs)
 
--- * Unit generator function builders.
+-- * Unit generator function builders
 
 -- | Apply proxy transformation if required.
 proxify :: UGen -> UGen

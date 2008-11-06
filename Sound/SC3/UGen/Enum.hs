@@ -1,3 +1,4 @@
+-- | Data types for enumerated and non signal unit generator inputs.
 module Sound.SC3.UGen.Enum where
 
 import Sound.SC3.UGen.UGen

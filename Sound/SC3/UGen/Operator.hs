@@ -1,3 +1,4 @@
+-- | Enumerations of the unary and binary math unit generators.
 module Sound.SC3.UGen.Operator (Unary(..), unaryName,
                                 Binary(..), binaryName) where
 

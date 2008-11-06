@@ -1,3 +1,4 @@
+-- | Unit generators to query, read and write audio buffer. 
 module Sound.SC3.UGen.Buffer where
 
 import Sound.SC3.UGen.Enum
@@ -5,7 +6,7 @@ import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.Utilities
 
--- * Buffer query UGens.
+-- * Buffer query unit generators
 
 -- | Buffer channel count.
 bufChannels :: Rate -> UGen -> UGen
@@ -31,7 +32,7 @@ bufSampleRate r buf = mkOsc r "BufSampleRate" [buf] 1
 bufSamples :: Rate -> UGen -> UGen
 bufSamples r buf = mkOsc r "BufSamples" [buf] 1
 
--- * Buffer filters and delays.
+-- * Buffer filters and delays
 
 -- | Allpass filter (cubic interpolation).
 bufAllpassC :: UGen -> UGen -> UGen -> UGen -> UGen
@@ -69,7 +70,7 @@ bufDelayL buf i dly = mkFilter "BufDelayL" [buf, i, dly] 1
 bufDelayN :: UGen -> UGen -> UGen -> UGen
 bufDelayN buf i dly = mkFilter "BufDelayN" [buf, i, dly] 1
 
--- * Buffer I\/O.
+-- * Buffer I\/O
 
 -- | Buffer reader.
 bufRd :: Int -> Rate -> UGen -> UGen -> Loop -> Interpolation -> UGen

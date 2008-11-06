@@ -1,3 +1,5 @@
+-- | Unit generators to access information related to the synthesis
+--   environment.
 module Sound.SC3.UGen.Information where
 
 import Sound.SC3.UGen.UGen

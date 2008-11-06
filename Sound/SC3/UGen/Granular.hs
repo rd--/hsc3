@@ -1,3 +1,4 @@
+-- | Granular synthesis unit generators.
 module Sound.SC3.UGen.Granular where
 
 import Sound.SC3.UGen.Rate

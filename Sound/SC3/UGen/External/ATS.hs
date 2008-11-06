@@ -1,3 +1,4 @@
+-- | Reader for ATS analyis data files.
 module Sound.SC3.UGen.External.ATS ( ATS(..)
                                    , ATSHeader(..)
                                    , ATSFrame

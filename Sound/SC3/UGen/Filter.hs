@@ -1,3 +1,4 @@
+-- | Time-domain filter unit generators.
 module Sound.SC3.UGen.Filter where
 
 import Data.List

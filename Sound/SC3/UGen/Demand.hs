@@ -1,3 +1,4 @@
+-- | Demand rate unit generators.
 module Sound.SC3.UGen.Demand where
 
 import Sound.SC3.UGen.Enum

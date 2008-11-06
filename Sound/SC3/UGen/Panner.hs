@@ -1,3 +1,4 @@
+-- | Sound field location and analysis unit generators.
 module Sound.SC3.UGen.Panner where
 
 import Sound.SC3.UGen.UGen

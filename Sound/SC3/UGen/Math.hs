@@ -1,3 +1,4 @@
+-- | Non-standard mathematical classes and class instances.
 module Sound.SC3.UGen.Math where
 
 import Sound.SC3.UGen.Operator

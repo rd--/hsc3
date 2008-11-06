@@ -1,3 +1,4 @@
+-- | Non-realtime score generation.
 module Sound.SC3.Server.NRT ( encodeNRT 
                             , writeNRT
                             , putNRT ) where

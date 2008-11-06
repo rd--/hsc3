@@ -1,3 +1,4 @@
+-- | Chaotic functions.
 module Sound.SC3.UGen.Chaos where
 
 import Sound.SC3.UGen.Rate

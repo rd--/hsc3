@@ -1,3 +1,4 @@
+-- | A record based interface to the pitch unit generator.
 module Sound.SC3.UGen.Record.Pitch (
     Args(..),
     defaults,

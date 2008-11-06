@@ -1,3 +1,4 @@
+-- | Machine listening & feature extraction analysis unit generators.
 module Sound.SC3.UGen.MachineListening where
 
 import Data.List

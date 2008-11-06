@@ -1,3 +1,4 @@
+-- | Oscillators.
 module Sound.SC3.UGen.Oscillator where
 
 import Data.List
