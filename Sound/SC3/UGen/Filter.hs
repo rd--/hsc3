@@ -328,3 +328,28 @@ twoZero i freq radius = mkFilter "TwoZero" [i, freq, radius] 1
 wrapIndex :: UGen -> UGen -> UGen
 wrapIndex b i = mkFilter "WrapIndex" [b, i] 1
 
+-- * BEQ filters
+
+bLowPass :: UGen -> UGen -> UGen -> UGen
+bLowPass i f rq = mkFilter "BLowPass" [i, f, rq] 1
+
+bHiPass :: UGen -> UGen -> UGen -> UGen
+bHiPass i f rq = mkFilter "BHiPass" [i, f, rq] 1
+
+bAllPass :: UGen -> UGen -> UGen -> UGen
+bAllPass i f rq = mkFilter "BAllPass" [i, f, rq] 1
+
+bBandPass :: UGen -> UGen -> UGen -> UGen
+bBandPass i f bw = mkFilter "BBandPass" [i, f, bw] 1
+
+bBandStop :: UGen -> UGen -> UGen -> UGen
+bBandStop i f bw = mkFilter "BBandStop" [i, f, bw] 1
+
+bPeakEQ :: UGen -> UGen -> UGen -> UGen -> UGen
+bPeakEQ i f rq db = mkFilter "BPeakEQ" [i, f, rq, db] 1
+
+bLowShelf :: UGen -> UGen -> UGen -> UGen -> UGen
+bLowShelf i f rs db = mkFilter "BLowShelf" [i, f, rs, db] 1
+
+bHiShelf :: UGen -> UGen -> UGen -> UGen -> UGen
+bHiShelf i f rs db = mkFilter "BHiShelf" [i, f, rs, db] 1
