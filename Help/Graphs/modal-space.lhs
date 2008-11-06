@@ -13,7 +13,7 @@ modal space (jmcc)
 >                   ; m = o + d }
 >               in combN m 0.31 0.31 2 + m }
 > in withSC3 (\fd -> do { async fd (b_alloc b (length p) 1)
->                       ; synch fd (b_setn1 b 0 p)
+>                       ; send fd (b_setn1 b 0 p)
 >                       ; n <- clone 2 (lfNoise1 kr 3)
 >                       ; play fd (out 0 ((c n 48 + c n 72) * 0.25)) })
 

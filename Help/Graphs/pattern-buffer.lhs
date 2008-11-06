@@ -12,7 +12,7 @@ pattern buffer (rd)
 >     ; t = bufRdC 1 ar 10 p Loop 
 >     ; rs h = do { r0 <- rrand 0 nf
 >                 ; r1 <- rrand 0.0 1.0
->                 ; synch h (b_set1 10 r0 r1) } }
+>                 ; send h (b_set1 10 r0 r1) } }
 > in do { r1 <- sequence (replicate c (rrand 36 96))
 >       ; r2 <- sequence (replicate c (rrand (-1.0) 1.0))
 >       ; r3 <- rrand 0 1

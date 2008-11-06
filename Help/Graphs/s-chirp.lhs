@@ -18,5 +18,5 @@ s-chirp (rd)
 >                    ; r1 <- tRand 0.05 0.15 u
 >                    ; return (m * 0.5 + allpassC m 0.15 r0 r1) }
 >       ; withSC3 (\fd -> do { async fd (b_alloc 0 7 1)
->                            ; synch fd (b_setn1 0 0 scl)
+>                            ; send fd (b_setn1 0 0 scl)
 >                            ; play fd (out 0 o) }) }

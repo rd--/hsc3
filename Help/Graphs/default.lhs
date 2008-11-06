@@ -22,12 +22,12 @@ default (jmcc)
 >                        ; amp <- rrand (0.1, 0.3)
 >                        ; indx <- rrand (0, 7)
 >                        ; let note = [60, 62, 64, 65, 67, 69, 71, 72] !! indx
->                          in synch fd (s_new "default" nid AddToTail 1
+>                          in send fd (s_new "default" nid AddToTail 1
 >                                      [("freq", midiCPS note)
 >                                      ,("pan", pan)
 >                                      ,("amp", amp)])
 >                        ; pauseThread 0.075
->                        ; synch fd (n_set nid [("gate", 0)])
+>                        ; send fd (n_set nid [("gate", 0)])
 >                        ; pauseThread 0.075 } }
 > in withSC3 (\fd -> do { u <- def
 >                       ; async fd (d_recv (synthdef "default" (out 0 u)))

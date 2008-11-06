@@ -24,7 +24,7 @@ voscil (rd)
 >                           ; j <- sequence (replicate m (rrand 0 bn))
 >                           ; k <- sequence (replicate m (rrand (-1) 1))
 >                           ; async fd (b_alloc i bn 1)
->                           ; synch fd (b_set i (zip j k)) }
+>                           ; send fd (b_set i (zip j k)) }
 >                in do { mapM_ r_set [0 .. (b - 1)]
 >                      ; play fd (out 0 s) } }
 > in withSC3 run

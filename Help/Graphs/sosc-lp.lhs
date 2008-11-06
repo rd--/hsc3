@@ -10,8 +10,8 @@ sosc-lp (rd)
 >     ; b = [71, 89, 60, 57, 65, 36, 95, 92, 93, 97]
 >     ; setup fd = do { async fd (b_alloc 10 9 1)
 >                     ; async fd (b_alloc 11 9 1)
->                     ; synch fd (b_setn1 10 0 a)
->                     ; synch fd (b_setn1 11 0 b) }
+>                     ; send fd (b_setn1 10 0 a)
+>                     ; send fd (b_setn1 11 0 b) }
 >     ; d_env t = decay2 t 0.002 2.5
 >     ; idx t = stepper t 0 0 15 1 0
 >     ; f1 t = let { l = (bufRdL 1 kr 10 (idx t) Loop - 24)
@@ -27,6 +27,6 @@ sosc-lp (rd)
 
 > let { a = [71, 60, 65, 89, 36, 57, 95, 97, 92, 97]
 >     ; b = [89, 71, 60, 65, 57, 36, 92, 95, 93, 97]
->     ; resetup fd = do { synch fd (b_setn1 10 0 a)
->                       ; synch fd (b_setn1 11 0 b) } }
+>     ; resetup fd = do { send fd (b_setn1 10 0 a)
+>                       ; send fd (b_setn1 11 0 b) } }
 > in withSC3 resetup

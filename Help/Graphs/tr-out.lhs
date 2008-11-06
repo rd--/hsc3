@@ -12,11 +12,11 @@ tr-out (rd)
 >                   in return ( pan2 (sinOsc ar f 0) p a
 >                             , sendTrig t n (f / 660) ) }
 > in withSC3 (\fd -> do { async fd (b_alloc 0 6 1)
->                       ; synch fd (b_setn1 0 0 [60, 62, 64, 65, 67, 69])
+>                       ; send fd (b_setn1 0 0 [60, 62, 64, 65, 67, 69])
 >                       ; async fd (b_alloc 1 6 1)
->                       ; synch fd (b_setn1 1 0 [-1, -0.5, 0, 0.25, 0.75, 1.0])
+>                       ; send fd (b_setn1 1 0 [-1, -0.5, 0, 0.25, 0.75, 1.0])
 >                       ; async fd (b_alloc 2 6 1)
->                       ; synch fd (b_setn1 2 0 [0.01, 0.05, 0.1, 0.15, 0.25, 0.35])
+>                       ; send fd (b_setn1 2 0 [0.01, 0.05, 0.1, 0.15, 0.25, 0.35])
 >                       ; ns <- mapM node [1..4]
 >                       ; let o = sum (map fst ns)
 >                         in play fd (out 0 (mrg (o : map snd ns))) })

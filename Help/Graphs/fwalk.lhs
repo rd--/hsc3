@@ -23,5 +23,5 @@ fwalk (rd)
 > in withSC3 (\fd -> do { f1 <- fwalk 24
 >                       ; f2 <- fwalk 36
 >                       ; mapM_ (async fd) a
->                       ; mapM_ (synch fd) s
+>                       ; mapM_ (send fd) s
 >                       ; play fd (out 0 (f1 + f2)) })

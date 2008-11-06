@@ -24,6 +24,6 @@ loop   - when phase exceeds number of frames in buffer,
 >          ; o = sinOsc AR (f * mce2 1 1.01) 0 * 0.1
 >          ; g = mrg [d, out 0 o]
 >          ; run fd = do { async fd (b_alloc 0 24 1)
->                        ; synch fd (b_setn 0 [(0, (replicate 24 210))])
+>                        ; send fd (b_setn 0 [(0, (replicate 24 210))])
 >                        ; play fd g } }
 >      in withSC3 run }

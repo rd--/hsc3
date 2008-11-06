@@ -24,7 +24,7 @@ tgr-rpr (rd)
 >              , (0.0,   0.45) , (0.55, 1.0)
 >              , (-1.0,  0.0)  , (0.0, 1.0) ]
 >     ; edit fd = do { s <- mapM (\(l,r) -> rrand l r) rSet
->                    ; synch fd (c_setn [(0, s)])
+>                    ; send fd (c_setn [(0, s)])
 >                    ; pauseThread 0.35 } }
 > in do { clk <- dustR ar (in' 1 kr 0) (in' 1 kr 1)
 >       ; rat <- rpr 2 clk
@@ -33,7 +33,7 @@ tgr-rpr (rd)
 >       ; pan <- rpr 10 clk
 >       ; amp <- rpr 6 clk
 >       ; withSC3 (\fd -> do { async fd (b_allocRead 10 sf 0 0)
->                            ; synch fd (c_setn [(0, preset)])
+>                            ; send fd (c_setn [(0, preset)])
 >                            ; let o = tGrains 2 clk 10 rat pos dur pan amp 2
 >                              in play fd (out 0 o)
 >                            ; pauseThread 0.3

@@ -117,7 +117,7 @@ caution - audio feedback graph
 >            ; a <- rrand 0.05 0.1
 >            ; d <- rrand 0.001 0.005
 >            ; fl <- rrand 1 7
->            ; synch fd (n_set 1002 [("freq", f)
+>            ; send fd (n_set 1002 [("freq", f)
 >                                  ,("iamp", ia)
 >                                  ,("buf", 0)
 >                                  ,("loc", l)
@@ -126,7 +126,7 @@ caution - audio feedback graph
 >                                  ,("fall", fl)])
 >            ; pauseThread =<< choose [0.25, 0.5, 0.75, 1.5] } }
 > in withSC3 (\fd -> do { async fd (b_alloc 0 (length vlc * 2) 1)
->                       ; synch fd (b_setn1 0 0 (concatMap prep vlc))
+>                       ; send fd (b_setn1 0 0 (concatMap prep vlc))
 >                       ; async fd . d_recv . synthdef "plyr48" =<< plyr 48
->                       ; synch fd (s_new "plyr48" 1002 AddToTail 1 [])
+>                       ; send fd (s_new "plyr48" 1002 AddToTail 1 [])
 >                       ; sequence (replicate 32 (pattern fd)) })

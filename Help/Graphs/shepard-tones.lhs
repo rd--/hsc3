@@ -22,8 +22,8 @@ shepard tones (alberto de campo)
 >     ; tone = mix (sinOsc ar freqs 0 * amps) * 0.1 }
 > in withSC3 (\fd -> do { async fd (b_alloc 1 1024 1)
 >                       ; async fd (b_alloc 2 1024 1)
->                       ; synch fd (b_setn1 1 0 freqTable)
->                       ; synch fd (b_setn1 2 0 ampTable)
+>                       ; send fd (b_setn1 1 0 freqTable)
+>                       ; send fd (b_setn1 2 0 ampTable)
 >                       ; audition (out 0 tone) })
 
 { var ampTable = Signal.hanningWindow(1024).squared

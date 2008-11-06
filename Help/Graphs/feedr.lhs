@@ -16,7 +16,7 @@ warning: input/output feedback loop
 >                          ; r = i + sum (map (* x) (zipWith (*) d f)) }
 >                      in return (mrg [out 0 s, delayWr 10 r]) } }
 > in withSC3 (\fd -> do { nf <- fmap (* dl) (serverSampleRateActual fd)
->                       ; synch fd (b_alloc 10 (floor nf) 2)
+>                       ; send fd (b_alloc 10 (floor nf) 2)
 >                       ; audition =<< feedr 18 })
 
-> withSC3 (\fd -> synch fd (b_zero 10))
+> withSC3 (\fd -> send fd (b_zero 10))

@@ -104,7 +104,7 @@ scritto (rd)
 >                   , [40, 80,  100, 120, 120] ) ]
 >     ; s_msg n (_, f, a, b) = b_setn1 n 0 (f ++ a ++ b)
 >     ; s_alloc fd (s, b) = do { async fd (b_alloc b 15 1)
->                              ; synch fd (s_msg b s) }
+>                              ; send fd (s_msg b s) }
 >     ; buf_at b n = bufRd 1 kr b (mce [n .. n + 4]) NoLoop NoInterpolation
 >     ; v_filter i f a b = resonz i f (b / f) * dbAmp a
 >     ; v_filter_b bi i = v_filter i (buf_at bi 0) (buf_at bi 5) (buf_at bi 10)
