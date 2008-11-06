@@ -4,7 +4,6 @@ e-lamell (rd)
 > import Sound.OpenSoundControl
 > import Sound.SC3
 > import System.Random
-> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { now = NTPi 1
 >     ; rrand l r = getStdRandom (randomR (l, r))
@@ -20,7 +19,7 @@ e-lamell (rd)
 >                      ; d = ctl "d" 0.1
 >                      ; l = ctl "l" 0
 >                      ; a = ctl "a" 1 }
->                  in do { t <- M.tChoose 1 (mce2 1 32)
+>                  in do { t <- tChoose 1 (mce2 1 32)
 >                        ; let { h = line ar n t d DoNothing
 >                              ; s = blip ar f h
 >                              ; e_d = envPerc 0.005 d

@@ -1,18 +1,16 @@
 tgb (rd)
 
-> import Sound.OpenSoundControl
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 > import System.Random
 
 > let { mkls bp t = envGen kr 1 1 0 1 RemoveSynth (envCoord bp t 1 EnvLin)
 >     ; pm_t l r d t = let { le = mkls l d
 >                          ; re = mkls r d }
->                      in M.tRand le re t
+>                      in tRand le re t
 >     ; wrp i l r = linLin i (-1) 1 l r
 >     ; pm_n rt l d = let { le = mkls l d
 >                         ; re = mkls l d }
->                     in do { n <- M.whiteNoise rt
+>                     in do { n <- whiteNoise rt
 >                           ; return (wrp n le re) }
 >     ; rrand l r = getStdRandom (randomR (l, r))
 >     ; gb b d = do { gps <- pm_n ar [(0, 400), (1, 900)] d

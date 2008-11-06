@@ -1,6 +1,7 @@
 deep sea (jrhb)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Base as B
 
 > let { range s l r = let m = (r - l) * 0.5 in mulAdd s m (m + l)
 >     ; amp = 1

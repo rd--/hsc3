@@ -1,7 +1,7 @@
 tgrn (rd)
 
-> import Sound.OpenSoundControl
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Base as B
 
 > let { fn = "/home/rohan/audio/text.snd"
 >     ; tgrn b = let { trate = mouseY kr 2 120 Exponential 0.1

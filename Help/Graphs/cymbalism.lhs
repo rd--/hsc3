@@ -1,17 +1,16 @@
 cymbalism (jmcc)
 
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 
 > let p = 15
-> in do { f1 <- M.rand 500 2500
->       ; f2 <- M.rand 0 8000
->       ; let y = do { f <- sequence (replicate p (M.rand f1 (f1 + f2)))
->                    ; rt <- sequence (replicate p (M.rand 1 5))
+> in do { f1 <- rand 500 2500
+>       ; f2 <- rand 0 8000
+>       ; let y = do { f <- sequence (replicate p (rand f1 (f1 + f2)))
+>                    ; rt <- sequence (replicate p (rand 1 5))
 >                    ; return (klankSpec f (replicate p 1) rt) }
 >         in do { z <- clone 2 y
->               ; n <- fmap (* 0.03) (M.whiteNoise ar)
->               ; tf <- M.rand 0.5 3.5
+>               ; n <- fmap (* 0.03) (whiteNoise ar)
+>               ; tf <- rand 0.5 3.5
 >               ; let { t = impulse ar tf 0
 >                     ; s = decay t 0.004 * n
 >                     ; k = klank s 1 0 1 (mceTranspose z) }

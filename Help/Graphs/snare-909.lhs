@@ -1,7 +1,6 @@
 snare-909 (jmcc)
 
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { snr tr n v =
 >       let { e a b = envGen ar tr 1 0 1 DoNothing (envPerc a b)
@@ -19,8 +18,8 @@ snare-909 (jmcc)
 >     ; x = mouseX kr 1 4 Linear 0.2
 >     ; y = mouseY kr 0.25 0.75 Exponential 0.2
 >     ; t = impulse kr (3 * x) 0 }
-> in do { n <- M.whiteNoise ar
->       ; v <- M.tRand 0.25 1.0 t
+> in do { n <- whiteNoise ar
+>       ; v <- tRand 0.25 1.0 t
 >       ; audition (out 0 (pan2 (snr t n v) 0 y)) }
 
 { var snr =

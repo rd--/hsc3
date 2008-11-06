@@ -1,6 +1,5 @@
 voscil (rd)
 
-> import Sound.OpenSoundControl
 > import Sound.SC3
 > import qualified Sound.SC3.UGen.Unsafe as U
 > import System.Random
@@ -25,7 +24,7 @@ voscil (rd)
 >                           ; j <- sequence (replicate m (rrand 0 bn))
 >                           ; k <- sequence (replicate m (rrand (-1) 1))
 >                           ; async fd (b_alloc i bn 1)
->                           ; send fd (b_set i (zip j k)) }
+>                           ; synch fd (b_set i (zip j k)) }
 >                in do { mapM_ r_set [0 .. (b - 1)]
 >                      ; play fd (out 0 s) } }
 > in withSC3 run

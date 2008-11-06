@@ -1,12 +1,11 @@
 lg-timed (rd)
 
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { timed r y p =
->       do { d0 <- M.dser r p
->          ; d1 <- M.dcons 0 d0
->          ; d2 <- M.dser r y
+>       do { d0 <- dser r p
+>          ; d1 <- dcons 0 d0
+>          ; d2 <- dser r y
 >          ; let t = tDuty ar d1 0 RemoveSynth d2 1
 >            in return (latch t t) }
 >     ; lg u = return (lag u 0.03)

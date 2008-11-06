@@ -1,11 +1,10 @@
 demanding studies (jmcc)
 
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 
-> do { s1 <- M.drand dinf (mce [72, 75, 79, 82])
->    ; s2 <- M.drand 1 (mce [82, 84, 86])
->    ; s3 <- M.dseq dinf (mce [72, 75, 79, s2])
+> do { s1 <- drand dinf (mce [72, 75, 79, 82])
+>    ; s2 <- drand 1 (mce [82, 84, 86])
+>    ; s3 <- dseq dinf (mce [72, 75, 79, s2])
 >    ; let { x = mouseX kr 5 13 Linear 0.2
 >          ; tr = impulse kr x 0
 >          ; f = demand tr 0 (mce [midiCPS (s1 - 12), midiCPS s3])

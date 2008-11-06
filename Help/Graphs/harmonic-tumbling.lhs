@@ -1,13 +1,12 @@
 harmonic tumbling (jmcc)
 
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { f = 80
 >     ; p = 10
 >     ; t = xLine kr (mce2 10 11) 0.1 60 DoNothing
->     ; o h = do { n <- M.dust kr t
->                ; r <- M.rand 0 0.5
+>     ; o h = do { n <- dust kr t
+>                ; r <- rand 0 0.5
 >                ; let e = decay2 (n * 0.02) 0.005 r
 >                  in return (fSinOsc ar (f * (h + 1)) 0 * e) } }
 > in audition . out 0 . sum =<< mapM o [0..p]

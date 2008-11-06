@@ -1,16 +1,15 @@
 wind metals (jmcc)
 
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 
 > let n = 6
-> in do { base <- M.expRand 60 4000
->       ; range <- M.rand 500 8000
->       ; n0 <- clone 2 (M.brownNoise ar)
->       ; r0 <- M.expRand 0.125 0.5
->       ; n1 <- M.lfNoise1 kr r0
->       ; f <- sequence (replicate n (M.rand base (base + range)))
->       ; dt <- sequence (replicate n (M.rand 0.1 2))
+> in do { base <- expRand 60 4000
+>       ; range <- rand 500 8000
+>       ; n0 <- clone 2 (brownNoise ar)
+>       ; r0 <- expRand 0.125 0.5
+>       ; n1 <- lfNoise1 kr r0
+>       ; f <- sequence (replicate n (rand base (base + range)))
+>       ; dt <- sequence (replicate n (rand 0.1 2))
 >       ; let { exc = n0 * 0.007 * max 0 (n1 * 0.75 + 0.25)
 >             ; k = klankSpec f (replicate n 1) dt
 >             ; s = klank exc 1 0 1 k }

@@ -2,18 +2,17 @@ h-chatter (rd)
 
 > import Control.Monad
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { wrp i l r = linLin i (-1) 1 l r
 >     ; mma m a = return . (+ a)  . (* m)
->     ; h0 = do { n <- mma 5 5 =<< M.lfNoise0 kr 1
->               ; a <- mma 0.2 1.2 =<< M.lfNoise2 kr n
->               ; b <- mma 0.15 0.15 =<< M.lfNoise2 kr n
+>     ; h0 = do { n <- mma 5 5 =<< lfNoise0 kr 1
+>               ; a <- mma 0.2 1.2 =<< lfNoise2 kr n
+>               ; b <- mma 0.15 0.15 =<< lfNoise2 kr n
 >               ; let { f = 40
 >                     ; h = henonN ar (mce2 f (f * 0.5)) a b 0 0 }
 >                 in return (saw ar (h * 3200 + 1600) * 0.35) }
->     ; h1 = do { n0 <- M.lfNoise0 kr 32
->               ; n1 <- M.lfNoise0 kr 2
+>     ; h1 = do { n0 <- lfNoise0 kr 32
+>               ; n1 <- lfNoise0 kr 2
 >               ; let { a = mouseX kr 1.2 1.4 Linear 0.1
 >                     ; b = mouseY kr 0.2 0.3 Linear 0.1
 >                     ; h = wrp n0 1 32

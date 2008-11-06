@@ -3,7 +3,6 @@ caution - audio feedback graph
 
 > import Sound.OpenSoundControl
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 > import System.Random
 
 > let { rrand l r = getStdRandom (randomR (l, r))
@@ -85,8 +84,8 @@ caution - audio feedback graph
 >             , (-67.32140, -2.79905)
 >             , (-68.22010, -2.33831) ]
 >     ; partial i freq detune fall n =
->         do { n0 <- M.lfNoise1 kr 1
->            ; n1 <- M.rand 0.75 1.25
+>         do { n0 <- lfNoise1 kr 1
+>            ; n1 <- rand 0.75 1.25
 >            ; let { m = n * 2
 >                  ; ampl = bufRdN 1 kr 0 m NoLoop
 >                  ; f = freq * (n + 1) * (n0 * detune + 1) }
@@ -118,7 +117,7 @@ caution - audio feedback graph
 >            ; a <- rrand 0.05 0.1
 >            ; d <- rrand 0.001 0.005
 >            ; fl <- rrand 1 7
->            ; send fd (n_set 1002 [("freq", f)
+>            ; synch fd (n_set 1002 [("freq", f)
 >                                  ,("iamp", ia)
 >                                  ,("buf", 0)
 >                                  ,("loc", l)
@@ -127,7 +126,7 @@ caution - audio feedback graph
 >                                  ,("fall", fl)])
 >            ; pauseThread =<< choose [0.25, 0.5, 0.75, 1.5] } }
 > in withSC3 (\fd -> do { async fd (b_alloc 0 (length vlc * 2) 1)
->                       ; send fd (b_setn1 0 0 (concatMap prep vlc))
+>                       ; synch fd (b_setn1 0 0 (concatMap prep vlc))
 >                       ; async fd . d_recv . synthdef "plyr48" =<< plyr 48
->                       ; send fd (s_new "plyr48" 1002 AddToTail 1 [])
->                       ; replicateM 32 (pattern fd) })
+>                       ; synch fd (s_new "plyr48" 1002 AddToTail 1 [])
+>                       ; sequence (replicate 32 (pattern fd)) })

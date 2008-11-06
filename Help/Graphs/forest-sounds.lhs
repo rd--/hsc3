@@ -1,10 +1,9 @@
 forest sounds (paul jones)
 
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 
-> let insects = do { n1 <- M.brownNoise ar
->                  ; n2 <- M.lfNoise2 kr 50
+> let insects = do { n1 <- brownNoise ar
+>                  ; n2 <- lfNoise2 kr 50
 >                  ; let o = sinOsc kr (n2 * 50 + 50) 0 * 100 + 2000
 >                    in return (bpf n1 o 0.001 * 10) }
 > in audition . (out 0) =<< clone 2 insects

@@ -3,10 +3,9 @@ bit reduction (adc)
 sample rate decrease
 
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 
-> do { f <- M.lfNoise2 kr 8
->    ; nh <- M.lfNoise2 kr 3
+> do { f <- lfNoise2 kr 8
+>    ; nh <- lfNoise2 kr 3
 >    ; let { src = blip ar (f * 200 + 300) (nh * 10 + 20)
 >          ; sr = mouseX kr 1000 (sampleRate * 0.1) Exponential 0.2 }
 >      in audition (out 0 (latch src (impulse ar sr 0))) }
@@ -19,8 +18,8 @@ sample rate decrease
 
 bit rate decrease
 
-> do { f <- M.lfNoise2 kr 8
->    ; nh <- M.lfNoise2 kr 3
+> do { f <- lfNoise2 kr 8
+>    ; nh <- lfNoise2 kr 3
 >    ; let { src = blip ar (f * 200 + 300) (nh * 10 + 20)
 >          ; sr = mouseX kr 1000 (sampleRate * 0.1) Exponential 0.2
 >          ; bit_sz = mouseY kr 1 24 Exponential 0.2

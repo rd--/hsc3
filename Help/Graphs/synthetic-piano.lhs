@@ -1,14 +1,13 @@
 synthetic piano (jmcc)
 
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 
-> let p = do { n <- M.iRand 36 90
->            ; f <- M.rand 0.1 0.5
->            ; ph <- M.rand 0 (pi * 2)
+> let p = do { n <- iRand 36 90
+>            ; f <- rand 0.1 0.5
+>            ; ph <- rand 0 (pi * 2)
 >            ; let { s = impulse ar f ph * 0.1
 >                  ; e = decay2 s 0.008 0.04
->                  ; c i = do { n0 <- M.lfNoise2 ar 3000
+>                  ; c i = do { n0 <- lfNoise2 ar 3000
 >                             ; let { o = [-0.05, 0, 0.04] !! i
 >                                   ; dt = 1 / (midiCPS (n + o)) }
 >                               in return (combL (n0 * e) dt dt 6) }

@@ -1,15 +1,14 @@
 cricket (rd)
 
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 
-> do { r1 <- clone 2 (M.rand 10 13)
->    ; r2 <- clone 2 (M.rand 10 13)
->    ; r3 <- clone 2 (M.rand 4 7)
+> do { r1 <- clone 2 (rand 10 13)
+>    ; r2 <- clone 2 (rand 10 13)
+>    ; r3 <- clone 2 (rand 4 7)
 >    ; let { t = impulse kr 0.7 0
 >          ; e = decay2 (impulse kr r1 0) 0.001 0.005
 >          ; f = sinOsc kr r2 0 * e * r3 }
->      in do { r4 <- clone 2 (M.tRand 2220 2227 t)
+>      in do { r4 <- clone 2 (tRand 2220 2227 t)
 >            ; audition (out 0 (sinOsc ar r4 0 * f * 0.25)) } }
 
 { var r1 = Array.fill(2, { Rand.new(10, 13) })

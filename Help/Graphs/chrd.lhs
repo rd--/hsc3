@@ -1,12 +1,11 @@
 chrd (rd)
 
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 
-> let chrd = do { r0 <- M.rand 0.05 0.5
->               ; [r1, r2] <- sequence (replicate 2 (M.rand (-1) 1))
->               ; r3 <- M.rand 0.15 0.35
->               ; r4 <- M.rand 0.005 0.01
+> let chrd = do { r0 <- rand 0.05 0.5
+>               ; [r1, r2] <- sequence (replicate 2 (rand (-1) 1))
+>               ; r3 <- rand 0.15 0.35
+>               ; r4 <- rand 0.005 0.01
 >               ; let { m = mce [60, 65, 72, 77, 79, 84]
 >                     ; ds = 3
 >                     ; d = mce (map (* ds) [5, 4, 5, 7, 4, 5])

@@ -2,21 +2,20 @@ dial history (jrhb)
 
 > import Data.List
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { mfv = [[697, 770, 852, 941], [1209, 1336, 1477, 1633]]
 >     ; numbers = [[3, 1]] ++ [[a, b] | a <- [0..2], b <- [0..2]]
 >     ; range s l r = linLin s 0 1 l r
 >     ; mce_r = mce . map mce 
 >     ; mce_mrg = mrg . mceProxies }
-> in do { n <- M.dwhite dinf 7 12
->       ; w <- M.dwhite 1 2 7
->       ; b <- M.dbrown n 0.1 0.2 0.01
->       ; rate <- M.dseq dinf (mce2 w b)
->       ; q <- M.dseq dinf (mce [1..10])
->       ; g1 <- M.grayNoise ar
->       ; g2 <- M.grayNoise ar
->       ; d <- M.lfdNoise3 kr 0.5
+> in do { n <- dwhite dinf 7 12
+>       ; w <- dwhite 1 2 7
+>       ; b <- dbrown n 0.1 0.2 0.01
+>       ; rate <- dseq dinf (mce2 w b)
+>       ; q <- dseq dinf (mce [1..10])
+>       ; g1 <- grayNoise ar
+>       ; g2 <- grayNoise ar
+>       ; d <- lfdNoise3 kr 0.5
 >       ; let { tr = trig (tDuty kr rate 0 DoNothing q 1) 0.09
 >             ; pat = latch tr tr
 >             ; x = mouseX kr 0 1 Linear 0.2

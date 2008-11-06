@@ -1,10 +1,9 @@
 shifting pulses (rd)
 
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 
-> do { [n0, n1, n2] <- sequence (replicate 3 (clone 2 (M.brownNoise kr)))
->    ; t <- M.dust kr 0.75
+> do { [n0, n1, n2] <- sequence (replicate 3 (clone 2 (brownNoise kr)))
+>    ; t <- dust kr 0.75
 >    ; let { warp i = linLin i (-1) 1
 >          ; l = latch t t
 >          ; p = pulse ar (warp n0 2 (mce2 11 15)) 0.01 * 0.1 

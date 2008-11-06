@@ -2,7 +2,6 @@ nharm (rd)
 
 > import Control.Concurrent
 > import Control.Monad
-> import Sound.OpenSoundControl
 > import Sound.SC3
 > import System.Random
 
@@ -12,7 +11,7 @@ nharm (rd)
 >     ; klg m u = do { n <- rrand 4 u
 >                    ; d <- rrand 9 12
 >                    ; f <- rrand m (m + 2)
->                    ; l <- replicateM n (rrand 0.01 0.02)
+>                    ; l <- sequence (replicate n (rrand 0.01 0.02))
 >                    ; p <- rrand (-1.0) 1.0
 >                    ; let { a = 0.5
 >                          ; e = envGen kr 1 0.9 0 1 RemoveSynth (envSine d a)

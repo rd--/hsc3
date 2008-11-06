@@ -1,8 +1,6 @@
 karplus strong (alex mclean)
 
-> import Sound.OpenSoundControl
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { aA = ( "aA" 
 >            , [800, 1150, 2800, 3500, 4950]
@@ -33,9 +31,9 @@ karplus strong (alex mclean)
 >                    ; a6 = vf (toggleFF d * 15) a5
 >                    ; a7 = a6 * 1.5 }
 >               in mrg [localOut (a5 * 0.99), out 0 (mce [a7, a7])] }
-> in withSC3 (\fd -> do { send fd (c_setn [(0,cs aA), (15, cs aU)])
->                       ; n <- M.whiteNoise ar
->                       ; d <- M.dust kr 4
+> in withSC3 (\fd -> do { synch fd (c_setn [(0,cs aA), (15, cs aU)])
+>                       ; n <- whiteNoise ar
+>                       ; d <- dust kr 4
 >                       ; play fd (ks n d) })
 
 Variant on http://doc.gold.ac.uk/~ma503am/alex/vocable-source-released/

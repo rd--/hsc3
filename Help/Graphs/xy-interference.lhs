@@ -1,15 +1,18 @@
 xy-interference (rd)
 
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { x = mouseX kr 20 22000 Linear (mce2 0.005 0.025)
 >     ; y = mouseY kr 20 22000 Linear (mce2 0.005 0.075)
->     ; nd = do { n <- M.lfNoise0 kr (mce2 5 9)
+>     ; nd = do { n <- lfNoise0 kr (mce2 5 9)
 >               ; let { a = sinOsc ar (x + n) 0
 >                     ; b = sinOsc ar y 0 }
 >                 in return (a * b) } }
 > in audition . (out 0) . sum =<< sequence (replicate 3 nd)
+
+the same graph, written using a non-monadic noise constructor
+
+> import qualified Sound.SC3.UGen.Base as B
 
 > let { x = mouseX kr 20 22000 Linear (mce2 0.005 0.025)
 >     ; y = mouseY kr 20 22000 Linear (mce2 0.005 0.075)

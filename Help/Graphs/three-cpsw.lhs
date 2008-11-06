@@ -1,14 +1,13 @@
 three-cpsw (rd)
 
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 
-> do { t <- M.dust kr (mce2 12 18)
->    ; f0 <- M.tRand 1 64 t
->    ; f1 <- M.lfNoise0 kr f0
->    ; a <- M.tRand 0.0 0.5 t
->    ; dt <- M.tRand 0.975 1.025 t
->    ; dh <- M.tRand 0.750 0.7505 t
+> do { t <- dust kr (mce2 12 18)
+>    ; f0 <- tRand 1 64 t
+>    ; f1 <- lfNoise0 kr f0
+>    ; a <- tRand 0.0 0.5 t
+>    ; dt <- tRand 0.975 1.025 t
+>    ; dh <- tRand 0.750 0.7505 t
 >    ; let { f = f1 * mce2 9000 12000 + 9500
 >          ; o = saw ar f + saw ar (f * dh) + saw ar (f * dt) }
 >      in audition (out 0 (clip2 (o * a) 0.75)) }

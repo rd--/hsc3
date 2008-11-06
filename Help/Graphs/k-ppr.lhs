@@ -2,7 +2,6 @@ k-ppr (rd)
 
 > import Control.Monad
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { wrp i l r = linLin i (-1) 1 l r
 >     ; x = mouseX kr 0.05 0.35 Linear 0.1
@@ -11,10 +10,10 @@ k-ppr (rd)
 >     ; tf = wrp ti 100 200
 >     ; t = impulse ar tf 0
 >     ; stream lf rf ld rd g = 
->         do { r1 <- M.rand 9 18
+>         do { r1 <- rand 9 18
 >            ; let t' = pulseDivider t r1 0
->              in do { r2 <- M.tRand lf (wrp ti lf rf) t'
->                    ; r3 <- M.tRand ld rd t'
+>              in do { r2 <- tRand lf (wrp ti lf rf) t'
+>                    ; r3 <- tRand ld rd t'
 >                    ; return (ringz (decay2 t' 0.01 0.5) r2 (r3 * y) * g) } } 
 >     ; s1 = stream 3140 6240 0.050 0.005 0.15 
 >     ; s2 = stream 0400 9000 0.005 0.005 0.15 }

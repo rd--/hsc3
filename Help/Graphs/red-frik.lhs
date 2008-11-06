@@ -1,19 +1,18 @@
 red frik (f0)
 
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 
 > let red tr n = 
->     do { r1 <- M.tRand 0.3 3 tr
->        ; r2 <- M.tRand 0.3 5 tr
->        ; r3 <- M.tRand 0 0.5 tr
->        ; r4 <- M.tRand 0.49 0.56 tr
->        ; r5 <- M.tRand 0.3 0.6 tr
->        ; r6 <- M.tRand 0.3 0.5 tr
+>     do { r1 <- tRand 0.3 3 tr
+>        ; r2 <- tRand 0.3 5 tr
+>        ; r3 <- tRand 0 0.5 tr
+>        ; r4 <- tRand 0.49 0.56 tr
+>        ; r5 <- tRand 0.3 0.6 tr
+>        ; r6 <- tRand 0.3 0.5 tr
 >        ; let { o1 = fSinOsc kr r2 0 * r3 + r4
 >              ; o2 = fSinOsc kr o1 r5 * r6 }
 >          in return (rhpf n r1 o2) }
-> in do { n <- clone 2 (M.brownNoise ar)
+> in do { n <- clone 2 (brownNoise ar)
 >       ; let tr = impulse kr 0.1 0
 >         in audition . out 0 =<< red tr n }
 

@@ -1,8 +1,6 @@
 scritto (rd)
 
-> import Sound.OpenSoundControl
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { scritto = [ ( "sA" 
 >                   , [800, 1150, 2900, 3900, 4950]
@@ -106,16 +104,16 @@ scritto (rd)
 >                   , [40, 80,  100, 120, 120] ) ]
 >     ; s_msg n (_, f, a, b) = b_setn1 n 0 (f ++ a ++ b)
 >     ; s_alloc fd (s, b) = do { async fd (b_alloc b 15 1)
->                              ; send fd (s_msg b s) }
+>                              ; synch fd (s_msg b s) }
 >     ; buf_at b n = bufRd 1 kr b (mce [n .. n + 4]) NoLoop NoInterpolation
 >     ; v_filter i f a b = resonz i f (b / f) * dbAmp a
 >     ; v_filter_b bi i = v_filter i (buf_at bi 0) (buf_at bi 5) (buf_at bi 10)
 >     ; mk_instr bx = do 
->         { n <- M.lfNoise2 kr 3
+>         { n <- lfNoise2 kr 3
 >         ; let { t = impulse ar (n * 9 + 9) 0
->               ; i d = do { n1 <- M.tRand 0.02 0.06 t
->                          ; n2 <- M.tiRand 30 52 t
->                          ; n3 <- M.tiRand 16 32 t
+>               ; i d = do { n1 <- tRand 0.02 0.06 t
+>                          ; n2 <- tiRand 30 52 t
+>                          ; n3 <- tiRand 16 32 t
 >                          ; let { p = pulseDivider t d 0
 >                                ; b = blip ar (midiCPS n2) n3 }
 >                            in return (decay2 p 0.01 n1 * b * 12) }

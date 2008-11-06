@@ -1,18 +1,17 @@
 ccomb (rd)
 
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
 
 > let { rng l r i = linLin i (-1) 1 l r
 >     ; lwr = 48
 >     ; flwr = midiCPS lwr
->     ; spart t = do { n <- fmap (rng lwr 72.0) (M.lfNoise2 kr 0.1)
->                    ; e <- fmap (decay2 t 0.01) (M.tRand 0.05 0.75 t)
->                    ; x <- fmap (* e) (M.whiteNoise ar)
->                    ; m <- M.lfNoise2 kr 0.1
+>     ; spart t = do { n <- fmap (rng lwr 72.0) (lfNoise2 kr 0.1)
+>                    ; e <- fmap (decay2 t 0.01) (tRand 0.05 0.75 t)
+>                    ; x <- fmap (* e) (whiteNoise ar)
+>                    ; m <- lfNoise2 kr 0.1
 >                    ; let f = lag (midiCPS n) 0.25
 >                      in return (combC x (recip flwr) (recip f) (rng 1 8 m)) } }
-> in do { t <- M.dust kr (mce2 0.75 0.35)
+> in do { t <- dust kr (mce2 0.75 0.35)
 >       ; audition . (out 0) . (* 0.1) . sum =<< sequence (replicate 12 (spart t)) }
 
 { var lwr = 48
