@@ -1,5 +1,5 @@
 -- | Basic user interaction with the scsynth server.
-module Sound.SC3.Server.Play ( play, stop, reset, async
+module Sound.SC3.Server.Play ( play, stop, reset, synch, async
                              , withSC3, audition ) where
 
 import Sound.OpenSoundControl
@@ -19,6 +19,10 @@ play fd u = do let d = synthdef "Anonymous" u
 -- | Free all nodes at the group with node id 1.
 stop :: Transport t => t -> IO ()
 stop fd = send fd (g_freeAll [1])
+
+-- | Send an osc message and do not wait for a reply.
+synch :: Transport t => t -> OSC -> IO ()
+synch = send
 
 -- | Send an osc message and wait for a reply.
 async :: Transport t => t -> OSC -> IO OSC
