@@ -157,6 +157,8 @@ through unit generator graphs.
 In the expression below, the frequency input
 causes two sinOsc unit generators to be created.
 
+> import Sound.SC3
+
 > let { x = mouseX KR (-1) 1 Linear 0.1
 >     ; o1 = pulse AR 440 0.1
 >     ; o2 = sinOsc AR (mce [110, 2300]) 0 * 0.1 }
@@ -227,6 +229,8 @@ for non-deterministic unit generators.
 
 To write this simple graph in haskell we can use
 the clone function:
+
+> import Control.Monad
 
 > let f = liftM (* mce [0.1, 0.05])
 > in do { a <- f (clone 2 (whiteNoise AR))
