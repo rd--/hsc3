@@ -11,5 +11,5 @@ The server status command can extract nominal and
 actual sample rates from a running server.
 
 > withSC3 (\fd -> liftM2 (,)
->                        (serverSampleRateNominal fd) 
+>                        (serverSampleRateNominal fd)
 >                        (serverSampleRateActual fd))

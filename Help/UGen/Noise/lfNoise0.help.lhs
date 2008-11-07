@@ -13,5 +13,5 @@ Modulate frequency.
 
 Use as frequency control.
 
-> f <- lfNoise0 KR 4 
+> f <- lfNoise0 KR 4
 > audition (out 0 (sinOsc AR (f * 400 + 450) 0 * 0.1))

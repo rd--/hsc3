@@ -1,4 +1,4 @@
--- | Unit generators to query, read and write audio buffer. 
+-- | Unit generators to query, read and write audio buffers. 
 module Sound.SC3.UGen.Buffer where
 
 import Sound.SC3.UGen.Enum

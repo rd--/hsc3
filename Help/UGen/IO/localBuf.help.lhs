@@ -2,7 +2,7 @@ localBuf id nf nc m
 
     nf - number of frames (default: 1)
     nc - number of channels for multiple channel buffers (default: 1)
-     m - the first LocalBuf in a SynthDef may define the maximum buffers 
+     m - the first LocalBuf in a SynthDef may define the maximum buffers
          used (default 8)
 
 Allocate a buffer local to the synthesis graph.
@@ -39,7 +39,7 @@ bufCombC needs no clearing, because the delay line is filled by the ugen
 >    ; n <- whiteNoise AR
 >    ; let { z = decay d 0.3 * n
 >          ; l = xLine KR 0.0001 0.01 20 DoNothing
->          ; sr = sampleRate 
+>          ; sr = sampleRate
 >          ; b = mce (map (\i -> localBuf (uid i) sr 2 8) [0, 1]) }
 >      in audition (out 0 (bufCombC b z l 0.2)) }
 
