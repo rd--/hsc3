@@ -1,4 +1,4 @@
-LocalBuf id nf nc m
+localBuf id nf nc m
 
     nf - number of frames (default: 1)
     nc - number of channels for multiple channel buffers (default: 1)

@@ -137,7 +137,7 @@ localBuf z nf nc mx = mkOscId z IR "LocalBuf" [nc, nf, mx] 1
 
 -- | Set local buffer values.
 setBuf :: UGen -> [UGen] -> UGen -> UGen
-setBuf b xs o = mkOsc IR "SetBuf" ([b, o, fromIntegral (length xs)] ++ xs) 0
+setBuf b xs o = mkOsc IR "SetBuf" ([b, o, fromIntegral (length xs)] ++ xs) 1
 
 -- | 
 asLocalBuf :: UGenId -> [UGen] -> UGen
