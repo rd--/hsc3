@@ -200,7 +200,7 @@ is_sink u
 -- Ensure input UGen is valid, ie. not a sink.
 check_input :: UGen -> UGen
 check_input u = if is_sink u 
-                then error ("illegal input" ++ show u) 
+                then error ("illegal input: " ++ show u) 
                 else u
 
 -- | Construct proxied and multiple channel expanded UGen.

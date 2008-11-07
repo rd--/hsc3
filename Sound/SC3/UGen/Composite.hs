@@ -1,9 +1,11 @@
 -- | Common unit generator graphs.
 module Sound.SC3.UGen.Composite where
 
+import Sound.SC3.UGen.Buffer
 import Sound.SC3.UGen.Filter
 import Sound.SC3.UGen.Information
 import Sound.SC3.UGen.IO
+import Sound.SC3.UGen.Math
 import Sound.SC3.UGen.Oscillator
 import Sound.SC3.UGen.Panner
 import Sound.SC3.UGen.Rate
@@ -20,6 +22,13 @@ freqShift :: UGen -> UGen -> UGen -> UGen
 freqShift i f p = mix (h * o)
     where o = sinOsc AR f (mce [p + 0.5 * pi, p])
           h = hilbert i
+
+-- | Linear interpolating variant on index.
+indexL :: UGen -> UGen -> UGen
+indexL b i =
+    let x = index b i
+        y = index b (i + 1)
+    in linLin (frac i) 0 1 x y
 
 -- | Collapse multiple channel expansion by summing.
 mix :: UGen -> UGen

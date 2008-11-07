@@ -17,6 +17,8 @@ times shorter than the threshold of pitch (i.e. < 0.05 seconds or >
 20Hz), or where sample accurate alignment is required. See the
 resonator example below.
 
+> import Sound.SC3
+
 > do { n <- whiteNoise AR
 >    ; let { a0 = decay (impulse AR 0.3 0) 0.1 * n * 0.2
 >          ; a1 = localIn 2 AR + mce [a0, 0]
