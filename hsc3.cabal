@@ -24,6 +24,7 @@ Data-files:        README
                    Help/Graphs/aleatoric-quartet.lhs
                    Help/Graphs/analog-bubbles.lhs
                    Help/Graphs/babbling-brook.lhs
+                   Help/Graphs/birds.lhs
                    Help/Graphs/bit-reduction.lhs
                    Help/Graphs/bottle.lhs
                    Help/Graphs/bowed-string.lhs
@@ -35,6 +36,7 @@ Data-files:        README
                    Help/Graphs/cut-outs.lhs
                    Help/Graphs/cymbalism.lhs
                    Help/Graphs/deep-sea.lhs
+                   Help/Graphs/default.lhs
                    Help/Graphs/demanding-studies.lhs
                    Help/Graphs/dial-history.lhs
                    Help/Graphs/diffraction.lhs
@@ -42,6 +44,7 @@ Data-files:        README
                    Help/Graphs/drummer.lhs
                    Help/Graphs/eggcrate.lhs
                    Help/Graphs/e-lamell.lhs
+                   Help/Graphs/fbl-fbf.lhs
                    Help/Graphs/feedr.lhs
                    Help/Graphs/f-lets.lhs
                    Help/Graphs/fm-iter.lhs
@@ -54,6 +57,7 @@ Data-files:        README
                    Help/Graphs/h-chatter.lhs
                    Help/Graphs/hh-808.lhs
                    Help/Graphs/implosion.lhs
+                   Help/Graphs/insects.lhs
                    Help/Graphs/karplus-strong.lhs
                    Help/Graphs/klink.lhs
                    Help/Graphs/k-ppr.lhs
@@ -68,6 +72,7 @@ Data-files:        README
                    Help/Graphs/noise-burst-sweep.lhs
                    Help/Graphs/one-line.lhs
                    Help/Graphs/oscillator-cluster.lhs
+                   Help/Graphs/overlap-add.lhs
                    Help/Graphs/pattern-buffer.lhs
                    Help/Graphs/plucked-strings.lhs
                    Help/Graphs/police-state.lhs
@@ -92,10 +97,13 @@ Data-files:        README
                    Help/Graphs/synthetic-piano.lhs
                    Help/Graphs/tank.lhs
                    Help/Graphs/tgb.lhs
+                   Help/Graphs/tgrn.lhs
                    Help/Graphs/tgr-rpr.lhs
                    Help/Graphs/theremin.lhs
                    Help/Graphs/three-cpsw.lhs
+                   Help/Graphs/thx.lhs
                    Help/Graphs/tipnso.lhs
+                   Help/Graphs/train.lhs
                    Help/Graphs/trkl.lhs
                    Help/Graphs/trmlo.lhs
                    Help/Graphs/tr-out.lhs
@@ -152,13 +160,16 @@ Data-files:        README
                    Help/Server/quit.help.lhs
                    Help/Server/s_get.help.lhs
                    Help/Server/s_getn.help.lhs
+                   Help/Server/s_newargs.help.lhs
                    Help/Server/s_new.help.lhs
                    Help/Server/s_noid.help.lhs
                    Help/Server/status.help.lhs
                    Help/Server/sync.help.lhs
                    Help/Server/tr.help.lhs
                    Help/Server/u_cmd.help.lhs
+                   Help/Tutorial/non-real-time.hs
                    Help/Tutorial/Tutorial.lhs
+                   Help/Tutorial/Waveset.hs
                    Help/UGen/Analysis/amplitude.help.lhs
                    Help/UGen/Analysis/compander.help.lhs
                    Help/UGen/Analysis/pitch.help.lhs
@@ -219,6 +230,7 @@ Data-files:        README
                    Help/UGen/Demand/dseq.help.lhs
                    Help/UGen/Demand/dser.help.lhs
                    Help/UGen/Demand/dseries.help.lhs
+                   Help/UGen/Demand/dstutter.help.lhs
                    Help/UGen/Demand/dswitch1.help.lhs
                    Help/UGen/Demand/dswitch.help.lhs
                    Help/UGen/Demand/duty.help.lhs
@@ -240,6 +252,7 @@ Data-files:        README
                    Help/UGen/External/atsNoiSynth.help.lhs
                    Help/UGen/External/atsSynth.help.lhs
                    Help/UGen/External/ay.help.lhs
+                   Help/UGen/External/fm7.help.lhs
                    Help/UGen/External/lpcSynth.help.lhs
                    Help/UGen/External/lpcVals.help.lhs
                    Help/UGen/External/membraneCircle.help.lhs
@@ -255,6 +268,7 @@ Data-files:        README
                    Help/UGen/FFT/fft.help.lhs
                    Help/UGen/FFT/ifft.help.lhs
                    Help/UGen/FFT/packFFT.help.lhs
+                   Help/UGen/FFT/partConv.help.lhs
                    Help/UGen/FFT/pv_BinScramble.help.lhs
                    Help/UGen/FFT/pv_BinShift.help.lhs
                    Help/UGen/FFT/pv_BinWipe.help.lhs
@@ -274,6 +288,13 @@ Data-files:        README
                    Help/UGen/Filter/allpassC.help.lhs
                    Help/UGen/Filter/allpassL.help.lhs
                    Help/UGen/Filter/allpassN.help.lhs
+                   Help/UGen/Filter/bBandPass.help.lhs
+                   Help/UGen/Filter/bBandStop.help.lhs
+                   Help/UGen/Filter/bHiPass.help.lhs
+                   Help/UGen/Filter/bHiShelf.help.lhs
+                   Help/UGen/Filter/bLowPass.help.lhs
+                   Help/UGen/Filter/bLowShelf.help.lhs
+                   Help/UGen/Filter/bPeakEQ.help.lhs
                    Help/UGen/Filter/bpf.help.lhs
                    Help/UGen/Filter/bpz2.help.lhs
                    Help/UGen/Filter/brf.help.lhs
@@ -349,6 +370,7 @@ Data-files:        README
                    Help/UGen/IO/inTrig.help.lhs
                    Help/UGen/IO/keyState.help.lhs
                    Help/UGen/IO/lagIn.help.lhs
+                   Help/UGen/IO/localBuf.help.lhs
                    Help/UGen/IO/localIn.help.lhs
                    Help/UGen/IO/localOut.help.lhs
                    Help/UGen/IO/mouseButton.help.lhs
@@ -360,6 +382,7 @@ Data-files:        README
                    Help/UGen/IO/soundIn.help.lhs
                    Help/UGen/IO/xOut.help.lhs
                    Help/UGen/MachineListening/beatTrack.help.lhs
+                   Help/UGen/MachineListening/loudness.help.lhs
                    Help/UGen/MachineListening/onsets.help.lhs
                    Help/UGen/Math/absDif.help.lhs
                    Help/UGen/Math/abs.help.lhs
