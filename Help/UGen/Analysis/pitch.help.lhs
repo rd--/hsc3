@@ -17,6 +17,8 @@ Default values at sclang are: in = 0, initFreq = 440, minFreq = 60,
 maxFreq = 4000, execFreq = 100, maxBinsPerOctave = 16, median = 1,
 ampThreshold = 0.01, peakThreshold = 0.5, downSample = 1.
 
+> import Sound.SC3
+
 > let { x = mouseX KR 220 660 Linear 0.1
 >     ; y = mouseY KR 0.05 0.25 Linear 0.1
 >     ; s = sinOsc AR x 0 * y

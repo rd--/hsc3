@@ -17,9 +17,13 @@ step - step value each trigger. May be negative.
 resetval - value to which the counter is reset when it receives a
            reset trigger. If nil, then this is patched to min.
 
+> import Sound.SC3
+
 > let { i = impulse KR 10 0
 >     ; f = stepper i 0 4 16 (-3) 4 * 100 }
 > in audition (out 0 (sinOsc AR f 0 * 0.1))
+
+> import System.Random
 
 > let { compose = foldl (flip (.)) id
 >     ; noisec n l r = randomRs (l,r) (mkStdGen n)
