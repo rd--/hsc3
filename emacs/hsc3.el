@@ -112,9 +112,19 @@
 				      (thing-at-point 'symbol)
 				      "\\.help\\.lhs"))))
 
+(defun chunk-string (n s)
+  "Split a string into chunks of 'n' characters."
+  (let* ((l (length s))
+         (m (min l n))
+         (c (substring s 0 m)))
+    (if (<= l n)
+        (list c)
+      (cons c (chunk-string n (substring s n))))))
+
 (defun hsc3-send-string (s)
   (if (comint-check-proc hsc3-buffer)
-      (comint-send-string hsc3-buffer (concat s "\n"))
+      (let ((cs (chunk-string 64 (concat s "\n"))))
+        (mapcar (lambda (c) (comint-send-string hsc3-buffer c)) cs))
     (error "no hsc3 process running?")))
 
 (defun hsc3-transform-and-store (f s)
