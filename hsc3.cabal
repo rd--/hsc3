@@ -1,5 +1,5 @@
 Name:              hsc3
-Version:           0.5
+Version:           0.6
 Synopsis:          Haskell SuperCollider
 Description:       hsc3 provides Sound.SC3, a haskell module that 
                    facilitates using haskell as a client to the 
@@ -470,7 +470,7 @@ Data-files:        README
                    Help/UGen/Trigger/trig.help.lhs
 
 Library
-  Build-Depends:   base, binary, bytestring, containers, hosc == 0.5,
+  Build-Depends:   base, binary, bytestring, containers, hosc == 0.6,
                    network, process, random
   GHC-Options:     -Wall -fwarn-tabs
   Exposed-modules: Sound.SC3
