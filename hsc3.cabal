@@ -513,6 +513,7 @@ Library
                    Sound.SC3.UGen.Oscillator
                    Sound.SC3.UGen.Panner
                    Sound.SC3.UGen.Rate
+                   Sound.SC3.UGen.Record
                    Sound.SC3.UGen.Record.Pitch
                    Sound.SC3.UGen.UGen
                    Sound.SC3.UGen.UGen.Lift
