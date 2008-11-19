@@ -63,7 +63,7 @@ data Verbosity =
   | Verbose
   | VeryVerbose
   | ExtremelyVerbose
-  deriving (Eq, Show)
+  deriving (Eq, Read, Show)
 
 -- 'Enum' instance for 'Verbosity' for conversion to a commandline option.
 instance Enum (Verbosity) where
@@ -98,7 +98,7 @@ data ServerOptions = ServerOptions {
     numberOfRandomSeeds         :: Int,         -- ^ Number of random number generator seeds
     loadSynthDefs               :: Bool,        -- ^ If 'True', load synth definitions from /synthdefs/ directory on startup
     verbosity                   :: Verbosity    -- ^ 'Verbosity' level
-} deriving (Eq, Show)
+} deriving (Eq, Read, Show)
 
 -- | Default server options.
 defaultServerOptions :: ServerOptions
@@ -163,7 +163,7 @@ data RTOptions t = RTOptions {
     hardwareSampleRate      :: Int,             -- ^ Hardware buffer size (no effect with JACK)
     inputStreamsEnabled     :: Maybe Int,       -- ^ Enabled input streams (CoreAudio only)
     outputStreamsEnabled    :: Maybe Int        -- ^ Enabled output streams (CoreAudio only)
-} deriving (Eq, Show)
+} deriving (Eq, Read, Show)
 
 -- | Default realtime server options.
 defaultRTOptions :: RTOptions t
@@ -215,7 +215,7 @@ data NRTOptions = NRTOptions {
     outputSampleRate    :: Int,             -- ^ Output sound file sample rate
     outputHeaderFormat  :: String,          -- ^ Output sound file header format
     outputSampleFormat  :: String           -- ^ Output sound file sample format
-} deriving (Eq, Show)
+} deriving (Eq, Read, Show)
 
 -- | Default non-realtime server options.
 defaultNRTOptions :: NRTOptions
