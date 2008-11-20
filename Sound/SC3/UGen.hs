@@ -6,6 +6,7 @@ module Sound.SC3.UGen (module Sound.SC3.UGen.Analysis,
                        module Sound.SC3.UGen.Composite.Monadic,
                        module Sound.SC3.UGen.Demand,
                        module Sound.SC3.UGen.Demand.Monadic,
+                       module Sound.SC3.UGen.DiskIO,
                        module Sound.SC3.UGen.Envelope,
                        module Sound.SC3.UGen.Envelope.Construct,
                        module Sound.SC3.UGen.Enum,
@@ -35,6 +36,7 @@ import Sound.SC3.UGen.Composite
 import Sound.SC3.UGen.Composite.Monadic
 import Sound.SC3.UGen.Demand
 import Sound.SC3.UGen.Demand.Monadic
+import Sound.SC3.UGen.DiskIO
 import Sound.SC3.UGen.Envelope
 import Sound.SC3.UGen.Envelope.Construct
 import Sound.SC3.UGen.Enum
