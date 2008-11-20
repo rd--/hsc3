@@ -237,6 +237,8 @@ Data-files:        README
                    Help/UGen/Demand/dwhite.help.lhs
                    Help/UGen/Demand/dxrand.help.lhs
                    Help/UGen/Demand/tDuty.help.lhs
+                   Help/UGen/DiskIO/diskIn.help.lhs
+                   Help/UGen/DiskIO/vDiskIn.help.lhs
                    Help/UGen/Envelope/detectSilence.help.lhs
                    Help/UGen/Envelope/done.help.lhs
                    Help/UGen/Envelope/envGen.help.lhs
