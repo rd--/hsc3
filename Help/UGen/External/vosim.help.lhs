@@ -13,6 +13,8 @@ vosim tr freq nCycles decay
 
      decay - sets the decay factor.
 
+> import Sound.SC3
+
 > do { p <- tRand 0 1 (impulse AR 6 0)
 >    ; let { t = impulse AR (9 * ( 1 + ( p >* 0.95))) 0
 >          ; x = mouseX KR 0.25 2 Linear 0.2
