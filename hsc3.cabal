@@ -478,7 +478,6 @@ Library
                    Sound.SC3.Server.Command
                    Sound.SC3.Server.NRT
                    Sound.SC3.Server.Play
-                   Sound.SC3.Server.Process
                    Sound.SC3.Server.Status
                    Sound.SC3.Server.Synthdef
                    Sound.SC3.UGen
