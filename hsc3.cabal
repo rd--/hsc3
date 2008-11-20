@@ -491,7 +491,6 @@ Library
                    Sound.SC3.UGen.Demand
                    Sound.SC3.UGen.Demand.Base
                    Sound.SC3.UGen.Demand.Monadic
-                   Sound.SC3.UGen.Demand.Unsafe
                    Sound.SC3.UGen.Enum
                    Sound.SC3.UGen.Envelope
                    Sound.SC3.UGen.Envelope.Construct
