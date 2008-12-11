@@ -1,4 +1,8 @@
-normalizer in level dur
+normalizer i l d
+
+    i - input signal
+    l - level
+    d - duration (0.01)
 
 Flattens dynamics.
 

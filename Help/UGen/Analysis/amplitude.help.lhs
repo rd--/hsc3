@@ -1,4 +1,9 @@
-amplitude rate in attackTime releaseTime
+amplitude r i at rt
+
+    r - operating rate
+    i - input
+   at - attack time (0.01)
+   rt - release time (0.01)
 
 Amplitude follower. Tracks the peak amplitude of a signal.
 

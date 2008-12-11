@@ -1,4 +1,8 @@
-pulse rate freq width
+pulse r f w
+
+   r - operating rate
+   f - frequency (hz)
+   w - width (0.5)
 
 Bandlimited pulse wave generator.
 
