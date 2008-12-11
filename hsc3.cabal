@@ -65,6 +65,7 @@ Data-files:        README
                    Help/Graphs/lf-pulses.lhs
                    Help/Graphs/lg-timed.lhs
                    Help/Graphs/lin-sosc.lhs
+                   Help/Graphs/lucier.hs
                    Help/Graphs/modal-space.lhs
                    Help/Graphs/moto-rev.lhs
                    Help/Graphs/mouse-clatter.lhs
