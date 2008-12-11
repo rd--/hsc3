@@ -81,7 +81,6 @@ Data-files:        README
                    Help/Graphs/red-frik.lhs
                    Help/Graphs/reverberated-sine-percussion.lhs
                    Help/Graphs/rm-octaver.lhs
-                   Help/Graphs/rzblp.lhs
                    Help/Graphs/sample-and-hold-liquidities.lhs
                    Help/Graphs/s-chirp.lhs
                    Help/Graphs/scratchy.lhs
@@ -105,11 +104,9 @@ Data-files:        README
                    Help/Graphs/tipnso.lhs
                    Help/Graphs/train.lhs
                    Help/Graphs/trkl.lhs
-                   Help/Graphs/trmlo.lhs
                    Help/Graphs/tr-out.lhs
                    Help/Graphs/tsort.lhs
                    Help/Graphs/vlc-distrtn.lhs
-                   Help/Graphs/voscil.lhs
                    Help/Graphs/what-was-i-thinking.lhs
                    Help/Graphs/wial.lhs
                    Help/Graphs/wind-metals.lhs
