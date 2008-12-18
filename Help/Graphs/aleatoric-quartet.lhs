@@ -2,8 +2,8 @@ aleatoric quartet (jmcc)
 
 > import Sound.SC3
 
-> let { base_mn = Control KR "mn" 66
->     ; amp = 0.07
+> let { base_mn = Control KR "note" 66
+>     ; amp = Control KR "ampl" 0.07
 >     ; density = mouseX kr 0.01 1 Linear 0.1
 >     ; dmul = recip density * 0.5 * amp
 >     ; dadd = amp - dmul
