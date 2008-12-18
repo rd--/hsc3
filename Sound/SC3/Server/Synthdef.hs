@@ -57,7 +57,7 @@ synth u = let (_, g) = mk_node (prepare_root u) empty_graph
               (Graph _ cs ks us) = g
               us' = if null ks 
                     then reverse us
-                    else implicit (length ks) : reverse us
+                    else implicit ks : reverse us
           in Graph (-1) cs ks us'
 
 -- | Transform a unit generator into bytecode.
@@ -225,9 +225,12 @@ encode_graphdef s g =
     where (Graph _ cs ks us) = g
           mm = mk_maps g
 
--- Construct implicit control unit generator node (k-rate only).
-implicit :: Int -> Node
-implicit n = NodeU (-1) KR "Control" [] (replicate n KR) (Special 0) Nothing
+-- Construct implicit control unit generator node (i|k-rate only).
+implicit :: [Node] -> Node
+implicit ks =
+    let n = length ks
+        r = if all (== IR) (map node_k_rate ks) then IR else KR
+    in NodeU (-1) r "Control" [] (replicate n r) (Special 0) Nothing
 
 -- Transform mce nodes to mrg nodes
 prepare_root :: UGen -> UGen
