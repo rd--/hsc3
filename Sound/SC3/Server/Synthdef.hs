@@ -1,7 +1,7 @@
 -- | The unit-generator graph structure implemented by the
 --   SuperCollider synthesis server.
 module Sound.SC3.Server.Synthdef ( Node(..), FromPort(..), Graph(..)
-                                  , synth, synthdef ) where
+                                  , synth, synthdef, synthstat ) where
 
 import qualified Data.ByteString.Lazy as B
 import qualified Data.Char as C
@@ -63,6 +63,21 @@ synth u = let (_, g) = mk_node (prepare_root u) empty_graph
 -- | Transform a unit generator into bytecode.
 synthdef :: String -> UGen -> [Word8]
 synthdef s u = B.unpack (encode_graphdef s (synth u))
+
+-- | Simple statistical analysis of a unit generator graph.
+synthstat :: UGen -> String
+synthstat u =
+    let s = synth u
+        cs = constants s
+        ks = controls s
+        us = ugens s
+        f g = let h = \(x:xs) -> (x, length (x:xs))
+              in show . map h . group . sort . map g
+    in unlines ["number of constants       : " ++ show (length cs)
+               ,"number of controls        : " ++ show (length ks)
+               ,"control rates             : " ++ f node_k_rate ks
+               ,"number of unit generators : " ++ show (length us)
+               ,"unit generator rates      : " ++ f node_u_rate us]
 
 as_from_port :: Node -> FromPort
 as_from_port (NodeC n _) = C n
