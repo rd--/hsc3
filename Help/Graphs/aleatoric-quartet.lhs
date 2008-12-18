@@ -2,7 +2,8 @@ aleatoric quartet (jmcc)
 
 > import Sound.SC3
 
-> let { amp = 0.07
+> let { base_mn = Control KR "mn" 66
+>     ; amp = 0.07
 >     ; density = mouseX kr 0.01 1 Linear 0.1
 >     ; dmul = recip density * 0.5 * amp
 >     ; dadd = amp - dmul
@@ -14,7 +15,7 @@ aleatoric quartet (jmcc)
 >                 ; let r0 = select i0 (mce [1, 0.5, 0.25])
 >                   in do { r1 <- rand (-30) 30
 >                         ; n0 <- lfNoise0 kr r0
->                         ; let m = lag (roundE (n0 * 7 + 66 + r1) 1) 0.2
+>                         ; let m = lag (roundE (n0 * 7 + base_mn + r1) 1) 0.2
 >                           in return (midiCPS m) } }
 >     ; mk_s = do { f <- fmap recip mk_f
 >                 ; r <- rand (-1) 1
