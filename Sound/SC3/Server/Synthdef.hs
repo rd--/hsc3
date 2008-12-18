@@ -1,7 +1,7 @@
 -- | The unit-generator graph structure implemented by the
 --   SuperCollider synthesis server.
 module Sound.SC3.Server.Synthdef ( Node(..), FromPort(..), Graph(..)
-                                  , synth, synthdef, synthstat ) where
+                                 , synth, synthdef, synthstat ) where
 
 import qualified Data.ByteString.Lazy as B
 import qualified Data.Char as C
@@ -39,7 +39,7 @@ data Node = NodeC { node_id :: NodeId
                   , node_u_outputs :: [Output]
                   , node_u_special :: Special
                   , node_u_ugenid :: Maybe UGenId }
-          | NodeP { node_id :: NodeId 
+          | NodeP { node_id :: NodeId
                   , node_p_node :: Node
                   , node_p_index :: PortIndex }
             deriving (Eq, Show)
@@ -55,7 +55,7 @@ data FromPort = C NodeId
 synth :: UGen -> Graph
 synth u = let (_, g) = mk_node (prepare_root u) empty_graph
               (Graph _ cs ks us) = g
-              us' = if null ks 
+              us' = if null ks
                     then reverse us
                     else implicit ks : reverse us
           in Graph (-1) cs ks us'
@@ -162,7 +162,7 @@ mk_node_p n p g = let z = nextId g
                   in (NodeP z n p, g { nextId = z + 1 })
 
 mk_node :: UGen -> Graph -> (Node, Graph)
-mk_node u g 
+mk_node u g
     | isConstant u = mk_node_c u g
     | isControl u = mk_node_k u g
     | isUGen u = mk_node_u u g
@@ -178,7 +178,7 @@ type Maps = (Map, Map, Map)
 
 -- Generate maps from node identifiers to synthdef indexes.
 mk_maps :: Graph -> Maps
-mk_maps (Graph _ cs ks us) = 
+mk_maps (Graph _ cs ks us) =
     ( M.fromList (zip (map node_id cs) [0..])
     , M.fromList (zip (map node_id ks) [0..])
     , M.fromList (zip (map node_id us) [0..]) )
@@ -249,7 +249,7 @@ implicit ks =
 
 -- Transform mce nodes to mrg nodes
 prepare_root :: UGen -> UGen
-prepare_root u 
+prepare_root u
     | isMCE u = mrg (mceProxies u)
     | isMRG u = MRG (prepare_root (mrgLeft u)) (prepare_root (mrgRight u))
     | otherwise = u
