@@ -55,8 +55,8 @@ lpcSC3 (LPC h d) = let f = fromIntegral
                    in np : nf : fs : concat (transpose d)
 
 read_i32 :: Handle -> IO Int
-read_i32 h = B.hGet h 4 >>= return . decode_i32
+read_i32 h = liftM decode_i32 (B.hGet h 4)
 
 read_f32 :: Handle -> IO Double
-read_f32 h = B.hGet h 4 >>= return . decode_f32
+read_f32 h = liftM decode_f32 (B.hGet h 4)
 

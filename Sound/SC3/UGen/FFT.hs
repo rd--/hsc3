@@ -35,7 +35,7 @@ packFFT b sz from to z mp = mkOscMCE KR "PackFFT" [b, sz, from, to, z, n] mp 1
 -- | Format magnitude and phase data data as required for packFFT.
 packFFTSpec :: [UGen] -> [UGen] -> UGen
 packFFTSpec m p = mce (interleave m p)
-    where interleave x y = concat (zipWith (\a b -> [a,b]) x y)
+    where interleave x = concat . zipWith (\a b -> [a,b]) x
 
 pvcollect :: UGen -> UGen -> (UGen -> UGen -> UGen -> (UGen, UGen)) -> UGen -> UGen -> UGen -> UGen
 pvcollect c nf f from to z = packFFT c nf from to z mp
@@ -43,7 +43,7 @@ pvcollect c nf f from to z = packFFT c nf from to z mp
         p = unpackFFT c nf from to 1
         i = [from .. to]
         e = zipWith3 f m p i
-        mp = (uncurry packFFTSpec) (unzip e)
+        mp = uncurry packFFTSpec (unzip e)
 
 pv_Add :: UGen -> UGen -> UGen
 pv_Add ba bb = mkOsc KR "PV_Add" [ba,bb] 1

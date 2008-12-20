@@ -20,7 +20,7 @@ loudness fft smask tmask = mkOsc KR "Loudness" [fft, smask, tmask] 1
 
 -- | Translate onset type string to constant UGen value.
 onsetType :: String -> UGen
-onsetType s = fromIntegral (maybe 3 id (findIndex (== s) t))
+onsetType s = fromIntegral (fromMaybe 3 (findIndex (== s) t))
     where t = ["power", "magsum", "complex", "rcomplex", "phase", "wphase", "mkl"]
 
 -- | Onset detector.

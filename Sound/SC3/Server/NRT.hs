@@ -15,12 +15,12 @@ oscWithSize o = B.append l b
 
 -- | Encode a list of OSC bundles as an NRT score.
 encodeNRT :: [OSC] -> B.ByteString
-encodeNRT s = B.concat (map oscWithSize s)
+encodeNRT = B.concat . map oscWithSize
 
 -- | Write a list of OSC bundles as an NRT score.
 writeNRT :: FilePath -> [OSC] -> IO ()
-writeNRT fn s = B.writeFile fn (encodeNRT s)
+writeNRT fn = B.writeFile fn . encodeNRT
 
 -- | Write a list of OSC bundles as an NRT score to a file handle.
 putNRT :: Handle -> [OSC] -> IO ()
-putNRT h s = B.hPut h (encodeNRT s)
+putNRT h = B.hPut h . encodeNRT

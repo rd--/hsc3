@@ -26,16 +26,16 @@ liftU4 f a b c d = do n <- generateUId
 
 -- | Lift monadic UGen to unsafe form.
 liftP :: (a -> IO UGen) -> (a -> UGen)
-liftP f a = unsafePerformIO (f a)
+liftP f = unsafePerformIO . f
 
 -- | Lift monadic UGen to unsafe form.
 liftP2 :: (a -> b -> IO UGen) -> (a -> b -> UGen)
-liftP2 f a b = unsafePerformIO (f a b)
+liftP2 f a = unsafePerformIO . f a
 
 -- | Lift monadic UGen to unsafe form.
 liftP3 :: (a -> b -> c -> IO UGen) -> (a -> b -> c -> UGen)
-liftP3 f a b c = unsafePerformIO (f a b c)
+liftP3 f a b = unsafePerformIO . f a b
 
 -- | Lift monadic UGen to unsafe form.
 liftP4 :: (a -> b -> c -> d -> IO UGen) -> (a -> b -> c -> d -> UGen)
-liftP4 f a b c d = unsafePerformIO (f a b c d)
+liftP4 f a b c = unsafePerformIO . f a b c

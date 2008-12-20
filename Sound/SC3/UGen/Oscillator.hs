@@ -71,7 +71,7 @@ saw r freq = mkOsc r "Saw" [freq] 1
 
 -- | Silence.
 silent :: Int -> UGen
-silent nc = mkOsc AR "Silent" [] nc
+silent = mkOsc AR "Silent" []
 
 -- | Sine oscillator.
 sinOsc :: Rate -> UGen -> UGen -> UGen

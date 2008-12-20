@@ -22,17 +22,17 @@ d_loadDir p = Message "/d_loadDir" [String p]
 
 -- | Remove definition once all nodes using it have ended.
 d_free :: [String] -> OSC
-d_free n = Message "/d_free" (map String n)
+d_free = Message "/d_free" . map String
 
 -- * Node commands
 
 -- | Place a node after another.
 n_after :: [(Int, Int)] -> OSC
-n_after l = Message "/n_after" (mk_duples Int Int l)
+n_after = Message "/n_after" . mk_duples Int Int
 
 -- | Place a node before another.
 n_before :: [(Int, Int)] -> OSC
-n_before l = Message "/n_before" (mk_duples Int Int l)
+n_before = Message "/n_before" . mk_duples Int Int
 
 -- | Fill ranges of a node's control values.
 n_fill :: Int -> [(String, Int, Double)] -> OSC
@@ -40,7 +40,7 @@ n_fill nid l = Message "/n_fill" (Int nid : mk_triples String Int Float l)
 
 -- | Delete a node.
 n_free :: [Int] -> OSC
-n_free nid = Message "/n_free" (map Int nid)
+n_free = Message "/n_free" . map Int
 
 -- | Map a node's controls to read from a bus.
 n_map :: Int -> [(String, Int)] -> OSC
@@ -52,11 +52,11 @@ n_mapn nid l = Message "/n_mapn" (Int nid : mk_triples String Int Int l)
 
 -- | Get info about a node.
 n_query :: [Int] -> OSC
-n_query nid = Message "/n_query" (map Int nid)
+n_query = Message "/n_query" . map Int
 
 -- | Turn node on or off.
 n_run :: [(Int, Bool)] -> OSC
-n_run l = Message "/n_run" (mk_duples Int (Int . fromEnum) l)
+n_run = Message "/n_run" . mk_duples Int (Int . fromEnum)
 
 -- | Set a node's control values.
 n_set :: Int -> [(String, Double)] -> OSC
@@ -65,11 +65,11 @@ n_set nid c = Message "/n_set" (Int nid : mk_duples String Float c)
 -- | Set ranges of a node's control values.
 n_setn :: Int -> [(String, [Double])] -> OSC
 n_setn nid l = Message "/n_setn" (Int nid : concatMap f l)
-    where f (s,d) = String s : Int (length d) : (map Float d)
+    where f (s,d) = String s : Int (length d) : map Float d
 
 -- | Trace a node.
 n_trace :: [Int] -> OSC
-n_trace nid = Message "/n_trace" (map Int nid)
+n_trace = Message "/n_trace" . map Int
 
 -- * Synthesis node commands
 
@@ -99,29 +99,29 @@ s_newargs n i a t c = Message "/s_newargs" (String n : Int i : Int (fromEnum a) 
 
 -- | Auto-reassign synth's ID to a reserved value.
 s_noid :: [Int] -> OSC
-s_noid nid = Message "/s_noid" (map Int nid)
+s_noid = Message "/s_noid" . map Int
 
 -- * Group node commands
 
 -- | Free all synths in this group and all its sub-groups.
 g_deepFree :: [Int] -> OSC
-g_deepFree nid = Message "/g_deepFree" (map Int nid)
+g_deepFree = Message "/g_deepFree" . map Int
 
 -- | Delete all nodes in a group.
 g_freeAll :: [Int] -> OSC
-g_freeAll nid = Message "/g_freeAll" (map Int nid)
+g_freeAll = Message "/g_freeAll" . map Int
 
 -- | Add node to head of group.
 g_head :: [(Int, Int)] -> OSC
-g_head l = Message "/g_head" (mk_duples Int Int l)
+g_head = Message "/g_head" . mk_duples Int Int
 
 -- | Create a new group.
 g_new :: [(Int, AddAction, Int)] -> OSC
-g_new l = Message "/g_new" (mk_triples Int (Int . fromEnum) Int l)
+g_new = Message "/g_new" . mk_triples Int (Int . fromEnum) Int
 
 -- | Add node to tail of group.
 g_tail :: [(Int, Int)] -> OSC
-g_tail l = Message "/g_tail" (mk_duples Int Int l)
+g_tail = Message "/g_tail" . mk_duples Int Int
 
 -- * Unit Generator commands
 
@@ -165,7 +165,7 @@ b_getn nid l = Message "/b_getn" (Int nid : mk_duples Int Int l)
 
 -- | Request \/b_info messages.
 b_query :: [Int] -> OSC
-b_query nid = Message "/b_query" (map Int nid)
+b_query = Message "/b_query" . map Int
 
 -- | Read sound file data into an existing buffer.
 b_read :: Int -> String -> Int -> Int -> Int -> Int -> OSC
@@ -192,19 +192,19 @@ b_zero nid = Message "/b_zero" [Int nid]
 
 -- |  Fill ranges of bus values.
 c_fill :: [(Int, Int, Double)] -> OSC
-c_fill l = Message "/c_fill" (mk_triples Int Int Float l)
+c_fill = Message "/c_fill" . mk_triples Int Int Float
 
 -- | Get bus values.
 c_get :: [Int] -> OSC
-c_get nid = Message "/c_get" (map Int nid)
+c_get = Message "/c_get" . map Int
 
 -- | Get ranges of bus values.
 c_getn :: [(Int, Int)] -> OSC
-c_getn l = Message "/c_getn" (mk_duples Int Int l)
+c_getn = Message "/c_getn" . mk_duples Int Int
 
 -- | Set bus values.
 c_set :: [(Int, Double)] -> OSC
-c_set l = Message "/c_set" (mk_duples Int Float l)
+c_set = Message "/c_set" . mk_duples Int Float
 
 -- | Set ranges of bus values.
 c_setn :: [(Int, [Double])] -> OSC

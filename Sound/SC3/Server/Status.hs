@@ -9,15 +9,15 @@ import Sound.SC3.Server.Command
 
 -- | Collect server status information.
 serverStatus :: Transport t => t -> IO [String]
-serverStatus fd = liftM statusFormat (serverStatusData fd)
+serverStatus = liftM statusFormat . serverStatusData
 
 -- | Read nominal sample rate of server.
 serverSampleRateNominal :: (Transport t) => t -> IO Double
-serverSampleRateNominal fd = liftM (extractDouble . (!! 7)) (serverStatusData fd)
+serverSampleRateNominal = liftM (extractDouble . (!! 7)) . serverStatusData
 
 -- | Read actual sample rate of server.
 serverSampleRateActual :: (Transport t) => t -> IO Double
-serverSampleRateActual fd = liftM (extractDouble . (!! 8)) (serverStatusData fd)
+serverSampleRateActual = liftM (extractDouble . (!! 8)) . serverStatusData
 
 extractDouble :: Datum -> Double
 extractDouble (Float f) = f

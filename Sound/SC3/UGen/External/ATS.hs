@@ -56,19 +56,19 @@ atsSC3 :: ATS -> [Double]
 atsSC3 (ATS h d) = 
     let f = fromIntegral
         td = transpose d
-    in ( f (atsFileType h) :
-         f (atsNPartials h) :
-         f (atsNFrames h) :
-         f (atsWindowSize h) :
-         concatMap (td !!) (atsSC3Indices h) )
+    in f (atsFileType h) :
+       f (atsNPartials h) :
+       f (atsNFrames h) :
+       f (atsWindowSize h) :
+       concatMap (td !!) (atsSC3Indices h)
 
 -- be
 read_f64 :: Handle -> IO Double
-read_f64 h = B.hGet h 8 >>= return . decode_f64
+read_f64 h = liftM decode_f64 (B.hGet h 8)
 
 -- le
 read_f64LE :: Handle -> IO Double
-read_f64LE h = B.hGet h 8 >>= return . decode_f64 . B.reverse
+read_f64LE h = liftM (decode_f64 . B.reverse) (B.hGet h 8)
 
 -- Determine endianess and hence reader.
 get_reader :: B.ByteString -> (Handle -> IO Double)

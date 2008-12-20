@@ -103,7 +103,7 @@ mce2 x y = mce [x, y]
 
 -- | Clone a unit generator (mce . replicateM).
 clone :: (UId m) => Int -> m UGen -> m UGen
-clone n u = liftM mce (replicateM n u)
+clone n = liftM mce . replicateM n
 
 -- | Number of channels to expand to.
 mceDegree :: UGen -> Int
@@ -150,12 +150,12 @@ mceChannel _ _ = error "mceChannel: non MCE value"
 -- | Output channels of UGen as a list.
 mceChannels :: UGen -> [UGen]
 mceChannels (MCE l) = l
-mceChannels (MRG x y) = (MRG r y) : rs where (r:rs) = mceChannels x
+mceChannels (MRG x y) = let (r:rs) = mceChannels x in MRG r y : rs 
 mceChannels u = [u]
 
 -- | Transpose rows and columns, ie. {{a,b},{c,d}} to {{a,c},{b,d}}.
 mceTranspose :: UGen -> UGen
-mceTranspose u = mce (map mce (transpose (map mceChannels (mceChannels u))))
+mceTranspose = mce . map mce . transpose . map mceChannels . mceChannels
 
 -- * Multiple root graphs
 
@@ -236,10 +236,10 @@ mkOsc = mk_osc Nothing
 
 -- | Oscillator constructor, setting identifier.
 mkOscId :: UGenId -> Rate -> String -> [UGen] -> Int -> UGen
-mkOscId z = mk_osc (Just z)
+mkOscId = mk_osc . Just
 
 mk_osc_mce :: Maybe UGenId -> Rate -> String -> [UGen] -> UGen -> Int -> UGen
-mk_osc_mce z r c i j o = mk_osc z r c (i ++ mceChannels j) o
+mk_osc_mce z r c i j = mk_osc z r c (i ++ mceChannels j)
 
 -- | Variant oscillator constructor with MCE collapsing input.
 mkOscMCE :: Rate -> String -> [UGen] -> UGen -> Int -> UGen
@@ -247,7 +247,7 @@ mkOscMCE = mk_osc_mce Nothing
 
 -- | Variant oscillator constructor with MCE collapsing input.
 mkOscMCEId :: UGenId -> Rate -> String -> [UGen] -> UGen -> Int -> UGen
-mkOscMCEId z = mk_osc_mce (Just z)
+mkOscMCEId = mk_osc_mce . Just
 
 mk_filter :: Maybe UGenId -> String -> [UGen] -> Int -> UGen
 mk_filter z c i o = mkUGen r c i o' (Special 0) z
@@ -260,7 +260,7 @@ mkFilter = mk_filter Nothing
 
 -- | Filter UGen constructor.
 mkFilterId :: UGenId -> String -> [UGen] -> Int -> UGen
-mkFilterId z = mk_filter (Just z)
+mkFilterId = mk_filter . Just
 
 -- | Variant filter with rate derived from keyed input.
 mkFilterKeyed :: String -> Int -> [UGen] -> Int -> UGen
@@ -269,7 +269,7 @@ mkFilterKeyed c k i o = mkUGen r c i o' (Special 0) Nothing
           o' = replicate o r
 
 mk_filter_mce :: Maybe UGenId -> String -> [UGen] -> UGen -> Int -> UGen
-mk_filter_mce z c i j o = mk_filter z c (i ++ mceChannels j) o
+mk_filter_mce z c i j = mk_filter z c (i ++ mceChannels j)
 
 -- | Variant filter constructor with MCE collapsing input.
 mkFilterMCE :: String -> [UGen] -> UGen -> Int -> UGen
@@ -277,7 +277,7 @@ mkFilterMCE = mk_filter_mce Nothing
 
 -- | Variant filter constructor with MCE collapsing input.
 mkFilterMCEId :: UGenId -> String -> [UGen] -> UGen -> Int -> UGen
-mkFilterMCEId z = mk_filter_mce (Just z)
+mkFilterMCEId = mk_filter_mce . Just
 
 -- | Information unit generators are very specialized.
 mkInfo :: String -> UGen
@@ -352,7 +352,7 @@ instance Ord UGen where
 instance Enum UGen where
     succ u                = u + 1
     pred u                = u - 1
-    toEnum i              = constant i
+    toEnum                = constant
     fromEnum (Constant n) = truncate n
     fromEnum _            = error "cannot enumerate non-constant UGens"
     enumFrom              = iterate (+1)
@@ -366,4 +366,4 @@ instance Random UGen where
     randomR (Constant l, Constant r) g = let (n, g') = randomR (l,r) g
                                          in (Constant n, g')
     randomR _ _ = error "randomR: non constant (l,r)"
-    random g = randomR (-1.0, 1.0) g
+    random = randomR (-1.0, 1.0)

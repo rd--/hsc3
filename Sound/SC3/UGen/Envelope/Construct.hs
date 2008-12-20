@@ -18,7 +18,7 @@ env (l:vl) tms crv rls lp =
 -- | Co-ordinate based static envelope generator.
 envCoord :: [(UGen, UGen)] -> UGen -> UGen -> EnvCurve -> [UGen]
 envCoord bp dur amp c = env l t (repeat c) (-1) (-1)
-    where l = map (* amp) (map snd bp)
+    where l = map ((* amp) . snd) bp
           t = map (* dur) (d_dx (map fst bp))
 
 {- | Trapezoidal envelope generator.  The arguments are: 1. @shape@

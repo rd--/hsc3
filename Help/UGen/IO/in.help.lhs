@@ -1,7 +1,7 @@
 in' numChannels rate bus
 
 Read signal from an audio or control bus.
- 
+
 Patching input to output.
 
 > audition (out 0 (in' 2 AR numOutputBuses))

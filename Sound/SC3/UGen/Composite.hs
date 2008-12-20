@@ -1,6 +1,7 @@
 -- | Common unit generator graphs.
 module Sound.SC3.UGen.Composite where
 
+import Control.Monad
 import Sound.SC3.UGen.Buffer
 import Sound.SC3.UGen.Filter
 import Sound.SC3.UGen.Information
@@ -41,7 +42,7 @@ mixFill n f = mix (mce (map f [0..n-1]))
 
 -- | Monadic variant on mixFill.
 mixFillM :: (Monad m) => Int -> (Int -> m UGen) -> m UGen
-mixFillM n f = mapM f [0 .. n - 1] >>= return . sum
+mixFillM n f = liftM sum (mapM f [0 .. n - 1])
 
 -- | PM oscillator.
 pmOsc :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -56,7 +57,7 @@ soundIn n =
 
 -- | Pan a set of channels across the stereo field.
 splay :: UGen -> UGen -> UGen -> UGen -> UGen
-splay i s l c = mix (pan2 i (mce p * s + c) 1) * l * (sqrt (1 / n))
+splay i s l c = mix (pan2 i (mce p * s + c) 1) * l * sqrt (1 / n)
     where n = fromIntegral (mceDegree i)
           m = n - 1
           p = map ( (+ (-1.0)) . (* (2 / m)) ) [0 .. m]

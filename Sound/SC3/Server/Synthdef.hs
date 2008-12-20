@@ -62,7 +62,7 @@ synth u = let (_, g) = mk_node (prepare_root u) empty_graph
 
 -- | Transform a unit generator into bytecode.
 synthdef :: String -> UGen -> [Word8]
-synthdef s u = B.unpack (encode_graphdef s (synth u))
+synthdef s = B.unpack . encode_graphdef s . synth
 
 -- | Simple statistical analysis of a unit generator graph.
 synthstat :: UGen -> String
@@ -71,7 +71,8 @@ synthstat u =
         cs = constants s
         ks = controls s
         us = ugens s
-        f g = let h = \(x:xs) -> (x, length (x:xs))
+        f g = let h (x:xs) = (x, length (x:xs))
+                  h [] = undefined
               in show . map h . group . sort . map g
     in unlines ["number of constants       : " ++ show (length cs)
                ,"number of controls        : " ++ show (length ks)

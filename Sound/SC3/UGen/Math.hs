@@ -42,7 +42,7 @@ instance OrdE UGen where
 -- | Unary operator class.
 class (Floating a, Ord a) => UnaryOp a where
     ampDb :: a -> a
-    ampDb a = (log10 a) * 20
+    ampDb a = log10 a * 20
     asFloat :: a -> a
     asFloat = undefined
     asInt :: a -> a
@@ -66,9 +66,9 @@ class (Floating a, Ord a) => UnaryOp a where
     isNil :: a -> a
     isNil a = if a == 0.0 then 0.0 else 1.0
     log10 :: a -> a
-    log10 a = logBase 10 a
+    log10 = logBase 10
     log2 :: a -> a
-    log2 a = logBase 2 a
+    log2 = logBase 2
     midiCPS :: a -> a
     midiCPS a = 440.0 * (2.0 ** ((a - 69.0) * (1.0 / 12.0)))
     midiRatio :: a -> a
@@ -80,7 +80,7 @@ class (Floating a, Ord a) => UnaryOp a where
     octCPS :: a -> a
     octCPS a = 440.0 * (2.0 ** (a - 4.75))
     ratioMIDI :: a -> a
-    ratioMIDI a = 12.0 * (log2 a)
+    ratioMIDI a = 12.0 * log2 a
     softClip :: a -> a
     softClip = undefined
     squared :: a -> a
