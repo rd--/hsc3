@@ -154,8 +154,8 @@ pc_preparePartConv b irb fft_size =
     b_gen b "PreparePartConv" (map fromIntegral [irb, fft_size])
 
 -- | Partitioned convolution.
-partConv :: UGen -> UGen -> UGen -> UGen -> UGen
-partConv i sz ib ab = mkOsc AR "PartConv" [i,sz,ib,ab] 1
+partConv :: UGen -> UGen -> UGen -> UGen
+partConv i sz ib = mkOsc AR "PartConv" [i, sz, ib] 1
 
 -- Local Variables:
 -- truncate-lines:t
