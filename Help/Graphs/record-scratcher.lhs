@@ -10,7 +10,7 @@ record scratcher (josh parmenter)
 >     ; dx = x - delayN x 0.1 0.1
 >     ; bdx = mouseButton kr 1 0 0.3 + dx
 >     ; bdxr = bdx * bufRateScale kr 0
->     ; scr = playBuf 1 0 bdxr 0 0 Loop }
+>     ; scr = playBuf 1 0 bdxr 0 0 Loop DoNothing }
 > in withSC3 (\fd -> do { async fd (b_allocRead 0 fn 0 0)
 >                       ; play fd (out 0 (dup (scr * e))) })
 

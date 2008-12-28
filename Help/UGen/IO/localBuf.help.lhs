@@ -27,7 +27,7 @@ slowly overwrite data with noise
 > let { b = localBuf (uid 0) 2048 2 8
 >     ; nf = bufFrames KR b
 >     ; x = mouseX KR 1 2 Linear 0.2
->     ; r = playBuf 2 b x 1 0 Loop * 0.1
+>     ; r = playBuf 2 b x 1 0 Loop DoNothing * 0.1
 >     ; wr ph i = bufWr b (linLin ph (-1) 1 0 nf) Loop i }
 > in do { n <- clone 2 (whiteNoise AR)
 >       ; ph <- lfNoise0 AR 530

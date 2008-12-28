@@ -42,6 +42,8 @@ plugin needs. Different options are provided
 commented out for loading impulse responses from
 soundfiles.
 
+> import Sound.SC3
+
 > let { fft_size = 2048
 >     ; ir_file = "/home/rohan/audio/church.ir.wav"
 >     ; ir_length = 82756
@@ -52,7 +54,7 @@ soundfiles.
 >     ; target_b = 13 {- source signal -}
 >     ; target_file = "/home/rohan/audio/text.snd"
 >     ; c = constant
->     ; g = let { i = playBuf 1 (c target_b) 1 0 0 Loop
+>     ; g = let { i = playBuf 1 (c target_b) 1 0 0 Loop DoNothing
 >               ; pc = partConv i (c fft_size) (c ir_fd_b) (c accum_b) }
 >           in out 0 (pc / constant accum_size) }
 > in withSC3 (\fd -> do 

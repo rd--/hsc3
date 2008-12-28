@@ -3,11 +3,13 @@ pv_MagClip buffer threshold
 Clip bins to a threshold.  Clips bin magnitudes to a maximum
 threshold.
 
+> import Sound.SC3
+
 > let fileName = "/home/rohan/audio/metal.wav"
 > in withSC3 (\fd -> do { async fd (b_alloc 10 2048 1)
 >                       ; async fd (b_allocRead 12 fileName 0 0) })
 
-> let { a = playBuf 1 12 (bufRateScale KR 12) 0 0 Loop
+> let { a = playBuf 1 12 (bufRateScale KR 12) 0 0 Loop DoNothing
 >     ; f = fft' 10 a
 >     ; x = mouseX KR 0 5 Linear 0.1
 >     ; h = pv_MagBelow f x }

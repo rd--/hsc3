@@ -19,6 +19,8 @@ processed are silenced.
 Note that this procedure can be relatively CPU-heavy, depending on
 how you use it.
 
+> import Sound.SC3
+
 > let fileName = "/home/rohan/audio/metal.wav"
 > in withSC3 (\fd -> do { async fd (b_alloc 10 1024 1)
 >                       ; async fd (b_allocRead 11 fileName 0 0) })
@@ -32,7 +34,7 @@ how you use it.
 >     ; bpf_sweep m p i = let { l = lfPar KR 0.1 0
 >                             ; e = abs (i - (linLin l (-1) 1 2 (nf / 20))) }
 >                         in ((e <* 10) * m, p)
->     ; sf = playBuf 1 11 (bufRateScale KR 11) 1 0 Loop
+>     ; sf = playBuf 1 11 (bufRateScale KR 11) 1 0 Loop DoNothing
 >     ; c1 = fft' 10 sf
 >     ; c2 = pvcollect c1 nf spectral_delay 0 250 0 }
 > in audition (out 0 (0.1 * ifft' c2))
