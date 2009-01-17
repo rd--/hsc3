@@ -1,22 +1,29 @@
-localBuf id nf nc m
+localBuf id nf nc
+maxLocalBufs n
+setBuf b xs o
+asLocalBuf id xs
 
+    id - node identifier
     nf - number of frames (default: 1)
     nc - number of channels for multiple channel buffers (default: 1)
-     m - the first LocalBuf in a SynthDef may define the maximum buffers
-         used (default 8)
+     n - maximum number of local buffers per graph
+     b - buffer identifier
+    xs - sequential values to store at buffer
 
 Allocate a buffer local to the synthesis graph.
 
 > import Sound.SC3
 
 > do { n <- whiteNoise AR
->    ; let { b = localBuf (uid 0) 2048 1 8
+>    ; let { m = maxLocalBufs 1
+>          ; b = mrg2 (localBuf (uid 0) 2048 1) m
 >          ; f = fft' b n
 >          ; c = pv_BrickWall f (sinOsc KR 0.1 0 * 0.75) }
 >      in audition (out 0 (ifft' c * 0.1)) }
 
 > do { n <- clone 2 (whiteNoise AR)
->    ; let { b = mce (map (\i -> localBuf (uid i) 2048 1 8) [0, 1])
+>    ; let { m = maxLocalBufs 2
+>          ; b = mrg2 (mce (map (\i -> localBuf (uid i) 2048 1) [0, 1])) m
 >          ; f = fft' b n
 >          ; c = pv_BrickWall f (sinOsc KR (mce2 0.1 0.11) 0 * 0.75) }
 >      in audition (out 0 (ifft' c * 0.1)) }
@@ -24,7 +31,8 @@ Allocate a buffer local to the synthesis graph.
 not clearing the buffer accesses old data:
 slowly overwrite data with noise
 
-> let { b = localBuf (uid 0) 2048 2 8
+> let { m = maxLocalBufs 1
+>     ; b = mrg2 (localBuf (uid 0) 2048 2) m
 >     ; nf = bufFrames KR b
 >     ; x = mouseX KR 1 2 Linear 0.2
 >     ; r = playBuf 2 b x 1 0 Loop DoNothing * 0.1
@@ -40,7 +48,8 @@ bufCombC needs no clearing, because the delay line is filled by the ugen
 >    ; let { z = decay d 0.3 * n
 >          ; l = xLine KR 0.0001 0.01 20 DoNothing
 >          ; sr = sampleRate
->          ; b = mce (map (\i -> localBuf (uid i) sr 2 8) [0, 1]) }
+>          ; m = maxLocalBufs 2
+>          ; b = mrg2 (mce (map (\i -> localBuf (uid i) sr 2) [0, 1])) m }
 >      in audition (out 0 (bufCombC b z l 0.2)) }
 
 asLocalBuf combines localBuf and setBuf
@@ -61,9 +70,12 @@ asLocalBuf combines localBuf and setBuf
 >    ; let { x = mouseX KR 0 15 Linear 0.1
 >          ; b = asLocalBuf (uid 0) [0, 2, 3.2, 5, 7, 9, 10]
 >          ; k = degreeToKey b x 12
->          ; f b = let { o = sinOsc AR (midiCPS (b + k + n * 0.04)) 0 * 0.1
->                      ; t = lfPulse AR (midiCPS (mce [48, 55])) 0.15 0.5
->                      ; d = rlpf t (midiCPS (sinOsc KR 0.1 0 * 10 + b)) 0.1 * 0.1
->                      ; m = o + d }
+>          ; mk_c bf = let { f0 = midiCPS (bf + k + n * 0.04)
+>                          ; o = sinOsc AR f0 0 * 0.1
+>                          ; f1 = midiCPS (mce [48, 55])
+>                          ; t = lfPulse AR f1 0.15 0.5
+>                          ; f2 = midiCPS (sinOsc KR 0.1 0 * 10 + bf)
+>                          ; d = rlpf t f2 0.1 * 0.1
+>                          ; m = o + d }
 >                  in combN m 0.31 0.31 2 + m }
->      in audition (out 0 ((f 48 + f 72) * 0.25)) }
+>      in audition (out 0 ((mk_c 48 + mk_c 72) * 0.25)) }

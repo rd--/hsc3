@@ -131,9 +131,13 @@ vOsc r b f phase = mkOsc r "VOsc" [b, f, phase] 1
 -- * Local buffers
 
 -- | Allocate a buffer local to the synth.
-localBuf :: UGenId -> UGen -> UGen -> UGen -> UGen
-localBuf z nf nc mx = mkOscId z IR "LocalBuf" [nc, nf, mx] 1
+localBuf :: UGenId -> UGen -> UGen -> UGen
+localBuf z nf nc = mkOscId z IR "LocalBuf" [nc, nf] 1
 -- note that nf & nc are swapped at actual ugen
+
+-- | Set the maximum number of local buffers in a synth.
+maxLocalBufs :: UGen -> UGen
+maxLocalBufs n = mkOsc IR "MaxLocalBufs" [n] 0
 
 -- | Set local buffer values.
 setBuf :: UGen -> [UGen] -> UGen -> UGen
@@ -142,7 +146,8 @@ setBuf b xs o = mkOsc IR "SetBuf" ([b, o, fromIntegral (length xs)] ++ xs) 1
 -- | Generate a localBuf and use setBuf to initialise it.
 asLocalBuf :: UGenId -> [UGen] -> UGen
 asLocalBuf i xs =
-    let b = localBuf i (fromIntegral (length xs)) 1 8
+    let m = maxLocalBufs 8
+        b = mrg2 (localBuf i (fromIntegral (length xs)) 1) m
         s = setBuf b xs 0
     in mrg2 b s
 
