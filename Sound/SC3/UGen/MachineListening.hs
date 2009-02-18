@@ -46,7 +46,7 @@ specPcile :: UGen -> UGen -> UGen -> UGen
 specPcile b f i = mkOsc KR "SpecPcile" [b, f, i] 1
 
 specCentroid :: UGen -> UGen
-specCentroid b = mkOsc KR "SpecFlatness" [b] 1
+specCentroid b = mkOsc KR "SpecCentroid" [b] 1
 
 -- Local Variables:
 -- truncate-lines:t
