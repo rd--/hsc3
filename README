@@ -18,4 +18,5 @@ The hsc3 interaction environment is written for GNU Emacs.
     with contributions by henning thielemann
                         & stefan kersten
                         & alex mclean
+                        & brent yorgey
     see darcs history for details
