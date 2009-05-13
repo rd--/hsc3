@@ -5,23 +5,27 @@ bowed string (jmcc)
 > import qualified Sound.SC3.UGen.Monadic as M
 > import System.Random
 
-> let { rrand l r = getStdRandom (randomR (l, r)) 
->     ; choose l = fmap (l !!) (rrand 0 (length l - 1))
->     ; root = 5
->     ; scale = map (+ root) [0, 2, 4, 5, 7, 9, 11] 
->     ; oct = [24, 36, 48, 60, 72, 84] }
-> in do { n0 <- clone 2 (M.brownNoise ar)
->       ; r0 <- M.expRand 0.125 0.5
->       ; r1 <- M.rand 0.7 0.9
->       ; r2 <- sequence (replicate 12 (M.rand 1.0 3.0))
->       ; f <- fmap midiCPS (liftM2 (+) (choose scale) (choose oct))
->       ; n1 <- M.lfNoise1 kr r0
->       ; let { x = n0 * 0.007 * max 0 (n1 * 0.6 + 0.4)
->             ; geom n i z = take n (iterate (* z) i)
->             ; iota n i z = take n (iterate (+ z) i)
->             ; d = klankSpec (iota 12 f f) (geom 12 1 r1) r2
->             ; k = klank x 1 0 1 d }
+> bowed_string :: IO ()
+> bowed_string =
+>     let { rrand l r = getStdRandom (randomR (l, r))
+>         ; choose l = fmap (l !!) (rrand 0 (length l - 1))
+>         ; root = 5
+>         ; scale = map (+ root) [0, 2, 4, 5, 7, 9, 11]
+>         ; oct = [24, 36, 48, 60, 72, 84] }
+>   in do { n0 <- clone 2 (M.brownNoise ar)
+>         ; r0 <- M.expRand 0.125 0.5
+>         ; r1 <- M.rand 0.7 0.9
+>         ; r2 <- sequence (replicate 12 (M.rand 1.0 3.0))
+>         ; f <- fmap midiCPS (liftM2 (+) (choose scale) (choose oct))
+>         ; n1 <- M.lfNoise1 kr r0
+>         ; let { x = n0 * 0.007 * max 0 (n1 * 0.6 + 0.4)
+>               ; geom n i z = take n (iterate (* z) i)
+>               ; iota n i z = take n (iterate (+ z) i)
+>               ; d = klankSpec (iota 12 f f) (geom 12 1 r1) r2
+>               ; k = klank x 1 0 1 d }
 >         in audition (out 0 (softClip (k * 0.1))) }
+
+bowed_string
 
 { var root = 5
 ; var scale = #[0, 2, 4, 5, 7, 9, 11] + root

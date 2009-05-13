@@ -29,5 +29,5 @@ adso (rd)
 >                         ; pauseThread t } }
 > in withSC3 (\fd -> do { mapM_ (\i -> async fd (b_alloc i n 1)) [0..6]
 >                       ; play fd adso
->                       ; mapM_ (pattern fd) =<< rrand_l 32 0.025 0.75 
+>                       ; mapM_ (pattern fd) =<< rrand_l 32 0.025 0.75
 >                       ; reset fd })

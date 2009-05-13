@@ -8,29 +8,31 @@ increasing the stack limit of the haskell run time system]
 > import qualified Sound.SC3.UGen.Monadic as M
 > import System.Random
 
-> let { rrand l r = getStdRandom (randomR (l, r)) :: IO Double
->     ; coin n a b = do { m <- rrand 0.0 1.0
->                       ; return (if m > n then a else b) }
->     ; exprange s l r = linExp s (-1) 1 l r
->     ; chain n fn = foldr (<=<) return (replicate n fn)
->     ; mceProduct = mceEdit (\l -> [product l])
->     ; clipu s = clip2 s 1
->     ; dup a = mce2 a a
->     ; f s1 = do { xr <- fmap dup (M.expRand 0.1 2)
->                 ; n1 <- M.lfNoise1 kr xr
->                 ; n2 <- M.lfNoise1 kr xr
->                 ; n3 <- M.lfNoise1 kr xr
->                 ; f1 <- coin 0.6 (exprange n1 0.01 10) (exprange n2 10 50)
->                 ; s2 <- coin 0.5 (1 - s1) (mceReverse s1)
->                 ; let { f2 = linExp s1 (-1) 1 f1 (f1 * exprange n3 2 10)
->                       ; u1 = lfSaw kr f2 0 
->                       ; u2 = lfSaw kr (f1 * 0.1) 0 * 0.1 + 1 }
+> main :: IO ()
+> main =
+>    let { rrand l r = getStdRandom (randomR (l, r)) :: IO Double
+>        ; coin n a b = do { m <- rrand 0.0 1.0
+>                          ; return (if m > n then a else b) }
+>        ; exprange s l r = linExp s (-1) 1 l r
+>        ; chain n fn = foldr (<=<) return (replicate n fn)
+>        ; mceProduct = mceEdit (\l -> [product l])
+>        ; clipu s = clip2 s 1
+>        ; dup a = mce2 a a
+>        ; f s1 = do { xr <- fmap dup (M.expRand 0.1 2)
+>                    ; n1 <- M.lfNoise1 kr xr
+>                    ; n2 <- M.lfNoise1 kr xr
+>                    ; n3 <- M.lfNoise1 kr xr
+>                    ; f1 <- coin 0.6 (exprange n1 0.01 10) (exprange n2 10 50)
+>                    ; s2 <- coin 0.5 (1 - s1) (mceReverse s1)
+>                    ; let { f2 = linExp s1 (-1) 1 f1 (f1 * exprange n3 2 10)
+>                          ; u1 = lfSaw kr f2 0
+>                          ; u2 = lfSaw kr (f1 * 0.1) 0 * 0.1 + 1 }
 >                   in return . clipu =<< coin 0.5 (u1 * s2) (u1 * u2) }
->     ; inp = lfSaw kr (0.2 * mce2 1 1.1) 0
->     ; b_freq = mce [70, 800, 9000, 5242] }
-> in do { ff <- chain 8 f inp
->       ; let { c_saw = mceProduct (saw ar (exprange ff 6 11000))
->             ; b_saw = dup (mix (bpf c_saw b_freq 0.2)) }
+>        ; inp = lfSaw kr (0.2 * mce2 1 1.1) 0
+>        ; b_freq = mce [70, 800, 9000, 5242] }
+>   in do { ff <- chain 8 f inp
+>         ; let { c_saw = mceProduct (saw ar (exprange ff 6 11000))
+>               ; b_saw = dup (mix (bpf c_saw b_freq 0.2)) }
 >         in audition (out 0 (b_saw * 0.3)) }
 
 { var f = { arg s1

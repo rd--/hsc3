@@ -3,14 +3,16 @@ sample and hold liquidities (jmcc)
 > import Sound.SC3
 > import qualified Sound.SC3.UGen.Base as B
 
-> let { r = mouseX kr 1 200 Exponential 0.1
->     ; t = recip r
->     ; c = impulse kr r 0.4
->     ; cf = mouseY kr 100 8000 Exponential 0.1
->     ; f = latch (B.whiteNoise (uid 0) kr * cf * 0.5 + cf) c
->     ; p = latch (B.whiteNoise (uid 1) kr) c
->     ; i = pan2 (sinOsc ar f 0 * decay2 c (t * 0.1) (t * 0.9)) p 1 }
-> in audition (out 0 (combN i 0.3 0.3 2))
+> main :: IO ()
+> main =
+>   let { r = mouseX kr 1 200 Exponential 0.1
+>       ; t = recip r
+>       ; c = impulse kr r 0.4
+>       ; cf = mouseY kr 100 8000 Exponential 0.1
+>       ; f = latch (B.whiteNoise (uid 0) kr * cf * 0.5 + cf) c
+>       ; p = latch (B.whiteNoise (uid 1) kr) c
+>       ; i = pan2 (sinOsc ar f 0 * decay2 c (t * 0.1) (t * 0.9)) p 1 }
+>   in audition (out 0 (combN i 0.3 0.3 2))
 
 { var r = MouseX.kr(1, 200, 'exponential', 0.1)
 ; var t = r.reciprocal
