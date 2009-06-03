@@ -307,7 +307,7 @@ Data-files:        README
                    Help/UGen/Filter/degreeToKey.help.lhs
                    Help/UGen/Filter/delay1.help.lhs
                    Help/UGen/Filter/delay2.help.lhs
-                   Help/UGen/Filter/delayA.help.lhs
+                   Help/UGen/Filter/delayC.help.lhs
                    Help/UGen/Filter/delayL.help.lhs
                    Help/UGen/Filter/delayN.help.lhs
                    Help/UGen/Filter/formlet.help.lhs
