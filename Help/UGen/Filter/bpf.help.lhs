@@ -6,6 +6,8 @@ in    - input signal to be processed
 freq  - cutoff frequency in Hertz
 rq    - the reciprocal of Q, ie. bandwidth / cutoffFreq
 
+> import Sound.SC3
+
 > let f = fSinOsc KR (xLine KR 0.7 300 20 RemoveSynth) 0 * 3600 + 4000
 > in audition (out 0 (bpf (saw AR 200 * 0.5) f 0.3 ))
 
