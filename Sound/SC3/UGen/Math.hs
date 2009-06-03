@@ -79,6 +79,8 @@ class (Floating a, Ord a) => UnaryOp a where
     notNil a = if a /= 0.0 then 0.0 else 1.0
     octCPS :: a -> a
     octCPS a = 440.0 * (2.0 ** (a - 4.75))
+    ramp_ :: a -> a
+    ramp_ _ = undefined
     ratioMIDI :: a -> a
     ratioMIDI a = 12.0 * log2 a
     softClip :: a -> a
@@ -111,6 +113,7 @@ instance UnaryOp UGen where
     notE = mkUnaryOperator Not notE
     notNil = mkUnaryOperator NotNil notNil
     octCPS = mkUnaryOperator OctCPS octCPS
+    ramp_ = mkUnaryOperator Ramp ramp_
     ratioMIDI = mkUnaryOperator RatioMIDI ratioMIDI
     softClip = mkUnaryOperator SoftClip softClip
     squared = mkUnaryOperator Squared squared
