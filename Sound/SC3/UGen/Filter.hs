@@ -236,6 +236,10 @@ pulseCount t r = mkFilter "PulseCount" [t, r] 1
 pulseDivider :: UGen -> UGen -> UGen -> UGen
 pulseDivider t factor start = mkFilter "PulseDivider" [t, factor, start] 1
 
+-- | Linear lag.
+ramp :: UGen -> UGen -> UGen
+ramp i t = mkFilter "Ramp" [i, t] 1
+
 -- | Resonant highpass filter.
 rhpf :: UGen -> UGen -> UGen -> UGen
 rhpf i freq rq = mkFilter "RHPF" [i, freq, rq] 1
