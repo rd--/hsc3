@@ -108,6 +108,10 @@ indexInBetween b i = mkFilter "IndexInBetween" [b, i] 1
 osc :: Rate -> UGen -> UGen -> UGen -> UGen
 osc r bufnum freq phase = mkOsc r "Osc" [bufnum, freq, phase] 1
 
+-- | Wavetable oscillator.
+oscN :: Rate -> UGen -> UGen -> UGen -> UGen
+oscN r bufnum freq phase = mkOsc r "OscN" [bufnum, freq, phase] 1
+
 -- | Buffer playback.
 playBuf :: Int -> UGen -> UGen -> UGen -> UGen -> Loop -> DoneAction -> UGen
 playBuf n b r t s l a = mkOsc AR "PlayBuf" [b, r, t, s, from_loop l, from_done_action a] n
