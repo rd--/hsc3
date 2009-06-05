@@ -11,7 +11,7 @@ Author:            Rohan Drape
 Maintainer:        rd@slavepianos.org
 Stability:         Experimental
 Homepage:          http://slavepianos.org/rd/f/207949/
-Tested-With:       GHC==6.10.1
+Tested-With:       GHC==6.8.2
 Build-Type:        Simple
 Cabal-Version:     >= 1.2
 
@@ -338,6 +338,7 @@ Data-files:        README
                    Help/UGen/Filter/oneZero.help.lhs
                    Help/UGen/Filter/pitchShift.help.lhs
                    Help/UGen/Filter/pluck.help.lhs
+                   Help/UGen/Filter/ramp.help.lhs
                    Help/UGen/Filter/resonz.help.lhs
                    Help/UGen/Filter/rhpf.help.lhs
                    Help/UGen/Filter/ringz.help.lhs
@@ -386,14 +387,25 @@ Data-files:        README
                    Help/UGen/MachineListening/onsets.help.lhs
                    Help/UGen/Math/absDif.help.lhs
                    Help/UGen/Math/abs.help.lhs
+                   Help/UGen/Math/add.help.lhs
                    Help/UGen/Math/amClip.help.lhs
                    Help/UGen/Math/atan2.help.lhs
                    Help/UGen/Math/clip2.help.lhs
+                   Help/UGen/Math/dbAmp.help.lhs
                    Help/UGen/Math/difSqr.help.lhs
                    Help/UGen/Math/distort.help.lhs
+                   Help/UGen/Math/eq.help.lhs
+                   Help/UGen/Math/excess.help.lhs
+                   Help/UGen/Math/fdiv.help.lhs
                    Help/UGen/Math/fold2.help.lhs
+                   Help/UGen/Math/gt.help.lhs
                    Help/UGen/Math/hypot.help.lhs
+                   Help/UGen/Math/max.help.lhs
+                   Help/UGen/Math/mod.help.lhs
+                   Help/UGen/Math/mul.help.lhs
+                   Help/UGen/Math/pow.help.lhs
                    Help/UGen/Math/ring1.help.lhs
+                   Help/UGen/Math/roundUp.help.lhs
                    Help/UGen/Math/scaleNeg.help.lhs
                    Help/UGen/Math/softClip.help.lhs
                    Help/UGen/Math/sumSqr.help.lhs
@@ -470,8 +482,14 @@ Data-files:        README
                    Help/UGen/Trigger/trig.help.lhs
 
 Library
-  Build-Depends:   base, binary, bytestring, containers, hosc == 0.7,
-                   network, process, random
+  Build-Depends:   base == 3.*,
+                   binary,
+                   bytestring,
+                   containers,
+                   hosc == 0.7,
+                   network,
+                   process,
+                   random
   GHC-Options:     -Wall -fwarn-tabs
   Exposed-modules: Sound.SC3
                    Sound.SC3.Server
