@@ -1,5 +1,5 @@
 Name:              hsc3
-Version:           0.7
+Version:           0.8
 Synopsis:          Haskell SuperCollider
 Description:       hsc3 provides Sound.SC3, a haskell module that 
                    facilitates using haskell as a client to the 
@@ -487,7 +487,7 @@ Library
                    binary,
                    bytestring,
                    containers,
-                   hosc == 0.7,
+                   hosc == 0.8,
                    network,
                    process,
                    random
