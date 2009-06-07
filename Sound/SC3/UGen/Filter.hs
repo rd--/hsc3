@@ -2,6 +2,7 @@
 module Sound.SC3.UGen.Filter where
 
 import Data.List
+import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
 
 -- | Allpass filter (no interpolation)
@@ -134,7 +135,7 @@ inRange i lo hi = mkFilter "InRange" [i, lo, hi] 1
 
 -- | Fixed resonator filter bank.
 klank :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-klank i fs fp d s = mkFilterMCE "Klank" [i, fs, fp, d] s 1
+klank i fs fp d s = mkFilterMCER [AR] "Klank" [i, fs, fp, d] s 1
 
 -- | Format frequency, amplitude and decay time data as required for klank.
 klankSpec :: [UGen] -> [UGen] -> [UGen] -> UGen

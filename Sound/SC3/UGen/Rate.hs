@@ -7,7 +7,7 @@ import Data.Function
 
 -- | Operating rate of unit generator.
 data Rate = IR | KR | AR | DR 
-            deriving (Eq, Show, Enum)
+            deriving (Eq, Show, Enum, Bounded)
 
 instance Ord Rate where
     compare = compare `on` rate_ord

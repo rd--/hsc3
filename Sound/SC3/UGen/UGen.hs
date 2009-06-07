@@ -220,26 +220,34 @@ mkUnaryOperator i f a
     | otherwise = mkOperator "UnaryOpUGen" [a] (fromEnum i)
 
 -- | Binary math constructor with constant optimization.
-mkBinaryOperator :: Binary -> (Double -> Double -> Double) -> UGen -> UGen -> UGen
+mkBinaryOperator :: Binary -> (Double -> Double -> Double) -> 
+                    UGen -> UGen -> UGen
 mkBinaryOperator i f a b 
     | isConstant a && isConstant b = let a' = constantValue a
                                          b' = constantValue b
                                      in constant (f a' b')
     | otherwise = mkOperator "BinaryOpUGen" [a, b] (fromEnum i)
 
-mk_osc :: Maybe UGenId -> Rate -> String -> [UGen] -> Int -> UGen
-mk_osc z r c i o = mkUGen r c i (replicate o r) (Special 0) z
+mk_osc :: [Rate] -> Maybe UGenId -> 
+          Rate -> String -> [UGen] -> Int -> UGen
+mk_osc rs z r c i o
+    | r `elem` rs = mkUGen r c i (replicate o r) (Special 0) z
+    | otherwise = error ("mk_osc: rate restricted: " ++ show (r, rs, c))
 
 -- | Oscillator constructor.
 mkOsc :: Rate -> String -> [UGen] -> Int -> UGen
-mkOsc = mk_osc Nothing
+mkOsc = mk_osc [minBound .. maxBound] Nothing
+
+-- | Oscillator constructor, rate restricted variant.
+mkOscR :: [Rate] -> Rate -> String -> [UGen] -> Int -> UGen
+mkOscR rs = mk_osc rs Nothing
 
 -- | Oscillator constructor, setting identifier.
 mkOscId :: UGenId -> Rate -> String -> [UGen] -> Int -> UGen
-mkOscId = mk_osc . Just
+mkOscId = mk_osc [minBound .. maxBound] . Just
 
 mk_osc_mce :: Maybe UGenId -> Rate -> String -> [UGen] -> UGen -> Int -> UGen
-mk_osc_mce z r c i j = mk_osc z r c (i ++ mceChannels j)
+mk_osc_mce z r c i j = mk_osc [minBound .. maxBound] z r c (i ++ mceChannels j)
 
 -- | Variant oscillator constructor with MCE collapsing input.
 mkOscMCE :: Rate -> String -> [UGen] -> UGen -> Int -> UGen
@@ -249,18 +257,28 @@ mkOscMCE = mk_osc_mce Nothing
 mkOscMCEId :: UGenId -> Rate -> String -> [UGen] -> UGen -> Int -> UGen
 mkOscMCEId = mk_osc_mce . Just
 
-mk_filter :: Maybe UGenId -> String -> [UGen] -> Int -> UGen
-mk_filter z c i o = mkUGen r c i o' (Special 0) z
-    where r = maximum (map rateOf i)
-          o'= replicate o r
+mk_filter :: [Rate] -> Maybe UGenId -> String -> [UGen] -> Int -> UGen
+mk_filter rs z c i o =
+    let r = maximum (map rateOf i)
+        o'= replicate o r
+    in if r `elem` rs
+       then mkUGen r c i o' (Special 0) z
+       else error ("mk_filter: rate restriceted: " ++ show (r, rs, c))
+
+all_rates :: [Rate]
+all_rates = [minBound .. maxBound]
 
 -- | Filter UGen constructor.
 mkFilter :: String -> [UGen] -> Int -> UGen
-mkFilter = mk_filter Nothing
+mkFilter = mk_filter all_rates Nothing
+
+-- | Filter UGen constructor.
+mkFilterR :: [Rate] -> String -> [UGen] -> Int -> UGen
+mkFilterR rs = mk_filter rs Nothing
 
 -- | Filter UGen constructor.
 mkFilterId :: UGenId -> String -> [UGen] -> Int -> UGen
-mkFilterId = mk_filter . Just
+mkFilterId = mk_filter all_rates . Just
 
 -- | Variant filter with rate derived from keyed input.
 mkFilterKeyed :: String -> Int -> [UGen] -> Int -> UGen
@@ -268,16 +286,21 @@ mkFilterKeyed c k i o = mkUGen r c i o' (Special 0) Nothing
     where r = rateOf (i !! k)
           o' = replicate o r
 
-mk_filter_mce :: Maybe UGenId -> String -> [UGen] -> UGen -> Int -> UGen
-mk_filter_mce z c i j = mk_filter z c (i ++ mceChannels j)
+mk_filter_mce :: [Rate] -> Maybe UGenId -> 
+                 String -> [UGen] -> UGen -> Int -> UGen
+mk_filter_mce rs z c i j = mk_filter rs z c (i ++ mceChannels j)
+
+-- | Variant filter constructor with MCE collapsing input.
+mkFilterMCER :: [Rate] -> String -> [UGen] -> UGen -> Int -> UGen
+mkFilterMCER rs = mk_filter_mce rs Nothing
 
 -- | Variant filter constructor with MCE collapsing input.
 mkFilterMCE :: String -> [UGen] -> UGen -> Int -> UGen
-mkFilterMCE = mk_filter_mce Nothing
+mkFilterMCE = mk_filter_mce all_rates Nothing
 
 -- | Variant filter constructor with MCE collapsing input.
 mkFilterMCEId :: UGenId -> String -> [UGen] -> UGen -> Int -> UGen
-mkFilterMCEId = mk_filter_mce . Just
+mkFilterMCEId = mk_filter_mce all_rates . Just
 
 -- | Information unit generators are very specialized.
 mkInfo :: String -> UGen

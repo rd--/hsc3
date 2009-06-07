@@ -54,19 +54,19 @@ sharedIn nc bus = mkOsc KR "SharedIn" [bus] nc
 
 -- | Report the status of a particular key.
 keyState :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-keyState r key minVal maxVal lag = mkOsc r "KeyState" [key, minVal, maxVal, lag] 1
+keyState r key minVal maxVal lag = mkOscR [KR] r "KeyState" [key, minVal, maxVal, lag] 1
 
 -- | Report the status of the first pointer button.
 mouseButton :: Rate -> UGen -> UGen -> UGen -> UGen
-mouseButton r ll rl lag = mkOsc r "MouseButton" [ll, rl, lag] 1
+mouseButton r ll rl lag = mkOscR [KR] r "MouseButton" [ll, rl, lag] 1
 
 -- | Cursor UGen, X axis.
 mouseX :: Rate -> UGen -> UGen -> Warp -> UGen -> UGen
-mouseX r ll rl w lag = mkOsc r "MouseX" [ll, rl, from_warp w, lag] 1
+mouseX r ll rl w lag = mkOscR [KR] r "MouseX" [ll, rl, from_warp w, lag] 1
 
 -- | Cursor UGen, Y axis.
 mouseY :: Rate -> UGen -> UGen -> Warp -> UGen -> UGen
-mouseY r ll rl w lag = mkOsc r "MouseY" [ll, rl, from_warp w, lag] 1
+mouseY r ll rl w lag = mkOscR [KR] r "MouseY" [ll, rl, from_warp w, lag] 1
 
 -- | Control variant.
 trigControl :: Int -> Rate -> UGen

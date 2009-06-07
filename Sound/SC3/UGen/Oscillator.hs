@@ -7,11 +7,11 @@ import Sound.SC3.UGen.UGen
 
 -- | Band Limited ImPulse generator.
 blip :: Rate -> UGen -> UGen -> UGen
-blip r freq nharm = mkOsc r "Blip" [freq, nharm] 1
+blip r freq nharm = mkOscR [AR] r "Blip" [freq, nharm] 1
 
 -- | Formant oscillator.
 formant :: Rate -> UGen -> UGen -> UGen -> UGen
-formant r f0 f bw = mkOsc r "Formant" [f0, f, bw] 1
+formant r f0 f bw = mkOscR [AR] r "Formant" [f0, f, bw] 1
 
 -- | Fast sine wave oscillator implemented using a ringing filter.
 fSinOsc :: Rate -> UGen -> UGen -> UGen
@@ -27,7 +27,9 @@ impulse r freq phase = mkOsc r "Impulse" [freq, phase] 1
 
 -- | Bank of fixed oscillators.
 klang :: Rate -> UGen -> UGen -> UGen -> UGen
-klang r fs fo a = mkOscMCE r "Klang" [fs, fo] a 1
+klang r fs fo a
+    | r == AR = mkOscMCE r "Klang" [fs, fo] a 1
+    | otherwise = undefined
 
 -- | Format frequency, amplitude and phase data as required for klang.
 klangSpec :: [UGen] -> [UGen] -> [UGen] -> UGen
@@ -63,11 +65,11 @@ phasor r t f s e p = mkOsc r "Phasor" [t, f, s, e, p] 1
 
 -- | Pulse wave generator (band limited).
 pulse :: Rate -> UGen -> UGen -> UGen
-pulse r freq width = mkOsc r "Pulse" [freq, width] 1
+pulse r freq width = mkOscR [AR] r "Pulse" [freq, width] 1
 
 -- | Sawtooth oscillator (band limited).
 saw :: Rate -> UGen -> UGen
-saw r freq = mkOsc r "Saw" [freq] 1
+saw r freq = mkOscR [AR] r "Saw" [freq] 1
 
 -- | Silence.
 silent :: Int -> UGen

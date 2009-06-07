@@ -1,4 +1,4 @@
-formant rate fundFreq formFreq bwFreq
+formant AR fundFreq formFreq bwFreq
 
 Formant oscillator. Generates a set of harmonics around a formant
 frequency at a given fundamental frequency.

@@ -1,4 +1,4 @@
-mouseX rate minval maxval warp lag
+mouseX KR minval maxval warp lag
 
 Report mouse location on root window of the machine that the synthesis
 server is running on.

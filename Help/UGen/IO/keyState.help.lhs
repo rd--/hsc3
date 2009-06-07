@@ -1,4 +1,4 @@
-keyState rate keyNum minVal maxVal lag
+keyState KR keyNum minVal maxVal lag
 
 Report the status of a particular key.  A key is either pressed, or
 not pressed.

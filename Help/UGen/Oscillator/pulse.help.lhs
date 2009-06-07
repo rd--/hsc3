@@ -1,4 +1,4 @@
-pulse r f w
+pulse AR f w
 
    r - operating rate
    f - frequency (hz)
