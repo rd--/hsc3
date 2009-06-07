@@ -38,6 +38,8 @@ relaxTime: The amount of time for the amplitude adjustment to be
 
 Example signal to process.
 
+> import Sound.SC3
+
 > let { e = decay2 (impulse AR 8 0 * lfSaw KR 0.3 0 * 0.3) 0.001 0.3
 >     ; p = mix (pulse AR (mce [80, 81]) 0.3) }
 > in audition (out 0 (e * p))

@@ -10,6 +10,8 @@ in - input signal to measure.
 In the example below a is quadratic noise, b first derivative line
 segments, and c second derivative constant segments.
 
+> import Sound.SC3
+
 > do { a <- lfNoise2 KR 2
 >    ; let { s = 1/2
 >          ; b = slope a * s

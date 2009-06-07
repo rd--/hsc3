@@ -2,6 +2,8 @@ saw rate freq
 
 Band limited sawtooth wave generator.
 
+> import Sound.SC3
+
 > audition (out 0 (saw AR (xLine KR 40 4000 6 RemoveSynth) * 0.1))
 
 Two band limited sawtooth waves thru a resonant low pass filter

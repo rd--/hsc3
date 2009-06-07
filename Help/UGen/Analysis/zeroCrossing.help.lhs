@@ -9,5 +9,7 @@ a very crude pitch follower, but can be useful in some situations.
 
 in - input signal.
 
+> import Sound.SC3
+
 > let a = sinOsc AR (sinOsc KR 1 0 * 600 + 700) 0 * 0.1
 > in audition (out 0 (mce [a, impulse AR (zeroCrossing a) 0 * 0.25]))

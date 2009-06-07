@@ -23,6 +23,8 @@ to be ON.
 
 Allocate and fill tables 0 to 7.
 
+> import Sound.SC3
+
 > let { square a = a * a
 >     ; harmonics i = let { n = square (i + 1)
 >                         ; f j = square ((n - j) / n) }
@@ -38,6 +40,9 @@ Oscillator at buffers 0 through 7, mouse selects buffer.
 > in audition (out 0 (vOsc AR x (mce [120, 121]) 0 * 0.3))
 
 Reallocate buffers while oscillator is running.
+
+> import Control.Monad
+> import System.Random
 
 > let { rrand l r = getStdRandom (randomR (l,r))
 >     ; rrandl n l r = replicateM n (rrand l r)

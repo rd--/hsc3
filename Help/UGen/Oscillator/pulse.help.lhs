@@ -8,6 +8,8 @@ Bandlimited pulse wave generator.
 
 Modulate frequency
 
+> import Sound.SC3
+
 > let f = xLine KR 40 4000 6 RemoveSynth
 > in audition (out 0 (pulse AR f 0.1 * 0.1))
 

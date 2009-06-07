@@ -7,6 +7,8 @@ amplitude r i at rt
 
 Amplitude follower. Tracks the peak amplitude of a signal.
 
+> import Sound.SC3
+
 > let { s = in' 1 AR numOutputBuses
 >     ; a = amplitude KR s 0.1 0.1 }
 > in audition (out 0 (pulse AR 90 0.3 * a))

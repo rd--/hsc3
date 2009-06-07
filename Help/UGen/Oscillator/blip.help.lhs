@@ -16,6 +16,8 @@ interpolated for better quality.
 The number of harmonics may be lowered internally if it would cause
 aliasing.
 
+> import Sound.SC3
+
 > audition (out 0 (blip AR 440 200 * 0.1))
 
 Modulate frequency
