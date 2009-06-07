@@ -22,8 +22,10 @@ aliasing.
 
 Modulate frequency
 
-> audition (out 0 (blip AR (xLine KR 20000 200 6 RemoveSynth) 100 * 0.1))
+> let f = xLine KR 20000 200 6 RemoveSynth
+> in audition (out 0 (blip AR f 100 * 0.1))
 
 Modulate number of harmonics.
 
-> audition (out 0 (blip AR 200 (line KR 1 100 20 RemoveSynth) * 0.2))
+> let nh = line KR 1 100 20 RemoveSynth
+> in audition (out 0 (blip AR 200 nh * 0.2))
