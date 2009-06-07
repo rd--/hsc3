@@ -457,6 +457,7 @@ Data-files:        README
                    Help/UGen/Oscillator/tGrains.help.lhs
                    Help/UGen/Oscillator/twChoose.help.lhs
                    Help/UGen/Oscillator/twindex.help.lhs
+                   Help/UGen/Oscillator/varSaw.help.lhs
                    Help/UGen/Panner/linPan2.help.lhs
                    Help/UGen/Panner/pan2.help.lhs
                    Help/UGen/Panner/rotate2.help.lhs
