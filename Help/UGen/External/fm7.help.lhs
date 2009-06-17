@@ -28,6 +28,8 @@ the amount of phase modulation in radians.
 The UGen outputs the six individual oscillator
 signals.
 
+> import Sound.SC3
+
 > let { c = [ [xLine KR 300 310 4 DoNothing, 0, 1]
 >           , [xLine KR 300 310 8 DoNothing, 0, 1]
 >           , [0, 0, 1]

@@ -6,6 +6,8 @@ above 2.0. Towards 2.0 the sound crackles.
 
 The equation implemented is: y0 = fabs(y1 * param - y2 - 0.05f)
 
+> import Sound.SC3
+
 > audition (out 0 (crackle AR 1.95 * 0.2))
 
 Modulate chaos parameter

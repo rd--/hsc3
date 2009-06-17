@@ -10,6 +10,8 @@ General quadratic map chaotic generator.  Non-, linear- and cubic-
 interpolating sound generators based on the difference equation:
 xn+1 = axn2 + bxn + c
 
+> import Sound.SC3
+
 > audition (out 0 (quadC AR 4000 1 (-1) (-0.75) 0 * 0.2))
 
 > let x = mouseX KR 3.5441 4 Linear 0.1

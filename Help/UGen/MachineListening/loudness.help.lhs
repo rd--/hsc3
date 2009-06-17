@@ -2,16 +2,17 @@ loudness chain smask tmask
 
 Extraction of instantaneous loudness in sones.
 
- chain [fft] - Audio input to track, which has been pre-analysed by the
-               FFT UGen; see examples below for the expected FFT size
+ chain [fft] - Audio input to track, which has been pre-analysed by
+               the FFT UGen; see examples below for the expected FFT
+               size
 
-  smask [sk] - Spectral masking param: lower bins mask higher bin power
-               within ERB bands, with a power falloff (leaky
+  smask [sk] - Spectral masking param: lower bins mask higher bin
+               power within ERB bands, with a power falloff (leaky
                integration multiplier) of smask per bin. (=0.25)
 
-  tmask [sk] - Temporal masking param: the phon level let through in an
-               ERB band is the maximum of the new measurement, and the
-               previous minus tmask phons (=6)
+  tmask [sk] - Temporal masking param: the phon level let through in
+               an ERB band is the maximum of the new measurement, and
+               the previous minus tmask phons (=6)
 
 A perceptual loudness function which outputs loudness in sones; this
 is a variant of an MP3 perceptual model, summing excitation in ERB

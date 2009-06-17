@@ -18,6 +18,8 @@ while studying the orbits of stars in globular clusters.
 
 With default initial parameters.
 
+> import Sound.SC3
+
 > let x = mouseX KR 20 sampleRate Linear 0.1
 > in audition (out 0 (henonN AR x 1.4 0.3 0 0 * 0.1))
 

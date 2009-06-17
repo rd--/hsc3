@@ -28,6 +28,8 @@ gap - if true the dirst duration precedes the first level,
 
 Play a little rhythm
 
+> import Sound.SC3
+
 > do { d <- dseq dinf (mce [0.1, 0.2, 0.4, 0.3])
 >    ; audition (out 0 (tDuty AR d 0 DoNothing 1 1)) }
 
@@ -35,13 +37,15 @@ Amplitude changes
 
 > do { d0 <- dseq dinf (mce [0.1, 0.2, 0.4, 0.3])
 >    ; d1 <- dseq dinf (mce [0.1, 0.4, 0.01, 0.5, 1.0])
->    ; audition (out 0 (ringz (tDuty AR d0 0 DoNothing d1 1) 1000 0.1)) }
+>    ; let s = ringz (tDuty AR d0 0 DoNothing d1 1) 1000 0.1
+>      in audition (out 0 s) }
 
 Mouse control.
 
 > do { d <- dseq dinf (mce [0.1, 0.4, 0.01, 0.5, 1.0])
->    ; let x = mouseX KR 0.003 1 Exponential 0.1
->      in audition (out 0 (ringz (tDuty AR x 0 DoNothing d 1) 1000 0.1)) }
+>    ; let { x = mouseX KR 0.003 1 Exponential 0.1
+>          ; s = ringz (tDuty AR x 0 DoNothing d 1) 1000 0.1 }
+>      in audition (out 0 s) }
 
 Note that the 440 is the shorter pitch, since gap is set to false
 

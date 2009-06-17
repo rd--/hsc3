@@ -5,6 +5,8 @@ Demand rate generator for switching between inputs
 index	- which of the inputs to return
 array	- array of values or other ugens
 
+> import Sound.SC3
+
 > let { x = mouseX KR 0 4 Linear 0.1
 >     ; y = mouseY KR 1 15 Linear 0.1
 >     ; t = impulse KR 3 0 }

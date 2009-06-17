@@ -12,8 +12,10 @@ xn+1 = a - b*sqrt(|xn|)
 
 Vary frequency
 
+> import Sound.SC3
+
 > let x = mouseX KR 20 sampleRate Linear 0.1
-> audition (out 0 (cuspL AR x 1.0 1.99 0 * 0.3))
+> in audition (out 0 (cuspL AR x 1.0 1.99 0 * 0.3))
 
 Mouse-controlled parameters.
 

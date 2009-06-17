@@ -20,6 +20,8 @@ doneAction - action evaluated when the duration stream ends.
 
 level - demand ugen providing the output values.
 
+> import Sound.SC3
+
 > do { n0 <- drand dinf (mce [0.01, 0.2, 0.4])
 >    ; n1 <- dseq dinf (mce [204, 400, 201, 502, 300, 200])
 >    ; let f = duty KR n0 0 RemoveSynth n1

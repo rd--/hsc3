@@ -8,6 +8,8 @@ index - which of the inputs to return
 In difference to dswitch1, dswitch embeds all items of 
 an input demand ugen first before looking up the next index.
 
+> import Sound.SC3
+
 > do { a0 <- dwhite 2 3 4
 >    ; a1 <- dwhite 2 0 1
 >    ; a2 <- dseq 2 (mce [1, 1, 1, 0])
