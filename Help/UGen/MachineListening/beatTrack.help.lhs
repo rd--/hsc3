@@ -34,13 +34,16 @@ without much expressive tempo variation), and can form the
 basis of computer processing that is decidedly faster than
 human.
 
+> import Sound.SC3
+
 > let { i = soundIn 0
 >     ; x = mouseX KR (-1) 1 Linear 0.2
 >     ; MCE [b, h, q, t] = beatTrack (fft' 10 i) x
 >     ; f = mce [440, 660, 880]
->     ; s = mix (sinOsc AR f 0 * 0.1 * decay (mce [b, h, q]) 0.05) }
+>     ; a = mce [0.4, 0.2, 0.1]
+>     ; s = mix (sinOsc AR f 0 * a * decay (mce [b, h, q]) 0.05) }
 > in withSC3 (\fd -> do { async fd (b_alloc 10 1024 1)
->                       ; play fd (out 0 s) })
+>                       ; play fd (out 0 (i + s)) })
 
 Davies, M. E. P.  and Plumbley, M. D. Beat Tracking With A
 Two State Model. Proceedings of the IEEE International
