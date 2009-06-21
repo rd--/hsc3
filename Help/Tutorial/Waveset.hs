@@ -2,46 +2,12 @@
 
 import Control.Monad
 import Data.Array
-import qualified Data.Array.Storable as A
 import Data.List
-import qualified Sound.File.Sndfile as F
+import qualified Sound.File.NeXT as F
 import Sound.OpenSoundControl
 import Sound.SC3
 import System.Environment
 import System.Random
-
--- * Sound file utilities.
-
--- | file-name -> (channel-count, frame-count, sample-rate)
-sf_info :: String -> IO (Int, Integer, Double)
-sf_info fn = do
-  h <- F.openFile fn F.ReadMode F.defaultInfo
-  let i = F.hInfo h
-      nc = F.channels i
-      nf = F.frames i
-      sr = F.samplerate i
-  F.hClose h
-  return (nc, fromIntegral nf, fromIntegral sr)
-
--- | channel-count -> channel -> interleaved-data -> channel-data
-extract_channel :: Int -> Int -> [a] -> [a]
-extract_channel _ _ [] = []
-extract_channel nc n xs =
-    let r = extract_channel nc n (drop nc xs)
-    in (xs !! n) : r
-
--- | file-name -> channel -> data
-sf_channel :: String -> Int -> IO [Double]
-sf_channel fn n = do
-  h <- F.openFile fn F.ReadMode F.defaultInfo
-  let i = F.hInfo h
-      nc = F.channels i
-      nf = F.frames i
-      ns = nc * nf
-  b <- A.newArray_ (0, ns) :: IO (A.StorableArray F.Index Double)
-  F.hGetSamples h b ns
-  e <- A.getElems b
-  return (extract_channel nc n e)
 
 -- * Score model.
 
@@ -163,9 +129,12 @@ run_waveset :: Transport t => t -> String -> IO ()
 run_waveset fd fn = do
   async fd (d_recv (synthdef "waveset" waveset))
   async fd (b_allocRead 10 fn 0 0)
-  (nc, nf, sr) <- sf_info fn
-  b <- sf_channel fn 0
-  let w = ws (prune 64 0 (fzc 0 b))
+  (hdr, cs) <- F.read fn
+  let nc = F.channelCount hdr
+      nf = F.frameCount hdr
+      sr = fromIntegral (F.sampleRate hdr)
+      b = cs !! 0
+      w = ws (prune 64 0 (fzc 0 b))
       pl s = play_score 10 fd s >> pauseThread 1
   putStrLn ("#f: " ++ show (nc, nf, sr))
   putStrLn ("#w: " ++ show (length w)) -- force w
