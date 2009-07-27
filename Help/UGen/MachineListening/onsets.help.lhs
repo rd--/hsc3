@@ -48,6 +48,8 @@ monophonic and polyphonic audio signals. The onset detection
 is purely based on signal analysis and does not make use of
 any "top-down" inferences such as tempo.
 
+> import Sound.SC3
+
 > let { x = mouseX KR 0 1 Linear 0.2
 >     ; i = soundIn 0
 >     ; c = fft' 10 i
