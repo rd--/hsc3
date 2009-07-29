@@ -23,9 +23,7 @@ module, the second the Sound.SC3 module.
 To build use the standard Cabal process in each repository in
 sequence.  To install to the user package database type:
 
-  $ runhaskell Setup.lhs configure --prefix ~
-  $ runhaskell Setup.lhs build
-  $ runhaskell Setup.lhs install --user
+  $ cabal install
 
 * Setting up the Haskell SuperCollider Emacs mode
 
