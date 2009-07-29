@@ -13,11 +13,11 @@ graph =
 score :: [OSC]
 score =
     let at t m = Bundle (NTPr t) m
-        instr = d_recv (synthdef "test" graph)
-        group = g_new [(1, AddToTail, 0)]
-        node t f = at t [s_new "test" (-1) AddToTail 1 [("freq", f)]]
-        notes = take 128 (zipWith node [0.0, 0.05 ..] [330, 350 ..])
-    in at 0.0 [instr, group] : notes
+        mk_instr = d_recv (synthdef "test" graph)
+        mk_group = g_new [(1, AddToTail, 0)]
+        mk_node t f = at t [s_new "test" (-1) AddToTail 1 [("freq", f)]]
+        notes = take 128 (zipWith mk_node [0.0, 0.05 ..] [330, 350 ..])
+    in at 0.0 [mk_instr, mk_group] : notes
 
 main :: IO ()
 main = do
