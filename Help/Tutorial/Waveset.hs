@@ -1,9 +1,9 @@
 {- A simple waveset synthesiser (rd) -}
 
 import Control.Monad
-import Data.Array
+import qualified Data.Array as A {- array -}
 import Data.List
-import qualified Sound.File.NeXT as F
+import qualified Sound.File.NeXT as F {- hsc3-sf -}
 import Sound.OpenSoundControl
 import Sound.SC3
 import System.Environment
@@ -120,8 +120,8 @@ mk_score sr repeats w =
 rchoose :: Int -> [a] -> [a]
 rchoose n w =
     let (l, r) = (1, length w)
-        a = listArray (l,r) w
-    in take n (map (a !) (randomRs (l,r) (mkStdGen 1)))
+        a = A.listArray (l,r) w
+    in take n (map (a A.!) (randomRs (l,r) (mkStdGen 1)))
 
 -- | Load waveset instrument, allocate sound file buffer, do waveset
 --   analysis, generate & play scores.
@@ -145,8 +145,10 @@ run_waveset fd fn = do
 
 main :: IO ()
 main = do
-  (fn:_) <- getArgs
-  withSC3 (\fd -> run_waveset fd fn)
+  a <- getArgs
+  case a of
+    [fn] -> withSC3 (\fd -> run_waveset fd fn)
+    _ -> error "audio file?"
 
 {--
 withSC3 (\fd -> run_waveset fd "/home/rohan/audio/text.snd")
