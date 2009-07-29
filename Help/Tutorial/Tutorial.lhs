@@ -2,9 +2,9 @@
 
 * Prerequisites
 
-Haskell SuperCollider requires that SuperCollider [1], GHC [2], the
-GHC binary package[3], Emacs [4] and the standard Haskell Emacs mode
-[5] are all installed and working properly.
+Haskell SuperCollider requires that SuperCollider [1], GHC [2],
+Emacs [4] and the standard Haskell Emacs mode [5] are all
+installed and working properly.
 
 * Setting up Haskell SuperCollider
 
@@ -237,7 +237,6 @@ To end printing send:
 
 [1] http://audiosynth.com/
 [2] http://haskell.org/ghc/
-[3] http://hackage.haskell.org/cgi-bin/hackage-scripts/package/binary-0.3
 [4] http://gnu.org/software/emacs/
 [5] http://haskell.org/haskell-mode/
 [6] http://hackage.haskell.org/
