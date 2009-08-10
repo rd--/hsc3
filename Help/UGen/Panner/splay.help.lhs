@@ -2,9 +2,12 @@ splay in spread level center
 
 splay spreads an array of channels across the stereo field.
 
-spread -    0 = mono, 1 = stereo
-level  -    0 = silent, 1 = unit gain (equal power level compensated)
-center -   -1 = left, 1 = right
+   spread - 0 = mono, 1 = stereo
+    level - 0 = silent, 1 = unit gain (equal power level compensated)
+   center - negate 1 = left, 1 = right
+
+> import Sound.SC3
+> import Control.Monad
 
 > do { i <- return 6
 >    ; r <- replicateM i (rand 10 20)
