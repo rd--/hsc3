@@ -5,6 +5,8 @@ a resonance parameter, the bandwidth is specified in a 60dB ring
 decay time. One Ringz is equivalent to one component of the Klank
 UGen.
 
+> import Sound.SC3
+
 > do { n <- dust AR 3
 >    ; audition (out 0 (ringz (n * 0.3) 2000 2)) }
 
