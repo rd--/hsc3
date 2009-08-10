@@ -2,6 +2,8 @@ mrg2 left right
 
 mrg2 defines a node indicating a multiple root graph.
 
+> import Sound.SC3
+
 > let { l = out 0 (sinOsc AR 300 0 * 0.1)
 >     ; r = out 1 (sinOsc AR 900 0 * 0.1) }
 > in audition (mrg2 l r)
