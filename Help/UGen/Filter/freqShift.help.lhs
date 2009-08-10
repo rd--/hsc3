@@ -1,14 +1,15 @@
 freqShift input shift phase
 
-freq-shift implements single sideband amplitude modulation, also
-known as frequency shifting, but not to be confused with pitch
-shifting.  Frequency shifting moves all the components of a signal
-by a fixed amount but does not preserve the original harmonic
-relationships.
+Single sideband amplitude modulation, also known as frequency
+shifting, but not to be confused with pitch shifting.  Frequency
+shifting moves all the components of a signal by a fixed amount but
+does not preserve the original harmonic relationships.
 
-input - audio input
-shift - amount of shift in cycles per second
-phase - phase of the frequency shift (0 - 2pi) 
+   input - audio input
+   shift - amount of shift in cycles per second
+   phase - phase of the frequency shift (0 - 2pi)
+
+> import Sound.SC3
 
 shifting a 100Hz tone by 1 Hz rising to 500Hz
 
