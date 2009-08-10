@@ -358,3 +358,16 @@ bLowShelf i f rs db = mkFilter "BLowShelf" [i, f, rs, db] 1
 
 bHiShelf :: UGen -> UGen -> UGen -> UGen -> UGen
 bHiShelf i f rs db = mkFilter "BHiShelf" [i, f, rs, db] 1
+
+bLowPassCoef :: Floating a => a -> a -> a -> (a, a, a, a, a)
+bLowPassCoef sr freq rq =
+    let w0 = pi * 2 * freq * (1 / sr)
+        cos_w0 = cos w0
+        i = 1 - cos_w0
+        alpha = sin w0 * 0.5 * rq
+        b0rz = recip (1 + alpha)
+        a0 = i * 0.5 * b0rz
+        a1 = i * b0rz
+        b1 = cos_w0 * 2 * b0rz
+        b2 = (1 - alpha) * negate b0rz
+    in (a0, a1, a0, b1, b2)
