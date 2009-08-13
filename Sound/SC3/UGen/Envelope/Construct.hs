@@ -1,25 +1,34 @@
--- | Functions to generate break point data for standard envelope types.
-module Sound.SC3.UGen.Envelope.Construct where
+-- | Functions to generate break point data for standard envelope
+--   types.
+module Sound.SC3.UGen.Envelope.Construct (env
+                                         ,envCoord
+                                         ,envTrapezoid
+                                         ,envPerc', envPerc
+                                         ,envTriangle
+                                         ,envSine
+                                         ,envLinen', envLinen) where
 
 import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.Math
 import Sound.SC3.UGen.Enum
-import Sound.SC3.UGen.Utilities
 
--- | Basic envelope data constructor.
+-- | Basic envelope data constructor.  The curve argument are cycled
+--   if required.
 env :: [UGen] -> [UGen] -> [EnvCurve] -> UGen -> UGen -> [UGen]
-env []     _   _   _   _  = error "env: illegal specification"
-env (l:vl) tms crv rls lp =
-    [l, n', rls, lp] ++ concat (zipWith3 f vl tms (take n $ cycle crv))
-    where f l' t c = [l', t, env_curve c, env_value c]
-          n       = length tms
-          n'      = fromIntegral n
+env [] _   _   _   _  = error "env: illegal specification"
+env (l:ls) tms crv rls lp =
+    let f l' t c = [l', t, env_curve c, env_value c]
+        n = length tms
+        n' = fromIntegral n
+        crv' = take n (cycle crv)
+    in [l, n', rls, lp] ++ concat (zipWith3 f ls tms crv')
 
 -- | Co-ordinate based static envelope generator.
 envCoord :: [(UGen, UGen)] -> UGen -> UGen -> EnvCurve -> [UGen]
-envCoord bp dur amp c = env l t (repeat c) (-1) (-1)
-    where l = map ((* amp) . snd) bp
-          t = map (* dur) (d_dx (map fst bp))
+envCoord bp dur amp c = 
+    let l = map ((* amp) . snd) bp
+        t = map (* dur) (d_dx (map fst bp))
+    in env l t (repeat c) (-1) (-1)
 
 {- | Trapezoidal envelope generator.  The arguments are: 1. @shape@
 determines the sustain time as a proportion of @dur@, zero is a
@@ -28,30 +37,66 @@ the attack\/decay ratio, zero is an immediate attack and a slow decay,
 one a slow attack and an immediate decay; 3. @duration@ in seconds;
 4. @amplitude@ as linear gain.  -}
 envTrapezoid :: UGen -> UGen -> UGen -> UGen -> [UGen]
-envTrapezoid shape skew dur amp = envCoord bp dur amp EnvLin
-    where x1 = skew * (1 - shape)
-          bp = [ (0, skew <=* 0)
-               , (x1, 1)
-               , (shape + x1, 1)
-               , (1, skew >=* 1) ]
+envTrapezoid shape skew dur amp =
+    let x1 = skew * (1 - shape)
+        bp = [ (0, skew <=* 0)
+             , (x1, 1)
+             , (shape + x1, 1)
+             , (1, skew >=* 1) ]
+    in envCoord bp dur amp EnvLin
 
-envPerc' :: UGen -> UGen -> UGen -> [EnvCurve] -> [UGen]
-envPerc' atk rls lvl crv = env [0.0, lvl, 0.0] [atk, rls] crv (-1.0) (-1.0)
+envPerc' :: UGen -> UGen -> UGen -> (EnvCurve, EnvCurve) -> [UGen]
+envPerc' atk rls lvl (c0, c1) =
+    let c = [c0, c1]
+    in env [0.0, lvl, 0.0] [atk, rls] c (-1.0) (-1.0)
 
--- | Percussive envelope, with attack, release, level and curve inputs.
+-- | Percussive envelope, with attack, release, level and curve
+--   inputs.
 envPerc :: UGen -> UGen -> [UGen]
-envPerc atk rls = envPerc' atk rls 1.0 (dbl (EnvNum (-4.0)))
+envPerc atk rls =
+    let cn = EnvNum (-4.0)
+    in envPerc' atk rls 1.0 (cn, cn)
 
 -- | Triangular envelope, with duration and level inputs.
 envTriangle :: UGen -> UGen -> [UGen]
 envTriangle dur lvl =
-   env [0.0, lvl, 0.0] (dbl (dur / 2.0)) (dbl EnvLin) (-1.0) (-1.0)
+    let c = replicate 2 EnvLin
+        d = replicate 2 (dur / 2.0)
+    in env [0.0, lvl, 0.0] d c (-1.0) (-1.0)
 
 -- | Sine envelope, with duration and level inputs.
 envSine :: UGen -> UGen -> [UGen]
 envSine dur lvl =
-   env [0.0, lvl, 0.0] (dbl (dur / 2.0)) (dbl EnvSin) (-1.0) (-1.0)
+    let c = replicate 2 EnvSin
+        d = replicate 2 (dur / 2.0)
+    in env [0.0, lvl, 0.0] d c (-1.0) (-1.0)
+
+envLinen' :: UGen -> UGen -> UGen -> UGen -> (EnvCurve, EnvCurve, EnvCurve) -> [UGen]
+envLinen' aT sT rT l (c0, c1, c2) =
+    env [0, l, l, 0] [aT, sT, rT] [c0, c1, c2] (-1) (-1)
 
 -- | Linear envelope parameter constructor.
-envLinen :: UGen -> UGen -> UGen -> UGen -> [EnvCurve] -> [UGen]
-envLinen aT sT rT l c = env [0, l, l, 0] [aT, sT, rT] c (-1) (-1)
+envLinen :: UGen -> UGen -> UGen -> UGen -> [UGen]
+envLinen aT sT rT l =
+    let c = (EnvLin, EnvLin, EnvLin)
+    in envLinen' aT sT rT l c
+
+d_dx :: (Num a) => [a] -> [a]
+d_dx [] = []
+d_dx [_] = []
+d_dx [x,y] = [y - x]
+d_dx (x:y:r) = y - x : d_dx (y:r)
+
+env_curve :: EnvCurve -> UGen
+env_curve EnvStep = Constant 0.0
+env_curve EnvLin = Constant 1.0
+env_curve EnvExp = Constant 2.0 
+env_curve EnvSin = Constant 3.0
+env_curve EnvCos = Constant 4.0
+env_curve (EnvNum _) = Constant 5.0
+env_curve EnvSqr = Constant 6.0
+env_curve EnvCub = Constant 7.0
+
+env_value :: EnvCurve -> UGen
+env_value (EnvNum u) = u
+env_value _ = Constant 0.0

@@ -12,8 +12,9 @@ overlap-add (jmcc, rd)
 >               ; at' t f
 >               ; return () }
 >     ; mk_env a s 
->       = let c = EnvNum 4
->         in envGen KR 1 1 0 1 RemoveSynth (envLinen a s a 1 [c,c,c])
+>       = let { c = EnvNum 4
+>             ; p = envLinen' a s a 1 (c, c, c) }
+>         in envGen KR 1 1 0 1 RemoveSynth p
 >     ; with_env g a s 
 >       = out 0 (g * (mk_env a s))
 >     ; overlap_add fd n o a s g 
