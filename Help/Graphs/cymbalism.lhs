@@ -2,19 +2,20 @@ cymbalism (jmcc)
 
 > import Sound.SC3
 
-> let p = 15
-> in do { f1 <- rand 500 2500
->       ; f2 <- rand 0 8000
->       ; let y = do { f <- sequence (replicate p (rand f1 (f1 + f2)))
->                    ; rt <- sequence (replicate p (rand 1 5))
->                    ; return (klankSpec f (replicate p 1) rt) }
->         in do { z <- clone 2 y
->               ; n <- fmap (* 0.03) (whiteNoise ar)
->               ; tf <- rand 0.5 3.5
->               ; let { t = impulse ar tf 0
->                     ; s = decay t 0.004 * n
->                     ; k = klank s 1 0 1 (mceTranspose z) }
->                 in audition (out 0 k) } }
+> main =
+>   let p = replicate 15
+>   in do { f1 <- rand 500 2500
+>         ; f2 <- rand 0 8000
+>         ; let y = do { f <- sequence (p (rand f1 (f1 + f2)))
+>                      ; rt <- sequence (p (rand 1 5))
+>                      ; return (klankSpec f (p 1) rt) }
+>           in do { z <- clone 2 y
+>                 ; n <- fmap (* 0.03) (whiteNoise ar)
+>                 ; tf <- rand 0.5 3.5
+>                 ; let { t = impulse ar tf 0
+>                       ; s = decay t 0.004 * n
+>                       ; k = klank s 1 0 1 (mceTranspose z) }
+>                   in audition (out 0 k) } }
 
 { var p = 15
 ; var f1 = Rand.new(500, 2500)

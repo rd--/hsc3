@@ -5,7 +5,6 @@ C-cC-l C-cC-m
 > import Sound.SC3
 > import qualified Sound.SC3.UGen.Base as B
 
-> tgrn :: UGen -> UGen
 > tgrn b =
 >   let { trate = mouseY kr 2 120 Exponential 0.1
 >       ; dur = 1.2 / trate
@@ -16,7 +15,6 @@ C-cC-l C-cC-m
 >       ; rate = shiftLeft 1.2 n }
 >   in tGrains 2 clk b rate pos dur pan 0.25 2
 
-> main :: IO ()
 > main =
 >   let fn = "/home/rohan/audio/text.snd"
 >   in withSC3 (\fd -> do { async fd (b_allocRead 10 fn 0 0)

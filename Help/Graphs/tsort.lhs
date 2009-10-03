@@ -11,11 +11,12 @@ would otherwise be loaded.)
 
 > import Sound.SC3
 
-> let { n = 122
->     ; c = envCoord [(0,0), (0.15, 1), (6, 0)] 1 1 EnvLin
->     ; e = envGen kr 1 1 0 1 RemoveSynth c
->     ; f o = sinOsc ar (440 + constant o) 0 * 0.001
->     ; s = mixFill n f }
-> in audition (out 0 (s * e))
+> main =
+>   let { n = 122
+>       ; c = envCoord [(0,0), (0.15, 1), (6, 0)] 1 1 EnvLin
+>       ; e = envGen kr 1 1 0 1 RemoveSynth c
+>       ; f o = sinOsc ar (440 + constant o) 0 * 0.001
+>       ; s = mixFill n f }
+>   in audition (out 0 (s * e))
 
 http://create.ucsb.edu/pipermail/sc-users/2003-March/002807.html

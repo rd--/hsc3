@@ -5,8 +5,7 @@ bowed string (jmcc)
 > import qualified Sound.SC3.UGen.Monadic as M
 > import System.Random
 
-> bowed_string :: IO ()
-> bowed_string =
+> main =
 >     let { rrand l r = getStdRandom (randomR (l, r))
 >         ; choose l = fmap (l !!) (rrand 0 (length l - 1))
 >         ; root = 5
@@ -24,9 +23,6 @@ bowed string (jmcc)
 >               ; d = klankSpec (iota 12 f f) (geom 12 1 r1) r2
 >               ; k = klank x 1 0 1 d }
 >         in audition (out 0 (softClip (k * 0.1))) }
-
-> main :: IO ()
-> main = bowed_string
 
 { var root = 5
 ; var scale = #[0, 2, 4, 5, 7, 9, 11] + root

@@ -8,7 +8,6 @@ increasing the stack limit of the haskell run time system]
 > import qualified Sound.SC3.UGen.Monadic as M
 > import System.Random
 
-> main :: IO ()
 > main =
 >    let { rrand l r = getStdRandom (randomR (l, r)) :: IO Double
 >        ; coin n a b = do { m <- rrand 0.0 1.0

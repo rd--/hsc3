@@ -3,7 +3,6 @@ strummable guitar (jmcc)
 > import Sound.SC3
 > import qualified Sound.SC3.UGen.Base as B
 
-> main :: IO ()
 > main =
 >   let { scale = [ 52, 57, 62, 67, 71, 76 ]
 >       ; str i = let { x = mouseX kr 0 1 Linear 0.2

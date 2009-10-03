@@ -57,7 +57,6 @@ lucier_wire freq =
 	outR = pk2_L + pk2_R
     in audition (out 0 (mrg [mce2 outL outR, drv, source, l_out]))
 
-main :: IO ()
 main = lucier_wire 60
 
 {-

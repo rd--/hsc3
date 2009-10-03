@@ -2,18 +2,19 @@ wind metals (jmcc)
 
 > import Sound.SC3
 
-> let n = 6
-> in do { base <- expRand 60 4000
->       ; range <- rand 500 8000
->       ; n0 <- clone 2 (brownNoise ar)
->       ; r0 <- expRand 0.125 0.5
->       ; n1 <- lfNoise1 kr r0
->       ; f <- sequence (replicate n (rand base (base + range)))
->       ; dt <- sequence (replicate n (rand 0.1 2))
->       ; let { exc = n0 * 0.007 * max 0 (n1 * 0.75 + 0.25)
->             ; k = klankSpec f (replicate n 1) dt
->             ; s = klank exc 1 0 1 k }
->         in audition (out 0 (softClip (s * 0.1))) }
+> main =
+>   let n = 6
+>   in do { base <- expRand 60 4000
+>         ; range <- rand 500 8000
+>         ; n0 <- clone 2 (brownNoise ar)
+>         ; r0 <- expRand 0.125 0.5
+>         ; n1 <- lfNoise1 kr r0
+>         ; f <- sequence (replicate n (rand base (base + range)))
+>         ; dt <- sequence (replicate n (rand 0.1 2))
+>         ; let { exc = n0 * 0.007 * max 0 (n1 * 0.75 + 0.25)
+>               ; k = klankSpec f (replicate n 1) dt
+>               ; s = klank exc 1 0 1 k }
+>           in audition (out 0 (softClip (s * 0.1))) }
 
 { var n = 6
 ; var base = ExpRand.new(60, 4000)

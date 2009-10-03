@@ -3,7 +3,6 @@ sample and hold liquidities (jmcc)
 > import Sound.SC3
 > import qualified Sound.SC3.UGen.Base as B
 
-> main :: IO ()
 > main =
 >   let { r = mouseX kr 1 200 Exponential 0.1
 >       ; t = recip r

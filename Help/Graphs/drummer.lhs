@@ -2,16 +2,16 @@ drummer (thor magnusson)
 
 > import Sound.SC3
 
-> do { n <- whiteNoise ar
->    ; let { tempo = 4
->          ; dup a = mce2 a a 
->          ; tr = impulse ar tempo 0
->          ; tr_2 = pulseDivider tr 4 2
->          ; tr_4 = pulseDivider tr 4 0
->          ; snare = n * decay2 tr_2 0.005 0.5
->          ; bass = sinOsc ar 60 0 * decay2 tr_4 0.005 0.5
->          ; hihat = hpf n 10000 * decay2 tr 0.005 0.5 }
->      in audition (out 0 (pan2 (snare + bass + hihat) 0 0.4)) }
+> main =
+>   do { n <- whiteNoise ar
+>      ; let { tempo = 4
+>            ; tr = impulse ar tempo 0
+>            ; tr_2 = pulseDivider tr 4 2
+>            ; tr_4 = pulseDivider tr 4 0
+>            ; snare = n * decay2 tr_2 0.005 0.5
+>            ; bass = sinOsc ar 60 0 * decay2 tr_4 0.005 0.5
+>            ; hihat = hpf n 10000 * decay2 tr 0.005 0.5 }
+>        in audition (out 0 (pan2 (snare + bass + hihat) 0 0.4)) }
 
 { var tempo = 4
 ; var n = WhiteNoise.ar()

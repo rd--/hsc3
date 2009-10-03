@@ -1,26 +1,27 @@
 xy-interference (rd)
 
 > import Sound.SC3
+> import qualified Sound.SC3.UGen.Base as B
 
-> let { x = mouseX kr 20 22000 Linear (mce2 0.005 0.025)
->     ; y = mouseY kr 20 22000 Linear (mce2 0.005 0.075)
->     ; nd = do { n <- lfNoise0 kr (mce2 5 9)
->               ; let { a = sinOsc ar (x + n) 0
->                     ; b = sinOsc ar y 0 }
->                 in return (a * b) } }
-> in audition . (out 0) . sum =<< sequence (replicate 3 nd)
+> main =
+>   let { x = mouseX kr 20 22000 Linear (mce2 0.005 0.025)
+>       ; y = mouseY kr 20 22000 Linear (mce2 0.005 0.075)
+>       ; nd = do { n <- lfNoise0 kr (mce2 5 9)
+>                 ; let { a = sinOsc ar (x + n) 0
+>                       ; b = sinOsc ar y 0 }
+>                   in return (a * b) } }
+>   in audition . (out 0) . sum =<< sequence (replicate 3 nd)
 
 the same graph, written using a non-monadic noise constructor
 
-> import qualified Sound.SC3.UGen.Base as B
-
-> let { x = mouseX kr 20 22000 Linear (mce2 0.005 0.025)
->     ; y = mouseY kr 20 22000 Linear (mce2 0.005 0.075)
->     ; nd k = let { n = B.lfNoise0 (uid k) kr (mce2 5 9)
->                  ; a = sinOsc ar (x + n) 0
->                  ; b = sinOsc ar y 0 }
->              in a * b }
-> in audition (out 0 (sum (map nd [1..3])))
+> alternate =
+>   let { x = mouseX kr 20 22000 Linear (mce2 0.005 0.025)
+>       ; y = mouseY kr 20 22000 Linear (mce2 0.005 0.075)
+>       ; nd k = let { n = B.lfNoise0 (uid k) kr (mce2 5 9)
+>                    ; a = sinOsc ar (x + n) 0
+>                    ; b = sinOsc ar y 0 }
+>                in a * b }
+>   in audition (out 0 (sum (map nd [1..3])))
 
 { var x = MouseX.kr(20, 22000, 'linear', [0.005, 0.025])
 ; var y = MouseY.kr(20, 22000, 'linear', [0.005, 0.075])

@@ -214,11 +214,14 @@ these unit generators they must be installed, see:
 
 * Example Unit Generator Graphs
 
-The Help/ directory contains example unit generator graphs.  The
-graphs are self contained, selecting the graph and typing C-cC-e
-will audition it.  In many cases both supercollider language and
-haskell versions are given, switch the emacs buffer to
-sclang-mode to run the supercollider language versions.
+The Help/ directory contains example unit generator
+graphs.  To audition a graph from Emacs type C-cC-l
+C-cC-m.  Many of the graphs are self contained,
+selecting the graph (excluding the 'main =' line) and
+typing C-cC-e will audition it.  In many cases both
+supercollider language and haskell versions are given,
+switch the emacs buffer to sclang-mode to run the
+supercollider language versions.
 
 * Monitoring incoming server messages
 

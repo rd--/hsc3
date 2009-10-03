@@ -3,7 +3,6 @@ crotale (rd)
 > import Sound.SC3
 > import qualified Sound.SC3.UGen.Base as B
 
-> main :: IO ()
 > main =
 >     let { crotale = ( [ 35.45676040649414
 >                       , 128.59849548339844

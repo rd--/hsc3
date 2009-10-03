@@ -4,7 +4,6 @@ tank (jmcc)
 > import Sound.SC3
 > import qualified Sound.SC3.UGen.Monadic as M
 
-> main :: IO ()
 > main =
 >   let { r_allpass i = do { r <- clone 2 (M.rand 0.005 0.02)
 >                          ; return (allpassN i 0.03 r 1) }
