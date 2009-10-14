@@ -5,10 +5,12 @@ When triggered pauses a node.
 gate   - when gate is 0,  node is paused, when 1 it runs
 nodeID - node to be paused
 
+> import Sound.SC3
+
 > let { f  = control KR "f" 440
 >     ; g  = control KR "g" 1
 >     ; a  = mrg [out 0 (sinOsc AR f 0 * 0.1), pause g 1001]
->     ; a' = graphdef "a" (graph a) }
+>     ; a' = synthdef "a" a }
 > in withSC3 (\fd -> do { async fd (d_recv a')
 >                       ; send fd (s_new "a" 1001 AddToTail 0 [])
 >                       ; send fd (s_new "a" 1002 AddToTail 0 [("f", 880)]) } )
