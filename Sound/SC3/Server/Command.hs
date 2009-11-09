@@ -135,11 +135,15 @@ u_cmd nid uid cmd arg = Message "/u_cmd" ([Int nid, Int uid, String cmd] ++ arg)
 b_alloc :: Int -> Int -> Int -> OSC
 b_alloc nid frames channels = Message "/b_alloc" [Int nid, Int frames, Int channels]
 
--- | Allocate buffer space and read a sound file.
+-- | Allocate buffer space and read a sound file. (Asynchronous)
 b_allocRead :: Int -> String -> Int -> Int -> OSC
 b_allocRead nid p f n = Message "/b_allocRead" [Int nid, String p, Int f, Int n]
 
--- | Close attached soundfile and write header information.
+-- | Allocate buffer space and read a sound file, picking specific channels. (Asynchronous)
+b_allocReadChannel :: Int -> String -> Int -> Int -> [Int] -> OSC
+b_allocReadChannel nid p f n cs = Message "/b_allocReadChannel" ([Int nid, String p, Int f, Int n] ++ map Int cs)
+
+-- | Close attached soundfile and write header information. (Asynchronous)
 b_close :: Int -> OSC
 b_close nid = Message "/b_close" [Int nid]
 
@@ -147,11 +151,11 @@ b_close nid = Message "/b_close" [Int nid]
 b_fill :: Int -> [(Int, Int, Double)] -> OSC
 b_fill nid l = Message "/b_fill" (Int nid : mk_triples Int Int Float l)
 
--- | Free buffer data.
+-- | Free buffer data. (Asynchronous)
 b_free :: Int -> OSC
 b_free nid = Message "/b_free" [Int nid]
 
--- | Call a command to fill a buffer.
+-- | Call a command to fill a buffer.  (Asynchronous)
 b_gen :: Int -> String -> [Double] -> OSC
 b_gen bid cmd arg = Message "/b_gen" (Int bid : String cmd : map Float arg)
 
@@ -167,9 +171,13 @@ b_getn nid l = Message "/b_getn" (Int nid : mk_duples Int Int l)
 b_query :: [Int] -> OSC
 b_query = Message "/b_query" . map Int
 
--- | Read sound file data into an existing buffer.
+-- | Read sound file data into an existing buffer. (Asynchronous)
 b_read :: Int -> String -> Int -> Int -> Int -> Int -> OSC
 b_read nid p f n f' z = Message "/b_read" [Int nid, String p, Int f, Int n, Int f', Int z]
+
+-- | Read sound file data into an existing buffer, picking specific channels. (Asynchronous)
+b_readChannel :: Int -> String -> Int -> Int -> Int -> Int -> [Int] -> OSC
+b_readChannel nid p f n f' z cs = Message "/b_readChannel" ([Int nid, String p, Int f, Int n, Int f', Int z] ++ map Int cs)
 
 -- | Set sample values.
 b_set :: Int -> [(Int, Double)] -> OSC
@@ -180,11 +188,11 @@ b_setn :: Int -> [(Int, [Double])] -> OSC
 b_setn nid l = Message "/b_setn" (Int nid : concatMap f l)
     where f (i,d) = Int i : Int (length d) : map Float d
 
--- | Write sound file data.
+-- | Write sound file data. (Asynchronous)
 b_write :: Int -> String -> Int -> Int -> Int -> Int -> Int -> OSC
 b_write nid p h t f s z = Message "/b_write" [Int nid, String p, Int h, Int t, Int f, Int s, Int z]
 
--- | Zero sample data.
+-- | Zero sample data. (Asynchronous)
 b_zero :: Int -> OSC
 b_zero nid = Message "/b_zero" [Int nid]
 
