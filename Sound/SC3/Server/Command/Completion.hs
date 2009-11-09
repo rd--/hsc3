@@ -1,9 +1,9 @@
 -- | This module provides variations of the asynchronous server commands that
--- expect a "completion packet" as the first argument. The completion packet
+-- expect a /completion packet/ as the first argument. The completion packet
 -- is executed by the server when the asynchronous command has finished. Note
 -- that this mechanism is for synchronizing server side processes only, for
--- client side synchronization use "/done" message notification or the "/sync"
--- barrier.
+-- client side synchronization use @\/done@ message notification or the
+-- @\/sync@ barrier.
 module Sound.SC3.Server.Command.Completion (
   -- *Synthdef handling
     d_recv'
