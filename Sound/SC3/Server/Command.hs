@@ -2,6 +2,7 @@
 --   synthesis server.
 module Sound.SC3.Server.Command where
 
+import qualified Data.ByteString.Lazy as B
 import Data.Word
 import Sound.OpenSoundControl
 import Sound.SC3.Server.Utilities
@@ -269,6 +270,25 @@ c_set1 i x = c_set [(i, x)]
 -- | Set a signle node control value.
 n_set1 :: Int -> String -> Double -> OSC
 n_set1 nid k n = n_set nid [(k, n)]
+
+-- * Modify existing message to include completion message
+
+-- List of asynchronous server commands.
+async_cmds :: [String]
+async_cmds = ["/d_recv", "/d_load", "/d_loadDir"
+             ,"/b_alloc", "/b_allocRead", "/b_allocReadChannel"
+             ,"/b_free", "/b_close"
+             ,"/b_read", "/b_readChannel"
+             ,"/b_write", "/b_zero"]
+
+-- | Add a completion message to an existing asynchronous command.
+withCM :: OSC -> OSC -> OSC
+withCM (Message c xs) cm =
+    if c `elem` async_cmds
+    then let xs' = xs ++ [Blob (B.unpack (encodeOSC cm))]
+         in Message c xs'
+    else error ("withCM: not async: " ++ c)
+withCM _ _ = error "withCM: not message"
 
 -- Local Variables:
 -- truncate-lines:t
