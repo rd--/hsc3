@@ -10,7 +10,7 @@ Copyright:         (c) Rohan Drape and others, 2006-2009
 Author:            Rohan Drape
 Maintainer:        rd@slavepianos.org
 Stability:         Experimental
-Homepage:          http://slavepianos.org/rd/?f=207949
+Homepage:          http://slavepianos.org/rd/?t=hsc3
 Tested-With:       GHC == 6.10.3
 Build-Type:        Simple
 Cabal-Version:     >= 1.6
@@ -99,3 +99,7 @@ Library
                    Sound.SC3.UGen.UId
   Other-modules:   Sound.SC3.Server.Utilities
                    Sound.SC3.UGen.Utilities
+
+Source-Repository  head
+  Type:            darcs
+  Location:        http://slavepianos.org/~rd/sw/hsc3/
