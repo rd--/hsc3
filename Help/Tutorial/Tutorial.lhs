@@ -131,6 +131,28 @@ server activity to the ghci output window.
   Sample Rate (Nominal)       Double 44100.0
   Sample Rate (Actual)        Double 44099.958404246536
 
+* Completion messages
+
+To send a completion message add one to an existing
+asynchronous message using withCM.
+
+> import Sound.SC3
+
+> let { g = out 0 (sinOsc AR 660 0 * 0.15)
+>     ; m = d_recv (synthdef "sin" g)
+>     ; cm = s_new "sin" 100 AddToTail 1 [] }
+> in withSC3 (\fd -> send fd (withCM m cm))
+
+Alternately use variant constructors for the
+asynchronous commands.
+
+> import Sound.SC3.Server.Command.Completion
+
+> let { g = out 0 (sinOsc AR 660 0 * 0.15)
+>     ; cm = s_new "sin" 100 AddToTail 1 []
+>     ; m = d_recv' cm (synthdef "sin" g) }
+> in withSC3 (\fd -> send fd m)
+
 * Multiple line expressions
 
 There are two variants for expressions that are written over
