@@ -11,14 +11,14 @@ fm-kltr (rd)
 >                ; r2 <- rand 0.5 1.5
 >                ; r3 <- rand 0.975 1.025
 >                ; r4 <- rand 0.75 1.25
->                ; let { o = Control ir "out" 0
->                      ; t = Control kr "trig" 0 -- unused
->                      ; a = Control kr "amp" 0.1
->                      ; d = Control kr "dur" 0.1
->                      ; f = Control kr "freq" 400.0
->                      ; i = Control kr "index" 40.0
->                      ; p = Control kr "pan" 0.0
->                      ; f2 = Control kr "freq2" 600
+>                ; let { o = control ir "out" 0
+>                      ; t = control kr "trig" 0 {- unused -}
+>                      ; a = control kr "amp" 0.1
+>                      ; d = control kr "dur" 0.1
+>                      ; f = control kr "freq" 400.0
+>                      ; i = control kr "index" 40.0
+>                      ; p = control kr "pan" 0.0
+>                      ; f2 = control kr "freq2" 600
 >                      ; ep = envPerc 0.01 d
 >                      ; e = envGen ar 1 a 0 1 RemoveSynth ep
 >                      ; so = sinOsc ar (xLine kr f (f * r1) d DoNothing) 0

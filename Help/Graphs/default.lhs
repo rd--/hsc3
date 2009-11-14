@@ -9,10 +9,10 @@ default (jmcc)
 >                  ; r1 <- rand 0.0 0.4
 >                  ; r2 <- rand 4000 5000
 >                  ; r3 <- rand 2500 3200
->                  ; let { f = Control KR "freq" 440
->                        ; a = Control KR "amp" 0.1
->                        ; p = Control KR "pan" 0
->                        ; g = Control KR "gate" 1
+>                  ; let { f = control KR "freq" 440
+>                        ; a = control KR "amp" 0.1
+>                        ; p = control KR "pan" 0
+>                        ; g = control KR "gate" 1
 >                        ; e = linen g 0.01 (a * 0.7) 0.3 RemoveSynth
 >                        ; f3 = mce [f, f + r0, f + r1]
 >                        ; l = xLine KR r2 r3 1 DoNothing

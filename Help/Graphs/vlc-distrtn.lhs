@@ -92,7 +92,7 @@ caution - audio feedback graph
 >                    ; f = freq * (n + 1) * (n0 * detune + 1) }
 >                in return (ringz i f (fall * n1) * ampl) }
 >       ; plyr n =
->           let { ctl j k = Control kr j k
+>           let { ctl j k = control kr j k
 >               ; buf = ctl "buf" 0
 >               ; iamp = ctl "iamp" 0.1
 >               ; ampl = ctl "ampl" 0.1

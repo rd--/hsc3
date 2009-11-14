@@ -13,7 +13,7 @@ e-lamell (rd)
 >                              in return ((r ** n) * a) }
 >       ; choose l = return . (l !!) =<< rrand 0 (length l - 1)
 >       ; sendSynth fd n u = async fd (d_recv (synthdef n u))
->       ; e_lamell = let { ctl s v = Control kr s v
+>       ; e_lamell = let { ctl s v = control kr s v
 >                        ; f = ctl "f" 440
 >                        ; n = ctl "n" 12
 >                        ; d = ctl "d" 0.1

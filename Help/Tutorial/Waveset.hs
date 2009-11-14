@@ -82,7 +82,7 @@ ws (x:y:z) = (x,y) : ws (y : z)
 -- | A trivial waveset instrument with unit envelope.
 waveset :: UGen
 waveset =
-    let k = Control KR
+    let k = control KR
         o = k "out" 0
         b = k "bufnum" 0
         s = k "start" 0
