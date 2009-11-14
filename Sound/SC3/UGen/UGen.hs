@@ -11,7 +11,8 @@ import System.Random
 data UGen = Constant { constantValue :: Double }
           | Control { controlOperatingRate :: Rate
                     , controlName :: String
-                    , controlDefault :: Double }
+                    , controlDefault :: Double 
+                    , controlTriggered :: Bool }
           | Primitive { ugenRate :: Rate
                       , ugenName :: String
                       , ugenInputs :: [UGen]
@@ -47,8 +48,19 @@ constant :: (Real a) => a -> UGen
 constant = Constant . realToFrac
 
 -- | Control input node constructor.
+--   
+--   Note that if the name begins with a t_ prefix the control is
+--   converted to a triggered control and the rate argument is
+--   ignored.  This is to conform to sclang conventions.
 control :: Rate -> String -> Double -> UGen
-control = Control
+control r n d =
+    if "t_" `isPrefixOf` n 
+    then tr_control n d
+    else Control r n d False
+
+-- | Triggered (kr) control input node constructor.
+tr_control :: String -> Double -> UGen
+tr_control n d = Control KR n d True
 
 -- | Multiple channel expansion node constructor.
 mce :: [UGen] -> UGen
@@ -72,8 +84,8 @@ isConstant _            = False
 
 -- | Control node predicate.
 isControl :: UGen -> Bool
-isControl (Control _ _ _) = True
-isControl _               = False
+isControl (Control _ _ _ _) = True
+isControl _ = False
 
 -- | Unit generator primitive node predicate.
 isUGen :: UGen -> Bool

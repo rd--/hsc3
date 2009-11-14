@@ -162,6 +162,8 @@ initialisation-rate (ir), control-rate (kr),
 triggered-control-rate (tr) and audio-rate.
 
 The graph below illustrates the first three of these.
+Note the specialised constructor for triggered
+controls.  
 
 > import Sound.SC3
 
@@ -169,8 +171,8 @@ The graph below illustrates the first three of these.
 >     ; b2 = control IR "b2" 1
 >     ; f1 = control KR "f1" 450
 >     ; f2 = control KR "f2" 900
->     ; a1 = control KR "t_a1" 0
->     ; a2 = control KR "t_a2" 0
+>     ; a1 = tr_control "a1" 0
+>     ; a2 = tr_control "a2" 0
 >     ; m = impulse KR 1 0 * 0.1
 >     ; d x = decay2 (m + x) 0.01 0.2
 >     ; o1 = sinOsc AR f1 0 * d a1
@@ -195,8 +197,22 @@ control rate.
 The audio controls can be set, however they are
 immediately reset to zero at the next control cycle.
 
-> withSC3 (\fd -> send fd (n_set1 100 "t_a1" 1))
-> withSC3 (\fd -> send fd (n_set1 100 "t_a2" 1))
+> withSC3 (\fd -> send fd (n_set1 100 "a1" 1))
+> withSC3 (\fd -> send fd (n_set1 100 "a2" 1))
+
+There is a convention in sclang of naming triggered
+controls with a 't_' prefix.  This is supported by the
+hsc3 'control' function, which in this case makes a
+triggered control and ignores the rate argument.
+
+> let { a = control KR "t_ampl" 0
+>     ; o = sinOsc AR 440 0 * decay2 a 0.01 0.2
+>     ; g = out 0 o
+>     ; i fd = do { async fd (d_recv (synthdef "g" g))
+>                 ; send fd (s_new "g" 100 AddToTail 1 []) } }
+> in withSC3 i
+
+> withSC3 (\fd -> send fd (n_set1 100 "t_ampl" 1))
 
 * Multiple line expressions
 

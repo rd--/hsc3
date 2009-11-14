@@ -53,9 +53,9 @@ node_k_cmp :: Node -> Node -> Ordering
 node_k_cmp p q = compare (node_k_type p) (node_k_type q)
 
 -- Determine class of control given rate and name.
-ktype :: Rate -> String -> KType
-ktype r n =
-    if "t_" `isPrefixOf` n
+ktype :: Rate -> Bool -> KType
+ktype r tr =
+    if tr
     then case r of
            KR -> K_TR
            _ -> error "ktype"
@@ -136,17 +136,17 @@ find_k_p x (NodeK _ _ y _ _) = x == y
 find_k_p _ _ = error "find_k_p"
 
 -- Insert a control node into the graph.
-push_k :: (Rate, String, Double) -> Graph -> (Node, Graph)
-push_k (r, nm, d) g =
-    let n = NodeK (nextId g) r nm d (ktype r nm)
+push_k :: (Rate, String, Double, Bool) -> Graph -> (Node, Graph)
+push_k (r, nm, d, tr) g =
+    let n = NodeK (nextId g) r nm d (ktype r tr)
     in (n, g { controls = n : controls g
              , nextId = nextId g + 1 })
 
 -- Either find existing control node, or insert a new node.
 mk_node_k :: UGen -> Graph -> (Node, Graph)
-mk_node_k (Control r nm d) g =
+mk_node_k (Control r nm d tr) g =
     let y = find (find_k_p nm) (controls g)
-    in maybe (push_k (r, nm, d) g) (\y' -> (y', g)) y
+    in maybe (push_k (r, nm, d, tr) g) (\y' -> (y', g)) y
 mk_node_k _ _ = error "mk_node_k"
 
 acc :: [UGen] -> [Node] -> Graph -> ([Node], Graph)
