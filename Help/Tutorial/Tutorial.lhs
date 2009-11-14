@@ -153,6 +153,51 @@ asynchronous commands.
 >     ; m = d_recv' cm (synthdef "sin" g) }
 > in withSC3 (\fd -> send fd m)
 
+* Controls
+
+In hsc3 control parameters must be indexed by name.
+
+There are four types of control parameters,
+initialisation-rate (ir), control-rate (kr),
+triggered-control-rate (tr) and audio-rate.
+
+The graph below illustrates the first three of these.
+
+> import Sound.SC3
+
+> let { b1 = control IR "b1" 0
+>     ; b2 = control IR "b2" 1
+>     ; f1 = control KR "f1" 450
+>     ; f2 = control KR "f2" 900
+>     ; a1 = control KR "t_a1" 0
+>     ; a2 = control KR "t_a2" 0
+>     ; m = impulse KR 1 0 * 0.1
+>     ; d x = decay2 (m + x) 0.01 0.2
+>     ; o1 = sinOsc AR f1 0 * d a1
+>     ; o2 = saw AR f2 * d a2
+>     ; g = mrg2 (out b1 o1) (out b2 o2)
+>     ; i fd = do { async fd (d_recv (synthdef "g" g))
+>                 ; send fd (s_new "g" 100 AddToTail 1 []) } }
+> in withSC3 i
+
+The output buses cannot be set, since they are
+initialisation rate only.
+
+> withSC3 (\fd -> send fd (n_set1 100 "b1" 1))
+> withSC3 (\fd -> send fd (n_set1 100 "b2" 0))
+
+The frequency controls can be set since they are
+control rate.
+
+> withSC3 (\fd -> send fd (n_set1 100 "f1" 200))
+> withSC3 (\fd -> send fd (n_set1 100 "f2" 300))
+
+The audio controls can be set, however they are
+immediately reset to zero at the next control cycle.
+
+> withSC3 (\fd -> send fd (n_set1 100 "t_a1" 1))
+> withSC3 (\fd -> send fd (n_set1 100 "t_a2" 1))
+
 * Multiple line expressions
 
 There are two variants for expressions that are written over

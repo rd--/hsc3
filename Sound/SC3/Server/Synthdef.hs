@@ -31,7 +31,8 @@ data Node = NodeC { node_id :: NodeId
           | NodeK { node_id :: NodeId
                   , node_k_rate :: Rate
                   , node_k_name :: String
-                  , node_k_default :: Double }
+                  , node_k_default :: Double 
+                  , node_k_type :: KType }
           | NodeU { node_id :: NodeId
                   , node_u_rate :: Rate
                   , node_u_name :: String
@@ -44,10 +45,30 @@ data Node = NodeC { node_id :: NodeId
                   , node_p_index :: PortIndex }
             deriving (Eq, Show)
 
+-- There are four classes of controls.
+data KType = K_IR | K_KR | K_TR | K_AR
+             deriving (Eq, Show, Ord)
+
+node_k_cmp :: Node -> Node -> Ordering
+node_k_cmp p q = compare (node_k_type p) (node_k_type q)
+
+-- Determine class of control given rate and name.
+ktype :: Rate -> String -> KType
+ktype r n =
+    if "t_" `isPrefixOf` n
+    then case r of
+           KR -> K_TR
+           _ -> error "ktype"
+    else case r of
+           IR -> K_IR
+           KR -> K_KR
+           AR -> K_AR
+           DR -> error "ktype"
+
 -- | Type to represent the left hand side of an edge in a unit
 --   generator graph.
 data FromPort = C NodeId
-              | K NodeId
+              | K NodeId KType
               | U NodeId PortIndex
                 deriving (Eq, Show)
 
@@ -55,10 +76,11 @@ data FromPort = C NodeId
 synth :: UGen -> Graph
 synth u = let (_, g) = mk_node (prepare_root u) empty_graph
               (Graph _ cs ks us) = g
-              us' = if null ks
+              ks' = sortBy node_k_cmp ks
+              us' = if null ks'
                     then reverse us
-                    else implicit ks : reverse us
-          in Graph (-1) cs ks us'
+                    else implicit ks' ++ reverse us
+          in Graph (-1) cs ks' us'
 
 -- | Transform a unit generator into bytecode.
 synthdef :: String -> UGen -> [Word8]
@@ -82,7 +104,7 @@ synthstat u =
 
 as_from_port :: Node -> FromPort
 as_from_port (NodeC n _) = C n
-as_from_port (NodeK n _ _ _) = K n
+as_from_port (NodeK n _ _ _ t) = K n t
 as_from_port (NodeU n _ _ _ _ _ _) = U n 0
 as_from_port (NodeP _ u p) = U (node_id u) p
 
@@ -110,13 +132,13 @@ mk_node_c _ _ = error "mk_node_c"
 
 -- Predicate to locate control, names must be unique.
 find_k_p :: String -> Node -> Bool
-find_k_p x (NodeK _ _ y _) = x == y
+find_k_p x (NodeK _ _ y _ _) = x == y
 find_k_p _ _ = error "find_k_p"
 
 -- Insert a control node into the graph.
 push_k :: (Rate, String, Double) -> Graph -> (Node, Graph)
 push_k (r, nm, d) g =
-    let n = NodeK (nextId g) r nm d
+    let n = NodeK (nextId g) r nm d (ktype r nm)
     in (n, g { controls = n : controls g
              , nextId = nextId g + 1 })
 
@@ -175,27 +197,47 @@ mk_node u g
     | otherwise = error "mk_node"
 
 type Map = M.IntMap Int
-type Maps = (Map, Map, Map)
+type Maps = (Map, [Node], Map, Map)
 
 -- Generate maps from node identifiers to synthdef indexes.
 mk_maps :: Graph -> Maps
 mk_maps (Graph _ cs ks us) =
     ( M.fromList (zip (map node_id cs) [0..])
+    , ks
     , M.fromList (zip (map node_id ks) [0..])
     , M.fromList (zip (map node_id us) [0..]) )
 
--- Locate index in map give node identifer.
+-- Locate index in map given node identifer.
 fetch :: NodeId -> Map -> Int
 fetch = M.findWithDefault (error "fetch")
 
 data Input = Input Int Int
              deriving (Eq, Show)
 
+-- For controls we need to know not the overall index
+-- but in relation to controls of the same type.
+fetch_k :: NodeId -> KType -> [Node] -> Int
+fetch_k n t ks =
+    let f _ [] = error "fetch_k"
+        f i (x:xs) = 
+            if n == node_id x
+            then i
+            else if t == node_k_type x
+                 then f (i + 1) xs
+                 else f i xs
+    in f 0 ks
+
 -- Construct input form required by byte-code generator.
 make_input :: Maps -> FromPort -> Input
-make_input (cs, _, _) (C n) = Input (-1) (fetch n cs)
-make_input (_, ks, _) (K n) = Input 0 (fetch n ks)
-make_input (_, _, us) (U n p) = Input (fetch n us) p
+make_input (cs, _, _, _) (C n) = Input (-1) (fetch n cs)
+make_input (_, ks, _, _) (K n t) = 
+    let i = case t of
+              K_IR -> 0
+              K_KR -> 1
+              K_TR -> 2
+              K_AR -> 3
+    in Input i (fetch_k n t ks)
+make_input (_, _, _, us) (U n p) = Input (fetch n us) p
 
 -- Byte-encode input value.
 encode_input :: Input -> B.ByteString
@@ -203,7 +245,7 @@ encode_input (Input u p) = B.append (encode_i16 u) (encode_i16 p)
 
 -- Byte-encode control node.
 encode_node_k :: Maps -> Node -> B.ByteString
-encode_node_k (_, ks, _) (NodeK n _ nm _) =
+encode_node_k (_, _, ks, _) (NodeK n _ nm _ _) =
     B.concat [ B.pack (str_pstr nm)
              , encode_i16 (fetch n ks) ]
 encode_node_k _ _ = error "encode_node_k"
@@ -241,12 +283,36 @@ encode_graphdef s g =
     where (Graph _ cs ks us) = g
           mm = mk_maps g
 
--- Construct implicit control unit generator node (i|k-rate only).
-implicit :: [Node] -> Node
+type KS_COUNT = (Int,Int,Int,Int)
+
+ks_count :: [Node] -> KS_COUNT
+ks_count ks =
+    let f r [] = r
+        f (i,k,t,a) (x:xs) =
+            let r' = case node_k_type x of
+                       K_IR -> (i+1,k,t,a)
+                       K_KR -> (i,k+1,t,a)
+                       K_TR -> (i,k,t+1,a)
+                       K_AR -> (i,k,t,a+1)
+            in f r' xs
+    in f (0,0,0,0) ks
+      
+-- Construct implicit control unit generator nodes.
+implicit :: [Node] -> [Node]
 implicit ks =
-    let n = length ks
-        r = if all (== IR) (map node_k_rate ks) then IR else KR
-    in NodeU (-1) r "Control" [] (replicate n r) (Special 0) Nothing
+    let (ni,nk,nt,na) = ks_count ks
+        mk_n t n o =
+            let (nm, r) = case t of
+                            K_IR -> ("Control", IR)
+                            K_KR -> ("Control", KR)
+                            K_TR -> ("TrigControl", KR)
+                            K_AR -> ("AudioControl", AR)
+                i = replicate n r
+            in NodeU (-1) r nm [] i (Special o) Nothing
+    in [mk_n K_IR ni 0
+       ,mk_n K_KR nk ni
+       ,mk_n K_TR nt (ni + nk)
+       ,mk_n K_AR na (ni + nk + nt)]
 
 -- Transform mce nodes to mrg nodes
 prepare_root :: UGen -> UGen
