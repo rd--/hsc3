@@ -11,8 +11,8 @@ fm-kltr (rd)
 >                ; r2 <- rand 0.5 1.5
 >                ; r3 <- rand 0.975 1.025
 >                ; r4 <- rand 0.75 1.25
->                ; let { o = Control kr "out" 0
->                      ; t = Control kr "trig" 0
+>                ; let { o = Control ir "out" 0
+>                      ; t = Control kr "trig" 0 -- unused
 >                      ; a = Control kr "amp" 0.1
 >                      ; d = Control kr "dur" 0.1
 >                      ; f = Control kr "freq" 400.0
