@@ -4,7 +4,7 @@ warning: input/output feedback loop
 > import Sound.SC3
 
 > main =
->   let { delayWr b i = recordBuf b 0 1 0 1 Loop 0 i
+>   let { delayWr b i = recordBuf b 0 1 0 1 Loop 0 DoNothing i
 >       ; tap nc b dt = playBuf nc b 1 0 (dt * (- sampleRate)) Loop DoNothing
 >       ; dl = 6
 >       ; feedr n = do { t <- sequence (replicate n (rand 0.0 (constant dl)))
