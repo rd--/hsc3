@@ -8,8 +8,8 @@ sample and hold liquidities (jmcc)
 >       ; t = recip r
 >       ; c = impulse kr r 0.4
 >       ; cf = mouseY kr 100 8000 Exponential 0.1
->       ; f = latch (B.whiteNoise (uid 0) kr * cf * 0.5 + cf) c
->       ; p = latch (B.whiteNoise (uid 1) kr) c
+>       ; f = latch (B.whiteNoise 'a' kr * cf * 0.5 + cf) c
+>       ; p = latch (B.whiteNoise 'b' kr) c
 >       ; i = pan2 (sinOsc ar f 0 * decay2 c (t * 0.1) (t * 0.9)) p 1 }
 >   in audition (out 0 (combN i 0.3 0.3 2))
 

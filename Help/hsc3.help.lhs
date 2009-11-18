@@ -409,7 +409,7 @@ values, and equal expressions denote the same
 value.  Therefore the graph given by the haskell
 expression:
 
-> let { z = uid 0
+> let { z = 'a'
 >     ; n = Sound.SC3.UGen.Base.whiteNoise z
 >     ; a = n AR
 >     ; b = n AR

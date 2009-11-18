@@ -15,6 +15,6 @@ scratchy (jmcc)
 the same graph, written using a non-monadic noise constructor
 
 > alternate =
->   let { f m = B.brownNoise (uid m) ar * 0.5 - 0.49
->       ; n = mce [f 0, f 1] }
+>   let { f m = B.brownNoise m ar * 0.5 - 0.49
+>       ; n = mce [f 'a', f 'b'] }
 >   in audition (out 0 (rhpf (max n 0 * 20) 5000 1))

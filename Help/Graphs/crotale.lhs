@@ -156,13 +156,13 @@ crotale (rd)
 >                       , 24.93169593811035 ] )
 >         ; (cf, ca, cd) = crotale
 >         ; ps = mce [-12, -5, 0, 2, 4, 5, 7, 12]
->         ; n = B.pinkNoise (uid 0) ar
->         ; t = B.dust (uid 0) kr 3
->         ; fs = select (B.tiRand (uid 0) 0 7 t) ps
->         ; g = B.tRand (uid 0) 0 1 t
->         ; fo = B.tRand (uid 1) 0 1 t
->         ; ds = B.tRand (uid 2) 2 7 t
->         ; p = B.tRand (uid 3) (-1) 1 t
+>         ; n = B.pinkNoise 'a' ar
+>         ; t = B.dust 'a' kr 3
+>         ; fs = select (B.tiRand 'a' 0 7 t) ps
+>         ; g = B.tRand 'a' 0 1 t
+>         ; fo = B.tRand 'b' 0 1 t
+>         ; ds = B.tRand 'c' 2 7 t
+>         ; p = B.tRand 'd' (-1) 1 t
 >         ; s = decay2 t 0.06 0.01 * n * g
 >         ; ks = klankSpec cf ca (map recip cd)
 >         ; k = dynKlank s (midiRatio fs) fo ds ks }

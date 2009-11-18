@@ -31,7 +31,7 @@ data Node = NodeC { node_id :: NodeId
           | NodeK { node_id :: NodeId
                   , node_k_rate :: Rate
                   , node_k_name :: String
-                  , node_k_default :: Double 
+                  , node_k_default :: Double
                   , node_k_type :: KType }
           | NodeU { node_id :: NodeId
                   , node_u_rate :: Rate
@@ -39,7 +39,7 @@ data Node = NodeC { node_id :: NodeId
                   , node_u_inputs :: [FromPort]
                   , node_u_outputs :: [Output]
                   , node_u_special :: Special
-                  , node_u_ugenid :: Maybe UGenId }
+                  , node_u_ugenid :: Int }
           | NodeP { node_id :: NodeId
                   , node_p_node :: Node
                   , node_p_index :: PortIndex }
@@ -154,7 +154,7 @@ acc [] n g = (reverse n, g)
 acc (x:xs) ys g = let (y, g') = mk_node x g
                   in acc xs (y:ys) g'
 
-type UGenParts = (Rate, String, [FromPort], [Output], Special, Maybe UGenId)
+type UGenParts = (Rate, String, [FromPort], [Output], Special, Int)
 
 -- Predicate to locate primitive, names must be unique.
 find_u_p :: UGenParts -> Node -> Bool
@@ -219,7 +219,7 @@ data Input = Input Int Int
 fetch_k :: NodeId -> KType -> [Node] -> Int
 fetch_k n t ks =
     let f _ [] = error "fetch_k"
-        f i (x:xs) = 
+        f i (x:xs) =
             if n == node_id x
             then i
             else if t == node_k_type x
@@ -230,7 +230,7 @@ fetch_k n t ks =
 -- Construct input form required by byte-code generator.
 make_input :: Maps -> FromPort -> Input
 make_input (cs, _, _, _) (C n) = Input (-1) (fetch n cs)
-make_input (_, ks, _, _) (K n t) = 
+make_input (_, ks, _, _) (K n t) =
     let i = case t of
               K_IR -> 0
               K_KR -> 1
@@ -253,35 +253,35 @@ encode_node_k _ _ = error "encode_node_k"
 -- Byte-encode primitive node.
 encode_node_u :: Maps -> Node -> B.ByteString
 encode_node_u m (NodeU _ r nm i o s _) =
-    B.concat [ B.pack (str_pstr nm)
-             , encode_i8 (rateId r)
-             , encode_i16 (length i)
-             , encode_i16 (length o)
-             , encode_i16 s'
-             , B.concat i'
-             , B.concat o' ]
-    where i' = map (encode_input . make_input m) i
-          o' = map (encode_i8 . rateId) o
-          (Special s') = s
+    let i' = map (encode_input . make_input m) i
+        o' = map (encode_i8 . rateId) o
+        (Special s') = s
+    in B.concat [ B.pack (str_pstr nm)
+                , encode_i8 (rateId r)
+                , encode_i16 (length i)
+                , encode_i16 (length o)
+                , encode_i16 s'
+                , B.concat i'
+                , B.concat o' ]
 encode_node_u _ _ = error "encode_ugen: illegal input"
 
 -- Construct instrument definition bytecode.
 encode_graphdef :: String -> Graph -> B.ByteString
 encode_graphdef s g =
-    B.concat [ encode_str "SCgf"
-             , encode_i32 0
-             , encode_i16 1
-             , B.pack (str_pstr s)
-             , encode_i16 (length cs)
-             , B.concat (map (encode_f32 . node_c_value) cs)
-             , encode_i16 (length ks)
-             , B.concat (map (encode_f32 . node_k_default) ks)
-             , encode_i16 (length ks)
-             , B.concat (map (encode_node_k mm) ks)
-             , encode_i16 (length us)
-             , B.concat (map (encode_node_u mm) us) ]
-    where (Graph _ cs ks us) = g
-          mm = mk_maps g
+    let (Graph _ cs ks us) = g
+        mm = mk_maps g
+    in B.concat [ encode_str "SCgf"
+                , encode_i32 0
+                , encode_i16 1
+                , B.pack (str_pstr s)
+                , encode_i16 (length cs)
+                , B.concat (map (encode_f32 . node_c_value) cs)
+                , encode_i16 (length ks)
+                , B.concat (map (encode_f32 . node_k_default) ks)
+                , encode_i16 (length ks)
+                , B.concat (map (encode_node_k mm) ks)
+                , encode_i16 (length us)
+                , B.concat (map (encode_node_u mm) us) ]
 
 type KS_COUNT = (Int,Int,Int,Int)
 
@@ -296,7 +296,7 @@ ks_count ks =
                        K_AR -> (i,k,t,a+1)
             in f r' xs
     in f (0,0,0,0) ks
-      
+
 -- Construct implicit control unit generator nodes.
 implicit :: [Node] -> [Node]
 implicit ks =
@@ -308,7 +308,7 @@ implicit ks =
                             K_TR -> ("TrigControl", KR)
                             K_AR -> ("AudioControl", AR)
                 i = replicate n r
-            in NodeU (-1) r nm [] i (Special o) Nothing
+            in NodeU (-1) r nm [] i (Special o) defaultID
     in [mk_n K_IR ni 0
        ,mk_n K_KR nk ni
        ,mk_n K_TR nt (ni + nk)

@@ -27,7 +27,7 @@ lucier_wire freq =
 	pk1_L =
             let i = pk1_R * negate 1
                 r = pk1_pos * 2
-                dt = B.rand (uid 0) 0.001 0.11
+                dt = B.rand 'a' 0.001 0.11
             in mk_allpass i r dt
 	pk2_L =
             let i = pk1_L
@@ -40,7 +40,7 @@ lucier_wire freq =
 	pk2_R =
             let i = stringL * negate 1
                 r = 1.0 - pk2_pos
-                dt = 2 + B.rand (uid 1) 0.001 0.11
+                dt = 2 + B.rand 'b' 0.001 0.11
             in mk_allpass i r dt * 0.99
 	stringR =
             let i = pk2_R

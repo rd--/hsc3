@@ -1,4 +1,4 @@
--- | Unit generators to query, read and write audio buffers. 
+-- | Unit generators to query, read and write audio buffers.
 module Sound.SC3.UGen.Buffer where
 
 import Sound.SC3.UGen.Enum
@@ -135,7 +135,7 @@ vOsc r b f phase = mkOsc r "VOsc" [b, f, phase] 1
 -- * Local buffers
 
 -- | Allocate a buffer local to the synth.
-localBuf :: UGenId -> UGen -> UGen -> UGen
+localBuf :: ID i => i -> UGen -> UGen -> UGen
 localBuf z nf nc = mkOscId z IR "LocalBuf" [nc, nf] 1
 -- note that nf & nc are swapped at actual ugen
 
@@ -148,7 +148,7 @@ setBuf :: UGen -> [UGen] -> UGen -> UGen
 setBuf b xs o = mkOsc IR "SetBuf" ([b, o, fromIntegral (length xs)] ++ xs) 1
 
 -- | Generate a localBuf and use setBuf to initialise it.
-asLocalBuf :: UGenId -> [UGen] -> UGen
+asLocalBuf :: ID i => i -> [UGen] -> UGen
 asLocalBuf i xs =
     let m = maxLocalBufs 8
         b = mrg2 (localBuf i (fromIntegral (length xs)) 1) m
