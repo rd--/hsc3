@@ -18,11 +18,6 @@ instance ID Int where
 instance ID Char where
     resolveID = C.ord
 
---LANGUAGE TypeSynonymInstances
---import qualified Data.HashTable as H
---instance ID String where
---    resolveID = fromIntegral . H.hashString
-
 -- | Unit generator.
 data UGen = Constant { constantValue :: Double }
           | Control { controlOperatingRate :: Rate
