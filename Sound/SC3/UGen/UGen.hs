@@ -60,13 +60,9 @@ constant = Constant . realToFrac
 -- | Control input node constructor.
 --
 --   Note that if the name begins with a t_ prefix the control is
---   converted to a triggered control and the rate argument is
---   ignored.  This is to conform to sclang conventions.
+--   not converted to a triggered control.  Please see tr_control.
 control :: Rate -> String -> Double -> UGen
-control r n d =
-    if "t_" `isPrefixOf` n
-    then tr_control n d
-    else Control r n d False
+control r n d = Control r n d False
 
 -- | Triggered (kr) control input node constructor.
 tr_control :: String -> Double -> UGen
