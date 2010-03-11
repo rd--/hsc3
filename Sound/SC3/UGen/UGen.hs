@@ -182,6 +182,10 @@ mceTranspose :: UGen -> UGen
 mceTranspose =
     mce . map mce . transpose . map mceChannels . mceChannels
 
+-- | Collapse mce by summing.
+mceSum :: UGen -> UGen
+mceSum = sum . mceChannels
+
 -- * Multiple root graphs
 
 -- | Multiple root graph constructor.
