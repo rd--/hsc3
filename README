@@ -8,12 +8,12 @@ tutorial file at Help/Tutorial.
 
 The hsc3 interaction environment is written for GNU Emacs.
 
-  http://slavepianos.org/rd/?f=207949
+  http://slavepianos.org/rd/?t=hsc3
   http://haskell.org/
   http://audiosynth.com/
   http://gnu.org/software/emacs/
 
-(c) rohan drape and others, 2006-2009
+(c) rohan drape and others, 2006-2010
     gpl, http://gnu.org/copyleft/
     with contributions by henning thielemann
                         & stefan kersten
