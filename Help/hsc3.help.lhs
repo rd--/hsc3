@@ -231,6 +231,7 @@ To write this simple graph in haskell we can use
 the clone function:
 
 > import Control.Monad
+> import Sound.SC3.Monadic
 
 > let f = liftM (* mce [0.1, 0.05])
 > in do { a <- f (clone 2 (whiteNoise AR))
@@ -409,8 +410,8 @@ values, and equal expressions denote the same
 value.  Therefore the graph given by the haskell
 expression:
 
-> let { z = 'a'
->     ; n = Sound.SC3.UGen.Base.whiteNoise z
+> let { z = 'α'
+>     ; n = Sound.SC3.UGen.Noise.ID.whiteNoise z
 >     ; a = n AR
 >     ; b = n AR
 >     ; c = a - b }
@@ -500,7 +501,7 @@ need to write it.
 >     ; a >>=* b = a >>= b |> return
 >     ; u1 = sinOsc ar 440 0 * 0.1
 >     ; u2 = pinkNoise ar >>=* (* 0.1)
->     ; u3 = B.pinkNoise (uid 0) ar * 1
+>     ; u3 = Sound.SC3.UGen.Noise.ID.pinkNoise 'α' ar * 1
 >     ; u4 = resonz u3 (440 * 4) 0.1
 >     ; g = u2 >>=* (+ (u1 + u4)) }
 > in g >>= out 0 |> audition
@@ -524,7 +525,9 @@ orindary let binding.
 
 This is hardly more convenient than do notation,
 however we can also insert non-determinstic nodes
-directly into function arguments.
+directly into function arguments.  The package
+hsc3-unsafe provides unsafe variant unnit generator
+constructors.
 
 > let { n = Sound.SC3.UGen.Unsafe.whiteNoise
 >     ; x = n AR - n AR }
@@ -534,6 +537,9 @@ The above uses the unsafe unit generator functions
 provided at Sound.SC3.UGen.Unsafe, and avoids the
 lifting operations which, for functions of many
 arguments, can be cumbersome.
+
+> import Control.Monad
+> import Sound.SC3.Monadic
 
 > let n = whiteNoise
 > in do { x <- liftM2 (-) (n AR) (n AR)

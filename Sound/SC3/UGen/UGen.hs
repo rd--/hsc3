@@ -46,10 +46,6 @@ newtype Special = Special Int
 
 -- * Unit generator node constructors
 
--- | Unit generator identifier constructor (obsolete since ID change).
-uid :: (ID a) => a -> a
-uid = id
-
 defaultID :: Int
 defaultID = (-1)
 
