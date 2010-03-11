@@ -31,5 +31,3 @@ Simple bell-like tone.
 >     ; o = sinOsc AR (500 * f) 0 * a
 >     ; e = envGen KR 1 0.1 0 1 RemoveSynth (envPerc 0.01 10) }
 > in audition (out 0 (mix o * e))
-
-

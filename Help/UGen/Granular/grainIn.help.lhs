@@ -20,7 +20,7 @@ pan - a value from -1 to 1. Determines where to pan the output in
 envbuf - the buffer number containing a singal to use for the
          grain envelope. -1 uses a built-in Hanning envelope.
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > do { n <- pinkNoise AR
 >    ; let { x = mouseX KR (-0.5) 0.5 Linear 0.1

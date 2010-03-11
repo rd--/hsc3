@@ -1,6 +1,6 @@
 half-life (jrhb)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { t_half = 3.92

@@ -1,6 +1,6 @@
 insects (sam pluta)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let insect = do { r1 <- rand 2000 3000

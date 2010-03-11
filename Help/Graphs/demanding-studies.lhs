@@ -1,6 +1,6 @@
 demanding studies (jmcc)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   do { s1 <- drand dinf (mce [72, 75, 79, 82])

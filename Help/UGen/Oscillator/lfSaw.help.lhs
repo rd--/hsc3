@@ -6,6 +6,8 @@ oscillator. Output ranges from -1 to +1.
 freq   - frequency in Hertz
 iphase - initial phase [0,2]
 
+> import Sound.SC3
+
 > audition (out 0 (lfSaw AR 500 1 * 0.1))
 
 Used as both Oscillator and LFO.

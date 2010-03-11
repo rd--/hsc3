@@ -1,23 +1,22 @@
 deep sea (jrhb)
 
-> import Sound.SC3
-> import qualified Sound.SC3.UGen.Base as B
+> import Sound.SC3.ID
 
 > main =
 >   let { range s l r = let m = (r - l) * 0.5 in mulAdd s m (m + l)
 >       ; amp = 1
 >       ; pan = 0
 >       ; variation = 0.9
->       ; n = B.rand 'a' 7 46
->       ; dt1 = 25.0 + B.rand 'b' (-1.7) 1.7
->       ; dt2 = (dt1 + B.lfNoise2 'c' kr 2) * variation * 0.001
->       ; freq = 901 + B.rand 'd' 0 65
+>       ; n = rand 'α' 7 46
+>       ; dt1 = 25.0 + rand 'β' (-1.7) 1.7
+>       ; dt2 = (dt1 + lfNoise2 'γ' kr 2) * variation * 0.001
+>       ; f = 901 + rand 'δ' 0 65
 >       ; t = impulse ar (recip dt2) 0 * 100
 >       ; count = pulseCount t 0
 >       ; mul = count <* n
->       ; u1 = bpf (mul * t) freq 1 * 0.1
->       ; freq2 = freq * ((count `modE` range (B.lfNoise1 'e' kr 1) 2 20) + 1)
->       ; u2 = bpf u1 freq2 1 * 0.2 }
+>       ; u1 = bpf (mul * t) f 1 * 0.1
+>       ; f2 = f * ((count `modE` range (lfNoise1 'ε' kr 1) 2 20) + 1)
+>       ; u2 = bpf u1 f2 1 * 0.2 }
 >   in audition (mrg [ detectSilence u2 0.0001 0.2 RemoveSynth
 >                    , out 0 (pan2 u2 pan (amp * 10)) ])
 

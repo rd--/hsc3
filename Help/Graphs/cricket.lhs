@@ -1,6 +1,6 @@
 cricket (rd)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   do { r1 <- clone 2 (rand 10 13)

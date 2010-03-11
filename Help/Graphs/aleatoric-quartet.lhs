@@ -1,6 +1,6 @@
 aleatoric quartet (jmcc)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main = 
 >   let { base_mn = control KR "note" 66

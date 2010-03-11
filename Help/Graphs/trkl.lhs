@@ -1,6 +1,6 @@
 trkl (rd)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let trkl d ul fu dy la fy =

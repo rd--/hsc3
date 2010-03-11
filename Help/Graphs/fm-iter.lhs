@@ -1,6 +1,6 @@
 fm-iter (rd)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { t0 = impulse ar (recip 0.30) 0

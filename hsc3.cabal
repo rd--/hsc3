@@ -54,6 +54,8 @@ Library
                    random
   GHC-Options:     -Wall -fwarn-tabs
   Exposed-modules: Sound.SC3
+                   Sound.SC3.ID
+                   Sound.SC3.Monadic
                    Sound.SC3.Server
                    Sound.SC3.Server.Command
                    Sound.SC3.Server.Command.Completion
@@ -63,13 +65,12 @@ Library
                    Sound.SC3.Server.Synthdef
                    Sound.SC3.UGen
                    Sound.SC3.UGen.Analysis
-                   Sound.SC3.UGen.Base
                    Sound.SC3.UGen.Buffer
                    Sound.SC3.UGen.Chaos
                    Sound.SC3.UGen.Composite
                    Sound.SC3.UGen.Composite.Monadic
                    Sound.SC3.UGen.Demand
-                   Sound.SC3.UGen.Demand.Base
+                   Sound.SC3.UGen.Demand.ID
                    Sound.SC3.UGen.Demand.Monadic
                    Sound.SC3.UGen.DiskIO
                    Sound.SC3.UGen.Enum
@@ -79,7 +80,7 @@ Library
                    Sound.SC3.UGen.External.ATS
                    Sound.SC3.UGen.External.LPC
                    Sound.SC3.UGen.FFT
-                   Sound.SC3.UGen.FFT.Base
+                   Sound.SC3.UGen.FFT.ID
                    Sound.SC3.UGen.FFT.Monadic
                    Sound.SC3.UGen.Filter
                    Sound.SC3.UGen.Granular
@@ -87,8 +88,7 @@ Library
                    Sound.SC3.UGen.Information
                    Sound.SC3.UGen.MachineListening
                    Sound.SC3.UGen.Math
-                   Sound.SC3.UGen.Monadic
-                   Sound.SC3.UGen.Noise.Base
+                   Sound.SC3.UGen.Noise.ID
                    Sound.SC3.UGen.Noise.Monadic
                    Sound.SC3.UGen.Operator
                    Sound.SC3.UGen.Oscillator

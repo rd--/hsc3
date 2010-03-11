@@ -1,6 +1,6 @@
 s-chirp (rd)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { x = mouseX kr 15 0 Linear 0.1

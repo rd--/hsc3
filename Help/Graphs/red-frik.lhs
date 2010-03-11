@@ -1,6 +1,6 @@
 red frik (f0)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let red tr n = 

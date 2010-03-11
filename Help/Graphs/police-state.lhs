@@ -1,6 +1,6 @@
 police state (jmcc)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let node = do { r0 <- rand 0.02 0.12

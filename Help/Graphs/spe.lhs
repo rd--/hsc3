@@ -1,6 +1,6 @@
 spe (jmcc)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { (>=>) f g = \x -> f x >>= g

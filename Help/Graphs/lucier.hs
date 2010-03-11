@@ -5,8 +5,7 @@ http://www.listarc.bham.ac.uk/lists/sc-users/msg47539.html
 http://www.listarc.bham.ac.uk/lists/sc-users/msg47540.html
 -}
 
-import Sound.SC3
-import qualified Sound.SC3.UGen.Base as B
+import Sound.SC3.ID
 
 lucier_wire :: UGen -> IO ()
 lucier_wire freq =
@@ -27,7 +26,7 @@ lucier_wire freq =
 	pk1_L =
             let i = pk1_R * negate 1
                 r = pk1_pos * 2
-                dt = B.rand 'a' 0.001 0.11
+                dt = rand 'α' 0.001 0.11
             in mk_allpass i r dt
 	pk2_L =
             let i = pk1_L
@@ -40,7 +39,7 @@ lucier_wire freq =
 	pk2_R =
             let i = stringL * negate 1
                 r = 1.0 - pk2_pos
-                dt = 2 + B.rand 'b' 0.001 0.11
+                dt = 2 + rand 'β' 0.001 0.11
             in mk_allpass i r dt * 0.99
 	stringR =
             let i = pk2_R

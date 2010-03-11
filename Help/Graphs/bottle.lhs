@@ -1,6 +1,6 @@
 bottle (sc)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   do { freq <- rand 220 880

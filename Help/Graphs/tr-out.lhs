@@ -1,6 +1,6 @@
 tr-out (rd)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let node n = do { t <- dust kr 1.6

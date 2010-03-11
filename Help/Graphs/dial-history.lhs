@@ -1,7 +1,7 @@
 dial history (jrhb)
 
 > import Data.List
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { mfv = [[697, 770, 852, 941], [1209, 1336, 1477, 1633]]

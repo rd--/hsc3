@@ -1,6 +1,6 @@
 klink (rd)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   do { n1 <- lfNoise0 kr (mce2 0.5 1.5)

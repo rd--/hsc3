@@ -1,6 +1,6 @@
 default (jmcc)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 > import Sound.OpenSoundControl
 > import System.Random
 

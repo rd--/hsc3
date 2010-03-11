@@ -1,6 +1,6 @@
 birds (jmcc)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { node = do { r1 <- rand 94.0 102.0

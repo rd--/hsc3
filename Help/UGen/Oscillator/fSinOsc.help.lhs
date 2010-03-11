@@ -14,6 +14,8 @@ iPhase - initial phase
 
 Note the phase argument, which was not in the SC2 variant.
 
+> import Sound.SC3
+
 > audition (out 0 (fSinOsc AR (mce [440, 550]) 0 * 0.05))
 
 > audition (out 0 (fSinOsc AR (xLine KR 200 4000 1 RemoveSynth) 0 * 0.1))

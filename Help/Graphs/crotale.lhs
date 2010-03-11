@@ -1,7 +1,6 @@
 crotale (rd)
 
-> import Sound.SC3
-> import qualified Sound.SC3.UGen.Base as B
+> import Sound.SC3.ID
 
 > main =
 >     let { crotale = ( [ 35.45676040649414
@@ -156,13 +155,13 @@ crotale (rd)
 >                       , 24.93169593811035 ] )
 >         ; (cf, ca, cd) = crotale
 >         ; ps = mce [-12, -5, 0, 2, 4, 5, 7, 12]
->         ; n = B.pinkNoise 'a' ar
->         ; t = B.dust 'a' kr 3
->         ; fs = select (B.tiRand 'a' 0 7 t) ps
->         ; g = B.tRand 'a' 0 1 t
->         ; fo = B.tRand 'b' 0 1 t
->         ; ds = B.tRand 'c' 2 7 t
->         ; p = B.tRand 'd' (-1) 1 t
+>         ; n = pinkNoise 'a' ar
+>         ; t = dust 'a' kr 3
+>         ; fs = select (tiRand 'a' 0 7 t) ps
+>         ; g = tRand 'a' 0 1 t
+>         ; fo = tRand 'b' 0 1 t
+>         ; ds = tRand 'c' 2 7 t
+>         ; p = tRand 'd' (-1) 1 t
 >         ; s = decay2 t 0.06 0.01 * n * g
 >         ; ks = klankSpec cf ca (map recip cd)
 >         ; k = dynKlank s (midiRatio fs) fo ds ks }

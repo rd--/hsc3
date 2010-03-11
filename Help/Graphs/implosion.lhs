@@ -1,6 +1,6 @@
 implosion (rd)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { mkls bp t = let e = envCoord bp t 1 EnvLin

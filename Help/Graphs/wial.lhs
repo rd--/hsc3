@@ -1,6 +1,6 @@
 wial (rd)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { pls c d f = let { t = pulseDivider c d 0

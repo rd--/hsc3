@@ -1,13 +1,10 @@
 oscillator cluster (rd)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
->   let { rng i l r = linLin i (-1) 1 l r
->       ; ln a b d = line kr a b d RemoveSynth
->       ; xln a b d = xLine kr a b d RemoveSynth
+>   let { ln a b d = line kr a b d RemoveSynth
 >       ; rln r a b d = fmap (\n -> ln (a + n) b d) (rand 0 r)
->       ; rxln r a b d = fmap (\n -> xln (a + n) b d) (rand 0 r)
 >       ; prt d a cf = do { r1 <- rand cf (cf + 2)
 >                         ; r2 <- rln 1 5 0.01 d
 >                         ; r3 <- rln 10 20 0 d

@@ -1,6 +1,6 @@
 mouse clatter (rd)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { x = mouseX kr 100 12000 Linear 0.1

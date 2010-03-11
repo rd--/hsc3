@@ -1,6 +1,6 @@
 chrd (rd)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let chrd = do { r0 <- rand 0.05 0.5

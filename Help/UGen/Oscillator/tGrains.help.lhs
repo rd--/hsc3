@@ -34,12 +34,16 @@ interp - 1, 2, or 4. Determines whether the grain uses (1) no
          interpolation, (2) linear interpolation, or (4) cubic
          interpolation.
 
+> import Sound.SC3
+
 > withSC3 (\fd -> async fd (b_allocRead 10 "/home/rohan/audio/metal.wav" 0 0))
 
 > let { tRate = mouseY KR 2 200 Exponential 0.1
 >     ; ctr = mouseX KR 0 (bufDur KR 10) Linear 0.1
 >     ; tr = impulse AR tRate 0 }
 > in audition (out 0 (tGrains 2 tr 10 1 ctr (4 / tRate) 0 0.1 2))
+
+> import Sound.SC3.Monadic
 
 > let { b = 10
 >     ; trate = mouseY KR 8 120 Exponential 0.1

@@ -3,6 +3,9 @@ tChoose trig inputs
 The output is selected randomly on recieving a trigger from an
 array of inputs.  tChoose is a composite of tiRand and select.
 
+> import Control.Monad
+> import Sound.SC3.Monadic
+
 > let x = mouseX kr 1 1000 Exponential 0.1
 > in do { t <- dust AR x
 >       ; f <- liftM midiCPS (tiRand 48 60 t)

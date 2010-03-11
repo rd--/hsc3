@@ -29,7 +29,7 @@ pan - a value from -1 to 1. Determines where to pan the output in
 envb - the buffer number containing a signal to use for the
        grain envelope. -1 uses a built-in Hanning envelope.
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > let { fn = "/home/rohan/audio/metal.wav"
 >     ; b = 10

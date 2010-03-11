@@ -92,6 +92,8 @@ the expression to do this is written below.  To run single line
 expressions move the cursor to the line and type C-cC-c (Haskell
 SuperCollider -> Expression -> Run line).
 
+> import Sound.SC3
+
 > withSC3 (\fd -> send fd (g_new [(1, AddToTail, 0)]))
 
 We can then audition a quiet sine oscillator at A440.
@@ -136,8 +138,6 @@ server activity to the ghci output window.
 To send a completion message add one to an existing
 asynchronous message using withCM.
 
-> import Sound.SC3
-
 > let { g = out 0 (sinOsc AR 660 0 * 0.15)
 >     ; m = d_recv (synthdef "sin" g)
 >     ; cm = s_new "sin" 100 AddToTail 1 [] }
@@ -164,8 +164,6 @@ triggered-control-rate (tr) and audio-rate.
 The graph below illustrates the first three of these.
 Note the specialised constructor for triggered
 controls.  
-
-> import Sound.SC3
 
 > let { b1 = control IR "b1" 0
 >     ; b2 = control IR "b2" 1
@@ -200,20 +198,6 @@ immediately reset to zero at the next control cycle.
 > withSC3 (\fd -> send fd (n_set1 100 "a1" 1))
 > withSC3 (\fd -> send fd (n_set1 100 "a2" 1))
 
-There is a convention in sclang of naming triggered
-controls with a 't_' prefix.  This is supported by the
-hsc3 'control' function, which in this case makes a
-triggered control and ignores the rate argument.
-
-> let { a = control KR "t_ampl" 0
->     ; o = sinOsc AR 440 0 * decay2 a 0.01 0.2
->     ; g = out 0 o
->     ; i fd = do { async fd (d_recv (synthdef "g" g))
->                 ; send fd (s_new "g" 100 AddToTail 1 []) } }
-> in withSC3 i
-
-> withSC3 (\fd -> send fd (n_set1 100 "t_ampl" 1))
-
 * Multiple line expressions
 
 There are two variants for expressions that are written over
@@ -247,6 +231,7 @@ current scope it is enough to type C-cC-c at an appropriate
 location.  If hsc3-dot is installed, the following two
 expressions will load the module and make a drawing.
 
+> import Sound.SC3
 > import Sound.SC3.UGen.Dot
 
 > let { o = control KR "bus" 0

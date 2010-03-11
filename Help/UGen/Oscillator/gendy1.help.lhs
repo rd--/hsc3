@@ -66,6 +66,8 @@ sclang defaults: ampdist=1, durdist=1, adparam=1.0, ddparam=1.0,
 minfreq=440, maxfreq=660, ampscale= 0.5, durscale=0.5, initCPs= 12,
 knum=12.
 
+> import Sound.SC3
+
 > let g = gendy1 AR 1 1 1 1 440 660 0.5 0.5 12 12
 > in audition (out 0 (pan2 g 0 0.15))
 
@@ -150,6 +152,9 @@ Near the corners are interesting.
 > in audition (out 0 (pan2 g 0 0.2))
 
 Texture
+
+> import Sound.SC3.Monadic
+> import Control.Monad
 
 > let node = do { f  <- rand 130 160.3
 >               ; r0 <- rand 0 6

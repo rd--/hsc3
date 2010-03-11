@@ -1,14 +1,13 @@
 strummable guitar (jmcc)
 
-> import Sound.SC3
-> import qualified Sound.SC3.UGen.Base as B
+> import Sound.SC3.ID
 
 > main =
 >   let { scale = [ 52, 57, 62, 67, 71, 76 ]
 >       ; str i = let { x = mouseX kr 0 1 Linear 0.2
 >                     ; t = abs (hpz1 (x >* (0.25 + constant i * 0.1)))
 >                     ; e = decay t 0.05
->                     ; n = B.pinkNoise i ar * e
+>                     ; n = pinkNoise i ar * e
 >                     ; dt = 1 / (midiCPS (scale !! i))
 >                     ; s = combL n dt dt 4 }
 >                 in pan2 s (constant i * 0.2 - 0.5) 1

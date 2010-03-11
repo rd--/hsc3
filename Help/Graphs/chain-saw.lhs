@@ -4,8 +4,7 @@ chain saw (jrhb)
 increasing the stack limit of the haskell run time system]
 
 > import Control.Monad
-> import Sound.SC3
-> import qualified Sound.SC3.UGen.Monadic as M
+> import Sound.SC3.Monadic
 > import System.Random
 
 > main =
@@ -17,10 +16,10 @@ increasing the stack limit of the haskell run time system]
 >        ; mceProduct = mceEdit (\l -> [product l])
 >        ; clipu s = clip2 s 1
 >        ; dup a = mce2 a a
->        ; f s1 = do { xr <- fmap dup (M.expRand 0.1 2)
->                    ; n1 <- M.lfNoise1 kr xr
->                    ; n2 <- M.lfNoise1 kr xr
->                    ; n3 <- M.lfNoise1 kr xr
+>        ; f s1 = do { xr <- fmap dup (expRand 0.1 2)
+>                    ; n1 <- lfNoise1 kr xr
+>                    ; n2 <- lfNoise1 kr xr
+>                    ; n3 <- lfNoise1 kr xr
 >                    ; f1 <- coin 0.6 (exprange n1 0.01 10) (exprange n2 10 50)
 >                    ; s2 <- coin 0.5 (1 - s1) (mceReverse s1)
 >                    ; let { f2 = linExp s1 (-1) 1 f1 (f1 * exprange n3 2 10)

@@ -1,6 +1,6 @@
 shifting pulses (rd)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   do { [n0, n1, n2] <- sequence (replicate 3 (clone 2 (brownNoise kr)))

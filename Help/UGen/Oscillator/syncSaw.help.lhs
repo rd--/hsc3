@@ -9,4 +9,6 @@ waveform, so it may alias.
 The frequency of the slave synched sawtooth wave should always be
 greater than the syncFreq.
 
+> import Sound.SC3
+
 > audition (out 0 (syncSaw AR 100 (line KR 100 800 12 RemoveSynth) * 0.1))

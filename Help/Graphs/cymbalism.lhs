@@ -1,6 +1,6 @@
 cymbalism (jmcc)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let p = replicate 15

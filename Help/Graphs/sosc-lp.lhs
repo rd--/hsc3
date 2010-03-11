@@ -1,6 +1,6 @@
 sosc-lp (rd)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { dustR r lo hi = do { n1 <- dwhite 1 lo hi

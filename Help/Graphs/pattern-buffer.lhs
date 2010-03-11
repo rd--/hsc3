@@ -1,6 +1,6 @@
 pattern buffer (rd)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 > import System.Random
 
 > main =

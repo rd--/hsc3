@@ -1,7 +1,7 @@
 feedr (rd)
 warning: input/output feedback loop
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { delayWr b i = recordBuf b 0 1 0 1 Loop 0 DoNothing i
@@ -20,4 +20,4 @@ warning: input/output feedback loop
 >                         ; send fd (b_alloc 10 (floor nf) 2)
 >                         ; audition =<< feedr 18 })
 
->   withSC3 (\fd -> send fd (b_zero 10))
+withSC3 (\fd -> send fd (b_zero 10))

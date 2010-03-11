@@ -1,6 +1,6 @@
 tipnso (rd)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { x = mouseX kr 1 32 Linear 0.1

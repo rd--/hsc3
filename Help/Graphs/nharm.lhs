@@ -2,7 +2,7 @@ nharm (rd)
 
 > import Control.Concurrent
 > import Control.Monad
-> import Sound.SC3
+> import Sound.SC3.Monadic
 > import System.Random
 
 > main =

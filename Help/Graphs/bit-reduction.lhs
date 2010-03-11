@@ -1,6 +1,6 @@
 bit reduction (adc)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > sample_rate_decrease =
 >   do { f <- lfNoise2 kr 8

@@ -1,7 +1,7 @@
 pulsing bottles (jmcc)
 
 > import Control.Monad
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { r = do { n <- whiteNoise ar

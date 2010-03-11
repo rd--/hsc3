@@ -2,7 +2,7 @@ overlap-add (jmcc, rd)
 
 > import Control.Concurrent
 > import Sound.OpenSoundControl
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { at t f 

@@ -1,6 +1,6 @@
 three-cpsw (rd)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   do { t <- dust kr (mce2 12 18)

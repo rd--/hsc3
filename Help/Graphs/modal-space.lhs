@@ -1,6 +1,6 @@
 modal space (jmcc)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { b = 0

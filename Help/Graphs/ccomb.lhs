@@ -1,6 +1,6 @@
 ccomb (rd)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { rng l r i = linLin i (-1) 1 l r

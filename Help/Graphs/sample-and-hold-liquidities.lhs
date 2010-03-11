@@ -1,15 +1,14 @@
 sample and hold liquidities (jmcc)
 
-> import Sound.SC3
-> import qualified Sound.SC3.UGen.Base as B
+> import Sound.SC3.ID
 
 > main =
 >   let { r = mouseX kr 1 200 Exponential 0.1
 >       ; t = recip r
 >       ; c = impulse kr r 0.4
 >       ; cf = mouseY kr 100 8000 Exponential 0.1
->       ; f = latch (B.whiteNoise 'a' kr * cf * 0.5 + cf) c
->       ; p = latch (B.whiteNoise 'b' kr) c
+>       ; f = latch (whiteNoise 'α' kr * cf * 0.5 + cf) c
+>       ; p = latch (whiteNoise 'β' kr) c
 >       ; i = pan2 (sinOsc ar f 0 * decay2 c (t * 0.1) (t * 0.9)) p 1 }
 >   in audition (out 0 (combN i 0.3 0.3 2))
 

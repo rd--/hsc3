@@ -2,6 +2,8 @@ lfCub rate freq iphase
  
 A sine like shape made of two cubic pieces. Smoother than lfPar.
 
+> import Sound.SC3
+
 > audition (out 0 (lfCub AR (lfCub KR (lfCub KR 0.2 0 * 8 + 10) 0 * 400 + 800) 0 * 0.1))
 > audition (out 0 (lfCub AR (lfCub KR 0.2 0 * 400 + 800) 0 * 0.1))
 > audition (out 0 (lfCub AR 800 0 * 0.1))

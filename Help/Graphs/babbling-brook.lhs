@@ -1,6 +1,6 @@
 babbling brook (jmcc)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main = 
 >   let b f m a g = do { n1 <- brownNoise ar

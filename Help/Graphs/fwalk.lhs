@@ -1,6 +1,6 @@
 fwalk (rd)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { n = [ 40.0, 47.0, 42.0, 40.0, 50.0

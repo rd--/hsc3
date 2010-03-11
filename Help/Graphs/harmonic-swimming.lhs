@@ -1,6 +1,6 @@
 harmonic swimming (jmcc)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { a = 0.02

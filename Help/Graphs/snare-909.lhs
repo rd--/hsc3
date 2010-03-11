@@ -1,6 +1,6 @@
 snare-909 (jmcc)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { snr tr n v =

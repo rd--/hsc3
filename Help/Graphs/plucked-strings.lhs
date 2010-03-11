@@ -1,6 +1,6 @@
 plucked strings (jmcc)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { s = do { n0 <- pinkNoise ar

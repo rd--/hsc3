@@ -1,4 +1,4 @@
-module Sound.SC3.UGen.FFT.Base where
+module Sound.SC3.UGen.FFT.ID where
 
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen

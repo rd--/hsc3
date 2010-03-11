@@ -1,6 +1,6 @@
 cut-outs (rd)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { t = impulse ar 22 0 * (sinOsc kr 0.5 0 + 1)

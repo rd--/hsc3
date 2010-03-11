@@ -1,6 +1,6 @@
 what was i thinking? (jmcc)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   do { n0 <- lfNoise1 kr 0.2

@@ -1,6 +1,6 @@
 karplus strong (alex mclean)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { aA = ( "aA" 

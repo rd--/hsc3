@@ -8,6 +8,8 @@ When using fixed values the normalizeSum method can be used to
 normalize the values.  TWChoose is a composite of TWindex and
 Select
 
+> import Sound.SC3.Monadic
+
 > let x = mouseX KR 1 1000 Exponential 0.1
 > in do { d <- dust AR x
 >       ; let { a = mce [ sinOsc AR 220 0

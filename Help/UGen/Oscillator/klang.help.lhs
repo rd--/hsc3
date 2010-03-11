@@ -3,6 +3,8 @@ klang rate freqScale freqOffset spec
 Bank of fixed oscillators.  spec is constructed using klangSpec, which
 takes lists of frequency, amplitude and phase.
 
+> import Sound.SC3
+
 > let { f = [440,550..1100]
 >     ; a = take 7 (cycle [0.05, 0.02])
 >     ; p = replicate 7 0 }

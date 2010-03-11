@@ -1,6 +1,6 @@
 fbl-fbf (rd)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { fbl l i d g = let { a0 = l + mce i

@@ -1,11 +1,9 @@
-module Sound.SC3 (
-                  -- $help
+module Sound.SC3 (-- $help
+                  module Sound.SC3.Server
+                 ,module Sound.SC3.UGen) where
 
-                  module Sound.SC3.UGen,
-                  module Sound.SC3.Server) where
-
-import Sound.SC3.UGen
 import Sound.SC3.Server
+import Sound.SC3.UGen
 
 -- $help
 -- Once the hsc3 library has been installed, you will find help files

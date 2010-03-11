@@ -1,6 +1,6 @@
 sweepy noise (jmcc)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   do { n <- clone 2 (whiteNoise ar)

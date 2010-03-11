@@ -1,15 +1,15 @@
-xy-interference (rd)
+xy-interference-m (rd)
 
-> import Sound.SC3.ID
+> import Sound.SC3.Monadic
 
 > main =
 >   let { x = mouseX KR 20 22000 Linear (mce2 0.005 0.025)
 >       ; y = mouseY KR 20 22000 Linear (mce2 0.005 0.075)
->       ; nd k = let { n = lfNoise0 k KR (mce2 5 9)
->                    ; a = sinOsc AR (x + n) 0
->                    ; b = sinOsc AR y 0 }
->                in a * b }
->   in audition (out 0 (sum (map nd ['α'..'γ'])))
+>       ; nd = do { n <- lfNoise0 KR (mce2 5 9)
+>                 ; let { a = sinOsc AR (x + n) 0
+>                       ; b = sinOsc AR y 0 }
+>                   in return (a * b) } }
+>   in audition . (out 0) . sum =<< sequence (replicate 3 nd)
 
 { var x = MouseX.kr(20, 22000, 'linear', [0.005, 0.025])
 ; var y = MouseY.kr(20, 22000, 'linear', [0.005, 0.075])

@@ -1,7 +1,7 @@
 k-ppr (rd)
 
 > import Control.Monad
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { wrp i l r = linLin i (-1) 1 l r

@@ -1,6 +1,6 @@
 reverberated sine percussion (jmcc)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { d = 6

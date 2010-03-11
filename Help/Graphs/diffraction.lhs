@@ -1,7 +1,7 @@
 diffraction (rd)
 
 > import Control.Monad
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > main =
 >   let { p = let { x = mouseX kr 0.001 0.02 Exponential 0.1
