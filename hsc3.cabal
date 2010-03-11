@@ -51,7 +51,8 @@ Library
                    hosc == 0.8,
                    network,
                    process,
-                   random
+                   random,
+                   split
   GHC-Options:     -Wall -fwarn-tabs
   Exposed-modules: Sound.SC3
                    Sound.SC3.ID

@@ -182,7 +182,7 @@ mceTranspose :: UGen -> UGen
 mceTranspose =
     mce . map mce . transpose . map mceChannels . mceChannels
 
--- | Collapse mce by summing.
+-- | Collapse mce by summing (see also mix and mixN).
 mceSum :: UGen -> UGen
 mceSum = sum . mceChannels
 

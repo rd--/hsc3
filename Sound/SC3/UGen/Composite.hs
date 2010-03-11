@@ -2,6 +2,8 @@
 module Sound.SC3.UGen.Composite where
 
 import Control.Monad
+import Data.List
+import Data.List.Split
 import Sound.SC3.UGen.Buffer
 import Sound.SC3.UGen.Filter
 import Sound.SC3.UGen.Information
@@ -31,10 +33,15 @@ indexL b i =
         y = index b (i + 1)
     in linLin (frac i) 0 1 x y
 
--- | Collapse multiple channel expansion by summing.
+-- | Collapse possible mce by summing.
 mix :: UGen -> UGen
-mix u | isMCE u = sum (mceProxies u)
-      | otherwise = u
+mix = sum . mceChannels
+
+-- | Mix variant, sum to n channels.
+mixN :: Int -> UGen -> UGen
+mixN n u =
+    let xs = transpose (splitEvery n (mceChannels u))
+    in mce (map sum xs)
 
 -- | Construct and sum a set of UGens.
 mixFill :: Int -> (Int -> UGen) -> UGen
