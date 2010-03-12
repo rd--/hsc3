@@ -19,6 +19,9 @@ instance ID Int where
 instance ID Char where
     resolveID = C.ord
 
+instance ID UGen where
+    resolveID = hashUGen
+
 -- | Unit generator.
 data UGen = Constant { constantValue :: Double }
           | Control { controlOperatingRate :: Rate
