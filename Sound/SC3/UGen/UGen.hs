@@ -2,6 +2,7 @@ module Sound.SC3.UGen.UGen where
 
 import Control.Monad
 import qualified Data.Char as C
+import qualified Data.HashTable as H
 import Data.List
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Rate
@@ -48,6 +49,10 @@ newtype Special = Special Int
 
 defaultID :: Int
 defaultID = (-1)
+
+-- | Hash function for unit generators.
+hashUGen :: UGen -> Int
+hashUGen = fromIntegral . H.hashString . show
 
 -- | Constant value node constructor.
 constant :: (Real a) => a -> UGen
