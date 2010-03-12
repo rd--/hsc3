@@ -14,6 +14,8 @@ LFNoise0 is more efficient.
 Try wiggling mouse quickly; LFNoise frequently seems stuck,
 LFDNoise changes smoothly.
 
+> import Sound.SC3.Monadic
+
 > let x = mouseX KR 0.1 1000 Exponential 0.2
 > in audition . (out 0) . (* 0.1) =<< lfdNoise0 AR x
 

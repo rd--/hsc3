@@ -2,6 +2,8 @@ whiteNoise rate
 
 Generates noise whose spectrum has equal power at all frequencies.
 
+> import Sound.SC3.Monadic
+
 > audition . (out 0) . (* 0.05) =<< whiteNoise AR
 
 Random filtered noise bursts.

@@ -4,6 +4,8 @@ Generates a random integer value in uniform distribution from lo to
 hi each time the trig signal changes from nonpositive to positive
 values
 
+> import Sound.SC3.Monadic
+
 > do { l <- tiRand (-1) 1 =<< dust KR 10
 >    ; n <- pinkNoise AR
 >    ; audition (out 0 (pan2 (n * 0.1) l 1)) }

@@ -5,6 +5,8 @@ nearest integer division of the sample rate by the freq argument.
 It is probably pretty hard on your speakers.  The freq argument is
 the approximate rate at which to generate random values.
 
+> import Sound.SC3.Monadic
+
 > audition . (out 0) . (* 0.05) =<< lfClipNoise AR 1000
 
 Modulate frequency

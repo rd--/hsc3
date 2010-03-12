@@ -4,6 +4,8 @@ Quadratic noise.  Generates quadratically interpolated random
 values at a rate given by the nearest integer division of the
 sample rate by the freq argument.
 
+> import Sound.SC3.Monadic
+
 > audition . (out 0) . (* 0.05) =<< lfNoise2 AR 1000
 
 Modulate frequency.

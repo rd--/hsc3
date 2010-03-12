@@ -1,10 +1,10 @@
 a + b
 
-> import Sound.SC3
+> import Sound.SC3.ID
 
-> let o = fSinOsc AR 800 0
-> in do { n <- pinkNoise AR
->       ; audition (out 0 ((o + n) * 0.1)) }
+> let { o = fSinOsc AR 800 0
+>     ; n = pinkNoise 'a' AR }
+> in audition (out 0 ((o + n) * 0.1))
 
 DC offset.
 

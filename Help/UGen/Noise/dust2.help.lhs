@@ -3,6 +3,8 @@ dust2 rate density
 Generates random impulses from -1 to +1.  The `density' is in
 impulses per second.
 
+> import Sound.SC3.Monadic
+
 > do { n <- dust2 AR 200
 >    ; audition (out 0 (n * 0.5)) }
 

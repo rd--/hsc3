@@ -22,6 +22,8 @@ coef - the coef of the internal OnePole filter. Values should be
 Excitation signal is WhiteNoise, triggered twice a second with
 varying OnePole coef.
 
+> import Sound.SC3.Monadic
+
 > do { n <- whiteNoise AR
 >    ; let { t = impulse KR 9 0
 >          ; x = mouseX KR (-0.999) 0.999 Linear 0.1

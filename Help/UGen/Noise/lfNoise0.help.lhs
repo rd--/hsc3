@@ -3,6 +3,8 @@ lfNoise0 rate freq
 Step noise.  Generates random values at a rate given by the nearest
 integer division of the sample rate by the freq argument.
 
+> import Sound.SC3.Monadic
+
 > audition . (out 0) . (* 0.05) =<< lfNoise0 AR 1000
 
 Modulate frequency.
@@ -13,5 +15,5 @@ Modulate frequency.
 
 Use as frequency control.
 
-> f <- lfNoise0 KR 4
-> audition (out 0 (sinOsc AR (f * 400 + 450) 0 * 0.1))
+> do { f <- lfNoise0 KR 4
+>    ; audition (out 0 (sinOsc AR (f * 400 + 450) 0 * 0.1)) }

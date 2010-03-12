@@ -7,7 +7,9 @@ current value.
 in   - input signal
 trig - reset the output value to the current input value
 
-> do { n <- dust AR 20
->    ; let { t = impulse AR 0.4 0
->          ; f = runningMax n t * 500 + 200 }
->      in audition (out 0 (sinOsc AR f 0 * 0.2)) }
+> import Sound.SC3.ID
+
+> let { n = dust 'α' AR 20
+>     ; t = impulse AR 0.4 0
+>     ; f = runningMax n t * 500 + 200 }
+> in audition (out 0 (sinOsc AR f 0 * 0.2))

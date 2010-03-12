@@ -6,6 +6,8 @@ the freq argument.
 
 freq - approximate rate at which to generate random values.
 
+> import Sound.SC3.Monadic
+
 > audition . (out 0) . (* 0.05) =<< lfNoise1 AR 1000
 
 Modulate frequency.

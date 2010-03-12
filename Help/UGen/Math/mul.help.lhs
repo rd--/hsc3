@@ -8,8 +8,10 @@ Multiplication.
 
 Creates a beating effect (subaudio rate).
 
-> do { n <- pinkNoise AR
->    ; audition (out 0 (fSinOsc kr 10 0 * n * 0.5)) }
+> import Sound.SC3.ID
+
+> let n = pinkNoise 'a' AR
+> in audition (out 0 (fSinOsc kr 10 0 * n * 0.5))
 
 Ring modulation.
 

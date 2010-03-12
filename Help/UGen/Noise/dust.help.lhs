@@ -3,7 +3,7 @@ dust rate density
 Generates random impulses from 0 to +1 at a rate determined by the
 density argument.
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > audition . (out 0) . (* 0.25) =<< dust AR 200
 

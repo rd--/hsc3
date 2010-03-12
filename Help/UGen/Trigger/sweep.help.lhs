@@ -5,6 +5,8 @@ when trig input crosses from non-positive to positive.
 	
 Using sweep to modulate sine frequency
 
+> import Sound.SC3
+
 > let { x = mouseX KR 0.5 20 Exponential 0.1
 >     ; t = impulse KR x 0 
 >     ; f = sweep t 700 + 500 }
@@ -12,7 +14,8 @@ Using sweep to modulate sine frequency
 
 Using sweep to index into a buffer
 
-> withSC3 (\fd -> send fd (b_allocRead 0 "/home/rohan/audio/metal.wav" 0 0))
+> let fn = "/home/rohan/audio/metal.wav"
+> in withSC3 (\fd -> send fd (b_allocRead 0 fn 0 0))
 
 > let { x = mouseX KR 0.5 20 Exponential 0.1
 >     ; t = impulse AR x 0
@@ -21,12 +24,14 @@ Using sweep to index into a buffer
 
 Backwards, variable offset
 
-> do { n <- lfNoise0 KR 15
->    ; let { x = mouseX KR 0.5 10 Exponential 0.1
->          ; t = impulse AR x 0
->          ; r = bufSampleRate KR 0
->          ; p = sweep t (negate r) + (bufFrames KR 0 * n) }
->      in audition (out 0 (bufRdL 1 AR 0 p NoLoop)) }
+> import Sound.SC3.ID
+
+> let { n = lfNoise0 'a' KR 15
+>     ; x = mouseX KR 0.5 10 Exponential 0.1
+>     ; t = impulse AR x 0
+>     ; r = bufSampleRate KR 0
+>     ; p = sweep t (negate r) + (bufFrames KR 0 * n) }
+> in audition (out 0 (bufRdL 1 AR 0 p NoLoop))
 
 Raising rate
 

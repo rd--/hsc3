@@ -6,7 +6,7 @@ splay spreads an array of channels across the stereo field.
     level - 0 = silent, 1 = unit gain (equal power level compensated)
    center - negate 1 = left, 1 = right
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 > import Control.Monad
 
 > do { i <- return 6

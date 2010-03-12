@@ -9,7 +9,9 @@ precipitating event cause something to happen until you reset it.
 trig  - trigger sets output to one
 reset - trigger resets output to zero
 
-> do { n <- brownNoise AR
->    ; d0 <- dust AR 5
->    ; d1 <- dust AR 5
->    ; audition (out 0 (setResetFF d0 d1 * n * 0.2)) }
+> import Sound.SC3.ID
+
+> let { n = brownNoise 'α' AR
+>     ; d0 = dust 'α' AR 5
+>     ; d1 = dust 'β' AR 5 }
+> in audition (out 0 (setResetFF d0 d1 * n * 0.2))

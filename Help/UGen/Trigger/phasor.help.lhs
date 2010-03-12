@@ -13,6 +13,8 @@ resetPos   - determines where to jump to on recieving a trigger.  the
 
 phasor controls sine frequency: end frequency matches a second sine wave.
 
+> import Sound.SC3
+
 > let { rate = mouseX KR 0.2 2 Exponential 0.1
 >     ; tr = impulse AR rate 0
 >     ; sr = sampleRate

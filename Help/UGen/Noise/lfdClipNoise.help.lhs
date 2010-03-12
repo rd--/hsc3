@@ -15,6 +15,8 @@ LFClipNoise is more efficient.
 Try wiggling mouse quickly; lfClipNoise frequently seems stuck,
 lfdClipNoise changes smoothly.
 
+> import Sound.SC3.Monadic
+
 > let x = mouseX KR 0.1 1000 Exponential 0.2
 > in do { n <- lfdClipNoise AR x
 >       ; audition (out 0 (sinOsc AR (n * 200 + 500) 0 * 0.05)) }
