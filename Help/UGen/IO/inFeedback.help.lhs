@@ -25,6 +25,8 @@ at the default block size and sample rate.
 
 Audio feedback modulation.
 
+> import Sound.SC3
+
 > let { f = inFeedback 1 0 * 1300 + 300
 >     ; s = sinOsc AR f 0 * 0.4 }
 > in audition (out 0 s)

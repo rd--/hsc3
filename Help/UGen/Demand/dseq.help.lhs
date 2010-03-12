@@ -5,7 +5,7 @@ Demand rate sequence generator.
 array   - array of values or other ugens
 length  - number of repeats
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > do { n <- dseq 3 (mce [1, 3, 2, 7, 8])
 >    ; let { x = mouseX KR 1 40 Exponential 0.1

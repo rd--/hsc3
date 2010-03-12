@@ -3,7 +3,7 @@ freeSelf src
 Free enclosing synth when the input signal crosses from non-positive
 to positive.
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > do { n <- dust KR 0.5
 >    ; let { a = freeSelf n

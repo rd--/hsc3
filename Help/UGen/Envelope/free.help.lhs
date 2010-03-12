@@ -5,7 +5,7 @@ When triggered frees a node.
 trig   - when triggered, frees node
 nodeID - node to be freed
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > let { a = out 0 (sinOsc AR 880 0 * 0.1) 
 >     ; b = do { n0 <- pinkNoise AR

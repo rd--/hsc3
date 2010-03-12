@@ -2,7 +2,10 @@ bufFrames rate bufnum
 
 Current duration of buffer.
 
-> withSC3 (\fd -> async fd (b_allocRead 0 "/home/rohan/audio/metal.wav" 0 0))
+> import Sound.SC3
+
+> let fn = "/home/rohan/audio/metal.wav"
+> in withSC3 (\fd -> async fd (b_allocRead 0 fn 0 0))
 
 > let p = phasor AR 0 (bufRateScale KR 0) 0 (bufFrames KR 0) 0
 > in audition (out 0 (bufRdL 1 AR 0 p NoLoop))

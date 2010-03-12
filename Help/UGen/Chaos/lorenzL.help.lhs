@@ -28,6 +28,8 @@ Vary frequency
 
 Randomly modulate params
 
+> import Sound.SC3.Monadic
+
 > let { madd a m = return . (+ a) . (* m)
 >     ; n = lfNoise0 KR 1 }
 > in do { n0 <- madd 10 2 =<< n

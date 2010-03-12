@@ -10,7 +10,10 @@ you have specified to the BufRd, it will fail silently.
 The interpolation value should be either NoInterpolation,
 LinearInterpolation, CubicInterpolation or (Interpolation UGen).
 
-> withSC3 (\fd -> send fd (b_allocRead 0 "/home/rohan/audio/metal.wav" 0 0))
+> import Sound.SC3
+
+> let fn = "/home/rohan/audio/metal.wav"
+> in withSC3 (\fd -> send fd (b_allocRead 0 fn 0 0))
 
 > let phase = (sinOsc AR 0.1 0 * bufFrames KR 0)
 > in audition (out 0 (bufRd 1 AR 0 phase Loop NoInterpolation))
@@ -18,6 +21,8 @@ LinearInterpolation, CubicInterpolation or (Interpolation UGen).
 There are constructors, bufRdN, bufRdL, and bufRdC for the fixed
 cases.
 
-> let x = mouseX KR (mce [5, 10]) 100 Linear 0.1
-> in do { n <- lfNoise1 AR x
->       ; audition (out 0 (bufRdL 1 AR 0 (n * bufFrames KR 0) Loop)) }
+> import Sound.SC3.ID
+
+> let { x = mouseX KR (mce [5, 10]) 100 Linear 0.1
+>     ; n = lfNoise1 'a' AR x }
+> in audition (out 0 (bufRdL 1 AR 0 (n * bufFrames KR 0) Loop))

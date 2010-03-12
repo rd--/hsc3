@@ -2,6 +2,8 @@ replaceOut bufferIndex inputs
 
 Send signal to a bus, overwrite existing signal.
 
+> import Sound.SC3
+
 > let { a = out 0 (sinOsc AR (mce [330, 331]) 0 * 0.1)
 >     ; b = replaceOut 0 (sinOsc AR (mce [880, 881]) 0 * 0.1)
 >     ; c = out 0 (sinOsc AR (mce [120, 121]) 0 * 0.1) }

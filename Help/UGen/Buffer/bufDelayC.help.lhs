@@ -14,6 +14,8 @@ buf       - buffer number.
 in        - the input signal.
 delaytime - delay time in seconds.
 
+> import Sound.SC3.Monadic
+
 > withSC3 (\fd -> async fd (b_alloc 0 44100 1))
 
 > do { d <- dust AR 1

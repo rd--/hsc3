@@ -28,7 +28,7 @@ gap - if true the dirst duration precedes the first level,
 
 Play a little rhythm
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > do { d <- dseq dinf (mce [0.1, 0.2, 0.4, 0.3])
 >    ; audition (out 0 (tDuty AR d 0 DoNothing 1 1)) }

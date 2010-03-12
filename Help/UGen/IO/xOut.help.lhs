@@ -2,6 +2,8 @@ xOut bufferIndex xFade inputs
  
 Send signal to a bus, crossfading with existing contents.
 
+> import Sound.SC3
+
 > let { p a b = sinOsc AR (mce [a, b]) 0 * 0.1
 >     ; x = mouseX KR 0 1 Linear 0.1
 >     ; y = mouseY KR 0 1 Linear 0.1 }

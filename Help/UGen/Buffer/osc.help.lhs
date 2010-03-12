@@ -15,6 +15,8 @@ flag set to true.
 Note about wavetables: OscN requires the b_gen sine1 wavetable flag
 to be OFF.  Osc requires the b_gen sine1 wavetable flag to be ON.
 
+> import Sound.SC3
+
 > withSC3 (\fd -> do { async fd (b_alloc 10 512 1)
 >                    ; send fd (b_gen 10 "sine1" [1 + 2 + 4, 1, 1/2, 1/3, 1/4, 1/5]) })
 
@@ -39,5 +41,8 @@ Change the buffer while its playing
 
 > audition (out 0 (osc AR 10 220 0 * 0.1))
 
+> import System.Random
+
 > do { r <- getStdRandom (randomR (0.0,1.0))
->    ; withSC3 (\fd -> send fd (b_gen 10 "sine1" [1 + 2 + 4, 1, r, 1/4])) }
+>    ; let g = b_gen 10 "sine1" [1 + 2 + 4, 1, r, 1/4]
+>      in withSC3 (\fd -> send fd g) }

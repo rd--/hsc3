@@ -4,6 +4,8 @@ Interpolating index search into a sorted table with a signal.
 
 Allocate and set values at buffer 10.
 
+> import Sound.SC3
+
 > withSC3 (\fd -> do { async fd (b_alloc 10 6 1)
 >                    ; send fd (b_setn 10 [(0, [200, 210, 400, 430, 600, 800])]) })
 

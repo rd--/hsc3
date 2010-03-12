@@ -4,6 +4,8 @@ Read signal from an audio or control bus.
 
 Patching input to output.
 
+> import Sound.SC3
+
 > audition (out 0 (in' 2 AR numOutputBuses))
 
 Patching input to output, with delay.
@@ -14,10 +16,12 @@ Patching input to output, with delay.
 
 Write noise to bus 10, then read it out.  The multiple root graph is ordered.
 
-> do { n <- pinkNoise AR
->    ; let { wr = out 10 (n * 0.3)
->          ; rd = out 0 (in' 1 AR 10) }
->      in audition (mrg [rd, wr]) }
+> import Sound.SC3.ID
+
+> let { n = pinkNoise 'a' AR
+>     ; wr = out 10 (n * 0.3)
+>     ; rd = out 0 (in' 1 AR 10) }
+> in audition (mrg [rd, wr])
 
 Reading a control bus.
 

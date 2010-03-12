@@ -8,7 +8,7 @@ length	- number of values to create
 
 The arguments can be a number or any other ugen
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > do { n <- dgeom 15 1 1.2
 >    ; let { x = mouseX KR 1 40 Exponential 0.1

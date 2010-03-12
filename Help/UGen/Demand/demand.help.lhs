@@ -14,7 +14,7 @@ trig  - Trigger can be any signal. A trigger happens when
 
 reset - Resets the list of ugens when triggered.
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > do { r <- dust KR 1
 >    ; s <- dgeom dinf (midiCPS 72) (midiRatio 1)

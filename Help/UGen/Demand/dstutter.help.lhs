@@ -5,7 +5,7 @@ Demand rate input replicator.
 n   - number of repeats (can be a demand ugen)
 in  - input ugen
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > do { inp <- dseq dinf (mce [1, 2, 3])
 >    ; nse <- diwhite dinf 2 8

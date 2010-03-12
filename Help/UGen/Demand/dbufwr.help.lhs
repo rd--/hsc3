@@ -9,7 +9,7 @@ input  - single channel input
 loop   - when phase exceeds number of frames in buffer, 
          loops when set to 1 (default :1)
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > do { s1 <- dseries 30 0 3
 >    ; s2 <- dseries 30 0 1

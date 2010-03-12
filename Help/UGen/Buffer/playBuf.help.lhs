@@ -36,22 +36,26 @@ Allocate buffer.
 
 Play once only.
 
-> audition (out 0 (playBuf 1 10 (bufRateScale KR 10) 1 0 NoLoop RemoveSynth))
+> let s = bufRateScale KR 10
+> in audition (out 0 (playBuf 1 10 s 1 0 NoLoop RemoveSynth))
 
 Play in infinite loop.
 
-> audition (out 0 (playBuf 1 10 (bufRateScale KR 10) 1 0 Loop DoNothing))
+> let s = bufRateScale KR 10
+> in audition (out 0 (playBuf 1 10 s 1 0 Loop DoNothing))
 
 Trigger playback at each pulse.
 
-> let t = impulse KR 2 0
-> in audition (out 0 (playBuf 1 10 (bufRateScale KR 10) t 0 NoLoop DoNothing))
+> let { t = impulse KR 2 0
+>     ; s = bufRateScale KR 10 }
+> in audition (out 0 (playBuf 1 10 s t 0 NoLoop DoNothing))
 
 Trigger playback at each pulse (diminishing intervals).
 
 > let { f = xLine KR 0.1 100 10 RemoveSynth
->     ; t = impulse KR f 0 }
-> in audition (out 0 (playBuf 1 10 (bufRateScale KR 10) t 0 NoLoop DoNothing))
+>     ; t = impulse KR f 0 
+>     ; s = bufRateScale KR 10 }
+> in audition (out 0 (playBuf 1 10 s t 0 NoLoop DoNothing))
 
 Loop playback, accelerating pitch.
 
@@ -61,8 +65,9 @@ Loop playback, accelerating pitch.
 Sine wave control of playback rate, negative rate plays backwards.
 
 > let { f = xLine KR 0.2 8 30 RemoveSynth
->     ; r = fSinOsc KR f 0 * 3 + 0.6 }
-> in audition (out 0 (playBuf 1 10 (bufRateScale KR 10 * r) 1 0 Loop DoNothing))
+>     ; r = fSinOsc KR f 0 * 3 + 0.6
+>     ; s = bufRateScale KR 10 * r }
+> in audition (out 0 (playBuf 1 10 s 1 0 Loop DoNothing))
 
 Release buffer.
 

@@ -11,7 +11,7 @@ Dwhite returns numbers in the continuous range between lo and hi,
 Diwhite returns integer values.  The arguments can be a number or
 any other ugen
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > do { n <- dwhite dinf 0 15
 >    ; let { x = mouseX KR 1 40 Exponential 0.1

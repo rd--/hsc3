@@ -2,6 +2,8 @@ select which array
 
 The output is selected from an array of inputs.
 
+> import Sound.SC3
+
 > let { n = 3/2
 >     ; a = mce [sinOsc AR 440 0, saw AR 440, pulse AR 440 0.1] }
 > in audition (out 0 (select (lfSaw KR 1 0 * n + n) a * 0.2))

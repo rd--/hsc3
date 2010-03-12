@@ -6,7 +6,7 @@ bufnum  - buffer number to read from
 phase   - index into the buffer (demand ugen or any other ugen)
 loop    - loop when phase exceeds number of frames in buffer
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 > import System.Random
 
 > let n = randomRs (200.0, 500.0) (mkStdGen 0)

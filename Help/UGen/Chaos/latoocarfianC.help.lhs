@@ -30,6 +30,7 @@ sclang default initial parameters.
 Randomly modulate all parameters.
 
 > import Control.Monad
+> import Sound.SC3.Monadic
 
 > do { [n0, n1, n2, n3] <- replicateM 4 (lfNoise2 KR 5)
 >    ; let { f = sampleRate / 4

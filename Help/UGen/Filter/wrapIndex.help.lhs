@@ -9,6 +9,8 @@ cyclically to the valid range.
 bufnum - index of the buffer
 in     - the input signal.
 
+> import Sound.SC3
+
 > withSC3 (\fd -> do { async fd (b_alloc 0 6 1)
 >                    ; send fd (b_setn 0 [(0, [200, 300, 400, 500, 600, 800])]) })
 

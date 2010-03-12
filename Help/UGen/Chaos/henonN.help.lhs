@@ -29,7 +29,9 @@ With mouse-control of parameters.
 >     ; y = mouseY KR 0 0.3 Linear 0.1 }
 > in audition (out 0 (henonN AR (sampleRate / 4) x y 0 0 * 0.1))
 
-With randomly modulate parameters.
+With randomly modulated parameters.
+
+> import Sound.SC3.Monadic
 
 > do { n0 <- return . (+ 1.20) . (* 0.20) =<< lfNoise2 KR 1
 >    ; n1 <- return . (+ 0.15) . (* 0.15) =<< lfNoise2 KR 1

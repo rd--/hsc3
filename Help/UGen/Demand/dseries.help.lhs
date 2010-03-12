@@ -8,7 +8,7 @@ step    - step value
 
 The arguments can be a number or any other ugen
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > do { n <- dseries 15 0 1
 >    ; let { x = mouseX KR 1 40 Exponential 0.1

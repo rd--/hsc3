@@ -25,7 +25,7 @@ reset  - if reset crosses from nonpositive to positive, the ugen
 
 Frequency ramp, exponential curve.
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > do { l <- dseq dinf (mce2 440 9600)
 >    ; let { y = mouseY KR 0.01 3 Exponential 0.1

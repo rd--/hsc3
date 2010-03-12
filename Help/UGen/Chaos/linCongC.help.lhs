@@ -27,6 +27,8 @@ Default initial parameters.
 
 Randomly modulate parameters.
 
+> import Sound.SC3.Monadic
+
 > do { [n0, n1, n2, m] <- mapM (lfNoise2 KR) [1.0, 0.1, 0.1, 0.1]
 >    ; let { f = n0 * 1e4 + 1e4
 >          ; a = n1 * 0.5 + 1.4
