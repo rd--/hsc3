@@ -161,6 +161,10 @@ mceExpand u =
        then mceExpand (mceTransform u)
        else u
 
+-- | Apply a function to each channel at a unit generator.
+mceMap :: (UGen -> UGen) -> UGen -> UGen
+mceMap f u = mce (map f (mceChannels u))
+
 -- | Apply UGen list operation on MCE contents.
 mceEdit :: ([UGen] -> [UGen]) -> UGen -> UGen
 mceEdit f (MCE l) = MCE (f l)
