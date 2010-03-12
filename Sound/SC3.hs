@@ -10,7 +10,7 @@ import Sound.SC3.UGen
 -- installed in @$PREFIX\/share\/hsc3-VERSION\/Help\/@.
 --
 -- For installation and configuration information please consult the
--- tutorial file at @Help\/Tutorial\/Tutorial.lhs@.
+-- tutorial file at @Help\/tutorial.lhs@.
 --
 -- For general information on supercollider and the overall design of
 -- the hsc3 bindings, see @Help\/hsc3.help.lhs@.

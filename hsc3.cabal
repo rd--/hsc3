@@ -18,8 +18,7 @@ Cabal-Version:     >= 1.6
 Data-files:        README
                    emacs/hsc3.el
                    Help/hsc3.help.lhs
-                   Help/Tutorial/*.lhs
-                   Help/Tutorial/*.hs
+                   Help/tutorial.lhs
                    Help/Server/*.help.lhs
                    Help/UGen/Analysis/*.help.lhs
                    Help/UGen/Buffer/*.help.lhs
@@ -40,8 +39,6 @@ Data-files:        README
                    Help/UGen/Oscillator/*.help.lhs
                    Help/UGen/Panner/*.help.lhs
                    Help/UGen/Trigger/*.help.lhs
-                   Help/Graphs/*.lhs
-                   Help/Graphs/*.hs
 
 Library
   Build-Depends:   base == 4.*,
