@@ -25,9 +25,10 @@ extractDouble (Double f) = f
 extractDouble _ = error "extractDouble"
 
 serverStatusData :: Transport t => t -> IO [Datum]
-serverStatusData fd = do send fd status 
-                         (Message _ d) <- wait fd "status.reply"
-                         return d
+serverStatusData fd = do
+  send fd status
+  (Message _ d) <- wait fd "/status.reply"
+  return d
 
 statusFields :: [String]
 statusFields = ["Unused                      ",
@@ -41,7 +42,6 @@ statusFields = ["Unused                      ",
                 "Sample Rate (Actual)        "]
 
 statusFormat :: [Datum] -> [String]
-statusFormat d = s : zipWith (++) 
-                             (tail statusFields) 
-                             (map show (tail d))
-    where s = "***** SuperCollider Server Status *****"
+statusFormat d =
+    let s = "***** SuperCollider Server Status *****"
+    in s : zipWith (++) (tail statusFields) (map show (tail d))
