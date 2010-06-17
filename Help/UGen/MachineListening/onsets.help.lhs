@@ -59,6 +59,8 @@ any "top-down" inferences such as tempo.
 > in withSC3 (\fd -> do { async fd (b_alloc 10 512 1)
 >                       ; play fd (out 0 (s * e)) })
 
+> audition (out 0 (soundIn 0 * 0.1))
+
 The type argument chooses which onset detection function is
 used. In many cases the default will be fine. The following
 choices are available:
