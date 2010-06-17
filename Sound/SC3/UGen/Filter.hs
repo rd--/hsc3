@@ -277,6 +277,13 @@ select i a = mkFilterMCE "Select" [i] a 1
 sendTrig :: UGen -> UGen -> UGen -> UGen
 sendTrig i k v = mkFilter "SendTrig" [i, k, v] 0
 
+-- | Send a reply message from the server back to the all registered clients.
+sendReply :: UGen -> UGen -> String -> [UGen] -> UGen
+sendReply i k n v =
+    let n' = map (fromIntegral . fromEnum) n
+        s = fromIntegral (length n')
+    in mkFilter "SendReply" ([i, k, s] ++ n' ++ v) 0
+
 -- | Set-reset flip flop.
 setResetFF :: UGen -> UGen -> UGen
 setResetFF t r = mkFilter "SetResetFF" [t, r] 1
