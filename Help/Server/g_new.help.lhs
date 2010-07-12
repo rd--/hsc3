@@ -2,7 +2,7 @@
 
 [
   int - new group ID
-  int - add action (0,1,2, 3 or 4 see below)
+  int - add action (enumeration)
   int - add target ID
 ] * N
 

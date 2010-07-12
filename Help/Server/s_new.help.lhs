@@ -2,7 +2,7 @@
 
 string - synth definition name
 int    - synth ID
-int    - add action (0,1,2, 3 or 4 see below)
+int    - add action (enumeration)
 int    - add target ID
 [
   int|string - a control index or name
@@ -13,11 +13,11 @@ Create a new synth from a synth definition, give it an ID, and add it
 to the tree of nodes. There are four ways to add the node to the tree
 as determined by the add action argument which is defined as follows:
 
-0 - add the new node to the the head of the target group
-1 - add the new node to the the tail of the target group
-2 - add the new node just before the target node
-3 - add the new node just after the target node
-4 - the new node replaces the target node, which is freed
+AddToHead  - 0 - add the new node to the the head of the target group
+AddToTail  - 1 - add the new node to the the tail of the target group
+AddBefore  - 2 - add the new node just before the target node
+AddAfter   - 3 - add the new node just after the target node
+AddReplace - 4 - the new node replaces the target node, which is freed
 
 Controls may be set when creating the synth. The control arguments are
 the same as for the n_set command.
