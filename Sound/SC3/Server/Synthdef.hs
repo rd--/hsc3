@@ -4,7 +4,6 @@ module Sound.SC3.Server.Synthdef ( Node(..), FromPort(..), Graph(..)
                                  , synth, synthdef, synthstat ) where
 
 import qualified Data.ByteString.Lazy as B
-import qualified Data.Char as C
 import qualified Data.IntMap as M
 import Data.List
 import Data.Word

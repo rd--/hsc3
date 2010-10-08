@@ -41,7 +41,7 @@ lpcRead fn = do
       hdr = LPCHeader hs lm np fs fr sr fd nf
       hc = hs - (7 * 4)
       get_f = replicateM fs (read_f32 h)
-  B.hGet h hc
+  _ <- B.hGet h hc
   d <- replicateM nf get_f
   hClose h
   return (LPC hdr d)
