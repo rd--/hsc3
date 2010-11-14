@@ -99,6 +99,8 @@
 (defun hsc3-quit-haskell ()
   "Quit haskell."
   (interactive)
+  (hsc3-send-string ":quit")
+  (sit-for 0.25)
   (kill-buffer hsc3-buffer)
   (delete-other-windows))
 
