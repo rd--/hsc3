@@ -114,6 +114,11 @@
 				      (thing-at-point 'symbol)
 				      "\\.help\\.lhs"))))
 
+(defun hsc3-request-type ()
+  "Ask ghci for the type of the name at point."
+  (interactive)
+  (hsc3-send-string (concat ":t " (thing-at-point 'symbol))))
+
 (defun chunk-string (n s)
   "Split a string into chunks of 'n' characters."
   (let* ((l (length s))
