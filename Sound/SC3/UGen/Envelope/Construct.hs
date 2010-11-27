@@ -6,7 +6,8 @@ module Sound.SC3.UGen.Envelope.Construct (env
                                          ,envPerc', envPerc
                                          ,envTriangle
                                          ,envSine
-                                         ,envLinen', envLinen) where
+                                         ,envLinen', envLinen
+                                         ,envADSR, envASR) where
 
 import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.Math
@@ -80,6 +81,30 @@ envLinen :: UGen -> UGen -> UGen -> UGen -> [UGen]
 envLinen aT sT rT l =
     let c = (EnvLin, EnvLin, EnvLin)
     in envLinen' aT sT rT l c
+
+-- aT = attackTime
+-- dT = decayTime
+-- sL = sustainLevel
+-- rT = releaseTime
+-- pL = peakLevel
+-- c = curve
+-- b = bias
+
+-- | Attack, decay, sustain, release envelope parameter constructor.
+envADSR :: UGen -> UGen -> UGen -> UGen -> UGen -> EnvCurve -> UGen -> [UGen]
+envADSR aT dT sL rT pL c b =
+    let l = map (+ b) [0,pL,pL*sL,0]
+        t = [aT,dT,rT]
+        c' = [c,c,c]
+    in env l t c' 2 (-1)
+
+-- | Attack, sustain, release envelope parameter constructor.
+envASR :: UGen -> UGen -> UGen -> EnvCurve -> [UGen]
+envASR aT sL rT c =
+    let l = [0,sL,0]
+        t = [aT,rT]
+        c' = [c,c]
+    in env l t c' 1 (-1)
 
 d_dx :: (Num a) => [a] -> [a]
 d_dx [] = []
