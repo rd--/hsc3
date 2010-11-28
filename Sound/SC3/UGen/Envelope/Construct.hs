@@ -107,10 +107,7 @@ envASR aT sL rT c =
     in env l t c' 1 (-1)
 
 d_dx :: (Num a) => [a] -> [a]
-d_dx [] = []
-d_dx [_] = []
-d_dx [x,y] = [y - x]
-d_dx (x:y:r) = y - x : d_dx (y:r)
+d_dx xs = zipWith (-) (drop 1 xs) xs
 
 env_curve :: EnvCurve -> UGen
 env_curve EnvStep = Constant 0.0
