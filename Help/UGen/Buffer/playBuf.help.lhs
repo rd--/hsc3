@@ -1,4 +1,4 @@
-playBuf numChannels bufnum rate trigger startPos loop
+playBuf numChannels bufnum rate trigger startPos loop doneAction
 
 Sample playback oscillator.  Plays back a memory resident sample.
 
