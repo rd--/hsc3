@@ -1,6 +1,6 @@
 envASR :: UGen -> UGen -> UGen -> EnvCurve -> [UGen]
 
-Attack, sustain, release envelope.  Argumets are:
+Attack, sustain, release envelope.  Arguments are:
 
     aT = attackTime (0.01)
     sL = sustainLevel (1)

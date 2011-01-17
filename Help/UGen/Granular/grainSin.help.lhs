@@ -1,4 +1,4 @@
-grainSin nc tr dur freq pan envbuf
+grainSin nc tr dur freq pan envbuf maxgrn
 
 Granular synthesis with sine tones
 
@@ -27,4 +27,4 @@ envbuf - the buffer number containing a singal to use for the grain
 >          ; y = mouseY KR 0 400 Linear 0.1
 >          ; f = n * y + 440
 >          ; t = impulse KR 10 0 }
->      in audition (out 0 (grainSin 2 t 0.1 f x (-1) * 0.1)) }
+>      in audition (out 0 (grainSin 2 t 0.1 f x (-1) 512 * 0.1)) }

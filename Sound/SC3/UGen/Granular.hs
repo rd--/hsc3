@@ -5,20 +5,20 @@ import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
 
 -- | Granular synthesis with sound stored in a buffer.
-grainBuf :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-grainBuf nc t d s r p i l e = mkOsc AR "GrainBuf" [t, d, s, r, p, i, l, e] nc
+grainBuf :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+grainBuf nc t d s r p i l e mx = mkOsc AR "GrainBuf" [t, d, s, r, p, i, l, e, mx] nc
 
 -- | Granular synthesis with frequency modulated sine tones.
-grainFM :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-grainFM nc t d c m i l e = mkOsc AR "GrainFM" [t, d, c, m, i, l, e] nc
+grainFM :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+grainFM nc t d c m i l e mx = mkOsc AR "GrainFM" [t, d, c, m, i, l, e, mx] nc
 
 -- | Granulate an input signal.
-grainIn :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-grainIn nc t d i l e = mkOsc AR "GrainIn" [t, d, i, l, e] nc
+grainIn :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+grainIn nc t d i l e mx = mkOsc AR "GrainIn" [t, d, i, l, e, mx] nc
 
 -- | Granular synthesis with sine tones.
-grainSin :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-grainSin nc t d f l e = mkOsc AR "GrainSin" [t, d, f, l, e] nc
+grainSin :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+grainSin nc t d f l e mx = mkOsc AR "GrainSin" [t, d, f, l, e, mx] nc
 
 -- | Warp a buffer with a time pointer.
 warp1 :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
