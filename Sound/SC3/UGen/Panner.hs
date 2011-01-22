@@ -35,8 +35,8 @@ biPanB2 inA inB azimuth gain = mkFilter "BiPanB2" [inA, inB, azimuth, gain] 3
 decodeB2 :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 decodeB2 nc w x y o = mkFilterMCE "DecodeB2" [w, x, y, o] nc 0
 
-panAz :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-panAz nc i p l w o = mkFilterMCE "PanAz" [i, p, l, w, o] nc 0
+panAz :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+panAz nc i p l w o = mkFilter "PanAz" [i, p, l, w, o] nc
 
 xFade2 :: UGen -> UGen -> UGen -> UGen -> UGen
 xFade2 inA inB pan level = mkFilter "XFade2" [inA, inB, pan, level] 2
