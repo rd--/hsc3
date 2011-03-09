@@ -38,6 +38,10 @@ drand = liftU2 D.drand
 dxrand :: (UId m) => UGen -> UGen -> m UGen
 dxrand = liftU2 D.dxrand
 
+-- | Demand rate weighted random sequence generator.
+dwrand :: (UId m) => UGen -> UGen -> UGen -> m UGen
+dwrand = liftU3 D.dwrand
+
 -- | Demand rate arithmetic series.
 dseries :: (UId m) => UGen -> UGen -> UGen -> m UGen
 dseries = liftU3 D.dseries
