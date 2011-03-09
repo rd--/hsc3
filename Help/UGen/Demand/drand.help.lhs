@@ -9,10 +9,11 @@ array	- array of values or other ugens
 Dxrand never plays the same value twice, whereas Drand chooses any
 value in the list.
 
-> import Sound.SC3.Monadic
+> import Sound.SC3.ID
 
-> do { n <- drand dinf (mce [1, 3, 2, 7, 8])
->    ; let { x = mouseX KR 1 400 Exponential 0.1
->          ; t = impulse KR x 0
->          ; f = demand t 0 n * 30 + 340 }
->      in audition (out 0 (sinOsc AR f 0 * 0.1)) }
+> let { n = drand 'a' dinf (mce [1, 3, 2, 7, 8])
+>     ; x = linLin (lfNoise0 'b' KR 1) (-1) 1 1 8
+>  {- ; x = mouseX KR 1 400 Exponential 0.1 -}
+>     ; t = impulse KR x 0
+>     ; f = demand t 0 n * 30 + 340 }
+> in audition (out 0 (sinOsc AR f 0 * 0.1))

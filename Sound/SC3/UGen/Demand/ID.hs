@@ -37,6 +37,13 @@ drand z l array = mkOscMCEId z DR "Drand" [l] array 1
 dxrand :: ID i => i -> UGen -> UGen -> UGen
 dxrand z l array = mkOscMCEId z DR "Dxrand" [l] array 1
 
+-- | Demand rate weighted random sequence generator.
+dwrand :: ID i => i -> UGen -> UGen -> UGen -> UGen
+dwrand z l a w =
+    let n = mceDegree a
+        w' = mceExtend n w
+    in mkOscMCEId z DR "Dxrand" (l:w') a 1
+
 -- | Demand rate arithmetic series.
 dseries :: ID i => i -> UGen -> UGen -> UGen -> UGen
 dseries z l i n = mkOscId z DR "Dseries" [l, i, n] 1
