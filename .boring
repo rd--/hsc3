@@ -1,8 +1,4 @@
 dist$
-\.hi$
-\.o$
 ~$
-\.installed-pkg-config
-\.setup-config
-TAGS
-tags
+TAGS$
+tags$
