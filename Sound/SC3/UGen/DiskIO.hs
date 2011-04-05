@@ -30,3 +30,13 @@ diskIn nc bufnum loop = mkOsc AR "DiskIn" [bufnum, from_loop loop] nc
 --
 vDiskIn :: Int -> UGen -> UGen -> Loop -> UGen
 vDiskIn nc bufnum rate loop = mkOsc AR "VDiskIn" [bufnum, rate, from_loop loop] nc
+
+-- | Stream soundfile to disk.
+--
+--  [@bufnum@] Buffer used for streaming (the file descriptor has to be left
+--             open, see the @/b_write@ server command).
+--
+--  [@output@] Current number of written frames.
+--
+diskOut :: UGen -> UGen -> UGen
+diskOut bufnum inputs = mkOscMCE AR "DiskOut" [bufnum] inputs 1
