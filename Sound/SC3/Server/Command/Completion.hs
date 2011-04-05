@@ -73,8 +73,8 @@ b_readChannel' :: OSC -> Int -> String -> Int -> Int -> Int -> Int -> [Int] -> O
 b_readChannel' osc nid p f n f' z cs = message "/b_readChannel" ([Int nid, String p, Int f, Int n, Int f', Int z] ++ map Int cs ++ [encode_osc_blob osc])
 
 -- | Write sound file data. (Asynchronous)
-b_write' :: OSC -> Int -> String -> Int -> Int -> Int -> Int -> Int -> OSC
-b_write' osc nid p h t f s z = message "/b_write" [Int nid, String p, Int h, Int t, Int f, Int s, Int z, encode_osc_blob osc]
+b_write' :: OSC -> Int -> String -> String -> String -> Int -> Int -> Int -> OSC
+b_write' osc nid p h t f s z = message "/b_write" [Int nid, String p, String h, String t, Int f, Int s, Int z, encode_osc_blob osc]
 
 -- | Zero sample data. (Asynchronous)
 b_zero' :: OSC -> Int -> OSC
