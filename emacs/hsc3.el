@@ -1,5 +1,3 @@
-;; hsc3.el - (c) rohan drape, 2006-2008
-
 ;; This mode is implemented as a derivation of `haskell' mode,
 ;; indentation and font locking is courtesy that mode.  The
 ;; inter-process communication is courtesy `comint'.  The symbol at
@@ -63,7 +61,7 @@
   (if (not (file-exists-p hsc3-run-control))
       (with-temp-file
           hsc3-run-control
-        (mapc 
+        (mapc
          (lambda (s)
            (insert (concat s "\n")))
          hsc3-modules))))
@@ -118,6 +116,18 @@
   "Ask ghci for the type of the name at point."
   (interactive)
   (hsc3-send-string (concat ":t " (thing-at-point 'symbol))))
+
+(defun hsc3-audition-value ()
+  "Audition the UGen value of the name at point."
+  (interactive)
+  (hsc3-send-string (concat "audition . out 0 $"
+                            (thing-at-point 'symbol))))
+
+(defun hsc3-audition-action ()
+  "Audition the (IO UGen) value of the name at point."
+  (interactive)
+  (hsc3-send-string (concat "audition . out 0 =<<"
+                            (thing-at-point 'symbol))))
 
 (defun chunk-string (n s)
   "Split a string into chunks of 'n' characters."
@@ -234,6 +244,8 @@
   (local-set-key [?\C-c ?\C-c] 'hsc3-run-line)
   (local-set-key [?\C-c ?\C-e] 'hsc3-run-multiple-lines)
   (local-set-key [?\C-c ?\C-r] 'hsc3-run-region)
+  (local-set-key [?\C-c ?\C-a] 'hsc3-audition-value)
+  (local-set-key [?\C-c ?\C-z] 'hsc3-audition-action)
   (local-set-key [?\C-c ?\C-l] 'hsc3-load-buffer)
   (local-set-key [?\C-c ?\C-i] 'hsc3-interrupt-haskell)
   (local-set-key [?\C-c ?\C-m] 'hsc3-run-main)
@@ -256,6 +268,10 @@
     '("Run main" . hsc3-run-main))
   (define-key map [menu-bar hsc3 expression run-region]
     '("Run region" . hsc3-run-region))
+  (define-key map [menu-bar hsc3 expression audition-action]
+    '("Audition action" . hsc3-audition-action))
+  (define-key map [menu-bar hsc3 expression audition-value]
+    '("Audition value" . hsc3-audition-value))
   (define-key map [menu-bar hsc3 expression run-multiple-lines]
     '("Run multiple lines" . hsc3-run-multiple-lines))
   (define-key map [menu-bar hsc3 expression run-line]
