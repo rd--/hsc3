@@ -119,6 +119,19 @@ After a reset we can audition a new graph.
 
 > audition (out 0 (sinOsc AR 220 0 * 0.1))
 
+Likewise auditioning a value is so common there is a keybinding,
+C-cC-a.  Evaluating the line below names a UGen value, by placing
+point over the name and typing C-cC-a the value is auditioned.
+
+> let o = sinOsc AR 440 0 * 0.1
+
+There is a variant that auditions an IO UGen value which has the
+keybinding C-cC-z.
+
+> import Sound.SC3.Monadic
+
+> let n :: IO UGen ; n = whiteNoise AR >>= return . (* 0.1)
+
 To see the server status type C-cC-w (Haskell SuperCollider ->
 SCSynth -> Display status).  This prints a table indicating
 server activity to the ghci output window.
