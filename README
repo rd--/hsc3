@@ -1,7 +1,7 @@
 hsc3 - haskell supercollider
 
 hsc3 provides Sound.SC3, a Haskell module that facilitates using
-Haskell as a client to the SuperCollider synthesis server.  
+Haskell as a client to the SuperCollider synthesis server.
 
 For installation and configuration information please consult the
 tutorial file at Help/tutorial.lhs
