@@ -4,8 +4,8 @@
 -- that this mechanism is for synchronizing server side processes only, for
 -- client side synchronization use @\/done@ message notification or the
 -- @\/sync@ barrier.
-module Sound.SC3.Server.Command.Completion (
-  -- *Synthdef handling
+module Sound.SC3.Server.Command.Completion
+  ( -- *Synthdef handling
     d_recv'
   , d_load'
   , d_loadDir'
@@ -22,7 +22,7 @@ module Sound.SC3.Server.Command.Completion (
   , b_write'
   -- *Buffer operations
   , b_zero'
-) where
+  ) where
 
 import qualified Data.ByteString.Lazy as B
 import           Sound.OpenSoundControl
@@ -65,16 +65,19 @@ b_close' :: OSC -> Int -> OSC
 b_close' osc nid = message "/b_close" [Int nid, encode_osc_blob osc]
 
 -- | Read sound file data into an existing buffer. (Asynchronous)
-b_read' :: OSC -> Int -> String -> Int -> Int -> Int -> Int -> OSC
-b_read' osc nid p f n f' z = message "/b_read" [Int nid, String p, Int f, Int n, Int f', Int z, encode_osc_blob osc]
+b_read' :: OSC -> Int -> String -> Int -> Int -> Int -> Bool -> OSC
+b_read' osc nid p f n f' z = message "/b_read" [Int nid, String p, Int f, Int n, Int f', Int z', encode_osc_blob osc]
+    where z' = if z then 1 else 0
 
 -- | Read sound file data into an existing buffer. (Asynchronous)
-b_readChannel' :: OSC -> Int -> String -> Int -> Int -> Int -> Int -> [Int] -> OSC
-b_readChannel' osc nid p f n f' z cs = message "/b_readChannel" ([Int nid, String p, Int f, Int n, Int f', Int z] ++ map Int cs ++ [encode_osc_blob osc])
+b_readChannel' :: OSC -> Int -> String -> Int -> Int -> Int -> Bool -> [Int] -> OSC
+b_readChannel' osc nid p f n f' z cs = message "/b_readChannel" ([Int nid, String p, Int f, Int n, Int f', Int z'] ++ map Int cs ++ [encode_osc_blob osc])
+    where z' = if z then 1 else 0
 
 -- | Write sound file data. (Asynchronous)
-b_write' :: OSC -> Int -> String -> String -> String -> Int -> Int -> Int -> OSC
-b_write' osc nid p h t f s z = message "/b_write" [Int nid, String p, String h, String t, Int f, Int s, Int z, encode_osc_blob osc]
+b_write' :: OSC -> Int -> String -> String -> String -> Int -> Int -> Bool -> OSC
+b_write' osc nid p h t f s z = message "/b_write" [Int nid, String p, String h, String t, Int f, Int s, Int z', encode_osc_blob osc]
+    where z' = if z then 1 else 0
 
 -- | Zero sample data. (Asynchronous)
 b_zero' :: OSC -> Int -> OSC
