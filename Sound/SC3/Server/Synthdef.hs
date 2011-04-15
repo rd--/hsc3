@@ -1,12 +1,11 @@
 -- | The unit-generator graph structure implemented by the
 --   SuperCollider synthesis server.
-module Sound.SC3.Server.Synthdef ( Node(..), FromPort(..), Graph(..)
+module Sound.SC3.Server.Synthdef ( Node(..), FromPort(..), Graph(..), Synthdef
                                  , synth, synthdef, synthstat ) where
 
 import qualified Data.ByteString.Lazy as B
 import qualified Data.IntMap as M
 import Data.List
-import Data.Word
 import Sound.OpenSoundControl
 import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.Rate
@@ -81,9 +80,12 @@ synth u = let (_, g) = mk_node (prepare_root u) empty_graph
                     else implicit ks' ++ reverse us
           in Graph (-1) cs ks' us'
 
+-- | Binary representation of a unit generator graph.
+type Synthdef = B.ByteString
+
 -- | Transform a unit generator into bytecode.
-synthdef :: String -> UGen -> [Word8]
-synthdef s = B.unpack . encode_graphdef s . synth
+synthdef :: String -> UGen -> Synthdef
+synthdef s = encode_graphdef s . synth
 
 -- | Simple statistical analysis of a unit generator graph.
 synthstat :: UGen -> String
