@@ -2,7 +2,6 @@
 --   synthesis server.
 module Sound.SC3.Server.Command where
 
-import qualified Data.ByteString.Lazy as B
 import Sound.OpenSoundControl
 import Sound.SC3.Server.Utilities
 import Sound.SC3.Server.Synthdef (Synthdef)
@@ -11,7 +10,7 @@ import Sound.SC3.Server.Synthdef (Synthdef)
 
 -- | Install a bytecode instrument definition. (Asynchronous)
 d_recv :: Synthdef -> OSC
-d_recv b = message "/d_recv" [Blob (B.unpack b)]
+d_recv b = message "/d_recv" [Blob b]
 
 -- | Load an instrument definition from a named file. (Asynchronous)
 d_load :: String -> OSC
@@ -288,7 +287,7 @@ async_cmds = ["/d_recv", "/d_load", "/d_loadDir"
 withCM :: OSC -> OSC -> OSC
 withCM (Message c xs) cm =
     if c `elem` async_cmds
-    then let xs' = xs ++ [Blob (B.unpack (encodeOSC cm))]
+    then let xs' = xs ++ [Blob (encodeOSC cm)]
          in message c xs'
     else error ("withCM: not async: " ++ c)
 withCM _ _ = error "withCM: not message"

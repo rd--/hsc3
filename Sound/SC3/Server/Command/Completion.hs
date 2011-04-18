@@ -24,17 +24,16 @@ module Sound.SC3.Server.Command.Completion
   , b_zero'
   ) where
 
-import qualified Data.ByteString.Lazy as B
 import           Sound.OpenSoundControl
 import           Sound.SC3.Server.Synthdef (Synthdef)
 
 -- Encode an OSC packet as an OSC blob.
 encode_osc_blob :: OSC -> Datum
-encode_osc_blob = Blob . B.unpack . encodeOSC
+encode_osc_blob = Blob . encodeOSC
 
 -- | Install a bytecode instrument definition. (Asynchronous)
 d_recv' :: OSC -> Synthdef -> OSC
-d_recv' osc b = message "/d_recv" [Blob (B.unpack b), encode_osc_blob osc]
+d_recv' osc b = message "/d_recv" [Blob b, encode_osc_blob osc]
 
 -- | Load an instrument definition from a named file. (Asynchronous)
 d_load' :: OSC -> String -> OSC
