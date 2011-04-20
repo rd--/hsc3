@@ -173,13 +173,11 @@ b_query = message "/b_query" . map Int
 
 -- | Read sound file data into an existing buffer. (Asynchronous)
 b_read :: Int -> String -> Int -> Int -> Int -> Bool -> OSC
-b_read nid p f n f' z = message "/b_read" [Int nid, String p, Int f, Int n, Int f', Int z']
-    where z' = if z then 1 else 0
+b_read nid p f n f' z = message "/b_read" [Int nid, String p, Int f, Int n, Int f', Int (fromEnum z)]
 
 -- | Read sound file data into an existing buffer, picking specific channels. (Asynchronous)
 b_readChannel :: Int -> String -> Int -> Int -> Int -> Bool -> [Int] -> OSC
-b_readChannel nid p f n f' z cs = message "/b_readChannel" ([Int nid, String p, Int f, Int n, Int f', Int z'] ++ map Int cs)
-    where z' = if z then 1 else 0
+b_readChannel nid p f n f' z cs = message "/b_readChannel" ([Int nid, String p, Int f, Int n, Int f', Int (fromEnum z)] ++ map Int cs)
 
 -- | Set sample values.
 b_set :: Int -> [(Int, Double)] -> OSC
@@ -192,8 +190,7 @@ b_setn nid l = message "/b_setn" (Int nid : concatMap f l)
 
 -- | Write sound file data. (Asynchronous)
 b_write :: Int -> String -> String -> String -> Int -> Int -> Bool -> OSC
-b_write nid p h t f s z = message "/b_write" [Int nid, String p, String h, String t, Int f, Int s, Int z']
-    where z' = if z then 1 else 0
+b_write nid p h t f s z = message "/b_write" [Int nid, String p, String h, String t, Int f, Int s, Int (fromEnum z)]
 
 -- | Zero sample data. (Asynchronous)
 b_zero :: Int -> OSC
