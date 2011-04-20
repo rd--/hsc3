@@ -123,6 +123,38 @@ g_new = message "/g_new" . mk_triples Int (Int . fromEnum) Int
 g_tail :: [(Int, Int)] -> OSC
 g_tail = message "/g_tail" . mk_duples Int Int
 
+-- | Post a representation of a group's node subtree, optionally including the current control values for synths.
+g_dumpTree :: [(Int, Bool)] -> OSC
+g_dumpTree = message "/g_dumpTree" . mk_duples Int (Int . fromEnum)
+
+-- | Request a representation of a group's node subtree, optionally including the current control values for synths.
+--
+-- Replies to the sender with a @/g_queryTree.reply@ message listing all of the nodes contained within the group in the following format:
+-- 
+-- > int - if synth control values are included 1, else 0
+-- > int - node ID of the requested group
+-- > int - number of child nodes contained within the requested group
+-- >
+-- > For each node in the subtree:
+-- > [
+-- >   int - node ID
+-- >   int - number of child nodes contained within this node. If -1 this is a synth, if >= 0 it's a group.
+-- >
+-- >   If this node is a synth:
+-- >     symbol - the SynthDef name for this node.
+-- >
+-- >   If flag (see above) is true:
+-- >     int - numControls for this synth (M)
+-- >     [
+-- >       symbol or int: control name or index
+-- >       float or symbol: value or control bus mapping symbol (e.g. 'c1')
+-- >     ] * M
+-- > ] * the number of nodes in the subtree
+--  
+-- N.B. The order of nodes corresponds to their execution order on the server. Thus child nodes (those contained within a group) are listed immediately following their parent.
+g_queryTree :: [(Int, Bool)] -> OSC
+g_queryTree = message "/g_queryTree" . mk_duples Int (Int . fromEnum)
+
 -- * Unit Generator commands
 
 -- | Send a command to a unit generator.
