@@ -71,6 +71,10 @@ n_setn nid l = message "/n_setn" (Int nid : concatMap f l)
 n_trace :: [Int] -> OSC
 n_trace = message "/n_trace" . map Int
 
+-- | Move an ordered sequence of nodes.
+n_order :: AddAction -> Int -> [Int] -> OSC
+n_order a n ns = message "/n_order" (Int (fromEnum a) : Int n : map Int ns)
+
 -- * Synthesis node commands
 
 -- | Get control values.
