@@ -50,6 +50,14 @@ n_map nid l = message "/n_map" (Int nid : mk_duples String Int l)
 n_mapn :: Int -> [(String, Int, Int)] -> OSC
 n_mapn nid l = message "/n_mapn" (Int nid : mk_triples String Int Int l)
 
+-- | Map a node's controls to read from an audio bus.
+n_mapa :: Int -> [(String, Int)] -> OSC
+n_mapa nid l = message "/n_mapa" (Int nid : mk_duples String Int l)
+
+-- | Map a node's controls to read from audio buses.
+n_mapan :: Int -> [(String, Int, Int)] -> OSC
+n_mapan nid l = message "/n_mapan" (Int nid : mk_triples String Int Int l)
+
 -- | Get info about a node.
 n_query :: [Int] -> OSC
 n_query = message "/n_query" . map Int
