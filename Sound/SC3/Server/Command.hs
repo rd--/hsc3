@@ -302,6 +302,23 @@ status = message "/status" []
 sync :: Int -> OSC
 sync sid = message "/sync" [Int sid]
 
+-- | Error posting scope.
+data ErrorScope = Globally  -- ^ Global scope
+                | Locally   -- ^ Bundle scope
+                  deriving (Eq, Show, Enum)
+
+-- | Error posting mode.
+data ErrorMode = ErrorsOff  -- ^ Turn error posting off
+               | ErrorsOn   -- ^ Turn error posting on
+                 deriving (Eq, Show, Enum)
+
+-- | Set error posting scope and mode.
+errorMode :: ErrorScope -> ErrorMode -> OSC
+errorMode scope mode = message "/error" [Int e]
+    where e = case scope of
+                Globally -> fromEnum mode
+                Locally  -> -1 - fromEnum mode
+
 -- * Variants to simplify common cases
 
 -- | Set single sample value.
