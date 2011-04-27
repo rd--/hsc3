@@ -167,11 +167,17 @@ g_dumpTree = message "/g_dumpTree" . mk_duples Int (Int . fromEnum)
 g_queryTree :: [(Int, Bool)] -> OSC
 g_queryTree = message "/g_queryTree" . mk_duples Int (Int . fromEnum)
 
+-- * Plugin commands
+
+-- | Send a plugin command.
+cmd :: String -> [Datum] -> OSC
+cmd name = message "/cmd" . (String name :)
+
 -- * Unit Generator commands
 
 -- | Send a command to a unit generator.
 u_cmd :: Int -> Int -> String -> [Datum] -> OSC
-u_cmd nid uid cmd arg = message "/u_cmd" ([Int nid, Int uid, String cmd] ++ arg)
+u_cmd nid uid name arg = message "/u_cmd" ([Int nid, Int uid, String name] ++ arg)
 
 -- * Buffer commands
 
@@ -201,7 +207,7 @@ b_free nid = message "/b_free" [Int nid]
 
 -- | Call a command to fill a buffer.  (Asynchronous)
 b_gen :: Int -> String -> [Double] -> OSC
-b_gen bid cmd arg = message "/b_gen" (Int bid : String cmd : map Float arg)
+b_gen bid name arg = message "/b_gen" (Int bid : String name : map Float arg)
 
 -- | Get sample values.
 b_get :: Int -> [Int] -> OSC
