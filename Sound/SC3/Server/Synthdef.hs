@@ -1,7 +1,9 @@
 -- | The unit-generator graph structure implemented by the
 --   SuperCollider synthesis server.
-module Sound.SC3.Server.Synthdef ( Node(..), FromPort(..), Graph(..), Synthdef
-                                 , synth, synthdef, synthstat ) where
+module Sound.SC3.Server.Synthdef ( Node(..), FromPort(..)
+                                 , Graph(..), Graphdef, graphdef
+                                 , Synthdef, synth, synthdef
+                                 , synthstat ) where
 
 import qualified Data.ByteString.Lazy as B
 import qualified Data.IntMap as M
@@ -81,11 +83,22 @@ synth u = let (_, g) = mk_node (prepare_root u) empty_graph
           in Graph (-1) cs ks' us'
 
 -- | Binary representation of a unit generator graph.
+type Graphdef = B.ByteString
+
+-- | Transform a unit generator graph into bytecode.
+graphdef :: Graph -> Graphdef
+graphdef = encode_graphdef
+
+-- | Binary representation of a unit generator synth definition.
 type Synthdef = B.ByteString
 
--- | Transform a unit generator into bytecode.
+-- | Transform a unit generator synth definition into bytecode.
 synthdef :: String -> UGen -> Synthdef
-synthdef s = encode_graphdef s . synth
+synthdef s u = B.concat [ encode_str "SCgf"
+                        , encode_i32 0
+                        , encode_i16 1
+                        , B.pack (str_pstr s)
+                        , encode_graphdef (synth u) ]
 
 -- | Simple statistical analysis of a unit generator graph.
 synthstat :: UGen -> String
@@ -267,15 +280,11 @@ encode_node_u m (NodeU _ r nm i o s _) =
 encode_node_u _ _ = error "encode_ugen: illegal input"
 
 -- Construct instrument definition bytecode.
-encode_graphdef :: String -> Graph -> B.ByteString
-encode_graphdef s g =
+encode_graphdef :: Graph -> B.ByteString
+encode_graphdef g =
     let (Graph _ cs ks us) = g
         mm = mk_maps g
-    in B.concat [ encode_str "SCgf"
-                , encode_i32 0
-                , encode_i16 1
-                , B.pack (str_pstr s)
-                , encode_i16 (length cs)
+    in B.concat [ encode_i16 (length cs)
                 , B.concat (map (encode_f32 . node_c_value) cs)
                 , encode_i16 (length ks)
                 , B.concat (map (encode_f32 . node_k_default) ks)
