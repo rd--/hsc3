@@ -11,7 +11,7 @@ import Sound.SC3.UGen.UGen
 -- | messages to scsynth.
 play :: Transport t => t -> UGen -> IO OSC
 play fd u = do let d = synthdef "Anonymous" u
-               send fd (d_recv d) 
+               send fd (d_recv d)
                r <- wait fd "/done"
                send fd (s_new "Anonymous" (-1) AddToTail 1 [])
                return r

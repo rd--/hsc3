@@ -32,8 +32,8 @@ serverStatusData fd = do
 
 statusFields :: [String]
 statusFields = ["Unused                      ",
-                "# UGens                     ", 
-                "# Synths                    ", 
+                "# UGens                     ",
+                "# Synths                    ",
                 "# Groups                    ",
                 "# Instruments               ",
                 "% CPU (Average)             ",
