@@ -35,5 +35,7 @@ orientation - Should be zero if the front is a vertex
 
 > import Sound.SC3.ID
 
-> let n = pinkNoise 'a' AR
-> in audition (out 0 (panAz 2 n (lfSaw KR 2 0) 0.1 2 0.5))
+> let { o = pinkNoise 'a' AR
+>     ; nc = 4
+>     ; fr = 0.15 }
+> in audition (out 0 (panAz nc o (lfSaw KR fr 0) 0.1 2 0.5))
