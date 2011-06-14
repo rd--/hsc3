@@ -8,7 +8,7 @@ module Sound.SC3.UGen.External.LPC ( LPC(..)
 import Control.Monad
 import qualified Data.ByteString.Lazy as B
 import Data.List
-import Sound.OpenSoundControl
+import Sound.OpenSoundControl.Byte
 import System.IO
 
 -- | LPC analysis data.

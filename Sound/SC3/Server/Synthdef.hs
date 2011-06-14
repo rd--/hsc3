@@ -1,14 +1,15 @@
 -- | The unit-generator graph structure implemented by the
 --   SuperCollider synthesis server.
-module Sound.SC3.Server.Synthdef ( Node(..), FromPort(..)
-                                 , Graph(..), Graphdef, graphdef
-                                 , Synthdef, synth, synthdef
-                                 , synthstat ) where
+module Sound.SC3.Server.Synthdef (Node(..),FromPort(..)
+                                 ,Graph(..),Graphdef,graphdef
+                                 ,Synthdef,synth,synthdef
+                                 ,synthstat) where
 
 import qualified Data.ByteString.Lazy as B
 import qualified Data.IntMap as M
 import Data.List
-import Sound.OpenSoundControl
+import Sound.OpenSoundControl.Byte
+import Sound.OpenSoundControl.Cast
 import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.Rate
 

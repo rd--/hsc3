@@ -1,10 +1,12 @@
 -- | Non-realtime score generation.
-module Sound.SC3.Server.NRT ( encodeNRT 
-                            , writeNRT
-                            , putNRT ) where
+module Sound.SC3.Server.NRT (encodeNRT
+                            ,writeNRT
+                            ,putNRT ) where
 
 import qualified Data.ByteString.Lazy as B
-import Sound.OpenSoundControl
+import Sound.OpenSoundControl.OSC.Encoding
+import Sound.OpenSoundControl.OSC.Type
+import Sound.OpenSoundControl.Byte
 import System.IO
 
 -- | Encode and prefix with encoded length.

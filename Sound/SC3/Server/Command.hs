@@ -2,7 +2,8 @@
 --   synthesis server.
 module Sound.SC3.Server.Command where
 
-import Sound.OpenSoundControl
+import Sound.OpenSoundControl.OSC.Encoding
+import Sound.OpenSoundControl.OSC.Type
 import Sound.SC3.Server.Utilities
 import Sound.SC3.Server.Synthdef (Synthdef)
 

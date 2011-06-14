@@ -1,10 +1,11 @@
 -- | Request and display status information from the synthesis server.
-module Sound.SC3.Server.Status ( serverStatus
-                               , serverSampleRateNominal
-                               , serverSampleRateActual ) where
+module Sound.SC3.Server.Status (serverStatus
+                               ,serverSampleRateNominal
+                               ,serverSampleRateActual) where
 
 import Control.Monad
-import Sound.OpenSoundControl
+import Sound.OpenSoundControl.OSC.Type
+import Sound.OpenSoundControl.Transport
 import Sound.SC3.Server.Command
 
 -- | Collect server status information.

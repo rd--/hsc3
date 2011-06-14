@@ -24,7 +24,8 @@ module Sound.SC3.Server.Command.Completion
   , b_zero'
   ) where
 
-import           Sound.OpenSoundControl
+import           Sound.OpenSoundControl.OSC.Encoding
+import           Sound.OpenSoundControl.OSC.Type
 import           Sound.SC3.Server.Synthdef (Synthdef)
 
 -- Encode an OSC packet as an OSC blob.
