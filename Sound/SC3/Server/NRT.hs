@@ -4,9 +4,8 @@ module Sound.SC3.Server.NRT (encodeNRT
                             ,putNRT ) where
 
 import qualified Data.ByteString.Lazy as B
-import Sound.OpenSoundControl.OSC.Encoding
-import Sound.OpenSoundControl.OSC.Type
-import Sound.OpenSoundControl.Byte
+import Sound.OpenSoundControl
+import Sound.OpenSoundControl.Coding.Byte
 import System.IO
 
 -- | Encode and prefix with encoded length.

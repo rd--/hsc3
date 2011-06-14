@@ -8,8 +8,8 @@ module Sound.SC3.Server.Synthdef (Node(..),FromPort(..)
 import qualified Data.ByteString.Lazy as B
 import qualified Data.IntMap as M
 import Data.List
-import Sound.OpenSoundControl.Byte
-import Sound.OpenSoundControl.Cast
+import Sound.OpenSoundControl.Coding.Byte
+import Sound.OpenSoundControl.Coding.Cast
 import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.Rate
 

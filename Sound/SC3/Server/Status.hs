@@ -4,8 +4,7 @@ module Sound.SC3.Server.Status (serverStatus
                                ,serverSampleRateActual) where
 
 import Control.Monad
-import Sound.OpenSoundControl.OSC.Type
-import Sound.OpenSoundControl.Transport
+import Sound.OpenSoundControl
 import Sound.SC3.Server.Command
 
 -- | Collect server status information.

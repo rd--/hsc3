@@ -8,7 +8,7 @@ module Sound.SC3.UGen.External.ATS ( ATS(..)
 import Control.Monad
 import qualified Data.ByteString.Lazy as B
 import Data.List
-import Sound.OpenSoundControl.Byte
+import Sound.OpenSoundControl.Coding.Byte
 import System.IO
 
 -- | ATS analysis data.

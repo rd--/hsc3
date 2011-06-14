@@ -1,7 +1,7 @@
 -- | Frequency domain unit generators.
 module Sound.SC3.UGen.FFT where
 
-import Sound.OpenSoundControl.OSC.Type (OSC)
+import Sound.OpenSoundControl (OSC)
 import Sound.SC3.Server.Command (b_gen)
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen

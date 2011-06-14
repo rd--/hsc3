@@ -2,9 +2,7 @@
 module Sound.SC3.Server.Play ( play, stop, reset, send, async
                              , withSC3, audition ) where
 
-import Sound.OpenSoundControl.OSC.Type
-import Sound.OpenSoundControl.Transport
-import Sound.OpenSoundControl.Transport.UDP
+import Sound.OpenSoundControl
 import Sound.SC3.Server.Command
 import Sound.SC3.Server.Synthdef
 import Sound.SC3.UGen.UGen
