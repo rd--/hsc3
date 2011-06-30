@@ -526,7 +526,7 @@ orindary let binding.
 This is hardly more convenient than do notation,
 however we can also insert non-determinstic nodes
 directly into function arguments.  The package
-hsc3-unsafe provides unsafe variant unnit generator
+hsc3-unsafe provides unsafe variant unit generator
 constructors.
 
 > let { n = Sound.SC3.UGen.Unsafe.whiteNoise

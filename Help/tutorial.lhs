@@ -176,7 +176,7 @@ triggered-control-rate (tr) and audio-rate.
 
 The graph below illustrates the first three of these.
 Note the specialised constructor for triggered
-controls.  
+controls.
 
 > let { b1 = control IR "b1" 0
 >     ; b2 = control IR "b2" 1
