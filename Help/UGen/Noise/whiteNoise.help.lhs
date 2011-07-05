@@ -18,12 +18,10 @@ Random filtered noise bursts.
 
 The same graph, without using do notation.
 
-> whiteNoise AR >>= \n -> 
-> dust AR (mce [3, 7]) >>= \t -> 
+> whiteNoise AR >>= \n ->
+> dust AR (mce [3, 7]) >>= \t ->
 > tExpRand 20 1800 t >>= \f ->
-> tExpRand 0.001 1 t >>= \bw -> 
+> tExpRand 0.001 1 t >>= \bw ->
 > let { e = decay2 t 0.01 0.2
 >     ; r = resonz (n * e) f bw }
 > in audition (out 0 r)
-
- 

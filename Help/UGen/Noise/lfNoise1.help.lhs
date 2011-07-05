@@ -18,6 +18,6 @@ Modulate frequency.
 
 Use as frequency control.
 
-> do { n <- lfNoise1 KR 4 
+> do { n <- lfNoise1 KR 4
 >    ; let f = n * 400 + 450
 >      in audition (out 0 (sinOsc AR f 0 * 0.1)) }
