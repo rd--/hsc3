@@ -1,8 +1,6 @@
-{-# LANGUAGE FlexibleInstances #-}
 module Sound.SC3.Identifier where
 
 import Data.Char
-import Data.HashTable
 
 -- | Typeclass to constrain UGen identifiers.
 class ID a where
@@ -13,6 +11,3 @@ instance ID Int where
 
 instance ID Char where
     resolveID = ord
-
-instance ID [Char] where
-    resolveID = fromIntegral . hashString
