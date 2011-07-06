@@ -29,6 +29,10 @@ data UGen = Constant { constantValue :: Double }
                 , mrgRight :: UGen }
             deriving (Eq, Show)
 
+-- | Hash function for unit generators.
+hashUGen :: UGen -> Int
+hashUGen = fromIntegral . H.hashString . show
+
 instance ID UGen where
     resolveID = hashUGen
 
@@ -43,10 +47,6 @@ newtype Special = Special Int
 
 defaultID :: Int
 defaultID = (-1)
-
--- | Hash function for unit generators.
-hashUGen :: UGen -> Int
-hashUGen = fromIntegral . H.hashString . show
 
 -- | Constant value node constructor.
 constant :: (Real a) => a -> UGen
