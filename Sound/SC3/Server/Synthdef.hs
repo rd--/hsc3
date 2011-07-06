@@ -68,9 +68,9 @@ ktype r tr =
 
 -- | Type to represent the left hand side of an edge in a unit
 --   generator graph.
-data FromPort = C NodeId
-              | K NodeId KType
-              | U NodeId PortIndex
+data FromPort = FromPort_C {port_nid :: NodeId}
+              | FromPort_K {port_nid :: NodeId,port_kt :: KType}
+              | FromPort_U {port_nid :: NodeId,port_idx :: PortIndex}
                 deriving (Eq, Show)
 
 -- | Transform a unit generator into a graph.
@@ -118,10 +118,10 @@ synthstat u =
                ,"unit generator rates      : " ++ f node_u_rate us]
 
 as_from_port :: Node -> FromPort
-as_from_port (NodeC n _) = C n
-as_from_port (NodeK n _ _ _ t) = K n t
-as_from_port (NodeU n _ _ _ _ _ _) = U n 0
-as_from_port (NodeP _ u p) = U (node_id u) p
+as_from_port (NodeC n _) = FromPort_C n
+as_from_port (NodeK n _ _ _ t) = FromPort_K n t
+as_from_port (NodeU n _ _ _ _ _ _) = FromPort_U n 0
+as_from_port (NodeP _ u p) = FromPort_U (node_id u) p
 
 -- The empty graph.
 empty_graph :: Graph
@@ -244,15 +244,15 @@ fetch_k n t ks =
 
 -- Construct input form required by byte-code generator.
 make_input :: Maps -> FromPort -> Input
-make_input (cs, _, _, _) (C n) = Input (-1) (fetch n cs)
-make_input (_, ks, _, _) (K n t) =
+make_input (cs, _, _, _) (FromPort_C n) = Input (-1) (fetch n cs)
+make_input (_, ks, _, _) (FromPort_K n t) =
     let i = case t of
               K_IR -> 0
               K_KR -> 1
               K_TR -> 2
               K_AR -> 3
     in Input i (fetch_k n t ks)
-make_input (_, _, _, us) (U n p) = Input (fetch n us) p
+make_input (_, _, _, us) (FromPort_U n p) = Input (fetch n us) p
 
 -- Byte-encode input value.
 encode_input :: Input -> B.ByteString

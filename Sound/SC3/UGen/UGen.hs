@@ -1,7 +1,6 @@
 module Sound.SC3.UGen.UGen where
 
 import Control.Monad
-import qualified Data.Char as C
 import qualified Data.HashTable as H
 import Data.List
 import Sound.SC3.Identifier
