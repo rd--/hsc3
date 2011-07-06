@@ -11,4 +11,3 @@ import Sound.SC3.UGen.Demand.Monadic
 import Sound.SC3.UGen.FFT.Monadic
 import Sound.SC3.UGen.Noise.Monadic
 import Sound.SC3.Server
-

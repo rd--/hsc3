@@ -4,23 +4,11 @@ import Control.Monad
 import qualified Data.Char as C
 import qualified Data.HashTable as H
 import Data.List
+import Sound.SC3.Identifier
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UId
 import System.Random
-
--- | Typeclass to constrain UGen identifiers.
-class ID a where
-    resolveID :: a -> Int
-
-instance ID Int where
-    resolveID = id
-
-instance ID Char where
-    resolveID = C.ord
-
-instance ID UGen where
-    resolveID = hashUGen
 
 -- | Unit generator.
 data UGen = Constant { constantValue :: Double }
@@ -40,6 +28,9 @@ data UGen = Constant { constantValue :: Double }
           | MRG { mrgLeft :: UGen
                 , mrgRight :: UGen }
             deriving (Eq, Show)
+
+instance ID UGen where
+    resolveID = hashUGen
 
 -- | Unit generator output descriptor.
 type Output = Rate

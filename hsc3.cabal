@@ -52,6 +52,7 @@ Library
                    split
   GHC-Options:     -Wall -fwarn-tabs
   Exposed-modules: Sound.SC3
+                   Sound.SC3.Identifier
                    Sound.SC3.ID
                    Sound.SC3.Monadic
                    Sound.SC3.Server

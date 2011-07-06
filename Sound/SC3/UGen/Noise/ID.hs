@@ -1,5 +1,6 @@
 module Sound.SC3.UGen.Noise.ID where
 
+import Sound.SC3.Identifier
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
 
