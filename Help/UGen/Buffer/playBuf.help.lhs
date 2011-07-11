@@ -53,7 +53,7 @@ Trigger playback at each pulse.
 Trigger playback at each pulse (diminishing intervals).
 
 > let { f = xLine KR 0.1 100 10 RemoveSynth
->     ; t = impulse KR f 0 
+>     ; t = impulse KR f 0
 >     ; s = bufRateScale KR 10 }
 > in audition (out 0 (playBuf 1 10 s t 0 NoLoop DoNothing))
 
