@@ -138,7 +138,7 @@ g_dumpTree = message "/g_dumpTree" . mk_duples Int (Int . fromEnum)
 -- | Request a representation of a group's node subtree, optionally including the current control values for synths.
 --
 -- Replies to the sender with a @/g_queryTree.reply@ message listing all of the nodes contained within the group in the following format:
--- 
+--
 -- > int - if synth control values are included 1, else 0
 -- > int - node ID of the requested group
 -- > int - number of child nodes contained within the requested group
@@ -158,7 +158,7 @@ g_dumpTree = message "/g_dumpTree" . mk_duples Int (Int . fromEnum)
 -- >       float or symbol: value or control bus mapping symbol (e.g. 'c1')
 -- >     ] * M
 -- > ] * the number of nodes in the subtree
---  
+--
 -- N.B. The order of nodes corresponds to their execution order on the server. Thus child nodes (those contained within a group) are listed immediately following their parent.
 g_queryTree :: [(Int, Bool)] -> OSC
 g_queryTree = message "/g_queryTree" . mk_duples Int (Int . fromEnum)
@@ -337,11 +337,28 @@ n_set1 nid k n = n_set nid [(k, n)]
 
 -- List of asynchronous server commands.
 async_cmds :: [String]
-async_cmds = ["/d_recv", "/d_load", "/d_loadDir"
-             ,"/b_alloc", "/b_allocRead", "/b_allocReadChannel"
-             ,"/b_free", "/b_close"
-             ,"/b_read", "/b_readChannel"
-             ,"/b_write", "/b_zero"]
+async_cmds =
+    ["b_alloc"
+    ,"b_allocRead"
+    ,"b_allocReadChannel"
+    ,"b_close"
+    ,"b_free"
+    ,"b_read"
+    ,"b_readChannel"
+    ,"b_write"
+    ,"b_zero"
+    ,"d_load"
+    ,"d_loadDir"
+    ,"d_recv"
+    ,"notify"
+    ,"quit"
+    ,"sync"]
+
+isAsync :: OSC -> Bool
+isAsync o =
+    case o of
+      Message a _ -> a `elem` async_cmds
+      Bundle _ _ -> error "isAsync: bundle"
 
 -- | Add a completion message to an existing asynchronous command.
 withCM :: OSC -> OSC -> OSC
