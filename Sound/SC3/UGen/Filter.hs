@@ -55,7 +55,11 @@ combL i mt dly dcy = mkFilter "CombL" [i,mt,dly,dcy] 1
 
 -- | Comb filter (cubic interpolation)
 combC :: UGen -> UGen -> UGen -> UGen -> UGen
-combC i mt dly dcy = mkFilter "CombC" [i, mt, dly, dcy] 1
+combC i mt dly dcy = mkFilter "CombC" [i,mt,dly,dcy] 1
+
+-- | Compressor,expander,limiter,gate,ducker.
+compander :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+compander i c t sb sa ct rt = mkFilter "Compander" [i,c,t,sb,sa,ct,rt] 1
 
 -- | Convert signal to modal pitch.
 degreeToKey :: UGen -> UGen -> UGen -> UGen
@@ -163,7 +167,11 @@ latch i t = mkFilter "Latch" [i,t] 1
 
 -- | Remove DC offset.
 leakDC :: UGen -> UGen -> UGen
-leakDC i coef = mkFilter "LeakDC" [i, coef] 1
+leakDC i coef = mkFilter "LeakDC" [i,coef] 1
+
+-- | Limiter.
+limiter :: UGen -> UGen -> UGen -> UGen
+limiter i l d = mkFilter "Limiter" [i,l,d] 1
 
 -- | Map from one linear range to another linear range.
 linLin :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -205,9 +213,9 @@ mostChange a b = mkFilter "MostChange" [a,b] 1
 mulAdd :: UGen -> UGen -> UGen -> UGen
 mulAdd s m a = mkFilter "MulAdd" [s,m,a] 1
 
--- | Flattens dynamics.
+-- | Normalizer (flattens dynamics).
 normalizer :: UGen -> UGen -> UGen -> UGen
-normalizer i level dur = mkFilter "Normalizer" [i, level, dur] 1
+normalizer i l d = mkFilter "Normalizer" [i,l,d] 1
 
 -- | One pole filter.
 onePole :: UGen -> UGen -> UGen
