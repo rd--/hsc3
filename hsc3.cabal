@@ -67,6 +67,7 @@ Library
                    Sound.SC3.UGen.Buffer
                    Sound.SC3.UGen.Chaos
                    Sound.SC3.UGen.Composite
+                   Sound.SC3.UGen.Composite.ID
                    Sound.SC3.UGen.Composite.Monadic
                    Sound.SC3.UGen.Demand
                    Sound.SC3.UGen.Demand.ID
