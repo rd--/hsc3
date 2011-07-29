@@ -76,47 +76,32 @@ proxy = Proxy
 
 -- * Unit generator node predicates
 
--- | Constant node predicate.
-isConstant :: UGen -> Bool
-isConstant u =
-    case u of
-      Constant _ -> True
-      _ -> False
-
--- | Control node predicate.
-isControl :: UGen -> Bool
-isControl u =
-    case u of
-      Control _ _ _ _ -> True
-      _ -> False
-
--- | Unit generator primitive node predicate.
-isPrimitive :: UGen -> Bool
-isPrimitive u =
-    case u of
-      Primitive _ _ _ _ _ _ -> True
-      _ -> False
-
--- | Proxy node predicate.
-isProxy :: UGen -> Bool
-isProxy u =
-    case u of
-      Proxy _ _ -> True
-      _ -> False
+data UGenType = Constant_U
+              | Control_U
+              | Primitive_U
+              | Proxy_U
+              | MCE_U
+              | MRG_U
+                deriving (Eq,Enum,Bounded,Show)
 
 -- | Multiple channel expansion node predicate.
 isMCE :: UGen -> Bool
-isMCE u =
-    case u of
-      MCE _ -> True
-      _ -> False
+isMCE = (== MCE_U) . ugenType
 
--- | MRG predicate.
-isMRG :: UGen -> Bool
-isMRG u =
+-- | Constant node predicate.
+isConstant :: UGen -> Bool
+isConstant = (== Constant_U) . ugenType
+
+-- | Constant node predicate.
+ugenType :: UGen -> UGenType
+ugenType u =
     case u of
-      MRG _ _ -> True
-      _ -> False
+      Constant _ -> Constant_U
+      Control _ _ _ _ -> Control_U
+      Primitive _ _ _ _ _ _ -> Primitive_U
+      Proxy _ _ -> Proxy_U
+      MCE _ -> MCE_U
+      MRG _ _ -> MRG_U
 
 -- * Multiple channel expansion
 
@@ -212,35 +197,37 @@ mrg u =
 
 -- | Apply proxy transformation if required.
 proxify :: UGen -> UGen
-proxify u
-    | isMCE u = mce (map proxify (mceProxies u))
-    | isMRG u = mrg [proxify (mrgLeft u), mrgRight u]
-    | isPrimitive u =
+proxify u =
+    case ugenType u of
+    MCE_U -> mce (map proxify (mceProxies u))
+    MRG_U -> mrg [proxify (mrgLeft u), mrgRight u]
+    Primitive_U ->
         let o = ugenOutputs u
         in case o of
              (_:_:_) -> mce (map (proxy u) [0..(length o - 1)])
              _ -> u
-    | isConstant u = u
-    | otherwise = error "proxify: illegal ugen"
+    Constant_U -> u
+    _ -> error "proxify: illegal ugen"
 
 -- | Determine the rate of a UGen.
 rateOf :: UGen -> Rate
-rateOf u
-    | isConstant u = IR
-    | isControl u = controlOperatingRate u
-    | isPrimitive u = ugenRate u
-    | isProxy u = rateOf (proxySource u)
-    | isMCE u = error "rateOf: mce"
-    | isMRG u = rateOf (mrgLeft u)
-    | otherwise = undefined
+rateOf u =
+    case ugenType u of
+      Constant_U -> IR
+      Control_U -> controlOperatingRate u
+      Primitive_U -> ugenRate u
+      Proxy_U -> rateOf (proxySource u)
+      MCE_U -> maximum (map rateOf (mceChannels u))
+      MRG_U -> rateOf (mrgLeft u)
 
 -- True is input is a sink UGen, ie. has no outputs.
 is_sink :: UGen -> Bool
-is_sink u
-    | isPrimitive u = null (ugenOutputs u)
-    | isMCE u = all is_sink (mceProxies u)
-    | isMRG u = is_sink (mrgLeft u)
-    | otherwise = False
+is_sink u =
+    case ugenType u of
+      Primitive_U -> null (ugenOutputs u)
+      MCE_U -> all is_sink (mceProxies u)
+      MRG_U -> is_sink (mrgLeft u)
+      _ -> False
 
 -- Ensure input UGen is valid, ie. not a sink.
 check_input :: UGen -> UGen

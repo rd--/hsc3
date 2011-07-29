@@ -200,16 +200,18 @@ mk_node_p n p g = let z = nextId g
                   in (NodeP z n p, g { nextId = z + 1 })
 
 mk_node :: UGen -> Graph -> (Node, Graph)
-mk_node u g
-    | isConstant u = mk_node_c u g
-    | isControl u = mk_node_k u g
-    | isPrimitive u = mk_node_u u g
-    | isProxy u = let (n, g') = mk_node_u (proxySource u) g
-                  in mk_node_p n (proxyIndex u) g'
-    | isMRG u = let (_, g') = mk_node (mrgRight u) g
-                in mk_node (mrgLeft u) g'
-    | isMCE u = error "mk_node: mce"
-    | otherwise = error "mk_node"
+mk_node u g =
+    case ugenType u of
+      Constant_U -> mk_node_c u g
+      Control_U -> mk_node_k u g
+      Primitive_U -> mk_node_u u g
+      Proxy_U ->
+          let (n, g') = mk_node_u (proxySource u) g
+          in mk_node_p n (proxyIndex u) g'
+      MRG_U ->
+          let (_, g') = mk_node (mrgRight u) g
+          in mk_node (mrgLeft u) g'
+      MCE_U -> error "mk_node: mce"
 
 type Map = M.IntMap Int
 type Maps = (Map, [Node], Map, Map)
@@ -327,7 +329,8 @@ implicit ks =
 
 -- Transform mce nodes to mrg nodes
 prepare_root :: UGen -> UGen
-prepare_root u
-    | isMCE u = mrg (mceProxies u)
-    | isMRG u = MRG (prepare_root (mrgLeft u)) (prepare_root (mrgRight u))
-    | otherwise = u
+prepare_root u =
+    case ugenType u of
+      MCE_U -> mrg (mceProxies u)
+      MRG_U -> MRG (prepare_root (mrgLeft u)) (prepare_root (mrgRight u))
+      _ -> u
