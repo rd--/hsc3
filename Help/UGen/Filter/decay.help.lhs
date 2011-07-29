@@ -8,6 +8,8 @@ for exponential decaying envelopes triggered by impulses.
 
 Used as an envelope.
 
-> do { n <- pinkNoise AR
->    ; let s = impulse AR (xLine KR 1 50 20 RemoveSynth) 0.25
->      in audition (out 0 (decay s 0.2 * n)) }
+> import Sound.SC3.ID
+
+> let { n = pinkNoise 'a' AR
+>     ; s = impulse AR (xLine KR 1 50 20 RemoveSynth) 0.25 }
+> in audition (out 0 (decay s 0.2 * n))

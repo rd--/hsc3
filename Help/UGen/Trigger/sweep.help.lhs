@@ -2,13 +2,13 @@ sweep trig rate
 
 Triggered linear ramp.  Starts a linear raise by rate/sec from zero
 when trig input crosses from non-positive to positive.
-	
+
 Using sweep to modulate sine frequency
 
-> import Sound.SC3
+> import Sound.SC3.ID
 
 > let { x = mouseX KR 0.5 20 Exponential 0.1
->     ; t = impulse KR x 0 
+>     ; t = impulse KR x 0
 >     ; f = sweep t 700 + 500 }
 > in audition (out 0 (sinOsc AR f 0 * 0.2))
 
@@ -23,8 +23,6 @@ Using sweep to index into a buffer
 > in audition (out 0 (bufRdL 1 AR 0 p NoLoop))
 
 Backwards, variable offset
-
-> import Sound.SC3.ID
 
 > let { n = lfNoise0 'a' KR 15
 >     ; x = mouseX KR 0.5 10 Exponential 0.1

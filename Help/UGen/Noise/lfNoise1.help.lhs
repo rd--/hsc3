@@ -6,18 +6,18 @@ the freq argument.
 
 freq - approximate rate at which to generate random values.
 
-> import Sound.SC3.Monadic
+> import Sound.SC3.ID
 
-> audition . (out 0) . (* 0.05) =<< lfNoise1 AR 1000
+> audition (out 0 (lfNoise1 'a' AR 1000 * 0.05))
 
 Modulate frequency.
 
-> let f = xLine KR 1000 10000 10 RemoveSynth
-> in do { n <- lfNoise1 AR f
->       ; audition (out 0 (n * 0.05)) }
+> let { f = xLine KR 1000 10000 10 RemoveSynth
+>     ; n = lfNoise1 'a' AR f }
+> in audition (out 0 (n * 0.05))
 
 Use as frequency control.
 
-> do { n <- lfNoise1 KR 4
->    ; let f = n * 400 + 450
->      in audition (out 0 (sinOsc AR f 0 * 0.1)) }
+> let { n = lfNoise1 'a' KR 4
+>     ; f = n * 400 + 450 }
+> in audition (out 0 (sinOsc AR f 0 * 0.1))

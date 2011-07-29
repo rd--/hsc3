@@ -28,28 +28,29 @@ gap - if true the dirst duration precedes the first level,
 
 Play a little rhythm
 
-> import Sound.SC3.Monadic
+> import Sound.SC3.ID
 
-> do { d <- dseq dinf (mce [0.1, 0.2, 0.4, 0.3])
->    ; audition (out 0 (tDuty AR d 0 DoNothing 1 1)) }
+> let d = dseq 'a' dinf (mce [0.1, 0.2, 0.4, 0.3])
+> in audition (out 0 (tDuty AR d 0 DoNothing 1 0))
 
 Amplitude changes
 
-> do { d0 <- dseq dinf (mce [0.1, 0.2, 0.4, 0.3])
->    ; d1 <- dseq dinf (mce [0.1, 0.4, 0.01, 0.5, 1.0])
->    ; let s = ringz (tDuty AR d0 0 DoNothing d1 1) 1000 0.1
->      in audition (out 0 s) }
+> let { d0 = dseq '0' dinf (mce [0.1, 0.2, 0.4, 0.3])
+>     ; d1 = dseq '1' dinf (mce [0.1, 0.4, 0.01, 0.5, 1.0])
+>     ; s = ringz (tDuty AR d0 0 DoNothing d1 1) 1000 0.1 }
+> in audition (out 0 s)
 
 Mouse control.
 
-> do { d <- dseq dinf (mce [0.1, 0.4, 0.01, 0.5, 1.0])
->    ; let { x = mouseX KR 0.003 1 Exponential 0.1
->          ; s = ringz (tDuty AR x 0 DoNothing d 1) 1000 0.1 }
->      in audition (out 0 s) }
+> let { d = dseq 'a' dinf (mce [0.1, 0.4, 0.01, 0.5, 1.0])
+>     ; x = linExp (lfNoise0 'b' KR 1) (-1) 1 0.003 1
+>  {- ; x = mouseX KR 0.003 1 Exponential 0.1 -}
+>     ; s = ringz (tDuty AR x 0 DoNothing d 1) 1000 0.1 * 0.5 }
+> in audition (out 0 s)
 
 Note that the 440 is the shorter pitch, since gap is set to false
 
-> do { d0 <- dser 12 (mce [0.1, 0.3])
->    ; d1 <- dser 12 (mce [440, 880])
->    ; let t = tDuty AR d0 0 RemoveSynth d1 0
->      in audition (out 0 (sinOsc AR (latch t t) 0 * 0.1)) }
+> let { d0 = dser '0' 12 (mce [0.1, 0.3])
+>     ; d1 = dser '1' 12 (mce [440, 880])
+>     ; t = tDuty AR d0 0 RemoveSynth d1 0 }
+> in audition (out 0 (sinOsc AR (latch t t) 0 * 0.1))
