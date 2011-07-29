@@ -7,15 +7,18 @@ See drand.
 >     ; t = tDuty AR d 0 DoNothing (dwhite 'c' dinf 0.5 1) 0 }
 > in audition (out 0 t) >> Sound.SC3.UGen.Dot.draw t
 
-Demand rate binary math is not working properly?  Below the i' variant
-is correct, the i'' variant incorrect.  In the first case the
-constants are re-written, in the second they introduce a deman rate
-binop with two constant inputs which seems to make an infinite
-sequence of the value.
+Demand rate and mce do not interact properly.  Below the i' variant is
+correct and the i'' variant incorrect.  In the first case the
+constants are re-written, in the second they introduce a demand rate
+binary operator with two constant inputs, which generates an infinite
+sequence of the value.  The problem arises in the mceTransform and
+mceExpand implementation, the rate of the filter primitive is set to
+the maximum rate of the inputs and is not revised after mce
+transformation, where it may be lower.
 
 > let { i = mce [0.2,0.4,dseq 'a' 2 (mce [0.1,0.1])]
->     ; i' = mceMap (* 0.5) i
->     ; i'' = i * 0.5
+>     ; i' = mceMap (* 2) i
+>     ; i'' = i * 2
 >     ; d = dxrand 'b' dinf i'
 >     ; t = tDuty AR d 0 DoNothing (dwhite 'c' dinf 0.5 1) 0 }
 > in audition (out 0 t) >> Sound.SC3.UGen.Dot.draw t

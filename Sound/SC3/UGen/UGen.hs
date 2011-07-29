@@ -64,8 +64,7 @@ tr_control n d = Control KR n d True
 
 -- | Multiple channel expansion node constructor.
 mce :: [UGen] -> UGen
-mce [] = error "mce: empty list"
-mce xs = MCE xs
+mce xs = if null xs then error "mce: empty list" else MCE xs
 
 -- | Multiple root graph node constructor.
 mrg2 :: UGen -> UGen -> UGen
@@ -79,33 +78,45 @@ proxy = Proxy
 
 -- | Constant node predicate.
 isConstant :: UGen -> Bool
-isConstant (Constant _) = True
-isConstant _ = False
+isConstant u =
+    case u of
+      Constant _ -> True
+      _ -> False
 
 -- | Control node predicate.
 isControl :: UGen -> Bool
-isControl (Control _ _ _ _) = True
-isControl _ = False
+isControl u =
+    case u of
+      Control _ _ _ _ -> True
+      _ -> False
 
 -- | Unit generator primitive node predicate.
-isUGen :: UGen -> Bool
-isUGen (Primitive _ _ _ _ _ _) = True
-isUGen _ = False
+isPrimitive :: UGen -> Bool
+isPrimitive u =
+    case u of
+      Primitive _ _ _ _ _ _ -> True
+      _ -> False
 
 -- | Proxy node predicate.
 isProxy :: UGen -> Bool
-isProxy (Proxy _ _) = True
-isProxy _ = False
+isProxy u =
+    case u of
+      Proxy _ _ -> True
+      _ -> False
 
 -- | Multiple channel expansion node predicate.
 isMCE :: UGen -> Bool
-isMCE (MCE _) = True
-isMCE _ = False
+isMCE u =
+    case u of
+      MCE _ -> True
+      _ -> False
 
 -- | MRG predicate.
 isMRG :: UGen -> Bool
-isMRG (MRG _ _) = True
-isMRG _ = False
+isMRG u =
+    case u of
+      MRG _ _ -> True
+      _ -> False
 
 -- * Multiple channel expansion
 
@@ -119,37 +130,35 @@ clone n = liftM mce . replicateM n
 
 -- | Number of channels to expand to.
 mceDegree :: UGen -> Int
-mceDegree (MCE l) = length l
-mceDegree (MRG u _) = mceDegree u
-mceDegree _ = error "mceDegree: illegal ugen"
+mceDegree u =
+    case u of
+      MCE l -> length l
+      MRG x _ -> mceDegree x
+      _ -> error "mceDegree: illegal ugen"
 
 -- | Extend UGen to specified degree.
 mceExtend :: Int -> UGen -> [UGen]
-mceExtend n (MCE l) = take n (cycle l)
-mceExtend n (MRG x y) =
-    let (r:rs) = mceExtend n x
-    in MRG r y : rs
-mceExtend n u = replicate n u
+mceExtend n u =
+    case u of
+      MCE l -> take n (cycle l)
+      MRG x y -> let (r:rs) = mceExtend n x
+                 in MRG r y : rs
+      _ -> replicate n u
 
--- | Apply MCE transformation.
-mceTransform :: UGen -> UGen
-mceTransform (Primitive r n i o s d) =
-    let f j = Primitive r n j o s d
-        upr = maximum (map mceDegree (filter isMCE i))
-        i' = transpose (map (mceExtend upr) i)
-    in MCE (map f i')
-mceTransform _ = error "mceTransform: illegal ugen"
+-- | Apply MCE transform to a list of inputs.
+mceInputTransform :: [UGen] -> Maybe [[UGen]]
+mceInputTransform i =
+    if any isMCE i
+    then let n = maximum (map mceDegree (filter isMCE i))
+         in Just (transpose (map (mceExtend n) i))
+    else Nothing
 
--- | Apply MCE transformation if required.
-mceExpand :: UGen -> UGen
-mceExpand (MCE l) = MCE (map mceExpand l)
-mceExpand (MRG x y) = MRG (mceExpand x) y
-mceExpand u =
-    let required (Primitive _ _ i _ _ _) = not (null (filter isMCE i))
-        required _ = False
-    in if required u
-       then mceExpand (mceTransform u)
-       else u
+-- | Build a UGen after MCE transformation of inputs.
+mceBuild :: ([UGen] -> UGen) -> [UGen] -> UGen
+mceBuild f i =
+    case mceInputTransform i of
+      Nothing -> f i
+      Just i' -> MCE (map f i')
 
 -- | Apply a function to each channel at a unit generator.
 mceMap :: (UGen -> UGen) -> UGen -> UGen
@@ -157,8 +166,10 @@ mceMap f u = mce (map f (mceChannels u))
 
 -- | Apply UGen list operation on MCE contents.
 mceEdit :: ([UGen] -> [UGen]) -> UGen -> UGen
-mceEdit f (MCE l) = MCE (f l)
-mceEdit _ _ = error "mceEdit: non MCE value"
+mceEdit f u =
+    case u of
+      MCE l -> MCE (f l)
+      _ -> error "mceEdit: non MCE value"
 
 -- | Reverse order of channels at MCE.
 mceReverse :: UGen -> UGen
@@ -166,19 +177,22 @@ mceReverse = mceEdit reverse
 
 -- | Obtain indexed channel at MCE.
 mceChannel :: Int -> UGen -> UGen
-mceChannel n (MCE l) = l !! n
-mceChannel _ _ = error "mceChannel: non MCE value"
+mceChannel n u =
+    case u of
+      MCE l -> l !! n
+      _ -> error "mceChannel: non MCE value"
 
 -- | Output channels of UGen as a list.
 mceChannels :: UGen -> [UGen]
-mceChannels (MCE l) = l
-mceChannels (MRG x y) = let (r:rs) = mceChannels x in MRG r y : rs
-mceChannels u = [u]
+mceChannels u =
+    case u of
+      MCE l -> l
+      MRG x y -> let (r:rs) = mceChannels x in MRG r y : rs
+      _ -> [u]
 
 -- | Transpose rows and columns, ie. {{a,b},{c,d}} to {{a,c},{b,d}}.
 mceTranspose :: UGen -> UGen
-mceTranspose =
-    mce . map mce . transpose . map mceChannels . mceChannels
+mceTranspose = mce . map mce . transpose . map mceChannels . mceChannels
 
 -- | Collapse mce by summing (see also mix and mixN).
 mceSum :: UGen -> UGen
@@ -188,9 +202,11 @@ mceSum = sum . mceChannels
 
 -- | Multiple root graph constructor.
 mrg :: [UGen] -> UGen
-mrg [] = undefined
-mrg [x] = x
-mrg (x:xs) = MRG x (mrg xs)
+mrg u =
+    case u of
+      [] -> undefined
+      [x] -> x
+      (x:xs) -> MRG x (mrg xs)
 
 -- * Unit generator function builders
 
@@ -199,11 +215,12 @@ proxify :: UGen -> UGen
 proxify u
     | isMCE u = mce (map proxify (mceProxies u))
     | isMRG u = mrg [proxify (mrgLeft u), mrgRight u]
-    | isUGen u =
+    | isPrimitive u =
         let o = ugenOutputs u
         in case o of
              (_:_:_) -> mce (map (proxy u) [0..(length o - 1)])
              _ -> u
+    | isConstant u = u
     | otherwise = error "proxify: illegal ugen"
 
 -- | Determine the rate of a UGen.
@@ -211,61 +228,75 @@ rateOf :: UGen -> Rate
 rateOf u
     | isConstant u = IR
     | isControl u = controlOperatingRate u
-    | isUGen u = ugenRate u
+    | isPrimitive u = ugenRate u
     | isProxy u = rateOf (proxySource u)
-    | isMCE u = maximum (map rateOf (mceProxies u))
+    | isMCE u = error "rateOf: mce"
     | isMRG u = rateOf (mrgLeft u)
     | otherwise = undefined
 
 -- True is input is a sink UGen, ie. has no outputs.
 is_sink :: UGen -> Bool
 is_sink u
-    | isUGen u = null (ugenOutputs u)
+    | isPrimitive u = null (ugenOutputs u)
     | isMCE u = all is_sink (mceProxies u)
     | isMRG u = is_sink (mrgLeft u)
     | otherwise = False
 
 -- Ensure input UGen is valid, ie. not a sink.
 check_input :: UGen -> UGen
-check_input u = if is_sink u
-                then error ("illegal input: " ++ show u)
-                else u
+check_input u =
+    if is_sink u
+    then error ("illegal input: " ++ show u)
+    else u
 
 -- | Construct proxied and multiple channel expanded UGen.
-mkUGen :: (ID a) =>
-          Rate -> String -> [UGen] -> [Output] -> Special -> a -> UGen
-mkUGen r n i o s z =
-    let u = Primitive r n (map check_input i) o s (resolveID z)
-    in proxify (mceExpand u)
+mkUGen :: (ID a) => Maybe ([Double] -> Double) -> [Rate] ->
+          Maybe Rate -> String -> [UGen] -> Int -> Special -> a -> UGen
+mkUGen cf rs r nm i o s z =
+    let f h = let r'' = case r of
+                          Nothing -> maximum (map rateOf h)
+                          Just r' -> r'
+                  o' = replicate o r''
+                  u = Primitive r'' nm h o' s (resolveID z)
+              in if r'' `elem` rs
+                 then case cf of
+                        Just cf' ->
+                            if all isConstant h
+                            then Constant (cf' (map constantValue h))
+                            else u
+                        Nothing -> u
+                 else error ("mkUGen: rate restricted: " ++ show (r,rs,nm))
+    in proxify (mceBuild f (map check_input i))
+
+all_rates :: [Rate]
+all_rates = [minBound .. maxBound]
 
 -- | Operator UGen constructor.
-mkOperator :: String -> [UGen] -> Int -> UGen
-mkOperator c i s =
-    let r = maximum (map rateOf i)
-    in mkUGen r c i [r] (Special s) defaultID
+mkOperator :: ([Double] -> Double) -> String -> [UGen] -> Int -> UGen
+mkOperator f c i s =
+    mkUGen (Just f) all_rates Nothing c i 1 (Special s) defaultID
 
 -- | Unary math constructor with constant optimization.
 mkUnaryOperator :: Unary -> (Double -> Double) -> UGen -> UGen
-mkUnaryOperator i f a
-    | isConstant a = constant (f (constantValue a))
-    | otherwise = mkOperator "UnaryOpUGen" [a] (fromEnum i)
+mkUnaryOperator i f a =
+    let g [x] = f x
+        g _ = error "mkUnaryOperator: non unary input"
+    in mkOperator g "UnaryOpUGen" [a] (fromEnum i)
 
 -- | Binary math constructor with constant optimization.
 mkBinaryOperator :: Binary -> (Double -> Double -> Double) ->
                     UGen -> UGen -> UGen
 mkBinaryOperator i f a b =
-    if isConstant a && isConstant b
-    then let a' = constantValue a
-             b' = constantValue b
-         in constant (f a' b')
-    else mkOperator "BinaryOpUGen" [a, b] (fromEnum i)
+   let g [x,y] = f x y
+       g _ = error "mkBinaryOperator: non binary input"
+   in mkOperator g "BinaryOpUGen" [a, b] (fromEnum i)
 
 mk_osc :: (ID a) =>
           [Rate] -> a ->
           Rate -> String -> [UGen] -> Int -> UGen
 mk_osc rs z r c i o =
     if r `elem` rs
-    then mkUGen r c i (replicate o r) (Special 0) z
+    then mkUGen Nothing rs (Just r) c i o (Special 0) z
     else error ("mk_osc: rate restricted: " ++ show (r, rs, c))
 
 -- | Oscillator constructor.
@@ -292,21 +323,11 @@ mkOscMCE :: Rate -> String -> [UGen] -> UGen -> Int -> UGen
 mkOscMCE = mk_osc_mce defaultID
 
 -- | Variant oscillator constructor with MCE collapsing input.
-mkOscMCEId :: (ID a) =>
-              a -> Rate -> String -> [UGen] -> UGen -> Int -> UGen
+mkOscMCEId :: ID a => a -> Rate -> String -> [UGen] -> UGen -> Int -> UGen
 mkOscMCEId = mk_osc_mce
 
-mk_filter :: (ID a) =>
-             [Rate] -> a -> String -> [UGen] -> Int -> UGen
-mk_filter rs z c i o =
-    let r = maximum (map rateOf i)
-        o'= replicate o r
-    in if r `elem` rs
-       then mkUGen r c i o' (Special 0) z
-       else error ("mk_filter: rate restriceted: " ++ show (r, rs, c))
-
-all_rates :: [Rate]
-all_rates = [minBound .. maxBound]
+mk_filter :: ID a => [Rate] -> a -> String -> [UGen] -> Int -> UGen
+mk_filter rs z c i o = mkUGen Nothing rs Nothing c i o (Special 0) z
 
 -- | Filter UGen constructor.
 mkFilter :: String -> [UGen] -> Int -> UGen
@@ -324,8 +345,7 @@ mkFilterId = mk_filter all_rates
 mkFilterKeyed :: String -> Int -> [UGen] -> Int -> UGen
 mkFilterKeyed c k i o =
     let r = rateOf (i !! k)
-        o' = replicate o r
-    in mkUGen r c i o' (Special 0) defaultID
+    in mkUGen Nothing all_rates (Just r) c i o (Special 0) defaultID
 
 mk_filter_mce :: (ID a) => [Rate] -> a ->
                  String -> [UGen] -> UGen -> Int -> UGen
@@ -340,8 +360,7 @@ mkFilterMCE :: String -> [UGen] -> UGen -> Int -> UGen
 mkFilterMCE = mk_filter_mce all_rates defaultID
 
 -- | Variant filter constructor with MCE collapsing input.
-mkFilterMCEId :: (ID a) =>
-                 a -> String -> [UGen] -> UGen -> Int -> UGen
+mkFilterMCEId :: ID a => a -> String -> [UGen] -> UGen -> Int -> UGen
 mkFilterMCEId = mk_filter_mce all_rates
 
 -- | Information unit generators are very specialized.

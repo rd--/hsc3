@@ -189,7 +189,7 @@ controls.
 >     ; o1 = sinOsc AR f1 0 * d a1
 >     ; o2 = saw AR f2 * d a2
 >     ; g = mrg2 (out b1 o1) (out b2 o2)
->     ; i fd = do { async fd (d_recv (synthdef "g" g))
+>     ; i fd = do { _ <- async fd (d_recv (synthdef "g" g))
 >                 ; send fd (s_new "g" 100 AddToTail 1 []) } }
 > in withSC3 i
 

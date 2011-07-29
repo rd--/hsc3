@@ -12,8 +12,9 @@ dinf = Constant 9E8
 
 -- | Demand results from demand rate ugens.
 demand :: UGen -> UGen -> UGen -> UGen
-demand t r d = mkFilterKeyed "Demand" 0 (t : r : d') (length d')
-    where d' = mceChannels d
+demand t r d =
+    let d' = mceChannels d
+    in mkFilterKeyed "Demand" 0 (t : r : d') (length d')
 
 -- | Demand envlope generator.
 demandEnvGen :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> DoneAction -> UGen

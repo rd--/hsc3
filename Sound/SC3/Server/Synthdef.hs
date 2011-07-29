@@ -203,7 +203,7 @@ mk_node :: UGen -> Graph -> (Node, Graph)
 mk_node u g
     | isConstant u = mk_node_c u g
     | isControl u = mk_node_k u g
-    | isUGen u = mk_node_u u g
+    | isPrimitive u = mk_node_u u g
     | isProxy u = let (n, g') = mk_node_u (proxySource u) g
                   in mk_node_p n (proxyIndex u) g'
     | isMRG u = let (_, g') = mk_node (mrgRight u) g
