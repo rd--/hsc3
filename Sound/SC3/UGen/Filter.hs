@@ -91,7 +91,11 @@ delayL i mt dly = mkFilter "DelayL" [i,mt,dly] 1
 
 -- | Simple delay line (no interpolation).
 delayN :: UGen -> UGen -> UGen -> UGen
-delayN i mt dly = mkFilter "DelayN" [i, mt, dly] 1
+delayN i mt dly = mkFilter "DelayN" [i,mt,dly] 1
+
+-- | Fold to range.
+fold :: UGen -> UGen -> UGen -> UGen
+fold i j k = mkFilter "Fold" [i,j,k] 1
 
 -- | FOF like filter.
 formlet :: UGen -> UGen -> UGen -> UGen -> UGen
@@ -345,7 +349,11 @@ twoPole i freq radius = mkFilter "TwoPole" [i,freq,radius] 1
 
 -- | Two zero filter.
 twoZero :: UGen -> UGen -> UGen -> UGen
-twoZero i freq radius = mkFilter "TwoZero" [i, freq, radius] 1
+twoZero i freq radius = mkFilter "TwoZero" [i,freq,radius] 1
+
+-- | Wrap to range.
+wrap :: UGen -> UGen -> UGen -> UGen
+wrap i j k = mkFilter "Wrap" [i,j,k] 1
 
 -- | Index into a table with a signal.
 wrapIndex :: UGen -> UGen -> UGen

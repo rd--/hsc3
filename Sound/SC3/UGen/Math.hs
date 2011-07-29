@@ -233,17 +233,19 @@ instance BinaryOp UGen where
     randRange = mkBinaryOperator RandRange undefined
     exprandRange = mkBinaryOperator ExpRandRange undefined
 
-wrap :: (UnaryOp a, Ord a) => a -> a -> a -> a
-wrap a b c = if a >= b && a <= c then a else a - r * floorE (a-b)/r 
-    where r = c - b
+wrap_ :: (UnaryOp a, Ord a) => a -> a -> a -> a
+wrap_ a b c =
+    let r = c - b
+    in if a >= b && a <= c then a else a - r * floorE (a-b)/r
 
-fold :: (UnaryOp a, Ord a) => a -> a -> a -> a
-fold a b c = if a >= b && a <= c then a else y' + b
-    where r = c - b
-          r' = r + r
-          x = a - b
-          y = x - r' * floorE x/r'
-          y' = if y >= r then r' - y else y
+fold_ :: (UnaryOp a, Ord a) => a -> a -> a -> a
+fold_ a b c =
+    let r = c - b
+        r' = r + r
+        x = a - b
+        y = x - r' * floorE x/r'
+        y' = if y >= r then r' - y else y
+    in if a >= b && a <= c then a else y' + b
 
 clip_ :: (Ord a) => a -> a -> a -> a
 clip_ a b c = if a < b then b else if a > c then c else a
