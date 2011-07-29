@@ -199,7 +199,10 @@ mantissaMask i bits = mkFilter "MantissaMask" [i,bits] 1
 
 -- | Median filter.
 median :: UGen -> UGen -> UGen
-median size i = mkFilter "Median" [size, i] 1
+median size i = mkFilter "Median" [size,i] 1
+
+midEQ :: UGen -> UGen -> UGen -> UGen -> UGen
+midEQ i f rq db = mkFilter "MidEQ" [i,f,rq,db] 1
 
 -- | Moog VCF implementation.
 moogFF :: UGen -> UGen -> UGen -> UGen -> UGen
