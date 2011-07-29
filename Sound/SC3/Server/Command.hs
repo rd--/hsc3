@@ -338,21 +338,21 @@ n_set1 nid k n = n_set nid [(k, n)]
 -- List of asynchronous server commands.
 async_cmds :: [String]
 async_cmds =
-    ["b_alloc"
-    ,"b_allocRead"
-    ,"b_allocReadChannel"
-    ,"b_close"
-    ,"b_free"
-    ,"b_read"
-    ,"b_readChannel"
-    ,"b_write"
-    ,"b_zero"
-    ,"d_load"
-    ,"d_loadDir"
-    ,"d_recv"
-    ,"notify"
-    ,"quit"
-    ,"sync"]
+    ["/b_alloc"
+    ,"/b_allocRead"
+    ,"/b_allocReadChannel"
+    ,"/b_close"
+    ,"/b_free"
+    ,"/b_read"
+    ,"/b_readChannel"
+    ,"/b_write"
+    ,"/b_zero"
+    ,"/d_load"
+    ,"/d_loadDir"
+    ,"/d_recv"
+    ,"/notify"
+    ,"/quit"
+    ,"/sync"]
 
 isAsync :: OSC -> Bool
 isAsync o =
