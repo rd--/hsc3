@@ -6,7 +6,7 @@ module Sound.SC3.UGen.Rate ( Rate(..)
 import Data.Function
 
 -- | Operating rate of unit generator.
-data Rate = IR | KR | AR | DR 
+data Rate = IR | KR | AR | DR
             deriving (Eq, Show, Enum, Bounded)
 
 instance Ord Rate where

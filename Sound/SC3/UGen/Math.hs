@@ -189,11 +189,11 @@ class (Floating a, Ord a) => BinaryOp a where
     wrap2 :: a -> a -> a
 
 instance BinaryOp Double where
-    fold2 a b = fold a (-b) b
-    modE a b = n - floorE n where n = a / b
+    fold2 a b = fold_ a (-b) b
+    modE a b = let n = a / b in n - floorE n
     roundE a b = if b == 0 then a else floorE (a/b + 0.5) * b
     roundUp a b = if b == 0 then a else ceil (a/b + 0.5) * b
-    wrap2 a b = wrap a (-b) b
+    wrap2 a b = wrap_ a (-b) b
 
 instance BinaryOp UGen where
     iDiv = mkBinaryOperator IDiv undefined
