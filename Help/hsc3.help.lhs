@@ -159,7 +159,7 @@ causes two sinOsc unit generators to be created.
 
 > import Sound.SC3
 
-> let { x = mouseX KR (-1) 1 Linear 0.1
+> let { x = mouseX' KR (-1) 1 Linear 0.1
 >     ; o1 = pulse AR 440 0.1
 >     ; o2 = sinOsc AR (mce [110, 2300]) 0 * 0.1 }
 > in audition (out 0 (pan2 o1 x 0.1 + o2))
@@ -339,7 +339,7 @@ Since the Ord type gives the signature:
 we define a variant with a star suffix, such
 that:
 
-> let { x = mouseX KR 3 45 Exponential 0.1
+> let { x = mouseX' KR 3 45 Exponential 0.1
 >     ; t = sinOsc AR x 0 >* 0
 >     ; d = envTriangle 0.01 0.1
 >     ; e = envGen AR t 1 0 1 DoNothing d
