@@ -143,7 +143,7 @@ mceBuild :: ([UGen] -> UGen) -> [UGen] -> UGen
 mceBuild f i =
     case mceInputTransform i of
       Nothing -> f i
-      Just i' -> MCE (map f i')
+      Just i' -> MCE (map (mceBuild f) i')
 
 -- | Apply a function to each channel at a unit generator.
 mceMap :: (UGen -> UGen) -> UGen -> UGen
