@@ -74,6 +74,20 @@ mouseY' = mouseR 'y'
 pmOsc :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
 pmOsc r cf mf pm mp = sinOsc r cf (sinOsc r mf mp * pm)
 
+-- | Scale bi-polar (-1,1) input to linear (l,r) range
+range :: Fractional c => c -> c -> c -> c
+range l r =
+    let m = (r - l) * 0.5
+	a = m + l
+    in (+ a) . (* m)
+
+-- | Mix one output from many sources
+selectX :: UGen -> UGen -> UGen
+selectX ix xs =
+    let s0 = select (roundE ix 2) xs
+        s1 = select (trunc ix 2 + 1) xs
+    in xFade2 s0 s1 (fold2 (ix * 2 - 1) 1) 1
+
 -- | Zero indexed audio input buses.
 soundIn :: UGen -> UGen
 soundIn (MCE ns) | all (==1) $ zipWith (-) (tail ns) ns =
