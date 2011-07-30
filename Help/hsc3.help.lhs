@@ -187,6 +187,17 @@ seems occasionally unreliable.
 > let f = mce2 440 440
 > in audition (out 0 (sinOsc AR f 0 * 0.1))
 
+The expansion is recursive, which can require care.
+The graph below has four oscillators, the mceSum
+function generates a graph with one 'out' UGen where
+the channel layout is [(440,441),(660,661)], without it
+there would be two 'out' UGens and the layout would be
+[(440,660),(441,661)].
+
+> let { f = mce2 (mce2 440 660) (mce2 441 661)
+>     ; o = sinOsc AR f 0 * 0.1 }
+> in audition (out 0 (mceSum o))
+
 * Multiply add inputs, Haskell Curry, and cloning
 
 The supercollider language provides optional multiply
