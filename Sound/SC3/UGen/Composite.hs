@@ -4,11 +4,14 @@ module Sound.SC3.UGen.Composite where
 import Control.Monad
 import Data.List
 import Data.List.Split
+import Sound.SC3.Identifier
 import Sound.SC3.UGen.Buffer
+import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Filter
 import Sound.SC3.UGen.Information
 import Sound.SC3.UGen.IO
 import Sound.SC3.UGen.Math
+import Sound.SC3.UGen.Noise.ID
 import Sound.SC3.UGen.Oscillator
 import Sound.SC3.UGen.Panner
 import Sound.SC3.UGen.Rate
@@ -50,6 +53,22 @@ mixFill n f = mix (mce (map f [0..n-1]))
 -- | Monadic variant on mixFill.
 mixFillM :: (Monad m) => Int -> (Int -> m UGen) -> m UGen
 mixFillM n f = liftM sum (mapM f [0 .. n - 1])
+
+mouseR :: ID a => a -> Rate -> UGen -> UGen -> Warp -> UGen -> UGen
+mouseR z rt l r ty tm =
+  let f = case ty of
+            Linear -> linLin
+            Exponential -> linExp
+            _ -> undefined
+  in lag (f (lfNoise1 z rt 1) (-1) 1 l r) tm
+
+-- | Variant that randomly traverses the mouseX space.
+mouseX' :: Rate -> UGen -> UGen -> Warp -> UGen -> UGen
+mouseX' = mouseR 'x'
+
+-- | Variant that randomly traverses the mouseY space.
+mouseY' :: Rate -> UGen -> UGen -> Warp -> UGen -> UGen
+mouseY' = mouseR 'y'
 
 -- | PM oscillator.
 pmOsc :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
