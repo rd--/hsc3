@@ -44,11 +44,11 @@ class (Floating a, Ord a) => UnaryOp a where
     ampDb :: a -> a
     ampDb a = log10 a * 20
     asFloat :: a -> a
-    asFloat = undefined
+    asFloat = error "asFloat"
     asInt :: a -> a
-    asInt = undefined
+    asInt = error "asInt"
     bitNot :: a -> a
-    bitNot = undefined
+    bitNot = error "bitNot"
     ceil :: a -> a
     cpsMIDI :: a -> a
     cpsMIDI a = (log2 (a * (1.0 / 440.0)) * 12.0) + 69.0
@@ -59,10 +59,10 @@ class (Floating a, Ord a) => UnaryOp a where
     dbAmp :: a -> a
     dbAmp a = 10 ** (a * 0.05)
     distort :: a -> a
-    distort = undefined
+    distort = error "distort"
     floorE :: a -> a
     frac :: a -> a
-    frac = undefined
+    frac = error "frac"
     isNil :: a -> a
     isNil a = if a == 0.0 then 0.0 else 1.0
     log10 :: a -> a
@@ -80,11 +80,11 @@ class (Floating a, Ord a) => UnaryOp a where
     octCPS :: a -> a
     octCPS a = 440.0 * (2.0 ** (a - 4.75))
     ramp_ :: a -> a
-    ramp_ _ = undefined
+    ramp_ _ = error "ramp_"
     ratioMIDI :: a -> a
     ratioMIDI a = 12.0 * log2 a
     softClip :: a -> a
-    softClip = undefined
+    softClip = error "softClip"
     squared :: a -> a
     squared a = a * a
 
@@ -127,11 +127,11 @@ class (Floating a, Ord a) => BinaryOp a where
     atan2E :: a -> a -> a
     atan2E a b = atan (b/a)
     bitAnd :: a -> a -> a
-    bitAnd = undefined
+    bitAnd = error "bitAnd"
     bitOr :: a -> a -> a
-    bitOr = undefined
+    bitOr = error "bitOr"
     bitXOr :: a -> a -> a
-    bitXOr = undefined
+    bitXOr = error "bitXOr"
     clip2 :: a -> a -> a
     clip2 a b = clip_ a (-b) b
     difSqr :: a -> a -> a
@@ -139,25 +139,25 @@ class (Floating a, Ord a) => BinaryOp a where
     excess :: a -> a -> a
     excess a b = a - clip_ a (-b) b
     exprandRange :: a -> a -> a
-    exprandRange = undefined
+    exprandRange = error "exprandRange"
     fill :: a -> a -> a
-    fill = undefined
+    fill = error "fill"
     firstArg :: a -> a -> a
     firstArg a _ = a
     fold2 :: a -> a -> a
     gcdE :: a -> a -> a
-    gcdE = undefined
+    gcdE = error "gcdE"
     hypot :: a -> a -> a
-    hypot = undefined
+    hypot = error "hypot"
     hypotx :: a -> a -> a
-    hypotx = undefined
+    hypotx = error "hypotx"
     iDiv :: a -> a -> a
-    iDiv = undefined
+    iDiv = error "iDiv"
     lcmE :: a -> a -> a
-    lcmE = undefined
+    lcmE = error "lcmE"
     modE :: a -> a -> a
     randRange :: a -> a -> a
-    randRange = undefined
+    randRange = error "randRange"
     ring1 :: a -> a -> a
     ring1 a b = a * b + a
     ring2 :: a -> a -> a
@@ -171,9 +171,9 @@ class (Floating a, Ord a) => BinaryOp a where
     scaleNeg :: a -> a -> a
     scaleNeg a b = (abs a - a) * b' + a where b' = 0.5 * b + 0.5
     shiftLeft :: a -> a -> a
-    shiftLeft = undefined
+    shiftLeft = error "shiftLeft"
     shiftRight :: a -> a -> a
-    shiftRight = undefined
+    shiftRight = error "shiftRight"
     sqrDif :: a -> a -> a
     sqrDif a b = (a-b) * (a-b)
     sqrSum :: a -> a -> a
@@ -183,9 +183,9 @@ class (Floating a, Ord a) => BinaryOp a where
     thresh :: a -> a -> a
     thresh a b = if a <  b then 0 else a
     trunc :: a -> a -> a
-    trunc = undefined
+    trunc = error "trunc"
     unsignedShift :: a -> a -> a
-    unsignedShift = undefined
+    unsignedShift = error "unsignedShift"
     wrap2 :: a -> a -> a
 
 instance BinaryOp Double where
@@ -196,42 +196,42 @@ instance BinaryOp Double where
     wrap2 a b = wrap_ a (-b) b
 
 instance BinaryOp UGen where
-    iDiv = mkBinaryOperator IDiv undefined
+    iDiv = mkBinaryOperator IDiv iDiv
     modE = mkBinaryOperator Mod modE
-    bitAnd = mkBinaryOperator BitAnd undefined
-    bitOr = mkBinaryOperator BitOr undefined
-    bitXOr = mkBinaryOperator BitXor undefined
-    lcmE = mkBinaryOperator LCM undefined
-    gcdE = mkBinaryOperator GCD undefined
-    roundE = mkBinaryOperator Round undefined
-    roundUp = mkBinaryOperator RoundUp undefined
-    trunc = mkBinaryOperator Trunc undefined
-    atan2E = mkBinaryOperator Atan2 undefined
-    hypot = mkBinaryOperator Hypot undefined
-    hypotx = mkBinaryOperator Hypotx undefined
-    shiftLeft = mkBinaryOperator ShiftLeft undefined
-    shiftRight = mkBinaryOperator ShiftRight undefined
-    unsignedShift = mkBinaryOperator UnsignedShift undefined
-    fill = mkBinaryOperator Fill undefined
-    ring1 = mkBinaryOperator Ring1 undefined
-    ring2 = mkBinaryOperator Ring2 undefined
-    ring3 = mkBinaryOperator Ring3 undefined
-    ring4 = mkBinaryOperator Ring4 undefined
-    difSqr = mkBinaryOperator DifSqr undefined
-    sumSqr = mkBinaryOperator SumSqr undefined
-    sqrSum = mkBinaryOperator SqrSum undefined
-    sqrDif = mkBinaryOperator SqrDif undefined
-    absDif = mkBinaryOperator AbsDif undefined
-    thresh = mkBinaryOperator Thresh undefined
-    amClip = mkBinaryOperator AMClip undefined
-    scaleNeg = mkBinaryOperator ScaleNeg undefined
-    clip2 = mkBinaryOperator Clip2 undefined
-    excess = mkBinaryOperator Excess undefined
-    fold2 = mkBinaryOperator Fold2 undefined
-    wrap2 = mkBinaryOperator Wrap2 undefined
-    firstArg = mkBinaryOperator FirstArg undefined
-    randRange = mkBinaryOperator RandRange undefined
-    exprandRange = mkBinaryOperator ExpRandRange undefined
+    bitAnd = mkBinaryOperator BitAnd bitAnd
+    bitOr = mkBinaryOperator BitOr bitOr
+    bitXOr = mkBinaryOperator BitXor bitXOr
+    lcmE = mkBinaryOperator LCM lcmE
+    gcdE = mkBinaryOperator GCD gcdE
+    roundE = mkBinaryOperator Round roundE
+    roundUp = mkBinaryOperator RoundUp roundUp
+    trunc = mkBinaryOperator Trunc trunc
+    atan2E = mkBinaryOperator Atan2 atan2E
+    hypot = mkBinaryOperator Hypot hypot
+    hypotx = mkBinaryOperator Hypotx hypotx
+    shiftLeft = mkBinaryOperator ShiftLeft shiftLeft
+    shiftRight = mkBinaryOperator ShiftRight shiftRight
+    unsignedShift = mkBinaryOperator UnsignedShift unsignedShift
+    fill = mkBinaryOperator Fill fill
+    ring1 = mkBinaryOperator Ring1 ring1
+    ring2 = mkBinaryOperator Ring2 ring2
+    ring3 = mkBinaryOperator Ring3 ring3
+    ring4 = mkBinaryOperator Ring4 ring4
+    difSqr = mkBinaryOperator DifSqr difSqr
+    sumSqr = mkBinaryOperator SumSqr sumSqr
+    sqrSum = mkBinaryOperator SqrSum sqrSum
+    sqrDif = mkBinaryOperator SqrDif sqrDif
+    absDif = mkBinaryOperator AbsDif absDif
+    thresh = mkBinaryOperator Thresh thresh
+    amClip = mkBinaryOperator AMClip amClip
+    scaleNeg = mkBinaryOperator ScaleNeg scaleNeg
+    clip2 = mkBinaryOperator Clip2 clip2
+    excess = mkBinaryOperator Excess excess
+    fold2 = mkBinaryOperator Fold2 fold2
+    wrap2 = mkBinaryOperator Wrap2 wrap2
+    firstArg = mkBinaryOperator FirstArg firstArg
+    randRange = mkBinaryOperator RandRange randRange
+    exprandRange = mkBinaryOperator ExpRandRange exprandRange
 
 wrap_ :: (UnaryOp a, Ord a) => a -> a -> a -> a
 wrap_ a b c =

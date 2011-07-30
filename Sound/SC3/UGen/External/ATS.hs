@@ -28,7 +28,7 @@ data ATSHeader = ATSHeader { atsSampleRate :: Double
                            , atsFileType :: Int
                            } deriving (Eq, Show)
 
--- | ATS analysis frame data. 
+-- | ATS analysis frame data.
 type ATSFrame = [Double]
 
 -- | Read an ATS data file.
@@ -53,7 +53,7 @@ atsRead fn = do
 
 -- | Analysis data in format required by the sc3 ATS UGens.
 atsSC3 :: ATS -> [Double]
-atsSC3 (ATS h d) = 
+atsSC3 (ATS h d) =
     let f = fromIntegral
         td = transpose d
     in f (atsFileType h) :
@@ -82,11 +82,11 @@ ftype_n 1 = (2, 1)
 ftype_n 2 = (3, 1)
 ftype_n 3 = (2, 26)
 ftype_n 4 = (3, 26)
-ftype_n _ = undefined
+ftype_n _ = error "ftype_n"
 
 -- Indices for track data in the order required by sc3.
 atsSC3Indices :: ATSHeader -> [Int]
-atsSC3Indices h = 
+atsSC3Indices h =
     let np = atsNPartials h
         o = 3 * (np - 1)
         a = [1,4 .. (1 + o)]

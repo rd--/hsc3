@@ -27,9 +27,10 @@ impulse r freq phase = mkOsc r "Impulse" [freq, phase] 1
 
 -- | Bank of fixed oscillators.
 klang :: Rate -> UGen -> UGen -> UGen -> UGen
-klang r fs fo a
-    | r == AR = mkOscMCE r "Klang" [fs, fo] a 1
-    | otherwise = undefined
+klang r fs fo a =
+    if r == AR
+    then mkOscMCE r "Klang" [fs, fo] a 1
+    else error "klang: not AR"
 
 -- | Format frequency, amplitude and phase data as required for klang.
 klangSpec :: [UGen] -> [UGen] -> [UGen] -> UGen

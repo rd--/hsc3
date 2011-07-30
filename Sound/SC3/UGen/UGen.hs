@@ -189,7 +189,7 @@ mceSum = sum . mceChannels
 mrg :: [UGen] -> UGen
 mrg u =
     case u of
-      [] -> undefined
+      [] -> error "mrg: null"
       [x] -> x
       (x:xs) -> MRG x (mrg xs)
 
@@ -398,11 +398,11 @@ instance Real UGen where
 
 -- Unit generators are integral.
 instance Integral UGen where
-    quot = mkBinaryOperator IDiv undefined
-    rem = mkBinaryOperator Mod undefined
+    quot = mkBinaryOperator IDiv (error "ugen: quot")
+    rem = mkBinaryOperator Mod (error "ugen: rem")
     quotRem a b = (quot a b, rem a b)
-    div = mkBinaryOperator IDiv undefined
-    mod = mkBinaryOperator Mod undefined
+    div = mkBinaryOperator IDiv (error "ugen: div")
+    mod = mkBinaryOperator Mod (error "ugen: mod")
     toInteger (Constant n) = floor n
     toInteger _ = error "toInteger at non-constant UGen"
 

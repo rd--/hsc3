@@ -109,7 +109,7 @@ synthstat u =
         ks = controls s
         us = ugens s
         f g = let h (x:xs) = (x, length (x:xs))
-                  h [] = undefined
+                  h [] = error "synthstat"
               in show . map h . group . sort . map g
     in unlines ["number of constants       : " ++ show (length cs)
                ,"number of controls        : " ++ show (length ks)
