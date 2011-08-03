@@ -21,6 +21,9 @@ ay ta tb tc n c va vb vc ef es ct = mkOsc AR "AY" [ta, tb, tc, n, c, va, vb, vc,
 ayFreqToTone :: Fractional a => a -> a
 ayFreqToTone f = 110300 / (f - 0.5)
 
+dfm1 :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dfm1 i f r g ty nl = mkFilter "DFM1" [i,f,r,g,ty,nl] 1
+
 -- | Phase modulation oscillator matrix.
 fm7 :: [[UGen]] -> [[UGen]] -> UGen
 fm7 ctl m0d = mkOsc AR "FM7" (concat ctl ++ concat m0d) 6
