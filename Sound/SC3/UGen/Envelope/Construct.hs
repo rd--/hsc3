@@ -26,7 +26,7 @@ env (l:ls) tms crv rls lp =
 
 -- | Co-ordinate based static envelope generator.
 envCoord :: [(UGen, UGen)] -> UGen -> UGen -> EnvCurve -> [UGen]
-envCoord bp dur amp c = 
+envCoord bp dur amp c =
     let l = map ((* amp) . snd) bp
         t = map (* dur) (d_dx (map fst bp))
     in env l t (repeat c) (-1) (-1)
@@ -112,7 +112,7 @@ d_dx xs = zipWith (-) (drop 1 xs) xs
 env_curve :: EnvCurve -> UGen
 env_curve EnvStep = Constant 0.0
 env_curve EnvLin = Constant 1.0
-env_curve EnvExp = Constant 2.0 
+env_curve EnvExp = Constant 2.0
 env_curve EnvSin = Constant 3.0
 env_curve EnvCos = Constant 4.0
 env_curve (EnvNum _) = Constant 5.0
