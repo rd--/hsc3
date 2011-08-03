@@ -36,8 +36,13 @@ membraneCircle i t l = mkOsc AR "MembraneCircle" [i, t, l] 1
 membraneHexagon :: UGen -> UGen -> UGen -> UGen
 membraneHexagon i t l = mkOsc AR "MembraneHexagon" [i, t, l] 1
 
+-- | Metronome
 metro :: Rate -> UGen -> UGen -> UGen
 metro rt bpm nb = mkOsc rt "Metro" [bpm,nb] 1
+
+-- | POKEY Chip Sound Simulator
+mzPokey :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+mzPokey f1 c1 f2 c2 f3 c3 f4 c4 ctl = mkOsc AR "MZPokey" [f1,c1,f2,c2,f3,c3,f4,c4,ctl] 1
 
 -- | Extract cps, rmso and err signals from LPC data.
 lpcVals :: Rate -> UGen -> UGen -> UGen
