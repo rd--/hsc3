@@ -5,17 +5,17 @@ Triangular waveguide meshes of a drum-like membrane.  Input is
 an excitation signal, such as a pulse of noise.  Tension and
 loss are k-rate.
 
-The variants are named after the shape made out of triangular 
+The variants are named after the shape made out of triangular
 meshes.
 
-Excite the mesh with some pink noise, triggered by an 
-impulse generator.  mouseX is tension and impulse frequency, 
+Excite the mesh with some pink noise, triggered by an
+impulse generator.  mouseX is tension and impulse frequency,
 mouseY is duration of excitation, release-time and amplitude.
 
 > import Sound.SC3
 
-> let { x = mouseX KR 0 1 Linear 0.2
->     ; y = mouseY KR 1e-9 1 Exponential 0.2
+> let { x = mouseX' KR 0 1 Linear 0.2
+>     ; y = mouseY' KR 1e-9 1 Exponential 0.2
 >     ; loss = linLin y 0 1 0.999999 0.999
 >     ; wobble = sinOsc KR 2 0
 >     ; tension = linLin x 0 1 0.01 0.1 + (wobble * 0.0001)

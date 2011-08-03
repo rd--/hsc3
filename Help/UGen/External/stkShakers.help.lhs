@@ -14,7 +14,10 @@ stkShakers rt instr energy decay nObjects rfreq tr
   Quarter + Mug=17, Franc + Mug=18, Peso + Mug=19, Big
   Rocks=20, Little Rocks=21, Tuned Bamboo Chimes=22
 
-> let { x = mouseX KR 0.25 4 Linear 0.2 
+> import Control.Monad
+> import Sound.SC3.Monadic
+
+> let { x = mouseX' KR 0.25 4 Linear 0.2
 >     ; tr = impulse KR x 0 - 0.5 }
 > in do { i <- tRand 0 23 tr
 >       ; [e, sd, no, rf] <- replicateM 4 (tRand 0 127 tr)

@@ -39,8 +39,8 @@ envbuf - the buffer number containing a singal to use for the grain
 > do { n1 <- whiteNoise KR
 >    ; n2 <- lfNoise1 KR 500
 >    ; let { d = 5
->          ; x = mouseX KR (-0.5) 0.5 Linear 0.1
->          ; y = mouseY KR 0 400 Linear 0.1
+>          ; x = mouseX' KR (-0.5) 0.5 Linear 0.1
+>          ; y = mouseY' KR 0 400 Linear 0.1
 >          ; f = n1 * y + 440
 >          ; t = impulse KR 12.5 0
 >          ; i = linLin n2 (-1) 1 1 10 }

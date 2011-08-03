@@ -1,10 +1,13 @@
-stkModalBar freq instrument stickHardness stickPosition 
+stkModalBar freq instrument stickHardness stickPosition
             vibratoGain vibratoFreq directStickMix volume trig
 
   Marimba=0, Vibraphone=1, Agogo=2, Wood1=3, Reso=4,
   Wood2=5, Beats=6, Two Fixed=7, Clump=8
 
-> let { x = mouseX KR 0.25 4 Linear 0.2 
+> import Control.Monad
+> import Sound.SC3.Monadic
+
+> let { x = mouseX' KR 0.25 4 Linear 0.2
 >     ; tr = impulse KR x 0 - 0.5
 >     ; tR = tRand 0 127 tr }
 > in do { i <- tRand 0 9 tr
@@ -12,7 +15,7 @@ stkModalBar freq instrument stickHardness stickPosition
 >       ; [sh, sp, vg, vf, mx, v] <- replicateM 6 tR
 >       ; audition (out 0 (stkModalBar AR (midiCPS mn) i sh sp vg vf mx v tr)) }
 
-> let { x = mouseX KR 1 6 Linear 0.2 
+> let { x = mouseX' KR 1 6 Linear 0.2
 >     ; t = impulse KR x 0 - 0.5
 >     ; tr = pulseDivider t 6 0 }
 > in do { mn <- tiRand 52 64 t

@@ -13,15 +13,15 @@ vosim tr freq nCycles decay
 
      decay - sets the decay factor.
 
-> import Sound.SC3
+> import Sound.SC3.Monadic
 
 > do { p <- tRand 0 1 (impulse AR 6 0)
 >    ; let { t = impulse AR (9 * ( 1 + ( p >* 0.95))) 0
->          ; x = mouseX KR 0.25 2 Linear 0.2
->          ; y = mouseY KR 0.25 1.5 Linear 0.2
->          ; z = 9 
->          ; range i l r = linLin i (-1) 1 l r
->          ; mk_n = lfNoise2 KR z >>= return . range 0.25 2 
+>          ; x = mouseX' KR 0.25 2 Linear 0.2
+>          ; y = mouseY' KR 0.25 1.5 Linear 0.2
+>          ; z = 9
+>          ; rng l r i = linLin i (-1) 1 l r
+>          ; mk_n = lfNoise2 KR z >>= return . rng 0.25 2
 >          ; tR l r = tRand (mce l) (mce r) }
 >      in do { f <- tR [40, 120, 220] [440, 990, 880] t
 >            ; n <- tR [4] [8, 16, 32] t
