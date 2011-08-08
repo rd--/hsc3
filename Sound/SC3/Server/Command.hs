@@ -163,6 +163,10 @@ g_dumpTree = message "/g_dumpTree" . mk_duples Int (Int . fromEnum)
 g_queryTree :: [(Int, Bool)] -> OSC
 g_queryTree = message "/g_queryTree" . mk_duples Int (Int . fromEnum)
 
+-- | Create a new parallel group (supernova specific).
+p_new :: [(Int, AddAction, Int)] -> OSC
+p_new = message "/p_new" . mk_triples Int (Int . fromEnum) Int
+
 -- * Plugin commands
 
 -- | Send a plugin command.
