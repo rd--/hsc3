@@ -4,13 +4,13 @@ module Sound.SC3.Server.Command where
 
 import Sound.OpenSoundControl
 import Sound.SC3.Server.Utilities
-import Sound.SC3.Server.Synthdef (Synthdef)
+import Sound.SC3.Server.Synthdef
 
 -- * Instrument definition commands
 
 -- | Install a bytecode instrument definition. (Asynchronous)
 d_recv :: Synthdef -> OSC
-d_recv b = message "/d_recv" [Blob b]
+d_recv d = message "/d_recv" [Blob (synthdefData d)]
 
 -- | Load an instrument definition from a named file. (Asynchronous)
 d_load :: String -> OSC

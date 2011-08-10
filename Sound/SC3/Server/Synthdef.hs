@@ -2,7 +2,7 @@
 --   SuperCollider synthesis server.
 module Sound.SC3.Server.Synthdef (Node(..),FromPort(..)
                                  ,Graph(..),Graphdef,graphdef
-                                 ,Synthdef,synth,synthdef
+                                 ,Synthdef,synthdefData,synth,synthdef
                                  ,synthstat) where
 
 import qualified Data.ByteString.Lazy as B
@@ -91,15 +91,15 @@ graphdef :: Graph -> Graphdef
 graphdef = encode_graphdef
 
 -- | Binary representation of a unit generator synth definition.
-type Synthdef = B.ByteString
+newtype Synthdef = Synthdef {synthdefData ::  B.ByteString}
 
 -- | Transform a unit generator synth definition into bytecode.
 synthdef :: String -> UGen -> Synthdef
-synthdef s u = B.concat [ encode_str "SCgf"
-                        , encode_i32 0
-                        , encode_i16 1
-                        , B.pack (str_pstr s)
-                        , encode_graphdef (synth u) ]
+synthdef s u = Synthdef (B.concat [ encode_str "SCgf"
+                                  , encode_i32 0
+                                  , encode_i16 1
+                                  , B.pack (str_pstr s)
+                                  , encode_graphdef (synth u) ])
 
 -- | Simple statistical analysis of a unit generator graph.
 synthstat :: UGen -> String
