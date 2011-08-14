@@ -273,14 +273,13 @@ wrap_ a b c =
     let r = c - b
     in if a >= b && a <= c then a else a - r * floorf (a-b)/r
 
-fold_ :: (UnaryOp a, Ord a) => a -> a -> a -> a
-fold_ a b c =
-    let r = c - b
-        r' = r + r
-        x = a - b
-        y = x - r' * floorE x/r'
-        y' = if y >= r then r' - y else y
-    in if a >= b && a <= c then a else y' + b
+fold_ :: (RealFrac a) => a -> a -> a -> a
+fold_ n i j =
+    if n > j
+    then fold_ (j - (n - j)) i j
+    else if n < i
+         then fold_ (i - (n - i)) i j
+         else n
 
 clip_ :: (Ord a) => a -> a -> a -> a
 clip_ a b c = if a < b then b else if a > c then c else a
