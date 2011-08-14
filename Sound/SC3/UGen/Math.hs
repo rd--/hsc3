@@ -39,6 +39,50 @@ instance OrdE UGen where
     (>*) = mkBinaryOperator GT_ (>*)
     (>=*) = mkBinaryOperator GE (>=*)
 
+class RealFracE a where
+  properFractionE :: a -> (a,a)
+  truncateE :: a -> a
+  roundE :: a -> a
+  ceilingE :: a -> a
+  floorE :: a -> a
+
+truncatef :: RealFrac a => a -> a
+truncatef a = fromIntegral (truncate a :: Integer)
+
+roundf :: RealFrac a => a -> a
+roundf a = fromIntegral (round a :: Integer)
+
+ceilingf :: RealFrac a => a -> a
+ceilingf a = fromIntegral (ceiling a :: Integer)
+
+floorf :: RealFrac a => a -> a
+floorf a = fromIntegral (floor a :: Integer)
+
+instance RealFracE Double where
+    properFractionE n =
+        let (i,j) = properFraction n
+        in (fromIntegral (i::Integer),j)
+    truncateE = truncatef
+    roundE = roundf
+    ceilingE = ceilingf
+    floorE = floorf
+
+roundTo_ :: RealFrac a => a -> a -> a
+roundTo_ a b = if b == 0 then a else floorf (a/b + 0.5) * b
+
+roundTo :: UGen -> UGen -> UGen
+roundTo = mkBinaryOperator Round roundTo_
+
+instance RealFracE UGen where
+    properFractionE = error "RealFracE,UGen,partial"
+    truncateE = error "RealFracE,UGen,partial"
+    roundE i = roundTo i 1
+    ceilingE = mkUnaryOperator Ceil ceilingE
+    floorE = mkUnaryOperator Floor floorE
+
+ceil :: UGen -> UGen
+ceil = ceilingE
+
 -- | Unary operator class.
 class (Floating a, Ord a) => UnaryOp a where
     ampDb :: a -> a
@@ -49,7 +93,6 @@ class (Floating a, Ord a) => UnaryOp a where
     asInt = error "asInt"
     bitNot :: a -> a
     bitNot = error "bitNot"
-    ceil :: a -> a
     cpsMIDI :: a -> a
     cpsMIDI a = (log2 (a * (1.0 / 440.0)) * 12.0) + 69.0
     cpsOct :: a -> a
@@ -60,7 +103,6 @@ class (Floating a, Ord a) => UnaryOp a where
     dbAmp a = 10 ** (a * 0.05)
     distort :: a -> a
     distort = error "distort"
-    floorE :: a -> a
     frac :: a -> a
     frac = error "frac"
     isNil :: a -> a
@@ -89,21 +131,17 @@ class (Floating a, Ord a) => UnaryOp a where
     squared a = a * a
 
 instance UnaryOp Double where
-    ceil a = fromIntegral (ceiling a :: Integer)
-    floorE a = fromIntegral (floor a :: Integer)
 
 instance UnaryOp UGen where
     ampDb = mkUnaryOperator AmpDb ampDb
     asFloat = mkUnaryOperator AsFloat asFloat
     asInt = mkUnaryOperator AsInt asInt
     bitNot = mkUnaryOperator BitNot bitNot
-    ceil = mkUnaryOperator Ceil ceil
     cpsMIDI = mkUnaryOperator CPSMIDI cpsMIDI
     cpsOct = mkUnaryOperator CPSOct cpsOct
     cubed = mkUnaryOperator Cubed cubed
     dbAmp = mkUnaryOperator DbAmp dbAmp
     distort = mkUnaryOperator Distort distort
-    floorE = mkUnaryOperator Floor floorE
     frac = mkUnaryOperator Frac frac
     isNil = mkUnaryOperator IsNil isNil
     log10 = mkUnaryOperator Log10 log10
@@ -166,7 +204,6 @@ class (Floating a, Ord a) => BinaryOp a where
     ring3 a b = a * a * b
     ring4 :: a -> a -> a
     ring4 a b = a * a * b - a * b * b
-    roundE :: a -> a -> a
     roundUp :: a -> a -> a
     scaleNeg :: a -> a -> a
     scaleNeg a b = (abs a - a) * b' + a where b' = 0.5 * b + 0.5
@@ -190,9 +227,8 @@ class (Floating a, Ord a) => BinaryOp a where
 
 instance BinaryOp Double where
     fold2 a b = fold_ a (-b) b
-    modE a b = let n = a / b in n - floorE n
-    roundE a b = if b == 0 then a else floorE (a/b + 0.5) * b
-    roundUp a b = if b == 0 then a else ceil (a/b + 0.5) * b
+    modE a b = let n = a / b in n - floorf n
+    roundUp a b = if b == 0 then a else ceilingf (a/b + 0.5) * b
     wrap2 a b = wrap_ a (-b) b
 
 instance BinaryOp UGen where
@@ -203,7 +239,6 @@ instance BinaryOp UGen where
     bitXOr = mkBinaryOperator BitXor bitXOr
     lcmE = mkBinaryOperator LCM lcmE
     gcdE = mkBinaryOperator GCD gcdE
-    roundE = mkBinaryOperator Round roundE
     roundUp = mkBinaryOperator RoundUp roundUp
     trunc = mkBinaryOperator Trunc trunc
     atan2E = mkBinaryOperator Atan2 atan2E
@@ -233,10 +268,10 @@ instance BinaryOp UGen where
     randRange = mkBinaryOperator RandRange randRange
     exprandRange = mkBinaryOperator ExpRandRange exprandRange
 
-wrap_ :: (UnaryOp a, Ord a) => a -> a -> a -> a
+wrap_ :: (RealFrac a) => a -> a -> a -> a
 wrap_ a b c =
     let r = c - b
-    in if a >= b && a <= c then a else a - r * floorE (a-b)/r
+    in if a >= b && a <= c then a else a - r * floorf (a-b)/r
 
 fold_ :: (UnaryOp a, Ord a) => a -> a -> a -> a
 fold_ a b c =

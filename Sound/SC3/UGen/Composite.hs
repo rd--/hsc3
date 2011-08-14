@@ -84,7 +84,7 @@ range l r =
 -- | Mix one output from many sources
 selectX :: UGen -> UGen -> UGen
 selectX ix xs =
-    let s0 = select (roundE ix 2) xs
+    let s0 = select (roundTo ix 2) xs
         s1 = select (trunc ix 2 + 1) xs
     in xFade2 s0 s1 (fold2 (ix * 2 - 1) 1) 1
 
