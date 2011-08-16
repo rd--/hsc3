@@ -5,6 +5,10 @@ module Sound.SC3.UGen.External where
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
 
+-- | Emulation of the sound generation hardware of the Atari TIA chip.
+atari2600 :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+atari2600 audc0 audc1 audf0 audf1 audv0 audv1 rate = mkOsc AR "Atari2600" [audc0,audc1,audf0,audf1,audv0,audv1,rate] 1
+
 -- | Resynthesize sinusoidal ATS analysis data.
 atsSynth :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 atsSynth b np ps pk fp m a = mkOsc AR "AtsSynth" [b, np, ps, pk, fp, m, a] 1
