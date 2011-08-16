@@ -273,13 +273,24 @@ wrap_ a b c =
     let r = c - b
     in if a >= b && a <= c then a else a - r * floorf (a-b)/r
 
-fold_ :: (RealFrac a) => a -> a -> a -> a
-fold_ n i j =
-    if n > j
-    then fold_ (j - (n - j)) i j
-    else if n < i
-         then fold_ (i - (n - i)) i j
-         else n
+-- | Fold to within range (i,j).
+fold' :: (Ord a,Num a) => a -> a -> a -> a
+fold' i j =
+    let f n = if n > j
+              then f (j - (n - j))
+              else if n < i
+                   then f (i - (n - i))
+                   else n
+    in f
 
+-- | Variant with SC3 argument ordering.
+fold_ :: (Ord a,Num a) => a -> a -> a -> a
+fold_ n i j = fold' i j n
+
+-- | Clip to within range (i,j),
+clip' :: (Ord a) => a -> a -> a -> a
+clip' i j n = if n < i then i else if n > j then j else n
+
+-- | Variant with SC3 argument ordering.
 clip_ :: (Ord a) => a -> a -> a -> a
-clip_ a b c = if a < b then b else if a > c then c else a
+clip_ n i j = clip' i j n
