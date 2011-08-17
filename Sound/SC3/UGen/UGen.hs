@@ -113,6 +113,19 @@ mce2 x y = mce [x, y]
 clone :: (UId m) => Int -> m UGen -> m UGen
 clone n = liftM mce . replicateM n
 
+-- | Replicate a primitive UGen incrementing the identifier.
+replicant :: Int -> UGen -> UGen
+replicant n u =
+    let f i = u {ugenId = i}
+        j = ugenId u
+    in case u of
+         Primitive _ _ _ _ _ _ -> mce (map f (enumFromTo j (j + n - 1)))
+         _ -> error "replicant"
+
+-- | Duplicate a primitive UGen and increment the identifier.
+dup :: UGen -> UGen
+dup = replicant 2
+
 -- | Number of channels to expand to.
 mceDegree :: UGen -> Int
 mceDegree u =
