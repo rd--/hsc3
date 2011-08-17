@@ -8,8 +8,9 @@ import Sound.SC3.UGen.Utilities
 
 -- | Segment based envelope generator.
 envGen :: Rate -> UGen -> UGen -> UGen -> UGen -> DoneAction -> [UGen] -> UGen
-envGen r gate lvl bias scale act pts = mkOsc r "EnvGen" i 1
- where i = [gate, lvl, bias, scale, from_done_action act] ++ pts
+envGen r gate lvl bias scale act pts =
+    let i = [gate, lvl, bias, scale, from_done_action act] ++ pts
+    in mkOsc r "EnvGen" i 1
 
 -- | Line generator.
 line :: Rate -> UGen -> UGen -> UGen -> DoneAction -> UGen
@@ -45,7 +46,7 @@ done i = mkFilter "Done" [i] 1
 
 -- | Raise specified done action when input goes silent.
 detectSilence ::  UGen -> UGen -> UGen -> DoneAction -> UGen
-detectSilence i a t act = mkFilter "DetectSilence" [i, a, t, from_done_action act] 0
+detectSilence i a t act = mkFilter "DetectSilence" [i, a, t, from_done_action act] 1
 
 -- | When triggered free specified node.
 free :: UGen -> UGen -> UGen
