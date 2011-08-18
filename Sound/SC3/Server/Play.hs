@@ -28,9 +28,9 @@ withSC3 = withTransport (openUDP "127.0.0.1" 57110)
 
 -- | Send /d_recv and /s_new messages to scsynth.
 playSynthdef :: Transport t => t -> Synthdef -> IO ()
-playSynthdef fd d = do
-  _ <- async fd (d_recv d)
-  send fd (s_new "Anonymous" (-1) AddToTail 1 [])
+playSynthdef fd s = do
+  _ <- async fd (d_recv s)
+  send fd (s_new (synthdefName s) (-1) AddToTail 1 [])
 
 -- | Construct an instrument definition, send /d_recv and /s_new
 --   messages to scsynth.
