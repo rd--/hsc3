@@ -2,7 +2,7 @@
 --   SuperCollider synthesis server.
 module Sound.SC3.Server.Synthdef (Node(..),FromPort(..)
                                  ,Graph(..),Graphdef,graphdef
-                                 ,Synthdef,synthdefData,synth,synthdef
+                                 ,Synthdef(..),synthdefData,synth,synthdef
                                  ,synthstat) where
 
 import qualified Data.ByteString.Lazy as B
@@ -24,7 +24,7 @@ data Graph = Graph { nextId :: NodeId
                    , constants :: [Node]
                    , controls :: [Node]
                    , ugens :: [Node] }
-            deriving (Eq, Show)
+            deriving (Eq,Show)
 
 -- | Type to represent nodes in unit generator graph.
 data Node = NodeC { node_id :: NodeId
@@ -75,13 +75,14 @@ data FromPort = FromPort_C {port_nid :: NodeId}
 
 -- | Transform a unit generator into a graph.
 synth :: UGen -> Graph
-synth u = let (_, g) = mk_node (prepare_root u) empty_graph
-              (Graph _ cs ks us) = g
-              ks' = sortBy node_k_cmp ks
-              us' = if null ks'
-                    then reverse us
-                    else implicit ks' ++ reverse us
-          in Graph (-1) cs ks' us'
+synth u =
+    let (_, g) = mk_node (prepare_root u) empty_graph
+        (Graph _ cs ks us) = g
+        ks' = sortBy node_k_cmp ks
+        us' = if null ks'
+              then reverse us
+              else implicit ks' ++ reverse us
+    in Graph (-1) cs ks' us'
 
 -- | Binary representation of a unit generator graph.
 type Graphdef = B.ByteString
@@ -91,15 +92,20 @@ graphdef :: Graph -> Graphdef
 graphdef = encode_graphdef
 
 -- | Binary representation of a unit generator synth definition.
-newtype Synthdef = Synthdef {synthdefData ::  B.ByteString}
+data Synthdef = Synthdef {synthdefName :: String
+                         ,synthdefGraph :: Graph}
+
+synthdefData :: Synthdef -> B.ByteString
+synthdefData (Synthdef s g) =
+    B.concat [encode_str "SCgf"
+             ,encode_i32 0
+             ,encode_i16 1
+             ,B.pack (str_pstr s)
+             ,encode_graphdef g]
 
 -- | Transform a unit generator synth definition into bytecode.
 synthdef :: String -> UGen -> Synthdef
-synthdef s u = Synthdef (B.concat [ encode_str "SCgf"
-                                  , encode_i32 0
-                                  , encode_i16 1
-                                  , B.pack (str_pstr s)
-                                  , encode_graphdef (synth u) ])
+synthdef s u = Synthdef s (synth u)
 
 -- | Simple statistical analysis of a unit generator graph.
 synthstat :: UGen -> String
@@ -118,10 +124,12 @@ synthstat u =
                ,"unit generator rates      : " ++ f node_u_rate us]
 
 as_from_port :: Node -> FromPort
-as_from_port (NodeC n _) = FromPort_C n
-as_from_port (NodeK n _ _ _ t) = FromPort_K n t
-as_from_port (NodeU n _ _ _ _ _ _) = FromPort_U n 0
-as_from_port (NodeP _ u p) = FromPort_U (node_id u) p
+as_from_port d =
+    case d of
+      NodeC n _ -> FromPort_C n
+      NodeK n _ _ _ t -> FromPort_K n t
+      NodeU n _ _ _ _ _ _ -> FromPort_U n 0
+      NodeP _ u p -> FromPort_U (node_id u) p
 
 -- The empty graph.
 empty_graph :: Graph
@@ -129,26 +137,33 @@ empty_graph = Graph 0 [] [] []
 
 -- Predicate to locate constant.
 find_c_p :: Double -> Node -> Bool
-find_c_p x (NodeC _ y) = x == y
-find_c_p _ _ = error "find_c_p"
+find_c_p x n =
+    case n of
+      NodeC _ y -> x == y
+      _ -> error "find_c_p"
 
 -- Insert a constant node into the graph.
 push_c :: Double -> Graph -> (Node, Graph)
-push_c x g = let n = NodeC (nextId g) x
-             in (n, g { constants = n : constants g
-                      , nextId = nextId g + 1 })
+push_c x g =
+    let n = NodeC (nextId g) x
+    in (n, g { constants = n : constants g
+             , nextId = nextId g + 1 })
 
 -- Either find existing constant node, or insert a new node.
 mk_node_c :: UGen -> Graph -> (Node, Graph)
-mk_node_c (Constant x) g =
-    let y = find (find_c_p x) (constants g)
-    in maybe (push_c x g) (\y' -> (y', g)) y
-mk_node_c _ _ = error "mk_node_c"
+mk_node_c u g =
+    case u of
+      Constant x ->
+          let y = find (find_c_p x) (constants g)
+          in maybe (push_c x g) (\y' -> (y', g)) y
+      _ -> error "mk_node_c"
 
 -- Predicate to locate control, names must be unique.
 find_k_p :: String -> Node -> Bool
-find_k_p x (NodeK _ _ y _ _) = x == y
-find_k_p _ _ = error "find_k_p"
+find_k_p x n =
+    case n of
+      NodeK _ _ y _ _ -> x == y
+      _ -> error "find_k_p"
 
 -- Insert a control node into the graph.
 push_k :: (Rate, String, Double, Bool) -> Graph -> (Node, Graph)
@@ -159,23 +174,28 @@ push_k (r, nm, d, tr) g =
 
 -- Either find existing control node, or insert a new node.
 mk_node_k :: UGen -> Graph -> (Node, Graph)
-mk_node_k (Control r nm d tr) g =
-    let y = find (find_k_p nm) (controls g)
-    in maybe (push_k (r, nm, d, tr) g) (\y' -> (y', g)) y
-mk_node_k _ _ = error "mk_node_k"
+mk_node_k u g =
+    case u of
+      Control r nm d tr ->
+          let y = find (find_k_p nm) (controls g)
+          in maybe (push_k (r, nm, d, tr) g) (\y' -> (y', g)) y
+      _ -> error "mk_node_k"
 
 acc :: [UGen] -> [Node] -> Graph -> ([Node], Graph)
 acc [] n g = (reverse n, g)
-acc (x:xs) ys g = let (y, g') = mk_node x g
-                  in acc xs (y:ys) g'
+acc (x:xs) ys g =
+    let (y, g') = mk_node x g
+    in acc xs (y:ys) g'
 
 type UGenParts = (Rate, String, [FromPort], [Output], Special, Int)
 
 -- Predicate to locate primitive, names must be unique.
 find_u_p :: UGenParts -> Node -> Bool
-find_u_p (r, n, i, o, s, d) (NodeU _ r' n' i' o' s' d')
-    = r == r' && n == n' && i == i' && o == o' && s == s' && d == d'
-find_u_p _ _ = error "find_u_p"
+find_u_p (r, n, i, o, s, d) nd =
+    case nd of
+      NodeU _ r' n' i' o' s' d' ->
+          r == r' && n == n' && i == i' && o == o' && s == s' && d == d'
+      _ ->  error "find_u_p"
 
 -- Insert a primitive node into the graph.
 push_u :: UGenParts -> Graph -> (Node, Graph)
@@ -186,18 +206,21 @@ push_u (r, nm, i, o, s, d) g =
 
 -- Either find existing control node, or insert a new node.
 mk_node_u :: UGen -> Graph -> (Node, Graph)
-mk_node_u (Primitive r nm i o s d) g =
-    let (i', g') = acc i [] g
-        i'' = map as_from_port i'
-        u = (r, nm, i'', o, s, d)
-        y = find (find_u_p u) (ugens g')
-    in maybe (push_u u g') (\y' -> (y', g')) y
-mk_node_u _ _ = error "mk_node_u"
+mk_node_u ug g =
+    case ug of
+      Primitive r nm i o s d ->
+          let (i', g') = acc i [] g
+              i'' = map as_from_port i'
+              u = (r, nm, i'', o, s, d)
+              y = find (find_u_p u) (ugens g')
+          in maybe (push_u u g') (\y' -> (y', g')) y
+      _ -> error "mk_node_u"
 
 -- Proxies do not get stored in the graph.
 mk_node_p :: Node -> PortIndex -> Graph -> (Node, Graph)
-mk_node_p n p g = let z = nextId g
-                  in (NodeP z n p, g { nextId = z + 1 })
+mk_node_p n p g =
+    let z = nextId g
+    in (NodeP z n p, g { nextId = z + 1 })
 
 mk_node :: UGen -> Graph -> (Node, Graph)
 mk_node u g =
@@ -246,15 +269,16 @@ fetch_k n t ks =
 
 -- Construct input form required by byte-code generator.
 make_input :: Maps -> FromPort -> Input
-make_input (cs, _, _, _) (FromPort_C n) = Input (-1) (fetch n cs)
-make_input (_, ks, _, _) (FromPort_K n t) =
-    let i = case t of
-              K_IR -> 0
-              K_KR -> 1
-              K_TR -> 2
-              K_AR -> 3
-    in Input i (fetch_k n t ks)
-make_input (_, _, _, us) (FromPort_U n p) = Input (fetch n us) p
+make_input (cs, ks, _, us) fp =
+    case fp of
+      FromPort_C n -> Input (-1) (fetch n cs)
+      FromPort_K n t -> let i = case t of
+                                  K_IR -> 0
+                                  K_KR -> 1
+                                  K_TR -> 2
+                                  K_AR -> 3
+                        in Input i (fetch_k n t ks)
+      FromPort_U n p -> Input (fetch n us) p
 
 -- Byte-encode input value.
 encode_input :: Input -> B.ByteString
@@ -262,25 +286,28 @@ encode_input (Input u p) = B.append (encode_i16 u) (encode_i16 p)
 
 -- Byte-encode control node.
 encode_node_k :: Maps -> Node -> B.ByteString
-encode_node_k (_, _, ks, _) (NodeK n _ nm _ _) =
-    B.concat [ B.pack (str_pstr nm)
-             , encode_i16 (fetch n ks) ]
-encode_node_k _ _ = error "encode_node_k"
+encode_node_k (_, _, ks, _) nd =
+    case nd of
+      NodeK n _ nm _ _ -> B.concat [ B.pack (str_pstr nm)
+                                   , encode_i16 (fetch n ks) ]
+      _ -> error "encode_node_k"
 
 -- Byte-encode primitive node.
 encode_node_u :: Maps -> Node -> B.ByteString
-encode_node_u m (NodeU _ r nm i o s _) =
-    let i' = map (encode_input . make_input m) i
-        o' = map (encode_i8 . rateId) o
-        (Special s') = s
-    in B.concat [ B.pack (str_pstr nm)
-                , encode_i8 (rateId r)
-                , encode_i16 (length i)
-                , encode_i16 (length o)
-                , encode_i16 s'
-                , B.concat i'
-                , B.concat o' ]
-encode_node_u _ _ = error "encode_ugen: illegal input"
+encode_node_u m n =
+    case n of
+      NodeU _ r nm i o s _ ->
+          let i' = map (encode_input . make_input m) i
+              o' = map (encode_i8 . rateId) o
+              (Special s') = s
+          in B.concat [ B.pack (str_pstr nm)
+                      , encode_i8 (rateId r)
+                      , encode_i16 (length i)
+                      , encode_i16 (length o)
+                      , encode_i16 s'
+                      , B.concat i'
+                      , B.concat o' ]
+      _ -> error "encode_node_u: illegal input"
 
 -- Construct instrument definition bytecode.
 encode_graphdef :: Graph -> B.ByteString
