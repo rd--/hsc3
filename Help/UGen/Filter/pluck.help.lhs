@@ -26,8 +26,8 @@ varying OnePole coef.
 
 > do { n <- whiteNoise AR
 >    ; let { t = impulse KR 9 0
->          ; x = mouseX KR (-0.999) 0.999 Linear 0.1
->          ; y = mouseY KR 0.1 1 Linear 0.1
+>          ; x = mouseX' KR (-0.999) 0.999 Linear 0.1
+>          ; y = mouseY' KR 0.1 1 Linear 0.1
 >          ; dl = 1 / 440 }
 >      in audition (out 0 (pluck (n * 0.25) t dl (dl * y) 10 x)) }
 
@@ -38,7 +38,7 @@ varying OnePole coef.
 >       ; fi <- clone n (rand 10 12)
 >       ; coef <- rand 0.01 0.2
 >       ; l <- clone n (rand (-1) 1)
->       ; let { x = mouseX KR 60 1000 Exponential 0.1
+>       ; let { x = mouseX' KR 60 1000 Exponential 0.1
 >             ; o = linLin (sinOsc KR f p) (-1) 1 x 3000
 >             ; i = impulse KR fi 0
 >             ; ks = pluck (w * 0.1) i 0.01 (1 / o) 2 coef }

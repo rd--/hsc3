@@ -24,7 +24,7 @@ sclang default initial parameters.
 
 > import Sound.SC3
 
-> let x = mouseX KR 20 sampleRate Linear 0.1
+> let x = mouseX' KR 20 sampleRate Linear 0.1
 > in audition (out 0 (latoocarfianC AR x 1 3 0.5 0.5 0.5 0.5 * 0.2))
 
 Randomly modulate all parameters.
@@ -37,6 +37,6 @@ Randomly modulate all parameters.
 >          ; a = n0 * 1.5 + 1.5
 >          ; b = n1 * 1.5 + 1.5
 >          ; c = n2 * 0.5 + 1.5
->          ; d = n3 * 0.5 + 1.5 
+>          ; d = n3 * 0.5 + 1.5
 >          ; o = latoocarfianC AR f a b c d 0.5 0.5 * 0.2 }
 >      in audition (out 0 o) }

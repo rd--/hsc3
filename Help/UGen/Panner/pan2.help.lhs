@@ -9,6 +9,6 @@ left, +1 is right.  The level is a control rate input.
 > in audition (out 0 (pan2 n (fSinOsc KR 2 0) 0.3))
 
 > let { n = pinkNoise 'a' AR
->     ; x = mouseX KR (-1) 1 Linear 0.2
->     ; y = mouseY KR 0 1 Linear 0.2 }
+>     ; x = mouseX' KR (-1) 1 Linear 0.2
+>     ; y = mouseY' KR 0 1 Linear 0.2 }
 > in audition (out 0 (pan2 n x y))

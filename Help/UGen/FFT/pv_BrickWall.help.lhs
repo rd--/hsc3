@@ -7,5 +7,5 @@ as a high pass filter.
 > withSC3 (\fd -> async fd (b_alloc 10 2048 1))
 
 > do { n <- whiteNoise AR
->    ; let x = mouseX KR (-1) 1 Linear 0.1
+>    ; let x = mouseX' KR (-1) 1 Linear 0.1
 >      in audition (out 0 (ifft' (pv_BrickWall (fft' 10 (n * 0.2)) x))) }

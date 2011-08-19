@@ -14,7 +14,7 @@ yi   - initial value of y           - 0.1
 
 A cubic-interpolating sound generator based on the difference
 equations:
-	
+
 	xn+1 = sin(im*yn + fb*xn)
 	yn+1 = (ayn + c) % 2pi
 
@@ -44,7 +44,7 @@ Increase phase multiplier
 Randomly modulate parameters
 
 > let { madd a m = return . (+ a) . (* m)
->     ; x = mouseX KR 1 12 Linear 0.1 
+>     ; x = mouseX' KR 1 12 Linear 0.1
 >     ; n = lfNoise2 KR x }
 > in do { n0 <- madd 1e4 1e4 =<< n
 >       ; n1 <- madd 33 32 =<< n

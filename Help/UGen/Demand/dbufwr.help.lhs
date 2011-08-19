@@ -1,12 +1,12 @@
 dbufwr bufnum phase input loop
 
-Buffer demand ugen.  All inputs can be either 
+Buffer demand ugen.  All inputs can be either
 demand ugen or any other ugen.
 
 bufnum - buffer number to read from (single channel buffer)
 phase  - index into the buffer
 input  - single channel input
-loop   - when phase exceeds number of frames in buffer, 
+loop   - when phase exceeds number of frames in buffer,
          loops when set to 1 (default :1)
 
 > import Sound.SC3.Monadic
@@ -14,7 +14,7 @@ loop   - when phase exceeds number of frames in buffer,
 > do { s1 <- dseries 30 0 3
 >    ; s2 <- dseries 30 0 1
 >    ; s3 <- dseries 16 1 1
->    ; s4 <- dwhite 8 1 16 
+>    ; s4 <- dwhite 8 1 16
 >    ; s5 <- dseq dinf (mce2 s3 s4)
 >    ; wt <- dust KR 1                  {- write trigger -}
 >    ; rp <- dseries dinf 0 1           {- read pointer -}

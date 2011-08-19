@@ -7,3 +7,9 @@ server is running on.
 
 > let x = mouseX KR 40 10000 Exponential 0.2
 > in audition (out 0 (sinOsc AR x 0 * 0.1))
+
+There is a variant that takes the same arguments but is a random
+traversal.
+
+> let x = mouseX' KR 40 10000 Exponential 0.2
+> in audition (out 0 (sinOsc AR x 0 * 0.1))

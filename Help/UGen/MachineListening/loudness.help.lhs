@@ -32,7 +32,7 @@ Assume hop of half fftsize.
 > import Sound.SC3
 
 > let { b = 10
->     ; x = mouseX KR 0.001 0.1 Exponential 0.2
+>     ; x = mouseX' KR 0.001 0.1 Exponential 0.2
 >     ; i = sinOsc AR 1000 0 * x
 >     ; f = fft' (constant b) i
 >     ; l = loudness f 0.25 6

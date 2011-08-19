@@ -49,8 +49,8 @@ maxgrn - maxiumum number of grains
 
 > let { b = 10
 >     ; e = -1
->     ; x = mouseX KR (-1) 1 Linear 0.1
->     ; y = mouseY KR 10 45 Linear 0.1
+>     ; x = mouseX' KR (-1) 1 Linear 0.1
+>     ; y = mouseY' KR 10 45 Linear 0.1
 >     ; i = impulse KR y 0
 >     ; r n = linLin n (-1) 1 0.5 2
 >     ; p n = linLin n (-1) 1 0 1

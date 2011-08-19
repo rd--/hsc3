@@ -18,14 +18,17 @@ move one relative to the other.  When cursor is at the left, the
 impulses are adjacent, on the right, they are exactly 1 sample apart.
 View this with an oscilloscope.
 
+> import Sound.OpenSoundControl
+> import Sound.SC3
+
 > let { a = control KR "a" 0
 >     ; i = impulse AR 2000 0 * 0.3
 >     ; d = sampleDur
 >     ; x = 4
->     ; o = (1 - subsampleOffset) + mouseX KR 0 a Linear 0.1
+>     ; o = (1 - subsampleOffset) + mouseX' KR 0 a Linear 0.1
 >     ; r = delayC i (d * (1 + x)) (d * (o + x))
 >     ; g = offsetOut 0 r }
-> in withSC3 (\fd -> do { async fd (d_recv (synthdef "s" g))
+> in withSC3 (\fd -> do { _ <- async fd (d_recv (synthdef "s" g))
 >                       ; t <- utcr
 >                       ; let { t' = t + 0.2
 >                             ; dt = 1 / 44100.0

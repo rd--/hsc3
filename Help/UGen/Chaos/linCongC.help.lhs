@@ -22,7 +22,7 @@ Default initial parameters.
 
 > import Sound.SC3
 
-> let x = mouseX KR 20 sampleRate Linear 0.1
+> let x = mouseX' KR 20 sampleRate Linear 0.1
 > in audition (out 0 (linCongC AR x 1.1 0.13 1 0 * 0.2))
 
 Randomly modulate parameters.

@@ -23,7 +23,7 @@ Vary frequency
 
 > import Sound.SC3
 
-> let x = mouseX KR 20 sampleRate Linear 0.1
+> let x = mouseX' KR 20 sampleRate Linear 0.1
 > in audition (out 0 (lorenzL AR x 10 27 2.667 0.05 0.1 0 0 * 0.3))
 
 Randomly modulate params
@@ -40,6 +40,6 @@ Randomly modulate params
 
 As frequency control
 
-> let { x = mouseX KR 1 200 Linear 0.1
+> let { x = mouseX' KR 1 200 Linear 0.1
 >     ; n = lorenzL AR x 10 28 2.667 0.05 0.1 0 0 }
 > in audition (out 0 (sinOsc AR (lag n 0.003 * 800 + 900) 0 * 0.4))

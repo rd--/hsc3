@@ -19,7 +19,7 @@ random ordering.
 >     ; b = mix (mce (zipWith (\p s -> p * (max s 0.0)) o1 o2))
 >     ; f = fft' 10 a
 >     ; g = fft' 11 b
->     ; x = mouseX KR 0 1 Linear 0.1
->     ; y = mouseY KR 0 1 Linear 0.1 }
+>     ; x = mouseX' KR 0 1 Linear 0.1
+>     ; y = mouseY' KR 0 1 Linear 0.1 }
 > in do { h <- pv_RandWipe f g x (y >* 0.5)
 >       ; audition (out 0 (pan2 (ifft' h) 0 0.5)) }

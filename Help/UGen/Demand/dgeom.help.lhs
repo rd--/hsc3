@@ -11,7 +11,7 @@ The arguments can be a number or any other ugen
 > import Sound.SC3.Monadic
 
 > do { n <- dgeom 15 1 1.2
->    ; let { x = mouseX KR 1 40 Exponential 0.1
+>    ; let { x = mouseX' KR 1 40 Exponential 0.1
 >          ; t = impulse KR x 0
 >          ; f = demand t 0 n * 30 + 340 }
 >      in audition (out 0 (sinOsc AR f 0 * 0.1)) }

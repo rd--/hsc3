@@ -15,7 +15,7 @@ any other ugen.
 > import Sound.SC3.Monadic
 
 > do { n <- dbrown dinf 0 15 1
->    ; let { x = mouseX KR 1 40 Exponential 0.1
+>    ; let { x = mouseX' KR 1 40 Exponential 0.1
 >          ; t = impulse KR x 0
 >          ; f = demand t 0 n * 30 + 340 }
 >      in audition (out 0 (sinOsc AR f 0 * 0.1)) }

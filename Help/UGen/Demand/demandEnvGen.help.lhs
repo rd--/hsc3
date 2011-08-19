@@ -28,7 +28,7 @@ Frequency ramp, exponential curve.
 > import Sound.SC3.Monadic
 
 > do { l <- dseq dinf (mce2 440 9600)
->    ; let { y = mouseY KR 0.01 3 Exponential 0.1
+>    ; let { y = mouseY' KR 0.01 3 Exponential 0.1
 >          ; f = demandEnvGen AR l y 2 0 1 1 1 0 1 DoNothing }
 >      in audition (out 0 (sinOsc AR f 0 * 0.1)) }
 
@@ -36,6 +36,6 @@ Frequency envelope with random times.
 
 > do { l <- dseq dinf (mce [204, 400, 201, 502, 300, 200])
 >    ; t <- drand dinf (mce [1.01, 0.2, 0.1, 2.0])
->    ; let { y = mouseY KR 0.01 3 Exponential 0.1
+>    ; let { y = mouseY' KR 0.01 3 Exponential 0.1
 >          ; f = demandEnvGen AR l (t * y) 7 0 1 1 1 0 1 DoNothing }
 >      in audition (out 0 (sinOsc AR (f * mce2 1 1.01) 0 * 0.1)) }

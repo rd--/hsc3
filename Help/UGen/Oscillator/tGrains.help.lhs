@@ -39,28 +39,28 @@ interp - 1, 2, or 4. Determines whether the grain uses (1) no
 > let fn = "/home/rohan/audio/metal.wav"
 > in withSC3 (\fd -> async fd (b_allocRead 10 fn 0 0))
 
-> let { tRate = mouseY KR 2 200 Exponential 0.1
->     ; ctr = mouseX KR 0 (bufDur KR 10) Linear 0.1
+> let { tRate = mouseY' KR 2 200 Exponential 0.1
+>     ; ctr = mouseX' KR 0 (bufDur KR 10) Linear 0.1
 >     ; tr = impulse AR tRate 0 }
 > in audition (out 0 (tGrains 2 tr 10 1 ctr (4 / tRate) 0 0.1 2))
 
 > import Sound.SC3.Monadic
 
 > let { b = 10
->     ; trate = mouseY KR 8 120 Exponential 0.1
+>     ; trate = mouseY' KR 8 120 Exponential 0.1
 >     ; dur = 4 / trate }
 > in do { clk <- dust AR trate
 >       ; r <- tRand 0 0.01 clk
 >       ; pan <- return . (* 0.6) =<< whiteNoise KR
->       ; let { x = mouseX KR 0 (bufDur KR b) Linear 0.1
+>       ; let { x = mouseX' KR 0 (bufDur KR b) Linear 0.1
 >             ; pos = x + r }
 >         in audition (out 0 (tGrains 2 clk b 1 pos dur pan 0.1 2)) }
 
 > let { b = 10
->     ; trate = mouseY KR 2 120 Exponential 0.1
+>     ; trate = mouseY' KR 2 120 Exponential 0.1
 >     ; dur = 1.2 / trate
 >     ; clk = impulse AR trate 0
->     ; pos = mouseX KR 0 (bufDur KR b) Linear 0.1 }
+>     ; pos = mouseX' KR 0 (bufDur KR b) Linear 0.1 }
 > in do { n0 <- whiteNoise KR
 >       ; n1 <- whiteNoise KR
 >       ; let rate = shiftLeft 1.2 (roundE (n0 * 3) 1)

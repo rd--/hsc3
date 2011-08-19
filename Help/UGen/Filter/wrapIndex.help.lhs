@@ -11,9 +11,9 @@ in     - the input signal.
 
 > import Sound.SC3
 
-> withSC3 (\fd -> do { async fd (b_alloc 0 6 1)
->                    ; send fd (b_setn 0 [(0, [200, 300, 400, 500, 600, 800])]) })
+> withSC3 (\fd -> do {_ <- async fd (b_alloc 0 6 1)
+>                    ;send fd (b_setn 0 [(0,[200,300,400,500,600,800])])})
 
-> let { x = mouseX KR 0 18 Linear 0.1
+> let { x = mouseX' KR 0 18 Linear 0.1
 >     ; f = wrapIndex 0 x }
 > in audition (out 0 (sinOsc AR f 0 * 0.5))

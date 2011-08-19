@@ -12,7 +12,7 @@ Excite the mesh with some pink noise, triggered by an
 impulse generator.  mouseX is tension and impulse frequency,
 mouseY is duration of excitation, release-time and amplitude.
 
-> import Sound.SC3
+> import Sound.SC3.ID
 
 > let { x = mouseX' KR 0 1 Linear 0.2
 >     ; y = mouseY' KR 1e-9 1 Exponential 0.2
@@ -22,6 +22,6 @@ mouseY is duration of excitation, release-time and amplitude.
 >     ; p = envPerc 0.0001 y
 >     ; tr = impulse KR (linLin x 0 1 3 9) 0
 >     ; e = envGen KR tr (linLin y 0 1 0.05 0.25) 0 0.1 DoNothing p
->     ; m = membraneCircle }
-> in do { n <- pinkNoise AR
->       ; audition (out (mce2 0 1) (m (n * e) tension loss)) }
+>     ; m = membraneCircle
+>     ; n = pinkNoise 'a' AR }
+> in audition (out (mce2 0 1) (m (n * e) tension loss))

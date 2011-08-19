@@ -37,7 +37,7 @@ human.
 > import Sound.SC3
 
 > let { i = soundIn 0
->     ; x = mouseX KR (-1) 1 Linear 0.2
+>     ; x = mouseX' KR (-1) 1 Linear 0.2
 >     ; MCE [b, h, q, t] = beatTrack (fft' 10 i) x
 >     ; f = mce [440, 660, 880]
 >     ; a = mce [0.4, 0.2, 0.1]
