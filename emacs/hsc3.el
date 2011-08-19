@@ -21,22 +21,6 @@
   (list)
   "*Arguments to the haskell interpreter (default=none).")
 
-(defvar hsc3-run-control
-  "~/.hsc3.hs"
-  "*Run control file (default=~/.hsc3.hs)")
-
-(defvar hsc3-modules
-  (list "import Control.Concurrent"
-        "import Control.Monad"
-        "import Data.List"
-        "import Sound.OpenSoundControl"
-        "import Sound.SC3"
-        "import qualified Sound.SC3.UGen.Base as B"
-        "import qualified Sound.SC3.UGen.Monadic as M"
-        "import qualified Sound.SC3.UGen.Unsafe as U"
-        "import System.Random")
-  "*List of modules (possibly qualified) to bring into interpreter context.")
-
 (defvar hsc3-help-directory
   nil
   "*The directory containing the help files (default=nil).")
@@ -47,24 +31,9 @@
 
 (make-variable-buffer-local 'hsc3-literate-p)
 
-(defun hsc3-unlit (s)
-  "Remove bird literate marks"
-  (replace-regexp-in-string "^> " "" s))
-
-(defun hsc3-intersperse (e l)
-  (if (null l)
-      '()
-    (cons e (cons (car l) (hsc3-intersperse e (cdr l))))))
-
-(defun hsc3-write-default-run-control ()
-  "Write default run control file if no file exists."
-  (if (not (file-exists-p hsc3-run-control))
-      (with-temp-file
-          hsc3-run-control
-        (mapc
-         (lambda (s)
-           (insert (concat s "\n")))
-         hsc3-modules))))
+(defun hsc3-unlit (c s)
+  "Remove bird, or alternate, literate marks"
+  (replace-regexp-in-string (format "^%c " c) "" s))
 
 (defun hsc3-start-haskell ()
   "Start haskell."
@@ -78,8 +47,6 @@
      nil
      hsc3-interpreter-arguments)
     (hsc3-see-output))
-  (hsc3-write-default-run-control)
-  (hsc3-send-string (concat ":l " hsc3-run-control))
   (hsc3-send-string ":set prompt \"hsc3> \""))
 
 (defun hsc3-see-output ()
@@ -117,18 +84,6 @@
   (interactive)
   (hsc3-send-string (concat ":t " (thing-at-point 'symbol))))
 
-(defun hsc3-audition-value ()
-  "Audition the UGen value of the name at point."
-  (interactive)
-  (hsc3-send-string (concat "audition . out 0 $"
-                            (thing-at-point 'symbol))))
-
-(defun hsc3-audition-action ()
-  "Audition the (IO UGen) value of the name at point."
-  (interactive)
-  (hsc3-send-string (concat "audition . out 0 =<<"
-                            (thing-at-point 'symbol))))
-
 (defun chunk-string (n s)
   "Split a string into chunks of 'n' characters."
   (let* ((l (length s))
@@ -144,22 +99,13 @@
         (mapcar (lambda (c) (comint-send-string hsc3-buffer c)) cs))
     (error "no hsc3 process running?")))
 
-(defun hsc3-transform-and-store (f s)
-  "Transform example text into compilable form."
-  (with-temp-file f
-    (mapc (lambda (module)
-	    (insert (concat module "\n")))
-	  hsc3-modules)
-    (insert "main = do\n")
-    (insert (if hsc3-literate-p (hsc3-unlit s) s))))
-
 (defun hsc3-run-line ()
   "Send the current line to the interpreter."
   (interactive)
   (let* ((s (buffer-substring (line-beginning-position)
 			      (line-end-position)))
 	 (s* (if hsc3-literate-p
-		 (hsc3-unlit s)
+		 (hsc3-unlit ?> s)
 	       s)))
     (hsc3-send-string s*)))
 
@@ -169,18 +115,9 @@
   (let* ((s (buffer-substring-no-properties (region-beginning)
 					    (region-end)))
 	 (s* (if hsc3-literate-p
-		 (hsc3-unlit s)
+		 (hsc3-unlit ?> s)
 	       s)))
     (hsc3-send-string (replace-regexp-in-string "\n" " " s*))))
-
-(defun hsc3-run-region ()
-  "Place the region in a do block and compile."
-  (interactive)
-  (hsc3-transform-and-store
-   "/tmp/hsc3.hs"
-   (buffer-substring-no-properties (region-beginning) (region-end)))
-  (hsc3-send-string ":load \"/tmp/hsc3.hs\"")
-  (hsc3-send-string "main"))
 
 (defun hsc3-load-buffer ()
   "Load the current buffer."
@@ -227,7 +164,6 @@
   (define-key map [?\C-c ?\C-w] 'hsc3-status-scsynth)
   (define-key map [?\C-c ?\C-c] 'hsc3-run-line)
   (define-key map [?\C-c ?\C-e] 'hsc3-run-multiple-lines)
-  (define-key map [?\C-c ?\C-r] 'hsc3-run-region)
   (define-key map [?\C-c ?\C-l] 'hsc3-load-buffer)
   (define-key map [?\C-c ?\C-i] 'hsc3-interrupt-haskell)
   (define-key map [?\C-c ?\C-m] 'hsc3-run-main)
@@ -243,9 +179,6 @@
   (local-set-key [?\C-c ?\C-w] 'hsc3-status-scsynth)
   (local-set-key [?\C-c ?\C-c] 'hsc3-run-line)
   (local-set-key [?\C-c ?\C-e] 'hsc3-run-multiple-lines)
-  (local-set-key [?\C-c ?\C-r] 'hsc3-run-region)
-  (local-set-key [?\C-c ?\C-a] 'hsc3-audition-value)
-  (local-set-key [?\C-c ?\C-z] 'hsc3-audition-action)
   (local-set-key [?\C-c ?\C-l] 'hsc3-load-buffer)
   (local-set-key [?\C-c ?\C-i] 'hsc3-interrupt-haskell)
   (local-set-key [?\C-c ?\C-m] 'hsc3-run-main)
@@ -266,12 +199,6 @@
     '("Load buffer" . hsc3-load-buffer))
   (define-key map [menu-bar hsc3 expression run-main]
     '("Run main" . hsc3-run-main))
-  (define-key map [menu-bar hsc3 expression run-region]
-    '("Run region" . hsc3-run-region))
-  (define-key map [menu-bar hsc3 expression audition-action]
-    '("Audition action" . hsc3-audition-action))
-  (define-key map [menu-bar hsc3 expression audition-value]
-    '("Audition value" . hsc3-audition-value))
   (define-key map [menu-bar hsc3 expression run-multiple-lines]
     '("Run multiple lines" . hsc3-run-multiple-lines))
   (define-key map [menu-bar hsc3 expression run-line]
