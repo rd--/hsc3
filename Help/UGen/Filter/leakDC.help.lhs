@@ -1,4 +1,4 @@
-leakDC in coef
+leakDC in coef=0.995
 
 Remove DC.  This filter removes a DC offset from a signal.  in -
 input signal.  coef - leak coefficient.
