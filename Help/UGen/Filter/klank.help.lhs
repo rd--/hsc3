@@ -24,9 +24,9 @@ decayscale - a scale factor multiplied by all ring times at
 > let s = klankSpec [800, 1071, 1153, 1723] [1, 1, 1, 1] [1, 1, 1, 1]
 > in audition (out 0 (klank (impulse AR 2 0 * 0.1) 1 0 1 s))
 
-There is a limited form of multiple channel expansion possible
-at 'specification' input, below three equal dimensional 
-specifications are tranposed and force expansion in a sensible manner.
+There is a limited form of multiple channel expansion possible at
+'specification' input, below three equal dimensional specifications
+are transposed and force expansion in a sensible manner.
 
 > let { u = [1, 1, 1, 1]
 >     ; p = [200, 171, 153, 172]
