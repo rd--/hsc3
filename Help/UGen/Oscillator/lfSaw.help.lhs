@@ -3,6 +3,8 @@ lfSaw rate freq iphase
 Sawtooth oscillator.  A non-band-limited sawtooth
 oscillator. Output ranges from -1 to +1.
 
+SC2 did not have the iphase argument.
+
 freq   - frequency in Hertz
 iphase - initial phase [0,2]
 

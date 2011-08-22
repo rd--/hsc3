@@ -106,7 +106,7 @@ classes.
 
 These give signatures such as:
 
-> (+) :: (Num a) => a -> a -> a
+>| (+) :: (Num a) => a -> a -> a
 
 meaning that a value can only be summed with a
 value of the same type, and that the resulting
@@ -238,22 +238,23 @@ and a single PinkNoise node.
 We note that this distinction is only relevant
 for non-deterministic unit generators.
 
-To write this simple graph in haskell we can use
-the clone function:
+To write this simple graph in haskell we can use the
+clone function.  In this file we import the monadic
+noise unit generator functions qualified.
 
 > import Control.Monad
-> import Sound.SC3.Monadic
+> import qualified Sound.SC3.Monadic as M
 
 > let f = liftM (* mce [0.1, 0.05])
-> in do { a <- f (clone 2 (whiteNoise AR))
->       ; b <- f (pinkNoise AR)
+> in do { a <- f (clone 2 (M.whiteNoise AR))
+>       ; b <- f (M.pinkNoise AR)
 >       ; audition (out 0 (a + b)) }
 
 which is defined in relation to the standard
 monad functions replicateM and liftM.
 
-> clone :: (UId m) => Int -> m UGen -> m UGen
-> clone n u = liftM mce (replicateM n u)
+>| clone :: (UId m) => Int -> m UGen -> m UGen
+>| clone n u = liftM mce (replicateM n u)
 
 * Multiple Root Graphs
 
@@ -263,7 +264,7 @@ multiple sink nodes.
 
 Consider the freeSelf unit generator:
 
-> do { n <- dust KR 0.5
+> do { n <- M.dust KR 0.5
 >    ; let { a = freeSelf n
 >          ; b = out 0 (sinOsc AR 440 0 * 0.1) }
 >      in audition (mrg [a, b]) }
@@ -280,7 +281,7 @@ Consider a simple ping pong delay filter:
 >                 ; b = delayN a 0.2 0.2
 >                 ; c = mceEdit reverse b * 0.8 }
 >             in mrg [b, localOut c]
-> in do { n <- whiteNoise AR
+> in do { n <- M.whiteNoise AR
 >       ; let s = decay (impulse AR 0.3 0) 0.1 * n * 0.2
 >         in audition (out 0 (ppd s)) }
 
@@ -290,11 +291,11 @@ This is a somewhat subtle distinction.  Numeric
 literals in haskell are overloaded, not coerced.
 The numerical type classes provide two functions:
 
-> fromInteger :: (Num a) => Integer -> a
+>| fromInteger :: (Num a) => Integer -> a
 
 and
 
-> fromRational :: (Fractional a) => Rational -> a
+>| fromRational :: (Fractional a) => Rational -> a
 
 which are implicitly applied to all integer and
 rational literals respectively.
@@ -334,7 +335,7 @@ succeeds.
 
 Since the Ord type gives the signature:
 
-> (>) :: (Ord a) => a -> a -> Bool
+>| (>) :: (Ord a) => a -> a -> Bool
 
 we define a variant with a star suffix, such
 that:
@@ -353,7 +354,7 @@ For functions where the signature is
 consistent with the meaning of the unit
 generator operator we use the haskell name.
 
-| max :: (Ord a) => a -> a -> a
+>| max :: (Ord a) => a -> a -> a
 
 > let { l = fSinOsc AR 500 0 * 0.25
 >     ; r = fSinOsc AR 0.5 0 * 0.23 }
@@ -421,8 +422,10 @@ values, and equal expressions denote the same
 value.  Therefore the graph given by the haskell
 expression:
 
+> import Sound.SC3.ID
+
 > let { z = 'α'
->     ; n = Sound.SC3.UGen.Noise.ID.whiteNoise z
+>     ; n = whiteNoise z
 >     ; a = n AR
 >     ; b = n AR
 >     ; c = a - b }
@@ -433,21 +436,32 @@ would need to distinguish a and b, which can only
 be done by providing non-equal identifiers in
 place of z.
 
-The whiteNoise function used above is written
-using a fully qualified name because it is not the
-whiteNoise function provided by Sound.SC3, that
-function has the signature:
+> let { a = whiteNoise 'a' AR
+>     ; b = whiteNoise 'b' AR
+>     ; c = a - b }
+> in audition (out 0 (c * 0.05))
 
-> whiteNoise :: (UId m) => Rate -> m UGen
+Note that the whiteNoise function used above & provided
+by the module Sound.SC3.ID is a quite different
+function to the whiteNoise provided by the module
+Sound.SC3.Monadic.  That function has the signature:
+
+>| whiteNoise :: (UId m) => Rate -> m UGen
 
 where the type-class UId is defined as:
 
-> class (Monad m) => UId m where
->     generateUId :: m Int
+>| class (Monad m) => UId m where
+>|     generateUId :: m Int
 
 The signature indicates that whiteNoise is a
 function from a Rate value to an (m UGen)
 value.
+
+Note also for expressions that differ in parts other than the
+identifier multiple values are denoted.
+
+> let f = mce [rand 'a' 330 550,rand 'a' 660 990]
+> in audition (out 0 (sinOsc AR f 0 * 0.1))
 
 * Non-determinism, monadic structure, do notation
 
@@ -457,15 +471,15 @@ not of type UGen.
 Compare the whiteNoise signature with that of the
 deterministic sin oscillator:
 
-> sinOsc :: Rate -> UGen -> UGen -> UGen
+>| sinOsc :: Rate -> UGen -> UGen -> UGen
 
 We can write a white noise graph using this
 function and the haskell 'do' notation as:
 
-> do { a <- whiteNoise AR
->    ; b <- whiteNoise AR
+> do { a <- M.whiteNoise AR
+>    ; b <- M.whiteNoise AR
 >    ; let c = a - b
->      in audition (out 0 (c * 0.1)) }
+>      in audition (out 0 (c * 0.05)) }
 
 which brings us more or less to the supercollider
 language notation, with the exception that there
@@ -481,17 +495,17 @@ readable right to left binding notation.
 
 The above expression is equal to:
 
-> whiteNoise AR >>= \a ->
-> whiteNoise AR >>= \b ->
+> M.whiteNoise AR >>= \a ->
+> M.whiteNoise AR >>= \b ->
 > let c = a - b
-> in audition (out 0 (c * 0.1))
+> in audition (out 0 (c * 0.05))
 
 where (>>=) is the monadic bind function, and (\x
 -> y) is the notation for lambda expressions
 (ie. for function definition, ie. {|x| y} in
 supercollider language).  The signature for bind is:
 
-> (>>=) :: (Monad m) => m a -> (a -> m b) -> m b
+>| (>>=) :: (Monad m) => m a -> (a -> m b) -> m b
 
 which indicates that the value bound in the
 function definition can only be accessed in a
@@ -500,7 +514,7 @@ function that produces a value in the same monad.
 The audition function has an appropriate
 signature:
 
-> audition :: UGen -> IO ()
+>| audition :: UGen -> IO ()
 
 since IO is an instance of the UId class.
 
@@ -510,9 +524,9 @@ need to write it.
 
 > let { (|>) = flip (.)
 >     ; a >>=* b = a >>= b |> return
->     ; u1 = sinOsc ar 440 0 * 0.1
->     ; u2 = pinkNoise ar >>=* (* 0.1)
->     ; u3 = Sound.SC3.UGen.Noise.ID.pinkNoise 'α' ar * 1
+>     ; u1 = sinOsc AR 440 0 * 0.1
+>     ; u2 = M.pinkNoise AR >>=* (* 0.1)
+>     ; u3 = pinkNoise 'α' AR * 1
 >     ; u4 = resonz u3 (440 * 4) 0.1
 >     ; g = u2 >>=* (+ (u1 + u4)) }
 > in g >>= out 0 |> audition
@@ -529,10 +543,10 @@ orindary let binding.
 > import System.IO.Unsafe
 
 > let { u = unsafePerformIO
->     ; a = u (whiteNoise AR)
->     ; b = u (whiteNoise AR)
+>     ; a = u (M.whiteNoise AR)
+>     ; b = u (M.whiteNoise AR)
 >     ; c = a - b }
-> in audition (out 0 (c * 0.1))
+> in audition (out 0 (c * 0.05))
 
 This is hardly more convenient than do notation,
 however we can also insert non-determinstic nodes
@@ -542,7 +556,7 @@ constructors.
 
 > let { n = Sound.SC3.UGen.Unsafe.whiteNoise
 >     ; x = n AR - n AR }
-> in audition (out 0 (x * 0.1))
+> in audition (out 0 (x * 0.05))
 
 The above uses the unsafe unit generator functions
 provided at Sound.SC3.UGen.Unsafe, and avoids the
@@ -550,11 +564,18 @@ lifting operations which, for functions of many
 arguments, can be cumbersome.
 
 > import Control.Monad
-> import Sound.SC3.Monadic
+> import qualified Sound.SC3.Monadic as M
 
-> let n = whiteNoise
+> let n = M.whiteNoise
 > in do { x <- liftM2 (-) (n AR) (n AR)
->       ; audition (out 0 (x * 0.1)) }
+>       ; audition (out 0 (x * 0.05)) }
+
+There also Control.Monad.ap which can be more readable
+in some contexts.
+
+> let n = M.whiteNoise
+> in do { x <- return (-) `ap` n AR `ap` n AR
+>       ; audition (out 0 (x * 0.05)) }
 
 * Demand Rate, Sharing Again
 
@@ -581,7 +602,7 @@ Therefore in haskell demand rate unit generators have
 similar constructor functions to non-deterministic
 unit generators, in order that we can distinguish:
 
-> do { a <- dseq 3 (mce [1, 3, 2, 7, 8])
+> do { a <- M.dseq 3 (mce [1, 3, 2, 7, 8])
 >    ; let { t = impulse KR 5 0
 >          ; f = demand t 0 (mce [a, a]) * 30 + 340 }
 >      in audition (out 0 (sinOsc AR f 0 * 0.1)) }
@@ -589,7 +610,7 @@ unit generators, in order that we can distinguish:
 which is the same graph as given in supercollider
 language above, from:
 
-> do { a <- clone 2 (dseq 3 (mce [1, 3, 2, 7, 8]))
+> do { a <- clone 2 (M.dseq 3 (mce [1, 3, 2, 7, 8]))
 >    ; let { t = impulse KR 5 0
 >          ; f = demand t 0 a * 30 + 340 }
 >      in audition (out 0 (sinOsc AR f 0 * 0.1)) }

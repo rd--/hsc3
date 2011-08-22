@@ -1,5 +1,10 @@
 envLinen :: UGen -> UGen -> UGen -> UGen -> [UGen]
 
+ aT = attack time
+ sT = sustain time
+ rT = release time
+  l = level
+
 Linear envelope parameter constructor.
 
 > import Sound.SC3
