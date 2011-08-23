@@ -12,6 +12,7 @@ data Rate = IR | KR | AR | DR
 instance Ord Rate where
     compare = compare `on` rate_ord
 
+{-# DEPRECATED ar,kr,ir,dr "Aliases to be removed" #-}
 -- | Rate constructors (lower case aliases of upper case data
 --   constructors).
 ar, kr, ir, dr :: Rate
@@ -26,7 +27,9 @@ rateId = fromEnum
 
 -- Rates as ordered for filter rate selection.
 rate_ord :: Rate -> Int
-rate_ord IR = 0
-rate_ord KR = 1
-rate_ord AR = 2
-rate_ord DR = 3
+rate_ord r =
+    case r of
+      IR -> 0
+      KR -> 1
+      AR -> 2
+      DR -> 3
