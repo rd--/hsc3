@@ -78,7 +78,7 @@ pmOsc r cf mf pm mp = sinOsc r cf (sinOsc r mf mp * pm)
 range :: Fractional c => c -> c -> c -> c
 range l r =
     let m = (r - l) * 0.5
-	a = m + l
+        a = m + l
     in (+ a) . (* m)
 
 -- | Mix one output from many sources
