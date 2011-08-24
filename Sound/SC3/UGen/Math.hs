@@ -83,6 +83,9 @@ instance RealFracE UGen where
 ceil :: UGen -> UGen
 ceil = ceilingE
 
+midiCPS' :: Floating a => a -> a
+midiCPS' i = 440.0 * (2.0 ** ((i - 69.0) * (1.0 / 12.0)))
+
 -- | Unary operator class.
 class (Floating a, Ord a) => UnaryOp a where
     ampDb :: a -> a
@@ -112,7 +115,7 @@ class (Floating a, Ord a) => UnaryOp a where
     log2 :: a -> a
     log2 = logBase 2
     midiCPS :: a -> a
-    midiCPS a = 440.0 * (2.0 ** ((a - 69.0) * (1.0 / 12.0)))
+    midiCPS = midiCPS'
     midiRatio :: a -> a
     midiRatio a = 2.0 ** (a * (1.0 / 12.0))
     notE :: a -> a
