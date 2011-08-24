@@ -133,8 +133,10 @@
 (defun hsc3-interrupt-haskell ()
   (interactive)
   (if (comint-check-proc hsc3-buffer)
-      (with-current-buffer hsc3-buffer
-	(interrupt-process (get-buffer-process (current-buffer))))
+      (progn
+        (with-current-buffer hsc3-buffer
+          (interrupt-process (get-buffer-process (current-buffer))))
+        (hsc3-reset-scsynth))
     (error "no hsc3 process running?")))
 
 (defun hsc3-reset-scsynth ()

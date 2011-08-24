@@ -16,11 +16,11 @@ stop fd = send fd (g_freeAll [1])
 async :: Transport t => t -> OSC -> IO OSC
 async fd m = send fd m >> wait fd "/done"
 
--- | Free all nodes and re-create group node with id 1.
+-- | Free all nodes and re-create group nodes with ids 1 & 2.
 reset :: Transport t => t -> IO ()
 reset fd = do
   send fd (g_freeAll [0])
-  send fd (g_new [(1,AddToTail,0)])
+  send fd (g_new [(1,AddToTail,0),(2,AddToTail,0)])
 
 -- | Bracket SC3 communication.
 withSC3 :: (UDP -> IO a) -> IO a
