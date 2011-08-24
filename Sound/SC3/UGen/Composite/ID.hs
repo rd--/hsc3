@@ -13,10 +13,17 @@ dcons (z0,z1,z2) x xs =
         a = dseq z1 1 (mce2 x xs)
     in dswitch z2 i a
 
+mceN :: UGen -> UGen
+mceN = constant . length . mceChannels
+
+iChoose :: ID m => m -> UGen -> UGen
+iChoose e a = select (iRand e 0 (mceN a)) a
+
+iChoose' :: ID m => m -> [UGen] -> UGen
+iChoose' e = iChoose e . mce
+
 tChoose :: ID m => m -> UGen -> UGen -> UGen
-tChoose z t a =
-    let r = tiRand z 0 (constant (length (mceChannels a))) t
-    in select r a
+tChoose z t a = select (tiRand z 0 (mceN a) t) a
 
 twChoose :: ID m => m -> UGen -> UGen -> UGen -> UGen -> UGen
 twChoose z t a w n =

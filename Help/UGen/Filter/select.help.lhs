@@ -18,3 +18,4 @@ Here used as a sequencer:
 >     ; c = n / 2
 >     ; f = select (lfSaw KR 0.5 0 * c + c) a }
 > in audition (out 0 (saw AR f * 0.2))
+

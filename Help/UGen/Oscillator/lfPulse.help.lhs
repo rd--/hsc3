@@ -1,8 +1,9 @@
 lfPulse rate freq iphase width
 
 A non-band-limited pulse oscillator. Outputs a high value of one
-and a low value of zero.  Note that the iphase argument was not
-present in SC2.
+and a low value of zero.
+
+SC2: The iphase argument was not present in SC2.
 
 freq - frequency in Hertz
 iphase - initial phase offset in cycles ( 0..1 )
