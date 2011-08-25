@@ -39,6 +39,7 @@ Data-files:        README
                    Help/UGen/Oscillator/*.help.lhs
                    Help/UGen/Panner/*.help.lhs
                    Help/UGen/Trigger/*.help.lhs
+                   Help/UGen/Wavelets/*.help.lhs
 
 Library
   Build-Depends:   base == 4.*,
@@ -97,6 +98,7 @@ Library
                    Sound.SC3.UGen.UGen
                    Sound.SC3.UGen.UGen.Lift
                    Sound.SC3.UGen.UId
+                   Sound.SC3.UGen.Wavelets
   Other-modules:   Sound.SC3.Server.Utilities
                    Sound.SC3.UGen.Utilities
 

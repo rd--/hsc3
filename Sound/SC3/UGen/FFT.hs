@@ -15,6 +15,9 @@ fft buf i h wt a = mkOsc KR "FFT" [buf,i,h,wt,a] 1
 fft' :: UGen -> UGen -> UGen
 fft' buf i = fft buf i 0.5 0 1
 
+fftTrigger :: UGen -> UGen -> UGen -> UGen
+fftTrigger b h p = mkOsc KR "FFTTrigger" [b,h,p] 1
+
 -- | Inverse Fast Fourier Transform.
 ifft :: UGen -> UGen -> UGen
 ifft buf wt = mkOsc AR "IFFT" [buf,wt] 1
