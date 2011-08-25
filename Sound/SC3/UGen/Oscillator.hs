@@ -9,6 +9,10 @@ import Sound.SC3.UGen.UGen
 blip :: Rate -> UGen -> UGen -> UGen
 blip r freq nharm = mkOscR [AR] r "Blip" [freq, nharm] 1
 
+-- | Create a constant amplitude signal.
+dc :: Rate -> UGen -> UGen
+dc r k = mkOsc r "DC" [k] 1
+
 -- | Formant oscillator.
 formant :: Rate -> UGen -> UGen -> UGen -> UGen
 formant r f0 f bw = mkOscR [AR] r "Formant" [f0, f, bw] 1
