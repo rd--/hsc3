@@ -149,6 +149,12 @@ klank i fs fp d s = mkFilterMCER [AR] "Klank" [i,fs,fp,d] s 1
 klankSpec :: [UGen] -> [UGen] -> [UGen] -> UGen
 klankSpec f a p = mce ((concat . transpose) [f,a,p])
 
+-- | Variant for non-UGen inputs.
+klankSpec' :: [Double] -> [Double] -> [Double] -> UGen
+klankSpec' f a p =
+    let u = map constant
+    in klankSpec (u f) (u a) (u p)
+
 -- | Simple averaging filter.
 lag :: UGen -> UGen -> UGen
 lag i t = mkFilter "Lag" [i,t] 1
