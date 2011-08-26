@@ -80,7 +80,7 @@ pulse r freq width = mkOscR [AR] r "Pulse" [freq, width] 1
 
 -- | Sawtooth oscillator (band limited).
 saw :: Rate -> UGen -> UGen
-saw r freq = mkOscR [AR] r "Saw" [freq] 1
+saw r freq = mkOscR [AR,KR] r "Saw" [freq] 1
 
 -- | Silence.
 silent :: Int -> UGen
