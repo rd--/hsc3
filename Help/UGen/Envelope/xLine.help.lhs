@@ -10,8 +10,7 @@ dur        - duration in seconds
 doneAction - a doneAction to be evaluated when the XLine is
              completed. See EnvGen for details.
 
-Note: The sclang interface reorders the mul and add inputs to precede
-the doneAction input.
+SC3: at sclang mul and add inputs precede the doneAction input.
 
 > import Sound.SC3
 

@@ -94,6 +94,7 @@ graphdef = encode_graphdef
 -- | Binary representation of a unit generator synth definition.
 data Synthdef = Synthdef {synthdefName :: String
                          ,synthdefGraph :: Graph}
+                deriving (Eq,Show)
 
 synthdefData :: Synthdef -> B.ByteString
 synthdefData (Synthdef s g) =

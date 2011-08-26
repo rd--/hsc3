@@ -28,7 +28,7 @@ resetval - value to which the counter is reset when it receives a
 > let {compose = foldl (flip (.)) id
 >     ;noisec n l r = randomRs (l,r) (mkStdGen n)
 >     ;rvb s r0 r1 r2 =
->      let f dl1 dl2 dc i = allpassN i 0.05 (mce [dl1,dl2]) dc
+>      let f dl1 dl2 dcy i = allpassN i 0.05 (mce [dl1,dl2]) dcy
 >      in compose (take 5 (zipWith3 f r0 r1 r2)) s
 >     ;rvb' s = rvb s (noisec 0 0 0.05) (noisec 1 0 0.05) (noisec 2 1.5 2.0)
 >     ;stpr = let {rate = mouseX' KR 2 2.01 Exponential 0.1
