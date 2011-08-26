@@ -167,6 +167,18 @@ lag2 i t = mkFilter "Lag2" [i,t] 1
 lag3 :: UGen -> UGen -> UGen
 lag3 i t = mkFilter "Lag3" [i,t] 1
 
+-- | Lag variant with separate upward and downward times.
+lagUD :: UGen -> UGen -> UGen -> UGen
+lagUD i t1 t2 = mkFilter "LagUD" [i,t1,t2] 1
+
+-- | Nested lag filter.
+lag2UD :: UGen -> UGen -> UGen -> UGen
+lag2UD i t1 t2 = mkFilter "Lag2UD" [i,t1,t2] 1
+
+-- | Twice nested lag filter.
+lag3UD :: UGen -> UGen -> UGen -> UGen
+lag3UD i t1 t2 = mkFilter "Lag3UD" [i,t1,t2] 1
+
 -- | Last value before chang above threshhold.
 lastValue :: UGen -> UGen -> UGen
 lastValue i t = mkFilter "LastValue" [i,t] 1
