@@ -74,6 +74,12 @@ mouseY' = mouseR 'y'
 pmOsc :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
 pmOsc r cf mf pm mp = sinOsc r cf (sinOsc r mf mp * pm)
 
+-- | Scale uni-polar (0,1) input to linear (l,r) range
+urange :: Fractional c => c -> c -> c -> c
+urange l r =
+    let m = r - l
+    in (+ l) . (* m)
+
 -- | Scale bi-polar (-1,1) input to linear (l,r) range
 range :: Fractional c => c -> c -> c -> c
 range l r =

@@ -1,4 +1,4 @@
-pmOsc rate cf mf pm mp
+pmOsc rate cf mf pm=0 mp=0
 
 phase modulation oscillator (composite UGen)
 

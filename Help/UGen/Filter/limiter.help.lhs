@@ -1,4 +1,4 @@
-limiter input level lookAheadTime
+limiter input level=1 lookAheadTime=0.01
 
 Peak limiter.  Limits the input amplitude to the given
 level. Limiter will not overshoot like Compander will, but it needs

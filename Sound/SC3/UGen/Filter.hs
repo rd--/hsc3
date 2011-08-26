@@ -117,6 +117,10 @@ freeVerb2 i1 i2 mx room damp = mkFilter "FreeVerb2" [i1,i2,mx,room,damp] 2
 gate :: UGen -> UGen -> UGen
 gate i t = mkFilter "Gate" [i,t] 1
 
+-- | A less-simple reverb.
+gVerb :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+gVerb i rs rt d bw sp dl rl tl mrs = mkFilter "GVerb" [i,rs,rt,d,bw,sp,dl,rl,tl,mrs] 2
+
 -- | Hash input values.
 hasher :: UGen -> UGen
 hasher i = mkFilter "Hasher" [i] 1

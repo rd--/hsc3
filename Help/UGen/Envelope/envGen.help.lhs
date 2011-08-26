@@ -1,4 +1,4 @@
-envGen rate gate levelScale levelBias timeScale doneAction envelope
+envGen rate gate=1 levelScale=1 levelBias=0 timeScale=1 doneAction=0 envelope
 
 A segment based envelope generator.  Note that the SC3 language
 reorders the inputs to this UGen so that the envelope is the first
