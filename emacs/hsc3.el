@@ -131,18 +131,24 @@
   (hsc3-send-string "main"))
 
 (defun hsc3-interrupt-haskell ()
+  "Interrup haskell interpreter"
   (interactive)
   (if (comint-check-proc hsc3-buffer)
-      (progn
-        (with-current-buffer hsc3-buffer
-          (interrupt-process (get-buffer-process (current-buffer))))
-        (hsc3-reset-scsynth))
+      (with-current-buffer hsc3-buffer
+        (interrupt-process (get-buffer-process (current-buffer))))
     (error "no hsc3 process running?")))
 
 (defun hsc3-reset-scsynth ()
   "Reset"
   (interactive)
   (hsc3-send-string "withSC3 reset"))
+
+(defun hsc3-stop ()
+  "Interrup haskell interpreter & reset scsynth"
+  (interactive)
+  (progn
+    (hsc3-interrupt-haskell)
+    (hsc3-reset-scsynth)))
 
 (defun hsc3-status-scsynth ()
   "Status"
@@ -162,7 +168,7 @@
   (define-key map [?\C-c ?\C-s] 'hsc3-start-haskell)
   (define-key map [?\C-c ?\C-g] 'hsc3-see-output)
   (define-key map [?\C-c ?\C-x] 'hsc3-quit-haskell)
-  (define-key map [?\C-c ?\C-k] 'hsc3-reset-scsynth)
+  (define-key map [?\C-c ?\C-k] 'hsc3-stop)
   (define-key map [?\C-c ?\C-w] 'hsc3-status-scsynth)
   (define-key map [?\C-c ?\C-c] 'hsc3-run-line)
   (define-key map [?\C-c ?\C-e] 'hsc3-run-multiple-lines)
@@ -177,7 +183,7 @@
   (local-set-key [?\C-c ?\C-s] 'hsc3-start-haskell)
   (local-set-key [?\C-c ?\C-g] 'hsc3-see-output)
   (local-set-key [?\C-c ?\C-x] 'hsc3-quit-haskell)
-  (local-set-key [?\C-c ?\C-k] 'hsc3-reset-scsynth)
+  (local-set-key [?\C-c ?\C-k] 'hsc3-stop)
   (local-set-key [?\C-c ?\C-w] 'hsc3-status-scsynth)
   (local-set-key [?\C-c ?\C-c] 'hsc3-run-line)
   (local-set-key [?\C-c ?\C-e] 'hsc3-run-multiple-lines)

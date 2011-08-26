@@ -31,9 +31,9 @@ argument::audctl
 ## bit 0 || makes the 17bit poly-counter into a 9bit poly-counter
 
 > import Sound.SC3
-> import Sound.SC3.Lang.Math.Binary
+> import qualified Sound.SC3.Lang.Math as M
 
-> let b = fromIntegral . parseBits :: (String -> UGen)
+> let b = fromIntegral . M.parseBits :: (String -> UGen)
 > let bln = line KR 0 255 5 RemoveSynth
 > let mz1 i j = mzPokey i j 0 0 0 0 0 0 0
 > let mz1c i j c = mzPokey i j 0 0 0 0 0 0 c

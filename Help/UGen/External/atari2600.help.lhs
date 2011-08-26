@@ -47,7 +47,7 @@ rate - playback rate 1-... (<1 gets weird)
 >               ;o = out 0 (pan2 (z * eg) pan 1)}
 >           in synthdef "atari2600" o
 
-> import Sound.SC3.Lang.Pattern.List
+> import Sound.SC3.Lang.Pattern.ID
 
 > audition (ati
 >          ,pbind [("dur",0.125)

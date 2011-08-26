@@ -47,7 +47,7 @@ type...)
 run this to change sound: WARNING, NOISY!
 
 > import Control.Monad.Random
-> import Sound.SC3.Lang.Math.Random
+> import Sound.SC3.Lang.Random.Monad
 
 > withSC3 (\fd -> send fd (b_zero 10))
 
