@@ -47,6 +47,18 @@ class RealFracE a where
   ceilingE :: a -> a
   floorE :: a -> a
 
+truncatef :: RealFrac a => a -> a
+truncatef a = fromIntegral (truncate a :: Integer)
+
+roundf :: RealFrac a => a -> a
+roundf a = fromIntegral (round a :: Integer)
+
+ceilingf :: RealFrac a => a -> a
+ceilingf a = fromIntegral (ceiling a :: Integer)
+
+floorf :: RealFrac a => a -> a
+floorf a = fromIntegral (floor a :: Integer)
+
 ftruncate :: Double -> Double
 ftruncate = M.trunc
 
