@@ -1,6 +1,5 @@
-linPan2 in pos level
-
-Two channel linear pan.  See Pan2.
+> Sound.SC3.UGen.Help.viewSC3Help "LinPan2"
+> Sound.SC3.UGen.DB.ugenSummary "LinPan2"
 
 > import Sound.SC3.ID
 
