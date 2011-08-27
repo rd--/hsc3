@@ -102,8 +102,10 @@ soundIn n =
     in' 1 AR (numOutputBuses + n)
 
 -- | Pan a set of channels across the stereo field.
-splay :: UGen -> UGen -> UGen -> UGen -> UGen
-splay i s l c = mix (pan2 i (mce p * s + c) 1) * l * sqrt (1 / n)
-    where n = fromIntegral (mceDegree i)
-          m = n - 1
-          p = map ( (+ (-1.0)) . (* (2 / m)) ) [0 .. m]
+splay :: UGen -> UGen -> UGen -> UGen -> Bool -> UGen
+splay i s l c lc =
+    let n = fromIntegral (mceDegree i)
+        m = n - 1
+        p = map ( (+ (-1.0)) . (* (2 / m)) ) [0 .. m]
+        a = if lc then sqrt (1 / n) else 1
+    in mix (pan2 i (mce p * s + c) 1) * l * a
