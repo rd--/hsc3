@@ -64,6 +64,10 @@ linCongL r f a c m xi = mkOsc r "LinCongL" [f, a, c, m, xi] 1
 linCongN :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 linCongN r f a c m xi = mkOsc r "LinCongN" [f, a, c, m, xi] 1
 
+-- | The logistic map y = chaosParam * y * (1.0 - y)
+logistic :: Rate -> UGen -> UGen -> UGen -> UGen
+logistic r cp f i = mkOsc r "Logistic" [cp,f,i] 1
+
 -- | Lorenz chaotic generator (linear interpolation).
 lorenzL :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 lorenzL rate freq s r b h xi yi zi = mkOsc rate "LorenzL" [freq, s, r, b, h, xi, yi, zi] 1

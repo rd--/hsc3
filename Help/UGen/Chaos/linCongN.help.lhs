@@ -1,1 +1,1 @@
-See linCongC.
+See linCongC
