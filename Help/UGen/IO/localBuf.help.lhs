@@ -10,10 +10,9 @@ asLocalBuf id xs
      b - buffer identifier
     xs - sequential values to store at buffer
 
-Allocate a buffer local to the synthesis graph.
-
 > import Sound.SC3.ID
 
+Allocate a buffer local to the synthesis graph.
 > let { n = whiteNoise 'a' AR
 >     ; m = maxLocalBufs 1
 >     ; b = mrg2 (localBuf 'α' 2048 1) m
@@ -30,7 +29,6 @@ Allocate a buffer local to the synthesis graph.
 
 not clearing the buffer accesses old data:
 slowly overwrite data with noise
-
 > let { m = maxLocalBufs 1
 >     ; b = mrg2 (localBuf 'α' 2048 2) m
 >     ; nf = bufFrames KR b
@@ -42,7 +40,6 @@ slowly overwrite data with noise
 > in audition (mrg2 (out 0 r) (wr ph n))
 
 bufCombC needs no clearing, because the delay line is filled by the ugen
-
 > let { d = dup (dust 'a' AR 1)
 >     ; n = whiteNoise 'c' AR
 >     ; z = decay d 0.3 * n
@@ -53,7 +50,6 @@ bufCombC needs no clearing, because the delay line is filled by the ugen
 > in audition (out 0 (bufCombC b z l 0.2))
 
 asLocalBuf combines localBuf and setBuf
-
 > let { b = asLocalBuf 'α' [2, 1, 5, 3, 4, 0]
 >     ; x = mouseX' KR 0 (bufFrames KR b) Linear 0.2
 >     ; f = indexL b x * 100 + 40
@@ -62,7 +58,7 @@ asLocalBuf combines localBuf and setBuf
 
 > let { b = asLocalBuf 'α' [2, 3, 4, 0, 1, 5]
 >     ; n = bufFrames KR b
->     ; x = floorE (mouseX' KR 0 n Linear 0.1)
+>     ; x = ffloor (mouseX' KR 0 n Linear 0.1)
 >     ; i = detectIndex b x }
 > in audition (out 0 (sinOsc AR (linExp i 0 n 200 700) 0 * 0.1))
 

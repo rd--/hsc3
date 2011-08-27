@@ -26,7 +26,7 @@ how you use it.
 >                       ; async fd (b_allocRead 11 fileName 0 0) })
 
 > let { no_op m p _ = (m, p)
->     ; combf m p i = ((modE i 7.0 ==* 0) * m, p)
+>     ; combf m p i = ((fmod i 7.0 ==* 0) * m, p)
 >     ; spectral_delay m p _ = let { l = lfPar KR 0.5 0
 >                                  ; v = linLin l (-1) 1 0.1 1 }
 >                              in (m + delayN m 1 v, p)

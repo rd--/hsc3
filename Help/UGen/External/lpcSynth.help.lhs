@@ -33,7 +33,7 @@ b_allocRead.
 >           ; f = x / constant (lpcAnalysisDuration (lpcHeader lpc))
 >           ; ptr = lfSaw AR f 1 * 0.5 + 0.5
 >           ; MCE [cps, rms, err] = lpcVals AR b ptr
->           ; nh = floorE (22000 / cps)
+>           ; nh = ffloor (22000 / cps)
 >           ; voc = blip AR (cps * y) nh * (1 - err)
 >           ; s = lpcSynth b (voc + (n * err * 20)) ptr }
 >       in s * 1e-5 * rms }

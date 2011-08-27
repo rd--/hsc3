@@ -47,29 +47,29 @@ class RealFracE a where
   ceilingE :: a -> a
   floorE :: a -> a
 
-truncatef :: RealFrac a => a -> a
-truncatef a = fromIntegral (truncate a :: Integer)
+ftruncate :: Double -> Double
+ftruncate = M.trunc
 
-roundf :: RealFrac a => a -> a
-roundf a = fromIntegral (round a :: Integer)
+fround :: Double -> Double
+fround = M.round
 
-ceilingf :: RealFrac a => a -> a
-ceilingf a = fromIntegral (ceiling a :: Integer)
+fceiling :: Double -> Double
+fceiling = M.ceil
 
-floorf :: RealFrac a => a -> a
-floorf a = fromIntegral (floor a :: Integer)
+ffloor :: Double -> Double
+ffloor = M.floor
 
 instance RealFracE Double where
     properFractionE n =
         let (i,j) = properFraction n
         in (fromIntegral (i::Integer),j)
-    truncateE = truncatef
-    roundE = roundf
-    ceilingE = ceilingf
-    floorE = floorf
+    truncateE = ftruncate
+    roundE = fround
+    ceilingE = fceiling
+    floorE = ffloor
 
-roundTo_ :: RealFrac a => a -> a -> a
-roundTo_ a b = if b == 0 then a else floorf (a/b + 0.5) * b
+roundTo_ :: Double -> Double -> Double
+roundTo_ a b = if b == 0 then a else ffloor (a/b + 0.5) * b
 
 roundTo :: UGen -> UGen -> UGen
 roundTo = mkBinaryOperator Round roundTo_
@@ -78,8 +78,8 @@ instance RealFracE UGen where
     properFractionE = error "RealFracE,UGen,partial"
     truncateE = error "RealFracE,UGen,partial"
     roundE i = roundTo i 1
-    ceilingE = mkUnaryOperator Ceil ceilingE
-    floorE = mkUnaryOperator Floor floorE
+    ceilingE = mkUnaryOperator Ceil fceiling
+    floorE = mkUnaryOperator Floor ffloor
 
 ceil :: UGen -> UGen
 ceil = ceilingE
@@ -230,20 +230,20 @@ class (Floating a, Ord a) => BinaryOp a where
     wrap2 :: a -> a -> a
 
 -- SC3 % does not return negative numbers.
-modE' :: Double -> Double -> Double
-modE' i j =
+fmod :: Double -> Double -> Double
+fmod i j =
     let k = i `M.fmod` j
-    in if k < 0 then modE (i + j) j else k
+    in if k < 0 then fmod (i + j) j else k
 
 instance BinaryOp Double where
     fold2 a b = fold_ a (-b) b
-    modE = modE'
-    roundUp a b = if b == 0 then a else ceilingf (a/b + 0.5) * b
+    modE = fmod
+    roundUp a b = if b == 0 then a else fceiling (a/b + 0.5) * b
     wrap2 a b = wrap_ a (-b) b
 
 instance BinaryOp UGen where
     iDiv = mkBinaryOperator IDiv iDiv
-    modE = mkBinaryOperator Mod modE
+    modE = mkBinaryOperator Mod fmod
     bitAnd = mkBinaryOperator BitAnd bitAnd
     bitOr = mkBinaryOperator BitOr bitOr
     bitXOr = mkBinaryOperator BitXor bitXOr
@@ -278,10 +278,10 @@ instance BinaryOp UGen where
     randRange = mkBinaryOperator RandRange randRange
     exprandRange = mkBinaryOperator ExpRandRange exprandRange
 
-wrap_ :: (RealFrac a) => a -> a -> a -> a
+wrap_ :: Double -> Double -> Double -> Double
 wrap_ a b c =
     let r = c - b
-    in if a >= b && a <= c then a else a - r * floorf (a-b)/r
+    in if a >= b && a <= c then a else a - r * ffloor (a-b)/r
 
 -- | Fold to within range (i,j).
 fold' :: (Ord a,Num a) => a -> a -> a -> a
