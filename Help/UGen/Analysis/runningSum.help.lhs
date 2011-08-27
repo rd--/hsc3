@@ -1,11 +1,5 @@
-runningSum in numSamp
-
-A running sum over a user specified number of samples, useful for
-running RMS power windowing.
-
-in      - Input signal
-numsamp - How many samples to take the running sum over 
-          (initialisation rate)
+> Sound.SC3.UGen.Help.viewSC3Help "RunningSum"
+> Sound.SC3.UGen.DB.ugenSummary "RunningSum"
 
 > import Sound.SC3
 

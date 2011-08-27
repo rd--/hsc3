@@ -1,13 +1,5 @@
-zeroCrossing in
-
-Zero crossing frequency follower.
-
-Outputs a frequency based upon the distance between interceptions of
-the X axis. The X intercepts are determined via linear interpolation
-so this gives better than just integer wavelength resolution. This is
-a very crude pitch follower, but can be useful in some situations.
-
-in - input signal.
+> Sound.SC3.UGen.Help.viewSC3Help "ZeroCrossing"
+> Sound.SC3.UGen.DB.ugenSummary "ZeroCrossing"
 
 > import Sound.SC3
 
