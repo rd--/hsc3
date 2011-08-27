@@ -33,7 +33,11 @@
 
 (defun hsc3-unlit (c s)
   "Remove bird, or alternate, literate marks"
-  (replace-regexp-in-string (format "^%c " c) "" s))
+   (replace-regexp-in-string (format "^%c " c) "" s))
+
+(defun hsc3-remove-literates (c s)
+  "Remove bird, or alternate, literate lines"
+  (replace-regexp-in-string (format "^[^%c]*$" c) "" s))
 
 (defun hsc3-start-haskell ()
   "Start haskell."
@@ -115,7 +119,7 @@
   (let* ((s (buffer-substring-no-properties (region-beginning)
 					    (region-end)))
 	 (s* (if hsc3-literate-p
-		 (hsc3-unlit ?> s)
+		 (hsc3-unlit ?> (hsc3-remove-literates ?> s))
 	       s)))
     (hsc3-send-string (replace-regexp-in-string "\n" " " s*))))
 
