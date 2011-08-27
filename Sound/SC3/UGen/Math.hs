@@ -1,6 +1,7 @@
 -- | Non-standard mathematical classes and class instances.
 module Sound.SC3.UGen.Math where
 
+import qualified Foreign.C.Math.Double as M
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.UGen
 
@@ -228,9 +229,15 @@ class (Floating a, Ord a) => BinaryOp a where
     unsignedShift = error "unsignedShift"
     wrap2 :: a -> a -> a
 
+-- SC3 % does not return negative numbers.
+modE' :: Double -> Double -> Double
+modE' i j =
+    let k = i `M.fmod` j
+    in if k < 0 then modE (i + j) j else k
+
 instance BinaryOp Double where
     fold2 a b = fold_ a (-b) b
-    modE a b = let n = a / b in n - floorf n
+    modE = modE'
     roundUp a b = if b == 0 then a else ceilingf (a/b + 0.5) * b
     wrap2 a b = wrap_ a (-b) b
 

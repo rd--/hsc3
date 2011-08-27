@@ -45,6 +45,7 @@ Library
   Build-Depends:   base == 4.*,
                    binary,
                    bytestring,
+                   cmath,
                    containers,
                    hosc == 0.10,
                    network,
