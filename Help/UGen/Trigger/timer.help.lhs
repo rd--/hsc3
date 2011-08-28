@@ -1,9 +1,5 @@
-timer trig
-
-Returns time since last triggered
-
-Using timer to modulate sine frequency: the slower the trigger is
-the higher the frequency
+> Sound.SC3.UGen.Help.viewSC3Help "Timer"
+> Sound.SC3.UGen.DB.ugenSummary "Timer"
 
 > import Sound.SC3
 

@@ -1,6 +1,5 @@
-trig1 in dur
-
-When `in' is trigered output a unit signal for `dur' seconds.
+> Sound.SC3.UGen.Help.viewSC3Help "Trig1"
+> Sound.SC3.UGen.DB.ugenSummary "Trig1"
 
 > import Sound.SC3.ID
 
