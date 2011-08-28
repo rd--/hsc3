@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "RecordBuf"
 > Sound.SC3.UGen.DB.ugenSummary "RecordBuf"
 
-NOTE: SC3 reorders inputArray from last to first argument.
+# SC3 reorders inputArray from last to first argument.
 
 > import Sound.SC3
 

@@ -1,17 +1,10 @@
-combN in maxDelayTime delayTime decayTime
-
-Comb delay line. CombN uses no interpolation, CombL uses linear
-interpolation, CombC uses all pass interpolation.  All times are in
-seconds.  The decay time is the time for the echoes to decay by 60
-decibels. If this time is negative then the feedback coefficient
-will be negative, thus emphasizing only odd harmonics at an octave
-lower.
-
-Comb used as a resonator. The resonant fundamental is equal to
-reciprocal of the delay time.
+> Sound.SC3.UGen.Help.viewSC3Help "CombN"
+> Sound.SC3.UGen.DB.ugenSummary "CombN"
 
 > import Sound.SC3.ID
 
+Comb filter as resonator. The resonant fundamental is equal to
+reciprocal of the delay time.
 > let {n = whiteNoise 'a' AR
 >     ;dt = xLine KR 0.0001 0.01 20 RemoveSynth}
 > in audition (out 0 (combN (n * 0.1) 0.01 dt 0.2))
@@ -24,14 +17,12 @@ reciprocal of the delay time.
 >     ;dt = xLine KR 0.0001 0.01 20 RemoveSynth}
 > in audition (out 0 (combC (n * 0.1) 0.01 dt 0.2))
 
-With negative feedback:
-
+With negative feedback
 > let {n = whiteNoise 'a' AR
 >     ;dt = xLine KR 0.0001 0.01 20 RemoveSynth}
 > in audition (out 0 (combC (n * 0.1) 0.01 dt (-0.2)))
 
 Used as an echo.
-
 > let {d = dust 'a' AR 1
 >     ;n = whiteNoise 'a' AR
 >     ;i = decay (d * 0.5) 0.2 * n}

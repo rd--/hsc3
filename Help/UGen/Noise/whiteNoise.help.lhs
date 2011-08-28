@@ -1,27 +1,35 @@
-whiteNoise rate
+> Sound.SC3.UGen.Help.viewSC3Help "WhiteNoise"
+> Sound.SC3.UGen.DB.ugenSummary "WhiteNoise"
 
-Generates noise whose spectrum has equal power at all frequencies.
+> import Sound.SC3.ID
 
-> import Sound.SC3.Monadic
-
-> audition . (out 0) . (* 0.05) =<< whiteNoise AR
+> audition (out 0 (whiteNoise 'a' AR * 0.05))
 
 Random filtered noise bursts.
+> let {n = whiteNoise 'a' AR
+>     ;t = dust 'a' AR (mce [3, 7])
+>     ;f = tExpRand 'a' 20 1800 t
+>     ;bw = tExpRand 'a' 0.001 1 t
+>     ;e = decay2 t 0.01 0.2
+>     ;r = resonz (n * e) f bw}
+> in audition (out 0 r)
 
-> do { n <- whiteNoise AR
->    ; t <- dust AR (mce [3, 7])
->    ; f <- tExpRand 20 1800 t
->    ; bw <- tExpRand 0.001 1 t
->    ; let { e = decay2 t 0.01 0.2
->          ; r = resonz (n * e) f bw }
->      in audition (out 0 r) }
+> import qualified Sound.SC3.Monadic as M
 
-The same graph, without using do notation.
+Monadic form of above graph.
+> do {n <- M.whiteNoise AR
+>    ;t <- M.dust AR (mce [3, 7])
+>    ;f <- M.tExpRand 20 1800 t
+>    ;bw <- M.tExpRand 0.001 1 t
+>    ;let {e = decay2 t 0.01 0.2
+>         ;r = resonz (n * e) f bw}
+>      in audition (out 0 r)}
 
-> whiteNoise AR >>= \n ->
-> dust AR (mce [3, 7]) >>= \t ->
-> tExpRand 20 1800 t >>= \f ->
-> tExpRand 0.001 1 t >>= \bw ->
-> let { e = decay2 t 0.01 0.2
->     ; r = resonz (n * e) f bw }
+The same graph again, without using do notation.
+> M.whiteNoise AR >>= \n ->
+> M.dust AR (mce [3, 7]) >>= \t ->
+> M.tExpRand 20 1800 t >>= \f ->
+> M.tExpRand 0.001 1 t >>= \bw ->
+> let {e = decay2 t 0.01 0.2
+>     ;r = resonz (n * e) f bw}
 > in audition (out 0 r)
