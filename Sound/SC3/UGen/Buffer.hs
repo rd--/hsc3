@@ -118,8 +118,8 @@ playBuf :: Int -> Rate -> UGen -> UGen -> UGen -> UGen -> Loop -> DoneAction -> 
 playBuf n rt b r t s l a = mkOsc rt "PlayBuf" [b, r, t, s, from_loop l, from_done_action a] n
 
 -- | Buffer recording.
-recordBuf :: UGen -> UGen -> UGen -> UGen -> UGen -> Loop -> UGen -> DoneAction -> UGen -> UGen
-recordBuf b o rl pl r l t a i = mkOscMCE AR "RecordBuf" [b, o, rl, pl, r, from_loop l, t, from_done_action a] i 0
+recordBuf :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> Loop -> UGen -> DoneAction -> UGen -> UGen
+recordBuf rt b o rl pl r l t a i = mkOscMCE rt "RecordBuf" [b, o, rl, pl, r, from_loop l, t, from_done_action a] i 0
 
 -- | Triggered buffer shuffler (grain generator).
 tGrains :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
