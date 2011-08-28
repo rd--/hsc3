@@ -321,6 +321,13 @@ errorMode scope mode = message "/error" [Int e]
 
 -- * Variants to simplify common cases
 
+-- | Pre-allocate for b_setn1, values preceding offset are zeroed.
+b_alloc_setn1 :: Int -> Int -> [Double] -> OSC
+b_alloc_setn1 nid i xs =
+    let k = i + length xs
+        xs' = replicate i 0 ++ xs
+    in withCM (b_alloc nid k 1) (b_setn1 nid 0 xs')
+
 -- | Set single sample value.
 b_set1 :: Int -> Int -> Double -> OSC
 b_set1 nid i x = b_set nid [(i,x)]
