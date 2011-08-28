@@ -1,11 +1,8 @@
-linRand lo hi minmax
+> Sound.SC3.UGen.Help.viewSC3Help "LinRand"
+> Sound.SC3.UGen.DB.ugenSummary "LinRand"
 
-Generates a single random float value in linear distribution from
-lo to hi, skewed towards lo if minmax < 0, otherwise skewed towards
-hi.
+> import Sound.SC3.ID
 
-> import Sound.SC3.Monadic
-
-> do { f <- linRand 200.0 10000.0 (mce [-1, 1])
->    ; let e = line KR 0.4 0 0.01 RemoveSynth
->      in audition (out 0 (fSinOsc AR f 0 * e)) }
+> let {f = linRand 'a' 200.0 10000.0 (mce [-1, 1])
+>     ;e = line KR 0.4 0 0.01 RemoveSynth}
+> in audition (out 0 (fSinOsc AR f 0 * e))

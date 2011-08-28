@@ -1,13 +1,8 @@
-line rate start end dur doneAction
+> Sound.SC3.UGen.Help.viewSC3Help "Line"
+> Sound.SC3.UGen.DB.ugenSummary "Line"
 
-Generates a line from the start value to the end value.
-
-start - starting value
-end   - ending value
-dur   - duration in seconds
-
-Note: The SC3 UGen reorders the mul and add inputs to precede the
-doneAction input.
+#SC3
+SC3 reorders the mul and add inputs to precede the doneAction input.
 
 > import Sound.SC3
 

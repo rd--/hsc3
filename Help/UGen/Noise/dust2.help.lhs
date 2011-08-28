@@ -1,12 +1,10 @@
-dust2 rate density
+> Sound.SC3.UGen.Help.viewSC3Help "Dust2"
+> Sound.SC3.UGen.DB.ugenSummary "Dust2"
 
-Generates random impulses from -1 to +1.  The `density' is in
-impulses per second.
+> import Sound.SC3.ID
 
-> import Sound.SC3.Monadic
-
-> do { n <- dust2 AR 200
->    ; audition (out 0 (n * 0.5)) }
+> let n = dust2 'a' AR 200
+> in audition (out 0 (n * 0.5))
 
 > let d = xLine KR 20000 2 10 RemoveSynth
-> in audition . (out 0 ) . (* 0.15) =<< dust2 AR d
+> in audition (out 0 (dust2 'b' AR d * 0.15))
