@@ -109,6 +109,13 @@ ugenType u =
 mce2 :: UGen -> UGen -> UGen
 mce2 x y = mce [x, y]
 
+-- | Extract two channels from possible MCE.
+mce2c :: UGen -> (UGen,UGen)
+mce2c u =
+    case u of
+      MCE (p:q:_) -> (p,q)
+      _ -> (u,u)
+
 -- | Clone a unit generator (mce . replicateM).
 clone :: (UId m) => Int -> m UGen -> m UGen
 clone n = liftM mce . replicateM n
