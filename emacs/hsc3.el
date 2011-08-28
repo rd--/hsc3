@@ -83,6 +83,12 @@
 				      (thing-at-point 'symbol)
 				      "\\.help\\.lhs"))))
 
+(defun hsc3-ugen-summary ()
+  "Lookup up the UGen at point in hsc3-db"
+  (interactive)
+  (hsc3-send-string (format "Sound.SC3.UGen.DB.ugenSummary_ci \"%s\""
+                            (thing-at-point 'symbol))))
+
 (defun hsc3-request-type ()
   "Ask ghci for the type of the name at point."
   (interactive)
@@ -180,22 +186,8 @@
   (define-key map [?\C-c ?\C-i] 'hsc3-interrupt-haskell)
   (define-key map [?\C-c ?\C-m] 'hsc3-run-main)
   (define-key map [?\C-c ?\C-o] 'hsc3-quit-scsynth)
-  (define-key map [?\C-c ?\C-h] 'hsc3-help))
-
-(defun turn-on-hsc3-keybindings ()
-  "Haskell SuperCollider keybindings in the local map."
-  (local-set-key [?\C-c ?\C-s] 'hsc3-start-haskell)
-  (local-set-key [?\C-c ?\C-g] 'hsc3-see-output)
-  (local-set-key [?\C-c ?\C-x] 'hsc3-quit-haskell)
-  (local-set-key [?\C-c ?\C-k] 'hsc3-stop)
-  (local-set-key [?\C-c ?\C-w] 'hsc3-status-scsynth)
-  (local-set-key [?\C-c ?\C-c] 'hsc3-run-line)
-  (local-set-key [?\C-c ?\C-e] 'hsc3-run-multiple-lines)
-  (local-set-key [?\C-c ?\C-l] 'hsc3-load-buffer)
-  (local-set-key [?\C-c ?\C-i] 'hsc3-interrupt-haskell)
-  (local-set-key [?\C-c ?\C-m] 'hsc3-run-main)
-  (local-set-key [?\C-c ?\C-o] 'hsc3-quit-scsynth)
-  (local-set-key [?\C-c ?\C-h] 'hsc3-help))
+  (define-key map [?\C-c ?\C-h] 'hsc3-help)
+  (define-key map [?\C-c ?\C-u] 'hsc3-ugen-summary))
 
 (defun hsc3-mode-menu (map)
   "Haskell SuperCollider menu."
@@ -205,6 +197,8 @@
     (cons "Help" (make-sparse-keymap "Help")))
   (define-key map [menu-bar hsc3 help hsc3]
     '("Haskell SuperCollider help" . hsc3-help))
+  (define-key map [menu-bar hsc3 help ugen]
+    '("UGen parameter summary" . hsc3-ugen-summary))
   (define-key map [menu-bar hsc3 expression]
     (cons "Expression" (make-sparse-keymap "Expression")))
   (define-key map [menu-bar hsc3 expression load-buffer]
