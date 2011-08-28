@@ -1,74 +1,40 @@
-playBuf numChannels bufnum rate trigger startPos loop doneAction
-
-Sample playback oscillator.  Plays back a memory resident sample.
-
-numChannels - number of channels that the buffer will be.  This
-              must be a fixed integer. The architechture of the
-              SynthDef cannot change after it is compiled.
-              Warning: if you supply a bufnum of a buffer that
-              has a different numChannels then you have specified
-              to the PlayBuf, it will fail silently.
-
-bufnum      - the index of the buffer to use
-
-rate        - 1.0 is the server's sample rate, 2.0 is one octave up, 0.5
-              is one octave down -1.0 is backwards normal rate
-              etc. Interpolation is cubic.  Note: If the buffer's
-              sample rate is different from the server's, you will
-              need to multiply the desired playback rate by (file's
-              rate / server's rate). The UGen BufRateScale.kr(bufnum)
-              returns this factor. See examples below. BufRateScale
-              should be used in virtually every case.
-
-trigger     - a trigger causes a jump to the startPos.  A trigger occurs
-              when a signal changes from <= 0 to > 0.
-
-startPos    - sample frame to start playback (k-rate).
-
-loop        - 1 means true, 0 means false.  This is modulate-able.
-
-Allocate buffer.
+> Sound.SC3.UGen.Help.viewSC3Help "PlayBuf"
+> Sound.SC3.UGen.DB.ugenSummary "PlayBuf"
 
 > import Sound.SC3
 
-> let fileName = "/home/rohan/audio/metal.wav"
-> in withSC3 (\fd -> async fd (b_allocRead 10 fileName 0 0))
+Load sound file to buffer zero (required for examples)
+> let fn = "/home/rohan/data/audio/pf-c5.aif"
+> in withSC3 (\fd -> async fd (b_allocRead 0 fn 0 0))
 
 Play once only.
-
-> let s = bufRateScale KR 10
-> in audition (out 0 (playBuf 1 10 s 1 0 NoLoop RemoveSynth))
+> let s = bufRateScale KR 0
+> in audition (out 0 (playBuf 1 AR 0 s 1 0 NoLoop RemoveSynth))
 
 Play in infinite loop.
-
-> let s = bufRateScale KR 10
-> in audition (out 0 (playBuf 1 10 s 1 0 Loop DoNothing))
+> let s = bufRateScale KR 0
+> in audition (out 0 (playBuf 1 AR 0 s 1 0 Loop DoNothing))
 
 Trigger playback at each pulse.
-
-> let { t = impulse KR 2 0
->     ; s = bufRateScale KR 10 }
-> in audition (out 0 (playBuf 1 10 s t 0 NoLoop DoNothing))
+> let {t = impulse KR 2 0
+>     ;s = bufRateScale KR 0}
+> in audition (out 0 (playBuf 1 AR 0 s t 0 NoLoop DoNothing))
 
 Trigger playback at each pulse (diminishing intervals).
-
-> let { f = xLine KR 0.1 100 10 RemoveSynth
->     ; t = impulse KR f 0
->     ; s = bufRateScale KR 10 }
-> in audition (out 0 (playBuf 1 10 s t 0 NoLoop DoNothing))
+> let {f = xLine KR 0.1 100 10 RemoveSynth
+>     ;t = impulse KR f 0
+>     ;s = bufRateScale KR 0}
+> in audition (out 0 (playBuf 1 AR 0 s t 0 NoLoop DoNothing))
 
 Loop playback, accelerating pitch.
-
 > let r = xLine KR 0.1 100 60 RemoveSynth
-> in audition (out 0 (playBuf 1 10 r 1 0 Loop DoNothing))
+> in audition (out 0 (playBuf 1 AR 0 r 1 0 Loop DoNothing))
 
 Sine wave control of playback rate, negative rate plays backwards.
-
-> let { f = xLine KR 0.2 8 30 RemoveSynth
->     ; r = fSinOsc KR f 0 * 3 + 0.6
->     ; s = bufRateScale KR 10 * r }
-> in audition (out 0 (playBuf 1 10 s 1 0 Loop DoNothing))
+> let {f = xLine KR 0.2 8 30 RemoveSynth
+>     ;r = fSinOsc KR f 0 * 3 + 0.6
+>     ;s = bufRateScale KR 0 * r}
+> in audition (out 0 (playBuf 1 AR 0 s 1 0 Loop DoNothing))
 
 Release buffer.
-
-> withSC3 (\fd -> send fd (b_free 10))
+> withSC3 (\fd -> send fd (b_free 0))

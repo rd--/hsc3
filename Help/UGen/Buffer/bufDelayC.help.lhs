@@ -1,24 +1,21 @@
-bufDelayC buf in delayTime
+> Sound.SC3.UGen.Help.viewSC3Help "BufDelayC"
+> Sound.SC3.UGen.DB.ugenSummary "BufDelayC"
 
-Buffer based simple delay line with cubic interpolation.
+> import Sound.SC3.ID
 
-Simple delay line with cubic interpolation which uses a buffer for
-its internal memory. See also BufDelayN which uses no
-interpolation, and BufDelayL which uses linear interpolation. Cubic
-interpolation is more computationally expensive than linear, but
-more accurate.
-
-See also DelayC.
-
-buf       - buffer number.
-in        - the input signal.
-delaytime - delay time in seconds.
-
-> import Sound.SC3.Monadic
-
+Allocate buffer zero (required for examples below)
 > withSC3 (\fd -> async fd (b_alloc 0 44100 1))
 
-> do { d <- dust AR 1
->    ; n <- whiteNoise AR
->    ; let x = decay d 0.5 * n * 0.3
->      in audition (out 0 (bufDelayC 0 x 0.2 + x)) }
+Dust randomly triggers Decay to create an exponential decay envelope
+for the WhiteNoise input source.  The input is mixed with the delay.
+> let {t = dust 'a' AR 1
+>     ;n = whiteNoise 'a' AR
+>     ;d = decay t 0.5 * n * 0.3}
+> in audition (out 0 (bufDelayC 0 d 0.2 + d))
+
+Mouse control for delay time
+> let {t = dust 'a' AR 1
+>     ;n = whiteNoise 'b' AR
+>     ;d = decay t 0.3 * n
+>     ;x = mouseX' KR 0.0 0.2 Linear 0.1}
+> in audition (out 0 (d + bufDelayC 0 d x))

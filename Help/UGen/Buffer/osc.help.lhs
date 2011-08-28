@@ -1,48 +1,29 @@
-osc rate bufnum freq phase
-
-Linear interpolating wavetable lookup oscillator with frequency and
-phase modulation inputs.
-
-This oscillator requires a buffer to be filled with a wavetable
-format signal.  This preprocesses the Signal into a form which can
-be used efficiently by the Oscillator.  The buffer size must be a
-power of 2.
-
-This can be acheived by creating a Buffer object and sending it one
-of the "b_gen" messages ( sine1, sine2, sine3 ) with the wavetable
-flag set to true.
-
-Note about wavetables: OscN requires the b_gen sine1 wavetable flag
-to be OFF.  Osc requires the b_gen sine1 wavetable flag to be ON.
+> Sound.SC3.UGen.Help.viewSC3Help "Osc"
+> Sound.SC3.UGen.DB.ugenSummary "Osc"
 
 > import Sound.SC3
 
-> withSC3 (\fd -> do { async fd (b_alloc 10 512 1)
->                    ; send fd (b_gen 10 "sine1" [1 + 2 + 4, 1, 1/2, 1/3, 1/4, 1/5]) })
+Allocate and generate wavetable buffer
+> withSC3 (\fd -> do {_ <- async fd (b_alloc 10 512 1)
+>                    ;send fd (b_gen 10 "sine1" [1+2+4,1,1/2,1/3,1/4,1/5])})
 
+Fixed frequency wavetable oscillator
 > audition (out 0 (osc AR 10 220 0 * 0.1))
 
-Modulate freq
-
+Modulate frequency
 > let f = xLine KR 2000 200 1 DoNothing
 > in audition (out 0 (osc AR 10 f 0 * 0.1))
 
-Modulate freq
-
+As frequency modulator
 > let f = osc AR 10 (xLine KR 1 1000 9 RemoveSynth) 0 * 200 + 800
 > in audition (out 0 (osc AR 10 f 0 * 0.1))
 
-Modulate phase
-
+As phase modulatulator
 > let p = osc AR 10 (xLine KR 20 8000 10 RemoveSynth) 0 * 2 * pi
 > in audition (out 0 (osc AR 10 800 p * 0.1))
 
-Change the buffer while its playing
-
+Fixed frequency wavetable oscillator
 > audition (out 0 (osc AR 10 220 0 * 0.1))
 
-> import System.Random
-
-> do { r <- getStdRandom (randomR (0.0,1.0))
->    ; let g = b_gen 10 "sine1" [1 + 2 + 4, 1, r, 1/4]
->      in withSC3 (\fd -> send fd g) }
+Change the wavetable while its playing
+> withSC3 (\fd -> send fd (b_gen 10 "sine1" [1+2+4,1,0.6,1/4]))

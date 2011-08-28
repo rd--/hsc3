@@ -1,1 +1,1 @@
-See bufDelayC.
+See bufDelayC
