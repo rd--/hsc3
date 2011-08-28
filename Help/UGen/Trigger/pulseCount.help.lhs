@@ -1,7 +1,5 @@
-pulseCount trig reset
-
-This outputs the number of pulses received at `trig' and outputs
-that value until `reset' is triggered.
+> Sound.SC3.UGen.Help.viewSC3Help "PulseCount"
+> Sound.SC3.UGen.DB.ugenSummary "PulseCount"
 
 > import Sound.SC3
 

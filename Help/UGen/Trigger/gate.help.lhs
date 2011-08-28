@@ -1,6 +1,7 @@
-gate in trig
+> Sound.SC3.UGen.Help.viewSC3Help "Gate"
+> Sound.SC3.UGen.DB.ugenSummary "Gate"
 
-The signal at `in' is passed while `trig' is greater than zero.
+# hsc3: filter
 
 > import Sound.SC3
 
