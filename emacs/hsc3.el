@@ -9,10 +9,6 @@
 (require 'thingatpt)
 (require 'find-lisp)
 
-(defvar hsc3-buffer
-  "*hsc3*"
-  "*The name of the hsc3 process buffer (default=*hsc3*).")
-
 (defvar hsc3-interpreter
   "ghci"
   "*The haskell interpter to use (default=ghci).")
@@ -38,40 +34,6 @@
 (defun hsc3-remove-literates (c s)
   "Remove bird, or alternate, literate lines"
   (replace-regexp-in-string (format "^[^%c]*$" c) "" s))
-
-(defun hsc3-start-haskell ()
-  "Start haskell."
-  (interactive)
-  (if (comint-check-proc hsc3-buffer)
-      (error "An hsc3 process is already running")
-    (apply
-     'make-comint
-     "hsc3"
-     hsc3-interpreter
-     nil
-     hsc3-interpreter-arguments)
-    (hsc3-see-output))
-  (hsc3-send-string ":set prompt \"hsc3> \""))
-
-(defun hsc3-see-output ()
-  "Show haskell output."
-  (interactive)
-  (when (comint-check-proc hsc3-buffer)
-    (delete-other-windows)
-    (split-window-vertically)
-    (with-current-buffer hsc3-buffer
-      (let ((window (display-buffer (current-buffer))))
-	(goto-char (point-max))
-	(save-selected-window
-	  (set-window-point window (point-max)))))))
-
-(defun hsc3-quit-haskell ()
-  "Quit haskell."
-  (interactive)
-  (hsc3-send-string ":quit")
-  (sit-for 0.25)
-  (kill-buffer hsc3-buffer)
-  (delete-other-windows))
 
 (defun hsc3-help ()
   "Lookup up the name at point in the Help files."
@@ -104,9 +66,11 @@
       (cons c (chunk-string n (substring s n))))))
 
 (defun hsc3-send-string (s)
-  (if (comint-check-proc hsc3-buffer)
+  (if (comint-check-proc inferior-haskell-buffer)
       (let ((cs (chunk-string 64 (concat s "\n"))))
-        (mapcar (lambda (c) (comint-send-string hsc3-buffer c)) cs))
+        (mapcar
+         (lambda (c) (comint-send-string inferior-haskell-buffer c))
+         cs))
     (error "no hsc3 process running?")))
 
 (defun hsc3-run-line ()
@@ -129,12 +93,6 @@
 	       s)))
     (hsc3-send-string (replace-regexp-in-string "\n" " " s*))))
 
-(defun hsc3-load-buffer ()
-  "Load the current buffer."
-  (interactive)
-  (save-buffer)
-  (hsc3-send-string (format ":load \"%s\"" buffer-file-name)))
-
 (defun hsc3-run-main ()
   "Run current main."
   (interactive)
@@ -143,13 +101,13 @@
 (defun hsc3-interrupt-haskell ()
   "Interrup haskell interpreter"
   (interactive)
-  (if (comint-check-proc hsc3-buffer)
-      (with-current-buffer hsc3-buffer
+  (if (comint-check-proc inferior-haskell-buffer)
+      (with-current-buffer inferior-haskell-buffer
         (interrupt-process (get-buffer-process (current-buffer))))
-    (error "no hsc3 process running?")))
+    (error "no haskell interpreter process running?")))
 
 (defun hsc3-reset-scsynth ()
-  "Reset"
+  "Reset scsynth"
   (interactive)
   (hsc3-send-string "withSC3 reset"))
 
@@ -175,18 +133,15 @@
 
 (defun hsc3-mode-keybindings (map)
   "Haskell SuperCollider keybindings."
-  (define-key map [?\C-c ?\C-s] 'hsc3-start-haskell)
-  (define-key map [?\C-c ?\C-g] 'hsc3-see-output)
-  (define-key map [?\C-c ?\C-x] 'hsc3-quit-haskell)
-  (define-key map [?\C-c ?\C-k] 'hsc3-stop)
-  (define-key map [?\C-c ?\C-w] 'hsc3-status-scsynth)
   (define-key map [?\C-c ?\C-c] 'hsc3-run-line)
   (define-key map [?\C-c ?\C-e] 'hsc3-run-multiple-lines)
-  (define-key map [?\C-c ?\C-l] 'hsc3-load-buffer)
-  (define-key map [?\C-c ?\C-i] 'hsc3-interrupt-haskell)
-  (define-key map [?\C-c ?\C-m] 'hsc3-run-main)
-  (define-key map [?\C-c ?\C-o] 'hsc3-quit-scsynth)
   (define-key map [?\C-c ?\C-h] 'hsc3-help)
+  (define-key map [?\C-c ?\C-i] 'hsc3-interrupt-haskell)
+  (define-key map [?\C-c ?\C-k] 'hsc3-stop)
+  (define-key map [?\C-c ?\C-m] 'hsc3-run-main)
+  (define-key map [?\C-c ?\C-o] 'hsc3-quit-scsynth) ;; -o = otherwise
+  (define-key map [?\C-c ?\C-p] 'hsc3-status-scsynth)
+  (define-key map [?\C-c ?\C-s] 'hsc3-reset-scsynth)
   (define-key map [?\C-c ?\C-u] 'hsc3-ugen-summary))
 
 (defun hsc3-mode-menu (map)
@@ -201,8 +156,6 @@
     '("UGen parameter summary" . hsc3-ugen-summary))
   (define-key map [menu-bar hsc3 expression]
     (cons "Expression" (make-sparse-keymap "Expression")))
-  (define-key map [menu-bar hsc3 expression load-buffer]
-    '("Load buffer" . hsc3-load-buffer))
   (define-key map [menu-bar hsc3 expression run-main]
     '("Run main" . hsc3-run-main))
   (define-key map [menu-bar hsc3 expression run-multiple-lines]
@@ -218,13 +171,7 @@
   (define-key map [menu-bar hsc3 scsynth reset]
     '("Reset scsynth" . hsc3-reset-scsynth))
   (define-key map [menu-bar hsc3 haskell]
-    (cons "Haskell" (make-sparse-keymap "Haskell")))
-  (define-key map [menu-bar hsc3 haskell quit-haskell]
-    '("Quit haskell" . hsc3-quit-haskell))
-  (define-key map [menu-bar hsc3 haskell see-output]
-    '("See output" . hsc3-see-output))
-  (define-key map [menu-bar hsc3 haskell start-haskell]
-    '("Start haskell" . hsc3-start-haskell)))
+    (cons "Haskell" (make-sparse-keymap "Haskell"))))
 
 (if hsc3-mode-map
     ()
