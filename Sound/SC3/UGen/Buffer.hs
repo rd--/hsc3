@@ -114,8 +114,8 @@ oscN :: Rate -> UGen -> UGen -> UGen -> UGen
 oscN r bufnum freq phase = mkOsc r "OscN" [bufnum, freq, phase] 1
 
 -- | Buffer playback.
-playBuf :: Int -> UGen -> UGen -> UGen -> UGen -> Loop -> DoneAction -> UGen
-playBuf n b r t s l a = mkOsc AR "PlayBuf" [b, r, t, s, from_loop l, from_done_action a] n
+playBuf :: Int -> Rate -> UGen -> UGen -> UGen -> UGen -> Loop -> DoneAction -> UGen
+playBuf n rt b r t s l a = mkOsc rt "PlayBuf" [b, r, t, s, from_loop l, from_done_action a] n
 
 -- | Buffer recording.
 recordBuf :: UGen -> UGen -> UGen -> UGen -> UGen -> Loop -> UGen -> DoneAction -> UGen -> UGen
