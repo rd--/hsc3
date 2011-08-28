@@ -1,14 +1,12 @@
-syncSaw rate syncFreq sawFreq
-
-A sawtooth wave that is hard synched to a fundamental pitch. This
-produces an effect similar to moving formants or pulse width
-modulation. The sawtooth oscillator has its phase reset when the
-sync oscillator completes a cycle. This is not a band limited
-waveform, so it may alias.
-
-The frequency of the slave synched sawtooth wave should always be
-greater than the syncFreq.
+> Sound.SC3.UGen.Help.viewSC3Help "SyncSaw"
+> Sound.SC3.UGen.DB.ugenSummary "SyncSaw"
 
 > import Sound.SC3
 
-> audition (out 0 (syncSaw AR 100 (line KR 100 800 12 RemoveSynth) * 0.1))
+> let f = line KR 100 800 12 RemoveSynth
+> in audition (out 0 (syncSaw AR 100 f * 0.1))
+
+Mouse control
+> let {sy_f = mouseY' KR 80 220 Exponential 0.2
+>     ;sw_f = sy_f * mouseX' KR 1 3 Linear 0.2}
+> in audition (out 0 (syncSaw AR sy_f sw_f * 0.1))
