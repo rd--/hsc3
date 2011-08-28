@@ -9,14 +9,6 @@
 (require 'thingatpt)
 (require 'find-lisp)
 
-(defvar hsc3-interpreter
-  "ghci"
-  "*The haskell interpter to use (default=ghci).")
-
-(defvar hsc3-interpreter-arguments
-  (list)
-  "*Arguments to the haskell interpreter (default=none).")
-
 (defvar hsc3-help-directory
   nil
   "*The directory containing the help files (default=nil).")
@@ -27,6 +19,11 @@
 
 (make-variable-buffer-local 'hsc3-literate-p)
 
+(defun hsc3-quit-haskell ()
+  "Quit haskell."
+  (interactive)
+  (hsc3-send-string ":quit"))
+
 (defun hsc3-unlit (c s)
   "Remove bird, or alternate, literate marks"
    (replace-regexp-in-string (format "^%c " c) "" s))
@@ -36,7 +33,7 @@
   (replace-regexp-in-string (format "^[^%c]*$" c) "" s))
 
 (defun hsc3-help ()
-  "Lookup up the name at point in the Help files."
+  "Lookup up the name at point in the hsc3 help files."
   (interactive)
   (mapc (lambda (filename)
 	  (find-file-other-window filename))
@@ -44,6 +41,12 @@
 			      (concat "^"
 				      (thing-at-point 'symbol)
 				      "\\.help\\.lhs"))))
+
+(defun hsc3-sc3-help ()
+  "Lookup up the name at point in the SC3 help files."
+  (interactive)
+  (hsc3-send-string (format "viewSC3Help (toSC3Name \"%s\")"
+                            (thing-at-point 'symbol))))
 
 (defun hsc3-ugen-summary ()
   "Lookup up the UGen at point in hsc3-db"
@@ -136,11 +139,13 @@
   (define-key map [?\C-c ?\C-c] 'hsc3-run-line)
   (define-key map [?\C-c ?\C-e] 'hsc3-run-multiple-lines)
   (define-key map [?\C-c ?\C-h] 'hsc3-help)
+  (define-key map [?\C-c ?\C-j] 'hsc3-sc3-help)
   (define-key map [?\C-c ?\C-i] 'hsc3-interrupt-haskell)
   (define-key map [?\C-c ?\C-k] 'hsc3-stop)
   (define-key map [?\C-c ?\C-m] 'hsc3-run-main)
-  (define-key map [?\C-c ?\C-o] 'hsc3-quit-scsynth) ;; -o = otherwise
   (define-key map [?\C-c ?\C-p] 'hsc3-status-scsynth)
+  (define-key map [?\C-c ?\C-q] 'hsc3-quit-haskell)
+  (define-key map [?\C-c ?\C-0] 'hsc3-quit-scsynth)
   (define-key map [?\C-c ?\C-s] 'hsc3-reset-scsynth)
   (define-key map [?\C-c ?\C-u] 'hsc3-ugen-summary))
 
@@ -171,7 +176,9 @@
   (define-key map [menu-bar hsc3 scsynth reset]
     '("Reset scsynth" . hsc3-reset-scsynth))
   (define-key map [menu-bar hsc3 haskell]
-    (cons "Haskell" (make-sparse-keymap "Haskell"))))
+    (cons "Haskell" (make-sparse-keymap "Haskell")))
+  (define-key map [menu-bar hsc3 haskell quit-haskell]
+    '("Quit haskell" . hsc3-quit-haskell)))
 
 (if hsc3-mode-map
     ()
