@@ -2,6 +2,7 @@ module Sound.SC3.UGen.Help where
 
 import Control.Exception
 import Control.Monad
+import Data.Char
 import System.IO.Error
 import System.Cmd {- process -}
 import System.Environment
@@ -21,6 +22,14 @@ ugenSC3HelpFile :: String -> IO FilePath
 ugenSC3HelpFile u = do
     d <- sc3HelpDirectory
     return (d ++ "/Classes/" ++ u ++ ".html")
+
+toSC3Name :: String -> String
+toSC3Name nm =
+    case nm of
+      'l':'f':nm' -> "LF"++nm'
+      'p':'v':'_':nm' -> "PV_"++nm'
+      p:q -> toUpper p : q
+      [] -> []
 
 -- | Use x-www-browser to view SC3 help file for `u'.
 viewSC3Help :: String -> IO ()

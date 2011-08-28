@@ -14,6 +14,7 @@ module Sound.SC3.UGen (module Sound.SC3.UGen.Analysis
                       ,module Sound.SC3.UGen.FFT
                       ,module Sound.SC3.UGen.Filter
                       ,module Sound.SC3.UGen.Granular
+                      ,module Sound.SC3.UGen.Help
                       ,module Sound.SC3.UGen.Information
                       ,module Sound.SC3.UGen.IO
                       ,module Sound.SC3.UGen.MachineListening
@@ -41,6 +42,7 @@ import Sound.SC3.UGen.External.LPC
 import Sound.SC3.UGen.FFT
 import Sound.SC3.UGen.Filter
 import Sound.SC3.UGen.Granular
+import Sound.SC3.UGen.Help
 import Sound.SC3.UGen.Information
 import Sound.SC3.UGen.IO
 import Sound.SC3.UGen.Math
