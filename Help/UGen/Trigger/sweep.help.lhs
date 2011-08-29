@@ -1,5 +1,5 @@
-> Sound.SC3.UGen.Help.viewSC3Help "TDelay"
-> Sound.SC3.UGen.DB.ugenSummary "TDelay"
+> Sound.SC3.UGen.Help.viewSC3Help "Sweep"
+> Sound.SC3.UGen.DB.ugenSummary "Sweep"
 
 > import Sound.SC3.ID
 
