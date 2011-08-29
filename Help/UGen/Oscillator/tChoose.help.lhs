@@ -1,7 +1,7 @@
 tChoose trig inputs
+# composite
 
-The output is selected randomly on recieving a trigger from an
-array of inputs.  tChoose is a composite of tiRand and select.
+tChoose is a composite of tIRand and select.
 
 > import Sound.SC3.ID
 

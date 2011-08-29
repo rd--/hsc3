@@ -1,67 +1,49 @@
-tGrains numChannels trigger bufnum rate centerPos dur pan amp interp
+> Sound.SC3.UGen.Help.viewSC3Help "TGrains"
+> Sound.SC3.UGen.DB.ugenSummary "TGrains"
 
-Buffer granulator.  Triggers generate grains from a buffer. Each
-grain has a Hanning envelope (sin^2(x) for x from 0 to pi) and is
-panned between two channels of multiple outputs.
+> import Sound.SC3.ID
 
-numChannels - number of output channels.
-
-trigger - at each trigger, the following arguments are sampled and
-          used as the arguments of a new grain.  A trigger occurs
-          when a signal changes from <= 0 to > 0.  If the trigger
-          is audio rate then the grains will start with sample
-          accuracy.
-
-bufnum - the index of the buffer to use. It must be a one channel
-         (mono) buffer.
-
-rate - 1.0 is normal, 2.0 is one octave up, 0.5 is one octave down
-       and -1.0 is backwards normal rate ... etc.  Unlike PlayBuf,
-       the rate is multiplied by BufRate, so you needn't do that
-       yourself.
-
-centerPos - the position in the buffer in seconds at which the
-            grain envelope will reach maximum amplitude.
-
-dur - duration of the grain in seconds.
-
-pan - a value from -1 to 1. Determines where to pan the output in
-      the same manner as PanAz.
-
-amp - amplitude of the grain.
-
-interp - 1, 2, or 4. Determines whether the grain uses (1) no
-         interpolation, (2) linear interpolation, or (4) cubic
-         interpolation.
-
-> import Sound.SC3
-
-> let fn = "/home/rohan/audio/metal.wav"
+Load audio data
+> let fn = "/home/rohan/data/audio/pf-c5.aif"
 > in withSC3 (\fd -> async fd (b_allocRead 10 fn 0 0))
 
-> let { tRate = mouseY' KR 2 200 Exponential 0.1
->     ; ctr = mouseX' KR 0 (bufDur KR 10) Linear 0.1
->     ; tr = impulse AR tRate 0 }
+Mouse control
+> let {tRate = mouseY' KR 2 200 Exponential 0.1
+>     ;ctr = mouseX' KR 0 (bufDur KR 10) Linear 0.1
+>     ;tr = impulse AR tRate 0}
 > in audition (out 0 (tGrains 2 tr 10 1 ctr (4 / tRate) 0 0.1 2))
 
-> import Sound.SC3.Monadic
+> let {b = 10
+>     ;rt = mouseY' KR 8 120 Exponential 0.1
+>     ;dur = 4 / rt
+>     ;clk = dust 'a' AR rt
+>     ;r = tRand 'a' 0 0.01 clk
+>     ;pan = whiteNoise 'a' KR * 0.6
+>     ;x = mouseX' KR 0 (bufDur KR b) Linear 0.1
+>     ;pos = x + r}
+> in audition (out 0 (tGrains 2 clk b 1 pos dur pan 0.1 2))
 
-> let { b = 10
->     ; trate = mouseY' KR 8 120 Exponential 0.1
->     ; dur = 4 / trate }
-> in do { clk <- dust AR trate
->       ; r <- tRand 0 0.01 clk
->       ; pan <- return . (* 0.6) =<< whiteNoise KR
->       ; let { x = mouseX' KR 0 (bufDur KR b) Linear 0.1
->             ; pos = x + r }
->         in audition (out 0 (tGrains 2 clk b 1 pos dur pan 0.1 2)) }
+> let {b = 10
+>     ;rt = mouseY' KR 2 120 Exponential 0.1
+>     ;dur = 1.2 / rt
+>     ;clk = impulse AR rt 0
+>     ;pos = mouseX' KR 0 (bufDur KR b) Linear 0.1
+>     ;n0 = whiteNoise 'a' KR
+>     ;n1 = whiteNoise 'b' KR
+>     ;rate = shiftLeft 1.2 (roundTo (n0 * 3) 1)}
+> in audition (out 0 (tGrains 2 clk b rate pos dur (n1 * 0.6) 0.25 2))
 
-> let { b = 10
->     ; trate = mouseY' KR 2 120 Exponential 0.1
->     ; dur = 1.2 / trate
->     ; clk = impulse AR trate 0
->     ; pos = mouseX' KR 0 (bufDur KR b) Linear 0.1 }
-> in do { n0 <- whiteNoise KR
->       ; n1 <- whiteNoise KR
->       ; let rate = shiftLeft 1.2 (fround (n0 * 3) 1)
->         in audition (out 0 (tGrains 2 clk b rate pos dur (n1 * 0.6) 0.25 2)) }
+Demand UGens as inputs (will eventually hang scsynth...)
+> let {b = 10
+>     ;rt = mouseY' KR 2 100 Linear 0.2
+>     ;d e = dwhite e 1 0.1 0.2
+>     ;z e0 e1 = drand e0 1 (mce [dgeom e0 (diwhite e0 1 20 40) 0.1 (1 + d e0)
+>                                ,dgeom e1 (diwhite e1 1 20 40) 1 (1 - d e1)])
+>     ;clk = impulse AR rt 0
+>     ;dsq e xs = dseq e dinf (mce xs)
+>     ;rate = dsq 'a' [1,1,z 'a' 'b',0.5,0.5,0.2,0.1,0.1,0.1,0.1] * 2 + 1
+>     ;pos = dsq 'b' (take 8 (zipWith z ['a'..] ['A'..]))
+>     ;dur = dsq 'c' [1,d 'x',1,z 'x' 'X',0.5,0.5,0.1,z 'y' 'Y'] * 2 / rt
+>     ;pan = dsq 'd' [1,1,1,0.5,0.2,0.1,0,0,0] * 2 - 1
+>     ;amp = dsq 'e' [1,0,z 'z' 'Z',0,2,1,1,0.1,0.1]}
+> in audition (out 0 (tGrains 2 clk b rate pos dur pan amp 2))
