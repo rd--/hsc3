@@ -11,3 +11,11 @@ instance ID Int where
 
 instance ID Char where
     resolveID = ord
+
+-- | Resolve the ID at 'a' and add the resolved enumeration of 'j'.
+editID :: (ID a, Enum b) => a -> b -> Int
+editID i j = resolveID i + fromEnum j
+
+-- | Infix alias for editID
+(//) :: (ID a, Enum b) => a -> b -> Int
+(//) = editID
