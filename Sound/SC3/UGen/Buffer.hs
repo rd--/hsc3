@@ -123,7 +123,7 @@ recordBuf rt b o rl pl r l t a i = mkOscMCE rt "RecordBuf" [b, o, rl, pl, r, fro
 
 -- | Triggered buffer shuffler (grain generator).
 tGrains :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-tGrains n t b r c d p a i = mkFilter "TGrains" [t, b, r, c, d, p, a, i] n
+tGrains n t b r c d p a i = mkOsc AR "TGrains" [t, b, r, c, d, p, a, i] n
 
 -- | Three variable wavetable oscillator.
 vOsc3 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
