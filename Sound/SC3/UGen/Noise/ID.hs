@@ -93,16 +93,16 @@ tExpRand :: ID a => a -> UGen -> UGen -> UGen -> UGen
 tExpRand z lo hi trig = mkFilterId z "TExpRand" [lo, hi, trig] 1
 
 -- | Random integer in uniform distribution on trigger.
-tiRand :: ID a => a -> UGen -> UGen -> UGen -> UGen
-tiRand z lo hi trig = mkFilterId z "TIRand" [lo, hi, trig] 1
+tIRand :: ID a => a -> UGen -> UGen -> UGen -> UGen
+tIRand z lo hi trig = mkFilterId z "TIRand" [lo, hi, trig] 1
 
 -- | Random value in uniform distribution on trigger.
 tRand :: ID a => a -> UGen -> UGen -> UGen -> UGen
 tRand z lo hi trig = mkFilterId z "TRand" [lo, hi, trig] 1
 
 -- | Triggered windex.
-twindex :: ID a => a -> UGen -> UGen -> UGen -> UGen
-twindex z i n a = mkFilterMCEId z "TWindex" [i, n] a 1
+tWindex :: ID a => a -> UGen -> UGen -> UGen -> UGen
+tWindex z i n a = mkFilterMCEId z "TWindex" [i, n] a 1
 
 -- | White noise.
 whiteNoise :: ID a => a -> Rate -> UGen

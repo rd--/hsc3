@@ -15,10 +15,10 @@ dcons x xs = do
 
 tChoose :: (UId m) => UGen -> UGen -> m UGen
 tChoose t a = do
-  r <- tiRand 0 (constant (length (mceChannels a))) t
+  r <- tIRand 0 (constant (length (mceChannels a))) t
   return (select r a)
 
-twChoose :: (UId m) => UGen -> UGen -> UGen -> UGen -> m UGen
-twChoose t a w n = do
-  i <- twindex t n w
+tWChoose :: (UId m) => UGen -> UGen -> UGen -> UGen -> m UGen
+tWChoose t a w n = do
+  i <- tWindex t n w
   return (select i a)

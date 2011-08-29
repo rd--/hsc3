@@ -23,9 +23,9 @@ iChoose' :: ID m => m -> [UGen] -> UGen
 iChoose' e = iChoose e . mce
 
 tChoose :: ID m => m -> UGen -> UGen -> UGen
-tChoose z t a = select (tiRand z 0 (mceN a) t) a
+tChoose z t a = select (tIRand z 0 (mceN a) t) a
 
-twChoose :: ID m => m -> UGen -> UGen -> UGen -> UGen -> UGen
-twChoose z t a w n =
-    let i = twindex z t n w
+tWChoose :: ID m => m -> UGen -> UGen -> UGen -> UGen -> UGen
+tWChoose z t a w n =
+    let i = tWindex z t n w
     in select i a

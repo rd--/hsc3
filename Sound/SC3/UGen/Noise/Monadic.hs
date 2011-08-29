@@ -95,16 +95,16 @@ tExpRand :: (UId m) => UGen -> UGen -> UGen -> m UGen
 tExpRand = liftU3 N.tExpRand
 
 -- | Random integer in uniform distribution on trigger.
-tiRand :: (UId m) => UGen -> UGen -> UGen -> m UGen
-tiRand = liftU3 N.tiRand
+tIRand :: (UId m) => UGen -> UGen -> UGen -> m UGen
+tIRand = liftU3 N.tIRand
 
 -- | Random value in uniform distribution on trigger.
 tRand :: (UId m) => UGen -> UGen -> UGen -> m UGen
 tRand = liftU3 N.tRand
 
 -- | Triggered windex.
-twindex :: (UId m) => UGen -> UGen -> UGen -> m UGen
-twindex = liftU3 N.twindex
+tWindex :: (UId m) => UGen -> UGen -> UGen -> m UGen
+tWindex = liftU3 N.tWindex
 
 -- | White noise.
 whiteNoise :: (UId m) => Rate -> m UGen
