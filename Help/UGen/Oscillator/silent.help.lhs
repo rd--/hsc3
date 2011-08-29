@@ -1,6 +1,5 @@
-silent numberOfChannels
-
-Generate a silent (zero) signal.
+> Sound.SC3.UGen.Help.viewSC3Help "Silent"
+> Sound.SC3.UGen.DB.ugenSummary "Silent"
 
 > import Sound.SC3
 

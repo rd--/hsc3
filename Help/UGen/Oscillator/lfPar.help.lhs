@@ -1,5 +1,4 @@
-lfPar rate freq iphase
+> Sound.SC3.UGen.Help.viewSC3Help "LFPar"
+> Sound.SC3.UGen.DB.ugenSummary "LFPar"
 
-A sine-like shape made of two parabolas. Has audible odd harmonics.
-
-See lfCub.
+See lfCub

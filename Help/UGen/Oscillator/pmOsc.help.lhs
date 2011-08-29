@@ -1,23 +1,22 @@
-pmOsc rate cf mf pm=0 mp=0
+> Sound.SC3.UGen.Help.viewSC3Help "PMOsc"
+> :t pmOsc
 
-phase modulation oscillator (composite UGen)
+# composite
+sinOsc r cf (sinOsc r mf mp * pm)
 
-    cf = carrier frequency
-    mf = modulation frequency
-    pm = modulator amplitude
-    mp = modulator phase
+> import Sound.SC3.ID
 
-The definition is:
+Random parameters, linear modulation index motion over n seconds
+> let pmi n = let {cf = rand 'a' 0 2000
+>                 ;mf = rand 'b' 0 800
+>                 ;pme = rand 'c' 0 12
+>                 ;l = rand 'd' (-1) 1
+>                 ;pm = line KR 0 pme n DoNothing}
+> in linPan2 (pmOsc AR cf mf pm 0) l 0.05
 
-  pmOsc r cf mf pm mp = sinOsc r cf (sinOsc r mf mp * pm)
+> audition (out 0 (pmi 2))
 
-> import Sound.SC3.Monadic
-
-> do { cf <- rand 0 2000
->    ; mf <- rand 0 800
->    ; pm' <- rand 0 12
->    ; l <- rand (-1) 1
->    ; let { t = envLinen' 2 5 2 1 (EnvLin, EnvLin, EnvLin)
->          ; e = envGen KR 1 0.1 0 1 RemoveSynth t
->          ; pm = line KR 0 pm' 9 DoNothing }
->      in audition (out 0 (linPan2 (pmOsc AR cf mf pm 0) l e)) }
+PM textures
+> import qualified Sound.SC3.Lang.Control.OverlapTexture as L
+> L.overlapTextureU (1,0,5,maxBound) (pmi 1)
+> L.overlapTextureU (6,6,6,maxBound) (pmi 12)

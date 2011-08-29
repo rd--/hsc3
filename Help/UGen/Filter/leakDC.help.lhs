@@ -1,7 +1,7 @@
-leakDC in coef=0.995
+> Sound.SC3.UGen.Help.viewSC3Help "LeakDC"
+> Sound.SC3.UGen.DB.ugenSummary "LeakDC"
 
-Remove DC.  This filter removes a DC offset from a signal.  in -
-input signal.  coef - leak coefficient.
+> import Sound.SC3
 
-> let a = lfPulse AR 800 0.5 0.5 * 0.1
-> in audition (out 0 (mce [a, leakDC a 0.995]))
+> let a = lfPulse AR 800 0 0.5 * 0.1 + 0.5
+> in audition (out 0 (mce [a,leakDC a 0.995]))

@@ -1,13 +1,8 @@
-lfPulse rate freq iphase width
+> Sound.SC3.UGen.Help.viewSC3Help "LFPulse"
+> Sound.SC3.UGen.DB.ugenSummary "LFPulse"
 
-A non-band-limited pulse oscillator. Outputs a high value of one
-and a low value of zero.
-
-SC2: The iphase argument was not present in SC2.
-
-freq - frequency in Hertz
-iphase - initial phase offset in cycles ( 0..1 )
-width - pulse width duty cycle from zero to one.
+#SC2
+The initial phase argument was not present in SC2.
 
 > import Sound.SC3
 
