@@ -1,7 +1,7 @@
 module Sound.SC3.UGen.UGen where
 
 import Control.Monad
-import qualified Data.HashTable as H
+import qualified Data.Digest.Murmur32 as H
 import Data.List
 import Sound.SC3.Identifier
 import Sound.SC3.UGen.Operator
@@ -34,10 +34,13 @@ isSystemId i =
       SystemId _ -> True
       _ -> False
 
+hash :: H.Hashable32 a => a -> Int
+hash = fromIntegral . H.asWord32 . H.hash32
+
 userIdProtect :: Int -> UGenId -> UGenId
 userIdProtect k i =
     case i of
-      UserId j -> SystemId (fromIntegral (H.hashString (show (k,j))))
+      UserId j -> SystemId (fromIntegral (hash (show (k,j))))
       _ -> i
 
 userIdIncr :: Int -> UGenId -> UGenId
@@ -188,7 +191,7 @@ udup n u =
 
 -- | Hash function for unit generators.
 hashUGen :: UGen -> Int
-hashUGen = fromIntegral . H.hashString . show
+hashUGen = hash . show
 
 instance ID UGen where
     resolveID = hashUGen

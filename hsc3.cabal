@@ -48,6 +48,7 @@ Library
                    cmath,
                    containers,
                    hosc == 0.10,
+                   murmur-hash,
                    network,
                    process,
                    random,
