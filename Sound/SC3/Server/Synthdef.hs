@@ -40,7 +40,7 @@ data Node = NodeC { node_id :: NodeId
                   , node_u_inputs :: [FromPort]
                   , node_u_outputs :: [Output]
                   , node_u_special :: Special
-                  , node_u_ugenid :: Int }
+                  , node_u_ugenid :: UGenId }
           | NodeP { node_id :: NodeId
                   , node_p_node :: Node
                   , node_p_index :: PortIndex }
@@ -188,7 +188,7 @@ acc (x:xs) ys g =
     let (y, g') = mk_node x g
     in acc xs (y:ys) g'
 
-type UGenParts = (Rate, String, [FromPort], [Output], Special, Int)
+type UGenParts = (Rate, String, [FromPort], [Output], Special, UGenId)
 
 -- Predicate to locate primitive, names must be unique.
 find_u_p :: UGenParts -> Node -> Bool
@@ -349,7 +349,7 @@ implicit ks =
                             K_TR -> ("TrigControl", KR)
                             K_AR -> ("AudioControl", AR)
                 i = replicate n r
-            in NodeU (-1) r nm [] i (Special o) defaultID
+            in NodeU (-1) r nm [] i (Special o) NoId
     in [mk_n K_IR ni 0
        ,mk_n K_KR nk ni
        ,mk_n K_TR nt (ni + nk)

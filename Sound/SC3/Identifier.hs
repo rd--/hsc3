@@ -1,6 +1,7 @@
 module Sound.SC3.Identifier where
 
 import Data.Char
+import qualified Data.HashTable as H
 
 -- | Typeclass to constrain UGen identifiers.
 class ID a where
@@ -11,6 +12,9 @@ instance ID Int where
 
 instance ID Char where
     resolveID = ord
+
+idHash :: ID a => a -> Int
+idHash e = fromIntegral (H.hashInt (resolveID e))
 
 -- | Resolve the ID at 'a' and add the resolved enumeration of 'j'.
 editID :: (ID a, Enum b) => a -> b -> Int

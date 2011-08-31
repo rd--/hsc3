@@ -316,6 +316,15 @@ To end printing send:
 
 > withSC3 ((flip send) (dumpOSC NoPrinter))
 
+* UGen structure
+
+> import Sound.SC3
+
+There is a right fold.
+
+> ugenFoldr (\u r -> ugenType u : r) [] (sinOsc AR 440 0 * 0.1)
+> ugenFoldr (\u r -> show u : r) [] (sinOsc AR 440 0 * 0.1)
+
 * References
 
 [1] http://audiosynth.com/

@@ -1,3 +1,7 @@
+> import Control.Monad
+> import Sound.SC3.ID
+> import qualified Sound.SC3.Monadic as M
+
 * Abstract
 
 This document describes the hsc3 haskell
@@ -75,7 +79,7 @@ of work being done.
     questions (Hudak et al, 2007).
 
 (4) Computation in haskell is structured using a
-    small number of simple type classes; monads
+    small number of simple type classes;monads
     (Wadler, 1990), applicative functors (McBride
     and Paterson, 2007) & arrows (Hughes, 2000).
 
@@ -157,11 +161,9 @@ through unit generator graphs.
 In the expression below, the frequency input
 causes two sinOsc unit generators to be created.
 
-> import Sound.SC3
-
-> let { x = mouseX' KR (-1) 1 Linear 0.1
->     ; o1 = pulse AR 440 0.1
->     ; o2 = sinOsc AR (mce [110, 2300]) 0 * 0.1 }
+> let {x = mouseX' KR (-1) 1 Linear 0.1
+>     ;o1 = pulse AR 440 0.1
+>     ;o2 = sinOsc AR (mce [110, 2300]) 0 * 0.1}
 > in audition (out 0 (pan2 o1 x 0.1 + o2))
 
 This is turn causes the (*) function to
@@ -176,7 +178,7 @@ there is not replication of inputs.
 The out function does not expand, since it is
 defined to flatten one layer of mce values at
 it's second input to support a variable number
-of input channels; it would however expand on
+of input channels;it would however expand on
 mce at the first argument, or nested mce at the
 second.
 
@@ -194,8 +196,8 @@ the channel layout is [(440,441),(660,661)], without it
 there would be two 'out' UGens and the layout would be
 [(440,660),(441,661)].
 
-> let { f = mce2 (mce2 440 660) (mce2 441 661)
->     ; o = sinOsc AR f 0 * 0.1 }
+> let {f = mce2 (mce2 440 660) (mce2 441 661)
+>     ;o = sinOsc AR f 0 * 0.1}
 > in audition (out 0 (mceSum o))
 
 * Multiply add inputs, Haskell Curry, and cloning
@@ -208,8 +210,8 @@ haskell behaviour of treating functions as monadic.
 
 That is, one way to write the number thirteen is:
 
-> let { sum_squares x y = x * x + y * y
->     ; f = sum_squares 2 }
+> let {sum_squares x y = x * x + y * y
+>     ;f = sum_squares 2}
 > in f 3
 
 The absent multiply add inputs can in most cases be
@@ -217,7 +219,7 @@ simply re-written using (*) and (+).
 
 The expression:
 
-| { Out.ar(0, SinOsc.ar(440, 0, 0.1, 0.05)) }.play
+| {Out.ar(0, SinOsc.ar(440, 0, 0.1, 0.05))}.play
 
 is equivalent to:
 
@@ -228,9 +230,9 @@ relating to multiple channel expansion.
 
 The supercollider language expression:
 
-| { var a = WhiteNoise.ar([0.1, 0.05])
-| ; var b = PinkNoise.ar * [0.1, 0.05]
-| ; Out.ar(0, a + b) }.play
+| {var a = WhiteNoise.ar([0.1, 0.05])
+| ;var b = PinkNoise.ar * [0.1, 0.05]
+| ;Out.ar(0, a + b)}.play
 
 describes a graph with two WhiteNoise nodes
 and a single PinkNoise node.
@@ -242,13 +244,10 @@ To write this simple graph in haskell we can use the
 clone function.  In this file we import the monadic
 noise unit generator functions qualified.
 
-> import Control.Monad
-> import qualified Sound.SC3.Monadic as M
-
 > let f = liftM (* mce [0.1, 0.05])
-> in do { a <- f (clone 2 (M.whiteNoise AR))
->       ; b <- f (M.pinkNoise AR)
->       ; audition (out 0 (a + b)) }
+> in do {a <- f (clone 2 (M.whiteNoise AR))
+>       ;b <- f (M.pinkNoise AR)
+>       ;audition (out 0 (a + b))}
 
 which is defined in relation to the standard
 monad functions replicateM and liftM.
@@ -264,10 +263,10 @@ multiple sink nodes.
 
 Consider the freeSelf unit generator:
 
-> do { n <- M.dust KR 0.5
->    ; let { a = freeSelf n
->          ; b = out 0 (sinOsc AR 440 0 * 0.1) }
->      in audition (mrg [a, b]) }
+> do {n <- M.dust KR 0.5
+>    ;let {a = freeSelf n
+>         ;b = out 0 (sinOsc AR 440 0 * 0.1)}
+>      in audition (mrg [a, b])}
 
 In order to allow multiple root graphs to be
 freely composed we implement a leftmost rule,
@@ -277,13 +276,13 @@ as an input node.
 
 Consider a simple ping pong delay filter:
 
-> let ppd s = let { a = localIn 2 AR + mce [s, 0]
->                 ; b = delayN a 0.2 0.2
->                 ; c = mceEdit reverse b * 0.8 }
+> let ppd s = let {a = localIn 2 AR + mce [s, 0]
+>                 ;b = delayN a 0.2 0.2
+>                 ;c = mceEdit reverse b * 0.8}
 >             in mrg [b, localOut c]
-> in do { n <- M.whiteNoise AR
->       ; let s = decay (impulse AR 0.3 0) 0.1 * n * 0.2
->         in audition (out 0 (ppd s)) }
+> in do {n <- M.whiteNoise AR
+>       ;let s = decay (impulse AR 0.3 0) 0.1 * n * 0.2
+>        in audition (out 0 (ppd s))}
 
 * Literals, Overloading, Coercion, Constants
 
@@ -308,9 +307,9 @@ but must explicitly construct constants from values
 of a concrete numerical type using the constant
 function.
 
-> let { f = 440.0 :: Double
->     ; p = 0 :: Int
->     ; a = 0.1 :: Float }
+> let {f = 440.0 :: Double
+>     ;p = 0 :: Int
+>     ;a = 0.1 :: Float}
 > in sinOsc AR (constant f) (constant p) * (constant a)
 
 The most common case requiring constant annotations
@@ -340,12 +339,12 @@ Since the Ord type gives the signature:
 we define a variant with a star suffix, such
 that:
 
-> let { x = mouseX' KR 3 45 Exponential 0.1
->     ; t = sinOsc AR x 0 >* 0
->     ; d = envTriangle 0.01 0.1
->     ; e = envGen AR t 1 0 1 DoNothing d
->     ; f = 220 + 880 * (toggleFF t)
->     ; o = sinOsc AR f 0 }
+> let {x = mouseX' KR 3 45 Exponential 0.1
+>     ;t = sinOsc AR x 0 >* 0
+>     ;d = envTriangle 0.01 0.1
+>     ;e = envGen AR t 1 0 1 DoNothing d
+>     ;f = 220 + 880 * (toggleFF t)
+>     ;o = sinOsc AR f 0}
 > in audition (out 0 (o * e))
 
 is a sequence of low and high tones.
@@ -356,17 +355,17 @@ generator operator we use the haskell name.
 
 >| max :: (Ord a) => a -> a -> a
 
-> let { l = fSinOsc AR 500 0 * 0.25
->     ; r = fSinOsc AR 0.5 0 * 0.23 }
+> let {l = fSinOsc AR 500 0 * 0.25
+>     ;r = fSinOsc AR 0.5 0 * 0.23}
 > in audition (out 0 (l `max` r))
 
 * Observable Sharing, Pure Noise
 
 The haskell expression:
 
-> let { a = sinOsc AR 440 0
->     ; b = sinOsc AR 440 0
->     ; c = a - b }
+> let {a = sinOsc AR 440 0
+>     ;b = sinOsc AR 440 0
+>     ;c = a - b}
 > in audition (out 0 c)
 
 denotes a graph that has three nodes: sinOsc, (-)
@@ -382,8 +381,8 @@ between a and b, they are the same value.
 In other words, it is the same graph as if we had
 written:
 
-> let { x = sinOsc AR 440 0
->     ; y = x - x }
+> let {x = sinOsc AR 440 0
+>     ;y = x - x}
 > in audition (out 0 y)
 
 Expressions with the same notation have the same
@@ -397,13 +396,12 @@ such as dseq.
 
 In supercollider language, the graph
 
-| { var a = WhiteNoise.ar
-| ; var b = WhiteNoise.ar
-| ; var c = a - b
-| ; Out.ar(0, c * 0.1) }.play
+| {var a = WhiteNoise.ar
+| ;var b = WhiteNoise.ar
+| ;var c = a - b
+| ;Out.ar(0, c * 0.1)}.play
 
-does not describe silence, it describes white
-noise.
+does not describe silence, it describes noise.
 
 We read WhiteNoise.ar as a computation that
 constructs a value, not as an expression that
@@ -413,32 +411,30 @@ In procedural languages we are familiar with many
 different types of equality.  Scheme has eq?, eqv?
 and equal?, supercollider language has == and ===.
 
-| { var a = "x"
-| ; var b = "x"
-| ; [a == b, a === b] }.value
+| {var a = "x"
+| ;var b = "x"
+| ;[a == b, a === b]}.value
 
 In a purely functional language expressions denote
 values, and equal expressions denote the same
 value.  Therefore the graph given by the haskell
 expression:
 
-> import Sound.SC3.ID
-
-> let { z = 'α'
->     ; n = whiteNoise z
->     ; a = n AR
->     ; b = n AR
->     ; c = a - b }
+> let {z = 'α'
+>     ;n = whiteNoise z
+>     ;a = n AR
+>     ;b = n AR
+>     ;c = a - b}
 > in audition (out 0 (c * 0.1))
 
-describes silence.  To describe white noise we
+describes silence.  To describe noise we
 would need to distinguish a and b, which can only
 be done by providing non-equal identifiers in
 place of z.
 
-> let { a = whiteNoise 'a' AR
->     ; b = whiteNoise 'b' AR
->     ; c = a - b }
+> let {a = whiteNoise 'a' AR
+>     ;b = whiteNoise 'b' AR
+>     ;c = a - b}
 > in audition (out 0 (c * 0.05))
 
 Note that the whiteNoise function used above & provided
@@ -468,18 +464,18 @@ identifier multiple values are denoted.
 It is quite clear that a value of type (m UGen) is
 not of type UGen.
 
-Compare the whiteNoise signature with that of the
-deterministic sin oscillator:
+Compare the monadic whiteNoise signature with that
+of the deterministic sin oscillator:
 
 >| sinOsc :: Rate -> UGen -> UGen -> UGen
 
 We can write a white noise graph using this
 function and the haskell 'do' notation as:
 
-> do { a <- M.whiteNoise AR
->    ; b <- M.whiteNoise AR
->    ; let c = a - b
->      in audition (out 0 (c * 0.05)) }
+> do {a <- M.whiteNoise AR
+>    ;b <- M.whiteNoise AR
+>    ;let c = a - b
+>      in audition (out 0 (c * 0.05))}
 
 which brings us more or less to the supercollider
 language notation, with the exception that there
@@ -522,13 +518,13 @@ It is the type of audition that determines the
 type of a, the type is inferred so there is no
 need to write it.
 
-> let { (|>) = flip (.)
->     ; a >>=* b = a >>= b |> return
->     ; u1 = sinOsc AR 440 0 * 0.1
->     ; u2 = M.pinkNoise AR >>=* (* 0.1)
->     ; u3 = pinkNoise 'α' AR * 1
->     ; u4 = resonz u3 (440 * 4) 0.1
->     ; g = u2 >>=* (+ (u1 + u4)) }
+> let {(|>) = flip (.)
+>     ;a >>=* b = a >>= b |> return
+>     ;u1 = sinOsc AR 440 0 * 0.1
+>     ;u2 = M.pinkNoise AR >>=* (* 0.1)
+>     ;u3 = pinkNoise 'α' AR * 1
+>     ;u4 = resonz u3 (440 * 4) 0.1
+>     ;g = u2 >>=* (+ (u1 + u4))}
 > in g >>= out 0 |> audition
 
 * Unsafe unit generator constructors
@@ -542,10 +538,10 @@ orindary let binding.
 
 > import System.IO.Unsafe
 
-> let { u = unsafePerformIO
->     ; a = u (M.whiteNoise AR)
->     ; b = u (M.whiteNoise AR)
->     ; c = a - b }
+> let {u = unsafePerformIO
+>     ;a = u (M.whiteNoise AR)
+>     ;b = u (M.whiteNoise AR)
+>     ;c = a - b}
 > in audition (out 0 (c * 0.05))
 
 This is hardly more convenient than do notation,
@@ -554,8 +550,8 @@ directly into function arguments.  The package
 hsc3-unsafe provides unsafe variant unit generator
 constructors.
 
-> let { n = Sound.SC3.UGen.Unsafe.whiteNoise
->     ; x = n AR - n AR }
+> let {n = Sound.SC3.UGen.Unsafe.whiteNoise
+>     ;x = n AR - n AR}
 > in audition (out 0 (x * 0.05))
 
 The above uses the unsafe unit generator functions
@@ -563,19 +559,16 @@ provided at Sound.SC3.UGen.Unsafe, and avoids the
 lifting operations which, for functions of many
 arguments, can be cumbersome.
 
-> import Control.Monad
-> import qualified Sound.SC3.Monadic as M
-
 > let n = M.whiteNoise
-> in do { x <- liftM2 (-) (n AR) (n AR)
->       ; audition (out 0 (x * 0.05)) }
+> in do {x <- liftM2 (-) (n AR) (n AR)
+>       ;audition (out 0 (x * 0.05))}
 
 There also Control.Monad.ap which can be more readable
 in some contexts.
 
 > let n = M.whiteNoise
-> in do { x <- return (-) `ap` n AR `ap` n AR
->       ; audition (out 0 (x * 0.05)) }
+> in do {x <- return (-) `ap` n AR `ap` n AR
+>       ;audition (out 0 (x * 0.05))}
 
 * Demand Rate, Sharing Again
 
@@ -587,10 +580,10 @@ left and right channels have different signals,
 despite each receiving the same input unit
 generator.
 
-| { var a = Dseq([1, 3, 2, 7, 8], 3)
-| ; var t = Impulse.kr(5,0)
-| ; var f = Demand.kr(t, 0, [a, a]) * 30 + 340
-| ; Out.ar(0, SinOsc.ar(f, 0) * 0.1) }.play
+| {var a = Dseq([1, 3, 2, 7, 8], 3)
+| ;var t = Impulse.kr(5,0)
+| ;var f = Demand.kr(t, 0, [a, a]) * 30 + 340
+| ;Out.ar(0, SinOsc.ar(f, 0) * 0.1)}.play
 
 The distinction here concerns multiple
 reads from a single demand rate source, ie.
@@ -602,21 +595,54 @@ Therefore in haskell demand rate unit generators have
 similar constructor functions to non-deterministic
 unit generators, in order that we can distinguish:
 
-> do { a <- M.dseq 3 (mce [1, 3, 2, 7, 8])
->    ; let { t = impulse KR 5 0
->          ; f = demand t 0 (mce [a, a]) * 30 + 340 }
->      in audition (out 0 (sinOsc AR f 0 * 0.1)) }
+> do {a <- M.dseq 3 (mce [1, 3, 2, 7, 8])
+>    ;let {t = impulse KR 5 0
+>         ;f = demand t 0 (mce [a, a]) * 30 + 340}
+>      in audition (out 0 (sinOsc AR f 0 * 0.1))}
 
 which is the same graph as given in supercollider
 language above, from:
 
-> do { a <- clone 2 (M.dseq 3 (mce [1, 3, 2, 7, 8]))
->    ; let { t = impulse KR 5 0
->          ; f = demand t 0 a * 30 + 340 }
->      in audition (out 0 (sinOsc AR f 0 * 0.1)) }
+> do {a <- clone 2 (M.dseq 3 (mce [1, 3, 2, 7, 8]))
+>    ;let {t = impulse KR 5 0
+>         ;f = demand t 0 a * 30 + 340}
+>      in audition (out 0 (sinOsc AR f 0 * 0.1))}
 
 which gives an equal sequence of tones in each
 channel.
+
+* Composition of graphs, user specified identifiers
+
+udup is a shorthand for writing out an MCE node with
+multiple copies of a unit generator graph.  That is it
+traverses the UGen graph and increments each user
+supplied identifier.
+
+> ugenIds (udup 2 (whiteNoise 'a' AR))
+
+> let n e = whiteNoise e AR * 0.1
+> in udup 2 (n 'a') == mce [n 'a',n 'b']
+
+upar is a related function that transforms user
+identifiers into 'protected' system identifiers instead
+of incrementing them.
+
+> ugenIds (upar 'a' 2 (whiteNoise 'a' AR))
+
+The ID input to upar allows multiple instances to
+generate distinct graphs.
+
+> let n = whiteNoise 'a' AR
+> in ugenIds (upar 'a' 2 n + upar 'b' 2 n)
+
+ucmp is left to right composition of UGen processing
+functions where at each stage user identifiers are
+lifted to protected system identifiers.  useq is a
+variant that replicates the same function for
+composition.
+
+> let f i = allpassN i 0.050 (rand 'a' 0 0.05) 1
+> in ugenIds (useq 'a' 4 f (dust 'a' AR 10))
 
 * References
 
