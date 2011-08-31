@@ -153,14 +153,20 @@ ugenProtectUserId k =
                 _ -> u
     in ugenTraverse f
 
+ufix :: UGen -> UGen
+ufix = ugenProtectUserId 0
+
 uprotect :: ID a => a -> [UGen] -> [UGen]
 uprotect e =
     let n = map (+ (idHash e)) [1..]
     in zipWith ugenProtectUserId n
 
 -- | N parallel instances of `u' with protected Ids.
+upar' :: ID a => a -> Int -> UGen -> [UGen]
+upar' e n = uprotect e . replicate n
+
 upar :: ID a => a -> Int -> UGen -> UGen
-upar e n u = mce (uprotect e (replicate n u))
+upar e n = mce . upar' e n
 
 -- | Left to right UGen function composition with user id protection.
 ucompose :: ID a => a -> [UGen -> UGen] -> UGen -> UGen
