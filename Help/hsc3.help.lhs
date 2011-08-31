@@ -623,9 +623,13 @@ supplied identifier.
 > let n e = whiteNoise e AR * 0.1
 > in udup 2 (n 'a') == mce [n 'a',n 'b']
 
-upar is a related function that transforms user
+uprotect is a related function that transforms user
 identifiers into 'protected' system identifiers instead
-of incrementing them.
+of incrementing them.  upar is a variant form of
+uprotect.
+
+> let n = whiteNoise 'a' AR
+> in concatMap ugenIds (uprotect 'a' (replicate 2 n))
 
 > ugenIds (upar 'a' 2 (whiteNoise 'a' AR))
 

@@ -96,7 +96,7 @@ ugenTraverse f u =
     let rec = ugenTraverse f
     in case u of
          Primitive _ _ i _ _ _ -> f (u {ugenInputs = map rec i})
-         Proxy s _ -> f (u {proxySource = f s})
+         Proxy s _ -> f (u {proxySource = rec s})
          MCE p -> f (u {mceProxies = map rec p})
          MRG l r -> f (MRG (rec l) (rec r))
          _ -> f u
@@ -153,14 +153,14 @@ ugenProtectUserId k =
                 _ -> u
     in ugenTraverse f
 
-uprotect :: ID a => a -> [UGen] -> UGen
+uprotect :: ID a => a -> [UGen] -> [UGen]
 uprotect e =
     let n = map (+ (idHash e)) [1..]
-    in mce . zipWith ugenProtectUserId n
+    in zipWith ugenProtectUserId n
 
 -- | N parallel instances of `u' with protected Ids.
 upar :: ID a => a -> Int -> UGen -> UGen
-upar e n u = uprotect e (replicate n u)
+upar e n u = mce (uprotect e (replicate n u))
 
 -- | Left to right UGen function composition with user id protection.
 ucompose :: ID a => a -> [UGen -> UGen] -> UGen -> UGen
