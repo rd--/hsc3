@@ -187,11 +187,14 @@ ugenIncrUserId k =
                 _ -> u
     in ugenTraverse f
 
+udup' :: Int -> UGen -> [UGen]
+udup' n u =
+    let g k = ugenIncrUserId k u
+    in u : map g [1..n-1]
+
 -- | Duplicate `u' `n' times, increment user assigned Ids.
 udup :: Int -> UGen -> UGen
-udup n u =
-    let g k = ugenIncrUserId k u
-    in mce (u : map g [1..n-1])
+udup n = mce . udup' n
 
 -- * UGen ID Instance
 
