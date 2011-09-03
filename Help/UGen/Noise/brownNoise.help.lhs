@@ -1,9 +1,6 @@
 > Sound.SC3.UGen.Help.viewSC3Help "BrownNoise"
 > Sound.SC3.UGen.DB.ugenSummary "BrownNoise"
 
-Generates noise whose spectrum falls off in power by 6 dB per
-octave.
-
 > import Sound.SC3.ID
 
 > let n = brownNoise 'a' AR

@@ -54,6 +54,12 @@ mixFill n f = mix (mce (map f [0..n-1]))
 mixFillM :: (Monad m) => Int -> (Int -> m UGen) -> m UGen
 mixFillM n f = liftM sum (mapM f [0 .. n - 1])
 
+-- | Variant that is randomly pressed.
+mouseButton' :: Rate -> UGen -> UGen -> UGen -> UGen
+mouseButton' rt l r tm =
+    let o = lfClipNoise 'z' rt 1
+    in lag (linLin o (-1) 1 l r) tm
+
 mouseR :: ID a => a -> Rate -> UGen -> UGen -> Warp -> UGen -> UGen
 mouseR z rt l r ty tm =
   let f = case ty of
