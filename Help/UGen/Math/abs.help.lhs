@@ -1,6 +1,5 @@
-abs a
-
-Absolute value.
+> Sound.SC3.UGen.Help.viewSC3Help "abs"
+> :t abs
 
 > import Sound.SC3
 

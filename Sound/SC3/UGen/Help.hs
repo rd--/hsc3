@@ -5,23 +5,37 @@ import Control.Monad
 import Data.Char
 import System.IO.Error
 import System.Cmd {- process -}
+import System.Directory {- directory -}
 import System.Environment
+import System.FilePath
 
 -- Read the environment variable @SC3_HELP@, the default value is
 -- @~/share/SuperCollider/Help@.
 sc3HelpDirectory :: IO String
 sc3HelpDirectory = do
-  h <- getEnv "HOME"
   r <- tryJust (guard . isDoesNotExistError) (getEnv "SC3_HELP")
   case r of
     Right v -> return v
-    _ -> return (h ++ "/share/SuperCollider/Help")
+    _ -> do h <- getEnv "HOME"
+            return (h </> "share/SuperCollider/Help")
+
+sc3HelpClassFile :: FilePath -> String -> IO (Maybe FilePath)
+sc3HelpClassFile d c = do
+  let f = d </> "Classes" </> c <.> "html"
+  e <- doesFileExist f
+  if e then return (Just f) else return Nothing
+
+sc3HelpOperatorEntry :: FilePath -> String -> FilePath
+sc3HelpOperatorEntry d o = d </> "Overviews/Operators.html#." ++ o
 
 -- | The name of the local SC3 Help file documenting `u'.
 ugenSC3HelpFile :: String -> IO FilePath
 ugenSC3HelpFile u = do
-    d <- sc3HelpDirectory
-    return (d ++ "/Classes/" ++ u ++ ".html")
+  d <- sc3HelpDirectory
+  c <- sc3HelpClassFile d u
+  case c of
+    Just c' -> return c'
+    Nothing -> return (sc3HelpOperatorEntry d u)
 
 toSC3Name :: String -> String
 toSC3Name nm =
@@ -35,5 +49,4 @@ toSC3Name nm =
 viewSC3Help :: String -> IO ()
 viewSC3Help u = do
   nm <- ugenSC3HelpFile u
-  _ <- system ("x-www-browser " ++ nm)
-  return ()
+  void (system ("x-www-browser file://" ++ nm))

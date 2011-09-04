@@ -11,9 +11,9 @@ Author:            Rohan Drape
 Maintainer:        rd@slavepianos.org
 Stability:         Experimental
 Homepage:          http://slavepianos.org/rd/?t=hsc3
-Tested-With:       GHC == 6.12.1
+Tested-With:       GHC == 7.0.3
 Build-Type:        Simple
-Cabal-Version:     >= 1.6
+Cabal-Version:     >= 1.8
 
 Data-files:        README
                    emacs/hsc3.el
@@ -47,6 +47,8 @@ Library
                    bytestring,
                    cmath,
                    containers,
+                   directory,
+                   filepath,
                    hosc == 0.10,
                    murmur-hash,
                    network,

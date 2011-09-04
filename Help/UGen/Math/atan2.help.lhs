@@ -1,15 +1,11 @@
-atan2 x y
+> Sound.SC3.UGen.Help.viewSC3Help "atan2"
+> :t atan2
 
-Returns the arctangent of y/x.
-
-See also hypot.
+> import Sound.SC3
 
 Add a pan to the hypot doppler examples by using atan2 to find the
 azimuth, or direction angle, of the sound source.  Assume speakers
 at +/- 45 degrees and clip the direction to between those.
-
-> import Sound.SC3
-
 > let { x = 10
 >     ; y = lfSaw KR (1 / 6) 0 * 100
 >     ; d = hypot x y

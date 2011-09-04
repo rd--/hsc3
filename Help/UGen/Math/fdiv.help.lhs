@@ -1,8 +1,5 @@
-a / b
-
-Division, written '/'.
-
-Division can be tricky with signals because of division by zero.
+> Sound.SC3.UGen.Help.viewSC3Help "/"
+> :t (/)
 
 > import Sound.SC3.ID
 

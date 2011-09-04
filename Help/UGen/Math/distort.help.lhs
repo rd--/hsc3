@@ -1,7 +1,5 @@
-> Sound.SC3.UGen.Help.viewSC3Help "Distort"
-> Sound.SC3.UGen.DB.ugenSummary "Distort"
-
-# unaryop
+> Sound.SC3.UGen.Help.viewSC3Help "distort"
+> :t distort
 
 > import Sound.SC3
 

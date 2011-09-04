@@ -1,4 +1,5 @@
-# unaryop
+> Sound.SC3.UGen.Help.viewSC3Help "dbamp"
+> :t dbAmp
 
 > import Sound.SC3
 

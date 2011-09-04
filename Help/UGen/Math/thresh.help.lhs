@@ -1,8 +1,8 @@
-thresh a b
-
-Signal thresholding.  0 when a < b, otherwise a.
+> Sound.SC3.UGen.Help.viewSC3Help "thresh"
+> :t thresh
 
 > import Sound.SC3.ID
 
-> let n = lfNoise0 'a' AR 50
-> in audition (out 0 (thresh (n * 0.5) 0.45))
+low-rent gate
+> let n = lfNoise0 'a' AR 50 * 0.5
+> in audition (out 0 (thresh n 0.45))

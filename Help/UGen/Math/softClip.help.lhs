@@ -1,5 +1,5 @@
-> Sound.SC3.UGen.Help.viewSC3Help "SoftClip"
-> Sound.SC3.UGen.DB.ugenSummary "SoftClip"
+> Sound.SC3.UGen.Help.viewSC3Help "softclip"
+> :t softClip
 
 > import Sound.SC3
 

@@ -1,6 +1,5 @@
-roundUp a b
-
-Rounds a up to the nearest multiple of b.
+> Sound.SC3.UGen.Help.viewSC3Help "round"
+> :t roundUp
 
 > import Sound.SC3
 

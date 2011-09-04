@@ -1,9 +1,9 @@
-clip2 a b
-
-Bilateral clipping.  Clips a to +/- b
+> Sound.SC3.UGen.Help.viewSC3Help "clip2"
+> :t clip2
 
 > import Sound.SC3
 
+clipping distortion
 > audition (out 0 (clip2 (fSinOsc AR 400 0) 0.2))
 
 > let l = line KR 0 1 8 RemoveSynth

@@ -1,6 +1,5 @@
-fold2 a b
-
-Bilateral folding.  Folds a to +/- b.
+> Sound.SC3.UGen.Help.viewSC3Help "fold2"
+> :t fold2
 
 > import Sound.SC3
 

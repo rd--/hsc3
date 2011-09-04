@@ -1,6 +1,5 @@
-amClip a b
-
-0 when b <= 0, a*b when b > 0
+> Sound.SC3.UGen.Help.viewSC3Help "amclip"
+> :t amClip
 
 > import Sound.SC3.ID
 

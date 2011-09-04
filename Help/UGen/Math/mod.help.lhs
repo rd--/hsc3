@@ -1,7 +1,6 @@
-a `mod` b
-
-Modulo, written % in sclang.  outputs a modulo b.
+> Sound.SC3.UGen.Help.viewSC3Help "%"
+> :t modE
 
 > import Sound.SC3
 
-> audition (out 0 (fSinOsc AR 100 4 `mod` 1))
+> audition (out 0 (fSinOsc AR 100 4 `modE` 1))

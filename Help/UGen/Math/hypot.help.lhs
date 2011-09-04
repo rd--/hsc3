@@ -1,7 +1,5 @@
-hypot x y
-
-Returns the square root of the sum of the squares of a and b. Or
-equivalently, the distance from the origin to the point (x, y).
+> Sound.SC3.UGen.Help.viewSC3Help "hypot"
+> :t hypot
 
 > import Sound.SC3
 
@@ -11,7 +9,6 @@ equivalently, the distance from the origin to the point (x, y).
 
 Object travels 200 meters in 6 secs (=120kph) passing 10 meters
 from the listener.  The speed of sound is 344 meters/sec.
-
 > let { x = 10
 >     ; y = lfSaw KR (1 / 6) 0 * 100
 >     ; d = hypot x y
