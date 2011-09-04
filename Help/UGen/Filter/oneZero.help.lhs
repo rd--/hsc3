@@ -1,13 +1,14 @@
-oneZero in coef
+> Sound.SC3.UGen.Help.viewSC3Help "OneZero"
+> Sound.SC3.UGen.DB.ugenSummary "OneZero"
 
-One zero filter
+> import Sound.SC3.ID
 
-> do { n <- whiteNoise AR
->    ; audition (out 0 (oneZero (n * 0.5) 0.5)) }
+> let n = whiteNoise 'a' AR
+> in audition (out 0 (oneZero (n * 0.5) 0.5))
 
-> do { n <- whiteNoise AR
->    ; audition (out 0 (oneZero (n * 0.5) (-0.5))) }
+> let n = whiteNoise 'a' AR
+> in audition (out 0 (oneZero (n * 0.5) (-0.5)))
 
-> do { n <- whiteNoise AR
->    ; let c = line KR (-0.5) 0.5 10 RemoveSynth
->      in audition (out 0 (oneZero (n * 0.5) c)) }
+> let {n = whiteNoise 'a' AR
+>     ;c = line KR (-0.5) 0.5 10 RemoveSynth}
+> in audition (out 0 (oneZero (n * 0.5) c))

@@ -1,9 +1,8 @@
-twoZero in freq radius
+> Sound.SC3.UGen.Help.viewSC3Help "TwoZero"
+> Sound.SC3.UGen.DB.ugenSummary "TwoZero"
 
-Two zero filter
+> import Sound.SC3.ID
 
-> import Sound.SC3.Monadic
-
-> do { n <- whiteNoise AR
->    ; let f = xLine KR 20 20000 8 RemoveSynth
->      in audition (out 0 (twoZero (n * 0.125) f 1)) }
+> let {n = whiteNoise 'a' AR
+>     ;f = xLine KR 20 20000 8 RemoveSynth}
+> in audition (out 0 (twoZero (n * 0.125) f 1))

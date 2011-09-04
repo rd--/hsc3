@@ -1,11 +1,7 @@
-mantissaMask in bits
+> Sound.SC3.UGen.Help.viewSC3Help "MantissaMask"
+> Sound.SC3.UGen.DB.ugenSummary "MantissaMask"
 
-Masks off bits in the mantissa of the floating point sample
-value. This introduces a quantization noise, but is less severe
-than linearly quantizing the signal.
-
-in - input signal
-bits - the number of mantissa bits to preserve. a number from 0 to 23.
+> import Sound.SC3
 
 > let s = sinOsc AR (sinOsc KR 0.2 0 * 400 + 500) 0 * 0.4
 > in audition (out 0 (mantissaMask s 3))

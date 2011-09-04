@@ -1,6 +1,5 @@
-select which array
-
-The output is selected from an array of inputs.
+> Sound.SC3.UGen.Help.viewSC3Help "Select"
+> Sound.SC3.UGen.DB.ugenSummary "Select"
 
 > import Sound.SC3
 
@@ -8,11 +7,7 @@ The output is selected from an array of inputs.
 >     ; a = mce [sinOsc AR 440 0, saw AR 440, pulse AR 440 0.1] }
 > in audition (out 0 (select (lfSaw KR 1 0 * n + n) a * 0.2))
 
-Note: all input ugens are continously running. This may not be the
-most efficient way if each input is cpu-expensive.
-
 Here used as a sequencer:
-
 > let { n = 10
 >     ; a = mce [517, 403, 89, 562, 816, 107, 241, 145, 90, 224]
 >     ; c = n / 2

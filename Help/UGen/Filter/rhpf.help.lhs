@@ -1,6 +1,5 @@
-rhpf in freq rq
-
-A resonant high pass filter.
+> Sound.SC3.UGen.Help.viewSC3Help "RHPF"
+> Sound.SC3.UGen.DB.ugenSummary "RHPF"
 
 > import Sound.SC3
 
