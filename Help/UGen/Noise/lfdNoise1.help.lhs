@@ -1,5 +1,4 @@
-lfdNoise1 rate freq
+> Sound.SC3.UGen.Help.viewSC3Help "LFDNoise1"
+> Sound.SC3.UGen.DB.ugenSummary "LFDNoise1"
 
-Dynamic ramp noise. 
-
-See lfdNoise0 and lfNoise1.
+See lfdNoise0

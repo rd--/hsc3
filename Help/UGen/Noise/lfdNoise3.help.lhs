@@ -1,5 +1,4 @@
-lfdnoise3 rate freq
+> Sound.SC3.UGen.Help.viewSC3Help "LFDNoise3"
+> Sound.SC3.UGen.DB.ugenSummary "LFDNoise3"
 
-Dynamic cubic noise. 
-
-See lfNoise3 and lfdNoise0.
+See lfdNoise0

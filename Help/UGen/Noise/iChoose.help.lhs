@@ -1,10 +1,9 @@
-iChoose u
-iChoose' l
+> :t iChoose
 
-Select an element of the input mce node at random.
-
+# composite
 iChoose is a composite of iRand and select.
 
 > import Sound.SC3.ID
 
-> audition (out 0 (sinOsc AR (iChoose' 'a' [440,550,660]) 0 * 0.1))
+> let f = udup 2 (iChoose 'a' (mce [440,460 .. 880]))
+> in audition (out 0 (sinOsc AR f  0 * 0.1))

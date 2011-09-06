@@ -1,10 +1,8 @@
-clipNoise rate
+> Sound.SC3.UGen.Help.viewSC3Help "ClipNoise"
+> Sound.SC3.UGen.DB.ugenSummary "ClipNoise"
 
-Generates noise whose values are either -1 or 1.  This produces the
-maximum energy for the least peak to peak amplitude.
+> import Sound.SC3
+> import qualified Sound.SC3.Monadic as M
 
-> import Sound.SC3.Monadic
-
-> audition . (out 0) . (* 0.1) =<< clipNoise AR
-
-> audition . (out 0) . (* 0.1) =<< whiteNoise AR
+> audition . (out 0) . (* 0.1) =<< M.clipNoise AR
+> audition . (out 0) . (* 0.1) =<< M.whiteNoise AR
