@@ -3,11 +3,11 @@
 
 > import Sound.SC3
 
-> let {f = "/home/rohan/audio/metal.wav"
+> let {f = "/home/rohan/data/audio/pf-c5.snd"
 >     ;n = 1
 >     ;g = out 0 (diskIn n 0 Loop)}
 > in withSC3 (\fd -> do {async fd (b_alloc 0 8192 n)
->                       ;async fd (b_read 0 f 0 (-1) 0 1)
+>                       ;async fd (b_read 0 f 0 (-1) 0 True)
 >                       ;play fd g})
 
 > withSC3 (\fd -> do {reset fd

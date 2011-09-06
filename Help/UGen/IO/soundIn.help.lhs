@@ -1,6 +1,6 @@
 > Sound.SC3.UGen.Help.viewSC3Help "SoundIn"
 
-soundIn is a composite UGen.
+# composite
 
 > import Sound.SC3
 

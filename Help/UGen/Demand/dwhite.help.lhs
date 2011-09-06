@@ -1,20 +1,10 @@
-dwhite  length lo hi
-diwhite length lo hi
-
-Demand rate white noise random generators.
-
-length  - number of values to create
-lo      - minimum value
-hi      - maximum value
-
-Dwhite returns numbers in the continuous range between lo and hi,
-Diwhite returns integer values.  The arguments can be a number or
-any other ugen
+> Sound.SC3.UGen.Help.viewSC3Help "Dwhite"
+> Sound.SC3.UGen.DB.ugenSummary "Dwhite"
 
 > import Sound.SC3.ID
 
-> let { n = dwhite 'a' dinf 0 15
->     ; x = mouseX' KR 1 40 Exponential 0.1
->     ; t = impulse KR x 0
->     ; f = demand t 0 n * 30 + 340 }
+> let {n = dwhite 'a' dinf 0 15
+>     ;x = mouseX' KR 1 40 Exponential 0.1
+>     ;t = impulse KR x 0
+>     ;f = demand t 0 n * 30 + 340}
 > in audition (out 0 (sinOsc AR f 0 * 0.1))
