@@ -1,28 +1,22 @@
-dseq length array
-
-Demand rate sequence generator.
-
-array   - array of values or other ugens
-length  - number of repeats
+> Sound.SC3.UGen.Help.viewSC3Help "Dseq"
+> Sound.SC3.UGen.DB.ugenSummary "Dseq"
 
 > import Sound.SC3.ID
 
-> let { n = dseq 'a' 3 (mce [1, 3, 2, 7, 8])
->     ; x = mouseX' KR 1 40 Exponential 0.1
->     ; t = impulse KR x 0
->     ; f = demand t 0 n * 30 + 340 }
+> let {n = dseq 'a' 3 (mce [1, 3, 2, 7, 8])
+>     ;x = mouseX' KR 1 40 Exponential 0.1
+>     ;t = impulse KR x 0
+>     ;f = demand t 0 n * 30 + 340}
 > in audition (out 0 (sinOsc AR f 0 * 0.1))
 
 At audio rate.
-
-> let { n = dseq 'a' dinf (mce [1,3,2,7,8,32,16,18,12,24])
->     ; x = mouseX' KR 1 10000 Exponential 0.1
->     ; t = impulse AR x 0
->     ; f = demand t 0 n * 30 + 340 }
+> let {n = dseq 'a' dinf (mce [1,3,2,7,8,32,16,18,12,24])
+>     ;x = mouseX' KR 1 10000 Exponential 0.1
+>     ;t = impulse AR x 0
+>     ;f = demand t 0 n * 30 + 340}
 > in audition (out 0 (sinOsc AR f 0 * 0.1))
 
-The SC2 Sequencer UGen is somewhat like the sequ below.
-
+The SC2 Sequencer UGen is somewhat like the sequ function below
 > let {sequ e s tr = demand tr 0 (dseq e dinf (mce s))
 >     ;t = lfPulse AR 6 0 0.5
 >     ;n0 = sequ 'a' [60,62,63,58,48,55] t

@@ -79,16 +79,16 @@ of work being done.
     questions (Hudak et al, 2007).
 
 (4) Computation in haskell is structured using a
-    small number of simple type classes;monads
+    small number of simple type classes; monads
     (Wadler, 1990), applicative functors (McBride
     and Paterson, 2007) & arrows (Hughes, 2000).
 
-(5) The glasgow haskell system includes both an
+(5) The Glasgow haskell system includes both an
     optimizing compiler generating efficient
     machine programs and a bytecode generator and
     intepreter for interative use.
 
-In the authors experience the glasgow run-time
+In the authors experience the Glasgow run-time
 system is adequate for real-time control of the
 supercollider synthesiser, capable of generating
 high density & low latency control streams such as
@@ -244,7 +244,7 @@ To write this simple graph in haskell we can use the
 clone function.  In this file we import the monadic
 noise unit generator functions qualified.
 
-> let f = liftM (* mce [0.1, 0.05])
+> let f = liftM (* mce [0.1,0.05])
 > in do {a <- f (clone 2 (M.whiteNoise AR))
 >       ;b <- f (M.pinkNoise AR)
 >       ;audition (out 0 (a + b))}
@@ -276,13 +276,13 @@ as an input node.
 
 Consider a simple ping pong delay filter:
 
-> let ppd s = let {a = localIn 2 AR + mce [s, 0]
->                 ;b = delayN a 0.2 0.2
->                 ;c = mceEdit reverse b * 0.8}
->             in mrg [b, localOut c]
-> in do {n <- M.whiteNoise AR
->       ;let s = decay (impulse AR 0.3 0) 0.1 * n * 0.2
->        in audition (out 0 (ppd s))}
+> let {ppd s = let {a = localIn 2 AR + mce [s, 0]
+>                  ;b = delayN a 0.2 0.2
+>                  ;c = mceEdit reverse b * 0.8}
+>              in mrg [b, localOut c]
+>     ;n = whiteNoise 'a' AR
+>     ;s = decay (impulse AR 0.3 0) 0.1 * n * 0.2}
+> in audition (out 0 (ppd s))
 
 * Literals, Overloading, Coercion, Constants
 
@@ -469,13 +469,13 @@ of the deterministic sin oscillator:
 
 >| sinOsc :: Rate -> UGen -> UGen -> UGen
 
-We can write a white noise graph using this
-function and the haskell 'do' notation as:
+We can write a noise graph using this function and the
+haskell 'do' notation as:
 
 > do {a <- M.whiteNoise AR
 >    ;b <- M.whiteNoise AR
 >    ;let c = a - b
->      in audition (out 0 (c * 0.05))}
+>     in audition (out 0 (c * 0.05))}
 
 which brings us more or less to the supercollider
 language notation, with the exception that there

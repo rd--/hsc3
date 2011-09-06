@@ -1,17 +1,10 @@
-dseries length start step
+> Sound.SC3.UGen.Help.viewSC3Help "Dseries"
+> Sound.SC3.UGen.DB.ugenSummary "Dseries"
 
-Demand rate arithmetic series ugen.
+> import Sound.SC3.ID
 
-length  - number of values to create
-start   - start value
-step    - step value
-
-The arguments can be a number or any other ugen
-
-> import Sound.SC3.Monadic
-
-> do { n <- dseries 15 0 1
->    ; let { x = mouseX' KR 1 40 Exponential 0.1
->          ; t = impulse KR x 0
->          ; f = demand t 0 n * 30 + 340 }
->      in audition (out 0 (sinOsc AR f 0 * 0.1)) }
+> let {n = dseries 'a' 15 0 1
+>     ;x = mouseX' KR 1 40 Exponential 0.1
+>     ;t = impulse KR x 0
+>     ;f = demand t 0 n * 30 + 340}
+> in audition (out 0 (sinOsc AR f 0 * 0.1))

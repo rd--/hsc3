@@ -1,41 +1,23 @@
-demandEnvGen rate levels times shapes curves gate reset
-             levelScale levelOffset timeScale doneAction
+> Sound.SC3.UGen.Help.viewSC3Help "DemandEnvGen"
+> Sound.SC3.UGen.DB.ugenSummary "DemandEnvGen"
 
-levels - a demand ugen or any other ugen
-
-times  - a demand ugen or any other ugen if one of these ends,
-         the doneAction is evaluated
-
-shapes - a demand ugen or any other ugen, the number given is
-         the shape number according to Env
-
-curves - a demand ugen or any other ugen, if shape is 5, this
-         is the curve factor some curves/shapes don't work if
-         the duration is too short. have to see how to improve
-         this. also some depend on the levels obviously, like
-         exponential cannot cross zero.
-
-gate   - if gate is x >= 1, the ugen runs, if gate is 0 > x > 1,
-         the ugen is released at the next level (doneAction), if
-         gate is x < 0, the ugen is sampled and held
-
-reset  - if reset crosses from nonpositive to positive, the ugen
-         is reset at the next level, if it is > 1, it is reset
-         immediately.
+> import Sound.SC3.ID
+> import qualified Sound.SC3.Monadic as M
 
 Frequency ramp, exponential curve.
-
-> import Sound.SC3.Monadic
-
-> do { l <- dseq dinf (mce2 440 9600)
->    ; let { y = mouseY' KR 0.01 3 Exponential 0.1
->          ; f = demandEnvGen AR l y 2 0 1 1 1 0 1 DoNothing }
->      in audition (out 0 (sinOsc AR f 0 * 0.1)) }
+> let {l = dseq 'a' dinf (mce2 440 9600)
+>     ;y = mouseY' KR 0.01 3 Exponential 0.1
+>     ;f = demandEnvGen AR l y 2 0 1 1 1 0 1 DoNothing}
+> in audition (out 0 (sinOsc AR f 0 * 0.1))
 
 Frequency envelope with random times.
+> do {l <- M.dseq dinf (mce [204, 400, 201, 502, 300, 200])
+>    ;t <- M.drand dinf (mce [1.01, 0.2, 0.1, 2.0])
+>    ;let {y = mouseY' KR 0.01 3 Exponential 0.1
+>         ;f = demandEnvGen AR l (t * y) 7 0 1 1 1 0 1 DoNothing}
+>     in audition (out 0 (sinOsc AR (f * mce2 1 1.01) 0 * 0.1))}
 
-> do { l <- dseq dinf (mce [204, 400, 201, 502, 300, 200])
->    ; t <- drand dinf (mce [1.01, 0.2, 0.1, 2.0])
->    ; let { y = mouseY' KR 0.01 3 Exponential 0.1
->          ; f = demandEnvGen AR l (t * y) 7 0 1 1 1 0 1 DoNothing }
->      in audition (out 0 (sinOsc AR (f * mce2 1 1.01) 0 * 0.1)) }
+short sequence with doneAction, linear
+> let {s = dseq 'a' 1 (mce [1300,500,800,300,400])
+>     ;f = demandEnvGen KR s 2 1 0 1 1 1 0 1 RemoveSynth}
+> in audition (out 0 (sinOsc AR (f * mce2 1 1.01) 0 * 0.1))

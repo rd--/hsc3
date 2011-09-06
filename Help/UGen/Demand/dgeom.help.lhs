@@ -1,17 +1,10 @@
-dgeom length start grow
+> Sound.SC3.UGen.Help.viewSC3Help "Dgeom"
+> Sound.SC3.UGen.DB.ugenSummary "Dgeom"
 
-Demand rate geometric series ugen.
+> import Sound.SC3.ID
 
-start	- start value
-grow 	- value by which to grow ( x = x[-1] * grow )
-length	- number of values to create
-
-The arguments can be a number or any other ugen
-
-> import Sound.SC3.Monadic
-
-> do { n <- dgeom 15 1 1.2
->    ; let { x = mouseX' KR 1 40 Exponential 0.1
->          ; t = impulse KR x 0
->          ; f = demand t 0 n * 30 + 340 }
->      in audition (out 0 (sinOsc AR f 0 * 0.1)) }
+> let {n = dgeom 'a' 15 1 1.2
+>     ;x = mouseX' KR 1 40 Exponential 0.1
+>     ;t = impulse KR x 0
+>     ;f = demand t 0 n * 30 + 340}
+> in audition (out 0 (sinOsc AR f 0 * 0.1))
