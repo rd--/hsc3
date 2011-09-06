@@ -1,7 +1,5 @@
-detectSilence in amp=0.0001 time=0.1 doneAction=DoNothing
-
-If the signal at `in' falls below `amp' for `time' seconds then
-`doneAction' is raised.
+> Sound.SC3.UGen.Help.viewSC3Help "DetectSilence"
+> Sound.SC3.UGen.DB.ugenSummary "DetectSilence"
 
 > import Sound.SC3
 

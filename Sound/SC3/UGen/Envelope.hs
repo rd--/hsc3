@@ -22,7 +22,7 @@ xLine r start end dur act = mkOsc r "XLine" [start, end, dur, from_done_action a
 
 -- | Free node on trigger.
 freeSelf :: UGen -> UGen
-freeSelf i = mkFilter "FreeSelf" [i] 0
+freeSelf i = mkFilter "FreeSelf" [i] 1
 
 -- | Free node on done action at source.
 freeSelfWhenDone :: UGen -> UGen
@@ -34,11 +34,11 @@ pause t n = mkFilter "Pause" [t, n] 1
 
 -- | Pause node on trigger.
 pauseSelf :: UGen -> UGen
-pauseSelf i = mkFilter "PauseSelf" [i] 0
+pauseSelf i = mkFilter "PauseSelf" [i] 1
 
 -- | Pause node on done action at source.
 pauseSelfWhenDone :: UGen -> UGen
-pauseSelfWhenDone i = mkFilter "PauseSelfWhenDone" [i] 0
+pauseSelfWhenDone i = mkFilter "PauseSelfWhenDone" [i] 1
 
 -- | One while the source is marked done, else zero.
 done :: UGen -> UGen

@@ -1,9 +1,5 @@
-free trig nodeID
-
-When triggered frees a node.
-
-  trig   - when triggered, frees node
-  nodeID - node to be freed
+> Sound.SC3.UGen.Help.viewSC3Help "Free"
+> Sound.SC3.UGen.DB.ugenSummary "Free"
 
 > import Sound.SC3.ID
 

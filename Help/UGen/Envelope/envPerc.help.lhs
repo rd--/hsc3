@@ -1,7 +1,5 @@
-envPerc  attackTime=0.01 releaseTime=1
-envPerc' attackTime=0.01 releaseTime=1 level=1 (curve=-4,curve=-4)
-
-Percussive envelope
+> Sound.SC3.UGen.Help.viewSC3Help "Env.perc"
+> :t envPerc'
 
 > import Sound.SC3
 

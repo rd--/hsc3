@@ -1,6 +1,4 @@
-envTrapezoid :: UGen -> UGen -> UGen -> UGen -> [UGen]
-
-Trapezoidal envelope data.
+> :t envTrapezoid
 
 > import Sound.SC3
 
