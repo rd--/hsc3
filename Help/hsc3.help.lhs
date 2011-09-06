@@ -623,23 +623,25 @@ supplied identifier.
 > let n e = whiteNoise e AR * 0.1
 > in udup 2 (n 'a') == mce [n 'a',n 'b']
 
-uprotect is a related function that transforms user
-identifiers into 'protected' system identifiers instead
-of incrementing them.  upar is a variant form of
-uprotect.
+uprotect transforms user identifiers into 'protected'
+system identifiers instead of incrementing them.
+
+> ugenId (uprotect 'a' (whiteNoise 'a' AR))
 
 > let n = whiteNoise 'a' AR
-> in concatMap ugenIds (uprotect 'a' (replicate 2 n))
+> in concatMap ugenIds (uprotect' 'a' (replicate 2 n))
 
-> ugenIds (upar 'a' 2 (whiteNoise 'a' AR))
+uclone is a variant form of uprotect.
 
-The ID input to upar allows multiple instances to
+> ugenIds (uclone 'a' 2 (whiteNoise 'a' AR))
+
+The ID input to uclone allows multiple instances to
 generate distinct graphs.
 
 > let n = whiteNoise 'a' AR
-> in ugenIds (upar 'a' 2 n + upar 'b' 2 n)
+> in ugenIds (uclone 'a' 2 n + uclone 'b' 2 n)
 
-ucmp is left to right composition of UGen processing
+ucompose is left to right composition of UGen processing
 functions where at each stage user identifiers are
 lifted to protected system identifiers.  useq is a
 variant that replicates the same function for

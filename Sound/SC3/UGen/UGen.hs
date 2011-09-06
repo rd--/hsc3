@@ -49,24 +49,6 @@ userIdIncr n i =
           UserId (nm,k) -> UserId (nm,k+n)
           _ -> i
 
-{-
-maxSystemId :: [UGenId] -> Int
-maxSystemId = maximum . (minBound:) . map systemId . filter isSystemId
-
-systemIdProtect :: UGenId -> UGenId
-systemIdProtect i =
-    case i of
-      SystemId j -> SystemId (j + 1)
-      _ -> i
-
-ugenIdProtect :: UGenId -> UGenId
-ugenIdProtect i =
-    case i of
-      UserId _ -> userIdProtect i
-      SystemId _ -> systemIdProtect i
-      NoId -> NoId
--}
-
 -- * Unit Generator type
 
 -- | Unit generator.
@@ -132,19 +114,6 @@ ugenReplaceIds m =
                 _ -> u
     in ugenTraverse f
 
-{-
--- | Re-assign *user* identifiers in q that are not in p to *system*
---   identifiers that are not in p or q.
-ugenProtectRight :: UGen -> UGen -> UGen
-ugenProtectRight p q =
-    let ip = ugenIds p
-        iq = ugenIds q
-        n = maxSystemId (filter isSystemId (ip ++ iq))
-        r = filter (not . (flip elem) ip) (filter isUserId iq)
-        m = zip r (map SystemId [n+1..])
-    in ugenReplaceIds m q
--}
-
 -- | Protect user specified UGen Ids.
 ugenProtectUserId :: Int -> UGen -> UGen
 ugenProtectUserId k =
@@ -153,20 +122,20 @@ ugenProtectUserId k =
                 _ -> u
     in ugenTraverse f
 
-ufix :: UGen -> UGen
-ufix = ugenProtectUserId 0
+uprotect :: ID a => a -> UGen -> UGen
+uprotect e = ugenProtectUserId (idHash e)
 
-uprotect :: ID a => a -> [UGen] -> [UGen]
-uprotect e =
+uprotect' :: ID a => a -> [UGen] -> [UGen]
+uprotect' e =
     let n = map (+ (idHash e)) [1..]
     in zipWith ugenProtectUserId n
 
 -- | N parallel instances of `u' with protected Ids.
-upar' :: ID a => a -> Int -> UGen -> [UGen]
-upar' e n = uprotect e . replicate n
+uclone' :: ID a => a -> Int -> UGen -> [UGen]
+uclone' e n = uprotect' e . replicate n
 
-upar :: ID a => a -> Int -> UGen -> UGen
-upar e n = mce . upar' e n
+uclone :: ID a => a -> Int -> UGen -> UGen
+uclone e n = mce . uclone' e n
 
 -- | Left to right UGen function composition with user id protection.
 ucompose :: ID a => a -> [UGen -> UGen] -> UGen -> UGen
@@ -231,7 +200,11 @@ tr_control n d = Control KR n d True
 
 -- | Multiple channel expansion node constructor.
 mce :: [UGen] -> UGen
-mce xs = if null xs then error "mce: empty list" else MCE xs
+mce xs =
+    case xs of
+      [] -> error "mce: empty list"
+      [x] -> x
+      _ -> MCE xs
 
 -- | Multiple root graph node constructor.
 mrg2 :: UGen -> UGen -> UGen
