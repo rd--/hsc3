@@ -1,13 +1,7 @@
-pv_ConformalMap buffer real imag
+> Sound.SC3.UGen.Help.viewSC3Help "PV_ConformalMap"
+> Sound.SC3.UGen.DB.ugenSummary "PV_ConformalMap"
 
-Applies the conformal mapping z -> (z-a)/(1-za*) to the phase vocoder
-bins z with a given by the real and imag imputs to the UGen.
-
-See http://mathworld.wolfram.com/ConformalMapping.html
-
-buffer - buffer number of buffer to act on, passed in through a chain
-real   - real part of a.
-imag   - imaginary part of a.
+> import Sound.SC3.ID
 
 > withSC3 (\fd -> async fd (b_alloc 10 1024 1))
 
@@ -17,7 +11,6 @@ imag   - imaginary part of a.
 > in audition (out 0 (pan2 (ifft' (pv_ConformalMap (fft' 10 i) x y)) 0 1))
 
 With filtering.
-
 > withSC3 (\fd -> async fd (b_alloc 0 2048 1))
 
 > let { o = mce [1, 1.1, 1.5, 1.78, 2.45, 6.7, 8] * 220

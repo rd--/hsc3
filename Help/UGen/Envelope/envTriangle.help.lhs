@@ -1,4 +1,4 @@
-> Sound.SC3.UGen.Help.viewSC3Help "Env.triangle"
+> Sound.SC3.UGen.Help.viewSC3Help "Env.*triangle"
 > :t envTriangle
 
 > import Sound.SC3

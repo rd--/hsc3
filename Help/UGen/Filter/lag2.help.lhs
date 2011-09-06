@@ -1,6 +1,5 @@
-lag2 in lagTime
-
-Lag2 is the same as lag KR (lag KR s t) t.
+> Sound.SC3.UGen.Help.viewSC3Help "Lag2"
+> Sound.SC3.UGen.DB.ugenSummary "Lag2"
 
 > import Sound.SC3
 

@@ -1,6 +1,7 @@
-hpz2 in
+> Sound.SC3.UGen.Help.viewSC3Help "HPZ2"
+> Sound.SC3.UGen.DB.ugenSummary "HPZ2"
 
-Two zero fixed highpass filter.
+> import Sound.SC3.ID
 
-> do { n <- whiteNoise AR
->    ; audition (out 0 (hpz2 (n * 0.25))) }
+> let n = whiteNoise 'a' AR
+> in audition (out 0 (hpz2 (n * 0.25)))

@@ -1,7 +1,7 @@
-bpz2 in
+> Sound.SC3.UGen.Help.viewSC3Help "BPZ2"
+> Sound.SC3.UGen.DB.ugenSummary "BPZ2"
 
-Two zero fixed midpass.  This filter cuts out 0 Hz and the Nyquist
-frequency.
+> import Sound.SC3.ID
 
-> do { n <- whiteNoise AR
->    ; audition (out 0 (bpz2 (n * 0.25))) }
+> let n = whiteNoise 'a' AR
+> in audition (out 0 (bpz2 (n * 0.25)))

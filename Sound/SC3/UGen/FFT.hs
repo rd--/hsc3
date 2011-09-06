@@ -7,24 +7,24 @@ import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
 
 -- | Fast fourier transform.
-fft :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-fft buf i h wt a = mkOsc KR "FFT" [buf,i,h,wt,a] 1
+fft :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+fft buf i h wt a ws = mkOsc KR "FFT" [buf,i,h,wt,a,ws] 1
 
 -- | Variant FFT constructor with default values for hop size, window
--- | type, and active status.
+-- | type, active status and window size.
 fft' :: UGen -> UGen -> UGen
-fft' buf i = fft buf i 0.5 0 1
+fft' buf i = fft buf i 0.5 0 1 0
 
 fftTrigger :: UGen -> UGen -> UGen -> UGen
 fftTrigger b h p = mkOsc KR "FFTTrigger" [b,h,p] 1
 
 -- | Inverse Fast Fourier Transform.
-ifft :: UGen -> UGen -> UGen
-ifft buf wt = mkOsc AR "IFFT" [buf,wt] 1
+ifft :: UGen -> UGen -> UGen -> UGen
+ifft buf wt ws = mkOsc AR "IFFT" [buf,wt,ws] 1
 
 -- | Variant ifft with default value for window type.
 ifft' :: UGen -> UGen
-ifft' buf = ifft buf 0
+ifft' buf = ifft buf 0 0
 
 -- | Strict convolution of two continuously changing inputs.
 convolution :: UGen -> UGen -> UGen -> UGen

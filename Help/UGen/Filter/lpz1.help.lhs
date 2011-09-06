@@ -1,6 +1,7 @@
-lpz1 in
+> Sound.SC3.UGen.Help.viewSC3Help "LPZ1"
+> Sound.SC3.UGen.DB.ugenSummary "LPZ1"
 
-Two point average filter
+> import Sound.SC3.ID
 
-> do { n <- whiteNoise AR
->    ; audition (out 0 (lpz1 (n * 0.25))) }
+> let n = whiteNoise 'a' AR * 0.1
+> in audition (out 0 (mce2 n (lpz1 n)))

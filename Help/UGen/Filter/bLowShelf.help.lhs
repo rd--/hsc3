@@ -1,15 +1,7 @@
-bLowShelf i f rs db
+> Sound.SC3.UGen.Help.viewSC3Help "BLowShelf"
+> Sound.SC3.UGen.DB.ugenSummary "BLowShelf"
 
-   i - input signal to be processed
-   f - center frequency
-  rs - the reciprocal of S.  Shelf boost/cut slope. When S = 1, the
-       shelf slope is as steep as it can be and remain monotonically
-       increasing or decreasing gain with frequency.  The shelf slope,
-       in dB/octave, remains proportional to S for all other values
-       for a fixed freq/SampleRate.ir and db.
-  db - gain. boost/cut the center frequency in decibels.
-
-> import Sound.SC3
+> import Sound.SC3.ID
 
 > let { i = soundIn (mce2 0 1)
 >     ; f = mouseX' KR 40 6000 Exponential 0.2

@@ -1,27 +1,17 @@
-pv_BinWipe bufferA bufferB wipe
+> Sound.SC3.UGen.Help.viewSC3Help "PV_BinWipe"
+> Sound.SC3.UGen.DB.ugenSummary "PV_BinWipe"
 
-Combine low and high bins from two inputs.  Copies low bins from one
-input and the high bins of the other.
+> import Sound.SC3.ID
 
-bufferA - fft buffer A.
-bufferB - fft buffer B.
-wipe    - can range between -1 and +1.
+> let fileName = "/home/rohan/data/audio/pf-c5.snd"
+> in withSC3 (\fd -> do {_ <- async fd (b_alloc 10 2048 1)
+>                       ;_ <- async fd (b_alloc 11 2048 1)
+>                       ;async fd (b_allocRead 12 fileName 0 0)})
 
-if wipe == 0 then the output is the same as inA.
-if  wipe > 0 then it begins replacing with bins from inB from the bottom up.
-if  wipe < 0 then it begins replacing with bins from inB from the top down.
-
-> import Sound.SC3
-
-> let fileName = "/home/rohan/audio/metal.wav"
-> in withSC3 (\fd -> do { async fd (b_alloc 10 2048 1)
->                       ; async fd (b_alloc 11 2048 1)
->                       ; async fd (b_allocRead 12 fileName 0 0) })
-
-> do { n <- whiteNoise AR
->    ; let { b = playBuf 1 12 (bufRateScale KR 12) 0 0 Loop DoNothing
->          ; f = fft' 10 (n * 0.2)
->          ; g = fft' 11 b
->          ; x = mouseX' KR 0.0 1.0 Linear 0.1
->          ; h = pv_BinWipe f g x }
->      in audition (out 0 (pan2 (ifft' h) 0 0.5)) }
+> let {n = whiteNoise 'a' AR
+>     ;b = playBuf 1 AR 12 (bufRateScale KR 12) 0 0 Loop DoNothing
+>     ;f = fft' 10 (n * 0.2)
+>     ;g = fft' 11 b
+>     ;x = mouseX' KR 0.0 1.0 Linear 0.1
+>     ;h = pv_BinWipe f g x}
+> in audition (out 0 (pan2 (ifft' h) 0 0.5))

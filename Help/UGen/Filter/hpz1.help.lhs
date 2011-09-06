@@ -1,6 +1,7 @@
-hpz1 in
+> Sound.SC3.UGen.Help.viewSC3Help "HPZ1"
+> Sound.SC3.UGen.DB.ugenSummary "HPZ1"
 
-Two point difference filter.
+> import Sound.SC3.ID
 
-> do { n <- whiteNoise AR
->    ; audition (out 0 (hpz1 (n * 0.25))) }
+> let n = whiteNoise 'a' AR
+> in audition (out 0 (hpz1 (n * 0.25)))

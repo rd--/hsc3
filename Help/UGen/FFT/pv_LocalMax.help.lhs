@@ -1,18 +1,13 @@
-pv_LocalMax buffer threshold
+> Sound.SC3.UGen.Help.viewSC3Help "PV_LocalMax"
+> Sound.SC3.UGen.DB.ugenSummary "PV_LocalMax"
 
-Pass bins which are a local maximum.  Passes only bins whose magnitude
-is above a threshold and above their nearest neighbors.
+> import Sound.SC3.ID
 
-buffer    - fft buffer.
-threshold - magnitude threshold.
+> let fileName = "/home/rohan/data/audio/pf-c5.snd"
+> in withSC3 (\fd -> do {_ <- async fd (b_alloc 10 2048 1)
+>                       ;async fd (b_allocRead 12 fileName 0 0)})
 
-> import Sound.SC3
-
-> let fileName = "/home/rohan/audio/metal.wav"
-> in withSC3 (\fd -> do { async fd (b_alloc 10 2048 1)
->                       ; async fd (b_allocRead 12 fileName 0 0) })
-
-> let { a = playBuf 1 12 (bufRateScale KR 12) 0 0 Loop DoNothing
+> let { a = playBuf 1 AR 12 (bufRateScale KR 12) 0 0 Loop DoNothing
 >     ; f = fft' 10 a
 >     ; x = mouseX' KR 0 100 Linear 0.1
 >     ; h = pv_LocalMax f x }

@@ -1,13 +1,8 @@
-convolution in kernel frameSize
+> Sound.SC3.UGen.Help.viewSC3Help "Convolution"
+> Sound.SC3.UGen.DB.ugenSummary "Convolution"
 
-Strict convolution of two continuously changing inputs. Also see
-[Convolution2] for a cheaper CPU cost alternative for the case of a
-fixed kernel which can be changed with a trigger message.
+> import Sound.SC3.ID
 
-in        - processing target
-kernel    - processing kernel.
-framesize - size of FFT frame, must be a power of two
-
-> do { k <- whiteNoise AR
->    ; let i = in' 2 AR numOutputBuses
->      in audition (out 0 (convolution i k 2048 * 0.1)) }
+> let {k = whiteNoise 'a' AR
+>     ;i = in' 2 AR numOutputBuses}
+> in audition (out 0 (convolution i k 2048 * 0.1))

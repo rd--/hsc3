@@ -1,10 +1,5 @@
-bHiPass i f rq
-
-   i - input signal to be processed
-   f - cutoff frequency
-  rq - the reciprocal of Q, ie. bandwidth / cutoffFreq
-
-12db/oct rolloff - 2nd order resonant high pass filter.
+> Sound.SC3.UGen.Help.viewSC3Help "BHiPass"
+> Sound.SC3.UGen.DB.ugenSummary "BHiPass"
 
 > import Sound.SC3
 

@@ -1,10 +1,5 @@
-bpf in freq rq
-
-Second order Butterworth bandpass filter
-
-in    - input signal to be processed
-freq  - cutoff frequency in Hertz
-rq    - the reciprocal of Q, ie. bandwidth / cutoffFreq
+> Sound.SC3.UGen.Help.viewSC3Help "BPF"
+> Sound.SC3.UGen.DB.ugenSummary "BPF"
 
 > import Sound.SC3.ID
 

@@ -29,19 +29,26 @@ sc3HelpClassFile d c = do
 sc3HelpOperatorEntry :: FilePath -> String -> FilePath
 sc3HelpOperatorEntry d o = d </> "Overviews/Operators.html#." ++ o
 
+sc3HelpMethod :: FilePath -> Char -> (String,String) -> FilePath
+sc3HelpMethod d z (c,m) = d </> "Classes" </> c <.> "html#" ++ [z] ++ m
+
 sc3HelpClassMethod :: FilePath -> (String,String) -> FilePath
-sc3HelpClassMethod d (c,m) = d </> "Classes" </> c <.> "html" ++ "#*" ++ m
+sc3HelpClassMethod d = sc3HelpMethod d '*'
+
+sc3HelpInstanceMethod :: FilePath -> (String,String) -> FilePath
+sc3HelpInstanceMethod d = sc3HelpMethod d '-'
 
 -- | The name of the local SC3 Help file documenting `u'.
 ugenSC3HelpFile :: String -> IO FilePath
 ugenSC3HelpFile s = do
   d <- sc3HelpDirectory
   cf <- sc3HelpClassFile d s
-  case '.' `elem` s of
-    True -> let [c,m] = splitOn "." s in return (sc3HelpClassMethod d (c,m))
-    False -> case cf of
-               Just cf' -> return cf'
-               Nothing -> return (sc3HelpOperatorEntry d s)
+  case splitOn "." s of
+    [c,'*':m] -> return (sc3HelpClassMethod d (c,m))
+    [c,m] -> return (sc3HelpInstanceMethod d (c,m))
+    _ -> case cf of
+           Just cf' -> return cf'
+           Nothing -> return (sc3HelpOperatorEntry d s)
 
 toSC3Name :: String -> String
 toSC3Name nm =

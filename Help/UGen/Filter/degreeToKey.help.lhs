@@ -1,21 +1,12 @@
-degreeToKey bufnum in octave
-
-Convert signal to modal pitch
-
-The input signal value is truncated to an integer value and used
-as an index into an octave repeating table of note values.
-Indices wrap around the table and shift octaves as they do.
-
-bufnum - index of the buffer which contains the steps for each
-         scale degree.
-in     - the input signal.
-octave - the number of steps per octave in the scale.
+> Sound.SC3.UGen.Help.viewSC3Help "DegreeToKey"
+> Sound.SC3.UGen.DB.ugenSummary "DegreeToKey"
 
 > import Sound.SC3.ID
 
-> withSC3 (\fd -> do {_ <- async fd (b_alloc 0 7 1)
->                    ;send fd (b_setn 0 [(0,[0,2,3.2,5,7,9,10])])})
+allocate & initialise buffer zero
+> withSC3 (\fd -> async fd (b_alloc_setn1 0 0 [0,2,3.2,5,7,9,10]))
 
+modal space, mouse x controls discrete pitch in dorian mode
 > let {n = lfNoise1 'a' KR (mce [3,3.05])
 >     ;x = mouseX' KR 0 15 Linear 0.1
 >     ;k = degreeToKey 0 x 12

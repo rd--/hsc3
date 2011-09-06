@@ -1,8 +1,7 @@
-pv_BinShift buffer stretch shift
+> Sound.SC3.UGen.Help.viewSC3Help "PV_BinShift"
+> Sound.SC3.UGen.DB.ugenSummary "PV_BinShift"
 
-Shift and scale the positions of the bins.  Can be used as a very
-crude frequency shifter/scaler.  Shifts the leftmost bin at `buffer'
-by `shift' places, the distance between subsequent bins is `stretch'.
+> import Sound.SC3.ID
 
 > withSC3 (\fd -> async fd (b_alloc 10 2048 1))
 

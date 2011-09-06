@@ -1,21 +1,13 @@
-fft buffer in hopSize windowType active
-fft' buffer in
+> Sound.SC3.UGen.Help.viewSC3Help "FFT"
+> Sound.SC3.UGen.DB.ugenSummary "FFT"
+> :t fft'
 
-Fast fourier transform.  The fast fourier transform analyzes the
-frequency content of a signal.  fft uses a local buffer for holding
-the buffered audio.  The inverse transform, ifft, reconstructs an
-audio signal.
-
-The fft and pv_* UGens run at control rate, the ifft UGen at audio
-rate.
-
-fft' is a variant FFT constructor with default values for hop size,
-window type, and active status
+> import Sound.SC3.ID
 
 > withSC3 (\fd -> async fd (b_alloc 10 2048 1))
 
-> do { n <- whiteNoise AR
->    ; audition (out 0 (ifft' (fft' 10 (n * 0.05)))) }
+> let n = whiteNoise 'a' AR
+> in audition (out 0 (ifft' (fft' 10 (n * 0.05))))
 
 > let { s0 = sinOsc KR 0.08 0 * 6 + 6.2
 >     ; s1 = sinOsc KR (squared s0) 0 * 100 + 800

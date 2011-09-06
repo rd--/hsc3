@@ -1,6 +1,5 @@
-lag3 in lagTime
-
-Lag3 is the same as lag (lag (lag s t) t) t.
+> Sound.SC3.UGen.Help.viewSC3Help "Lag3"
+> Sound.SC3.UGen.DB.ugenSummary "Lag3"
 
 > import Sound.SC3
 

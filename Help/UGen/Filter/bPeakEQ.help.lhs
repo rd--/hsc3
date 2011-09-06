@@ -1,13 +1,7 @@
-bPeakEQ i f rq db
+> Sound.SC3.UGen.Help.viewSC3Help "BPeakEQ"
+> Sound.SC3.UGen.DB.ugenSummary "BPeakEQ"
 
-    i - input signal to be processed
-    f - center frequency
-   rq - the reciprocal of Q, ie.  bandwidth / cutoffFreq
-   db - boost/cut the center frequency (in dBs)
-
-Parametric equalizer.
-
-> import Sound.SC3
+> import Sound.SC3.ID
 
 > let { i = soundIn (mce2 0 1)
 >     ; f = mouseX' KR 2200 18000 Exponential 0.2

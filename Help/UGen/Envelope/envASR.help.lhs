@@ -1,4 +1,4 @@
-> Sound.SC3.UGen.Help.viewSC3Help "Env.asr"
+> Sound.SC3.UGen.Help.viewSC3Help "Env.*asr"
 > :t envASR
 
 > import Sound.SC3

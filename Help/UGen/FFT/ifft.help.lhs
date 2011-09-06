@@ -1,9 +1,6 @@
-ifft buffer windowType
-ifft' buffer
+> Sound.SC3.UGen.Help.viewSC3Help "IFFT"
+> Sound.SC3.UGen.DB.ugenSummary "IFFT"
+> :t ifft'
 
-Inverse Fast Fourier Transform.  The inverse fast fourier transform
-converts from frequency content to a signal.
-
-ifft' is a variant with the default window type.
-
-See fft.
+# hsc3
+ifft' is a variant with the default window type and size

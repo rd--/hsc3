@@ -1,4 +1,4 @@
-> Sound.SC3.UGen.Help.viewSC3Help "Env.linen"
+> Sound.SC3.UGen.Help.viewSC3Help "Env.*linen"
 > :t envLinen
 
 > import Sound.SC3
