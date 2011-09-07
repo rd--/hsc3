@@ -44,11 +44,12 @@ ugenSC3HelpFile s = do
   d <- sc3HelpDirectory
   cf <- sc3HelpClassFile d s
   case splitOn "." s of
+    ["Operator",m] -> return (sc3HelpOperatorEntry d m)
     [c,'*':m] -> return (sc3HelpClassMethod d (c,m))
     [c,m] -> return (sc3HelpInstanceMethod d (c,m))
     _ -> case cf of
            Just cf' -> return cf'
-           Nothing -> return (sc3HelpOperatorEntry d s)
+           Nothing -> error "ugenSC3HelpFile"
 
 toSC3Name :: String -> String
 toSC3Name nm =

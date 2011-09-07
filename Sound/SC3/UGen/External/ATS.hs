@@ -1,19 +1,17 @@
 -- | Reader for ATS analyis data files.
-module Sound.SC3.UGen.External.ATS ( ATS(..)
-                                   , ATSHeader(..)
-                                   , ATSFrame
-                                   , atsRead
-                                   , atsSC3 ) where
+module Sound.SC3.UGen.External.ATS (ATS(..)
+                                   ,ATSHeader(..)
+                                   ,ATSFrame,atsFrames
+                                   ,atsRead) where
 
-import Control.Monad
 import qualified Data.ByteString.Lazy as B
-import Data.List
+import Data.Int
+import Data.List.Split
 import Sound.OpenSoundControl.Coding.Byte
-import System.IO
 
 -- | ATS analysis data.
 data ATS = ATS { atsHeader :: ATSHeader
-               , atsFrames :: [ATSFrame] }
+               , atsData :: [Double] }
            deriving (Eq, Show)
 
 -- | ATS analysis meta-data.
@@ -26,31 +24,62 @@ data ATSHeader = ATSHeader { atsSampleRate :: Double
                            , atsMaxFrequency :: Double
                            , atsAnalysisDuration :: Double
                            , atsFileType :: Int
+                           , atsFrameLength :: Int
                            } deriving (Eq, Show)
 
 -- | ATS analysis frame data.
 type ATSFrame = [Double]
 
+bSep :: Int64 -> Int64 -> B.ByteString -> [B.ByteString]
+bSep n i d =
+    if i == 1
+    then [d]
+    else let (p,q) = B.splitAt n d
+         in p : bSep n (i - 1) q
+
+atsParse :: FilePath -> IO [Double]
+atsParse fn = do
+  d <- B.readFile fn
+  let n = B.length d `div` 8
+      v = B.take 8 d
+      f = get_decoder v
+  return (map f (bSep 8 n d))
+
 -- | Read an ATS data file.
 atsRead :: FilePath -> IO ATS
 atsRead fn = do
-  h <- openFile fn ReadMode
-  v <- B.hGet h 8
-  let reader = get_reader v
-  hdr_r <- replicateM 9 (reader h)
-  let f j = hdr_r !! (j - 1)
+  d <- atsParse fn
+  let f j = d !! j
       g = floor . f
       ft = g 9
       (n, x) = ftype_n ft
       np = g 4
       nf = g 5
       fl = np * n + x
-      hdr = ATSHeader (f 1) (g 2) (g 3) np nf (f 6) (f 7) (f 8) ft
-      get_f = replicateM fl (reader h)
-  d <- replicateM nf get_f
-  hClose h
+      hdr = ATSHeader (f 1) (g 2) (g 3) np nf (f 6) (f 7) (f 8) ft fl
   return (ATS hdr d)
 
+atsFrames :: ATS -> [ATSFrame]
+atsFrames a = splitEvery (atsFrameLength (atsHeader a)) (atsData a)
+
+-- Determine endianess and hence decoder.
+get_decoder :: B.ByteString -> (B.ByteString -> Double)
+get_decoder v =
+    if decode_f64 v == 123.0
+    then decode_f64
+    else decode_f64 . B.reverse
+
+-- Calculate partial depth and frame constant.
+ftype_n :: Int -> (Int, Int)
+ftype_n n =
+    case n of
+      1 -> (2, 1)
+      2 -> (3, 1)
+      3 -> (2, 26)
+      4 -> (3, 26)
+      _ -> error "ftype_n"
+
+{-
 -- | Analysis data in format required by the sc3 ATS UGens.
 atsSC3 :: ATS -> [Double]
 atsSC3 (ATS h d) =
@@ -61,28 +90,6 @@ atsSC3 (ATS h d) =
        f (atsNFrames h) :
        f (atsWindowSize h) :
        concatMap (td !!) (atsSC3Indices h)
-
--- be
-read_f64 :: Handle -> IO Double
-read_f64 h = liftM decode_f64 (B.hGet h 8)
-
--- le
-read_f64LE :: Handle -> IO Double
-read_f64LE h = liftM (decode_f64 . B.reverse) (B.hGet h 8)
-
--- Determine endianess and hence reader.
-get_reader :: B.ByteString -> (Handle -> IO Double)
-get_reader v = if decode_f64 v == 123.0
-               then read_f64
-               else read_f64LE
-
--- Calculate partial depth and frame constant.
-ftype_n :: Int -> (Int, Int)
-ftype_n 1 = (2, 1)
-ftype_n 2 = (3, 1)
-ftype_n 3 = (2, 26)
-ftype_n 4 = (3, 26)
-ftype_n _ = error "ftype_n"
 
 -- Indices for track data in the order required by sc3.
 atsSC3Indices :: ATSHeader -> [Int]
@@ -96,3 +103,4 @@ atsSC3Indices h =
     in if atsFileType h == 4
        then a ++ f ++ p ++ n
        else error "atsSC3Indices: illegal ATS file type (/= 4)"
+-}
