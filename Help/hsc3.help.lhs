@@ -6,7 +6,7 @@
 
 ## Abstract
 
-This document describes the hsc3 haskell
+This document describes the [hsc3][1] haskell
 bindings to the supercollider synthesis
 server.
 
@@ -34,12 +34,12 @@ language for real time audio synthesis (McCartney,
 
 The redesigned system consists of two parts, an
 elegant, efficient, and musically neutral real
-time audio synthesiser in the music-n family
+time audio synthesiser in the Music-N family
 (Mathews, 1961), and a language interpreter in the
-smalltalk family (Goldberg, 1983).
+SmallTalk family (Goldberg, 1983).
 
 The interpreter and synthesiser communicate using
-the open sound control protocol (Wright and Freed,
+the Open Sound Control protocol (Wright and Freed,
 1997).
 
 Using this model of discrete communicating
@@ -110,7 +110,7 @@ classes.
 
 These give signatures such as:
 
->| (+) :: (Num a) => a -> a -> a
+    (+) :: (Num a) => a -> a -> a
 
 meaning that a value can only be summed with a
 value of the same type, and that the resulting
@@ -252,8 +252,8 @@ noise unit generator functions qualified.
 which is defined in relation to the standard
 monad functions `replicateM` and `liftM`.
 
->| clone :: (UId m) => Int -> m UGen -> m UGen
->| clone n u = liftM mce (replicateM n u)
+    clone :: (UId m) => Int -> m UGen -> m UGen
+    clone n u = liftM mce (replicateM n u)
 
 ## Multiple Root Graphs
 
@@ -290,11 +290,11 @@ This is a somewhat subtle distinction.  Numeric
 literals in haskell are overloaded, not coerced.
 The numerical type classes provide two functions:
 
->| fromInteger :: (Num a) => Integer -> a
+    fromInteger :: (Num a) => Integer -> a
 
 and
 
->| fromRational :: (Fractional a) => Rational -> a
+    fromRational :: (Fractional a) => Rational -> a
 
 which are implicitly applied to all integer and
 rational literals respectively.
@@ -334,7 +334,7 @@ succeeds.
 
 Since the Ord type gives the signature:
 
->| (>) :: (Ord a) => a -> a -> Bool
+    (>) :: (Ord a) => a -> a -> Bool
 
 we define a variant with a star suffix, such
 that:
@@ -353,7 +353,7 @@ For functions where the signature is
 consistent with the meaning of the unit
 generator operator we use the haskell name.
 
->| max :: (Ord a) => a -> a -> a
+    max :: (Ord a) => a -> a -> a
 
 > let {l = fSinOsc AR 500 0 * 0.25
 >     ;r = fSinOsc AR 0.5 0 * 0.23}
@@ -442,12 +442,12 @@ by the module `Sound.SC3.ID` is a quite different
 function to the `whiteNoise` provided by the module
 `Sound.SC3.Monadic`.  That function has the signature:
 
->| whiteNoise :: (UId m) => Rate -> m UGen
+    whiteNoise :: (UId m) => Rate -> m UGen
 
 where the type-class `UId` is defined as:
 
->| class (Monad m) => UId m where
->|     generateUId :: m Int
+    class (Monad m) => UId m where
+        generateUId :: m Int
 
 The signature indicates that `whiteNoise` is a
 function from a `Rate` value to an `m UGen`
@@ -461,13 +461,13 @@ identifier multiple values are denoted.
 
 ## Non-determinism, monadic structure, do notation
 
-It is quite clear that a value of type (m UGen) is
-not of type UGen.
+It is quite clear that a value of type `m UGen` is
+not of type `UGen`.
 
 Compare the monadic whiteNoise signature with that
 of the deterministic sin oscillator:
 
->| sinOsc :: Rate -> UGen -> UGen -> UGen
+    sinOsc :: Rate -> UGen -> UGen -> UGen
 
 We can write a noise graph using this function and the
 haskell "do" notation as:
@@ -501,7 +501,7 @@ where `>>=` is the monadic bind function, and `\x
 (ie. for function definition, ie. `{|x| y}` in
 supercollider language).  The signature for bind is:
 
->| (>>=) :: (Monad m) => m a -> (a -> m b) -> m b
+    (>>=) :: (Monad m) => m a -> (a -> m b) -> m b
 
 which indicates that the value bound in the
 function definition can only be accessed in a
@@ -510,7 +510,7 @@ function that produces a value in the same monad.
 The `audition` function has an appropriate
 signature:
 
->| audition :: UGen -> IO ()
+    audition :: UGen -> IO ()
 
 since `IO` is an instance of the `UId` class.
 
@@ -613,9 +613,9 @@ channel.
 
 ## Composition of graphs, user specified identifiers
 
-udup is a shorthand for writing out an MCE node with
-multiple copies of a unit generator graph.  That is it
-traverses the UGen graph and increments each user
+`udup` is a shorthand for writing out an `mce` node
+with multiple copies of a unit generator graph.  That
+is it traverses the UGen graph and increments each user
 supplied identifier.
 
 > ugenIds (udup 2 (whiteNoise 'α' AR))
@@ -623,7 +623,7 @@ supplied identifier.
 > let n e = whiteNoise e AR * 0.1
 > in udup 2 (n 'α') == mce [n 'α',n 'β']
 
-uprotect transforms user identifiers into _protected_
+`uprotect` transforms user identifiers into _protected_
 system identifiers instead of incrementing them.
 
 > ugenId (uprotect 'α' (whiteNoise 'α' AR))
@@ -641,11 +641,11 @@ instances to generate distinct graphs.
 > let n = whiteNoise 'α' AR
 > in ugenIds (uclone 'α' 2 n + uclone 'β' 2 n)
 
-ucompose is left to right composition of UGen processing
-functions where at each stage user identifiers are
-lifted to protected system identifiers.  `useq` is a
-variant that replicates the same function for
-composition.
+`ucompose` is left to right composition of `UGen`
+processing functions where at each stage user
+identifiers are lifted to protected system identifiers.
+`useq` is a variant that replicates the same function
+for composition.
 
 > let f i = allpassN i 0.050 (rand 'α' 0 0.05) 1
 > in ugenIds (useq 'α' 4 f (dust 'α' AR 10))
@@ -718,3 +718,5 @@ composition.
   International Computer Music Conference_, pages
   101-104.  International Computer Music
   Association, 1997.
+
+[1]: http://slavepianos.org/rd/?t=hsc3

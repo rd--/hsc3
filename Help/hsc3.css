@@ -1,6 +1,7 @@
 body {
-  font-family: serif;
+  font-family: "Bitstream Vera Serif", serif;
   font-size: 10pt;
+  line-height: 1.4em;
   width: 40em;
   margin: 4em;
   color: #000;
@@ -17,8 +18,16 @@ h2 {
 
 pre {
   font-size: 1em;
-  padding: 1em 3em;
-  background-color: #ddd;
+  padding: 0.5em 0.75em;
+  border-style: dotted;
+  border-width: 1px;
+  border-color: #666;
+  background-color: #fff;
+}
+
+pre.haskell {
+  border-style: none;
+  background-color: #eee;
 }
 
 code {
@@ -29,5 +38,8 @@ code {
 
 pre code {
   color: #000;
-  background-color: #ddd;
+}
+
+pre.haskell code {
+  background-color: #eee;
 }
