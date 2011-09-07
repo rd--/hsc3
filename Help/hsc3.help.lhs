@@ -1,3 +1,5 @@
+# Haskell SuperCollider
+
 > import Control.Monad
 > import Sound.SC3.ID
 > import qualified Sound.SC3.Monadic as M
@@ -53,15 +55,15 @@ particularly specialised.
 
 The requirements are rather minimal.
 
-An open sound control protocol implementation and
-a usable notation for server commands.
+(1) An open sound control protocol implementation and a
+usable notation for server commands.
 
-A unit generator graph protocol implementation and
-a usable notation for writing graphs.
+(2) A unit generator graph protocol implementation and a
+usable notation for writing graphs.
 
-For interactive use a suitably responsive run time
-system, where suitable is a function of the kind
-of work being done.
+(3) For interactive use a suitably responsive run time
+system, where suitable is a function of the kind of
+work being done.
 
 ## Questions, San Dimas, 1965
 
@@ -650,69 +652,69 @@ composition.
 
 ## References
 
-+ A. Goldberg and D. Robson.  Smalltalk-80: The
-  language and its implementation.
++ A. Goldberg and D. Robson.  _Smalltalk-80: The
+  language and its implementation._
   Addison-Wesley, Reading, MA, 1983.
 
 + P. Hudak, J. Hughes, S. P. Jones, and P. Wadler.
-  A History of Haskell: being lazy with class.  In
-  The Third ACM SIGPLAN History of Programming
-  Languages Conference, San Diego, California,
+  "A History of Haskell: being lazy with class."  In
+  _The Third ACM SIGPLAN History of Programming
+  Languages Conference_, San Diego, California,
   June 2007.  Association for Computing Machinery.
 
-+ John Hughes. Generalising monads to arrows.
-  Sci. Comput. Program., 37(1-3):67-111, 2000.
++ John Hughes. "Generalising monads to arrows."
+  _Sci. Comput. Program._, 37(1-3):67-111, 2000.
 
-+ P. Landin.  The next 700 programming languages.
-  Communications of the ACM, 9(3):157-164, March
++ P. Landin.  "The next 700 programming languages."
+  _Communications of the ACM_, 9(3):157-164, March
   1966.  Presented at the ACM Programming and
   Pragmatics Conference, August 1965.
 
-+ M. V. Mathews.  An Acoustical Compiler for Music
-  and Psychological Stimuli.  AT&T Bell
-  Laboratories Technical Journal, 40:677-694,
++ M. V. Mathews.  "An Acoustical Compiler for Music
+  and Psychological Stimuli."  _AT&T Bell
+  Laboratories Technical Journal_, 40:677-694,
   1961.
 
-+ C. McBride and R. Paterson.  Applicative
-  Programming with Effects.  Journal of Functional
-  Programming, 17(4), 2007.
++ C. McBride and R. Paterson.  "Applicative
+  Programming with Effects."  _Journal of Functional
+  Programming_, 17(4), 2007.
 
-+ J. McCarthy.  Recursive functions of symbolic
-  expressions and their computation by machine.
-  Communications of the ACM, 3(4):184-195, 1960.
++ J. McCarthy.  "Recursive functions of symbolic
+  expressions and their computation by machine."
+  _Communications of the ACM_, 3(4):184-195, 1960.
 
-+ J. McCartney.  Continued evolution of the
-  SuperCollider real time synthesis environment.
-  In Proceedings of the International Computer
-  Music Conference, pages 133-136. International
++ J. McCartney.  "Continued evolution of the
+  SuperCollider real time synthesis environment."
+  In _Proceedings of the International Computer
+  Music Conference_, pages 133-136. International
   Computer Music Association, 1998.
 
-+ J. McCartney.  Rethinking the Computer Music
-  Language: SuperCollider.  Computer Music
-  Journal, 26(4):61-68, 2002.
++ J. McCartney.  "Rethinking the Computer Music
+  Language: SuperCollider."  _Computer Music
+  Journal_, 26(4):61-68, 2002.
 
-+ Amr Sabry. What is a Purely Functional Language?
-  Journal of Functional Programming, 1(1), 1993.
++ Amr Sabry. "What is a Purely Functional Language?"
+  _Journal of Functional Programming_, 1(1), 1993.
 
-+ C. Strachey.  Fundamental Concepts in
-  Programming Languages.  Higher-Order and
-  Symbolic Computation, 13:11-49, 2000.
++ C. Strachey.  "Fundamental Concepts in
+  Programming Languages."  _Higher-Order and
+  Symbolic Computation_, 13:11-49, 2000.
 
-+ Philip Wadler. Lazy versus strict.  ACM
-  Comput. Surv., 28(2):318-320, 1996.
++ Philip Wadler. "Lazy versus strict."  _ACM
+  Comput. Surv._, 28(2):318-320, 1996.
 
-+ P. Wadler.  Comprehending Monads.  In Conference
-  on Lisp and Funcional Programming, Nice, France,
++ P. Wadler.  "Comprehending Monads."  In _Conference
+  on Lisp and Funcional Programming_, Nice, France,
   June 1990. ACM.
 
-+ P. Wadler and S. Blott.  How to make ad hoc
-  polymorphism less ad hoc.  In Proceedings of
++ P. Wadler and S. Blott.  "How to make ad hoc
+  polymorphism less ad hoc."  In _Proceedings of
   16th ACM Symposium on Principles of Programming
-  Languages, pages 60-76, January 1989.
+  Languages_, pages 60-76, January 1989.
 
-+ M. Wright and A. Freed.  Open Sound Control: A
++ M. Wright and A. Freed.  "Open Sound Control: A
   New Protocol for Communicating with Sound
-  Synthesizers.  In Proceedings of the
-  International Computer Music Conference, pages
+  Synthesizers."  In _Proceedings of the
+  International Computer Music Conference_, pages
   101-104.  International Computer Music
   Association, 1997.
