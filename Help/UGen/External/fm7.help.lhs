@@ -1,32 +1,5 @@
-fm7 ctl mod
-
-  fm7, stefan kersten, phase modulation oscillator matrix.
-  http://darcs.k-hornz.de/repos/skUG/
-
-fm7 implements a 6x6 oscillator matrix, where each
-oscillator's phase can be modulated by any of the
-other oscillators' output.
-
-The UGen expects two (flattened) matrices: one for
-specifying the oscillator parameters frequency
-(control rate), phase (initialization only) and
-amplitude (control rate):
-
-[ [ 300, 0,    1   ],
-  [ 400, pi/2, 1   ],
-  [ 730, 0,    0.5 ],
-  [ 0,   0,    0   ],
-  [ 0,   0,    0   ],
-  [ 0,   0,    0   ] ]
-
-The modulation matrix specifies the amount of
-modulation each oscillator output has on another
-oscillator's phase. Row i in the matrix refer to
-oscillator i's phase input and the columns denote
-the amount of phase modulation in radians.
-
-The UGen outputs the six individual oscillator
-signals.
+> Sound.SC3.UGen.Help.viewSC3Help "FM7"
+> Sound.SC3.UGen.DB.ugenSummary "FM7"
 
 > import Sound.SC3
 

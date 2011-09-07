@@ -1,4 +1,4 @@
-> Sound.SC3.UGen.Help.viewSC3Help "softclip"
+> Sound.SC3.UGen.Help.viewSC3Help "Operator.softclip"
 > :t softClip
 
 > import Sound.SC3

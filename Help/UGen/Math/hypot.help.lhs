@@ -1,4 +1,4 @@
-> Sound.SC3.UGen.Help.viewSC3Help "hypot"
+> Sound.SC3.UGen.Help.viewSC3Help "Operator.hypot"
 > :t hypot
 
 > import Sound.SC3

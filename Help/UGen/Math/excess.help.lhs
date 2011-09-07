@@ -1,4 +1,4 @@
-> Sound.SC3.UGen.Help.viewSC3Help "excess"
+> Sound.SC3.UGen.Help.viewSC3Help "Operator.excess"
 > :t excess
 
 > import Sound.SC3

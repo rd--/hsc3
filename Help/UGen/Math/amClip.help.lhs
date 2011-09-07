@@ -1,4 +1,4 @@
-> Sound.SC3.UGen.Help.viewSC3Help "amclip"
+> Sound.SC3.UGen.Help.viewSC3Help "Operator.amclip"
 > :t amClip
 
 > import Sound.SC3.ID

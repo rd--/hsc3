@@ -1,4 +1,4 @@
-> Sound.SC3.UGen.Help.viewSC3Help "dbamp"
+> Sound.SC3.UGen.Help.viewSC3Help "Operator.dbamp"
 > :t dbAmp
 
 > import Sound.SC3

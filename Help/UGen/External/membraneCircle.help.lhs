@@ -1,19 +1,11 @@
-membraneCircle input tension loss
-membraneHexagon input tension loss
+> Sound.SC3.UGen.Help.viewSC3Help "MembraneCircle"
+> Sound.SC3.UGen.DB.ugenSummary "MembraneCircle"
 
-Triangular waveguide meshes of a drum-like membrane.  Input is
-an excitation signal, such as a pulse of noise.  Tension and
-loss are k-rate.
-
-The variants are named after the shape made out of triangular
-meshes.
+> import Sound.SC3.ID
 
 Excite the mesh with some pink noise, triggered by an
 impulse generator.  mouseX is tension and impulse frequency,
 mouseY is duration of excitation, release-time and amplitude.
-
-> import Sound.SC3.ID
-
 > let { x = mouseX' KR 0 1 Linear 0.2
 >     ; y = mouseY' KR 1e-9 1 Exponential 0.2
 >     ; loss = linLin y 0 1 0.999999 0.999

@@ -1,4 +1,4 @@
-> Sound.SC3.UGen.Help.viewSC3Help "sumsqr"
+> Sound.SC3.UGen.Help.viewSC3Help "Operator.sumsqr"
 > :t sumSqr
 
 > import Sound.SC3

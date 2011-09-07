@@ -1,4 +1,4 @@
-> Sound.SC3.UGen.Help.viewSC3Help "clip2"
+> Sound.SC3.UGen.Help.viewSC3Help "Operator.clip2"
 > :t clip2
 
 > import Sound.SC3

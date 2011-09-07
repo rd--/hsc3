@@ -1,4 +1,4 @@
-> Sound.SC3.UGen.Help.viewSC3Help "thresh"
+> Sound.SC3.UGen.Help.viewSC3Help "Operator.thresh"
 > :t thresh
 
 > import Sound.SC3.ID

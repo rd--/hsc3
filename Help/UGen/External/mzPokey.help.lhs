@@ -1,34 +1,5 @@
-MZPokey.  POKEY Chip Sound Simulator
-
-Emulation of the sound generation hardware of the POKEY chip by
-Michael Borisov. This version calculates in 16bits, is bandlimited and
-generally better sounding.
-
-Code adapted from the MZPOKEY sound chip emulation, v1.6, from the
-Atari800 emulator project, available here
-http://atari800.sourceforge.net/ More info on how to program this chip
-can be found here http://www.atariarchives.org/dere/chapt07.php and
-here http://www.retroclinic.com/leopardcats/bbpokey/pokey.pdf
-
-argument::audf1, audf2, audf3, audf4
-## bits 7-0 || frequency (8bits 0-255)
-
-argument::audc1, audc2, audc3, audc4
-## bit 7 || poly5 or direct clock
-## bit 6 || poly4 or poly17
-## bit 5 || poly4/17 or pure tone
-## bit 4 || volume output only
-## bits 3-0 || volume (4bits 0-15)
-
-argument::audctl
-## bit 7 || switches main clock base from 64KHz to 15KHz
-## bit 6 || inserts high-pass filter into channel 2, clocked by channel 4
-## bit 5 || inserts high-pass filter into channel 1, clocked by channel 3
-## bit 4 || joins channel 4 to channel 3 (16bit resolution)
-## bit 3 || joins channel 2 to channel 1 (16bit resolution)
-## bit 2 || clocks channel 3 with 1.79MHz
-## bit 1 || clocks channel 1 with 1.79MHz
-## bit 0 || makes the 17bit poly-counter into a 9bit poly-counter
+> Sound.SC3.UGen.Help.viewSC3Help "MZPokey"
+> Sound.SC3.UGen.DB.ugenSummary "MZPokey"
 
 > import Sound.SC3
 > import qualified Sound.SC3.Lang.Math as M

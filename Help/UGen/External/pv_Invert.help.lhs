@@ -1,4 +1,5 @@
-pv_Invert buffer
+> Sound.SC3.UGen.Help.viewSC3Help "PV_Invert"
+> Sound.SC3.UGen.DB.ugenSummary "PV_Invert"
 
 > import Sound.SC3.ID
 

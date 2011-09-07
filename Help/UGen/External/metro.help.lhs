@@ -1,12 +1,5 @@
-metro rate bpm numBeats
-
-Metronome. Outputs a single sample impulse according to bpm and numBeats
-
-      bpm - beats per minute
- numBeats - number of beats before the next pulse
-
-bpm and numBeats are polled on every impulse of output. These can be
-scalers, audio rate, control rate or Demand UGens
+> Sound.SC3.UGen.Help.viewSC3Help "Metro"
+> Sound.SC3.UGen.DB.ugenSummary "Metro"
 
 > import Sound.SC3.ID
 

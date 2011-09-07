@@ -1,4 +1,4 @@
-> Sound.SC3.UGen.Help.viewSC3Help "round"
+> Sound.SC3.UGen.Help.viewSC3Help "Operator.round"
 > :t roundUp
 
 > import Sound.SC3

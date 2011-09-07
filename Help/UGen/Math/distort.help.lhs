@@ -1,4 +1,4 @@
-> Sound.SC3.UGen.Help.viewSC3Help "distort"
+> Sound.SC3.UGen.Help.viewSC3Help "Operator.distort"
 > :t distort
 
 > import Sound.SC3

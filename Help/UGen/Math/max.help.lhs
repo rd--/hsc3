@@ -1,4 +1,4 @@
-> Sound.SC3.UGen.Help.viewSC3Help "max"
+> Sound.SC3.UGen.Help.viewSC3Help "Operator.max"
 > :t max
 
 > import Sound.SC3

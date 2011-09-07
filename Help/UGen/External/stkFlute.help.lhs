@@ -1,4 +1,5 @@
-stkFlute rate freq jetDelay noisegain vibFreq vibGain breathPressure tr
+> Sound.SC3.UGen.Help.viewSC3Help "StkFlute"
+> Sound.SC3.UGen.DB.ugenSummary "StkFlute"
 
 > import Sound.SC3
 

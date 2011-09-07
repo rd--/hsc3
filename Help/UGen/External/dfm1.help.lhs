@@ -1,15 +1,5 @@
-dfm1 in freq res inputgain type noiselevel
-
-Digital Filter Module.  dfm1 is a digitally modelled analog filter.
-It provides low-pass and high-pass filtering.  The filter can be
-overdriven and will self-oscillate at high resonances.
-
-         in - input signal
-       freq - cutoff frequency (1000.0)
-        res - resonance (0.1)
-  inputgain - gain applied to the input signal (1.0)
-       type - set to 0.0 for low-pass or 1.0 for high-pass (0.0)
- noiselevel - amplitude of noise added to the model (0.0003) (3e-4)
+> Sound.SC3.UGen.Help.viewSC3Help "DFM1"
+> Sound.SC3.UGen.DB.ugenSummary "DFM1"
 
 > import Sound.SC3.ID
 
@@ -22,5 +12,5 @@ Play it with the mouse
 Bass
 > let { i = pulse AR 100 0.5 * 0.4 + pulse AR 100.1 0.5 * 0.4
 >     ; f = range 80 2000 (sinOsc KR (range 0.2 5 (sinOsc KR 0.3 0)) 0)
->     ; s = dfm1 i f 1.1 2 0 3e-4 }
+>     ; s = dfm1 i f 1.1 2 0 3e-4 * 0.1 }
 > in audition (out 0 (mce2 s s))

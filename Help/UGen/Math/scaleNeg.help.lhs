@@ -1,4 +1,4 @@
-> Sound.SC3.UGen.Help.viewSC3Help "scaleneg"
+> Sound.SC3.UGen.Help.viewSC3Help "Operator.scaleneg"
 > :t scaleNeg
 
 > import Sound.SC3

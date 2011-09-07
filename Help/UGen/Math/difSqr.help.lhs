@@ -1,4 +1,4 @@
-> Sound.SC3.UGen.Help.viewSC3Help "difsqr"
+> Sound.SC3.UGen.Help.viewSC3Help "Operator.difsqr"
 > :t difSqr
 
 > import Sound.SC3

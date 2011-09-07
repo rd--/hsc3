@@ -1,4 +1,4 @@
-> Sound.SC3.UGen.Help.viewSC3Help "fold2"
+> Sound.SC3.UGen.Help.viewSC3Help "Operator.fold2"
 > :t fold2
 
 > import Sound.SC3
