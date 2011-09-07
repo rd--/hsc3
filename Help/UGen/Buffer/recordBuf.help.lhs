@@ -1,7 +1,8 @@
 > Sound.SC3.UGen.Help.viewSC3Help "RecordBuf"
 > Sound.SC3.UGen.DB.ugenSummary "RecordBuf"
 
-# SC3 reorders inputArray from last to first argument.
+# SC3
+reorders inputArray from last to first argument.
 
 > import Sound.SC3
 
@@ -21,4 +22,3 @@ Mix second signal equally with existing signal
 > let o = formant AR (xLine KR 200 1000 4 DoNothing) 2000 800 * 0.125
 > in audition (mrg2 (out 0 o)
 >                   (recordBuf AR 0 0 0.5 0.5 1 NoLoop 1 RemoveSynth o))
-

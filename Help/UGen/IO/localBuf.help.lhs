@@ -1,12 +1,13 @@
 > Sound.SC3.UGen.Help.viewSC3Help "LocalBuf"
 > Sound.SC3.UGen.DB.ugenSummary "LocalBuf"
 
-# SC3 automatically inserts a maxLocalBufs into graphs, hsc3 does not
+# SC3
+automatically inserts a maxLocalBufs into graphs
 
 > import Sound.SC3.ID
 
 Allocate a buffer local to the synthesis graph.
-> let {n = whiteNoise 'a' AR
+> let {n = whiteNoise 'α' AR
 >     ;m = maxLocalBufs 1
 >     ;b = mrg2 (localBuf 'α' 2048 1) m
 >     ;f = fft' b n
@@ -14,9 +15,9 @@ Allocate a buffer local to the synthesis graph.
 > in audition (out 0 (ifft' c * 0.1))
 
 Variant with two local buffers
-> let {n = dup (whiteNoise 'a' AR)
+> let {n = udup 2 (whiteNoise 'α' AR)
 >     ;m = maxLocalBufs 2
->     ;b = mrg2 (mce (map (\i -> localBuf i 2048 1) ['α','β'])) m
+>     ;b = mrg2 (udup 2 (localBuf 'α' 2048 1)) m
 >     ;f = fft' b n
 >     ;c = pv_BrickWall f (sinOsc KR (mce2 0.1 0.11) 0 * 0.75)}
 > in audition (out 0 (ifft' c * 0.1))
@@ -28,18 +29,18 @@ Not clearing the buffer accesses old data, slowly overwrite data with noise
 >     ;x = mouseX' KR 1 2 Linear 0.2
 >     ;r = playBuf 2 AR b x 1 0 Loop DoNothing * 0.1
 >     ;wr p i = bufWr b (linLin p (-1) 1 0 nf) Loop i
->     ;n = dup (whiteNoise 'a' AR)
->     ;ph = lfNoise0 'c' AR 530}
+>     ;n = udup 2 (whiteNoise 'α' AR)
+>     ;ph = lfNoise0 'α' AR 530}
 > in audition (mrg2 (out 0 r) (wr ph n))
 
 bufCombC needs no clearing, because the delay line is filled by the ugen
-> let {d = dup (dust 'a' AR 1)
->     ;n = whiteNoise 'c' AR
+> let {d = udup 2 (dust 'α' AR 1)
+>     ;n = whiteNoise 'α' AR
 >     ;z = decay d 0.3 * n
 >     ;l = xLine KR 0.0001 0.01 20 DoNothing
 >     ;sr = sampleRate
 >     ;m = maxLocalBufs 2
->     ;b = mrg2 (mce (map (\i -> localBuf i sr 2) ['α','β'])) m}
+>     ;b = mrg2 (udup 2 (localBuf 'α' sr 2)) m}
 > in audition (out 0 (bufCombC b z l 0.2))
 
 asLocalBuf combines localBuf and setBuf

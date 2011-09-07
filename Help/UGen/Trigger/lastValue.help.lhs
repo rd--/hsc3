@@ -1,8 +1,6 @@
 > Sound.SC3.UGen.Help.viewSC3Help "LastValue"
 > Sound.SC3.UGen.DB.ugenSummary "LastValue"
 
-# hsc3: filter
-
 > import Sound.SC3
 
 > let x = mouseX' KR 100 400 Linear 0.1
