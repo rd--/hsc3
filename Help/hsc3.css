@@ -1,0 +1,31 @@
+body {
+  font-family: serif;
+  font-size: 10pt;
+  width: 40em;
+  margin: 4em;
+}
+
+h1 {
+  font-size: 1.4em;
+}
+
+h2 {
+  font-size: 1.2em;
+}
+
+pre {
+  font-size: 1em;
+  padding: 1em 3em;
+  background-color: #ccc;
+}
+
+code {
+  font-size: 1em;
+  font-family: monospace;
+  color: #33f;
+}
+
+pre code {
+  color: #000;
+  background-color: #ccc;
+}
