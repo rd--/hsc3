@@ -131,6 +131,21 @@
   (interactive)
   (hsc3-send-string "withSC3 (\fd -> send fd quit)"))
 
+(defun hsc3-update-hsc3-tags ()
+  "Update hsc3 TAGS file, must be run from hsc3 directory."
+  (interactive)
+  (if (file-exists-p "hsc3.cabal")
+      (call-process-shell-command
+       "find Sound . -name '*.*hs' | xargs hasktags -e"
+       nil
+       nil)
+    (error "not at hsc3 directory?")))
+
+(defun hsc3-set-prompt ()
+  "Set ghci prompt to hsc3."
+  (interactive)
+  (hsc3-send-string ":set prompt \"hsc3> \""))
+
 (defvar hsc3-mode-map nil
   "Haskell SuperCollider keymap.")
 
