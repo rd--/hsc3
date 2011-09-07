@@ -2,9 +2,9 @@
 
 ## Prerequisites
 
-Haskell SuperCollider requires that [SuperCollider][1], [GHC][2],
-[Emacs][4] and [haskell-mode][5] are all installed and working
-properly.
+Haskell SuperCollider ([hsc3][13])requires that [SuperCollider][1],
+[GHC][2], [Emacs][4] and [haskell-mode][5] are all installed and
+working properly.
 
 ## Setting up Haskell SuperCollider
 
@@ -44,30 +44,35 @@ extension `.lhs`.  When the hsc3 emacs mode is active there is a
 ## Literate Haskell
 
 The documentation for Haskell SuperCollider, including this tutorial,
-is written using _Bird_ notation, a form of literate Haskell where
+is written using _Bird notation_, a form of literate Haskell where
 lines starting with `>` are Haskell code and everything else is
 commentary.
 
-Unlike ordinary literate programs the Haskell SuperCollider help files
-cannot be compiled to executables.  Each help file contains multiple
-independant examples that can be evaluated using editor commands,
-either by selecting from the `Haskell` or `Haskell-SuperCollider`
-menus or using the associated keybinding.
+The commentary is written using the [pandoc][14] variant of
+[markdown][15] so that the hsc3 documentation can be rendered in a
+number of formats.
+
+Unlike ordinary literate programs the Haskell SuperCollider
+documentation and help files cannot be compiled to executables.  Each
+file contains multiple independant examples that can be evaluated
+using editor commands, either by selecting from the `Haskell` or
+`Haskell-SuperCollider` menus or using the associated keybinding.
 
 ## Interpreter Interaction & User Configuration
 
 To start ghci type either `C-cC-b` or `C-cC-z` (Haskell -> Start
-interpreter) to run `switch-to-haskell`.
+interpreter).
 
-Starting the interpreter splits the current window into two
-windows.  If the ghci output window becomes obscured during a
-session you can see it again by re-typing the commands above.
+Starting the interpreter splits the current window into two windows.
+If the ghci output window becomes obscured during a session you can
+see it again by re-typing one of the commands above.
 
-To interrupt ghci type `C-cC-i` (Haskell SuperCollider -> Haskell
--> Interrupt haskell).
+To interrupt ghci type `C-cC-i` (Haskell SuperCollider -> Haskell ->
+Interrupt haskell).  To interrupt ghci and then reset scsynth type
+`C-cC-s` (ie. this is equal to typing `C-cC-i` and then `C-cC-k`).
 
-To stop ghci type `C-cC-q` (Haskell SuperCollider -> Haskell ->
-Quit haskell).
+To exit ghci type `C-cC-q` (Haskell SuperCollider -> Haskell -> Quit
+haskell).
 
 ## Starting the SuperCollider server
 
@@ -77,19 +82,27 @@ connections at the standard port on the local machine.
 
     $ scsynth -u 57110
 
+The [hsc3-process][17] package by Stefan Kersten has bindings for
+`libscsynth` and allows for direct control of the `scsynth` process
+from within haskell.
+
 ## Basic SuperCollider Interaction
 
-The SuperCollider server manages a graph of nodes with integer
-identifiers.  The root node has identifier zero.  By convention
-ordinary graph nodes are placed in a group with identifier one,
-however this node is not created when scsynth starts.
-
-To create this node we need to send an OSC message to the server,
-the expression to do this is written below.  To run single line
-expressions move the cursor to the line and type `C-cC-c` (Haskell
-SuperCollider -> Expression -> Run line).
+To send an expressions that is on a single line to the haskell
+interpreter, move the cursor to the line and type `C-cC-c` (Haskell
+SuperCollider -> Expression -> Run line).  `ghci` understands import
+expressions, so to add a module to the current scope it is enough to
+type `C-cC-c` at an appropriate location.
 
 > import Sound.SC3
+
+The SuperCollider server manages a graph of nodes with integer
+identifiers.  The root node has identifier `0`.  By convention
+ordinary graph nodes are placed in a group with identifier `1`,
+however this node is not created when scsynth starts.
+
+To create this node we need to send an OSC message to the server, the
+expression to do this is written below.
 
 > withSC3 (\fd -> send fd (g_new [(1, AddToTail, 0)]))
 
@@ -98,14 +111,14 @@ We can then audition a quiet sine oscillator at A440.
 > audition (out 0 (sinOsc AR 440 0 * 0.1))
 
 To stop the sound we can delete the group it is a part of, the
-audition function places the synthesis node into the group node
-with ID 1, the expression below deletes that group.
+audition function places the synthesis node into the group node `1`,
+the expression below deletes that group.
 
 > withSC3 (\fd -> send fd (n_free [1]))
 
-In order to audition another graph we need to re-create a group
-with ID 1.  `Sound.SC3` includes a function `reset` that sequences
-these two actions, first deleting the group node, then
+In order to audition another graph we need to re-create a group with
+identifier `1`.  `Sound.SC3` includes a function `reset` that
+sequences these two actions, first deleting the group node, then
 re-creating a new empty group.
 
 > withSC3 reset
@@ -130,28 +143,34 @@ server activity to the ghci output window.
     Sample Rate (Nominal)       Double 44100.0
     Sample Rate (Actual)        Double 44099.958404246536
 
+The [hsc3-server][16] package by Stefan Kersten has abstractions for
+managing node, bus and buffer identifiers.
+
 ## Multiple line expressions
 
-To evaluate an expression that is written over multiple line without
-using the Haskell layout rules select the region and type `C-cC-e`
-(Haskell SuperCollider -> Expression -> Run multiple lines).  To
-select a region use the mouse or place the cursor at one end, type
-`C-[Space]` then move the cursor to the other end.
+To evaluate an expression that is written over multiple lines select
+the region and type `C-cC-e` (Haskell SuperCollider -> Expression ->
+Run multiple lines).  To select a region use the mouse or place the
+cursor at one end, type `C-[Space]` then move the cursor to the other
+end.
 
-> let { f0 = xLine KR 1 1000 9 RemoveSynth
->     ; f1 = sinOsc AR f0 0 * 200 + 800 }
+> let {f0 = xLine KR 1 1000 9 RemoveSynth
+>     ;f1 = sinOsc AR f0 0 * 200 + 800}
 > in audition (out 0 (sinOsc AR f1 0 * 0.1))
 
-ghci understands import expressions, so to add a module to the
-current scope it is enough to type `C-cC-c` at an appropriate
-location.  If `hsc3-dot` is installed, the following two
-expressions will load the module and make a drawing.
+Expressions spanning multiple lines are joined into one line before
+being sent to the interpreter and therefore _must_ be written without
+using the Haskell layout rules.
 
-> import Sound.SC3
+## UGen Graph Drawings
+
+If [hsc3-dot][11] and [graphviz][18] are installed, the following two
+expressions will load the required haskell module and make a drawing.
+
 > import Sound.SC3.UGen.Dot
 
-> let { o = control KR "bus" 0
->     ; f = mouseX KR 440 880 Exponential 0.1 }
+> let {o = control KR "bus" 0
+>     ;f = mouseX KR 440 880 Exponential 0.1}
 > in draw (out o (sinOsc AR f 0))
 
 ## Completion messages
@@ -159,9 +178,9 @@ expressions will load the module and make a drawing.
 To send a completion message add one to an existing
 asynchronous message using withCM.
 
-> let { g = out 0 (sinOsc AR 660 0 * 0.15)
->     ; m = d_recv (synthdef "sin" g)
->     ; cm = s_new "sin" 100 AddToTail 1 [] }
+> let {g = out 0 (sinOsc AR 660 0 * 0.15)
+>     ;m = d_recv (synthdef "sin" g)
+>     ;cm = s_new "sin" 100 AddToTail 1 []}
 > in withSC3 (\fd -> send fd (withCM m cm))
 
 Alternately use variant constructors for the
@@ -169,9 +188,9 @@ asynchronous commands.
 
 > import Sound.SC3.Server.Command.Completion
 
-> let { g = out 0 (sinOsc AR 660 0 * 0.15)
->     ; cm = s_new "sin" 100 AddToTail 1 []
->     ; m = d_recv' cm (synthdef "sin" g) }
+> let {g = out 0 (sinOsc AR 660 0 * 0.15)
+>     ;cm = s_new "sin" 100 AddToTail 1 []
+>     ;m = d_recv' cm (synthdef "sin" g)}
 > in withSC3 (\fd -> send fd m)
 
 ## Controls
@@ -179,27 +198,27 @@ asynchronous commands.
 In hsc3 control parameters must be indexed by name.
 
 There are four types of control parameters,
-initialisation-rate (IR), control-rate (KR),
-triggered-control-rate (TR) and audio-rate (AR).
+initialisation-rate (`IR`), control-rate (`KR`),
+triggered-control-rate (`TR`) and audio-rate (`AR`).
 
 The graph below illustrates the first three of these.
 Note the specialised constructor for triggered
 controls.
 
-> let { b1 = control IR "b1" 0
->     ; b2 = control IR "b2" 1
->     ; f1 = control KR "f1" 450
->     ; f2 = control KR "f2" 900
->     ; a1 = tr_control "a1" 0
->     ; a2 = tr_control "a2" 0
->     ; m = impulse KR 1 0 * 0.1
->     ; d x = decay2 (m + x) 0.01 0.2
->     ; o1 = sinOsc AR f1 0 * d a1
->     ; o2 = saw AR f2 * d a2
->     ; g = mrg2 (out b1 o1) (out b2 o2)
->     ; i fd = do { _ <- async fd (d_recv (synthdef "g" g))
->                 ; send fd (s_new "g" 100 AddToTail 1 []) } }
-> in withSC3 i
+> let {b1 = control IR "b1" 0
+>     ;b2 = control IR "b2" 1
+>     ;f1 = control KR "f1" 450
+>     ;f2 = control KR "f2" 900
+>     ;a1 = tr_control "a1" 0
+>     ;a2 = tr_control "a2" 0
+>     ;m = impulse KR 1 0 * 0.1
+>     ;d x = decay2 (m + x) 0.01 0.2
+>     ;o1 = sinOsc AR f1 0 * d a1
+>     ;o2 = saw AR f2 * d a2
+>     ;g = mrg2 (out b1 o1) (out b2 o2)
+>     ;act fd = do {_ <- async fd (d_recv (synthdef "g" g))
+>                  ;send fd (s_new "g" 100 AddToTail 1 [])}}
+> in withSC3 act
 
 The output buses cannot be set, since they are
 initialisation rate only.
@@ -213,8 +232,8 @@ control rate.
 > withSC3 (\fd -> send fd (n_set1 100 "f1" 200))
 > withSC3 (\fd -> send fd (n_set1 100 "f2" 300))
 
-The audio controls can be set, however they are
-immediately reset to zero at the next control cycle.
+The trigger controls can be set, however they are immediately reset to
+zero at the next control cycle.
 
 > withSC3 (\fd -> send fd (n_set1 100 "a1" 1))
 > withSC3 (\fd -> send fd (n_set1 100 "a2" 1))
@@ -228,15 +247,16 @@ This opens the help file, which ought to have working examples in
 it, the above graph is in the `sinOsc` help file, the `s_new` help
 file explains what arguments are required and what they mean.
 
-To open the SuperCollider help page for a UGen type `C-cC-j`.
+To open the SuperCollider help page for a UGen type `C-cC-j`.  This
+requires that `SCDoc.renderAll` has been run at `sclang`.  If the SC3
+documentation is not in the standard location set the `SC3_HELP`
+environment variable.
 
 To view a summary of a UGen, with input names and default values, type
-`C-cC-u` (this requires `hsc3-db`).
+`C-cC-u` (this requires that [hsc3-db][12] is installed).
 
-There is also partial haddock documentation for the Sound.SC3 and
-Sound.OpenSoundControl modules, to build type:
-
-    $ runhaskell Setup.lhs haddock
+There is also partial haddock documentation for the hosc and hsc3,
+which is normally built by `cabal install`.
 
 ## Identifier lookup & hasktags
 
@@ -249,8 +269,9 @@ type:
 
     $ find Sound -name '*.*hs' | xargs hasktags -e
 
-To use the hsc3 tags table type `M-x visit-tags-table`, or add an
-entry to `~/.emacs`:
+This command can be run from within emacs using
+`hsc3-update-hsc3-tags`.  To use the hsc3 tags table type `M-x
+visit-tags-table`, or add an entry to `~/.emacs`:
 
     (setq tags-table-list '("~/sw/hsc3"))
 
@@ -262,7 +283,7 @@ generators they must be installed, see [sc3-plugins][8].
 
 ## Example Unit Generator Graphs
 
-The `hsc3-graphs` package contains example unit generator graphs.
+The [hsc3-graphs][10] package contains example unit generator graphs.
 
 These graphs all provide a `main` function, to load the file type
 `C-cC-l` and to run the `main` function type `C-cC-m`.
@@ -301,3 +322,12 @@ There is a right fold.
 [7]: http://darcs.net/
 [8]: http://sf.net/projects/sc3-plugins
 [9]: http://opensoundcontrol.org/
+[10]: http://slavepianos.org/rd/?t=hsc3-graphs
+[11]: http://slavepianos.org/rd/?t=hsc3-dot
+[12]: http://slavepianos.org/rd/?t=hsc3-db
+[13]: http://slavepianos.org/rd/?t=hsc3
+[14]: http://johnmacfarlane.net/pandoc/
+[15]: http://daringfireball.net/projects/markdown/
+[16]: http://space.k-hornz.de/software/hsc3-server/
+[17]: http://space.k-hornz.de/software/hsc3-process/
+[18]: http://graphviz.org/
