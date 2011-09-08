@@ -8,6 +8,7 @@
 (require 'comint)
 (require 'thingatpt)
 (require 'find-lisp)
+(require 'inf-haskell)
 
 (defvar hsc3-help-directory
   nil
@@ -146,11 +147,26 @@
   (interactive)
   (hsc3-send-string ":set prompt \"hsc3> \""))
 
+(defun hsc3-see-haskell ()
+ "Show haskell output."
+ (interactive)
+ (let* ((p (inferior-haskell-process))
+        (b (process-buffer p)))
+   (hsc3-set-prompt)
+   (delete-other-windows)
+   (split-window-vertically)
+   (with-current-buffer b
+     (let ((window (display-buffer (current-buffer))))
+       (goto-char (point-max))
+       (save-selected-window
+         (set-window-point window (point-max)))))))
+
 (defvar hsc3-mode-map nil
   "Haskell SuperCollider keymap.")
 
 (defun hsc3-mode-keybindings (map)
   "Haskell SuperCollider keybindings."
+  (define-key map [?\C-c ?>] 'hsc3-see-haskell)
   (define-key map [?\C-c ?\C-c] 'hsc3-run-line)
   (define-key map [?\C-c ?\C-e] 'hsc3-run-multiple-lines)
   (define-key map [?\C-c ?\C-h] 'hsc3-help)
@@ -176,6 +192,8 @@
     '("UGen parameter summary" . hsc3-ugen-summary))
   (define-key map [menu-bar hsc3 expression]
     (cons "Expression" (make-sparse-keymap "Expression")))
+  (define-key map [menu-bar hsc3 expression stop]
+    '("Stop (interrupt and reset)" . hsc3-stop))
   (define-key map [menu-bar hsc3 expression run-main]
     '("Run main" . hsc3-run-main))
   (define-key map [menu-bar hsc3 expression run-multiple-lines]
@@ -193,7 +211,11 @@
   (define-key map [menu-bar hsc3 haskell]
     (cons "Haskell" (make-sparse-keymap "Haskell")))
   (define-key map [menu-bar hsc3 haskell quit-haskell]
-    '("Quit haskell" . hsc3-quit-haskell)))
+    '("Quit haskell" . hsc3-quit-haskell))
+  (define-key map [menu-bar hsc3 haskell interrupt-haskell]
+    '("Interrupt haskell" . hsc3-interrupt-haskell))
+  (define-key map [menu-bar hsc3 haskell see-haskell]
+    '("See haskell" . hsc3-see-haskell)))
 
 (if hsc3-mode-map
     ()

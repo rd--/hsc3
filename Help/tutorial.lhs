@@ -41,6 +41,10 @@ extension `.lhs`.  When the hsc3 emacs mode is active there is a
 `hsc3-mode` is a derivative of `haskell-mode` and uses
 `inferior-haskell-mode` for communicating with a `ghci` process.
 
+The manuals for these packages document many useful commands
+(ie. `C-cC-t` gets type information, `C-uC-cC-t` inserts an inferred
+type signature and so on).
+
 ## Literate Haskell
 
 The documentation for Haskell SuperCollider, including this tutorial,
@@ -60,12 +64,14 @@ using editor commands, either by selecting from the `Haskell` or
 
 ## Interpreter Interaction & User Configuration
 
-To start ghci type either `C-cC-b` or `C-cC-z` (Haskell -> Start
-interpreter).
+To see the haskell inferior process buffer, and to start the
+interpreter if it is not running, type either `C-c>` (Haskell
+SuperCollider -> Haskell -> See haskell).
 
-Starting the interpreter splits the current window into two windows.
-If the ghci output window becomes obscured during a session you can
-see it again by re-typing one of the commands above.
+This splits the current window into two windows and is used if the
+ghci output window becomes obscured during a session.  Unlike `C-cC-z`
+(`switch-to-haskell`) it leaves point in the current buffer, sets the
+prompt to `hsc3>` and shows the end of the process buffer.
 
 To interrupt ghci type `C-cC-i` (Haskell SuperCollider -> Haskell ->
 Interrupt haskell).  To interrupt ghci and then reset scsynth type
