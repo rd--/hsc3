@@ -25,21 +25,21 @@ and <http://audiosynth.com>.
  > What should a computer music language do?
  > ...
  > Is a specialized computer music language
- > even necessary? (McCartney, 2002)
+ > even necessary? ([McCartney][12], 2002)
 
 These questions are asked in a paper that
 documents a reimplementation of the supercollider
-language for real time audio synthesis (McCartney,
+language for real time audio synthesis ([McCartney][14],
 1998).
 
 The redesigned system consists of two parts, an
 elegant, efficient, and musically neutral real
 time audio synthesiser in the Music-N family
-(Mathews, 1961), and a language interpreter in the
+([Mathews][5], 1961), and a language interpreter in the
 SmallTalk family (Goldberg, 1983).
 
 The interpreter and synthesiser communicate using
-the Open Sound Control protocol (Wright and Freed,
+the Open Sound Control protocol ([Wright][15] and Freed,
 1997).
 
 Using this model of discrete communicating
@@ -71,17 +71,17 @@ work being done.
  > ...
  > (4) How can we use them to program?
  > (5) How can we implement them?
- > (Strachey, in Landin, 1966)
+ > (Strachey, in [Landin][4], 1966)
 
-(1) Haskell is a non-strict (Wadler, 1996) and
-    purely functional (Sabry, 1993) language, one
+(1) Haskell is a non-strict ([Wadler][10], 1996) and
+    purely functional ([Sabry][9], 1993) language, one
     result of many years of research into these
-    questions (Hudak et al, 2007).
+    questions ([Hudak][2] et al, 2007).
 
 (4) Computation in haskell is structured using a
     small number of simple type classes; monads
-    (Wadler, 1990), applicative functors (McBride
-    and Paterson, 2007) and arrows (Hughes, 2000).
+    ([Wadler][7], 1990), applicative functors ([McBride][6]
+    and Paterson, 2007) and arrows ([Hughes][3], 2000).
 
 (5) The Glasgow haskell system includes both an
     optimizing compiler generating efficient
@@ -97,11 +97,11 @@ those required for waveset synthesis etc.
 ## Types, Unit Generators, Parametric Polymorphism
 
 In haskell polymorphism is provided by type
-classes (Wadler and Blott, 1989).
+classes ([Wadler and Blott][8], 1989).
 
 Type class polymorphism is parametric, as distinct
 from the ad hoc polymorphism of supercollider
-language (Strachey, 1967).
+language ([Strachey][11], 1967).
 
 Since unit generators are a sort of numerical
 value, we wish to make their representation
@@ -163,7 +163,7 @@ causes two `sinOsc` unit generators to be created.
 
 > let {x = mouseX' KR (-1) 1 Linear 0.1
 >     ;o1 = pulse AR 440 0.1
->     ;o2 = sinOsc AR (mce [110, 2300]) 0 * 0.1}
+>     ;o2 = sinOsc AR (mce [110,2300]) 0 * 0.1}
 > in audition (out 0 (pan2 o1 x 0.1 + o2))
 
 This is turn causes the `*` function to
@@ -219,7 +219,7 @@ simply re-written using `*` and `+`.
 
 The expression:
 
-    {Out.ar(0, SinOsc.ar(440, 0, 0.1, 0.05))}.play
+    {Out.ar(0,SinOsc.ar(440,0,0.1,0.05))}.play
 
 is equivalent to:
 
@@ -230,26 +230,27 @@ relating to multiple channel expansion.
 
 The supercollider language expression:
 
-    {var a = WhiteNoise.ar([0.1, 0.05])
-    ;var b = PinkNoise.ar * [0.1, 0.05]
-    ;Out.ar(0, a + b)}.play
+    {var a = WhiteNoise.ar([0.1,0.05])
+    ;var b = PinkNoise.ar * [0.1,0.05]
+    ;Out.ar(0,a + b)}.play
 
-describes a graph with two WhiteNoise nodes
-and a single PinkNoise node.
+describes a graph with two `WhiteNoise` nodes
+and a single `PinkNoise` node.
 
 We note that this distinction is only relevant
 for non-deterministic unit generators.
 
 To write this simple graph in haskell we can use the
-`clone` function.  In this file we import the monadic
-noise unit generator functions qualified.
+`clone` function.  By convention the hsc3 documentation
+imports the monadic noise unit generator functions
+qualified with an `M` prefix.
 
 > let f = liftM (* mce [0.1,0.05])
 > in do {a <- f (clone 2 (M.whiteNoise AR))
 >       ;b <- f (M.pinkNoise AR)
 >       ;audition (out 0 (a + b))}
 
-which is defined in relation to the standard
+`clone` is defined in relation to the standard
 monad functions `replicateM` and `liftM`.
 
     clone :: (UId m) => Int -> m UGen -> m UGen
@@ -263,10 +264,10 @@ multiple sink nodes.
 
 Consider the `freeSelf` unit generator:
 
-> do {n <- M.dust KR 0.5
->    ;let {a = freeSelf n
->         ;b = out 0 (sinOsc AR 440 0 * 0.1)}
->      in audition (mrg [a, b])}
+> let {n = dust 'α' KR 0.5
+>     ;a = freeSelf n
+>     ;b = out 0 (sinOsc AR 440 0 * 0.1)}
+> in audition (mrg [a,b])
 
 In order to allow multiple root graphs to be
 freely composed we implement a leftmost rule,
@@ -276,10 +277,10 @@ as an input node.
 
 Consider a simple ping pong delay filter:
 
-> let {ppd s = let {a = localIn 2 AR + mce [s, 0]
+> let {ppd s = let {a = localIn 2 AR + mce [s,0]
 >                  ;b = delayN a 0.2 0.2
 >                  ;c = mceEdit reverse b * 0.8}
->              in mrg [b, localOut c]
+>              in mrg [b,localOut c]
 >     ;n = whiteNoise 'α' AR
 >     ;s = decay (impulse AR 0.3 0) 0.1 * n * 0.2}
 > in audition (out 0 (ppd s))
@@ -368,15 +369,15 @@ The haskell expression:
 >     ;c = a - b}
 > in audition (out 0 c)
 
-denotes a graph that has three nodes: sinOsc, (-)
-and out.
+denotes a graph that has three nodes: `sinOsc`, `-`
+and `out`.
 
     # UGens                     Int 3
     # Synths                    Int 1
 
 The graph constructor, when traversing the
-structure denoted by (out 0 c), cannot distinguish
-between a and b, they are the same value.
+structure denoted by `out 0 c`, cannot distinguish
+between `a` and `b`, they are the same value.
 
 In other words, it is the same graph as if we had
 written:
@@ -388,22 +389,22 @@ written:
 Expressions with the same notation have the same
 value.
 
-This is acceptable for deterministic unit
-generators, such as `sinOsc`, but of course fails
+This is as we would expect for deterministic unit
+generators, such as `sinOsc`, but presents difficulties
 for non-deterministic unit generators such as
-`whiteNoise`, and also for demand rate sources
-such as `dseq`.
+`whiteNoise`, and also for demand rate sources such as
+`dseq`.
 
 In supercollider language, the graph
 
     {var a = WhiteNoise.ar
     ;var b = WhiteNoise.ar
     ;var c = a - b
-    ;Out.ar(0, c * 0.1)}.play
+    ;Out.ar(0,c * 0.1)}.play
 
 does not describe silence, it describes noise.
 
-We read WhiteNoise.ar as a computation that
+We read `WhiteNoise.ar` as a computation that
 constructs a value, not as an expression that
 denotes a value.
 
@@ -413,7 +414,7 @@ and `equal?`, supercollider language has `==` and `===`.
 
     {var a = "x"
     ;var b = "x"
-    ;[a == b, a === b]}.value
+    ;[a == b,a === b]}.value
 
 In a purely functional language expressions denote
 values, and equal expressions denote the same
@@ -439,7 +440,7 @@ place of `z`.
 
 Note that the `whiteNoise` function used above and provided
 by the module `Sound.SC3.ID` is a quite different
-function to the `whiteNoise` provided by the module
+function to the `M.whiteNoise` provided by the module
 `Sound.SC3.Monadic`.  That function has the signature:
 
     whiteNoise :: (UId m) => Rate -> m UGen
@@ -449,12 +450,13 @@ where the type-class `UId` is defined as:
     class (Monad m) => UId m where
         generateUId :: m Int
 
-The signature indicates that `whiteNoise` is a
+The signature indicates that `M.whiteNoise` is a
 function from a `Rate` value to an `m UGen`
 value.
 
-Note also for expressions that differ in parts other than the
-identifier multiple values are denoted.
+Note also for expressions that differ in parts other
+than the identifier, multiple values are denoted and
+the identifier may be equal.
 
 > let f = mce [rand 'α' 330 550,rand 'α' 660 990]
 > in audition (out 0 (sinOsc AR f 0 * 0.1))
@@ -464,7 +466,7 @@ identifier multiple values are denoted.
 It is quite clear that a value of type `m UGen` is
 not of type `UGen`.
 
-Compare the monadic whiteNoise signature with that
+Compare the monadic `M.whiteNoise` signature with that
 of the deterministic sin oscillator:
 
     sinOsc :: Rate -> UGen -> UGen -> UGen
@@ -508,14 +510,14 @@ function definition can only be accessed in a
 function that produces a value in the same monad.
 
 The `audition` function has an appropriate
-signature:
+signature for this context:
 
     audition :: UGen -> IO ()
 
 since `IO` is an instance of the `UId` class.
 
-It is the type of audition that determines the
-type of a, the type is inferred so there is no
+It is the type of `audition` that determines the
+type of `a`, the type is inferred so there is no
 need to write it.
 
 > let {(|>) = flip (.)
@@ -530,7 +532,7 @@ need to write it.
 ## Unsafe unit generator constructors
 
 Haskell provides a mechanism to force values
-from the IO monad, unsafePerformIO.
+from the IO monad, `unsafePerformIO`.
 
 Using this we can write unit generator graphs
 that have non-deterministic nodes using only
@@ -554,16 +556,15 @@ constructors.
 >     ;x = n AR - n AR}
 > in audition (out 0 (x * 0.05))
 
-The above uses the unsafe unit generator functions
-provided at `Sound.SC3.UGen.Unsafe`, and avoids the
-lifting operations which, for functions of many
-arguments, can be cumbersome.
+By using these unit generator function variants the
+expression avoids the monaidc lifting operations which,
+for functions of many arguments, can be cumbersome.
 
 > let n = M.whiteNoise
 > in do {x <- liftM2 (-) (n AR) (n AR)
 >       ;audition (out 0 (x * 0.05))}
 
-There also Control.Monad.ap which can be more readable
+There also `Control.Monad.ap` which can be more readable
 in some contexts.
 
 > let n = M.whiteNoise
@@ -580,10 +581,10 @@ left and right channels have different signals,
 despite each receiving the same input unit
 generator.
 
-    {var a = Dseq([1, 3, 2, 7, 8], 3)
+    {var a = Dseq([1,3,2,7,8],3)
     ;var t = Impulse.kr(5,0)
-    ;var f = Demand.kr(t, 0, [a, a]) * 30 + 340
-    ;Out.ar(0, SinOsc.ar(f, 0) * 0.1)}.play
+    ;var f = Demand.kr(t,0,[a,a]) * 30 + 340
+    ;Out.ar(0,SinOsc.ar(f,0) * 0.1)}.play
 
 The distinction here concerns multiple
 reads from a single demand rate source, ie.
@@ -595,15 +596,15 @@ Therefore in haskell demand rate unit generators have
 similar constructor functions to non-deterministic
 unit generators, in order that we can distinguish:
 
-> do {a <- M.dseq 3 (mce [1, 3, 2, 7, 8])
+> do {a <- M.dseq 3 (mce [1,3,2,7,8])
 >    ;let {t = impulse KR 5 0
->         ;f = demand t 0 (mce [a, a]) * 30 + 340}
+>         ;f = demand t 0 (mce [a,a]) * 30 + 340}
 >      in audition (out 0 (sinOsc AR f 0 * 0.1))}
 
 which is the same graph as given in supercollider
 language above, from:
 
-> do {a <- clone 2 (M.dseq 3 (mce [1, 3, 2, 7, 8]))
+> do {a <- clone 2 (M.dseq 3 (mce [1,3,2,7,8]))
 >    ;let {t = impulse KR 5 0
 >         ;f = demand t 0 a * 30 + 340}
 >      in audition (out 0 (sinOsc AR f 0 * 0.1))}
@@ -650,6 +651,15 @@ for composition.
 > let f i = allpassN i 0.050 (rand 'α' 0 0.05) 1
 > in ugenIds (useq 'α' 4 f (dust 'α' AR 10))
 
+## Unit Generator Graph structure
+
+A UGen describes a graph of nodes.  There is a right fold over this
+structure.
+
+> ugenFoldr (\u r -> ugenType u : r) [] (sinOsc AR 440 0 * 0.1)
+
+> ugenFoldr (\u r -> show u : r) [] (sinOsc AR 440 0 * 0.1)
+
 ## References
 
 + A. Goldberg and D. Robson.  _Smalltalk-80: The
@@ -679,7 +689,7 @@ for composition.
   Programming with Effects."  _Journal of Functional
   Programming_, 17(4), 2007.
 
-+ J. McCarthy.  "Recursive functions of symbolic
++ J. [McCarthy][13].  "Recursive functions of symbolic
   expressions and their computation by machine."
   _Communications of the ACM_, 3(4):184-195, 1960.
 
@@ -720,3 +730,17 @@ for composition.
   Association, 1997.
 
 [1]: http://slavepianos.org/rd/?t=hsc3
+[2]: http://dx.doi.org/10.1145/1238844.1238856
+[3]: http://dx.doi.org/10.1016/S0167-6423(99)00023-4
+[4]: http://dx.doi.org/10.1145/365230.365257
+[5]: http://www.alcatel-lucent.com/bstj/vol40-1961/bstj-vol40-issue03.html
+[6]: http://dx.doi.org/10.1017/S0956796807006326
+[7]: http://dx.doi.org/10.1145/91556.91592
+[8]: http://dx.doi.org/10.1145/75277.75283
+[9]: http://dx.doi.org/10.1017/S0956796897002943
+[10]: http://dx.doi.org/10.1145/234528.234738
+[11]: http://dx.doi.org/10.1023/A:1010000313106
+[12]: http://dx.doi.org/10.1162/014892602320991383
+[13]: http://dx.doi.org/10.1145/367177.367199
+[14]: http://quod.lib.umich.edu/i/icmc/bbp2372.1998.262
+[15]: http://quod.lib.umich.edu/i/icmc/bbp2372.1997.033

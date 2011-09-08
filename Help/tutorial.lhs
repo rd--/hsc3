@@ -1,8 +1,12 @@
 # Haskell SuperCollider, a Tutorial.
 
+> import Sound.SC3
+> import Sound.SC3.UGen.Dot
+> import Sound.SC3.Server.Command.Completion
+
 ## Prerequisites
 
-Haskell SuperCollider ([hsc3][13])requires that [SuperCollider][1],
+Haskell SuperCollider ([hsc3][13]) requires that [SuperCollider][1],
 [GHC][2], [Emacs][4] and [haskell-mode][5] are all installed and
 working properly.
 
@@ -13,9 +17,9 @@ library system [Hackage][6].  To install type:
 
     $ cabal install hsc3
 
-Haskell SuperCollider is also available as a set of [darcs][7]
-repositories, the first implementing the [OpenSoundControl][9]
-protocol, the second the SuperCollider bindings.
+hsc3 is also available as a set of [darcs][7] repositories, the first
+implementing the [OpenSoundControl][9] protocol, the second the
+SuperCollider bindings.
 
     $ darcs get http://slavepianos.org/rd/sw/hosc
     $ darcs get http://slavepianos.org/rd/sw/hsc3
@@ -34,16 +38,15 @@ Add an appropriately modified variant of the following to
     (setq hsc3-help-directory "~/sw/hsc3/Help/")
     (require 'hsc3)
 
-The hsc3 emacs mode associates itself with files having the
-extension `.lhs`.  When the hsc3 emacs mode is active there is a
+The hsc3 emacs mode associates itself with files having the extensions
+`.hs` and `.lhs`.  When the hsc3 emacs mode is active there is a
 `Haskell SuperCollider` menu available.
 
 `hsc3-mode` is a derivative of `haskell-mode` and uses
-`inferior-haskell-mode` for communicating with a `ghci` process.
-
-The manuals for these packages document many useful commands
-(ie. `C-cC-t` gets type information, `C-uC-cC-t` inserts an inferred
-type signature and so on).
+`inferior-haskell-mode` for communicating with a `ghci` process.  The
+manuals for these packages document many useful commands (ie. `C-cC-t`
+gets type information, `C-uC-cC-t` inserts an inferred type signature
+and so on).
 
 ## Literate Haskell
 
@@ -53,8 +56,8 @@ lines starting with `>` are Haskell code and everything else is
 commentary.
 
 The commentary is written using the [pandoc][14] variant of
-[markdown][15] so that the hsc3 documentation can be rendered in a
-number of formats.
+[markdown][15] and the hsc3 documentation can be rendered in a number
+of formats.
 
 Unlike ordinary literate programs the Haskell SuperCollider
 documentation and help files cannot be compiled to executables.  Each
@@ -65,20 +68,17 @@ using editor commands, either by selecting from the `Haskell` or
 ## Interpreter Interaction & User Configuration
 
 To see the haskell inferior process buffer, and to start the
-interpreter if it is not running, type either `C-c>` (Haskell
-SuperCollider -> Haskell -> See haskell).
+interpreter if it is not running, type `C-c>` (Haskell SuperCollider
+-> Haskell -> See haskell).
 
-This splits the current window into two windows and is used if the
+This splits the current window into two windows and can be used if the
 ghci output window becomes obscured during a session.  Unlike `C-cC-z`
 (`switch-to-haskell`) it leaves point in the current buffer, sets the
-prompt to `hsc3>` and shows the end of the process buffer.
+prompt to `hsc3>` and moves to the end of the process buffer.
 
 To interrupt ghci type `C-cC-i` (Haskell SuperCollider -> Haskell ->
-Interrupt haskell).  To interrupt ghci and then reset scsynth type
-`C-cC-s` (ie. this is equal to typing `C-cC-i` and then `C-cC-k`).
-
-To exit ghci type `C-cC-q` (Haskell SuperCollider -> Haskell -> Quit
-haskell).
+Interrupt haskell).  To exit ghci type `C-cC-q` (Haskell SuperCollider
+-> Haskell -> Quit haskell).
 
 ## Starting the SuperCollider server
 
@@ -135,9 +135,12 @@ After a reset we can audition a new graph.
 
 > audition (out 0 (sinOsc AR 220 0 * 0.1))
 
+To both interrupt the haskell interpreter and reset scsynth type
+`C-cC-s` (ie. Haskell SuperCollider -> Expression -> Stop).
+
 To see the server status type `C-cC-p` (Haskell SuperCollider ->
-SCSynth -> Display status).  This prints a table indicating
-server activity to the ghci output window.
+SCSynth -> Display status).  This prints a table indicating server
+activity to the haskell process buffer.
 
     ***** SuperCollider Server Status *****
     # UGens                     Int 3
@@ -166,12 +169,37 @@ end.
 
 Expressions spanning multiple lines are joined into one line before
 being sent to the interpreter and therefore _must_ be written without
-using the Haskell layout rules.
+using the Haskell layout rules, and must not contain comments written
+using the `--` notation.
+
+## Loading files and running main
+
+Of course the hsc3 mode can be used on files that do define whole
+programs.
+
+To load the current buffer into the interpreter type `C-cC-l` (Haskell
+-> Load file).  To run the `main` function type `C-cC-m` (Haskell
+SuperCollider -> Expression -> Run main).
+
+Modules (loaded with `C-cC-l`) may contain expressions to audition
+variants (evaluated with `C-cC-c`) by writing them either in comments
+(if the file is not literate) or commentary (if it is).
+
+    import Sound.SC3
+
+    s :: UGen -> UGen
+    s f = sinOsc AR f 0 * 0.1
+
+    {-
+    audition (out 0 (s (mce2 330 331)))
+    -}
 
 ## UGen Graph Drawings
 
-If [hsc3-dot][11] and [graphviz][18] are installed, the following two
-expressions will load the required haskell module and make a drawing.
+Drawings of UGen graphs can be very helpful in ensuring that the graph
+structure is as expected.  If [hsc3-dot][11] and [graphviz][18] are
+installed, the following two expressions will load the required
+haskell module and make a drawing.
 
 > import Sound.SC3.UGen.Dot
 
@@ -182,7 +210,7 @@ expressions will load the required haskell module and make a drawing.
 ## Completion messages
 
 To send a completion message add one to an existing
-asynchronous message using withCM.
+asynchronous message using `withCM`.
 
 > let {g = out 0 (sinOsc AR 660 0 * 0.15)
 >     ;m = d_recv (synthdef "sin" g)
@@ -258,16 +286,16 @@ requires that `SCDoc.renderAll` has been run at `sclang`.  If the SC3
 documentation is not in the standard location set the `SC3_HELP`
 environment variable.
 
-To view a summary of a UGen, with input names and default values, type
-`C-cC-u` (this requires that [hsc3-db][12] is installed).
+If [hsc3-db][12] is installed a `UGen` description indicating input
+names and default values can be printed by typing `C-cC-u`.
 
-There is also partial haddock documentation for the hosc and hsc3,
+There is also partial haddock documentation for hosc and hsc3,
 which is normally built by `cabal install`.
 
 ## Identifier lookup & hasktags
 
-The emacs command `M-.` (find-tag) looks up an identifier in a
-_tags_ table.  The hasktags utility can generate tags files from
+The emacs command `M-.` (`find-tag`) looks up an identifier in a
+_tags_ table.  The `hasktags` utility can generate tags files from
 haskell source files that are usable with emacs.
 
 To generate a tags file for hsc3, visit the hsc3 directory and
@@ -276,7 +304,8 @@ type:
     $ find Sound -name '*.*hs' | xargs hasktags -e
 
 This command can be run from within emacs using
-`hsc3-update-hsc3-tags`.  To use the hsc3 tags table type `M-x
+`hsc3-update-hsc3-tags`, it must be run when the `default-directory`
+is the hsc3 directory.  To use the hsc3 tags table type `M-x
 visit-tags-table`, or add an entry to `~/.emacs`:
 
     (setq tags-table-list '("~/sw/hsc3"))
@@ -308,17 +337,6 @@ traces of incoming messages to its standard output.
 To end printing send:
 
 > withSC3 ((flip send) (dumpOSC NoPrinter))
-
-## UGen structure
-
-> import Sound.SC3
-
-There is a right fold.
-
-> ugenFoldr (\u r -> ugenType u : r) [] (sinOsc AR 440 0 * 0.1)
-> ugenFoldr (\u r -> show u : r) [] (sinOsc AR 440 0 * 0.1)
-
-## References
 
 [1]: http://audiosynth.com/
 [2]: http://haskell.org/ghc/
