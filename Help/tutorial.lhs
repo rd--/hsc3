@@ -69,16 +69,16 @@ using editor commands, either by selecting from the `Haskell` or
 
 To see the haskell inferior process buffer, and to start the
 interpreter if it is not running, type `C-c>` (Haskell SuperCollider
--> Haskell -> See haskell).
+→ Haskell → See haskell).
 
 This splits the current window into two windows and can be used if the
 ghci output window becomes obscured during a session.  Unlike `C-cC-z`
 (`switch-to-haskell`) it leaves point in the current buffer, sets the
 prompt to `hsc3>` and moves to the end of the process buffer.
 
-To interrupt ghci type `C-cC-i` (Haskell SuperCollider -> Haskell ->
+To interrupt ghci type `C-cC-i` (Haskell SuperCollider → Haskell →
 Interrupt haskell).  To exit ghci type `C-cC-q` (Haskell SuperCollider
--> Haskell -> Quit haskell).
+→ Haskell → Quit haskell).
 
 ## Starting the SuperCollider server
 
@@ -96,7 +96,7 @@ from within haskell.
 
 To send an expressions that is on a single line to the haskell
 interpreter, move the cursor to the line and type `C-cC-c` (Haskell
-SuperCollider -> Expression -> Run line).  `ghci` understands import
+SuperCollider → Expression → Run line).  `ghci` understands import
 expressions, so to add a module to the current scope it is enough to
 type `C-cC-c` at an appropriate location.
 
@@ -130,16 +130,16 @@ re-creating a new empty group.
 > withSC3 reset
 
 Using this command is so common there is a keybinding for it,
-`C-cC-k` (Haskell SuperCollider -> SCSynth -> Reset scsynth).
+`C-cC-k` (Haskell SuperCollider → SCSynth → Reset scsynth).
 After a reset we can audition a new graph.
 
 > audition (out 0 (sinOsc AR 220 0 * 0.1))
 
 To both interrupt the haskell interpreter and reset scsynth type
-`C-cC-s` (ie. Haskell SuperCollider -> Expression -> Stop).
+`C-cC-s` (ie. Haskell SuperCollider → Expression → Stop).
 
-To see the server status type `C-cC-p` (Haskell SuperCollider ->
-SCSynth -> Display status).  This prints a table indicating server
+To see the server status type `C-cC-p` (Haskell SuperCollider →
+SCSynth → Display status).  This prints a table indicating server
 activity to the haskell process buffer.
 
     ***** SuperCollider Server Status *****
@@ -158,7 +158,7 @@ managing node, bus and buffer identifiers.
 ## Multiple line expressions
 
 To evaluate an expression that is written over multiple lines select
-the region and type `C-cC-e` (Haskell SuperCollider -> Expression ->
+the region and type `C-cC-e` (Haskell SuperCollider → Expression →
 Run multiple lines).  To select a region use the mouse or place the
 cursor at one end, type `C-[Space]` then move the cursor to the other
 end.
@@ -172,14 +172,18 @@ being sent to the interpreter and therefore _must_ be written without
 using the Haskell layout rules, and must not contain comments written
 using the `--` notation.
 
+To run a sequence of lines consecutively type `C-cC-r` (Haskell
+SuperCollider → Expression → Run consecutive lines).  This is
+particularly useful for evaluating a region of `import` statements.
+
 ## Loading files and running main
 
 Of course the hsc3 mode can be used on files that do define whole
 programs.
 
 To load the current buffer into the interpreter type `C-cC-l` (Haskell
--> Load file).  To run the `main` function type `C-cC-m` (Haskell
-SuperCollider -> Expression -> Run main).
+→ Load file).  To run the `main` function type `C-cC-m` (Haskell
+SuperCollider → Expression → Run main).
 
 Modules (loaded with `C-cC-l`) may contain expressions to audition
 variants (evaluated with `C-cC-c`) by writing them either in comments
@@ -276,7 +280,7 @@ zero at the next control cycle.
 
 To find help on a unit generator or on a SuperCollider server
 command place the cursor over the identifier and type `C-cC-h`
-(Haskell SuperCollider -> Help -> Haskell SuperCollider help).
+(Haskell SuperCollider → Help → Haskell SuperCollider help).
 This opens the help file, which ought to have working examples in
 it, the above graph is in the `sinOsc` help file, the `s_new` help
 file explains what arguments are required and what they mean.
