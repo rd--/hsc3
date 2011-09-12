@@ -25,13 +25,17 @@
   (interactive)
   (hsc3-send-string ":quit"))
 
-(defun hsc3-unlit (c s)
-  "Remove bird, or alternate, literate marks"
-   (replace-regexp-in-string (format "^%c " c) "" s))
+(defun hsc3-unlit (s)
+  "Remove bird literate marks and preceding comment marker"
+   (replace-regexp-in-string "^[- ]*> " "" s))
 
-(defun hsc3-remove-non-literates (c s)
-  "Remove non-bird, or alternate, literate lines"
-  (replace-regexp-in-string (format "^[^%c]*$" c) "" s))
+(defun hsc3-uncomment (s)
+  "Remove initial comment and Bird-literate markers if present"
+   (replace-regexp-in-string "^[- ]*[>]* " "" s))
+
+(defun hsc3-remove-non-literates (s)
+  "Remove non-bird literate lines"
+  (replace-regexp-in-string "^[^>]*$" "" s))
 
 (defun hsc3-help ()
   "Lookup up the name at point in the hsc3 help files."
@@ -83,19 +87,29 @@
   (let* ((s (buffer-substring (line-beginning-position)
 			      (line-end-position)))
 	 (s* (if hsc3-literate-p
-		 (hsc3-unlit ?> s)
-	       s)))
+		 (hsc3-unlit s)
+	       (hsc3-uncomment s))))
     (hsc3-send-string s*)))
+
+(defun region-string ()
+  "Get region as string (no properties)"
+  (buffer-substring-no-properties (region-beginning)
+                                  (region-end)))
 
 (defun hsc3-run-multiple-lines ()
   "Send the current region to the interpreter as a single line."
   (interactive)
-  (let* ((s (buffer-substring-no-properties (region-beginning)
-					    (region-end)))
+  (let* ((s (region-string))
 	 (s* (if hsc3-literate-p
-		 (hsc3-unlit ?> (hsc3-remove-non-literates ?> s))
+		 (hsc3-unlit (hsc3-remove-non-literates s))
 	       s)))
     (hsc3-send-string (replace-regexp-in-string "\n" " " s*))))
+
+(defun hsc3-run-consecutive-lines ()
+  "Send the current region to the interpreter one line at a time."
+  (interactive)
+  (mapcar 'hsc3-send-string
+          (mapcar 'hsc3-unlit (split-string (region-string) "\n"))))
 
 (defun hsc3-run-main ()
   "Run current main."
@@ -169,6 +183,7 @@
   (define-key map [?\C-c ?>] 'hsc3-see-haskell)
   (define-key map [?\C-c ?\C-c] 'hsc3-run-line)
   (define-key map [?\C-c ?\C-e] 'hsc3-run-multiple-lines)
+  (define-key map [?\C-c ?\C-r] 'hsc3-run-consecutive-lines)
   (define-key map [?\C-c ?\C-h] 'hsc3-help)
   (define-key map [?\C-c ?\C-j] 'hsc3-sc3-help)
   (define-key map [?\C-c ?\C-i] 'hsc3-interrupt-haskell)
@@ -196,6 +211,8 @@
     '("Stop (interrupt and reset)" . hsc3-stop))
   (define-key map [menu-bar hsc3 expression run-main]
     '("Run main" . hsc3-run-main))
+  (define-key map [menu-bar hsc3 expression run-consecutive-lines]
+    '("Run consecutive lines" . hsc3-run-consecutive-lines))
   (define-key map [menu-bar hsc3 expression run-multiple-lines]
     '("Run multiple lines" . hsc3-run-multiple-lines))
   (define-key map [menu-bar hsc3 expression run-line]
