@@ -185,9 +185,15 @@ To load the current buffer into the interpreter type `C-cC-l` (Haskell
 → Load file).  To run the `main` function type `C-cC-m` (Haskell
 SuperCollider → Expression → Run main).
 
-Modules (loaded with `C-cC-l`) may contain expressions to audition
-variants (evaluated with `C-cC-c`) by writing them either in comments
-(if the file is not literate) or commentary (if it is).
+Alternately type `C-c<` (Haskell SuperCollider → Expression → Load
+buffer) which, unlike the `haskell-mode` form, does not attempt to
+locate and change to a project directory.  To explicity set the
+directory type `M-x hsc3-cd` (Haskell SuperCollider → Expression →
+Change directory).
+
+Modules (loaded with `C-cC-l` or `C-c<`) may contain expressions to
+audition variants (evaluated with `C-cC-c`) by writing them either in
+comments (if the file is not literate) or commentary (if it is).
 
     import Sound.SC3
 

@@ -31,7 +31,7 @@
 
 (defun hsc3-uncomment (s)
   "Remove initial comment and Bird-literate markers if present"
-   (replace-regexp-in-string "^[- ]*[>]* " "" s))
+   (replace-regexp-in-string "^[- ]*[> ]* " "" s))
 
 (defun hsc3-remove-non-literates (s)
   "Remove non-bird literate lines"
@@ -73,6 +73,17 @@
         (list c)
       (cons c (chunk-string n (substring s n))))))
 
+(defun hsc3-cd ()
+  "Change directory at ghci to current value of 'default-directory'."
+  (interactive)
+  (hsc3-send-string (format ":cd %s" default-directory)))
+
+(defun hsc3-load-buffer ()
+  "Load the current buffer."
+  (interactive)
+  (save-buffer)
+  (hsc3-send-string (format ":load \"%s\"" buffer-file-name)))
+
 (defun hsc3-send-string (s)
   (if (comint-check-proc inferior-haskell-buffer)
       (let ((cs (chunk-string 64 (concat s "\n"))))
@@ -96,13 +107,16 @@
   (buffer-substring-no-properties (region-beginning)
                                   (region-end)))
 
+(defun hsc3-concat (l)
+  (apply #'concat l))
+
 (defun hsc3-run-multiple-lines ()
   "Send the current region to the interpreter as a single line."
   (interactive)
   (let* ((s (region-string))
 	 (s* (if hsc3-literate-p
 		 (hsc3-unlit (hsc3-remove-non-literates s))
-	       s)))
+	       (hsc3-concat (mapcar 'hsc3-uncomment (split-string s "\n"))))))
     (hsc3-send-string (replace-regexp-in-string "\n" " " s*))))
 
 (defun hsc3-run-consecutive-lines ()
@@ -180,6 +194,7 @@
 
 (defun hsc3-mode-keybindings (map)
   "Haskell SuperCollider keybindings."
+  (define-key map [?\C-c ?<] 'hsc3-load-buffer)
   (define-key map [?\C-c ?>] 'hsc3-see-haskell)
   (define-key map [?\C-c ?\C-c] 'hsc3-run-line)
   (define-key map [?\C-c ?\C-e] 'hsc3-run-multiple-lines)
@@ -209,6 +224,10 @@
     (cons "Expression" (make-sparse-keymap "Expression")))
   (define-key map [menu-bar hsc3 expression stop]
     '("Stop (interrupt and reset)" . hsc3-stop))
+  (define-key map [menu-bar hsc3 expression change-directory]
+    '("Change directory" . hsc3-cd))
+  (define-key map [menu-bar hsc3 expression load-buffer]
+    '("Load buffer" . hsc3-load-buffer))
   (define-key map [menu-bar hsc3 expression run-main]
     '("Run main" . hsc3-run-main))
   (define-key map [menu-bar hsc3 expression run-consecutive-lines]
