@@ -82,7 +82,8 @@
   "Load the current buffer."
   (interactive)
   (save-buffer)
-  (hsc3-send-string (format ":load \"%s\"" buffer-file-name)))
+  (hsc3-send-string (format ":load \"%s\"" buffer-file-name))
+  (hsc3-see-haskell))
 
 (defun hsc3-send-string (s)
   (if (comint-check-proc inferior-haskell-buffer)
