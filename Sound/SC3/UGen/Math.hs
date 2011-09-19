@@ -296,8 +296,8 @@ wrap_ a b c =
     in if a >= b && a <= c then a else a - r * ffloor (a-b)/r
 
 -- | Fold to within range (i,j).
-fold' :: (Ord a,Num a) => a -> a -> a -> a
-fold' i j =
+foldToRange :: (Ord a,Num a) => a -> a -> a -> a
+foldToRange i j =
     let f n = if n > j
               then f (j - (n - j))
               else if n < i
@@ -307,7 +307,7 @@ fold' i j =
 
 -- | Variant with SC3 argument ordering.
 fold_ :: (Ord a,Num a) => a -> a -> a -> a
-fold_ n i j = fold' i j n
+fold_ n i j = foldToRange i j n
 
 -- | Clip to within range (i,j),
 clip' :: (Ord a) => a -> a -> a -> a
