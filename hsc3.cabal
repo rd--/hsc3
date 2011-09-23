@@ -22,8 +22,6 @@ Cabal-Version:     >= 1.8
 
 Data-files:        README
                    emacs/hsc3.el
-                   Help/hsc3.help.lhs
-                   Help/tutorial.lhs
                    Help/Server/*.help.lhs
                    Help/UGen/Analysis/*.help.lhs
                    Help/UGen/Buffer/*.help.lhs

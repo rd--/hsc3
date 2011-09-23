@@ -10,8 +10,8 @@ import System.Directory {- directory -}
 import System.Environment
 import System.FilePath
 
--- Read the environment variable @SC3_HELP@, the default value is
--- @~/share/SuperCollider/Help@.
+-- | Read the environment variable @SC3_HELP@, the default value is
+-- @~\/share\/SuperCollider\/Help@.
 sc3HelpDirectory :: IO String
 sc3HelpDirectory = do
   r <- tryJust (guard . isDoesNotExistError) (getEnv "SC3_HELP")
@@ -38,9 +38,11 @@ sc3HelpClassMethod d = sc3HelpMethod d '*'
 sc3HelpInstanceMethod :: FilePath -> (String,String) -> FilePath
 sc3HelpInstanceMethod d = sc3HelpMethod d '-'
 
--- | The name of the local SC3 Help file documenting `u'.
+-- | The name of the local SC3 Help file documenting `u'.  Deletes
+-- @\@@ to allow use on haddock quoted comments.
 ugenSC3HelpFile :: String -> IO FilePath
-ugenSC3HelpFile s = do
+ugenSC3HelpFile x = do
+  let s = filter (`notElem` "@") x
   d <- sc3HelpDirectory
   cf <- sc3HelpClassFile d s
   case splitOn "." s of
