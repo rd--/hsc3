@@ -50,8 +50,9 @@
 (defun hsc3-sc3-help ()
   "Lookup up the name at point in the SC3 help files."
   (interactive)
-  (hsc3-send-string (format "viewSC3Help (toSC3Name \"%s\")"
-                            (thing-at-point 'symbol))))
+  (hsc3-send-string
+   (format "Sound.SC3.viewSC3Help (Sound.SC3.toSC3Name \"%s\")"
+           (thing-at-point 'symbol))))
 
 (defun hsc3-ugen-summary ()
   "Lookup up the UGen at point in hsc3-db"
