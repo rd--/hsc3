@@ -1,9 +1,14 @@
 Name:              hsc3
 Version:           0.10
 Synopsis:          Haskell SuperCollider
-Description:       hsc3 provides Sound.SC3, a haskell module that
-                   facilitates using haskell as a client to the
+Description:       hsc3 facilitates using haskell as a client to the
                    SuperCollider synthesis server.
+
+                   For detailed installation and configuration
+                   information please consult the /Tutorial/ and
+                   /Introduction/ documents at
+                   <http://slavepianos.org/rd/ut/hsc3-texts/>
+
 License:           GPL
 Category:          Sound
 Copyright:         (c) Rohan Drape and others, 2006-2011
