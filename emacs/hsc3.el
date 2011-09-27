@@ -27,11 +27,11 @@
 
 (defun hsc3-unlit (s)
   "Remove bird literate marks and preceding comment marker"
-   (replace-regexp-in-string "^[- ]*> " "" s))
+   (replace-regexp-in-string "^[- ]*>" "" s))
 
 (defun hsc3-uncomment (s)
   "Remove initial comment and Bird-literate markers if present"
-   (replace-regexp-in-string "^[- ]*[> ]* " "" s))
+   (replace-regexp-in-string "^[- ]*>*" "" s))
 
 (defun hsc3-remove-non-literates (s)
   "Remove non-bird literate lines"
