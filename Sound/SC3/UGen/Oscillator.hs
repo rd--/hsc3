@@ -9,6 +9,10 @@ import Sound.SC3.UGen.UGen
 blip :: Rate -> UGen -> UGen -> UGen
 blip r freq nharm = mkOscR [AR] r "Blip" [freq, nharm] 1
 
+-- | Chorusing wavetable oscillator.
+cOsc :: Rate -> UGen -> UGen -> UGen -> UGen
+cOsc r n f b = mkOsc r "COsc" [n,f,b] 1
+
 -- | Create a constant amplitude signal.
 dc :: Rate -> UGen -> UGen
 dc r k = mkOsc r "DC" [k] 1
