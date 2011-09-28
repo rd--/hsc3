@@ -295,7 +295,7 @@ wrap_ a b c =
     let r = c - b
     in if a >= b && a <= c then a else a - r * ffloor (a-b)/r
 
--- | Fold to within range (i,j).
+-- | Fold to within range (i,j), ie. @AbstractFunction.fold@
 foldToRange :: (Ord a,Num a) => a -> a -> a -> a
 foldToRange i j =
     let f n = if n > j

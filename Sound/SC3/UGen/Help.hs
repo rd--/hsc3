@@ -11,14 +11,14 @@ import System.Environment
 import System.FilePath
 
 -- | Read the environment variable @SC3_HELP@, the default value is
--- @~\/share\/SuperCollider\/Help@.
+-- @~\/.local\/share\/SuperCollider@.
 sc3HelpDirectory :: IO String
 sc3HelpDirectory = do
   r <- tryJust (guard . isDoesNotExistError) (getEnv "SC3_HELP")
   case r of
     Right v -> return v
     _ -> do h <- getEnv "HOME"
-            return (h </> "share/SuperCollider/Help")
+            return (h </> ".local/share/SuperCollider")
 
 sc3HelpClassFile :: FilePath -> String -> IO (Maybe FilePath)
 sc3HelpClassFile d c = do
@@ -51,7 +51,7 @@ ugenSC3HelpFile x = do
     [c,m] -> return (sc3HelpInstanceMethod d (c,m))
     _ -> case cf of
            Just cf' -> return cf'
-           Nothing -> error "ugenSC3HelpFile"
+           Nothing -> error (show ("ugenSC3HelpFile",d,cf,x,s))
 
 toSC3Name :: String -> String
 toSC3Name nm =
