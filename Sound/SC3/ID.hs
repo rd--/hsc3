@@ -1,15 +1,9 @@
-module Sound.SC3.ID (module Sound.SC3.Identifier
-                    ,module Sound.SC3.UGen
-                    ,module Sound.SC3.UGen.Composite.ID
-                    ,module Sound.SC3.UGen.Demand.ID
-                    ,module Sound.SC3.UGen.FFT.ID
-                    ,module Sound.SC3.UGen.Noise.ID
-                    ,module Sound.SC3.Server) where
+module Sound.SC3.ID (module I) where
 
-import Sound.SC3.Identifier
-import Sound.SC3.UGen
-import Sound.SC3.UGen.Composite.ID
-import Sound.SC3.UGen.Demand.ID
-import Sound.SC3.UGen.FFT.ID
-import Sound.SC3.UGen.Noise.ID
-import Sound.SC3.Server
+import Sound.SC3.Identifier as I
+import Sound.SC3.UGen as I
+import Sound.SC3.UGen.Composite.ID as I
+import Sound.SC3.UGen.Demand.ID as I
+import Sound.SC3.UGen.FFT.ID as I
+import Sound.SC3.UGen.Noise.ID as I
+import Sound.SC3.Server as I

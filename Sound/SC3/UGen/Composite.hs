@@ -38,13 +38,13 @@ indexL b i =
 
 -- | Collapse possible mce by summing.
 mix :: UGen -> UGen
-mix = foldl1 (+) . mceChannels
+mix = sum . mceChannels
 
 -- | Mix variant, sum to n channels.
 mixN :: Int -> UGen -> UGen
 mixN n u =
     let xs = transpose (splitEvery n (mceChannels u))
-    in mce (map (foldl1 (+)) xs)
+    in mce (map sum xs)
 
 -- | Construct and sum a set of UGens.
 mixFill :: Int -> (Int -> UGen) -> UGen

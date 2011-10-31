@@ -3,6 +3,7 @@ module Sound.SC3.UGen.UGen where
 import Control.Monad
 import qualified Data.Digest.Murmur32 as H
 import Data.List
+import Data.Maybe
 import Sound.SC3.Identifier
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Rate
@@ -387,12 +388,10 @@ check_input u =
 mkUGen :: Maybe ([Double] -> Double) -> [Rate] -> Maybe Rate ->
           String -> [UGen] -> Int -> Special -> UGenId -> UGen
 mkUGen cf rs r nm i o s z =
-    let f h = let r'' = case r of
-                          Nothing -> maximum (map rateOf h)
-                          Just r' -> r'
-                  o' = replicate o r''
-                  u = Primitive r'' nm h o' s z
-              in if r'' `elem` rs
+    let f h = let r' = fromMaybe (maximum (map rateOf h)) r
+                  o' = replicate o r'
+                  u = Primitive r' nm h o' s z
+              in if r' `elem` rs
                  then case cf of
                         Just cf' ->
                             if all isConstant h

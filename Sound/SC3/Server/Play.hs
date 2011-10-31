@@ -41,7 +41,7 @@ playUGen fd = playSynthdef fd . synthdef "Anonymous"
 class Audible e where
     play :: Transport t => t -> e -> IO ()
     audition :: e -> IO ()
-    audition e = withSC3 (\fd -> play fd e)
+    audition e = withSC3 (`play` e)
 
 instance Audible Synthdef where
     play = playSynthdef
@@ -68,5 +68,5 @@ run_bundle fd i o =
 -- timestamps /must/ be in 'NTPr' form.
 perform :: [OSC] -> IO ()
 perform s = do
-  let f i fd x = run_bundle fd i x
+  let f i fd = run_bundle fd i
   withSC3 (\fd -> utcr >>= \i -> mapM_ (f i fd) s)
