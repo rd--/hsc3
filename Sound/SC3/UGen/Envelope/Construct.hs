@@ -31,12 +31,12 @@ envCoord bp dur amp c =
         t = map (* dur) (d_dx (map fst bp))
     in env l t (repeat c) (-1) (-1)
 
-{- | Trapezoidal envelope generator.  The arguments are: 1. @shape@
-determines the sustain time as a proportion of @dur@, zero is a
-triangular envelope, one a rectangular envelope; 2. @skew@ determines
-the attack\/decay ratio, zero is an immediate attack and a slow decay,
-one a slow attack and an immediate decay; 3. @duration@ in seconds;
-4. @amplitude@ as linear gain.  -}
+-- | Trapezoidal envelope generator.  The arguments are: 1. @shape@
+-- determines the sustain time as a proportion of @dur@, zero is a
+-- triangular envelope, one a rectangular envelope; 2. @skew@
+-- determines the attack\/decay ratio, zero is an immediate attack and
+-- a slow decay, one a slow attack and an immediate decay;
+-- 3. @duration@ in seconds; 4. @amplitude@ as linear gain.
 envTrapezoid :: UGen -> UGen -> UGen -> UGen -> [UGen]
 envTrapezoid shape skew dur amp =
     let x1 = skew * (1 - shape)
@@ -46,6 +46,7 @@ envTrapezoid shape skew dur amp =
              , (1, skew >=* 1) ]
     in envCoord bp dur amp EnvLin
 
+-- | Variant 'envPerc' with user specified 'EnvCurve'.
 envPerc' :: UGen -> UGen -> UGen -> (EnvCurve, EnvCurve) -> [UGen]
 envPerc' atk rls lvl (c0, c1) =
     let c = [c0, c1]
@@ -72,6 +73,7 @@ envSine dur lvl =
         d = replicate 2 (dur / 2.0)
     in env [0.0, lvl, 0.0] d c (-1.0) (-1.0)
 
+-- | Variant of 'envLinen' with user specified 'EnvCurve'.
 envLinen' :: UGen -> UGen -> UGen -> UGen -> (EnvCurve, EnvCurve, EnvCurve) -> [UGen]
 envLinen' aT sT rT l (c0, c1, c2) =
     env [0, l, l, 0] [aT, sT, rT] [c0, c1, c2] (-1) (-1)

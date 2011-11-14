@@ -346,7 +346,7 @@ n_set1 nid k n = n_set nid [(k, n)]
 
 -- * Modify existing message to include completion message
 
--- List of asynchronous server commands.
+-- | List of asynchronous server commands.
 async_cmds :: [String]
 async_cmds =
     ["/b_alloc"
@@ -365,6 +365,7 @@ async_cmds =
     ,"/quit"
     ,"/sync"]
 
+-- | 'True' if 'OSC' is an asynchronous 'Message'.
 isAsync :: OSC -> Bool
 isAsync o =
     case o of

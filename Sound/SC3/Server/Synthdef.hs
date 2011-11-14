@@ -96,6 +96,7 @@ data Synthdef = Synthdef {synthdefName :: String
                          ,synthdefGraph :: Graph}
                 deriving (Eq,Show)
 
+-- | Encode 'Synthdef' as binary data stream.
 synthdefData :: Synthdef -> B.ByteString
 synthdefData (Synthdef s g) =
     B.concat [encode_str "SCgf"

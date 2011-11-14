@@ -1,3 +1,4 @@
+-- | Non-deterministic noise 'UGen's.
 module Sound.SC3.UGen.Noise.ID where
 
 import Sound.SC3.Identifier

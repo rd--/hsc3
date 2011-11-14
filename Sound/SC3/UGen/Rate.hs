@@ -1,7 +1,7 @@
 -- | Operating rate definitions and utilities.
-module Sound.SC3.UGen.Rate ( Rate(..)
-                           , rateId
-                           , ar, kr, ir, dr ) where
+module Sound.SC3.UGen.Rate (Rate(..)
+                           ,rateId
+                           ,ar,kr,ir,dr) where
 
 import Data.Function
 

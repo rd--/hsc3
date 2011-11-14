@@ -1,3 +1,5 @@
+-- | Unique identifier class for use by non-deterministic (noise) and
+-- non-sharable (demand) unit generators.
 module Sound.SC3.UGen.UId where
 
 import Control.Monad

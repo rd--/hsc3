@@ -25,6 +25,7 @@ ay ta tb tc n c va vb vc ef es ct = mkOsc AR "AY" [ta, tb, tc, n, c, va, vb, vc,
 ayFreqToTone :: Fractional a => a -> a
 ayFreqToTone f = 110300 / (f - 0.5)
 
+-- | Variant FM synthesis node.
 dfm1 :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 dfm1 i f r g ty nl = mkFilter "DFM1" [i,f,r,g,ty,nl] 1
 

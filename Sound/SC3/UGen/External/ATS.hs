@@ -59,11 +59,12 @@ atsRead fn = do
       hdr = ATSHeader (f 1) (g 2) (g 3) np nf (f 6) (f 7) (f 8) ft fl
   return (ATS hdr d)
 
+-- | Extract set of 'ATSFrame's from 'ATS'.
 atsFrames :: ATS -> [ATSFrame]
 atsFrames a = splitEvery (atsFrameLength (atsHeader a)) (atsData a)
 
 -- Determine endianess and hence decoder.
-get_decoder :: B.ByteString -> (B.ByteString -> Double)
+get_decoder :: B.ByteString -> B.ByteString -> Double
 get_decoder v =
     if decode_f64 v == 123.0
     then decode_f64

@@ -38,6 +38,8 @@ playSynthdef fd s = do
 playUGen :: Transport t => t -> UGen -> IO ()
 playUGen fd = playSynthdef fd . synthdef "Anonymous"
 
+-- | Class for values that can be encoded and send to @scsynth@ for
+-- audition.
 class Audible e where
     play :: Transport t => t -> e -> IO ()
     audition :: e -> IO ()

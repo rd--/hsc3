@@ -2,6 +2,7 @@
 module Sound.SC3.UGen.Operator (Unary(..), unaryName,
                                 Binary(..), binaryName) where
 
+-- | Enumeration of @SC3@ unary operator UGens.
 data Unary  = Neg
             | Not
             | IsNil
@@ -58,6 +59,7 @@ data Unary  = Neg
             | SCurve
               deriving (Eq, Show, Enum)
 
+-- | Enumeration of @SC3@ unary operator UGens.
 data Binary = Add
             | Sub
             | Mul

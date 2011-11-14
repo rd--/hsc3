@@ -1,3 +1,4 @@
+-- | UGen data structure representation and associated functions.
 module Sound.SC3.UGen.UGen where
 
 import Control.Monad
@@ -12,38 +13,45 @@ import System.Random
 
 -- * UGen Id type and functions
 
+-- | Data type for internalised identifier at 'UGen'.
 data UGenId = NoId
             | UserId {userId :: (String,Int)}
             | SystemId {systemId :: Int}
               deriving (Eq,Show)
 
+-- | Predicate for 'NoId'.
 isNoId :: UGenId -> Bool
 isNoId i =
     case i of
       NoId -> True
       _ -> False
 
+-- | Predicate for 'UserId'.
 isUserId :: UGenId -> Bool
 isUserId i =
     case i of
       UserId _ -> True
       _ -> False
 
+-- | Predicate for 'SystemId'.
 isSystemId :: UGenId -> Bool
 isSystemId i =
     case i of
       SystemId _ -> True
       _ -> False
 
+-- | Hash value to 'Int'.
 hash :: H.Hashable32 a => a -> Int
 hash = fromIntegral . H.asWord32 . H.hash32
 
+-- | Shift from 'UserId' to 'SystemId'.
 userIdProtect :: Int -> UGenId -> UGenId
 userIdProtect k i =
     case i of
       UserId j -> SystemId (fromIntegral (hash (show (k,j))))
       _ -> i
 
+-- | Increment 'UserId'.
 userIdIncr :: Int -> UGenId -> UGenId
 userIdIncr n i =
         case i of
@@ -105,6 +113,7 @@ ugenIds =
                 _ -> []
     in ugenFoldr ((++) . f) []
 
+-- | Recursive replacement of 'UGenId's according to table.
 ugenReplaceIds :: [(UGenId,UGenId)] -> UGen -> UGen
 ugenReplaceIds m =
     let f u = case ugenType u of
@@ -123,18 +132,22 @@ ugenProtectUserId k =
                 _ -> u
     in ugenTraverse f
 
+-- | 'idHash' variant of 'ugenProtectUserId'.
 uprotect :: ID a => a -> UGen -> UGen
 uprotect e = ugenProtectUserId (idHash e)
 
+-- | Variant of 'uprotect' with subsequent identifiers derived by
+-- incrementing initial identifier.
 uprotect' :: ID a => a -> [UGen] -> [UGen]
 uprotect' e =
-    let n = map (+ (idHash e)) [1..]
+    let n = map (+ idHash e) [1..]
     in zipWith ugenProtectUserId n
 
--- | N parallel instances of `u' with protected Ids.
+-- | Make /n/ parallel instances of 'UGen' with protected identifiers.
 uclone' :: ID a => a -> Int -> UGen -> [UGen]
 uclone' e n = uprotect' e . replicate n
 
+-- | 'mce' variant of 'uclone''.
 uclone :: ID a => a -> Int -> UGen -> UGen
 uclone e n = mce . uclone' e n
 
@@ -145,7 +158,7 @@ ucompose e xs =
         go ((f,k):f') u = go f' (ugenProtectUserId k (f u))
     in go (zip xs [idHash e ..])
 
--- | N sequential instances of `f' with protected Ids.
+-- | Make /n/ sequential instances of `f' with protected Ids.
 useq :: ID a => a -> Int -> (UGen -> UGen) -> UGen -> UGen
 useq e n f = ucompose e (replicate n f)
 
@@ -157,12 +170,13 @@ ugenIncrUserId k =
                 _ -> u
     in ugenTraverse f
 
+-- | Duplicate `u' `n' times, increment user assigned Ids.
 udup' :: Int -> UGen -> [UGen]
 udup' n u =
     let g k = ugenIncrUserId k u
     in u : map g [1..n-1]
 
--- | Duplicate `u' `n' times, increment user assigned Ids.
+-- | 'mce' variant of 'udup''.
 udup :: Int -> UGen -> UGen
 udup n = mce . udup' n
 
@@ -217,6 +231,7 @@ proxy = Proxy
 
 -- * Unit generator node predicates
 
+-- | Enumeration of 'UGen' types.
 data UGenType = Constant_U
               | Control_U
               | Primitive_U
@@ -368,7 +383,7 @@ rateOf u =
       MCE_U -> maximum (map rateOf (mceChannels u))
       MRG_U -> rateOf (mrgLeft u)
 
--- True is input is a sink UGen, ie. has no outputs.
+-- | True if input is a sink 'UGen', ie. has no outputs.
 is_sink :: UGen -> Bool
 is_sink u =
     case ugenType u of
@@ -377,7 +392,7 @@ is_sink u =
       MRG_U -> is_sink (mrgLeft u)
       _ -> False
 
--- Ensure input UGen is valid, ie. not a sink.
+-- | Ensure input 'UGen' is valid, ie. not a sink.
 check_input :: UGen -> UGen
 check_input u =
     if is_sink u
@@ -401,6 +416,7 @@ mkUGen cf rs r nm i o s z =
                  else error ("mkUGen: rate restricted: " ++ show (r,rs,nm))
     in proxify (mceBuild f (map check_input i))
 
+-- | Set of all 'Rate' values.
 all_rates :: [Rate]
 all_rates = [minBound .. maxBound]
 
@@ -424,31 +440,34 @@ mkBinaryOperator i f a b =
        g _ = error "mkBinaryOperator: non binary input"
    in mkOperator g "BinaryOpUGen" [a, b] (fromEnum i)
 
+-- | Oscillator constructor with constrained set of operating 'Rate's.
 mk_osc :: [Rate] -> UGenId -> Rate -> String -> [UGen] -> Int -> UGen
 mk_osc rs z r c i o =
     if r `elem` rs
     then mkUGen Nothing rs (Just r) c i o (Special 0) z
     else error ("mk_osc: rate restricted: " ++ show (r, rs, c))
 
--- | Oscillator constructor.
+-- | Oscillator constructor with 'all_rates'.
 mkOsc :: Rate -> String -> [UGen] -> Int -> UGen
-mkOsc = mk_osc [minBound .. maxBound] NoId
+mkOsc = mk_osc all_rates NoId
 
 -- | Oscillator constructor, rate restricted variant.
 mkOscR :: [Rate] -> Rate -> String -> [UGen] -> Int -> UGen
 mkOscR rs = mk_osc rs NoId
 
+-- | Transform 'String' and 'ID' to a 'UserId'.
 toUserId :: ID a => String -> a -> UGenId
 toUserId nm z = UserId (nm,resolveID z)
 
 -- | Oscillator constructor, setting identifier.
 mkOscId :: (ID a) => a -> Rate -> String -> [UGen] -> Int -> UGen
-mkOscId z r nm = mk_osc [minBound .. maxBound] (toUserId nm z) r nm
+mkOscId z r nm = mk_osc all_rates (toUserId nm z) r nm
 
+-- | Provided 'UGenId' variant of 'mkOscMCE'.
 mk_osc_mce :: UGenId -> Rate -> String -> [UGen] -> UGen -> Int -> UGen
 mk_osc_mce z r c i j =
     let i' = i ++ mceChannels j
-    in mk_osc [minBound .. maxBound] z r c i'
+    in mk_osc all_rates z r c i'
 
 -- | Variant oscillator constructor with MCE collapsing input.
 mkOscMCE :: Rate -> String -> [UGen] -> UGen -> Int -> UGen
@@ -458,10 +477,11 @@ mkOscMCE = mk_osc_mce NoId
 mkOscMCEId :: ID a => a -> Rate -> String -> [UGen] -> UGen -> Int -> UGen
 mkOscMCEId z r nm = mk_osc_mce (toUserId nm z) r nm
 
+-- | Rate constrained filter 'UGen' constructor.
 mk_filter :: [Rate] -> UGenId -> String -> [UGen] -> Int -> UGen
 mk_filter rs z c i o = mkUGen Nothing rs Nothing c i o (Special 0) z
 
--- | Filter UGen constructor.
+-- | Filter 'UGen' constructor.
 mkFilter :: String -> [UGen] -> Int -> UGen
 mkFilter = mk_filter all_rates NoId
 
@@ -479,6 +499,7 @@ mkFilterKeyed c k i o =
     let r = rateOf (i !! k)
     in mkUGen Nothing all_rates (Just r) c i o (Special 0) NoId
 
+-- | Provided 'UGenId' filter with 'mce' input.
 mk_filter_mce :: [Rate] -> UGenId -> String -> [UGen] -> UGen -> Int -> UGen
 mk_filter_mce rs z c i j = mk_filter rs z c (i ++ mceChannels j)
 

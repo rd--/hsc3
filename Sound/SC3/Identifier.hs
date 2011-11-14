@@ -1,3 +1,4 @@
+-- | Typeclass and functions to manage UGen identifiers.
 module Sound.SC3.Identifier where
 
 import Data.Char
@@ -13,10 +14,11 @@ instance ID Int where
 instance ID Char where
     resolveID = ord
 
+-- | Hash 'ID' to 'Int'.
 idHash :: ID a => a -> Int
 idHash = fromIntegral . H.asWord32 . H.hash32 . resolveID
 
--- | Resolve the ID at 'a' and add the resolved enumeration of 'j'.
+-- | Resolve the ID at 'i' and add the resolved enumeration of 'j'.
 editID :: (ID a, Enum b) => a -> b -> Int
 editID i j = resolveID i + fromEnum j
 
