@@ -1,3 +1,6 @@
+-- | Module exporting all of "Sound.SC3" and also the monadic
+-- constructor variants for non-deterministic and non-sharable unit
+-- generators.
 module Sound.SC3.Monadic (module M) where
 
 import Sound.SC3.UGen as M

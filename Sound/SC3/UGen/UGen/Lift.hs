@@ -1,3 +1,5 @@
+-- | Lifting functions from explicit identifier 'UGen' functions to
+-- monadic 'UGen' constructors.
 module Sound.SC3.UGen.UGen.Lift where
 
 import Sound.SC3.UGen.UGen

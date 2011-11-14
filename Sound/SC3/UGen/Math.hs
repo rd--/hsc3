@@ -40,6 +40,7 @@ instance OrdE UGen where
     (>*) = mkBinaryOperator GT_ (>*)
     (>=*) = mkBinaryOperator GE (>=*)
 
+-- | Variant of 'RealFrac' with non 'Integral' results.
 class RealFracE a where
   properFractionE :: a -> (a,a)
   truncateE :: a -> a
@@ -47,27 +48,35 @@ class RealFracE a where
   ceilingE :: a -> a
   floorE :: a -> a
 
+-- | Variant of 'truncate'.
 truncatef :: RealFrac a => a -> a
 truncatef a = fromIntegral (truncate a :: Integer)
 
+-- | Variant of 'round'.
 roundf :: RealFrac a => a -> a
 roundf a = fromIntegral (round a :: Integer)
 
+-- | Variant of 'ceiling'.
 ceilingf :: RealFrac a => a -> a
 ceilingf a = fromIntegral (ceiling a :: Integer)
 
+-- | Variant of 'floor'.
 floorf :: RealFrac a => a -> a
 floorf a = fromIntegral (floor a :: Integer)
 
+-- | Variant of 'truncatef' (via libc).
 ftruncate :: Double -> Double
 ftruncate = M.trunc
 
+-- | Variant of 'roundf' (via libc).
 fround :: Double -> Double
 fround = M.round
 
+-- | Variant of 'ceilingf' (via libc).
 fceiling :: Double -> Double
 fceiling = M.ceil
 
+-- | Variant of 'floorf' (via libc).
 ffloor :: Double -> Double
 ffloor = M.floor
 
@@ -80,9 +89,11 @@ instance RealFracE Double where
     ceilingE = fceiling
     floorE = ffloor
 
+-- | Variant of @SC3@ @roundTo@ function.
 roundTo_ :: Double -> Double -> Double
 roundTo_ a b = if b == 0 then a else ffloor (a/b + 0.5) * b
 
+-- | 'UGen' form or 'roundTo_'.
 roundTo :: UGen -> UGen -> UGen
 roundTo = mkBinaryOperator Round roundTo_
 
@@ -93,9 +104,11 @@ instance RealFracE UGen where
     ceilingE = mkUnaryOperator Ceil fceiling
     floorE = mkUnaryOperator Floor ffloor
 
+-- | 'UGen' form of 'ceilingE'.
 ceil :: UGen -> UGen
 ceil = ceilingE
 
+-- | 'Floating' form of 'midiCPS'.
 midiCPS' :: Floating a => a -> a
 midiCPS' i = 440.0 * (2.0 ** ((i - 69.0) * (1.0 / 12.0)))
 
@@ -241,7 +254,7 @@ class (Floating a, Ord a) => BinaryOp a where
     unsignedShift = error "unsignedShift"
     wrap2 :: a -> a -> a
 
--- SC3 % does not return negative numbers.
+-- | SC3 @%@ does not return negative numbers.
 fmod :: Double -> Double -> Double
 fmod i j =
     let k = i `M.fmod` j

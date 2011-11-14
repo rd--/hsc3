@@ -1,3 +1,6 @@
+-- | Module exporting all of "Sound.SC3" and also the explicit
+-- identifier variants for non-deterministic and non-sharable unit
+-- generators.
 module Sound.SC3.ID (module I) where
 
 import Sound.SC3.Identifier as I

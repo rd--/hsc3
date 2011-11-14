@@ -1,3 +1,4 @@
+-- | Explicit identifier functions for composite 'UGen's.
 module Sound.SC3.UGen.Composite.ID where
 
 import Sound.SC3.Identifier
@@ -13,18 +14,23 @@ dcons (z0,z1,z2) x xs =
         a = dseq z1 1 (mce2 x xs)
     in dswitch z2 i a
 
+-- | Count 'mce' channels.
 mceN :: UGen -> UGen
 mceN = constant . length . mceChannels
 
+-- | Randomly select one of several inputs (initialiastion rate).
 iChoose :: ID m => m -> UGen -> UGen
 iChoose e a = select (iRand e 0 (mceN a)) a
 
+-- | 'mce' variant of 'iChoose'.
 iChoose' :: ID m => m -> [UGen] -> UGen
 iChoose' e = iChoose e . mce
 
+-- | Randomly select one of several inputs on trigger.
 tChoose :: ID m => m -> UGen -> UGen -> UGen
 tChoose z t a = select (tIRand z 0 (mceN a) t) a
 
+-- | Randomly select one of several inputs on trigger (weighted).
 tWChoose :: ID m => m -> UGen -> UGen -> UGen -> UGen -> UGen
 tWChoose z t a w n =
     let i = tWindex z t n w

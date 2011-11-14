@@ -46,9 +46,11 @@ localOut i = mkFilterMCE "LocalOut" [] i 0
 xOut :: UGen -> UGen -> UGen -> UGen
 xOut bus xfade i = mkFilterMCE "XOut" [bus, xfade] i 0
 
+-- | Write to a shared control bus.
 sharedOut :: UGen -> UGen -> UGen
 sharedOut bus i = mkOscMCE KR "SharedOut" [bus] i 0
 
+-- | Read from a shared control bus.
 sharedIn :: Int -> UGen -> UGen
 sharedIn nc bus = mkOsc KR "SharedIn" [bus] nc
 
@@ -72,11 +74,11 @@ mouseY r ll rl w lag = mkOscR [KR] r "MouseY" [ll, rl, from_warp w, lag] 1
 trigControl :: Int -> Rate -> UGen
 trigControl nc r = mkOsc r "TrigControl" [] nc
 
--- Set the synth's random generator ID.
+-- | Set the synth's random generator ID.
 randID :: Rate -> UGen -> UGen
 randID r n = mkOsc r "RandID" [n] 1
 
--- Sets the synth's random generator seed.
+-- | Set the synth's random generator seed.
 randSeed :: Rate -> UGen -> UGen -> UGen
 randSeed r tr sd = mkOsc r "RandSeed" [tr,sd] 1
 

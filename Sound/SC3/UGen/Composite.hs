@@ -60,6 +60,7 @@ mouseButton' rt l r tm =
     let o = lfClipNoise 'z' rt 1
     in lag (linLin o (-1) 1 l r) tm
 
+-- | Randomised mouse UGen (see also 'mouseX'' and 'mouseY'').
 mouseR :: ID a => a -> Rate -> UGen -> UGen -> Warp -> UGen -> UGen
 mouseR z rt l r ty tm =
   let f = case ty of

@@ -1,3 +1,4 @@
+-- | Monadic constructors for composite 'UGen's.
 module Sound.SC3.UGen.Composite.Monadic where
 
 import qualified Sound.SC3.UGen.Composite.ID as C
@@ -15,17 +16,21 @@ dcons x xs = do
   a <- dseq 1 (mce2 x xs)
   dswitch i a
 
+-- | 'liftU' of 'C.iChoose'.
 iChoose :: UId m => UGen -> m UGen
 iChoose = liftU C.iChoose
 
+-- | 'liftU' of 'C.iChoose''.
 iChoose' :: UId m => [UGen] -> m UGen
 iChoose' = liftU C.iChoose'
 
+-- | Randomly select one of several inputs.
 tChoose :: (UId m) => UGen -> UGen -> m UGen
 tChoose t a = do
   r <- tIRand 0 (constant (length (mceChannels a))) t
   return (select r a)
 
+-- | Randomly select one of several inputs (weighted).
 tWChoose :: (UId m) => UGen -> UGen -> UGen -> UGen -> m UGen
 tWChoose t a w n = do
   i <- tWindex t n w

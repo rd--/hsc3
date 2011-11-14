@@ -1,3 +1,4 @@
+-- | Monadic constructors for non-deterministic FFT 'UGen's.
 module Sound.SC3.UGen.FFT.Monadic where
 
 import Sound.SC3.UGen.UGen
