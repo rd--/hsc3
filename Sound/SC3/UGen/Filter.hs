@@ -227,6 +227,7 @@ mantissaMask i bits = mkFilter "MantissaMask" [i,bits] 1
 median :: UGen -> UGen -> UGen
 median size i = mkFilter "Median" [size,i] 1
 
+-- | Parametric filter.
 midEQ :: UGen -> UGen -> UGen -> UGen -> UGen
 midEQ i f rq db = mkFilter "MidEQ" [i,f,rq,db] 1
 
@@ -333,7 +334,7 @@ shaper b s = mkFilter "Shaper" [b,s] 1
 slew :: UGen -> UGen -> UGen -> UGen
 slew i up dn = mkFilter "Slew" [i,up,dn] 1
 
--- | Second order filter section (biquad). 
+-- | Second order filter section (biquad).
 sos :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 sos i a0 a1 a2 b1 b2 = mkFilter "SOS" [i,a0,a1,a2,b1,b2] 1
 
@@ -345,14 +346,14 @@ stepper t r mn mx s v = mkFilter "Stepper" [t,r,mn,mx,s,v] 1
 sweep :: UGen -> UGen -> UGen
 sweep t r = mkFilter "Sweep" [t,r] 1
 
--- | Delay trigger by specified interval. 
+-- | Delay trigger by specified interval.
 tDelay :: UGen -> UGen -> UGen
 tDelay i d = mkFilter "TDelay" [i,d] 1
 
 -- | Time since last triggered.
 timer :: UGen -> UGen
 timer t = mkFilter "Timer" [t] 1
- 
+
 -- | Toggle flip flop.
 toggleFF :: UGen -> UGen
 toggleFF t = mkFilter "ToggleFF" [t] 1
@@ -383,30 +384,39 @@ wrapIndex b i = mkFilter "WrapIndex" [b,i] 1
 
 -- * BEQ filters
 
+-- | Bi-quad low-pass filter.
 bLowPass :: UGen -> UGen -> UGen -> UGen
 bLowPass i f rq = mkFilter "BLowPass" [i,f,rq] 1
 
+-- | Bi-quad high-pass filter.
 bHiPass :: UGen -> UGen -> UGen -> UGen
 bHiPass i f rq = mkFilter "BHiPass" [i,f,rq] 1
 
+-- | Bi-quad all-pass filter.
 bAllPass :: UGen -> UGen -> UGen -> UGen
 bAllPass i f rq = mkFilter "BAllPass" [i,f,rq] 1
 
+-- | Bi-quad band-pass filter.
 bBandPass :: UGen -> UGen -> UGen -> UGen
 bBandPass i f bw = mkFilter "BBandPass" [i,f,bw] 1
 
+-- | Bi-quad band-stop filter.
 bBandStop :: UGen -> UGen -> UGen -> UGen
 bBandStop i f bw = mkFilter "BBandStop" [i,f,bw] 1
 
+-- | Bi-quad peak equaliser.
 bPeakEQ :: UGen -> UGen -> UGen -> UGen -> UGen
 bPeakEQ i f rq db = mkFilter "BPeakEQ" [i,f,rq,db] 1
 
+-- | Bi-quad low shelf filter.
 bLowShelf :: UGen -> UGen -> UGen -> UGen -> UGen
 bLowShelf i f rs db = mkFilter "BLowShelf" [i,f,rs,db] 1
 
+-- | Bi-quad high shelf filter.
 bHiShelf :: UGen -> UGen -> UGen -> UGen -> UGen
 bHiShelf i f rs db = mkFilter "BHiShelf" [i,f,rs,db] 1
 
+-- | Calculate coefficients for bi-quad low pass filter.
 bLowPassCoef :: Floating a => a -> a -> a -> (a,a,a,a,a)
 bLowPassCoef sr freq rq =
     let w0 = pi * 2 * freq * (1 / sr)

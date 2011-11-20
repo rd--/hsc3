@@ -303,12 +303,25 @@ instance BinaryOp UGen where
     randRange = mkBinaryOperator RandRange randRange
     exprandRange = mkBinaryOperator ExpRandRange exprandRange
 
-wrap_ :: Double -> Double -> Double -> Double
-wrap_ a b c =
-    let r = c - b
-    in if a >= b && a <= c then a else a - r * ffloor (a-b)/r
+-- | Fold /k/ to within range /(i,j)/, ie. @AbstractFunction.wrap@.
+--
+-- > map (wrap' 5 10) [3..12] == [8,9,5,6,7,8,9,10,6,7]
+wrap' :: Double -> Double -> Double -> Double
+wrap' i j k =
+    let r = j - i
+    in if k >= i && k <= j
+       then k
+       else k - r * ffloor ((k-i) / r)
 
--- | Fold to within range (i,j), ie. @AbstractFunction.fold@
+-- | Variant of 'wrap'' with @SC3@ argument ordering.
+--
+-- > map (\n -> wrap_ n 5 10) [3..12] == map (wrap' 5 10) [3..12]
+wrap_ :: Double -> Double -> Double -> Double
+wrap_ a b c = wrap' b c a
+
+-- | Fold /k/ to within range /(i,j)/, ie. @AbstractFunction.fold@
+--
+-- > map (foldToRange 5 10) [3..12] == [7,6,5,6,7,8,9,10,9,8]
 foldToRange :: (Ord a,Num a) => a -> a -> a -> a
 foldToRange i j =
     let f n = if n > j
@@ -318,14 +331,16 @@ foldToRange i j =
                    else n
     in f
 
--- | Variant with SC3 argument ordering.
+-- | Variant of 'foldToRange' with @SC3@ argument ordering.
 fold_ :: (Ord a,Num a) => a -> a -> a -> a
 fold_ n i j = foldToRange i j n
 
--- | Clip to within range (i,j),
+-- | Clip /k/ to within range /(i,j)/,
+--
+-- > map (clip' 5 10) [3..12] == [5,5,5,6,7,8,9,10,10,10]
 clip' :: (Ord a) => a -> a -> a -> a
 clip' i j n = if n < i then i else if n > j then j else n
 
--- | Variant with SC3 argument ordering.
+-- | Variant of 'clip'' with @SC3@ argument ordering.
 clip_ :: (Ord a) => a -> a -> a -> a
 clip_ n i j = clip' i j n

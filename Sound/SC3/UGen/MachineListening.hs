@@ -20,8 +20,9 @@ loudness fft smask tmask = mkOsc KR "Loudness" [fft, smask, tmask] 1
 
 -- | Translate onset type string to constant UGen value.
 onsetType :: Num a => String -> a
-onsetType s = fromIntegral (fromMaybe 3 (findIndex (== s) t))
-    where t = ["power", "magsum", "complex", "rcomplex", "phase", "wphase", "mkl"]
+onsetType s =
+    let t = ["power", "magsum", "complex", "rcomplex", "phase", "wphase", "mkl"]
+    in fromIntegral (fromMaybe 3 (findIndex (== s) t))
 
 -- | Onset detector.
 onsets :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -39,12 +40,15 @@ keyTrack fft kd cl _ = mkOsc KR "KeyTrack" [fft, kd, cl] 1
 mfcc :: Int -> UGen -> UGen
 mfcc nc b = mkOsc KR "MFCC" [b, constant nc] nc
 
+-- | Spectral Flatness measure.
 specFlatness :: UGen -> UGen
 specFlatness b = mkOsc KR "SpecFlatness" [b] 1
 
+-- | Find a percentile of FFT magnitude spectrum.
 specPcile :: UGen -> UGen -> UGen -> UGen
 specPcile b f i = mkOsc KR "SpecPcile" [b, f, i] 1
 
+-- | Spectral centroid.
 specCentroid :: UGen -> UGen
 specCentroid b = mkOsc KR "SpecCentroid" [b] 1
 

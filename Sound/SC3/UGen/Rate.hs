@@ -13,12 +13,20 @@ instance Ord Rate where
     compare = compare `on` rate_ord
 
 {-# DEPRECATED ar,kr,ir,dr "Aliases to be removed" #-}
--- | Rate constructors (lower case aliases of upper case data
---   constructors).
-ar, kr, ir, dr :: Rate
+-- | Rate constructors alias.
+ar :: Rate
 ar = AR
+
+-- | Rate constructors alias.
+kr :: Rate
 kr = KR
+
+-- | Rate constructors alias.
+ir :: Rate
 ir = IR
+
+-- | Rate constructors alias.
+dr :: Rate
 dr = DR
 
 -- | Integer rate identifier, as required for scsynth bytecode.
