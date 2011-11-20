@@ -303,7 +303,7 @@ instance BinaryOp UGen where
     randRange = mkBinaryOperator RandRange randRange
     exprandRange = mkBinaryOperator ExpRandRange exprandRange
 
--- | Fold /k/ to within range /(i,j)/, ie. @AbstractFunction.wrap@.
+-- | Wrap /k/ to within range /(i,j)/, ie. @AbstractFunction.wrap@.
 --
 -- > map (wrap' 5 10) [3..12] == [8,9,5,6,7,8,9,10,6,7]
 wrap' :: Double -> Double -> Double -> Double
@@ -312,6 +312,17 @@ wrap' i j k =
     in if k >= i && k <= j
        then k
        else k - r * ffloor ((k-i) / r)
+
+-- | Generic variant of 'wrap''.
+--
+-- > map (genericWrap (5::Integer) 10) [3..12] == [8,9,5,6,7,8,9,10,6,7]
+genericWrap :: (Ord a, Num a) => a -> a -> a -> a
+genericWrap l r n =
+    let d = r - l
+        f = genericWrap l r
+    in if n < l
+       then f (n + d)
+       else if n > r then f (n - d) else n
 
 -- | Variant of 'wrap'' with @SC3@ argument ordering.
 --
