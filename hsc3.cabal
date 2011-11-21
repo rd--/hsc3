@@ -1,5 +1,5 @@
 Name:              hsc3
-Version:           0.10
+Version:           0.11
 Synopsis:          Haskell SuperCollider
 Description:       hsc3 facilitates using haskell as a client to the
                    SuperCollider synthesis server.
@@ -16,7 +16,7 @@ Author:            Rohan Drape
 Maintainer:        rd@slavepianos.org
 Stability:         Experimental
 Homepage:          http://slavepianos.org/rd/?t=hsc3
-Tested-With:       GHC == 7.0.4
+Tested-With:       GHC == 7.2.2
 Build-Type:        Simple
 Cabal-Version:     >= 1.8
 
@@ -52,7 +52,7 @@ Library
                    containers,
                    directory,
                    filepath,
-                   hosc == 0.10.*,
+                   hosc == 0.11.*,
                    murmur-hash,
                    network,
                    process,
