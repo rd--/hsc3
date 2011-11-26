@@ -7,7 +7,9 @@ module Sound.SC3.UGen.Envelope.Construct (env
                                          ,envTriangle
                                          ,envSine
                                          ,envLinen', envLinen
-                                         ,envADSR, envASR) where
+                                         ,envADSR
+                                         ,envADSR_r,ADSR(..)
+                                         ,envASR) where
 
 import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.Math
@@ -84,21 +86,26 @@ envLinen aT sT rT l =
     let c = (EnvLin, EnvLin, EnvLin)
     in envLinen' aT sT rT l c
 
--- aT = attackTime
--- dT = decayTime
--- sL = sustainLevel
--- rT = releaseTime
--- pL = peakLevel
--- c = curve
--- b = bias
+-- | Parameters for ADSR envelopes.
+data ADSR a = ADSR {attackTime :: a
+                   ,decayTime :: a
+                   ,sustainLevel :: a
+                   ,releaseTime :: a
+                   ,peakLevel :: a
+                   ,curve :: (EnvCurve,EnvCurve,EnvCurve)
+                   ,bias :: a}
 
 -- | Attack, decay, sustain, release envelope parameter constructor.
 envADSR :: UGen -> UGen -> UGen -> UGen -> UGen -> EnvCurve -> UGen -> [UGen]
-envADSR aT dT sL rT pL c b =
+envADSR aT dT sL rT pL c b = envADSR_r (ADSR aT dT sL rT pL (c,c,c) b)
+
+-- | Record ('ADSR') variant of 'envADSR'.
+envADSR_r :: ADSR UGen -> [UGen]
+envADSR_r (ADSR aT dT sL rT pL (c0,c1,c2) b) =
     let l = map (+ b) [0,pL,pL*sL,0]
         t = [aT,dT,rT]
-        c' = [c,c,c]
-    in env l t c' 2 (-1)
+        c = [c0,c1,c2]
+    in env l t c 2 (-1)
 
 -- | Attack, sustain, release envelope parameter constructor.
 envASR :: UGen -> UGen -> UGen -> EnvCurve -> [UGen]
