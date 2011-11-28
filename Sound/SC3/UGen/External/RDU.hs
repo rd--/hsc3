@@ -4,6 +4,23 @@ module Sound.SC3.UGen.External.RDU where
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
 
+rFreezer :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+rFreezer b l r g i io ir rr ps pt nl =
+    mkOsc AR "RFreezer" [b,l,r,g,i,io,ir,rr,ps,pt,nl] 1
+
+rFreezer_dsc :: [String]
+rFreezer_dsc = ["bufnum"
+               ,"left"
+               ,"right"
+               ,"gain"
+               ,"increment"
+               ,"incrementOffset"
+               ,"incrementRandom"
+               ,"rightRandom"
+               ,"syncPhaseTrigger"
+               ,"randomizePhaseTrigger"
+               ,"numberOfLoops"]
+
 rShufflerB :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 rShufflerB b rlL rlR riL riR dL dR eaL eaR esL esR ekL ekR slM slR ioL ioR i riQ ioQ =
     let p = [b,rlL,rlR,riL,riR,dL,dR,eaL,eaR,esL,esR,ekL,ekR,slM,slR,ioL,ioR,i,riQ,ioQ]
@@ -35,6 +52,12 @@ rShufflerB_r :: RShufflerB UGen -> UGen
 rShufflerB_r r =
     let (RShufflerB b rlL rlR riL riR dL dR eaL eaR esL esR ekL ekR slM slR ioL ioR i riQ ioQ) = r
     in rShufflerB b rlL rlR riL riR dL dR eaL eaR esL esR ekL ekR slM slR ioL ioR i riQ ioQ
+
+rShufflerL_dsc :: [String]
+rShufflerL_dsc = ["in","fragmentSize","maxDelay"]
+
+rShufflerL :: UGen -> UGen -> UGen -> UGen
+rShufflerL i fs md = mkFilterR [AR] "RShufflerL" [i,fs,md] 1
 
 -- Local Variables:
 -- truncate-lines:t
