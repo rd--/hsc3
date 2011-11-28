@@ -9,7 +9,8 @@ module Sound.SC3.UGen.Envelope.Construct (env
                                          ,envLinen', envLinen
                                          ,envADSR
                                          ,envADSR_r,ADSR(..)
-                                         ,envASR) where
+                                         ,envASR
+                                         ,env_curve,env_value) where
 
 import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.Math
@@ -118,16 +119,22 @@ envASR aT sL rT c =
 d_dx :: (Num a) => [a] -> [a]
 d_dx xs = zipWith (-) (drop 1 xs) xs
 
+-- | Convert 'EnvCurve' to constant 'UGen' value.
 env_curve :: EnvCurve -> UGen
-env_curve EnvStep = Constant 0.0
-env_curve EnvLin = Constant 1.0
-env_curve EnvExp = Constant 2.0
-env_curve EnvSin = Constant 3.0
-env_curve EnvCos = Constant 4.0
-env_curve (EnvNum _) = Constant 5.0
-env_curve EnvSqr = Constant 6.0
-env_curve EnvCub = Constant 7.0
+env_curve e =
+    case e of
+      EnvStep -> Constant 0.0
+      EnvLin -> Constant 1.0
+      EnvExp -> Constant 2.0
+      EnvSin -> Constant 3.0
+      EnvCos -> Constant 4.0
+      EnvNum _ -> Constant 5.0
+      EnvSqr -> Constant 6.0
+      EnvCub -> Constant 7.0
 
+-- | The /value/ of 'EnvCurve' is non-zero for 'EnvNum'.
 env_value :: EnvCurve -> UGen
-env_value (EnvNum u) = u
-env_value _ = Constant 0.0
+env_value e =
+    case e of
+      EnvNum u -> u
+      _ -> Constant 0.0

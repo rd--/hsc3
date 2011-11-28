@@ -2,6 +2,7 @@
 module Sound.SC3.UGen.Demand where
 
 import Sound.SC3.UGen.Enum
+import Sound.SC3.UGen.Envelope.Construct
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.Utilities
@@ -17,8 +18,8 @@ demand t r d =
     in mkFilterKeyed "Demand" 0 (t : r : d') (length d')
 
 -- | Demand envlope generator.
-demandEnvGen :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> DoneAction -> UGen
-demandEnvGen r l d s c g rst ls lb ts a = mkOsc r "DemandEnvGen" [l, d, s, c, g, rst, ls, lb, ts, from_done_action a] 1
+demandEnvGen :: Rate -> UGen -> UGen -> EnvCurve -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> DoneAction -> UGen
+demandEnvGen r l d s c g rst ls lb ts a = mkOsc r "DemandEnvGen" [l, d, env_curve s, c, g, rst, ls, lb, ts, from_done_action a] 1
 
 -- | Demand results from demand rate ugens.
 duty :: Rate -> UGen -> UGen -> DoneAction -> UGen -> UGen
