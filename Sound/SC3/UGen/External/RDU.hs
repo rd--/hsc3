@@ -1,8 +1,22 @@
 -- | RDU UGen definitions.
 module Sound.SC3.UGen.External.RDU where
 
+import Sound.SC3.Identifier
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
+
+dustR_dsc :: [String]
+dustR_dsc = ["rate","lo","hi"]
+
+dustR :: ID a => a -> Rate -> UGen -> UGen -> UGen
+dustR z rt lo hi = mkOscId z rt "DustR" [lo,hi] 1
+
+rDelayMap_dsc :: [String]
+rDelayMap_dsc = ["bufnum","input","dynamic","mapArray"]
+
+-- | Network of delay line operations.
+rDelayMap :: UGen -> UGen -> UGen -> UGen -> UGen
+rDelayMap b i d s = mkFilterMCE "RDelayMap" [b,i,d] s 1
 
 rFreezer :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 rFreezer b l r g i io ir rr ps pt nl =
