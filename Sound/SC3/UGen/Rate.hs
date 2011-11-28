@@ -1,7 +1,5 @@
 -- | Operating rate definitions and utilities.
-module Sound.SC3.UGen.Rate (Rate(..)
-                           ,rateId
-                           ,ar,kr,ir,dr) where
+module Sound.SC3.UGen.Rate (Rate(..),rateId) where
 
 import Data.Function
 
@@ -11,23 +9,6 @@ data Rate = IR | KR | AR | DR
 
 instance Ord Rate where
     compare = compare `on` rate_ord
-
-{-# DEPRECATED ar,kr,ir,dr "Aliases to be removed" #-}
--- | Rate constructors alias.
-ar :: Rate
-ar = AR
-
--- | Rate constructors alias.
-kr :: Rate
-kr = KR
-
--- | Rate constructors alias.
-ir :: Rate
-ir = IR
-
--- | Rate constructors alias.
-dr :: Rate
-dr = DR
 
 -- | Integer rate identifier, as required for scsynth bytecode.
 rateId :: Rate -> Int
