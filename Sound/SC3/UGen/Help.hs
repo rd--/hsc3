@@ -12,14 +12,14 @@ import System.Environment
 import System.FilePath
 
 -- | Read the environment variable @SC3_HELP@, the default value is
--- @~\/.local\/share\/SuperCollider@.
+-- @~\/.local\/share\/SuperCollider/Help@.
 sc3HelpDirectory :: IO String
 sc3HelpDirectory = do
   r <- tryJust (guard . isDoesNotExistError) (getEnv "SC3_HELP")
   case r of
     Right v -> return v
     _ -> do h <- getEnv "HOME"
-            return (h </> ".local/share/SuperCollider")
+            return (h </> ".local/share/SuperCollider/Help")
 
 -- | Locate path to indicated SC3 class help file.
 --
