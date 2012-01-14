@@ -36,6 +36,13 @@ indexL b i =
         y = index b (i + 1)
     in linLin (frac i) 0 1 x y
 
+-- | Map from one linear range to another linear range.
+linLin :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+linLin i sl sr dl dr =
+    let m = (dr - dl) / (sr - sl)
+        a = dl - (m * sl)
+    in mulAdd i m a
+
 -- | Collapse possible mce by summing.
 mix :: UGen -> UGen
 mix = sum . mceChannels

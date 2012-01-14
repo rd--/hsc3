@@ -199,10 +199,6 @@ leakDC i coef = mkFilter "LeakDC" [i,coef] 1
 limiter :: UGen -> UGen -> UGen -> UGen
 limiter i l d = mkFilter "Limiter" [i,l,d] 1
 
--- | Map from one linear range to another linear range.
-linLin :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-linLin i sl sh dl dh = mkFilter "LinLin" [i,sl,sh,dl,dh] 1
-
 -- | Map from a linear range to an exponential range.
 linExp :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 linExp i sl sh dl dh = mkFilter "LinExp" [i,sl,sh,dl,dh] 1
