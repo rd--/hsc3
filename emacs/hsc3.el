@@ -222,6 +222,8 @@
     '("Haskell SuperCollider help" . hsc3-help))
   (define-key map [menu-bar hsc3 help ugen]
     '("UGen parameter summary" . hsc3-ugen-summary))
+  (define-key map [menu-bar hsc3 help sc3]
+    '("SuperCollider help" . hsc3-sc3-help))
   (define-key map [menu-bar hsc3 expression]
     (cons "Expression" (make-sparse-keymap "Expression")))
   (define-key map [menu-bar hsc3 expression stop]

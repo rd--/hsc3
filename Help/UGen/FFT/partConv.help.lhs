@@ -12,12 +12,12 @@
 >     ; target_b = 12 {- source signal -}
 >     ; target_file = "/home/rohan/data/audio/pf-c5.snd"
 >     ; c = constant
->     ; g = let { i = playBuf 1 (c target_b) 1 0 0 Loop DoNothing
+>     ; g = let { i = playBuf 1 AR (c target_b) 1 0 0 Loop DoNothing
 >               ; pc = partConv i (c fft_size) (c ir_fd_b) }
 >           in out 0 (pc * 0.1) }
 > in withSC3 (\fd -> do
->     { async fd (b_allocRead ir_td_b ir_file 0 ir_length)
->     ; async fd (b_alloc ir_fd_b accum_size 1)
+>     { _ <- async fd (b_allocRead ir_td_b ir_file 0 ir_length)
+>     ; _ <- async fd (b_alloc ir_fd_b accum_size 1)
 >     ; send fd (pc_preparePartConv ir_fd_b ir_td_b fft_size)
->     ; async fd (b_allocRead target_b target_file 0 0)
+>     ; _ <- async fd (b_allocRead target_b target_file 0 0)
 >     ; play fd g })

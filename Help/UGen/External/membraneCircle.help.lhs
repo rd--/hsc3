@@ -6,8 +6,8 @@
 Excite the mesh with some pink noise, triggered by an
 impulse generator.  mouseX is tension and impulse frequency,
 mouseY is duration of excitation, release-time and amplitude.
-> let { x = mouseX' KR 0 1 Linear 0.2
->     ; y = mouseY' KR 1e-9 1 Exponential 0.2
+> let { x = mouseX KR 0 1 Linear 0.2
+>     ; y = mouseY KR 1e-9 1 Exponential 0.2
 >     ; loss = linLin y 0 1 0.999999 0.999
 >     ; wobble = sinOsc KR 2 0
 >     ; tension = linLin x 0 1 0.01 0.1 + (wobble * 0.0001)

@@ -4,7 +4,7 @@
 > import Sound.SC3.ID
 
 > let fileName = "/home/rohan/data/audio/pf-c5.snd"
-> in withSC3 (\fd -> do { async fd (b_alloc 10 1024 1)
+> in withSC3 (\fd -> do { _ <- async fd (b_alloc 10 1024 1)
 >                       ; async fd (b_allocRead 11 fileName 0 0) })
 
 > let {no_op m p _ = (m,p)

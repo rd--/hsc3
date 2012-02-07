@@ -1,0 +1,14 @@
+> Sound.SC3.UGen.Help.viewSC3Help "FMGrainB"
+> Sound.SC3.UGen.DB.ugenSummary "FMGrainB"
+
+> import Sound.SC3.ID
+
+> withSC3 (\fd -> do {_ <- async fd (b_alloc 10 512 1)
+>                    ;send fd (b_gen 10 "sine2" [1+2+4,0.5,0.1])})
+
+> let {t = impulse AR 20 0
+>     ;n = linLin (lfNoise1 'a' KR 1) (-1) 1 1 10
+>     ;s = envSine 9 0.1
+>     ;e = envGen KR 1 1 0 1 RemoveSynth s
+>     ;o = fmGrainB t 0.2 440 220 n 10 * e}
+> in audition (out 0 o)

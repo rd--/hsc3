@@ -4,7 +4,7 @@
 > import Sound.SC3.ID
 > import qualified System.Random as R
 
-> withSC3 (\fd -> do { async fd (b_alloc 10 2048 1)
+> withSC3 (\fd -> do { _ <- async fd (b_alloc 10 2048 1)
 >                    ; async fd (b_alloc 11 2048 1) })
 
 > let { n0 = R.randomRs (400.0, 1000.0) (R.mkStdGen 0)
@@ -17,7 +17,7 @@
 >     ; b = mix (mce (zipWith (\p s -> p * (max s 0.0)) o1 o2))
 >     ; f = fft' 10 a
 >     ; g = fft' 11 b
->     ; x = mouseX' KR 0 1 Linear 0.1
->     ; y = mouseY' KR 0 1 Linear 0.1
+>     ; x = mouseX KR 0 1 Linear 0.1
+>     ; y = mouseY KR 0 1 Linear 0.1
 >     ; h = pv_RandWipe 'a' f g x (y >* 0.5) }
 > in audition (out 0 (pan2 (ifft' h) 0 0.5))

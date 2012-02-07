@@ -9,6 +9,6 @@
 
 > let { a = playBuf 1 AR 12 (bufRateScale KR 12) 0 0 Loop DoNothing
 >     ; f = fft' 10 a
->     ; x = mouseX' KR 0 100 Linear 0.1
+>     ; x = mouseX KR 0 100 Linear 0.1
 >     ; h = pv_LocalMax f x }
 > in audition (out 0 (ifft' h * 0.5))
