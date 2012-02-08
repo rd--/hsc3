@@ -17,3 +17,15 @@
 >     ;f = demand t 0 s
 >     ;o = sinOsc AR (mce [f,f + 0.7]) 0}
 > in audition (out 0 (cubed (cubed o) * 0.1))
+
+audio rate (poll output is equal for x1 and x2)
+> let {i = lfNoise2 'a' AR 8000
+>     ;d = dseq 'a' dinf (mce [i])
+>     ;x = mouseX KR 1 3000 Exponential 0.2
+>     ;t = impulse AR x 0
+>     ;x1 = demand t 0 d
+>     ;x2 = latch i t
+>     ;s = mce2 x1 x2
+>     ;p = poll t s (mce2 (label "x1") (label "x2")) 0
+>     ;o = sinOsc AR (s * 300 + 400) 0 * 0.1}
+> in audition (mrg2 (out 0 o) p)
