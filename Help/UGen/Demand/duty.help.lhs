@@ -1,6 +1,8 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Duty"
 > Sound.SC3.UGen.DB.ugenSummary "Duty"
 
+# sc3 reorders inputs
+
 > import Sound.SC3
 > import qualified Sound.SC3.Monadic as M
 

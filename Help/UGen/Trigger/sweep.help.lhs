@@ -33,3 +33,12 @@ Raising rate
 >     ;r = sweep t 2 + 0.5
 >     ;p = sweep t (bufSampleRate KR 0 * r)}
 > in audition (out 0 (bufRdL 1 AR 0 p NoLoop))
+
+f0 (sc-users, 2012-02-09)
+> let {lf = range 0.01 1.25 (lfNoise2 'a' KR 1)
+>     ;du = duty AR lf 0 DoNothing lf
+>     ;tr = abs (hpz1 du) >* 0
+>     ;ph = sweep tr (1/du)
+>     ;fr = linExp ph 0 1 400 800
+>     ;os = sinOsc AR fr 0 * 0.2}
+> in audition (out 0 os)
