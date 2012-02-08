@@ -2,6 +2,7 @@
 module Sound.SC3.UGen.UGen where
 
 import Control.Monad
+import qualified Data.Char as C
 import qualified Data.Digest.Murmur32 as H
 import Data.List
 import Data.Maybe
@@ -66,6 +67,7 @@ data UGen = Constant { constantValue :: Double }
                     , controlName :: String
                     , controlDefault :: Double
                     , controlTriggered :: Bool }
+          | Label { ugenLabel :: String }
           | Primitive { ugenRate :: Rate
                       , ugenName :: String
                       , ugenInputs :: [UGen]
@@ -234,6 +236,7 @@ proxy = Proxy
 -- | Enumeration of 'UGen' types.
 data UGenType = Constant_U
               | Control_U
+              | Label_U
               | Primitive_U
               | Proxy_U
               | MCE_U
@@ -254,6 +257,7 @@ ugenType u =
     case u of
       Constant _ -> Constant_U
       Control _ _ _ _ -> Control_U
+      Label _ -> Label_U
       Primitive _ _ _ _ _ _ -> Primitive_U
       Proxy _ _ -> Proxy_U
       MCE _ -> MCE_U
@@ -356,6 +360,37 @@ mrg u =
       [x] -> x
       (x:xs) -> MRG x (mrg xs)
 
+-- * Labels
+
+-- | Lift a 'String' to a UGen label (ie. for 'poll').
+label :: String -> UGen
+label = Label
+
+-- | Are lists of equal length?
+--
+-- > equal_length_p ["t1","t2"] == True
+-- > equal_length_p ["t","t1","t2"] == False
+equal_length_p :: [[a]] -> Bool
+equal_length_p = (== 1) . length . nub . map length
+
+-- | Unpack a label to a length prefixed list of 'Constant's.  There
+-- is a special case for mce nodes, but it requires labels to be equal
+-- length.  Properly, 'poll' would not unpack the label, it would be
+-- done by the synthdef builder.
+unpackLabel :: UGen -> [UGen]
+unpackLabel u =
+    case u of
+      Label s -> let q = fromEnum '?'
+                     f c = if C.isAscii c then fromEnum c else q
+                     s' = map (fromIntegral . f) s
+                     n = fromIntegral (length s)
+                 in n : s'
+      MCE x -> let x' = map unpackLabel x
+               in if equal_length_p x'
+                  then map mce (transpose x')
+                  else error (show ("unpackLabel: mce length /=",x))
+      _ -> error (show ("unpackLabel: non-label",u))
+
 -- * Unit generator function builders
 
 -- | Apply proxy transformation if required.
@@ -378,6 +413,7 @@ rateOf u =
     case ugenType u of
       Constant_U -> IR
       Control_U -> controlOperatingRate u
+      Label_U -> IR
       Primitive_U -> ugenRate u
       Proxy_U -> rateOf (proxySource u)
       MCE_U -> maximum (map rateOf (mceChannels u))

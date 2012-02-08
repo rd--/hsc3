@@ -184,12 +184,6 @@ mk_node_k u g =
           in maybe (push_k (r,nm,d,tr) g) (\y' -> (y',g)) y
       _ -> error "mk_node_k"
 
-acc :: [UGen] -> [Node] -> Graph -> ([Node],Graph)
-acc [] n g = (reverse n,g)
-acc (x:xs) ys g =
-    let (y,g') = mk_node x g
-    in acc xs (y:ys) g'
-
 type UGenParts = (Rate,String,[FromPort],[Output],Special,UGenId)
 
 -- Predicate to locate primitive,names must be unique.
@@ -206,6 +200,12 @@ push_u (r,nm,i,o,s,d) g =
     let n = NodeU (nextId g) r nm i o s d
     in (n,g {ugens = n : ugens g
              ,nextId = nextId g + 1})
+
+acc :: [UGen] -> [Node] -> Graph -> ([Node],Graph)
+acc [] n g = (reverse n,g)
+acc (x:xs) ys g =
+    let (y,g') = mk_node x g
+    in acc xs (y:ys) g'
 
 -- Either find existing control node,or insert a new node.
 mk_node_u :: UGen -> Graph -> (Node,Graph)
@@ -230,6 +230,7 @@ mk_node u g =
     case ugenType u of
       Constant_U -> mk_node_c u g
       Control_U -> mk_node_k u g
+      Label_U -> error "mk_node: label"
       Primitive_U -> mk_node_u u g
       Proxy_U ->
           let (n,g') = mk_node_u (proxySource u) g
