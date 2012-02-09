@@ -33,8 +33,9 @@ convolution i kernel frameSize = mkOsc AR "Convolution" [i, kernel, frameSize] 1
 
 -- | Pack demand-rate FFT bin streams into an FFT chain.
 packFFT :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-packFFT b sz from to z mp = mkOscMCE KR "PackFFT" [b, sz, from, to, z, n] mp 1
-    where n = constant (mceDegree mp)
+packFFT b sz from to z mp =
+    let n = constant (mceDegree mp)
+    in mkOscMCE KR "PackFFT" [b, sz, from, to, z, n] mp 1
 
 -- | Format magnitude and phase data data as required for packFFT.
 packFFTSpec :: [UGen] -> [UGen] -> UGen
