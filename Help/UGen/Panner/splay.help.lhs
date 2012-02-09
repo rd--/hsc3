@@ -9,8 +9,8 @@ mouse control
 > let {i = 6
 >     ;r = map (\e -> rand e 10 20) (take i ['a'..])
 >     ;n = lfNoise2 'a' KR (mce r)
->     ;x = mouseX' KR (-1) 1 Linear 0.1
->     ;y = mouseY' KR 1 0 Linear 0.1
+>     ;x = mouseX KR (-1) 1 Linear 0.1
+>     ;y = mouseY KR 1 0 Linear 0.1
 >     ;ci = constant . fromIntegral
 >     ;f = mce [1 .. ci i] + 3 * 100
 >     ;o = sinOsc AR (n * 200 + f) 0}

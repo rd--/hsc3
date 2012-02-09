@@ -36,8 +36,8 @@ biPanB2 :: UGen -> UGen -> UGen -> UGen -> UGen
 biPanB2 inA inB azimuth gain = mkFilter "BiPanB2" [inA, inB, azimuth, gain] 3
 
 -- | 2D Ambisonic B-format decoder.
-decodeB2 :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-decodeB2 nc w x y o = mkFilterMCE "DecodeB2" [w, x, y, o] nc 0
+decodeB2 :: Int -> UGen -> UGen -> UGen -> UGen -> UGen
+decodeB2 nc w x y o = mkFilter "DecodeB2" [w,x,y,o] nc
 
 -- | Azimuth panner.
 panAz :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen

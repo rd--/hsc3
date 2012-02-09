@@ -1,5 +1,5 @@
-> Sound.SC3.UGen.Help.viewSC3Help "PanAZ"
-> Sound.SC3.UGen.DB.ugenSummary "PanAZ"
+> Sound.SC3.UGen.Help.viewSC3Help "PanAz"
+> Sound.SC3.UGen.DB.ugenSummary "PanAz"
 
 > import Sound.SC3.ID
 
