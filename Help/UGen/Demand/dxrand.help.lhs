@@ -3,8 +3,8 @@
 
 > import Sound.SC3.ID
 
-Select to draw or not...
-> let drw = Sound.SC3.UGen.Dot.draw
+Select to draw graphs, or not...
+> let drw = Sound.SC3.UGen.Dot.draw :: UGen -> IO ()
 > let drw = const (return ()) :: UGen -> IO ()
 
 > let {i = mce [0.2,0.4,dseq 'a' 2 (mce [0.1,0.1])]
@@ -29,4 +29,4 @@ to get this right!
 >     ;x = mouseX' KR 1 400 Exponential 0.1
 >     ;t = impulse KR x 0
 >     ;f = demand t 0 n * 30 + 340}
-> in audition (out 0 (sinOsc AR f 0 * 0.1))
+> in audition (out 0 (sinOsc AR f 0 * 0.1)) >> drw f
