@@ -10,9 +10,10 @@ import System.IO
 
 -- | Encode and prefix with encoded length.
 oscWithSize :: OSC -> B.ByteString
-oscWithSize o = B.append l b
-    where b = encodeOSC o
-          l = encode_i32 (fromIntegral (B.length b))
+oscWithSize o =
+    let b = encodeOSC o
+        l = encode_i32 (fromIntegral (B.length b))
+    in B.append l b
 
 -- | Encode a list of OSC bundles as an NRT score.
 encodeNRT :: [OSC] -> B.ByteString

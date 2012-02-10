@@ -20,9 +20,11 @@ serverSampleRateActual :: (Transport t) => t -> IO Double
 serverSampleRateActual = liftM (extractDouble . (!! 8)) . serverStatusData
 
 extractDouble :: Datum -> Double
-extractDouble (Float f) = f
-extractDouble (Double f) = f
-extractDouble _ = error "extractDouble"
+extractDouble d =
+    case d of
+      Float f -> f
+      Double f -> f
+      _ -> error "extractDouble"
 
 serverStatusData :: Transport t => t -> IO [Datum]
 serverStatusData fd = do
