@@ -9,7 +9,7 @@ import System.IO.Error
 import System.Cmd {- process -}
 import System.Directory {- directory -}
 import System.Environment
-import System.FilePath
+import System.FilePath {- filepath -}
 
 -- | Read the environment variable @SC3_HELP@, the default value is
 -- @~\/.local\/share\/SuperCollider/Help@.
@@ -84,6 +84,18 @@ toSC3Name nm =
       'l':'f':nm' -> "LF"++nm'
       'p':'v':'_':nm' -> "PV_"++nm'
       p:q -> toUpper p : q
+      [] -> []
+
+-- | Inverse of 'toSC3Name'.
+--
+-- > let nm = ["SinOsc","LFSaw","PV_Copy"]
+-- > in map fromSC3Name nm == ["sinOsc","lfSaw","pv_Copy"]
+fromSC3Name :: String -> String
+fromSC3Name nm =
+    case nm of
+      'L':'F':nm' -> "lf"++nm'
+      'P':'V':'_':nm' -> "pv_"++nm'
+      p:q -> toLower p : q
       [] -> []
 
 -- | Use x-www-browser to view SC3 help file for `u'.
