@@ -1,15 +1,39 @@
 -- | Envelope generators.
 module Sound.SC3.UGen.Envelope where
 
+import Data.Maybe
 import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.Utilities
 
+-- | SC3 envelope segment model
+data Envelope a =
+    Envelope {env_levels :: [a] -- ^ Set of /n/ levels
+             ,env_times :: [a] -- ^ Set of /n-1/ time intervals
+             ,env_curves :: [Envelope_Curve a] -- ^ Possibly empty curve set
+             ,env_release_node :: Maybe Int -- ^ Maybe index to release node
+             ,env_loop_node :: Maybe Int} -- ^ Maybe index to loop node
+
+-- | Linear SC3 form of 'Envelope' data.
+envelope_sc3_array :: Num a => Envelope a -> Maybe [a]
+envelope_sc3_array (Envelope l t c rn ln) =
+    let n = length t
+        n' = fromIntegral n
+        rn' = fromIntegral (fromMaybe (-99) rn)
+        ln' = fromIntegral (fromMaybe (-99) ln)
+        c' = if null c then replicate n EnvLin else take n (cycle c)
+        f i j k = [i,j,env_curve_shape k,env_curve_value k]
+    in case l of
+         l0:l' -> Just (l0 : n' : rn' : ln' : concat (zipWith3 f l' t c'))
+         _ -> Nothing
+
 -- | Segment based envelope generator.
-envGen :: Rate -> UGen -> UGen -> UGen -> UGen -> DoneAction -> [UGen] -> UGen
-envGen r gate lvl bias scale act pts =
-    let i = [gate, lvl, bias, scale, from_done_action act] ++ pts
+envGen :: Rate -> UGen -> UGen -> UGen -> UGen -> DoneAction -> Envelope UGen -> UGen
+envGen r gate lvl bias scale act e =
+    let err = error "envGen: bad Envelope"
+        z = fromMaybe err (envelope_sc3_array e)
+        i = [gate, lvl, bias, scale, from_done_action act] ++ z
     in mkOsc r "EnvGen" i 1
 
 -- | Line generator.

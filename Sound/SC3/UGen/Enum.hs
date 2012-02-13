@@ -30,12 +30,38 @@ data Warp = Linear
             deriving (Eq, Show)
 
 -- | Envelope curve indicator input.
-data EnvCurve = EnvStep
-              | EnvLin
-              | EnvExp
-              | EnvSin
-              | EnvCos
-              | EnvNum UGen
-              | EnvSqr
-              | EnvCub
-              deriving (Eq, Show)
+data Envelope_Curve a = EnvStep
+                      | EnvLin
+                      | EnvExp
+                      | EnvSin
+                      | EnvCos
+                      | EnvNum a
+                      | EnvSqr
+                      | EnvCub
+                        deriving (Eq, Show)
+
+type EnvCurve = Envelope_Curve UGen
+
+-- | Convert 'Envelope_Curve' to shape value.
+--
+-- > map env_curve_shape [EnvSin,EnvSqr] == [3,6]
+env_curve_shape :: Num a => Envelope_Curve a -> a
+env_curve_shape e =
+    case e of
+      EnvStep -> 0
+      EnvLin -> 1
+      EnvExp -> 2
+      EnvSin -> 3
+      EnvCos -> 4
+      EnvNum _ -> 5
+      EnvSqr -> 6
+      EnvCub -> 7
+
+-- | The /value/ of 'EnvCurve' is non-zero for 'EnvNum'.
+--
+-- > map env_curve_value [EnvCos,EnvNum 2] == [0,2]
+env_curve_value :: Num a => Envelope_Curve a -> a
+env_curve_value e =
+    case e of
+      EnvNum u -> u
+      _ -> 0
