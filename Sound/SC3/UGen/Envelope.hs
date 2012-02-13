@@ -13,7 +13,8 @@ data Envelope a =
              ,env_times :: [a] -- ^ Set of /n-1/ time intervals
              ,env_curves :: [Envelope_Curve a] -- ^ Possibly empty curve set
              ,env_release_node :: Maybe Int -- ^ Maybe index to release node
-             ,env_loop_node :: Maybe Int} -- ^ Maybe index to loop node
+             ,env_loop_node :: Maybe Int -- ^ Maybe index to loop node
+             }
     deriving (Eq,Show)
 
 -- | Linear SC3 form of 'Envelope' data.
