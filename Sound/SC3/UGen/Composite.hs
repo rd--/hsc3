@@ -89,12 +89,16 @@ pmOsc :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
 pmOsc r cf mf pm mp = sinOsc r cf (sinOsc r mf mp * pm)
 
 -- | Scale uni-polar (0,1) input to linear (l,r) range
+--
+-- > map (urange 3 4) [0,0.5,1] == [3,3.5,4]
 urange :: Fractional c => c -> c -> c -> c
 urange l r =
     let m = r - l
     in (+ l) . (* m)
 
 -- | Scale bi-polar (-1,1) input to linear (l,r) range
+--
+-- > map (range 3 4) [-1,0,1] == [3,3.5,4]
 range :: Fractional c => c -> c -> c -> c
 range l r =
     let m = (r - l) * 0.5
