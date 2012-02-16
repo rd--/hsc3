@@ -1,7 +1,7 @@
 -- | Non-standard mathematical classes and class instances.
 module Sound.SC3.UGen.Math where
 
-import qualified Foreign.C.Math.Double as M
+import qualified Foreign.C.Math.Double as M {- cmath -}
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.UGen
 
