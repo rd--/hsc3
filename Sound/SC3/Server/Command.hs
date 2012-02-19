@@ -366,6 +366,8 @@ async_cmds =
     ,"/sync"]
 
 -- | 'True' if 'OSC' is an asynchronous 'Message'.
+--
+-- > map isAsync [b_close 0,n_set1 0 "0" 0] == [True,False]
 isAsync :: OSC -> Bool
 isAsync o =
     case o of
@@ -373,13 +375,19 @@ isAsync o =
       Bundle _ _ -> error "isAsync: bundle"
 
 -- | Add a completion message to an existing asynchronous command.
+--
+-- > let {m = n_set1 0 "0" 0
+-- >     ;m' = encodeOSC m}
+-- > in withCM (b_close 0) m == Message "/b_close" [Int 0,Blob m']
 withCM :: OSC -> OSC -> OSC
-withCM (Message c xs) cm =
-    if c `elem` async_cmds
-    then let xs' = xs ++ [Blob (encodeOSC cm)]
-         in message c xs'
-    else error ("withCM: not async: " ++ c)
-withCM _ _ = error "withCM: not message"
+withCM m cm =
+    case m of
+      Message c xs ->
+          if c `elem` async_cmds
+          then let xs' = xs ++ [Blob (encodeOSC cm)]
+               in message c xs'
+          else error ("withCM: not async: " ++ c)
+      _ -> error "withCM: not message"
 
 -- Local Variables:
 -- truncate-lines:t
