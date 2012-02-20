@@ -4,7 +4,6 @@ module Sound.SC3.UGen.IO where
 import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.Utilities
 
 -- | Read signal from an audio or control bus.
 in' :: Int -> Rate -> UGen -> UGen

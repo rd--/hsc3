@@ -5,7 +5,6 @@ import Data.Maybe
 import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.Utilities
 
 -- | SC3 envelope segment model
 data Envelope a =

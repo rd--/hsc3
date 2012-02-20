@@ -5,7 +5,6 @@ import Sound.SC3.Identifier
 import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.Utilities
 
 -- * Buffer query unit generators
 

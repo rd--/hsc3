@@ -2,6 +2,7 @@
 module Sound.SC3.UGen.Oscillator where
 
 import Data.List
+import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
 
@@ -57,6 +58,10 @@ k2A i = mkOsc AR "K2A" [i] 1
 -- | A sine like shape made of two cubic pieces.
 lfCub :: Rate -> UGen -> UGen -> UGen
 lfCub r freq phase = mkOsc r "LFCub" [freq, phase] 1
+
+-- | Gaussian function oscillator
+lfGauss ::  Rate -> UGen -> UGen -> UGen -> Loop -> DoneAction -> UGen
+lfGauss r duration width iphase loop doneAction = mkOscR [AR,KR] r "LFGauss" [duration,width,iphase,from_loop loop,from_done_action doneAction] 1
 
 -- | A sine like shape made of two cubic pieces.
 lfPar :: Rate -> UGen -> UGen -> UGen

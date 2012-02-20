@@ -9,12 +9,29 @@ data Loop = Loop
           | WithLoop UGen
             deriving (Eq, Show)
 
+-- | Resolve 'Loop'.
+from_loop :: Loop -> UGen
+from_loop e =
+    case e of
+      NoLoop -> Constant 0
+      Loop -> Constant 1
+      WithLoop u -> u
+
 -- | Interpolation indicator input.
 data Interpolation = NoInterpolation
                    | LinearInterpolation
                    | CubicInterpolation
                    | Interpolation UGen
                      deriving (Eq, Show)
+
+-- | Resolve 'Interpolation'.
+from_interpolation :: Interpolation -> UGen
+from_interpolation e =
+    case e of
+      NoInterpolation -> Constant 1
+      LinearInterpolation -> Constant 2
+      CubicInterpolation -> Constant 4
+      Interpolation u -> u
 
 -- | Completion mode indicator input.
 data DoneAction = DoNothing
@@ -23,11 +40,28 @@ data DoneAction = DoNothing
                 | DoneAction UGen
                   deriving (Eq, Show)
 
+-- | Resolve 'DoneAction'.
+from_done_action :: DoneAction -> UGen
+from_done_action e =
+    case e of
+      DoNothing -> Constant 0
+      PauseSynth -> Constant 1
+      RemoveSynth -> Constant 2
+      DoneAction u -> u
+
 -- | Warp interpolation indicator input.
 data Warp = Linear
           | Exponential
           | Warp UGen
             deriving (Eq, Show)
+
+-- | Resolve 'Warp'.
+from_warp :: Warp -> UGen
+from_warp e =
+    case e of
+      Linear -> Constant 0
+      Exponential -> Constant 1
+      Warp u -> u
 
 -- | Envelope curve indicator input.
 data Envelope_Curve a = EnvStep
