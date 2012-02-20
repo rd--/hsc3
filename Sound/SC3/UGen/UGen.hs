@@ -276,6 +276,10 @@ mce2c u =
       MCE (p:q:_) -> (p,q)
       _ -> (u,u)
 
+-- | Multiple channel expansion for two inputs.
+mce3 :: UGen -> UGen -> UGen -> UGen
+mce3 x y z = mce [x,y,z]
+
 -- | Clone a unit generator (mce . replicateM).
 clone :: (UId m) => Int -> m UGen -> m UGen
 clone n = liftM mce . replicateM n

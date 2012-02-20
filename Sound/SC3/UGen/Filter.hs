@@ -149,7 +149,7 @@ inRange i lo hi = mkFilter "InRange" [i,lo,hi] 1
 klank :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 klank i fs fp d s = mkFilterMCER [AR] "Klank" [i,fs,fp,d] s 1
 
--- | Format frequency,amplitude and decay time data as required for klank.
+-- | Format frequency, amplitude and decay time data as required for klank.
 klankSpec :: [UGen] -> [UGen] -> [UGen] -> UGen
 klankSpec f a p = mce ((concat . transpose) [f,a,p])
 

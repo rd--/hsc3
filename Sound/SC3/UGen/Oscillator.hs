@@ -45,11 +45,17 @@ klang r fs fo a =
 klangSpec :: [UGen] -> [UGen] -> [UGen] -> UGen
 klangSpec f a p = mce ((concat . transpose) [f, a, p])
 
--- | Variant for non-UGen inputs.
+-- | Variant of 'klangSpec' for non-UGen inputs.
 klangSpec' :: [Double] -> [Double] -> [Double] -> UGen
 klangSpec' f a p =
     let u = map constant
     in klangSpec (u f) (u a) (u p)
+
+-- | Variant of 'klangSpec' for 'MCE' inputs.
+klangSpec_mce :: UGen -> UGen -> UGen -> UGen
+klangSpec_mce f a p =
+    let m = mceChannels
+    in klangSpec (m f) (m a) (m p)
 
 -- | Upsample control rate signal to audio rate.
 k2A :: UGen -> UGen

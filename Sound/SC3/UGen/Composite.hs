@@ -17,17 +17,26 @@ import Sound.SC3.UGen.Panner
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
 
+-- | Dynamic klang, dynamic sine oscillator bank
+dynKlang :: Rate -> UGen -> UGen -> UGen -> UGen
+dynKlang r fs fo s =
+    let gen (f:a:ph:xs) = sinOsc r (f * fs + fo) ph * a + gen xs
+        gen _ = 0
+    in gen (mceChannels s)
+
 -- | Dynamic klank, set of non-fixed resonating filters.
 dynKlank :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-dynKlank i fs fo ds s = gen (mceChannels s)
-    where gen (f:a:d:xs) = ringz i (f * fs + fo) (d * ds) * a + gen xs
-          gen _ = 0
+dynKlank i fs fo ds s =
+    let gen (f:a:d:xs) = ringz i (f * fs + fo) (d * ds) * a + gen xs
+        gen _ = 0
+    in gen (mceChannels s)
 
 -- | Frequency shifter, in terms of Hilbert UGen.
 freqShift :: UGen -> UGen -> UGen -> UGen
-freqShift i f p = mix (h * o)
-    where o = sinOsc AR f (mce [p + 0.5 * pi, p])
-          h = hilbert i
+freqShift i f p =
+    let o = sinOsc AR f (mce [p + 0.5 * pi, p])
+        h = hilbert i
+    in mix (h * o)
 
 -- | Linear interpolating variant on index.
 indexL :: UGen -> UGen -> UGen
@@ -114,10 +123,13 @@ selectX ix xs =
 
 -- | Zero indexed audio input buses.
 soundIn :: UGen -> UGen
-soundIn (MCE ns) | all (==1) $ zipWith (-) (tail ns) ns =
-    in' (length ns) AR (numOutputBuses + head ns)
-soundIn n =
-    in' 1 AR (numOutputBuses + n)
+soundIn u =
+    let r = in' 1 AR (numOutputBuses + u)
+    in case u of
+         MCE ns -> if all (==1) (zipWith (-) (tail ns) ns)
+                   then in' (length ns) AR (numOutputBuses + head ns)
+                   else r
+         _ -> r
 
 -- | Pan a set of channels across the stereo field.
 splay :: UGen -> UGen -> UGen -> UGen -> Bool -> UGen
