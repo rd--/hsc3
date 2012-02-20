@@ -105,6 +105,10 @@ silent = mkOsc AR "Silent" []
 sinOsc :: Rate -> UGen -> UGen -> UGen
 sinOsc r freq phase = mkOsc r "SinOsc" [freq, phase] 1
 
+-- | Feedback FM oscillator.
+sinOscFB :: Rate -> UGen -> UGen -> UGen
+sinOscFB r freq feedback = mkOscR [AR,KR] r "SinOscFB" [freq,feedback] 1
+
 -- | Sawtooth oscillator hard synched to a fundamental.
 syncSaw :: Rate -> UGen -> UGen -> UGen
 syncSaw r syncFreq sawFreq = mkOsc r "SyncSaw" [syncFreq, sawFreq] 1
@@ -112,6 +116,10 @@ syncSaw r syncFreq sawFreq = mkOsc r "SyncSaw" [syncFreq, sawFreq] 1
 -- | Variable duty sawtooth oscillator.
 varSaw :: Rate -> UGen -> UGen -> UGen -> UGen
 varSaw r freq iphase width = mkOsc r "VarSaw" [freq, iphase, width] 1
+
+-- | The Vibrato oscillator models a slow frequency modulation.
+vibrato :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+vibrato r freq rate depth delay onset rateVariation depthVariation iphase = mkOscR [AR,KR] r "Vibrato" [freq,rate,depth,delay,onset,rateVariation,depthVariation,iphase] 1
 
 -- Local Variables:
 -- truncate-lines:t
