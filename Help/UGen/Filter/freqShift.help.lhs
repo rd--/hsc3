@@ -26,3 +26,15 @@ shifting bandpassed noise
 >     ;i = bpf n1 1000 0.001
 >     ;s = n2 * 1000}
 > in audition (out 0 (freqShift i s 0 * 32))
+
+{a=Blip.ar(60,4,LFGauss.ar(4,1/8))
+;a=a/4+LocalIn.ar(2)
+;a=FreqShift.ar(a,LFNoise0.kr(1/4,90))
+;LocalOut.ar(DelayC.ar(a,1,0.1,0.9))
+;a}.play
+> let {e = lfGauss AR 4 (1/8) 0 Loop DoNothing
+>     ;o = blip AR 60 4 * e
+>     ;a = o / 4 + localIn 2 AR
+>     ;s = freqShift a (lfNoise0 'a' KR (1/4) * 90) 0
+>     ;z = delayC s 1 0.1 * 0.9}
+> in audition (mrg2 (out 0 s) (localOut z))
