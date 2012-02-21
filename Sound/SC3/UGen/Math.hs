@@ -1,7 +1,7 @@
 -- | Non-standard mathematical classes and class instances.
 module Sound.SC3.UGen.Math where
 
-import qualified Foreign.C.Math.Double as M {- cmath -}
+import qualified Data.Fixed as F
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.UGen
 
@@ -64,34 +64,18 @@ ceilingf a = fromIntegral (ceiling a :: Integer)
 floorf :: RealFrac a => a -> a
 floorf a = fromIntegral (floor a :: Integer)
 
--- | Variant of 'truncatef' (via libc).
-ftruncate :: Double -> Double
-ftruncate = M.trunc
-
--- | Variant of 'roundf' (via libc).
-fround :: Double -> Double
-fround = M.round
-
--- | Variant of 'ceilingf' (via libc).
-fceiling :: Double -> Double
-fceiling = M.ceil
-
--- | Variant of 'floorf' (via libc).
-ffloor :: Double -> Double
-ffloor = M.floor
-
 instance RealFracE Double where
     properFractionE n =
         let (i,j) = properFraction n
         in (fromIntegral (i::Integer),j)
-    truncateE = ftruncate
-    roundE = fround
-    ceilingE = fceiling
-    floorE = ffloor
+    truncateE = truncatef
+    roundE = roundf
+    ceilingE = ceilingf
+    floorE = floorf
 
 -- | Variant of @SC3@ @roundTo@ function.
 roundTo_ :: Double -> Double -> Double
-roundTo_ a b = if b == 0 then a else ffloor (a/b + 0.5) * b
+roundTo_ a b = if b == 0 then a else floorf (a/b + 0.5) * b
 
 -- | 'UGen' form or 'roundTo_'.
 roundTo :: UGen -> UGen -> UGen
@@ -101,8 +85,8 @@ instance RealFracE UGen where
     properFractionE = error "RealFracE,UGen,partial"
     truncateE = error "RealFracE,UGen,partial"
     roundE i = roundTo i 1
-    ceilingE = mkUnaryOperator Ceil fceiling
-    floorE = mkUnaryOperator Floor ffloor
+    ceilingE = mkUnaryOperator Ceil ceilingf
+    floorE = mkUnaryOperator Floor floorf
 
 -- | 'UGen' form of 'ceilingE'.
 ceil :: UGen -> UGen
@@ -254,16 +238,34 @@ class (Floating a, Ord a) => BinaryOp a where
     unsignedShift = error "unsignedShift"
     wrap2 :: a -> a -> a
 
--- | SC3 @%@ does not return negative numbers.
+-- | The SC3 @%@ operator is libc fmod function.
+--
+-- > 1.5 % 1.2 // ~= 0.3
+-- > -1.5 % 1.2 // ~= 0.9
+-- > 1.5 % -1.2 // ~= -0.9
+-- > -1.5 % -1.2 // ~= -0.3
+--
+-- > 1.5 `fmod` 1.2 -- ~= 0.3
+-- > (-1.5) `fmod` 1.2 -- ~= 0.9
+-- > 1.5 `fmod` (-1.2) -- ~= -0.9
+-- > (-1.5) `fmod` (-1.2) -- ~= -0.3
+--
+-- 1.2 % 1.5 // ~= 1.2
+-- -1.2 % 1.5 // ~= 0.3
+-- 1.2 % -1.5 // ~= -0.3
+-- -1.2 % -1.5 // ~= -1.2
+--
+-- > 1.2 `fmod` 1.5 -- ~= 1.2
+-- > (-1.2) `fmod` 1.5 -- ~= 0.3
+-- > 1.2 `fmod` (-1.5) -- ~= -0.3
+-- > (-1.2) `fmod` (-1.5) -- ~= -1.2
 fmod :: Double -> Double -> Double
-fmod i j =
-    let k = i `M.fmod` j
-    in if k < 0 then fmod (i + j) j else k
+fmod = F.mod'
 
 instance BinaryOp Double where
     fold2 a b = fold_ a (-b) b
     modE = fmod
-    roundUp a b = if b == 0 then a else fceiling (a/b + 0.5) * b
+    roundUp a b = if b == 0 then a else ceilingf (a/b + 0.5) * b
     wrap2 a b = wrap_ a (-b) b
 
 instance BinaryOp UGen where
@@ -311,7 +313,7 @@ wrap' i j k =
     let r = j - i
     in if k >= i && k <= j
        then k
-       else k - r * ffloor ((k-i) / r)
+       else k - r * floorf ((k-i) / r)
 
 -- | Generic variant of 'wrap''.
 --

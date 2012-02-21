@@ -48,7 +48,6 @@ Library
   Build-Depends:   base == 4.*,
                    binary,
                    bytestring,
-                   cmath,
                    containers,
                    directory,
                    filepath,
