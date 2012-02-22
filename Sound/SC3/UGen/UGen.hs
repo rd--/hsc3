@@ -499,6 +499,10 @@ mkOscR rs = mk_osc rs NoId
 toUserId :: ID a => String -> a -> UGenId
 toUserId nm z = UserId (nm,resolveID z)
 
+-- | Rate restricted oscillator constructor, setting identifier.
+mkOscIdR :: (ID a) => [Rate] -> a -> Rate -> String -> [UGen] -> Int -> UGen
+mkOscIdR rr z r nm = mk_osc rr (toUserId nm z) r nm
+
 -- | Oscillator constructor, setting identifier.
 mkOscId :: (ID a) => a -> Rate -> String -> [UGen] -> Int -> UGen
 mkOscId z r nm = mk_osc all_rates (toUserId nm z) r nm
