@@ -19,12 +19,12 @@ mceN :: UGen -> UGen
 mceN = constant . length . mceChannels
 
 -- | Randomly select one of several inputs (initialiastion rate).
-iChoose :: ID m => m -> UGen -> UGen
-iChoose e a = select (iRand e 0 (mceN a)) a
+choose :: ID m => m -> [UGen] -> UGen
+choose e a = select (iRand e 0 (fromIntegral (length a))) (mce a)
 
 -- | 'mce' variant of 'iChoose'.
-iChoose' :: ID m => m -> [UGen] -> UGen
-iChoose' e = iChoose e . mce
+choose' :: ID m => m -> UGen -> UGen
+choose' e = choose e . mceChannels
 
 -- | Randomly select one of several inputs on trigger.
 tChoose :: ID m => m -> UGen -> UGen -> UGen
