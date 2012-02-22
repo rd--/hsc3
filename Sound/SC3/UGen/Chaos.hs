@@ -28,6 +28,14 @@ fbSineL r freq im fb a c xi yi = mkOsc r "FBSineL" [freq, im, fb, a, c, xi, yi] 
 fbSineN :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 fbSineN r freq im fb a c xi yi = mkOsc r "FBSineN" [freq, im, fb, a, c, xi, yi] 1
 
+-- | Gingerbreadman map chaotic generator
+gbmanL :: Rate -> UGen -> UGen -> UGen -> UGen
+gbmanL r freq xi yi = mkOscR [AR] r "GbmanL" [freq,xi,yi] 1
+
+-- | Gingerbreadman map chaotic generator
+gbmanN :: Rate -> UGen -> UGen -> UGen -> UGen
+gbmanN r freq xi yi = mkOscR [AR] r "GbmanN" [freq,xi,yi] 1
+
 -- | Henon map chaotic generator (cubic interpolation).
 henonC :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 henonC r freq a b x0 x1 = mkOsc r "HenonC" [freq, a, b, x0, x1] 1
