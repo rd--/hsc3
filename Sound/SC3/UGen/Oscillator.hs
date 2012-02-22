@@ -57,10 +57,6 @@ klangSpec_mce f a p =
     let m = mceChannels
     in klangSpec (m f) (m a) (m p)
 
--- | Upsample control rate signal to audio rate.
-k2A :: UGen -> UGen
-k2A i = mkOsc AR "K2A" [i] 1
-
 -- | A sine like shape made of two cubic pieces.
 lfCub :: Rate -> UGen -> UGen -> UGen
 lfCub r freq phase = mkOsc r "LFCub" [freq, phase] 1

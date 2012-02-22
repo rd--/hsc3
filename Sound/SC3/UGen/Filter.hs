@@ -5,6 +5,10 @@ import Data.List
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
 
+-- | Audio to control rate converter.
+a2K ::  UGen -> UGen
+a2K i = mkOscR [KR] KR "A2K" [i] 1
+
 -- | Allpass filter (no interpolation)
 allpassN :: UGen -> UGen -> UGen -> UGen -> UGen
 allpassN i mt dly dcy = mkFilter "AllpassN" [i,mt,dly,dcy] 1
@@ -145,19 +149,29 @@ hpz2 i = mkFilter "HPZ2" [i] 1
 inRange :: UGen -> UGen -> UGen -> UGen
 inRange i lo hi = mkFilter "InRange" [i,lo,hi] 1
 
+-- | Control to audio rate converter.
+k2A :: UGen -> UGen
+k2A i = mkOscR [AR] AR "K2A" [i] 1
+
 -- | Fixed resonator filter bank.
 klank :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 klank i fs fp d s = mkFilterMCER [AR] "Klank" [i,fs,fp,d] s 1
 
 -- | Format frequency, amplitude and decay time data as required for klank.
 klankSpec :: [UGen] -> [UGen] -> [UGen] -> UGen
-klankSpec f a p = mce ((concat . transpose) [f,a,p])
+klankSpec f a dt = mce ((concat . transpose) [f,a,dt])
 
 -- | Variant for non-UGen inputs.
 klankSpec' :: [Double] -> [Double] -> [Double] -> UGen
-klankSpec' f a p =
+klankSpec' f a dt =
     let u = map constant
-    in klankSpec (u f) (u a) (u p)
+    in klankSpec (u f) (u a) (u dt)
+
+-- | Variant of 'klankSpec' for 'MCE' inputs.
+klankSpec_mce :: UGen -> UGen -> UGen -> UGen
+klankSpec_mce f a dt =
+    let m = mceChannels
+    in klankSpec (m f) (m a) (m dt)
 
 -- | Simple averaging filter.
 lag :: UGen -> UGen -> UGen
@@ -341,6 +355,14 @@ stepper t r mn mx s v = mkFilter "Stepper" [t,r,mn,mx,s,v] 1
 -- | Triggered linear ramp.
 sweep :: UGen -> UGen -> UGen
 sweep t r = mkFilter "Sweep" [t,r] 1
+
+-- | Control rate trigger to audio rate trigger converter
+t2A :: UGen -> UGen -> UGen
+t2A i offset = mkOscR [AR] AR "T2A" [i,offset] 1
+
+-- | Audio rate trigger to control rate trigger converter
+t2K :: UGen -> UGen
+t2K i = mkOscR [KR] KR "T2K" [i] 1
 
 -- | Delay trigger by specified interval.
 tDelay :: UGen -> UGen -> UGen
