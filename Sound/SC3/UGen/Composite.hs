@@ -63,12 +63,12 @@ mixN n u =
     in mce (map sum xs)
 
 -- | Construct and sum a set of UGens.
-mixFill :: Int -> (Int -> UGen) -> UGen
-mixFill n f = mix (mce (map f [0..n-1]))
+mixFill :: Integral n => Int -> (n -> UGen) -> UGen
+mixFill n f = mix (mce (map f [0 .. fromIntegral n - 1]))
 
 -- | Monadic variant on mixFill.
-mixFillM :: (Monad m) => Int -> (Int -> m UGen) -> m UGen
-mixFillM n f = liftM sum (mapM f [0 .. n - 1])
+mixFillM :: (Integral n,Monad m) => Int -> (n -> m UGen) -> m UGen
+mixFillM n f = liftM sum (mapM f [0 .. fromIntegral n - 1])
 
 -- | Variant that is randomly pressed.
 mouseButton' :: Rate -> UGen -> UGen -> UGen -> UGen
