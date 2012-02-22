@@ -17,11 +17,10 @@ stop fd = send fd (g_freeAll [1])
 async :: Transport t => t -> OSC -> IO OSC
 async fd m = send fd m >> wait fd "/done"
 
--- | Free all nodes ('g_freeAll') at group @0@ and re-create groups
--- @1@ and @2@.
+-- | Free all nodes ('g_freeAll') at and re-create groups @1@ and @2@.
 reset :: Transport t => t -> IO ()
 reset fd = do
-  send fd (g_freeAll [0])
+  send fd (g_freeAll [1,2])
   send fd (g_new [(1,AddToTail,0),(2,AddToTail,0)])
 
 -- | Bracket @SC3@ communication.
