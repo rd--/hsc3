@@ -9,11 +9,12 @@
 
 Using Stepper and BufRd for sequencing
 > let {compose = foldl (flip (.)) id
->     ;rvb s =
->         let f i = let dly = mce [rand (i//'a') 0 0.5,rand (i//'b') 0 0.5]
->                   in allpassN i 0.05 dly (rand i 1.5 2)
+>     ;rvb z s =
+>         let f i = let dly = mce [rand (z `joinID` i `joinID` 'a') 0 0.5
+>                                 ,rand (z `joinID` i `joinID` 'b') 0 0.5]
+>                     in allpassN i 0.05 dly (rand i 1.5 2)
 >         in compose (replicate 5 f) s
->     ;stpr = let {rate = mouseX' KR 2 2.01 Exponential 0.1
+>     ;stpr = let {rate = mouseX KR 1.75 2.25 Exponential 0.1
 >                 ;clock = impulse KR rate 0
 >                 ;envl = decay2 clock 0.002 2.5
 >                 ;indx = stepper clock 0 0 15 1 0
@@ -25,7 +26,7 @@ Using Stepper and BufRd for sequencing
 >                        ,\s -> rlpf s ffreq 0.3 * envl
 >                        ,\s -> s * 0.5
 >                        ,\s -> combL s 1 (0.66 / rate) 2 * 0.8 + s
->                        ,\s -> s + (rvb s * 0.3)
+>                        ,\s -> s + (rvb 'a' s * 0.3)
 >                        ,\s -> leakDC s 0.1
 >                        ,\s -> delayL s 0.1 lfo + s
 >                        ,\s -> onePole s 0.9]}

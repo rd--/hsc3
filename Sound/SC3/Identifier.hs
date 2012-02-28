@@ -14,14 +14,16 @@ instance ID Int where
 instance ID Char where
     resolveID = ord
 
+-- | Hash value to 'Int'.
+hash :: H.Hashable32 a => a -> Int
+hash = fromIntegral . H.asWord32 . H.hash32
+
 -- | Hash 'ID' to 'Int'.
 idHash :: ID a => a -> Int
-idHash = fromIntegral . H.asWord32 . H.hash32 . resolveID
+idHash = hash . resolveID
 
--- | Resolve the ID at 'i' and add the resolved enumeration of 'j'.
-editID :: (ID a, Enum b) => a -> b -> Int
-editID i j = resolveID i + fromEnum j
-
--- | Infix alias for editID
-(//) :: (ID a, Enum b) => a -> b -> Int
-(//) = editID
+-- | Hash 'ID's /p/ and /q/ and sum to form an 'Int'.
+--
+-- > 'a' `joinID` (1::Int) == 149929881
+joinID :: (ID a,ID b) => a -> b -> Int
+joinID p q = idHash p + idHash q

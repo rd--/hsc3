@@ -3,14 +3,13 @@ module Sound.SC3.UGen.UGen where
 
 import Control.Monad
 import qualified Data.Char as C
-import qualified Data.Digest.Murmur32 as H
 import Data.List
 import Data.Maybe
 import Sound.SC3.Identifier
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UId
-import System.Random
+import System.Random {- random -}
 
 -- * UGen Id type and functions
 
@@ -40,10 +39,6 @@ isSystemId i =
     case i of
       SystemId _ -> True
       _ -> False
-
--- | Hash value to 'Int'.
-hash :: H.Hashable32 a => a -> Int
-hash = fromIntegral . H.asWord32 . H.hash32
 
 -- | Shift from 'UserId' to 'SystemId'.
 userIdProtect :: Int -> UGenId -> UGenId
