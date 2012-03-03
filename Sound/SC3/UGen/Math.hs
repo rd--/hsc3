@@ -104,8 +104,6 @@ class (Floating a, Ord a) => UnaryOp a where
     asFloat = error "asFloat"
     asInt :: a -> a
     asInt = error "asInt"
-    bitNot :: a -> a
-    bitNot = error "bitNot"
     cpsMIDI :: a -> a
     cpsMIDI a = (log2 (a * (1.0 / 440.0)) * 12.0) + 69.0
     cpsOct :: a -> a
@@ -149,7 +147,6 @@ instance UnaryOp UGen where
     ampDb = mkUnaryOperator AmpDb ampDb
     asFloat = mkUnaryOperator AsFloat asFloat
     asInt = mkUnaryOperator AsInt asInt
-    bitNot = mkUnaryOperator BitNot bitNot
     cpsMIDI = mkUnaryOperator CPSMIDI cpsMIDI
     cpsOct = mkUnaryOperator CPSOct cpsOct
     cubed = mkUnaryOperator Cubed cubed
@@ -177,12 +174,6 @@ class (Floating a, Ord a) => BinaryOp a where
     amClip a b = if b <= 0 then 0 else a * b
     atan2E :: a -> a -> a
     atan2E a b = atan (b/a)
-    bitAnd :: a -> a -> a
-    bitAnd = error "bitAnd"
-    bitOr :: a -> a -> a
-    bitOr = error "bitOr"
-    bitXOr :: a -> a -> a
-    bitXOr = error "bitXOr"
     clip2 :: a -> a -> a
     clip2 a b = clip_ a (-b) b
     difSqr :: a -> a -> a
@@ -220,10 +211,6 @@ class (Floating a, Ord a) => BinaryOp a where
     roundUp :: a -> a -> a
     scaleNeg :: a -> a -> a
     scaleNeg a b = (abs a - a) * b' + a where b' = 0.5 * b + 0.5
-    shiftLeft :: a -> a -> a
-    shiftLeft = error "shiftLeft"
-    shiftRight :: a -> a -> a
-    shiftRight = error "shiftRight"
     sqrDif :: a -> a -> a
     sqrDif a b = (a-b) * (a-b)
     sqrSum :: a -> a -> a
@@ -234,8 +221,6 @@ class (Floating a, Ord a) => BinaryOp a where
     thresh a b = if a <  b then 0 else a
     trunc :: a -> a -> a
     trunc = error "trunc"
-    unsignedShift :: a -> a -> a
-    unsignedShift = error "unsignedShift"
     wrap2 :: a -> a -> a
 
 -- | The SC3 @%@ operator is libc fmod function.
@@ -271,9 +256,6 @@ instance BinaryOp Double where
 instance BinaryOp UGen where
     iDiv = mkBinaryOperator IDiv iDiv
     modE = mkBinaryOperator Mod fmod
-    bitAnd = mkBinaryOperator BitAnd bitAnd
-    bitOr = mkBinaryOperator BitOr bitOr
-    bitXOr = mkBinaryOperator BitXor bitXOr
     lcmE = mkBinaryOperator LCM lcmE
     gcdE = mkBinaryOperator GCD gcdE
     roundUp = mkBinaryOperator RoundUp roundUp
@@ -281,9 +263,6 @@ instance BinaryOp UGen where
     atan2E = mkBinaryOperator Atan2 atan2E
     hypot = mkBinaryOperator Hypot hypot
     hypotx = mkBinaryOperator Hypotx hypotx
-    shiftLeft = mkBinaryOperator ShiftLeft shiftLeft
-    shiftRight = mkBinaryOperator ShiftRight shiftRight
-    unsignedShift = mkBinaryOperator UnsignedShift unsignedShift
     fill = mkBinaryOperator Fill fill
     ring1 = mkBinaryOperator Ring1 ring1
     ring2 = mkBinaryOperator Ring2 ring2

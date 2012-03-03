@@ -2,6 +2,7 @@
 module Sound.SC3.UGen.UGen where
 
 import Control.Monad
+import Data.Bits
 import qualified Data.Char as C
 import Data.List
 import Data.Maybe
@@ -644,3 +645,42 @@ instance Random UGen where
         in (Constant n, g')
     randomR _ _ = error "randomR: non constant (l,r)"
     random = randomR (-1.0, 1.0)
+
+-- * Bitwise
+
+bitAnd :: UGen -> UGen -> UGen
+bitAnd = mkBinaryOperator BitAnd undefined
+
+bitOr :: UGen -> UGen -> UGen
+bitOr = mkBinaryOperator BitOr undefined
+
+bitXOr :: UGen -> UGen -> UGen
+bitXOr = mkBinaryOperator BitXor undefined
+
+bitNot :: UGen -> UGen
+bitNot = mkUnaryOperator BitNot undefined
+
+shiftLeft :: UGen -> UGen -> UGen
+shiftLeft = mkBinaryOperator ShiftLeft undefined
+
+shiftRight :: UGen -> UGen -> UGen
+shiftRight = mkBinaryOperator ShiftRight undefined
+
+unsignedShift :: UGen -> UGen -> UGen
+unsignedShift = mkBinaryOperator UnsignedShift undefined
+
+instance Bits UGen where
+    (.&.) = mkBinaryOperator BitAnd undefined
+    (.|.) = mkBinaryOperator BitOr undefined
+    xor = mkBinaryOperator BitXor undefined
+    complement = mkUnaryOperator BitNot undefined
+    shift = error "Bits/UGen is partial"
+    rotate = error "Bits/UGen is partial"
+    bitSize = error "Bits/UGen is partial"
+    isSigned _ = True
+
+(.<<.) :: UGen -> UGen -> UGen
+(.<<.) = shiftLeft
+
+(.>>.) :: UGen -> UGen -> UGen
+(.>>.) = shiftRight
