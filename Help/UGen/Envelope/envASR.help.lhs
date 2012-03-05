@@ -10,5 +10,5 @@
 
 > withSC3 (\fd -> send fd (n_set1 (-1) "gate" 0))
 
-> import qualified Graphics.Gnuplot.Simple as P {- gnuplot -}
-> P.plotList [] (envelope_table 256 (envASR 0.1 1 1 (EnvNum (-4))))
+> import Sound.SC3.Plot
+> plotEnvelope (envASR 0.1 1 1 (EnvNum (-4)))

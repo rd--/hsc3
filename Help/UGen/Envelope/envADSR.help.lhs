@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Env.*adsr"
-> :i ADSR
-> :t envADSR_r
-> :t envADSR
+> :i Sound.SC3.ADSR
+> :t Sound.SC3.envADSR_r
+> :t Sound.SC3.envADSR
 
 > import Sound.SC3
 
@@ -14,10 +14,8 @@
 > withSC3 (\fd -> send fd (n_set1 (-1) "gate" 1))
 > withSC3 (\fd -> send fd (n_free [-1]))
 
-> import qualified Graphics.Gnuplot.Simple as P {- gnuplot -}
-
-> let e = envADSR 0.75 0.75 0.5 0.75 1 (EnvNum (-4)) 0
-> in P.plotList [] (envelope_table 256 e)
+> import Sound.SC3.Plot
+> plotEnvelope (envADSR 0.75 0.75 0.5 0.75 1 (EnvNum (-4)) 0)
 
 There is a record variant:
 

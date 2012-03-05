@@ -60,13 +60,17 @@ envelope_at e t =
                 in f x0 x1 t'
       Nothing -> 0
 
--- | Contruct a lookup table of /n/ places from 'Envelope'.
-envelope_table :: (Ord t, Floating t, Enum t) => t -> Envelope t -> [t]
-envelope_table n e =
+-- | Render 'Envelope' to breakpoint set of /n/ places.
+envelope_render :: (Ord t, Floating t, Enum t) => t -> Envelope t -> [(t,t)]
+envelope_render n e =
     let d = envelope_duration e
         k = d / (n - 1)
         t = [0,k .. d]
-    in map (envelope_at e) t
+    in zip t (map (envelope_at e) t)
+
+-- | Contruct a lookup table of /n/ places from 'Envelope'.
+envelope_table :: (Ord t, Floating t, Enum t) => t -> Envelope t -> [t]
+envelope_table n = map snd . envelope_render n
 
 -- | Variant on 'env_curves' that expands the, possibly empty, user
 -- list by cycling (if not empty) or by filling with 'EnvLin'.
