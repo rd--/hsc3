@@ -13,3 +13,6 @@
 >     ;p = envPerc' 0.01 1 a (c,c)
 >     ;e = envGen KR 1 1 0 1 RemoveSynth p }
 > in audition (out 0 (sinOsc AR 440 0 * e))
+
+> import qualified Graphics.Gnuplot.Simple as P {- gnuplot -}
+> P.plotList [] (envelope_table 256 (envPerc 0.05 1))

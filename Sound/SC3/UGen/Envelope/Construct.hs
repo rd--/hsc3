@@ -1,26 +1,19 @@
 -- | Functions to generate break point data for standard envelope
 --   types.
-module Sound.SC3.UGen.Envelope.Construct (Envelope(..)
-                                         ,envelope_sc3_array
-                                         ,envCoord
-                                         ,envTrapezoid
-                                         ,envPerc', envPerc
-                                         ,envTriangle
-                                         ,envSine
-                                         ,envLinen', envLinen
-                                         ,envADSR
-                                         ,envADSR_r,ADSR(..)
-                                         ,envASR) where
+module Sound.SC3.UGen.Envelope.Construct where
 
 import Sound.SC3.UGen.Math
 import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Envelope
 
 -- | Co-ordinate based static envelope generator.
+--
+-- > let e = envCoord [(0,0),(1/4,1),(1,0)] 1 1 EnvLin
+-- > in envelope_sc3_array e == Just [0,2,-99,-99,1,1/4,1,0,0,3/4,1,0]
 envCoord :: Num a => [(a,a)] -> a -> a -> Envelope_Curve a -> Envelope a
 envCoord bp dur amp c =
     let l = map ((* amp) . snd) bp
-        t = map (* dur) (d_dx (map fst bp))
+        t = map (* dur) (tail (d_dx (map fst bp)))
     in Envelope l t [c] Nothing Nothing
 
 -- | Trapezoidal envelope generator.  The arguments are: 1. @shape@
@@ -52,6 +45,9 @@ envPerc atk rls =
     in envPerc' atk rls 1 (cn, cn)
 
 -- | Triangular envelope, with duration and level inputs.
+--
+-- > let e = envTriangle 1 0.1
+-- > in envelope_sc3_array e = Just [0,2,-99,-99,0.1,0.5,1,0,0,0.5,1,0]
 envTriangle :: (Num a,Fractional a) => a -> a -> Envelope a
 envTriangle dur lvl =
     let c = replicate 2 EnvLin
@@ -59,6 +55,9 @@ envTriangle dur lvl =
     in Envelope [0,lvl,0] d c Nothing Nothing
 
 -- | Sine envelope, with duration and level inputs.
+--
+-- > let e = envSine 0 0.1
+-- > in envelope_sc3_array e == Just [0,2,-99,-99,0.1,0,3.0,0,0,0,3,0]
 envSine :: (Num a,Fractional a) => a -> a -> Envelope a
 envSine dur lvl =
     let c = replicate 2 EnvSin
@@ -104,6 +103,3 @@ envASR aT sL rT c =
         t = [aT,rT]
         c' = [c,c]
     in Envelope l t c' (Just 1) Nothing
-
-d_dx :: (Num a) => [a] -> [a]
-d_dx xs = zipWith (-) (drop 1 xs) xs

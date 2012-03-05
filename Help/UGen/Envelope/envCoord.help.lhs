@@ -8,3 +8,8 @@ Co-ordinate (break-point) envelope
 >     ;e = envGen KR 1 1 0 1 RemoveSynth p}
 > in audition (out 0 (sinOsc AR 440 0 * e))
 
+> import qualified Graphics.Gnuplot.Simple as P {- gnuplot -}
+
+> let e = envCoord [(0,0),(0.5,0.1),(0.55,1),(1,0)] 9 0.1 EnvLin
+> in P.plotList [] (envelope_table 256 e)
+

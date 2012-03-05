@@ -1,10 +1,13 @@
 -- | Envelope generators.
 module Sound.SC3.UGen.Envelope where
 
+import Data.List
 import Data.Maybe
 import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
+
+-- * Envelope
 
 -- | SC3 envelope segment model
 data Envelope a =
@@ -16,17 +19,77 @@ data Envelope a =
              }
     deriving (Eq,Show)
 
+-- | Duration of 'Envelope', ie. 'sum' '.' 'env_times'.
+envelope_duration :: Num n => Envelope n -> n
+envelope_duration = sum . env_times
+
+-- | Number of segments at 'Envelope', ie. 'length' '.' 'env_times'.
+envelope_n_segments :: (Num n,Integral i) => Envelope n -> i
+envelope_n_segments = genericLength . env_times
+
+-- | Determine which envelope segment a given time /t/ falls in.
+envelope_segment_ix :: (Ord a, Num a) => Envelope a -> a -> Maybe Int
+envelope_segment_ix e t =
+    let d = dx_d (env_times e)
+    in findIndex (>= t) d
+
+-- | A set of start time, start level, end time, end level and curve.
+type Envelope_Segment t = (t,t,t,t,Envelope_Curve t)
+
+-- | Extract envelope segment given at index /i/.
+envelope_segment :: Num t => Envelope t -> Int -> Envelope_Segment t
+envelope_segment e i =
+    let l = env_levels e
+        t = env_times e
+        x0 = l !! i
+        x1 = l !! (i + 1)
+        t0 = (0 : dx_d t) !! i
+        t1 = t0 + t !! i
+        c = envelope_curves e !! i
+    in (t0,x0,t1,x1,c)
+
+-- | Get value for 'Envelope' at time /t/, or zero if /t/ is out of
+-- range.
+envelope_at :: (Ord t, Floating t) => Envelope t -> t -> t
+envelope_at e t =
+    case envelope_segment_ix e t of
+      Just n -> let (t0,x0,t1,x1,c) = envelope_segment e n
+                    d = t1 - t0
+                    t' = (t - t0) / d
+                    f = env_curve_interpolation_f c
+                in f x0 x1 t'
+      Nothing -> 0
+
+-- | Contruct a lookup table of /n/ places from 'Envelope'.
+envelope_table :: (Ord t, Floating t, Enum t) => t -> Envelope t -> [t]
+envelope_table n e =
+    let d = envelope_duration e
+        k = d / (n - 1)
+        t = [0,k .. d]
+    in map (envelope_at e) t
+
+-- | Variant on 'env_curves' that expands the, possibly empty, user
+-- list by cycling (if not empty) or by filling with 'EnvLin'.
+envelope_curves :: Num a => Envelope a -> [Envelope_Curve a]
+envelope_curves e =
+    let c = env_curves e
+        n = envelope_n_segments e
+    in if null c
+       then replicate n EnvLin
+       else take n (cycle c)
+
 -- | Linear SC3 form of 'Envelope' data.
 envelope_sc3_array :: Num a => Envelope a -> Maybe [a]
-envelope_sc3_array (Envelope l t c rn ln) =
-    let n = length t
+envelope_sc3_array e =
+    let Envelope l t _ rn ln = e
+        n = length t
         n' = fromIntegral n
         rn' = fromIntegral (fromMaybe (-99) rn)
         ln' = fromIntegral (fromMaybe (-99) ln)
-        c' = if null c then replicate n EnvLin else take n (cycle c)
+        c = envelope_curves e
         f i j k = [i,j,env_curve_shape k,env_curve_value k]
     in case l of
-         l0:l' -> Just (l0 : n' : rn' : ln' : concat (zipWith3 f l' t c'))
+         l0:l' -> Just (l0 : n' : rn' : ln' : concat (zipWith3 f l' t c))
          _ -> Nothing
 
 env_is_sustained :: Envelope a -> Bool
@@ -59,6 +122,8 @@ env_circle (Envelope l t c rn _) tc cc =
                        c' = cc : take n (cycle c)
                        rn' = Just (i + 1)
                    in  Envelope l' t' c' rn' (Just 0)
+
+-- * UGen
 
 -- | Segment based envelope generator.
 envGen :: Rate -> UGen -> UGen -> UGen -> UGen -> DoneAction -> Envelope UGen -> UGen
@@ -111,3 +176,14 @@ free i n = mkFilter "Free" [i, n] 1
 -- | Linear envelope generator.
 linen :: UGen -> UGen -> UGen -> UGen -> DoneAction -> UGen
 linen g at sl rt da = mkFilter "Linen" [g, at, sl, rt, from_done_action da] 1
+
+-- * List
+
+-- > d_dx [0,1,3,6] == [0,1,2,3]
+d_dx :: (Num a) => [a] -> [a]
+d_dx l = zipWith (-) l (0:l)
+
+-- > dx_d (d_dx [0,1,3,6]) == [0,1,3,6]
+-- > dx_d [0.5,0.5] == [0.5,1]
+dx_d :: Num n => [n] -> [n]
+dx_d = scanl1 (+)

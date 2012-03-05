@@ -2,6 +2,7 @@
 module Sound.SC3.UGen.Enum where
 
 import Sound.SC3.UGen.UGen
+import Sound.SC3.UGen.Envelope.Interpolate
 
 -- | Loop indicator input.
 data Loop = Loop
@@ -68,7 +69,7 @@ data Envelope_Curve a = EnvStep
                       | EnvLin
                       | EnvExp
                       | EnvSin
-                      | EnvCos
+                      | EnvCos -- ^ Note: not implemented at SC3
                       | EnvNum a
                       | EnvSqr
                       | EnvCub
@@ -99,3 +100,16 @@ env_curve_value e =
     case e of
       EnvNum u -> u
       _ -> 0
+
+env_curve_interpolation_f :: (Ord t, Floating t) =>
+                             Envelope_Curve t -> Interpolation_F t
+env_curve_interpolation_f c =
+    case c of
+      EnvStep -> step
+      EnvLin -> linear
+      EnvExp -> exponential
+      EnvSin -> sine
+      EnvCos -> error "env_curve_interpolation_f:EnvCos"
+      EnvNum n -> curve n
+      EnvSqr -> squared
+      EnvCub -> cubed

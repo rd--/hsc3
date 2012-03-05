@@ -14,6 +14,11 @@
 > withSC3 (\fd -> send fd (n_set1 (-1) "gate" 1))
 > withSC3 (\fd -> send fd (n_free [-1]))
 
+> import qualified Graphics.Gnuplot.Simple as P {- gnuplot -}
+
+> let e = envADSR 0.75 0.75 0.5 0.75 1 (EnvNum (-4)) 0
+> in P.plotList [] (envelope_table 256 e)
+
 There is a record variant:
 
 > let {g = control KR "gate" 1
