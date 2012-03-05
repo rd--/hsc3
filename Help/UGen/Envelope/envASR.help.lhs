@@ -11,4 +11,4 @@
 > withSC3 (\fd -> send fd (n_set1 (-1) "gate" 0))
 
 > import Sound.SC3.Plot
-> plotEnvelope (envASR 0.1 1 1 (EnvNum (-4)))
+> plotEnvelope [envASR 0.1 1 1 (EnvNum (-4)),envASR 0.3 0.25 1 EnvSin]

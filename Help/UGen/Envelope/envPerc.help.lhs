@@ -15,4 +15,4 @@
 > in audition (out 0 (sinOsc AR 440 0 * e))
 
 > import Sound.SC3.Plot
-> plotEnvelope (envPerc 0.05 1)
+> plotEnvelope [envPerc 0.05 1,envPerc 0.2 0.75]

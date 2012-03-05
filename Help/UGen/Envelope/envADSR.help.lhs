@@ -15,7 +15,7 @@
 > withSC3 (\fd -> send fd (n_free [-1]))
 
 > import Sound.SC3.Plot
-> plotEnvelope (envADSR 0.75 0.75 0.5 0.75 1 (EnvNum (-4)) 0)
+> plotEnvelope [envADSR 0.75 0.75 0.5 0.75 1 (EnvNum (-4)) 0]
 
 There is a record variant:
 

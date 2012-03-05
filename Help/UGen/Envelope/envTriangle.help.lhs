@@ -8,4 +8,4 @@
 > in audition (out 0 (sinOsc AR 440 0 * e))
 
 > import Sound.SC3.Plot
-> plotEnvelope (envTriangle 1 1)
+> plotEnvelope [envTriangle 1 1,envTriangle 0.25 0.5]
