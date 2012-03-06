@@ -29,3 +29,9 @@ Fixed frequency wavetable oscillator
 Change the wavetable while its playing
 > let f = [Normalise,Wavetable,Clear]
 > in withSC3 (\fd -> send fd (b_gen_sine1 10 f [1,0.6,1/4]))
+
+Send directly calculated wavetable
+> import Sound.SC3.Lang.Collection {- hsc3-lang -}
+> import Sound.SC3.Lang.Math.Window
+> let t = to_wavetable (triangular_table 512)
+> withSC3 (\fd -> send fd (b_setn1 10 0 t))
