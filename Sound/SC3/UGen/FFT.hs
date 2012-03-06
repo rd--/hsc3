@@ -1,8 +1,8 @@
 -- | Frequency domain unit generators.
 module Sound.SC3.UGen.FFT where
 
-import Sound.OpenSoundControl (OSC)
-import Sound.SC3.Server.Command (b_gen)
+import Sound.OpenSoundControl
+import Sound.SC3.Server.Command
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
 
@@ -86,11 +86,11 @@ pv_Diffuser buf trg = mkOsc KR "PV_Diffuser" [buf,trg] 1
 
 -- | FFT onset detector.
 pv_HainsworthFoote :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-pv_HainsworthFoote buf h f thr wait = mkOsc AR "PV_HainsworthFoote" [buf,h,f,thr,wait] 1
+pv_HainsworthFoote buf h f thr wt = mkOsc AR "PV_HainsworthFoote" [buf,h,f,thr,wt] 1
 
 -- | FFT feature detector for onset detection.
 pv_JensenAndersen :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-pv_JensenAndersen buf sc hfe hfc sf thr wait = mkOsc AR "PV_JensenAndersen" [buf,sc,hfe,hfc,sf,thr,wait] 1
+pv_JensenAndersen buf sc hfe hfc sf thr wt = mkOsc AR "PV_JensenAndersen" [buf,sc,hfe,hfc,sf,thr,wt] 1
 
 -- | Pass bins which are a local maximum.
 pv_LocalMax :: UGen -> UGen -> UGen
@@ -184,7 +184,7 @@ pc_calcAccumSize fft_size ir_length =
 -- | Generate accumulation buffer given time-domain IR buffer and FFT size.
 pc_preparePartConv :: Int -> Int -> Int -> OSC
 pc_preparePartConv b irb fft_size =
-    b_gen b "PreparePartConv" (map fromIntegral [irb, fft_size])
+    b_gen b "PreparePartConv" (map Int [irb, fft_size])
 
 -- | Partitioned convolution.
 partConv :: UGen -> UGen -> UGen -> UGen

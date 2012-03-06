@@ -2,9 +2,11 @@
 --   synthesis server.
 module Sound.SC3.Server.Command where
 
-import Sound.OpenSoundControl
+import Data.Maybe
+import Sound.OpenSoundControl {- hosc -}
 import Sound.SC3.Server.Utilities
 import Sound.SC3.Server.Synthdef
+import Sound.SC3.UGen.Enum
 
 -- * Instrument definition commands
 
@@ -206,8 +208,30 @@ b_free :: Int -> OSC
 b_free nid = message "/b_free" [Int nid]
 
 -- | Call a command to fill a buffer.  (Asynchronous)
-b_gen :: Int -> String -> [Double] -> OSC
-b_gen bid name arg = message "/b_gen" (Int bid : String name : map Float arg)
+b_gen :: Int -> String -> [Datum] -> OSC
+b_gen bid name arg = message "/b_gen" (Int bid : String name : arg)
+
+-- | Call @sine1@ 'b_gen' command.
+b_gen_sine1 :: Int -> [B_Gen] -> [Double] -> OSC
+b_gen_sine1 z f n = b_gen z "sine1" (Int (b_gen_flag f) : map Float n)
+
+-- | Call @sine2@ 'b_gen' command.
+b_gen_sine2 :: Int -> [B_Gen] -> [(Double,Double)] -> OSC
+b_gen_sine2 z f n = b_gen z "sine2" (Int (b_gen_flag f) : mk_duples Float Float n)
+
+-- | Call @sine3@ 'b_gen' command.
+b_gen_sine3 :: Int -> [B_Gen] -> [(Double,Double,Double)] -> OSC
+b_gen_sine3 z f n = b_gen z "sine3" (Int (b_gen_flag f) : mk_triples Float Float Float n)
+
+-- | Call @cheby@ 'b_gen' command.
+b_gen_cheby :: Int -> [B_Gen] -> [Double] -> OSC
+b_gen_cheby z f n = b_gen z "cheby" (Int (b_gen_flag f) : map Float n)
+
+-- | Call @copy@ 'b_gen' command.
+b_gen_copy :: Int -> Int -> Int -> Int -> Maybe Int -> OSC
+b_gen_copy z dst_ix src_b src_ix nf =
+    let nf' = fromMaybe (-1) nf
+    in b_gen z "copy" (map Int [dst_ix,src_b,src_ix,nf'])
 
 -- | Get sample values.
 b_get :: Int -> [Int] -> OSC

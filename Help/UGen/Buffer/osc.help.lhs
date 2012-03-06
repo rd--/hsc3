@@ -5,7 +5,8 @@
 
 Allocate and generate wavetable buffer
 > withSC3 (\fd -> do {_ <- async fd (b_alloc 10 512 1)
->                    ;send fd (b_gen 10 "sine1" [1+2+4,1,1/2,1/3,1/4,1/5])})
+>                    ;let f = [Normalise,Wavetable,Clear]
+>                     in send fd (b_gen_sine1 10 f [1,1/2,1/3,1/4,1/5])})
 
 Fixed frequency wavetable oscillator
 > audition (out 0 (osc AR 10 220 0 * 0.1))
@@ -26,4 +27,5 @@ Fixed frequency wavetable oscillator
 > audition (out 0 (osc AR 10 220 0 * 0.1))
 
 Change the wavetable while its playing
-> withSC3 (\fd -> send fd (b_gen 10 "sine1" [1+2+4,1,0.6,1/4]))
+> let f = [Normalise,Wavetable,Clear]
+> in withSC3 (\fd -> send fd (b_gen_sine1 10 f [1,0.6,1/4]))

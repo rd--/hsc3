@@ -4,15 +4,16 @@
 > import Sound.SC3
 
 Allocate and fill buffer.
-> let d = [1+2+4,1,1/2,1/3,1/4,1/5,1/6,1/7,1/8,1/9,1/10]
+> let {f = [Normalise,Wavetable,Clear]
+>     ;d = [1,1/2,1/3,1/4,1/5,1/6,1/7,1/8,1/9,1/10]}
 > in withSC3 (\fd -> do {_ <- async fd (b_alloc 10 512 1)
->                       ;async fd (b_gen 10 "sine1" d)})
+>                       ;async fd (b_gen_sine1 10 f d)})
 
 Fixed beat frequency
-> audition (out 0 (cOsc AR 10 200 0.7 * 0.25))
+> audition (out 0 (cOsc AR 10 200 0.7 * 0.1))
 
 Modulate beat frequency with mouseX
-> audition (out 0 (cOsc AR 10 200 (mouseX' KR 0 4 Linear 0.2) * 0.25))
+> audition (out 0 (cOsc AR 10 200 (mouseX KR 0 4 Linear 0.2) * 0.1))
 
 Compare with plain osc
-> audition (out 0 (osc AR 10 200 0.0 * 0.25))
+> audition (out 0 (osc AR 10 200 0.0 * 0.1))

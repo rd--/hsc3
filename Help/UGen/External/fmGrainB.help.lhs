@@ -4,7 +4,8 @@
 > import Sound.SC3.ID
 
 > withSC3 (\fd -> do {_ <- async fd (b_alloc 10 512 1)
->                    ;send fd (b_gen 10 "sine2" [1+2+4,0.5,0.1])})
+>                    ;let f = [Normalise,Wavetable,Clear]
+>                     in send fd (b_gen_sine2 10 f [(0.5,0.1)])})
 
 > let {t = impulse AR 20 0
 >     ;n = linLin (lfNoise1 'a' KR 1) (-1) 1 1 10
