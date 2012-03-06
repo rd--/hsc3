@@ -12,6 +12,6 @@ Audio rate sine oscillator as phase input
 > in audition (out 0 (bufRd 1 AR 0 phase Loop NoInterpolation))
 
 There are constructors, bufRd{N|L|C}, for the fixed cases.
-> let {x = mouseX' KR (mce [5, 10]) 100 Linear 0.1
+> let {x = mouseX KR (mce [5, 10]) 100 Linear 0.1
 >     ;n = lfNoise1 'a' AR x}
 > in audition (out 0 (bufRdL 1 AR 0 (n * bufFrames KR 0) Loop))

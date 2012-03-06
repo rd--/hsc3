@@ -328,6 +328,10 @@ b_alloc_setn1 nid i xs =
         xs' = replicate i 0 ++ xs
     in withCM (b_alloc nid k 1) (b_setn1 nid 0 xs')
 
+-- | Get ranges of sample values.
+b_getn1 :: Int -> (Int,Int) -> OSC
+b_getn1 nid = b_getn nid . return
+
 -- | Set single sample value.
 b_set1 :: Int -> Int -> Double -> OSC
 b_set1 nid i x = b_set nid [(i,x)]
@@ -335,6 +339,10 @@ b_set1 nid i x = b_set nid [(i,x)]
 -- | Set a range of sample values.
 b_setn1 :: Int -> Int -> [Double] -> OSC
 b_setn1 nid i xs = b_setn nid [(i,xs)]
+
+-- | Variant on 'b_query'.
+b_query1 :: Int -> OSC
+b_query1 = b_query . return
 
 -- | Set single bus values.
 c_set1 :: Int -> Double -> OSC
