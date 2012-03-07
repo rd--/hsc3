@@ -2,7 +2,7 @@
 module Sound.SC3.Server.Play (stop,reset,send,async
                              ,withSC3
                              ,Audible(..)
-                             ,perform) where
+                             ,performOSC) where
 
 import Sound.OpenSoundControl
 import Sound.SC3.Server.Command
@@ -50,6 +50,12 @@ instance Audible Synthdef where
 instance Audible UGen where
     play = playUGen
 
+{-
++FlexibleInstances
+instance Audible [OSC] where
+    play = performOSC
+-}
+
 -- | Wait ('pauseThreadUntil') until bundle is due to be sent relative
 -- to initial 'UTCr' time, then send each message, asynchronously if
 -- required.
@@ -67,7 +73,5 @@ run_bundle fd i o =
 -- | Perform an 'OSC' score (as would be rendered by 'writeNRT').  In
 -- particular note that: (1) all 'OSC' must be 'Bundle's and (2)
 -- timestamps /must/ be in 'NTPr' form.
-perform :: [OSC] -> IO ()
-perform s = do
-  let f i fd = run_bundle fd i
-  withSC3 (\fd -> utcr >>= \i -> mapM_ (f i fd) s)
+performOSC :: Transport t => t -> [OSC] -> IO ()
+performOSC fd s = utcr >>= \i -> mapM_ (run_bundle fd i) s
