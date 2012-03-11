@@ -352,7 +352,7 @@ implicit ks =
                             K_TR -> ("TrigControl",KR)
                             K_AR -> ("AudioControl",AR)
                 i = replicate n r
-            in NodeU (-1) r nm [] i (Special o) NoId
+            in NodeU (-1) r nm [] i (Special o) no_id
     in [mk_n K_IR ni 0
        ,mk_n K_KR nk ni
        ,mk_n K_TR nt (ni + nk)
