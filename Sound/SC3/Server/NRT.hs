@@ -36,9 +36,13 @@ data NRT_Sample_Format = I16 | I24 | I32 | F32 | F64 deriving (Eq,Show)
 
 -- | Data required to render 'OSC' score using @scsynth@.  The input
 -- file is optional.
-type NRT_Render = (FilePath,Maybe FilePath,FilePath
-                  ,Double
-                  ,NRT_File_Format,NRT_Sample_Format)
+data NRT_Render = NRT_Render {nrt_score :: FilePath
+                             ,nrt_input_file ::Maybe FilePath
+                             ,nrt_output_file :: FilePath
+                             ,nrt_channels :: Int
+                             ,nrt_sample_rate :: Double
+                             ,nrt_file_format :: NRT_File_Format
+                             ,nrt_sample_format :: NRT_Sample_Format}
 
 -- | Format 'NRT_Sample_Format' for @scsynth@.
 nrt_sf_pp :: NRT_Sample_Format -> String
@@ -52,15 +56,17 @@ nrt_sf_pp f =
 
 -- | Format 'NRT_Render' as list of arguments to @scsynth@.
 --
--- > let a = ["-N","x.osc","_","x.aif","44100","AIFF","int16"]
--- > in renderNRT_opt ("x.osc",Nothing,"x.aif",44100,AIFF,I16) == a
+-- > let {r = NRT_Render "x.osc" Nothing "x.aif" 2 44100 AIFF I16
+-- >     ;a = ["-o","2","-N","x.osc","_","x.aif","44100","AIFF","int16"]}
+-- > in renderNRT_opt r == a
 renderNRT_opt :: NRT_Render -> [String]
-renderNRT_opt (c_fn,i_fn,o_fn,sr,hdr,fmt) =
+renderNRT_opt (NRT_Render c_fn i_fn o_fn nc sr hdr fmt) =
     let i_fn' = fromMaybe "_" i_fn
+        nc' = show nc
         sr' = show (round sr :: Integer)
         hdr' = show hdr
         fmt' = nrt_sf_pp fmt
-    in ["-N",c_fn,i_fn',o_fn,sr',hdr',fmt']
+    in ["-o",nc',"-N",c_fn,i_fn',o_fn,sr',hdr',fmt']
 
 -- | Run @scsynth@ to render 'NRT_Render'.
 renderNRT :: NRT_Render -> IO ExitCode
