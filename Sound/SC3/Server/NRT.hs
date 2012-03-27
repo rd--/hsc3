@@ -68,6 +68,6 @@ renderNRT_opt (NRT_Render c_fn i_fn o_fn nc sr hdr fmt) =
         fmt' = nrt_sf_pp fmt
     in ["-o",nc',"-N",c_fn,i_fn',o_fn,sr',hdr',fmt']
 
--- | Run @scsynth@ to render 'NRT_Render'.
-renderNRT :: NRT_Render -> IO ExitCode
-renderNRT = rawSystem "scsynth" . renderNRT_opt
+-- | Run @scsynth@ to render 'NRT_Render' with given @scsynth@ options.
+renderNRT :: [String] -> NRT_Render -> IO ExitCode
+renderNRT o = rawSystem "scsynth" . (o ++ ) . renderNRT_opt
