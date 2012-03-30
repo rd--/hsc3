@@ -29,7 +29,7 @@ putNRT :: Handle -> [OSC] -> IO ()
 putNRT h = B.hPut h . encodeNRT
 
 -- | File formats @scsynth@ renders to.
-data NRT_File_Format = AIFF | WAVE | NeXT deriving (Eq,Show)
+data NRT_File_Format = AIFF | FLAC | NeXT | WAVE deriving (Eq,Show)
 
 -- | Sample formats @scsynth@ renders to.
 data NRT_Sample_Format = I16 | I24 | I32 | F32 | F64 deriving (Eq,Show)
