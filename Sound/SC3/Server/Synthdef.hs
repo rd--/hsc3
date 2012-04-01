@@ -4,15 +4,16 @@ module Sound.SC3.Server.Synthdef (NodeId,PortIndex,KType(..)
                                  ,Node(..),FromPort(..)
                                  ,Graph(..),Graphdef,graphdef
                                  ,Synthdef(..),synthdefData,synth,synthdef
-                                 ,synthstat) where
+                                 ,synthdefWrite,synthstat) where
 
-import qualified Data.ByteString.Lazy as B
-import qualified Data.IntMap as M
+import qualified Data.ByteString.Lazy as B {- bytestring -}
+import qualified Data.IntMap as M {- containers -}
 import Data.List
-import Sound.OpenSoundControl.Coding.Byte
+import Sound.OpenSoundControl.Coding.Byte {- hosc -}
 import Sound.OpenSoundControl.Coding.Cast
 import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.Rate
+import System.FilePath {- filepath -}
 
 -- | Node identifier.
 type NodeId = Int
@@ -109,6 +110,13 @@ synthdefData (Synthdef s g) =
 -- | Transform a unit generator synth definition into bytecode.
 synthdef :: String -> UGen -> Synthdef
 synthdef s u = Synthdef s (synth u)
+
+-- | Write 'Synthdef' to indicated directory.  The filename is the
+-- 'synthdefName' with the appropriate extension (@scsyndef@).
+synthdefWrite :: Synthdef -> FilePath -> IO ()
+synthdefWrite s dir =
+    let nm = dir </> synthdefName s <.> "scsyndef"
+    in B.writeFile nm (synthdefData s)
 
 -- | Simple statistical analysis of a unit generator graph.
 synthstat :: UGen -> String
