@@ -68,6 +68,14 @@ renderNRT_opt (NRT_Render c_fn i_fn o_fn nc sr hdr fmt) =
         fmt' = nrt_sf_pp fmt
     in ["-o",nc',"-N",c_fn,i_fn',o_fn,sr',hdr',fmt']
 
+-- | 'renderNRT' command as 'String', with shell protected arguments.
+--
+-- > renderNRT_cmd [] (NRT_Render "s.osc" Nothing "s.flac" 2 44100 FLAC I24)
+renderNRT_cmd :: [String] -> NRT_Render -> String
+renderNRT_cmd x o =
+    let protect s = '\'' : s ++ ['\'']
+    in unwords ("scsynth" : map protect (x ++ renderNRT_opt o))
+
 -- | Run @scsynth@ to render 'NRT_Render' with given @scsynth@ options.
 renderNRT :: [String] -> NRT_Render -> IO ExitCode
 renderNRT o = rawSystem "scsynth" . (o ++ ) . renderNRT_opt
