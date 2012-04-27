@@ -31,10 +31,10 @@ b_indices n m k =
 b_getn1_data :: Transport t => t -> Int -> (Int,Int) -> IO (Maybe [Double])
 b_getn1_data fd b s = do
   do send fd (b_getn1 b s)
-     d <- recv fd
-     case d of
-       Message "/b_setn" (Int _:Int _:Int _:f) ->
-           return (Just (map datum_real' f))
+     p <- recv fd
+     case p of
+       Left m -> let Message "/b_setn" (Int _:Int _:Int _:f) = m
+                 in return (Just (map datum_real' f))
        _ -> return Nothing
 
 -- | Variant of 'b_getn1_data' that gets segments individual 'b_getn'
@@ -50,8 +50,8 @@ b_getn1_data_segment fd n b (i,j) = do
 b_fetch :: Transport t => t -> Int -> Int -> IO [Double]
 b_fetch fd n b = do
   send fd (b_query1 b)
-  m <- recv fd
-  case m of
-    Message "/b_info" [Int _,Int nf,Int nc,Float _] ->
-        b_getn1_data_segment fd n b (0,nf*nc)
+  p <- recv fd
+  case p of
+    Left m -> let Message "/b_info" [Int _,Int nf,Int nc,Float _] = m
+              in b_getn1_data_segment fd n b (0,nf*nc)
     _ -> error "b_get_all"

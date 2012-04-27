@@ -2,10 +2,11 @@
 module Sound.SC3.Server.Play (stop,reset,send,async
                              ,withSC3
                              ,Audible(..)
-                             ,performOSC) where
+                             ,performNRT) where
 
 import Sound.OpenSoundControl
 import Sound.SC3.Server.Command
+import Sound.SC3.Server.NRT
 import Sound.SC3.Server.Synthdef
 import Sound.SC3.UGen.UGen
 
@@ -13,9 +14,9 @@ import Sound.SC3.UGen.UGen
 stop :: Transport t => t -> IO ()
 stop fd = send fd (g_freeAll [1])
 
--- | Send an 'OSC' message and wait for a @\/done@ reply.
-async :: Transport t => t -> OSC -> IO OSC
-async fd m = send fd m >> wait fd "/done"
+-- | Send a 'Message' and wait for a @\/done@ reply.
+async :: Transport t => t -> Message -> IO Message
+async fd m = send fd m >> waitMessage fd "/done"
 
 -- | Free all nodes ('g_freeAll') at and re-create groups @1@ and @2@.
 reset :: Transport t => t -> IO ()
@@ -50,28 +51,24 @@ instance Audible Synthdef where
 instance Audible UGen where
     play = playUGen
 
-{-
-+FlexibleInstances
-instance Audible [OSC] where
-    play = performOSC
--}
+instance Audible NRT where
+    play = performNRT
 
 -- | Wait ('pauseThreadUntil') until bundle is due to be sent relative
 -- to initial 'UTCr' time, then send each message, asynchronously if
 -- required.
-run_bundle :: Transport t => t -> Double -> OSC -> IO ()
-run_bundle fd i o =
+run_bundle :: Transport t => t -> Double -> Bundle -> IO ()
+run_bundle fd i (Bundle t x) =
     let wr m = if isAsync m
                then async fd m >> return ()
                else send fd m
-    in case o of
-         Bundle (NTPr t) x' -> do
-             pauseThreadUntil (i + t)
-             mapM_ wr x'
-         _ -> error "run_bundle: non bundle or non-NTPr bundle"
+    in case t of
+          NTPr n -> do
+                pauseThreadUntil (i + n)
+                mapM_ wr x
+          _ -> error "run_bundle: non-NTPr bundle"
 
--- | Perform an 'OSC' score (as would be rendered by 'writeNRT').  In
--- particular note that: (1) all 'OSC' must be 'Bundle's and (2)
--- timestamps /must/ be in 'NTPr' form.
-performOSC :: Transport t => t -> [OSC] -> IO ()
-performOSC fd s = utcr >>= \i -> mapM_ (run_bundle fd i) s
+-- | Perform an 'NRT' score (as would be rendered by 'writeNRT').  In
+-- particular note that all timestamps /must/ be in 'NTPr' form.
+performNRT :: Transport t => t -> NRT -> IO ()
+performNRT fd s = utcr >>= \i -> mapM_ (run_bundle fd i) (nrt_bundles s)

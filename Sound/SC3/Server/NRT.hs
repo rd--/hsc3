@@ -10,22 +10,25 @@ import System.IO
 import System.Process {- process -}
 
 -- | Encode and prefix with encoded length.
-oscWithSize :: OSC -> B.ByteString
+oscWithSize :: Bundle -> B.ByteString
 oscWithSize o =
     let b = encodeOSC o
         l = encode_i32 (fromIntegral (B.length b))
     in B.append l b
 
--- | Encode a list of OSC bundles as an NRT score.
-encodeNRT :: [OSC] -> B.ByteString
-encodeNRT = B.concat . map oscWithSize
+-- | An 'NRT' score is a sequence of 'Bundle's.
+data NRT = NRT {nrt_bundles :: [Bundle]}
 
--- | Write a list of OSC bundles as an NRT score.
-writeNRT :: FilePath -> [OSC] -> IO ()
+-- | Encode an 'NRT' score.
+encodeNRT :: NRT -> B.ByteString
+encodeNRT = B.concat . map oscWithSize . nrt_bundles
+
+-- | Write an 'NRT' score.
+writeNRT :: FilePath -> NRT -> IO ()
 writeNRT fn = B.writeFile fn . encodeNRT
 
--- | Write a list of OSC bundles as an NRT score to a file handle.
-putNRT :: Handle -> [OSC] -> IO ()
+-- | Write an 'NRT' score to a file handle.
+putNRT :: Handle -> NRT -> IO ()
 putNRT h = B.hPut h . encodeNRT
 
 -- | File formats @scsynth@ renders to.
@@ -34,8 +37,8 @@ data NRT_File_Format = AIFF | FLAC | NeXT | WAVE deriving (Eq,Show)
 -- | Sample formats @scsynth@ renders to.
 data NRT_Sample_Format = I16 | I24 | I32 | F32 | F64 deriving (Eq,Show)
 
--- | Data required to render 'OSC' score using @scsynth@.  The input
--- file is optional.
+-- | Data required to render an 'NRT' score using @scsynth@.  The
+-- input file is optional.
 data NRT_Render = NRT_Render {nrt_score :: FilePath
                              ,nrt_input_file ::Maybe FilePath
                              ,nrt_output_file :: FilePath

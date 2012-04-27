@@ -29,7 +29,7 @@ extractDouble d =
 serverStatusData :: Transport t => t -> IO [Datum]
 serverStatusData fd = do
   send fd status
-  (Message _ d) <- wait fd "/status.reply"
+  Message _ d <- waitMessage fd "/status.reply"
   return d
 
 statusFields :: [String]
