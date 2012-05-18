@@ -61,6 +61,10 @@ dseq z l array = mkOscMCEId z DR "Dseq" [l] array 1
 dser :: ID i => i -> UGen -> UGen -> UGen
 dser z l array = mkOscMCEId z DR "Dser" [l] array 1
 
+-- | Demand rate sequence shuffler.
+dshuf :: ID i => i -> UGen -> UGen -> UGen
+dshuf z l array = mkOscMCEId z DR "Dshuf" [l] array 1
+
 -- | Demand input replication
 dstutter :: ID i => i -> UGen -> UGen -> UGen
 dstutter z n i = mkOscId z DR "Dstutter" [n,i] 1

@@ -60,6 +60,10 @@ dseq = liftU2 D.dseq
 dser :: (UId m) => UGen -> UGen -> m UGen
 dser = liftU2 D.dser
 
+-- | Demand rate sequence shuffler.
+dshuf :: (UId m) => UGen -> UGen -> m UGen
+dshuf = liftU2 D.dshuf
+
 -- | Demand input replication
 dstutter :: (UId m) => UGen -> UGen -> m UGen
 dstutter = liftU2 D.dstutter
