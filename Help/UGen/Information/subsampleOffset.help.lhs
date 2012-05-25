@@ -23,7 +23,7 @@ oscilloscope.
 >       ;let {t' = t + 0.2
 >            ;dt = 1 / 44100.0
 >            ;m n = s_new "s" (-1) AddToTail 1 [("a", n)]}
->        in do {send fd (Bundle (UTCr t') [m 3])
->              ;send fd (Bundle (UTCr (t' + dt)) [m 0]) }}
+>        in do {sendBundle fd (Bundle (UTCr t') [m 3])
+>              ;sendBundle fd (Bundle (UTCr (t' + dt)) [m 0]) }}
 
 > withSC3 (run s)

@@ -10,19 +10,23 @@ import Sound.SC3.Server.NRT
 import Sound.SC3.Server.Synthdef
 import Sound.SC3.UGen.UGen
 
+-- | Synonym for 'sendMessage'.
+send :: (Transport t) => t -> Message -> IO ()
+send = sendMessage
+
 -- | Free all nodes ('g_freeAll') at group @1@.
 stop :: Transport t => t -> IO ()
-stop fd = send fd (g_freeAll [1])
+stop fd = sendMessage fd (g_freeAll [1])
 
 -- | Send a 'Message' and wait for a @\/done@ reply.
 async :: Transport t => t -> Message -> IO Message
-async fd m = send fd m >> waitMessage fd "/done"
+async fd m = sendMessage fd m >> waitMessage fd "/done"
 
 -- | Free all nodes ('g_freeAll') at and re-create groups @1@ and @2@.
 reset :: Transport t => t -> IO ()
 reset fd = do
-  send fd (g_freeAll [1,2])
-  send fd (g_new [(1,AddToTail,0),(2,AddToTail,0)])
+  sendMessage fd (g_freeAll [1,2])
+  sendMessage fd (g_new [(1,AddToTail,0),(2,AddToTail,0)])
 
 -- | Bracket @SC3@ communication.
 withSC3 :: (UDP -> IO a) -> IO a
@@ -32,7 +36,7 @@ withSC3 = withTransport (openUDP "127.0.0.1" 57110)
 playSynthdef :: Transport t => t -> Synthdef -> IO ()
 playSynthdef fd s = do
   _ <- async fd (d_recv s)
-  send fd (s_new (synthdefName s) (-1) AddToTail 1 [])
+  sendMessage fd (s_new (synthdefName s) (-1) AddToTail 1 [])
 
 -- | Send an /anonymous/ instrument definition using 'playSynthdef'.
 playUGen :: Transport t => t -> UGen -> IO ()
@@ -61,7 +65,7 @@ run_bundle :: Transport t => t -> Double -> Bundle -> IO ()
 run_bundle fd i (Bundle t x) =
     let wr m = if isAsync m
                then async fd m >> return ()
-               else send fd m
+               else sendMessage fd m
     in case t of
           NTPr n -> do
                 pauseThreadUntil (i + n)

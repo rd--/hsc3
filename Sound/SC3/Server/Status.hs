@@ -1,7 +1,5 @@
 -- | Request and display status information from the synthesis server.
-module Sound.SC3.Server.Status (serverStatus
-                               ,serverSampleRateNominal
-                               ,serverSampleRateActual) where
+module Sound.SC3.Server.Status where
 
 import Control.Monad
 import Sound.OpenSoundControl
@@ -13,25 +11,24 @@ serverStatus = liftM statusFormat . serverStatusData
 
 -- | Read nominal sample rate of server.
 serverSampleRateNominal :: (Transport t) => t -> IO Double
-serverSampleRateNominal = liftM (extractDouble . (!! 7)) . serverStatusData
+serverSampleRateNominal = liftM (extractStatusField 7) . serverStatusData
 
 -- | Read actual sample rate of server.
 serverSampleRateActual :: (Transport t) => t -> IO Double
-serverSampleRateActual = liftM (extractDouble . (!! 8)) . serverStatusData
+serverSampleRateActual = liftM (extractStatusField 8) . serverStatusData
 
-extractDouble :: Datum -> Double
-extractDouble d =
-    case d of
-      Float f -> f
-      Double f -> f
-      _ -> error "extractDouble"
+-- | Get /n/th field of status as 'Double'.
+extractStatusField :: Int -> [Datum] -> Double
+extractStatusField n = datum_real_err . (!! n)
 
+-- | Retrieve status data from server.
 serverStatusData :: Transport t => t -> IO [Datum]
 serverStatusData fd = do
-  send fd status
+  sendMessage fd status
   Message _ d <- waitMessage fd "/status.reply"
   return d
 
+-- | Names of status fields.
 statusFields :: [String]
 statusFields = ["Unused                      ",
                 "# UGens                     ",
@@ -43,6 +40,7 @@ statusFields = ["Unused                      ",
                 "Sample Rate (Nominal)       ",
                 "Sample Rate (Actual)        "]
 
+-- | Status pretty printer.
 statusFormat :: [Datum] -> [String]
 statusFormat d =
     let s = "***** SuperCollider Server Status *****"

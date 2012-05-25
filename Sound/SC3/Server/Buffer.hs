@@ -30,17 +30,17 @@ b_indices n m k =
 -- > withSC3 (\fd -> b_getn1_data fd 0 (0,5))
 b_getn1_data :: Transport t => t -> Int -> (Int,Int) -> IO (Maybe [Double])
 b_getn1_data fd b s = do
-  do send fd (b_getn1 b s)
-     p <- recv fd
-     case p of
-       Left m -> let Message "/b_setn" (Int _:Int _:Int _:f) = m
-                 in return (Just (map datum_real' f))
-       _ -> return Nothing
+  sendMessage fd (b_getn1 b s)
+  m <- recvMessage fd
+  case m of
+    Message "/b_setn" (Int _:Int _:Int _:f) ->
+        let f' = map datum_real_err f
+        in return (Just f')
+    _ -> return Nothing
 
--- | Variant of 'b_getn1_data' that gets segments individual 'b_getn'
+-- | Variant of 'b_getn1_data' that segments individual 'b_getn'
 -- messages to /n/ elements.
-b_getn1_data_segment :: Transport t =>
-                        t -> Int -> Int -> (Int,Int) -> IO [Double]
+b_getn1_data_segment :: Transport t => t -> Int -> Int -> (Int,Int) -> IO [Double]
 b_getn1_data_segment fd n b (i,j) = do
   let ix = b_indices n j i
   d <- mapM (b_getn1_data fd b) ix
@@ -49,9 +49,13 @@ b_getn1_data_segment fd n b (i,j) = do
 -- | Variant of 'b_getn1_data_segment' that gets the entire buffer.
 b_fetch :: Transport t => t -> Int -> Int -> IO [Double]
 b_fetch fd n b = do
-  send fd (b_query1 b)
-  p <- recv fd
-  case p of
-    Left m -> let Message "/b_info" [Int _,Int nf,Int nc,Float _] = m
-              in b_getn1_data_segment fd n b (0,nf*nc)
+  sendMessage fd (b_query1 b)
+  m <- recvMessage fd
+  case m of
+    Message "/b_info" [Int _,Int nf,Int nc,Float _] ->
+        b_getn1_data_segment fd n b (0,nf * nc)
     _ -> error "b_get_all"
+
+-- Local Variables:
+-- truncate-lines:t
+-- End:
