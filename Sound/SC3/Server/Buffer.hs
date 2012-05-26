@@ -8,14 +8,17 @@ import Sound.SC3.Server.Command
 -- | Segment a request for /m/ places into sets of at most /n/.
 --
 -- > b_segment 1024 2056 == [8,1024,1024]
+-- > b_segment 1 5 == replicate 5 1
 b_segment :: Int -> Int -> [Int]
 b_segment n m =
     let (q,r) = m `quotRem` n
-    in r : replicate q n
+        s = replicate q n
+    in if r == 0 then s else r : s
 
 -- | Variant of 'b_segment' that takes a starting index and returns
 -- /(index,size)/ duples.
 --
+-- > b_indices 1 5 0 == zip [0..4] (replicate 5 1)
 -- > b_indices 1024 2056 16 == [(16,8),(24,1024),(1048,1024)]
 b_indices :: Int -> Int -> Int -> [(Int,Int)]
 b_indices n m k =
@@ -37,6 +40,8 @@ b_getn1_data fd b s = do
 
 -- | Variant of 'b_getn1_data' that segments individual 'b_getn'
 -- messages to /n/ elements.
+--
+-- > withSC3 (\fd -> b_getn1_data_segment fd 1 0 (0,5))
 b_getn1_data_segment :: Transport t => t -> Int -> Int -> (Int,Int) -> IO [Double]
 b_getn1_data_segment fd n b (i,j) = do
   let ix = b_indices n j i
