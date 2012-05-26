@@ -2,7 +2,6 @@
 -- "Sound.SC3.Server.Command".
 module Sound.SC3.Server.Buffer where
 
-import Data.Maybe
 import Sound.OpenSoundControl {- hosc -}
 import Sound.SC3.Server.Command
 
@@ -28,15 +27,13 @@ b_indices n m k =
 -- | Variant of 'b_getn1' that waits for return message and unpacks it.
 --
 -- > withSC3 (\fd -> b_getn1_data fd 0 (0,5))
-b_getn1_data :: Transport t => t -> Int -> (Int,Int) -> IO (Maybe [Double])
+b_getn1_data :: Transport t => t -> Int -> (Int,Int) -> IO [Double]
 b_getn1_data fd b s = do
+  let f d = case d of
+              Int _:Int _:Int _:x -> map datum_real_err x
+              _ -> error "b_getn1_data"
   sendMessage fd (b_getn1 b s)
-  m <- recvMessage fd
-  case m of
-    Message "/b_setn" (Int _:Int _:Int _:f) ->
-        let f' = map datum_real_err f
-        in return (Just f')
-    _ -> return Nothing
+  fmap f (waitMessageDatum fd "/b_setn")
 
 -- | Variant of 'b_getn1_data' that segments individual 'b_getn'
 -- messages to /n/ elements.
@@ -44,17 +41,18 @@ b_getn1_data_segment :: Transport t => t -> Int -> Int -> (Int,Int) -> IO [Doubl
 b_getn1_data_segment fd n b (i,j) = do
   let ix = b_indices n j i
   d <- mapM (b_getn1_data fd b) ix
-  return (concat (catMaybes d))
+  return (concat d)
 
 -- | Variant of 'b_getn1_data_segment' that gets the entire buffer.
 b_fetch :: Transport t => t -> Int -> Int -> IO [Double]
 b_fetch fd n b = do
+  let f d = case d of
+              [Int _,Int nf,Int nc,Float _] ->
+                  let ix = (0,nf * nc)
+                  in b_getn1_data_segment fd n b ix
+              _ -> error "b_fetch"
   sendMessage fd (b_query1 b)
-  m <- recvMessage fd
-  case m of
-    Message "/b_info" [Int _,Int nf,Int nc,Float _] ->
-        b_getn1_data_segment fd n b (0,nf * nc)
-    _ -> error "b_get_all"
+  waitMessageDatum fd "/b_info" >>= f
 
 -- Local Variables:
 -- truncate-lines:t
