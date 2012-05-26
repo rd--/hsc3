@@ -25,8 +25,7 @@ extractStatusField n = datum_real_err . (!! n)
 serverStatusData :: Transport t => t -> IO [Datum]
 serverStatusData fd = do
   sendMessage fd status
-  Message _ d <- waitMessage fd "/status.reply"
-  return d
+  waitAddressDatum fd "/status.reply"
 
 -- | Names of status fields.
 statusFields :: [String]

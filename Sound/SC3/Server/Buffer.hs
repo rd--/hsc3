@@ -33,7 +33,7 @@ b_getn1_data fd b s = do
               Int _:Int _:Int _:x -> map datum_real_err x
               _ -> error "b_getn1_data"
   sendMessage fd (b_getn1 b s)
-  fmap f (waitMessageDatum fd "/b_setn")
+  fmap f (waitAddressDatum fd "/b_setn")
 
 -- | Variant of 'b_getn1_data' that segments individual 'b_getn'
 -- messages to /n/ elements.
@@ -52,7 +52,7 @@ b_fetch fd n b = do
                   in b_getn1_data_segment fd n b ix
               _ -> error "b_fetch"
   sendMessage fd (b_query1 b)
-  waitMessageDatum fd "/b_info" >>= f
+  waitAddressDatum fd "/b_info" >>= f
 
 -- Local Variables:
 -- truncate-lines:t
