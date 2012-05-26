@@ -11,6 +11,6 @@
 
 Retrieve a single message
 > withSC3 (\fd -> do {_ <- async fd (notify True)
->                    ;tr <- wait fd "/tr"
+>                    ;tr <- waitAddressDatum fd "/tr"
 >                    ;putStrLn (show tr)
 >                    ;async fd (notify False)})
