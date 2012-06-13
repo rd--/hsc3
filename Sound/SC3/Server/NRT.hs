@@ -75,9 +75,9 @@ renderNRT_opt (NRT_Render c_fn i_fn o_fn nc sr hdr fmt) =
 --
 -- > renderNRT_cmd [] (NRT_Render "s.osc" Nothing "s.flac" 2 44100 FLAC I24)
 renderNRT_cmd :: [String] -> NRT_Render -> String
-renderNRT_cmd x o =
+renderNRT_cmd x =
     let protect s = '\'' : s ++ ['\'']
-    in unwords ("scsynth" : map protect (x ++ renderNRT_opt o))
+    in unwords . ("scsynth" :) . map protect . (x ++) . renderNRT_opt
 
 -- | Run @scsynth@ to render 'NRT_Render' with given @scsynth@ options.
 renderNRT :: [String] -> NRT_Render -> IO ExitCode
