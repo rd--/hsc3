@@ -29,7 +29,7 @@ import Sound.SC3.Server.Synthdef
 
 -- Encode an OSC packet as an OSC blob.
 encode_message_blob :: Message -> Datum
-encode_message_blob = Blob . encodeOSC
+encode_message_blob = Blob . encodeMessage
 
 -- | Install a bytecode instrument definition. (Asynchronous)
 d_recv' :: Message -> Synthdef -> Message

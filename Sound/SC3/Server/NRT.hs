@@ -12,7 +12,7 @@ import System.Process {- process -}
 -- | Encode and prefix with encoded length.
 oscWithSize :: Bundle -> B.ByteString
 oscWithSize o =
-    let b = encodeOSC o
+    let b = encodeBundle o
         l = encode_i32 (fromIntegral (B.length b))
     in B.append l b
 

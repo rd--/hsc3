@@ -411,7 +411,7 @@ isAsync (Message a _) = a `elem` async_cmds
 withCM :: Message -> Message -> Message
 withCM (Message c xs) cm =
     if c `elem` async_cmds
-    then let xs' = xs ++ [Blob (encodeOSC cm)]
+    then let xs' = xs ++ [Blob (encodeMessage cm)]
          in message c xs'
     else error ("withCM: not async: " ++ c)
 
