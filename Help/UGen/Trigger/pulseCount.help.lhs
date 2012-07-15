@@ -11,4 +11,4 @@
 >     ;t = impulse AR 10 0
 >     ;p = pulseCount t 0
 >     ;d = demand t 0 (dbufwr 'α' (-666) b p NoLoop)}
-> in audition (mrg [out 0 (dc AR 0),poll t p "p" 0])
+> in audition (mrg [out 0 (dc AR 0),poll t p (label "p") 0])

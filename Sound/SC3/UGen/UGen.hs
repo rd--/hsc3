@@ -1,7 +1,6 @@
 -- | UGen data structure representation and associated functions.
 module Sound.SC3.UGen.UGen where
 
-import Control.Monad
 import Data.Bits
 import qualified Data.Char as C
 import Data.List
@@ -9,7 +8,6 @@ import Data.Maybe
 import Sound.SC3.Identifier
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Rate
-import Sound.SC3.UGen.UId
 import System.Random {- random -}
 
 -- * UGen Id type and functions
@@ -63,58 +61,6 @@ ugenFoldr f st u =
          MCE p -> f u (foldr rec st p)
          MRG l r -> f u (f l (f r st))
          _ -> f u st
-
--- * UGen graph Id reassignment
-
--- | Collect Ids at UGen graph
-ugenIds :: UGen -> [UGenId]
-ugenIds =
-    let f u = case ugenType u of
-                Primitive_U -> [ugenId u]
-                _ -> []
-    in ugenFoldr ((++) . f) []
-
--- | Apply /f/ at 'UId', or no-op at 'NoId'.
-atUGenId :: (Int -> Int) -> UGenId -> UGenId
-atUGenId f z =
-    case z of
-      NoId -> NoId
-      UId i -> UId (f i)
-
--- | Add 'idHash' of /e/ to all 'Primitive_U' at /u/.
-uprotect :: ID a => a -> UGen -> UGen
-uprotect e =
-    let e' = idHash e
-        f u = case ugenType u of
-                Primitive_U -> u {ugenId = atUGenId (+ e') (ugenId u)}
-                _ -> u
-    in ugenTraverse f
-
--- | Variant of 'uprotect' with subsequent identifiers derived by
--- incrementing initial identifier.
-uprotect' :: ID a => a -> [UGen] -> [UGen]
-uprotect' e =
-    let n = map (+ idHash e) [1..]
-    in zipWith uprotect n
-
--- | Make /n/ parallel instances of 'UGen' with protected identifiers.
-uclone' :: ID a => a -> Int -> UGen -> [UGen]
-uclone' e n = uprotect' e . replicate n
-
--- | 'mce' variant of 'uclone''.
-uclone :: ID a => a -> Int -> UGen -> UGen
-uclone e n = mce . uclone' e n
-
--- | Left to right UGen function composition with 'UGenId' protection.
-ucompose :: ID a => a -> [UGen -> UGen] -> UGen -> UGen
-ucompose e xs =
-    let go [] u = u
-        go ((f,k):f') u = go f' (uprotect k (f u))
-    in go (zip xs [idHash e ..])
-
--- | Make /n/ sequential instances of `f' with protected Ids.
-useq :: ID a => a -> Int -> (UGen -> UGen) -> UGen -> UGen
-useq e n f = ucompose e (replicate n f)
 
 -- * UGen ID Instance
 
@@ -213,10 +159,6 @@ mce2c u =
 -- | Multiple channel expansion for two inputs.
 mce3 :: UGen -> UGen -> UGen -> UGen
 mce3 x y z = mce [x,y,z]
-
--- | Clone a unit generator (mce . replicateM).
-clone :: (UId m) => Int -> m UGen -> m UGen
-clone n = liftM mce . replicateM n
 
 -- | Number of channels to expand to.
 mceDegree :: UGen -> Int

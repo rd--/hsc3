@@ -97,6 +97,8 @@ midiCPS' :: Floating a => a -> a
 midiCPS' i = 440.0 * (2.0 ** ((i - 69.0) * (1.0 / 12.0)))
 
 -- | Unary operator class.
+--
+-- > map (floor . (* 1e4) . dbAmp) [-90,-60,-30,0] == [0,10,316,10000]
 class (Floating a, Ord a) => UnaryOp a where
     ampDb :: a -> a
     ampDb a = log10 a * 20

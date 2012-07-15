@@ -5,7 +5,7 @@
 
 > let {t = impulse KR 10 0
 >     ;l = line KR 0 1 1 RemoveSynth}
-> in audition (poll t l (label "test") 0)
+> in audition (poll t l (label "polling...") 0)
 
 multichannel expansion (requires labels be equal length...)
 > let {t = impulse KR (mce2 10 5) 0
