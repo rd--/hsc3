@@ -353,6 +353,27 @@ mkUnaryOperator i f a =
     in mkOperator g "UnaryOpUGen" [a] (fromEnum i)
 
 -- | Binary math constructor with constant optimization.
+--
+-- > let o = sinOsc AR 440 0
+--
+-- > o * 1 == o && 1 * o == o && o * 2 /= o
+-- > o + 0 == o && 0 + o == o && o + 1 /= o
+-- > o - 0 == o && 0 - o /= o
+-- > o / 1 == o && 1 / o /= o
+-- > o ** 1 == o && o ** 2 /= o
+mkBinaryOperator_optimize :: Binary -> (Double -> Double -> Double) ->
+                             (Either Double Double -> Bool) ->
+                             UGen -> UGen -> UGen
+mkBinaryOperator_optimize i f o a b =
+   let g [x,y] = f x y
+       g _ = error "mkBinaryOperator: non binary input"
+       r = case (a,b) of
+             (Constant a',_) -> if o (Left a') then Just b else Nothing
+             (_,Constant b') -> if o (Right b') then Just a else Nothing
+             _ -> Nothing
+   in maybe (mkOperator g "BinaryOpUGen" [a, b] (fromEnum i)) id r
+
+-- | Binary math constructor with constant optimization.
 mkBinaryOperator :: Binary -> (Double -> Double -> Double) ->
                     UGen -> UGen -> UGen
 mkBinaryOperator i f a b =
@@ -445,9 +466,9 @@ mkInfo name = mkOsc IR name [] 1
 -- Unit generators are numbers.
 instance Num UGen where
     negate = mkUnaryOperator Neg negate
-    (+) = mkBinaryOperator Add (+)
-    (-) = mkBinaryOperator Sub (-)
-    (*) = mkBinaryOperator Mul (*)
+    (+) = mkBinaryOperator_optimize Add (+) (`elem` [Left 0,Right 0])
+    (-) = mkBinaryOperator_optimize Sub (-) ((==) (Right 0))
+    (*) = mkBinaryOperator_optimize Mul (*) (`elem` [Left 1,Right 1])
     abs = mkUnaryOperator Abs abs
     signum = mkUnaryOperator Sign signum
     fromInteger = Constant . fromInteger
@@ -455,7 +476,7 @@ instance Num UGen where
 -- Unit generators are fractional.
 instance Fractional UGen where
     recip = mkUnaryOperator Recip recip
-    (/) = mkBinaryOperator FDiv (/)
+    (/) = mkBinaryOperator_optimize FDiv (/) ((==) (Right 1))
     fromRational = Constant . fromRational
 
 -- Unit generators are floating point.
@@ -464,7 +485,7 @@ instance Floating UGen where
     exp = mkUnaryOperator Exp exp
     log = mkUnaryOperator Log log
     sqrt = mkUnaryOperator Sqrt sqrt
-    (**) = mkBinaryOperator Pow (**)
+    (**) = mkBinaryOperator_optimize Pow (**) ((==) (Right 1))
     logBase a b = log b / log a
     sin = mkUnaryOperator Sin sin
     cos = mkUnaryOperator Cos cos

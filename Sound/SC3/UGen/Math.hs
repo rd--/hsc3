@@ -29,10 +29,10 @@ class OrdE a where
     (>=*) :: a -> a -> a
 
 instance OrdE Double where
-    a <* b = if a < b   then 1.0 else 0.0
-    a <=* b = if a <= b  then 1.0 else 0.0
-    a >* b = if a > b   then 1.0 else 0.0
-    a >=* b = if a >= b  then 1.0 else 0.0
+    a <* b = if a < b then 1.0 else 0.0
+    a <=* b = if a <= b then 1.0 else 0.0
+    a >* b = if a > b then 1.0 else 0.0
+    a >=* b = if a >= b then 1.0 else 0.0
 
 instance OrdE UGen where
     (<*) = mkBinaryOperator LT_ (<*)
