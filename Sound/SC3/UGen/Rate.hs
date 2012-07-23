@@ -1,5 +1,5 @@
 -- | Operating rate definitions and utilities.
-module Sound.SC3.UGen.Rate (Rate(..),rateId) where
+module Sound.SC3.UGen.Rate where
 
 import Data.Function
 
@@ -14,7 +14,7 @@ instance Ord Rate where
 rateId :: Rate -> Int
 rateId = fromEnum
 
--- Rates as ordered for filter rate selection.
+-- | Rates as ordered for filter rate selection.
 rate_ord :: Rate -> Int
 rate_ord r =
     case r of
@@ -22,3 +22,13 @@ rate_ord r =
       KR -> 1
       AR -> 2
       DR -> 3
+
+-- | Color identifiers for each 'Rate'.
+rate_color :: Rate -> String
+rate_color r =
+    case r of
+      AR -> "black"
+      KR -> "blue"
+      IR -> "yellow"
+      DR -> "red"
+

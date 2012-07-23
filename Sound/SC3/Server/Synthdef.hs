@@ -1,10 +1,6 @@
 -- | The unit-generator graph structure implemented by the
 --   SuperCollider synthesis server.
-module Sound.SC3.Server.Synthdef (NodeId,PortIndex,KType(..)
-                                 ,Node(..),FromPort(..)
-                                 ,Graph(..),Graphdef,graphdef
-                                 ,Synthdef(..),synthdefData,synth,synthdef
-                                 ,synthdefWrite,synthstat) where
+module Sound.SC3.Server.Synthdef where
 
 import qualified Data.ByteString.Lazy as B {- bytestring -}
 import qualified Data.IntMap as M {- containers -}
@@ -32,6 +28,19 @@ data Graph = Graph {nextId :: NodeId
 data KType = K_IR | K_KR | K_TR | K_AR
              deriving (Eq,Show,Ord)
 
+-- | Type to represent the left hand side of an edge in a unit
+--   generator graph.
+data FromPort = FromPort_C {port_nid :: NodeId}
+              | FromPort_K {port_nid :: NodeId,port_kt :: KType}
+              | FromPort_U {port_nid :: NodeId,port_idx :: PortIndex}
+                deriving (Eq,Show)
+
+-- | A destination port.
+data ToPort = ToPort NodeId PortIndex deriving (Eq,Show)
+
+-- | A connection from 'FromPort' to 'ToPort'.
+type Edge = (FromPort,ToPort)
+
 -- | Type to represent nodes in unit generator graph.
 data Node = NodeC {node_id :: NodeId
                   ,node_c_value :: Double}
@@ -52,6 +61,14 @@ data Node = NodeC {node_id :: NodeId
                   ,node_p_index :: PortIndex}
             deriving (Eq,Show)
 
+-- | Binary representation of a unit generator graph.
+type Graphdef = B.ByteString
+
+-- | Binary representation of a unit generator synth definition.
+data Synthdef = Synthdef {synthdefName :: String
+                         ,synthdefGraph :: Graph}
+                deriving (Eq,Show)
+
 node_k_cmp :: Node -> Node -> Ordering
 node_k_cmp p q = compare (node_k_type p) (node_k_type q)
 
@@ -68,13 +85,6 @@ ktype r tr =
            AR -> K_AR
            DR -> error "ktype"
 
--- | Type to represent the left hand side of an edge in a unit
---   generator graph.
-data FromPort = FromPort_C {port_nid :: NodeId}
-              | FromPort_K {port_nid :: NodeId,port_kt :: KType}
-              | FromPort_U {port_nid :: NodeId,port_idx :: PortIndex}
-                deriving (Eq,Show)
-
 -- | Transform a unit generator into a graph.
 synth :: UGen -> Graph
 synth u =
@@ -83,20 +93,12 @@ synth u =
         ks' = sortBy node_k_cmp ks
         us' = if null ks'
               then reverse us
-              else implicit ks' ++ reverse us
+              else mk_implicit ks' ++ reverse us
     in Graph (-1) cs ks' us'
-
--- | Binary representation of a unit generator graph.
-type Graphdef = B.ByteString
 
 -- | Transform a unit generator graph into bytecode.
 graphdef :: Graph -> Graphdef
 graphdef = encode_graphdef
-
--- | Binary representation of a unit generator synth definition.
-data Synthdef = Synthdef {synthdefName :: String
-                         ,synthdefGraph :: Graph}
-                deriving (Eq,Show)
 
 -- | Encode 'Synthdef' as binary data stream.
 synthdefData :: Synthdef -> B.ByteString
@@ -133,6 +135,65 @@ synthstat u =
                ,"control rates             : " ++ f node_k_rate ks
                ,"number of unit generators : " ++ show (length us)
                ,"unit generator rates      : " ++ f node_u_rate us]
+
+-- | Find 'Node' with indicated identifier.
+find_node :: Graph -> NodeId -> Maybe Node
+find_node (Graph _ cs ks us) n =
+    let f x = node_id x == n
+    in find f (cs ++ ks ++ us)
+
+-- | Is 'Node' an /implicit/ control?
+is_implicit_control :: Node -> Bool
+is_implicit_control n =
+    let cs = ["AudioControl","Control","TrigControl"]
+    in case n of
+        NodeU x _ s _ _ _ _ -> x == -1 && s `elem` cs
+        _ -> False
+
+-- | Generate a label for 'Node' indicating the type and identifier.
+node_label :: Node -> String
+node_label nd =
+    case nd of
+      NodeC n _ -> "C_" ++ show n
+      NodeK n _ _ _ _ -> "K_" ++ show n
+      NodeU n _ _ _ _ _ _ -> "U_" ++ show n
+      NodeP n _ _ -> "P_" ++ show n
+
+-- | Get 'port_idx' for 'FromPort_U', else @0@.
+port_idx_or_zero :: FromPort -> PortIndex
+port_idx_or_zero p =
+    case p of
+      FromPort_U _ x -> x
+      _ -> 0
+
+-- | Is 'Node' a /constant/.
+is_node_c :: Node -> Bool
+is_node_c n =
+    case n of
+      NodeC _ _ -> True
+      _ -> False
+
+-- | Is 'Node' a /control/.
+is_node_k :: Node -> Bool
+is_node_k n =
+    case n of
+      NodeK _ _ _ _ _ -> True
+      _ -> False
+
+-- | Is 'Node' a /UGen/.
+is_node_u :: Node -> Bool
+is_node_u n =
+    case n of
+      NodeU _ _ _ _ _ _ _-> True
+      _ -> False
+
+-- | Calculate all edges given a set of 'NodeU'.
+edges :: [Node] -> [Edge]
+edges =
+    let f n = case n of
+                NodeU x _ _ i _ _ _ -> zip i (map (ToPort x) [0..])
+                _ -> error "edges"
+    in concatMap f
 
 as_from_port :: Node -> FromPort
 as_from_port d =
@@ -209,18 +270,18 @@ push_u (r,nm,i,o,s,d) g =
     in (n,g {ugens = n : ugens g
              ,nextId = nextId g + 1})
 
-acc :: [UGen] -> [Node] -> Graph -> ([Node],Graph)
-acc [] n g = (reverse n,g)
-acc (x:xs) ys g =
+mk_node_acc :: [UGen] -> [Node] -> Graph -> ([Node],Graph)
+mk_node_acc [] n g = (reverse n,g)
+mk_node_acc (x:xs) ys g =
     let (y,g') = mk_node x g
-    in acc xs (y:ys) g'
+    in mk_node_acc xs (y:ys) g'
 
 -- Either find existing control node,or insert a new node.
 mk_node_u :: UGen -> Graph -> (Node,Graph)
 mk_node_u ug g =
     case ug of
       Primitive r nm i o s d ->
-          let (i',g') = acc i [] g
+          let (i',g') = mk_node_acc i [] g
               i'' = map as_from_port i'
               u = (r,nm,i'',o,s,d)
               y = find (find_u_p u) (ugens g')
@@ -249,7 +310,11 @@ mk_node u g =
       MCE_U -> error "mk_node: mce"
 
 type Map = M.IntMap Int
+
 type Maps = (Map,[Node],Map,Map)
+
+data Input = Input Int Int
+             deriving (Eq,Show)
 
 -- Generate maps from node identifiers to synthdef indexes.
 mk_maps :: Graph -> Maps
@@ -262,9 +327,6 @@ mk_maps (Graph _ cs ks us) =
 -- Locate index in map given node identifer.
 fetch :: NodeId -> Map -> Int
 fetch = M.findWithDefault (error "fetch")
-
-data Input = Input Int Int
-             deriving (Eq,Show)
 
 -- For controls we need to know not the overall index
 -- but in relation to controls of the same type.
@@ -350,8 +412,8 @@ ks_count ks =
     in f (0,0,0,0) ks
 
 -- Construct implicit control unit generator nodes.
-implicit :: [Node] -> [Node]
-implicit ks =
+mk_implicit :: [Node] -> [Node]
+mk_implicit ks =
     let (ni,nk,nt,na) = ks_count ks
         mk_n t n o =
             let (nm,r) = case t of

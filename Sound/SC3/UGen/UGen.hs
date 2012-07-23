@@ -38,6 +38,14 @@ data UGen = Constant { constantValue :: Double }
                 , mrgRight :: UGen }
             deriving (Eq, Show)
 
+-- | Lookup operator name for operator UGens, else UGen name.
+ugen_user_name :: String -> Special -> String
+ugen_user_name nm (Special n) =
+    case nm of
+      "UnaryOpUGen" -> unaryName n
+      "BinaryOpUGen" -> binaryName n
+      _ -> nm
+
 -- * UGen graph functions
 
 -- | Depth first traversal of graph at `u' applying `f' to each node.

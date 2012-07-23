@@ -113,21 +113,25 @@ data Binary = Add
 
 -- | Provide symbolic names for standard unary operators.
 unaryName :: Int -> String
-unaryName   0 = "-"
-unaryName   n = show (toEnum n :: Unary)
+unaryName n =
+    case n of
+      0 -> "-"
+      _ -> show (toEnum n :: Unary)
 
 -- | Provide symbolic names for standard binary operators.
 binaryName :: Int -> String
-binaryName  0 = "+"
-binaryName  1 = "-"
-binaryName  2 = "*"
-binaryName  4 = "/"
-binaryName  5 = "%"
-binaryName  6 = "=="
-binaryName  7 = "/="
-binaryName  8 = "<"
-binaryName  9 = ">"
-binaryName 10 = "<="
-binaryName 11 = ">="
-binaryName 25 = "**"
-binaryName n  = show (toEnum n :: Binary)
+binaryName n =
+    case n of
+      0 -> "+"
+      1 -> "-"
+      2 -> "*"
+      4 -> "/"
+      5 -> "%"
+      6 -> "=="
+      7 -> "/="
+      8 -> "<"
+      9 -> ">"
+      10 -> "<="
+      11 -> ">="
+      25 -> "**"
+      _ -> show (toEnum n :: Binary)
