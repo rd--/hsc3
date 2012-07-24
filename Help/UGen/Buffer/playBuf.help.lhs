@@ -3,7 +3,7 @@
 
 > import Sound.SC3
 
-Load sound file to buffer zero (required for examples)
+Load sound file to buffer zero (single channel file required for examples)
 > let fn = "/home/rohan/data/audio/pf-c5.aif"
 > in withSC3 (\fd -> async fd (b_allocRead 0 fn 0 0))
 
