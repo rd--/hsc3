@@ -106,6 +106,7 @@ Library
                    Sound.SC3.UGen.Operator
                    Sound.SC3.UGen.Oscillator
                    Sound.SC3.UGen.Panner
+                   Sound.SC3.UGen.Plain
                    Sound.SC3.UGen.Protect
                    Sound.SC3.UGen.Rate
                    Sound.SC3.UGen.UGen
