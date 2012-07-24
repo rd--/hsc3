@@ -100,6 +100,7 @@ Library
                    Sound.SC3.UGen.Information
                    Sound.SC3.UGen.MachineListening
                    Sound.SC3.UGen.Math
+                   Sound.SC3.UGen.Name
                    Sound.SC3.UGen.Noise.ID
                    Sound.SC3.UGen.Noise.Monadic
                    Sound.SC3.UGen.Operator

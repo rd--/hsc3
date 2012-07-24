@@ -4,12 +4,16 @@ module Sound.SC3.Server.Synthdef where
 
 import qualified Data.ByteString.Lazy as B {- bytestring -}
 import qualified Data.IntMap as M {- containers -}
+import Data.Function
 import Data.List
+import Data.Maybe
 import Sound.OpenSoundControl.Coding.Byte {- hosc -}
 import Sound.OpenSoundControl.Coding.Cast
 import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.Rate
 import System.FilePath {- filepath -}
+
+-- * Data types
 
 -- | Node identifier.
 type NodeId = Int
@@ -32,7 +36,7 @@ data KType = K_IR | K_KR | K_TR | K_AR
 --   generator graph.
 data FromPort = FromPort_C {port_nid :: NodeId}
               | FromPort_K {port_nid :: NodeId,port_kt :: KType}
-              | FromPort_U {port_nid :: NodeId,port_idx :: PortIndex}
+              | FromPort_U {port_nid :: NodeId,port_idx :: Maybe PortIndex}
                 deriving (Eq,Show)
 
 -- | A destination port.
@@ -69,21 +73,24 @@ data Synthdef = Synthdef {synthdefName :: String
                          ,synthdefGraph :: Graph}
                 deriving (Eq,Show)
 
-node_k_cmp :: Node -> Node -> Ordering
-node_k_cmp p q = compare (node_k_type p) (node_k_type q)
+-- * User functions
 
--- Determine class of control given rate and name.
+-- | Compare 'NodeK' values 'on' 'node_k_type'.
+node_k_cmp :: Node -> Node -> Ordering
+node_k_cmp = compare `on` node_k_type
+
+-- | Determine class of control given 'Rate' and /trigger/ status.
 ktype :: Rate -> Bool -> KType
 ktype r tr =
     if tr
     then case r of
            KR -> K_TR
-           _ -> error "ktype"
+           _ -> error "ktype: non KR trigger control"
     else case r of
            IR -> K_IR
            KR -> K_KR
            AR -> K_AR
-           DR -> error "ktype"
+           DR -> error "ktype: DR control"
 
 -- | Transform a unit generator into a graph.
 synth :: UGen -> Graph
@@ -100,7 +107,7 @@ synth u =
 graphdef :: Graph -> Graphdef
 graphdef = encode_graphdef
 
--- | Encode 'Synthdef' as binary data stream.
+-- | Encode 'Synthdef' as a binary data stream.
 synthdefData :: Synthdef -> B.ByteString
 synthdefData (Synthdef s g) =
     B.concat [encode_str "SCgf"
@@ -136,7 +143,7 @@ synthstat u =
                ,"number of unit generators : " ++ show (length us)
                ,"unit generator rates      : " ++ f node_u_rate us]
 
--- | Find 'Node' with indicated identifier.
+-- | Find 'Node' with indicated 'NodeId'.
 find_node :: Graph -> NodeId -> Maybe Node
 find_node (Graph _ cs ks us) n =
     let f x = node_id x == n
@@ -150,20 +157,20 @@ is_implicit_control n =
         NodeU x _ s _ _ _ _ -> x == -1 && s `elem` cs
         _ -> False
 
--- | Generate a label for 'Node' indicating the type and identifier.
+-- | Generate a label for 'Node' using the /type/ and the 'node_id'.
 node_label :: Node -> String
 node_label nd =
     case nd of
-      NodeC n _ -> "C_" ++ show n
-      NodeK n _ _ _ _ -> "K_" ++ show n
-      NodeU n _ _ _ _ _ _ -> "U_" ++ show n
-      NodeP n _ _ -> "P_" ++ show n
+      NodeC n _ -> "c_" ++ show n
+      NodeK n _ _ _ _ -> "k_" ++ show n
+      NodeU n _ _ _ _ _ _ -> "u_" ++ show n
+      NodeP n _ _ -> "p_" ++ show n
 
 -- | Get 'port_idx' for 'FromPort_U', else @0@.
 port_idx_or_zero :: FromPort -> PortIndex
 port_idx_or_zero p =
     case p of
-      FromPort_U _ x -> x
+      FromPort_U _ (Just x) -> x
       _ -> 0
 
 -- | Is 'Node' a /constant/.
@@ -192,36 +199,39 @@ edges :: [Node] -> [Edge]
 edges =
     let f n = case n of
                 NodeU x _ _ i _ _ _ -> zip i (map (ToPort x) [0..])
-                _ -> error "edges"
+                _ -> error "edges: non NodeU input node"
     in concatMap f
 
+-- | Transform 'Node' to 'FromPort'.
 as_from_port :: Node -> FromPort
 as_from_port d =
     case d of
       NodeC n _ -> FromPort_C n
       NodeK n _ _ _ t -> FromPort_K n t
-      NodeU n _ _ _ _ _ _ -> FromPort_U n 0
-      NodeP _ u p -> FromPort_U (node_id u) p
+      NodeU n _ _ _ _ _ _ -> FromPort_U n Nothing
+      NodeP _ u p -> FromPort_U (node_id u) (Just p)
 
--- The empty graph.
+-- | The empty 'Graph'.
 empty_graph :: Graph
 empty_graph = Graph 0 [] [] []
 
--- Predicate to locate constant.
+-- * Internal functions
+
+-- | Predicate to determine if 'Node' is a constant with indicated /value/.
 find_c_p :: Double -> Node -> Bool
 find_c_p x n =
     case n of
       NodeC _ y -> x == y
-      _ -> error "find_c_p"
+      _ -> error "find_c_p: non NodeC"
 
--- Insert a constant node into the graph.
+-- | Insert a constant 'Node' into the 'Graph'.
 push_c :: Double -> Graph -> (Node,Graph)
 push_c x g =
     let n = NodeC (nextId g) x
     in (n,g {constants = n : constants g
-             ,nextId = nextId g + 1})
+            ,nextId = nextId g + 1})
 
--- Either find existing constant node,or insert a new node.
+-- | Either find existing constant node,or insert a new node.
 mk_node_c :: UGen -> Graph -> (Node,Graph)
 mk_node_c u g =
     case u of
@@ -230,21 +240,22 @@ mk_node_c u g =
           in maybe (push_c x g) (\y' -> (y',g)) y
       _ -> error "mk_node_c"
 
--- Predicate to locate control,names must be unique.
+-- | Predicate to determine if 'Node' is a control with indicated
+-- /name/.  Names must be unique.
 find_k_p :: String -> Node -> Bool
 find_k_p x n =
     case n of
       NodeK _ _ y _ _ -> x == y
       _ -> error "find_k_p"
 
--- Insert a control node into the graph.
+-- | Insert a control node into the 'Graph'.
 push_k :: (Rate,String,Double,Bool) -> Graph -> (Node,Graph)
 push_k (r,nm,d,tr) g =
     let n = NodeK (nextId g) r nm d (ktype r tr)
     in (n,g {controls = n : controls g
              ,nextId = nextId g + 1})
 
--- Either find existing control node,or insert a new node.
+-- | Either find existing 'Control' 'Node', or insert a new 'Node'.
 mk_node_k :: UGen -> Graph -> (Node,Graph)
 mk_node_k u g =
     case u of
@@ -255,7 +266,7 @@ mk_node_k u g =
 
 type UGenParts = (Rate,String,[FromPort],[Output],Special,UGenId)
 
--- Predicate to locate primitive,names must be unique.
+-- | Predicate to locate primitive, names must be unique.
 find_u_p :: UGenParts -> Node -> Bool
 find_u_p (r,n,i,o,s,d) nd =
     case nd of
@@ -263,25 +274,26 @@ find_u_p (r,n,i,o,s,d) nd =
           r == r' && n == n' && i == i' && o == o' && s == s' && d == d'
       _ ->  error "find_u_p"
 
--- Insert a primitive node into the graph.
+-- | Insert a primitive node into the graph.
 push_u :: UGenParts -> Graph -> (Node,Graph)
 push_u (r,nm,i,o,s,d) g =
     let n = NodeU (nextId g) r nm i o s d
     in (n,g {ugens = n : ugens g
              ,nextId = nextId g + 1})
 
-mk_node_acc :: [UGen] -> [Node] -> Graph -> ([Node],Graph)
-mk_node_acc [] n g = (reverse n,g)
-mk_node_acc (x:xs) ys g =
-    let (y,g') = mk_node x g
-    in mk_node_acc xs (y:ys) g'
+mk_node_u_acc :: [UGen] -> [Node] -> Graph -> ([Node],Graph)
+mk_node_u_acc u n g =
+    case u of
+      [] -> (reverse n,g)
+      x:xs -> let (y,g') = mk_node x g
+              in mk_node_u_acc xs (y:n) g'
 
--- Either find existing control node,or insert a new node.
+-- Either find existing control node, or insert a new node.
 mk_node_u :: UGen -> Graph -> (Node,Graph)
 mk_node_u ug g =
     case ug of
       Primitive r nm i o s d ->
-          let (i',g') = mk_node_acc i [] g
+          let (i',g') = mk_node_u_acc i [] g
               i'' = map as_from_port i'
               u = (r,nm,i'',o,s,d)
               y = find (find_u_p u) (ugens g')
@@ -352,7 +364,7 @@ make_input (cs,ks,_,us) fp =
                                   K_TR -> 2
                                   K_AR -> 3
                         in Input i (fetch_k n t ks)
-      FromPort_U n p -> Input (fetch n us) p
+      FromPort_U n p -> Input (fetch n us) (fromMaybe 0 p)
 
 -- Byte-encode input value.
 encode_input :: Input -> B.ByteString
