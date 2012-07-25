@@ -33,29 +33,43 @@ parenthesise_operator nm =
 
 -- > import Sound.SC3.ID
 --
--- > let u = out (control KR "bus" 0) ((sinOsc AR 440 0 + whiteNoise 'a' AR) * 0.1)
--- > in putStrLn (reconstruct_graph (synth u))
-reconstruct_graph :: Graph -> String
-reconstruct_graph g =
+-- > let {k = control KR "bus" 0
+-- >     ;o = sinOsc AR 440 0 + whiteNoise 'a' AR
+-- >     ;u = out k (pan2 (o * 0.1) 0 1)
+-- >     ;m = mrg [u,out 1 (impulse AR 1 0 * 0.1)]}
+-- > in putStrLn (reconstruct_graph_str (synth m))
+reconstruct_graph_str :: Graph -> String
+reconstruct_graph_str g =
     let (Graph _ c k u) = g
-        ls = concat [map reconstruct_c (node_sort c)
-                    ,map reconstruct_k (node_sort k)
-                    ,map (reconstruct_u g) u]
+        ls = concat [map reconstruct_c_str (node_sort c)
+                    ,map reconstruct_k_str (node_sort k)
+                    ,concatMap (reconstruct_u_str g) u
+                    ,[reconstruct_mrg_str g]]
     in unlines (filter (not . null) ls)
 
-reconstruct_c :: Node -> String
-reconstruct_c u =
+reconstruct_c_str :: Node -> String
+reconstruct_c_str u =
     let l = node_label u
         c = node_c_value u
     in printf "%s = constant %f" l c
 
-reconstruct_k :: Node -> String
-reconstruct_k u =
+reconstruct_c_ugen :: Node -> UGen
+reconstruct_c_ugen u = constant (node_c_value u)
+
+reconstruct_k_str :: Node -> String
+reconstruct_k_str u =
     let l = node_label u
         r = node_k_rate u
         n = node_k_name u
         d = node_k_default u
     in printf "%s = control %s \"%s\" %f" l (show r) n d
+
+reconstruct_k_ugen :: Node -> UGen
+reconstruct_k_ugen u =
+    let r = node_k_rate u
+        n = node_k_name u
+        d = node_k_default u
+    in control r n d
 
 ugen_qname :: String -> Special -> (String,String)
 ugen_qname nm (Special n) =
@@ -64,8 +78,18 @@ ugen_qname nm (Special n) =
       "BinaryOpUGen" -> ("binop",binaryName n)
       _ -> ("ugen",nm)
 
-reconstruct_u :: Graph -> Node -> String
-reconstruct_u _ u =
+reconstruct_mce_str :: Graph -> Node -> String
+reconstruct_mce_str _ u =
+    let o = length (node_u_outputs u)
+        l = node_label u
+        p = map (\i -> printf "%s_o_%d" l i) [0 .. o - 1]
+        p' = intercalate "," p
+    in if o <= 1
+       then ""
+       else printf "[%s] = mceChannels %s" p' l
+
+reconstruct_u_str :: Graph -> Node -> [String]
+reconstruct_u_str _ u =
     let l = node_label u
         r = node_u_rate u
         i = node_u_inputs u
@@ -76,27 +100,20 @@ reconstruct_u _ u =
         z = node_id u
         o = length (node_u_outputs u)
         u_s = printf "%s = ugen \"%s\" %s [%s] %d" l n (show r) i_l o
-        nd_s = printf "%s = nondet \"%s\" (UId %d) %s [%s] %d" l n z (show r) i_l o
-    in if is_implicit_control u
-       then ""
-       else case q of
+        nd_s = let t = "%s = nondet \"%s\" (UId %d) %s [%s] %d"
+               in printf t l n z (show r) i_l o
+        c = case q of
               "ugen" -> if node_u_ugenid u == NoId then u_s else nd_s
               _ -> printf "%s = %s \"%s\" %s %s" l q n (show r) i_s
+        m = reconstruct_mce_str undefined u
+    in if is_implicit_control u
+       then []
+       else if null m then [c] else [c,m]
 
-{-
---import Sound.SC3.UGen.Plain
---import Sound.SC3.UGen.Rate
--- > Sound.SC3.UGen.Dot.draw test
-test :: UGen
-test =
-    let c_1 = constant 440.0
-        c_2 = constant 0.0
-        c_6 = constant 0.1
-        k_0 = control KR "bus" 0.0
-        u_3 = ugen "SinOsc" AR [c_1,c_2] 1
-        u_4 = nondet "WhiteNoise" (UId 4) AR [] 1
-        u_5 = binop "+" AR u_3 u_4
-        u_7 = binop "*" AR u_5 c_6
-        u_8 = ugen "Out" AR [k_0,u_7] 0
-    in u_8
--}
+reconstruct_mrg_str :: Graph -> String
+reconstruct_mrg_str (Graph _ _ _ u) =
+    let zero_out n = not (is_implicit_control n) && null (node_u_outputs n)
+    in case map node_label (filter zero_out u) of
+         [] -> error "reconstruct_mrg_str"
+         [o] -> printf "%s" o
+         o -> printf "mrg [%s]" (intercalate "," o)

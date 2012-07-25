@@ -75,6 +75,10 @@ data Synthdef = Synthdef {synthdefName :: String
 
 -- * User functions
 
+-- | Find the maximum 'NodeId' used at 'Graph'.
+graph_maximum_id :: Graph -> NodeId
+graph_maximum_id (Graph _ c k u) = maximum (map node_id (c ++ k ++ u))
+
 -- | Compare 'NodeK' values 'on' 'node_k_type'.
 node_k_cmp :: Node -> Node -> Ordering
 node_k_cmp = compare `on` node_k_type
@@ -210,6 +214,10 @@ as_from_port d =
       NodeK n _ _ _ t -> FromPort_K n t
       NodeU n _ _ _ _ _ _ -> FromPort_U n Nothing
       NodeP _ u p -> FromPort_U (node_id u) (Just p)
+
+-- | Locate 'Node' of 'FromPort' in 'Graph'.
+from_port_node :: Graph -> FromPort -> Maybe Node
+from_port_node g fp = find_node g (port_nid fp)
 
 -- | The empty 'Graph'.
 empty_graph :: Graph
