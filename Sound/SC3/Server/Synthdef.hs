@@ -96,16 +96,27 @@ ktype r tr =
            AR -> K_AR
            DR -> error "ktype: DR control"
 
+-- | Remove implicit /control/ UGens from 'Graph'
+remove_implicit :: Graph -> Graph
+remove_implicit g =
+    let u = filter (not . is_implicit_control) (ugens g)
+    in g {ugens = u}
+
+-- | Add implicit /control/ UGens to 'Graph'
+add_implicit :: Graph -> Graph
+add_implicit g =
+    let (Graph _ cs ks us) = g
+        ks' = sortBy node_k_cmp ks
+        im = if null ks' then [] else mk_implicit ks'
+        us' = im ++ us
+    in Graph (-1) cs ks' us'
+
 -- | Transform a unit generator into a graph.
 synth :: UGen -> Graph
 synth u =
     let (_,g) = mk_node (prepare_root u) empty_graph
-        (Graph _ cs ks us) = g
-        ks' = sortBy node_k_cmp ks
-        us' = if null ks'
-              then reverse us
-              else mk_implicit ks' ++ reverse us
-    in Graph (-1) cs ks' us'
+        g' = g {ugens = reverse (ugens g)}
+    in add_implicit g'
 
 -- | Transform a unit generator graph into bytecode.
 graphdef :: Graph -> Graphdef
@@ -153,7 +164,7 @@ find_node (Graph _ cs ks us) n =
     let f x = node_id x == n
     in find f (cs ++ ks ++ us)
 
--- | Is 'Node' an /implicit/ control?
+-- | Is 'Node' an /implicit/ control UGen?
 is_implicit_control :: Node -> Bool
 is_implicit_control n =
     let cs = ["AudioControl","Control","TrigControl"]
@@ -239,7 +250,7 @@ push_c x g =
     in (n,g {constants = n : constants g
             ,nextId = nextId g + 1})
 
--- | Either find existing constant node,or insert a new node.
+-- | Either find existing 'Constant' 'Node', or insert a new 'Node'.
 mk_node_c :: UGen -> Graph -> (Node,Graph)
 mk_node_c u g =
     case u of
@@ -261,7 +272,7 @@ push_k :: (Rate,String,Double,Bool) -> Graph -> (Node,Graph)
 push_k (r,nm,d,tr) g =
     let n = NodeK (nextId g) r nm d (ktype r tr)
     in (n,g {controls = n : controls g
-             ,nextId = nextId g + 1})
+            ,nextId = nextId g + 1})
 
 -- | Either find existing 'Control' 'Node', or insert a new 'Node'.
 mk_node_k :: UGen -> Graph -> (Node,Graph)
@@ -282,12 +293,12 @@ find_u_p (r,n,i,o,s,d) nd =
           r == r' && n == n' && i == i' && o == o' && s == s' && d == d'
       _ ->  error "find_u_p"
 
--- | Insert a primitive node into the graph.
+-- | Insert a /primitive/ 'NodeU' into the 'Graph'.
 push_u :: UGenParts -> Graph -> (Node,Graph)
 push_u (r,nm,i,o,s,d) g =
     let n = NodeU (nextId g) r nm i o s d
     in (n,g {ugens = n : ugens g
-             ,nextId = nextId g + 1})
+            ,nextId = nextId g + 1})
 
 mk_node_u_acc :: [UGen] -> [Node] -> Graph -> ([Node],Graph)
 mk_node_u_acc u n g =
@@ -296,7 +307,7 @@ mk_node_u_acc u n g =
       x:xs -> let (y,g') = mk_node x g
               in mk_node_u_acc xs (y:n) g'
 
--- Either find existing control node, or insert a new node.
+-- | Either find existing 'Primitive' node, or insert a new 'Node'.
 mk_node_u :: UGen -> Graph -> (Node,Graph)
 mk_node_u ug g =
     case ug of
@@ -308,7 +319,7 @@ mk_node_u ug g =
           in maybe (push_u u g') (\y' -> (y',g')) y
       _ -> error "mk_node_u"
 
--- Proxies do not get stored in the graph.
+-- | Proxies do not get stored in the graph.
 mk_node_p :: Node -> PortIndex -> Graph -> (Node,Graph)
 mk_node_p n p g =
     let z = nextId g
@@ -331,62 +342,82 @@ mk_node u g =
 
 type Map = M.IntMap Int
 
-type Maps = (Map,[Node],Map,Map)
+type Maps = (Map,[Node],Map,Map,[(KType,Int)])
 
 data Input = Input Int Int
              deriving (Eq,Show)
 
--- Generate maps from node identifiers to synthdef indexes.
+-- | Determine 'KType' of a /control/ UGen at 'NodeU', or not.
+node_ktype :: Node -> Maybe KType
+node_ktype n =
+    case (node_u_name n,node_u_rate n) of
+      ("Control",IR) -> Just K_IR
+      ("Control",KR) -> Just K_KR
+      ("TrigControl",KR) -> Just K_TR
+      ("AudioControl",AR) -> Just K_AR
+      _ -> Nothing
+
+-- | Map associating 'KType' with UGen index.
+mk_ktype_map :: [Node] -> [(KType,Int)]
+mk_ktype_map =
+    let f (i,n) = let g ty = (ty,i) in fmap g (node_ktype n)
+    in mapMaybe f . zip [0..]
+
+-- | Lookup 'KType' index from map (erroring variant of 'lookup').
+ktype_map_lookup :: KType -> [(KType,Int)] -> Int
+ktype_map_lookup k =
+    let e = error (show ("ktype_map_lookup",k))
+    in fromMaybe e . lookup k
+
+-- | Generate 'Maps' translating node identifiers to synthdef indexes.
 mk_maps :: Graph -> Maps
 mk_maps (Graph _ cs ks us) =
     (M.fromList (zip (map node_id cs) [0..])
     ,ks
     ,M.fromList (zip (map node_id ks) [0..])
-    ,M.fromList (zip (map node_id us) [0..]))
+    ,M.fromList (zip (map node_id us) [0..])
+    ,mk_ktype_map us)
 
--- Locate index in map given node identifer.
+-- | Locate index in map given node identifer 'NodeId'.
 fetch :: NodeId -> Map -> Int
 fetch = M.findWithDefault (error "fetch")
 
--- For controls we need to know not the overall index
--- but in relation to controls of the same type.
+-- | Controls are a special case.  We need to know not the overall
+-- index but the index in relation to controls of the same type.
 fetch_k :: NodeId -> KType -> [Node] -> Int
-fetch_k n t ks =
-    let f _ [] = error "fetch_k"
-        f i (x:xs) =
-            if n == node_id x
-            then i
-            else if t == node_k_type x
-                 then f (i + 1) xs
-                 else f i xs
-    in f 0 ks
+fetch_k z t =
+    let rec i ns =
+            case ns of
+              [] -> error "fetch_k"
+              n:ns' -> if z == node_id n
+                       then i
+                       else if t == node_k_type n
+                            then rec (i + 1) ns'
+                            else rec i ns'
+    in rec 0
 
--- Construct input form required by byte-code generator.
+-- | Construct 'Input' form required by byte-code generator.
 make_input :: Maps -> FromPort -> Input
-make_input (cs,ks,_,us) fp =
+make_input (cs,ks,_,us,kt) fp =
     case fp of
       FromPort_C n -> Input (-1) (fetch n cs)
-      FromPort_K n t -> let i = case t of
-                                  K_IR -> 0
-                                  K_KR -> 1
-                                  K_TR -> 2
-                                  K_AR -> 3
+      FromPort_K n t -> let i = ktype_map_lookup t kt
                         in Input i (fetch_k n t ks)
       FromPort_U n p -> Input (fetch n us) (fromMaybe 0 p)
 
--- Byte-encode input value.
+-- | Byte-encode 'Input' value.
 encode_input :: Input -> B.ByteString
 encode_input (Input u p) = B.append (encode_i16 u) (encode_i16 p)
 
--- Byte-encode control node.
+-- | Byte-encode 'NodeK' control node.
 encode_node_k :: Maps -> Node -> B.ByteString
-encode_node_k (_,_,ks,_) nd =
+encode_node_k (_,_,ks,_,_) nd =
     case nd of
       NodeK n _ nm _ _ -> B.concat [B.pack (str_pstr nm)
                                    ,encode_i16 (fetch n ks)]
       _ -> error "encode_node_k"
 
--- Byte-encode primitive node.
+-- | Byte-encode 'NodeU' primitive node.
 encode_node_u :: Maps -> Node -> B.ByteString
 encode_node_u m n =
     case n of
@@ -403,7 +434,7 @@ encode_node_u m n =
                       ,B.concat o']
       _ -> error "encode_node_u: illegal input"
 
--- Construct instrument definition bytecode.
+-- | Construct instrument definition bytecode.
 encode_graphdef :: Graph -> B.ByteString
 encode_graphdef g =
     let (Graph _ cs ks us) = g
@@ -417,21 +448,27 @@ encode_graphdef g =
                 ,encode_i16 (length us)
                 ,B.concat (map (encode_node_u mm) us)]
 
+-- | 4-tuple to count 'KType's.
 type KS_COUNT = (Int,Int,Int,Int)
 
+-- | Count the number of /controls/ if each 'KType'.
 ks_count :: [Node] -> KS_COUNT
-ks_count ks =
-    let f r [] = r
-        f (i,k,t,a) (x:xs) =
-            let r' = case node_k_type x of
-                       K_IR -> (i+1,k,t,a)
-                       K_KR -> (i,k+1,t,a)
-                       K_TR -> (i,k,t+1,a)
-                       K_AR -> (i,k,t,a+1)
-            in f r' xs
-    in f (0,0,0,0) ks
+ks_count =
+    let rec r ns =
+            let (i,k,t,a) = r
+            in case ns of
+                 [] -> r
+                 n:ns' -> let r' = case node_k_type n of
+                                     K_IR -> (i+1,k,t,a)
+                                     K_KR -> (i,k+1,t,a)
+                                     K_TR -> (i,k,t+1,a)
+                                     K_AR -> (i,k,t,a+1)
+                          in rec r' ns'
+    in rec (0,0,0,0)
 
--- Construct implicit control unit generator nodes.
+-- | Construct implicit /control/ unit generator 'Nodes'.  Unit
+-- generators are only constructed for instances of control types that
+-- are present.
 mk_implicit :: [Node] -> [Node]
 mk_implicit ks =
     let (ni,nk,nt,na) = ks_count ks
@@ -442,13 +479,15 @@ mk_implicit ks =
                             K_TR -> ("TrigControl",KR)
                             K_AR -> ("AudioControl",AR)
                 i = replicate n r
-            in NodeU (-1) r nm [] i (Special o) no_id
-    in [mk_n K_IR ni 0
-       ,mk_n K_KR nk ni
-       ,mk_n K_TR nt (ni + nk)
-       ,mk_n K_AR na (ni + nk + nt)]
+            in if n == 0
+               then Nothing
+               else Just (NodeU (-1) r nm [] i (Special o) no_id)
+    in catMaybes [mk_n K_IR ni 0
+                 ,mk_n K_KR nk ni
+                 ,mk_n K_TR nt (ni + nk)
+                 ,mk_n K_AR na (ni + nk + nt)]
 
--- Transform mce nodes to mrg nodes
+-- | Transform /mce/ nodes to /mrg/ nodes
 prepare_root :: UGen -> UGen
 prepare_root u =
     case ugenType u of

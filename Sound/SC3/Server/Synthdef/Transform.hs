@@ -26,24 +26,24 @@ from_port_node_err g fp =
 -- | Lift a set of 'NodeU' /inputs/ from constants to controls.  The
 -- result triple gives the incremented 'NodeId', the transformed
 -- 'FromPort' list, and the list of newly minted control 'Node's.
-clift_inputs :: Graph -> NodeId -> [FromPort] -> (NodeId,[FromPort],[Node])
-clift_inputs g z i =
+c_lift_inputs :: Graph -> NodeId -> [FromPort] -> (NodeId,[FromPort],[Node])
+c_lift_inputs g z i =
     let n = map (from_port_node_err g) i
         (z',n') = mapAccumL constant_to_control z n
     in (z',map as_from_port n',filter is_node_k n')
 
-clift_ugen :: Graph -> NodeId -> Node -> (NodeId,Node,[Node])
-clift_ugen g z n =
+c_lift_ugen :: Graph -> NodeId -> Node -> (NodeId,Node,[Node])
+c_lift_ugen g z n =
     let i = node_u_inputs n
-        (z',i',k) = clift_inputs g z i
+        (z',i',k) = c_lift_inputs g z i
     in (z',n {node_u_inputs = i'},k)
 
-clift_ugens :: Graph -> NodeId -> [Node] -> ([Node],[Node])
-clift_ugens g  =
+c_lift_ugens :: Graph -> NodeId -> [Node] -> ([Node],[Node])
+c_lift_ugens g  =
     let rec (k,r) z u =
             case u of
               [] -> (k,reverse r)
-              n:u' -> let (z',n',k') = clift_ugen g z n
+              n:u' -> let (z',n',k') = c_lift_ugen g z n
                       in rec (k++k',n':r) z' u'
     in rec ([],[])
 
@@ -56,7 +56,8 @@ clift_ugens g  =
 -- > draw (lift_constants g)
 lift_constants :: Graph -> Graph
 lift_constants g =
-    let (Graph nm _ k u) = g
+    let (Graph _ _ k u) = remove_implicit g
         z = graph_maximum_id g + 1
-        (k',u') = clift_ugens g z u
-    in Graph nm [] (nub (k ++ k')) u'
+        (k',u') = c_lift_ugens g z u
+        g' = Graph (-1) [] (nub (k ++ k')) u'
+    in add_implicit g'
