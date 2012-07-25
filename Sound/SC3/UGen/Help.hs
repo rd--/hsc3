@@ -10,15 +10,21 @@ import System.Directory {- directory -}
 import System.Environment
 import System.FilePath {- filepath -}
 
+-- | Guarded variant of 'getEnv' with default value.
+get_env_default :: String -> String -> IO String
+get_env_default e k = do
+  r <- tryJust (guard . isDoesNotExistError) (getEnv e)
+  case r of
+    Right v -> return v
+    _ -> return k
+
 -- | Read the environment variable @SC3_HELP@, the default value is
 -- @~\/.local\/share\/SuperCollider/Help@.
 sc3HelpDirectory :: IO String
 sc3HelpDirectory = do
-  r <- tryJust (guard . isDoesNotExistError) (getEnv "SC3_HELP")
-  case r of
-    Right v -> return v
-    _ -> do h <- getEnv "HOME"
-            return (h </> ".local/share/SuperCollider/Help")
+  h <- getEnv "HOME"
+  let d = h </> ".local/share/SuperCollider/Help"
+  get_env_default d "SC3_HELP"
 
 -- | Locate path to indicated SC3 class help file.
 --
@@ -71,14 +77,6 @@ ugenSC3HelpFile x = do
     _ -> case cf of
            Just cf' -> return cf'
            Nothing -> error (show ("ugenSC3HelpFile",d,cf,x,s))
-
--- | Guarded variant of 'getEnv' with default value.
-get_env_default :: String -> String -> IO String
-get_env_default e k = do
-  r <- tryJust (guard . isDoesNotExistError) (getEnv e)
-  case r of
-    Right v -> return v
-    _ -> return k
 
 -- | Use x-www-browser to view SC3 help file for `u'.
 --
