@@ -75,7 +75,8 @@ data Synthdef = Synthdef {synthdefName :: String
 
 -- * User functions
 
--- | Find the maximum 'NodeId' used at 'Graph'.
+-- | Find the maximum 'NodeId' used at 'Graph' (this ought normally be
+-- the 'nextId').
 graph_maximum_id :: Graph -> NodeId
 graph_maximum_id (Graph _ c k u) = maximum (map node_id (c ++ k ++ u))
 
@@ -102,16 +103,19 @@ remove_implicit g =
     let u = filter (not . is_implicit_control) (ugens g)
     in g {ugens = u}
 
--- | Add implicit /control/ UGens to 'Graph'
+-- | Add implicit /control/ UGens to 'Graph'.
 add_implicit :: Graph -> Graph
 add_implicit g =
-    let (Graph _ cs ks us) = g
+    let (Graph z cs ks us) = g
         ks' = sortBy node_k_cmp ks
         im = if null ks' then [] else mk_implicit ks'
         us' = im ++ us
-    in Graph (-1) cs ks' us'
+    in Graph z cs ks' us'
 
 -- | Transform a unit generator into a graph.
+--
+-- > import Sound.SC3.UGen
+-- > synth (out 0 (pan2 (sinOsc AR 440 0) 0.5 0.1))
 synth :: UGen -> Graph
 synth u =
     let (_,g) = mk_node (prepare_root u) empty_graph
@@ -223,7 +227,10 @@ as_from_port d =
     case d of
       NodeC n _ -> FromPort_C n
       NodeK n _ _ _ t -> FromPort_K n t
-      NodeU n _ _ _ _ _ _ -> FromPort_U n Nothing
+      NodeU n _ _ _ o _ _ ->
+          case o of
+            [_] -> FromPort_U n Nothing
+            _ -> error (show ("as_from_port: non unary NodeU",d))
       NodeP _ u p -> FromPort_U (node_id u) (Just p)
 
 -- | Locate 'Node' of 'FromPort' in 'Graph'.

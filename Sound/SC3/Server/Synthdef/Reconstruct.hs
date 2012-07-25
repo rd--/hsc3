@@ -43,8 +43,8 @@ reconstruct_graph_str g =
     let (Graph _ c k u) = g
         ls = concat [map reconstruct_c_str (node_sort c)
                     ,map reconstruct_k_str (node_sort k)
-                    ,concatMap (reconstruct_u_str g) u
-                    ,[reconstruct_mrg_str g]]
+                    ,concatMap reconstruct_u_str u
+                    ,[reconstruct_mrg_str u]]
     in unlines (filter (not . null) ls)
 
 reconstruct_c_str :: Node -> String
@@ -78,8 +78,8 @@ ugen_qname nm (Special n) =
       "BinaryOpUGen" -> ("binop",binaryName n)
       _ -> ("ugen",nm)
 
-reconstruct_mce_str :: Graph -> Node -> String
-reconstruct_mce_str _ u =
+reconstruct_mce_str :: Node -> String
+reconstruct_mce_str u =
     let o = length (node_u_outputs u)
         l = node_label u
         p = map (\i -> printf "%s_o_%d" l i) [0 .. o - 1]
@@ -88,8 +88,8 @@ reconstruct_mce_str _ u =
        then ""
        else printf "[%s] = mceChannels %s" p' l
 
-reconstruct_u_str :: Graph -> Node -> [String]
-reconstruct_u_str _ u =
+reconstruct_u_str :: Node -> [String]
+reconstruct_u_str u =
     let l = node_label u
         r = node_u_rate u
         i = node_u_inputs u
@@ -105,13 +105,13 @@ reconstruct_u_str _ u =
         c = case q of
               "ugen" -> if node_u_ugenid u == NoId then u_s else nd_s
               _ -> printf "%s = %s \"%s\" %s %s" l q n (show r) i_s
-        m = reconstruct_mce_str undefined u
+        m = reconstruct_mce_str u
     in if is_implicit_control u
        then []
        else if null m then [c] else [c,m]
 
-reconstruct_mrg_str :: Graph -> String
-reconstruct_mrg_str (Graph _ _ _ u) =
+reconstruct_mrg_str :: [Node] -> String
+reconstruct_mrg_str u =
     let zero_out n = not (is_implicit_control n) && null (node_u_outputs n)
     in case map node_label (filter zero_out u) of
          [] -> error "reconstruct_mrg_str"
