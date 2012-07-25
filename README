@@ -1,23 +1,35 @@
 hsc3 - haskell supercollider
+----------------------------
 
-hsc3 provides Sound.SC3, a Haskell module that facilitates using
-Haskell as a client to the SuperCollider synthesis server.
+[hsc3][hsc3] provides Sound.SC3, a module that facilitates using
+[Haskell][hs] as a client to the [SuperCollider][sc3] synthesis
+server.
 
 For installation and configuration information please consult the
-tutorial file at http://slavepianos.org/rd/ut/hsc3-texts/
+[tutorial][tutorial] at [hsc3-texts][hsc3-texts].
 
-The hsc3 interaction environment is written for GNU Emacs.
+The hsc3 interaction environment is written for [GNU][gnu]
+[Emacs][emacs].
 
-  http://slavepianos.org/rd/?t=hsc3
-  http://haskell.org/
-  http://audiosynth.com/
-  http://gnu.org/software/emacs/
+hsc3 is (c) [rohan drape][rd] and others, 2006-2012, [gpl][gpl].
+with contributions by:
 
-(c) rohan drape and others, 2006-2012
-    gpl, http://gnu.org/copyleft/
-    with contributions by henning thielemann
-                        & stefan kersten
-                        & alex mclean
-                        & brent yorgey
-                        & shae erisson
-    see darcs history for details
+- henning thielemann
+- stefan kersten
+- alex mclean
+- brent yorgey
+- shae erisson
+
+see the [darcs][darcs] [history][hsc3-history] for details
+
+[rd]:  http://rd.slavepianos.org/
+[hsc3]:  http://rd.slavepianos.org/?t=hsc3
+[hs]: http://haskell.org/
+[sc3]: http://audiosynth.com/
+[tutorial]: http://rd.slavepianos.org/ut/hsc3-texts/hsc3-tutorial.html
+[hsc3-texts]: http://rd.slavepianos.org/ut/hsc3-texts/
+[gnu]: http://gnu.org/
+[emacs]: http://gnu.org/software/emacs/
+[darcs]: http://darcs.net/
+[gpl]: http://gnu.org/copyleft/
+[hsc3-history]:  http://rd.slavepianos.org/r/d/darcsweb.cgi?r=hsc3

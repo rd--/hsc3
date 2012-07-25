@@ -28,6 +28,8 @@ sc3HelpDirectory = do
 
 -- | Locate path to indicated SC3 class help file.
 --
+-- > import System.FilePath
+-- >
 -- > d <- sc3HelpDirectory
 -- > h <- sc3HelpClassFile d "SinOsc"
 -- > h == Just (d </> "Classes/SinOsc.html")
