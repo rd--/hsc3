@@ -72,6 +72,14 @@ ugenSC3HelpFile x = do
            Just cf' -> return cf'
            Nothing -> error (show ("ugenSC3HelpFile",d,cf,x,s))
 
+-- | Guarded variant of 'getEnv' with default value.
+get_env_default :: String -> String -> IO String
+get_env_default e k = do
+  r <- tryJust (guard . isDoesNotExistError) (getEnv e)
+  case r of
+    Right v -> return v
+    _ -> return k
+
 -- | Use x-www-browser to view SC3 help file for `u'.
 --
 -- > viewSC3Help (toSC3Name "Collection.*fill")
@@ -80,4 +88,5 @@ ugenSC3HelpFile x = do
 viewSC3Help :: String -> IO ()
 viewSC3Help u = do
   nm <- ugenSC3HelpFile u
-  void (system ("x-www-browser file://" ++ nm))
+  br <- get_env_default "BROWSER" "x-www-browser"
+  void (rawSystem br ["file://" ++ nm])

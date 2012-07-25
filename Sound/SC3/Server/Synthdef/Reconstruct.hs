@@ -51,7 +51,7 @@ reconstruct_c_str :: Node -> String
 reconstruct_c_str u =
     let l = node_label u
         c = node_c_value u
-    in printf "%s = constant %f" l c
+    in printf "%s = constant (%f::Double)" l c
 
 reconstruct_c_ugen :: Node -> UGen
 reconstruct_c_ugen u = constant (node_c_value u)
