@@ -49,6 +49,9 @@ class Audible e where
     audition :: e -> IO ()
     audition e = withSC3 (`play` e)
 
+instance Audible Graph where
+    play fd g = playSynthdef fd (Synthdef "Anonymous" g)
+
 instance Audible Synthdef where
     play = playSynthdef
 
