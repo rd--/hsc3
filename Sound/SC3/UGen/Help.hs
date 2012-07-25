@@ -24,11 +24,13 @@ sc3HelpDirectory :: IO String
 sc3HelpDirectory = do
   h <- getEnv "HOME"
   let d = h </> ".local/share/SuperCollider/Help"
-  get_env_default d "SC3_HELP"
+  get_env_default "SC3_HELP" d
 
 -- | Locate path to indicated SC3 class help file.
 --
--- > sc3HelpDirectory >>= (flip sc3HelpClassFile) "SinOsc"
+-- > d <- sc3HelpDirectory
+-- > h <- sc3HelpClassFile d "SinOsc"
+-- > h == Just (d </> "Classes/SinOsc.html")
 sc3HelpClassFile :: FilePath -> String -> IO (Maybe FilePath)
 sc3HelpClassFile d c = do
   let f = d </> "Classes" </> c <.> "html"
@@ -62,6 +64,8 @@ sc3HelpInstanceMethod d = sc3HelpMethod d '-'
 -- | The name of the local SC3 Help file documenting `u'.  Deletes
 -- @\@@ to allow use on haddock quoted comments.
 --
+-- > import Sound.SC3.UGen.Name
+-- >
 -- > ugenSC3HelpFile (toSC3Name "Collection.*fill")
 -- > ugenSC3HelpFile (toSC3Name "Collection.inject")
 -- > ugenSC3HelpFile (toSC3Name "sinOsc")
@@ -78,8 +82,10 @@ ugenSC3HelpFile x = do
            Just cf' -> return cf'
            Nothing -> error (show ("ugenSC3HelpFile",d,cf,x,s))
 
--- | Use x-www-browser to view SC3 help file for `u'.
+-- | Use @BROWSER@ or @x-www-browser@ to view SC3 help file for `u'.
 --
+-- > import Sound.SC3.UGen.Name
+-- >
 -- > viewSC3Help (toSC3Name "Collection.*fill")
 -- > viewSC3Help (toSC3Name "Collection.inject")
 -- > viewSC3Help (toSC3Name "sinOsc")
