@@ -18,14 +18,10 @@ Oscillator at buffers 0 through 7, mouse selects buffer.
 > let x = mouseX KR 0 7 Linear 0.1
 > in audition (out 0 (vOsc AR x (mce [120, 121]) 0 * 0.3))
 
-> import Control.Monad
-> import Control.Monad.IO.Class
-> import System.Random
+> import Sound.SC3.Lang.Random.IO
 
 Reallocate buffers while oscillator is running.
-> let {rrand l r = getStdRandom (randomR (l,r))
->     ;rrandl n l r = replicateM n (rrand l r)
->     ;bf = [Normalise,Wavetable,Clear]
->     ;resetTable i = do {h <- liftIO (rrandl 12 0 1)
+> let {bf = [Normalise,Wavetable,Clear]
+>     ;resetTable i = do {h <- nrrand 12 0 1
 >                        ;send (b_gen_sine1 i bf h)}}
 > in withSC3 (mapM_ resetTable [0 .. 7])

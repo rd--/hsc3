@@ -1,7 +1,6 @@
 > Sound.SC3.UGen.Help.viewSC3Help "SubsampleOffset"
 > Sound.SC3.UGen.DB.ugenSummary "SubsampleOffset"
 
-> import Control.Monad.IO.Class
 > import Sound.OSC
 > import Sound.SC3
 
@@ -20,7 +19,7 @@ right, they are exactly 1 sample apart.  View this with an
 oscilloscope.
 > let run s = do
 >       {_ <- async (d_recv s)
->       ;t <- liftIO utcr
+>       ;t <- utcr
 >       ;let {t' = t + 0.2
 >            ;dt = 1 / 44100.0
 >            ;m n = s_new "s" (-1) AddToTail 1 [("a", n)]}

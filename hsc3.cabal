@@ -63,7 +63,9 @@ Library
                    Sound.SC3.FD
                    Sound.SC3.Identifier
                    Sound.SC3.ID
+                   Sound.SC3.ID.FD
                    Sound.SC3.Monadic
+                   Sound.SC3.Monadic.FD
                    Sound.SC3.Server
                    Sound.SC3.Server.Buffer
                    Sound.SC3.Server.Buffer.FD
@@ -107,10 +109,12 @@ Library
                    Sound.SC3.UGen.Filter
                    Sound.SC3.UGen.Granular
                    Sound.SC3.UGen.Help
+                   Sound.SC3.UGen.ID
                    Sound.SC3.UGen.IO
                    Sound.SC3.UGen.Information
                    Sound.SC3.UGen.MachineListening
                    Sound.SC3.UGen.Math
+                   Sound.SC3.UGen.Monadic
                    Sound.SC3.UGen.Name
                    Sound.SC3.UGen.Noise.ID
                    Sound.SC3.UGen.Noise.Monadic

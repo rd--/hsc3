@@ -1,6 +1,5 @@
 module Sound.SC3.Server.Play.Monad where
 
-import Control.Monad.IO.Class
 import Sound.OSC
 import Sound.SC3.Server.Command
 import Sound.SC3.Server.NRT
