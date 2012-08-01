@@ -121,6 +121,10 @@ selectX ix xs =
         s1 = select (trunc ix 2 + 1) xs
     in xFade2 s0 s1 (fold2 (ix * 2 - 1) 1) 1
 
+-- | Silence.
+silent :: Int -> UGen
+silent n = let s = dc AR 0 in mce (replicate n s)
+
 -- | Zero indexed audio input buses.
 soundIn :: UGen -> UGen
 soundIn u =

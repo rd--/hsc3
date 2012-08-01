@@ -93,10 +93,6 @@ pulse r freq width = mkOscR [AR] r "Pulse" [freq, width] 1
 saw :: Rate -> UGen -> UGen
 saw r freq = mkOscR [AR,KR] r "Saw" [freq] 1
 
--- | Silence.
-silent :: Int -> UGen
-silent = mkOsc AR "Silent" []
-
 -- | Sine oscillator.
 sinOsc :: Rate -> UGen -> UGen -> UGen
 sinOsc r freq phase = mkOsc r "SinOsc" [freq, phase] 1
