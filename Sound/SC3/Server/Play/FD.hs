@@ -1,8 +1,5 @@
 -- | Basic user interaction with the scsynth server.
-module Sound.SC3.Server.Play (stop,reset,send,async
-                             ,withSC3
-                             ,Audible(..)
-                             ,performNRT) where
+module Sound.SC3.Server.Play.FD where
 
 import Sound.OpenSoundControl
 import Sound.SC3.Server.Command
@@ -20,7 +17,7 @@ stop fd = sendMessage fd (g_freeAll [1])
 
 -- | Send a 'Message' and wait for a @\/done@ reply.
 async :: Transport t => t -> Message -> IO Message
-async fd m = sendMessage fd m >> waitAddressMessage fd "/done"
+async fd m = sendMessage fd m >> waitReply fd "/done"
 
 -- | Free all nodes ('g_freeAll') at and re-create groups @1@ and @2@.
 reset :: Transport t => t -> IO ()
