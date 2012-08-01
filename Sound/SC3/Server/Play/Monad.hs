@@ -58,7 +58,7 @@ playUGen = playSynthdef . synthdef "Anonymous"
 -- | Wait ('pauseThreadUntil') until bundle is due to be sent relative
 -- to initial 'UTCr' time, then send each message, asynchronously if
 -- required.
-run_bundle :: (MonadIO m,Transport m) => Double -> Bundle -> m ()
+run_bundle :: (Transport m) => Double -> Bundle -> m ()
 run_bundle i (Bundle t x) =
     let wr m = if isAsync m
                then async m >> return ()
@@ -71,7 +71,7 @@ run_bundle i (Bundle t x) =
 
 -- | Perform an 'NRT' score (as would be rendered by 'writeNRT').  In
 -- particular note that all timestamps /must/ be in 'NTPr' form.
-performNRT :: (MonadIO m,Transport m) => NRT -> m ()
+performNRT :: (Transport m) => NRT -> m ()
 performNRT s = liftIO utcr >>= \i -> mapM_ (run_bundle i) (nrt_bundles s)
 
 -- * Audible
@@ -79,7 +79,7 @@ performNRT s = liftIO utcr >>= \i -> mapM_ (run_bundle i) (nrt_bundles s)
 -- | Class for values that can be encoded and send to @scsynth@ for
 -- audition.
 class Audible e where
-    play :: (MonadIO m,Transport m) => e -> m ()
+    play :: (Transport m) => e -> m ()
 
 instance Audible Graph where
     play g = playSynthdef (Synthdef "Anonymous" g)
