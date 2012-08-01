@@ -3,10 +3,9 @@ module Sound.SC3.Server.Transport.FD where
 
 import Control.Monad
 import Sound.OpenSoundControl.Transport.FD
-import Sound.OpenSoundControl.Transport.UDP
+import Sound.OpenSoundControl.Transport.FD.UDP
 import Sound.OpenSoundControl.Time
 import Sound.OpenSoundControl.Type
-import Sound.OpenSoundControl.Wait.FD
 import Sound.SC3.Server.Command
 import Sound.SC3.Server.NRT
 import Sound.SC3.Server.Status
