@@ -26,7 +26,7 @@ sin grain with sin envelope
 >     ;e = envGen AR 1 1 0 1 RemoveSynth s
 >     ;u = offsetOut b (pan2 o p e)
 >     ;i = synthdef "grain" u}
-> in withSC3 (\fd -> async fd (d_recv i))
+> in withSC3 (async (d_recv i))
 
 > import Sound.SC3.Lang.Pattern.ID
 

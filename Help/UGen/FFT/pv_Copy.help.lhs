@@ -3,8 +3,8 @@
 
 > import Sound.SC3.ID
 
-> withSC3 (\fd -> do {_ <- async fd (b_alloc 0 2048 1)
->                    ;async fd (b_alloc 1 2048 1)})
+> withSC3 (do {_ <- async (b_alloc 0 2048 1)
+>             ;async (b_alloc 1 2048 1)})
 
 Proof of concept, silence
 > let {i = lfClipNoise 'a' AR 100 * 0.1

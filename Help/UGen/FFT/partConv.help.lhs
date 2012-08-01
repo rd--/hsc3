@@ -15,9 +15,9 @@
 >     ; g = let { i = playBuf 1 AR (c target_b) 1 0 0 Loop DoNothing
 >               ; pc = partConv i (c fft_size) (c ir_fd_b) }
 >           in out 0 (pc * 0.1) }
-> in withSC3 (\fd -> do
->     { _ <- async fd (b_allocRead ir_td_b ir_file 0 ir_length)
->     ; _ <- async fd (b_alloc ir_fd_b accum_size 1)
->     ; send fd (pc_preparePartConv ir_fd_b ir_td_b fft_size)
->     ; _ <- async fd (b_allocRead target_b target_file 0 0)
->     ; play fd g })
+> in withSC3 (do
+>     {_ <- async (b_allocRead ir_td_b ir_file 0 ir_length)
+>     ;_ <- async (b_alloc ir_fd_b accum_size 1)
+>     ;send (pc_preparePartConv ir_fd_b ir_td_b fft_size)
+>     ;_ <- async (b_allocRead target_b target_file 0 0)
+>     ;play g })

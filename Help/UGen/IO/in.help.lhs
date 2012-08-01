@@ -21,10 +21,10 @@ Write noise to bus 10, then read it out, the multiple root graph is ordered.
 > in audition (mrg [rd, wr])
 
 Set value on a control bus
-> withSC3 (\fd -> send fd (c_set [(0, 300)]))
+> withSC3 (send (c_set [(0, 300)]))
 
 Read a control bus
 > audition (out 0 (sinOsc AR (in' 1 KR 0) 0 * 0.1))
 
 Re-set value on bus
-> withSC3 (\fd -> send fd (c_set [(0, 600)]))
+> withSC3 (send (c_set [(0, 600)]))

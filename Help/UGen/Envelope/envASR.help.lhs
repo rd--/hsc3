@@ -8,7 +8,7 @@
 >     ;e = envGen KR g 0.1 0 1 RemoveSynth p}
 > in audition (out 0 (sinOsc AR 440 0 * e))
 
-> withSC3 (\fd -> send fd (n_set1 (-1) "gate" 0))
+> withSC3 (send (n_set1 (-1) "gate" 0))
 
 > import Sound.SC3.Plot
 > plotEnvelope [envASR 0.1 1 1 (EnvNum (-4))

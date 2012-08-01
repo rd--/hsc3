@@ -4,7 +4,7 @@
 > import Sound.SC3.ID
 
 Allocate buffer
-> withSC3 (\fd -> async fd (b_alloc 0 44100 1))
+> withSC3 (async (b_alloc 0 44100 1))
 
 Filtered decaying noise bursts
 > let {d = dust 'a' AR 1

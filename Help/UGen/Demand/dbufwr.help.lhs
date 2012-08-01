@@ -18,6 +18,6 @@
 >         ;f = lag (demand (impulse KR 16 0) 0 r) 0.01
 >         ;o = sinOsc AR (f * mce2 1 1.01) 0 * 0.1
 >         ;g = mrg [d, out 0 o]
->         ;run fd = do {async fd (b_alloc_setn1 0 0 (replicate 24 210))
->                      ;play fd g}}
+>         ;run = do {_ <- async (b_alloc_setn1 0 0 (replicate 24 210))
+>                   ;play g}}
 >     in withSC3 run}

@@ -1,11 +1,12 @@
 > Sound.SC3.UGen.Help.viewSC3Help "SubsampleOffset"
 > Sound.SC3.UGen.DB.ugenSummary "SubsampleOffset"
 
-> import Sound.OpenSoundControl
+> import Control.Monad.IO.Class
+> import Sound.OSC
 > import Sound.SC3
 
 Impulse train that can be moved between samples
-> let s = let {a = control KR "a" 0
+> let g = let {a = control KR "a" 0
 >             ;i = impulse AR 2000 0 * 0.3
 >             ;d = sampleDur
 >             ;x = 4
@@ -17,13 +18,13 @@ Create two pulse trains one sample apart, move one relative to the
 other.  When cursor is at the left, the impulses are adjacent, on the
 right, they are exactly 1 sample apart.  View this with an
 oscilloscope.
-> let run s fd = do
->       {_ <- async fd (d_recv s)
->       ;t <- utcr
+> let run s = do
+>       {_ <- async (d_recv s)
+>       ;t <- liftIO utcr
 >       ;let {t' = t + 0.2
 >            ;dt = 1 / 44100.0
 >            ;m n = s_new "s" (-1) AddToTail 1 [("a", n)]}
->        in do {sendBundle fd (Bundle (UTCr t') [m 3])
->              ;sendBundle fd (Bundle (UTCr (t' + dt)) [m 0]) }}
+>        in do {sendBundle (Bundle (UTCr t') [m 3])
+>              ;sendBundle (Bundle (UTCr (t' + dt)) [m 0]) }}
 
-> withSC3 (run s)
+> withSC3 (run g)

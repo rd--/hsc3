@@ -5,7 +5,7 @@
 
 Load sound file to buffer zero (required for examples)
 > let fn = "/home/rohan/data/audio/pf-c5.aif"
-> in withSC3 (\fd -> async fd (b_allocRead 0 fn 0 0))
+> in withSC3 (async (b_allocRead 0 fn 0 0))
 
 Read buffer at 3/4 reported sample rate.
 > let {r = 0.75 * bufRateScale KR 0

@@ -3,7 +3,7 @@
 
 > import Sound.SC3.ID
 
-> withSC3 (\fd -> send fd (b_alloc 10 512 1))
+> withSC3 (async (b_alloc 10 512 1))
 
 > let {n = 100
 >     ;square a = a * a

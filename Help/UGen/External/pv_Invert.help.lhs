@@ -8,6 +8,6 @@
 >     ; i = s + n
 >     ; c0 = fft' 10 i
 >     ; c1 = pv_Invert c0
->     ; run fd = do { _ <- async fd (b_alloc 10 2048 1)
->                   ; audition (out 0 (mce2 i (ifft' c1) * 0.5)) } }
+>     ; run = do {_ <- async (b_alloc 10 2048 1)
+>                ;play (out 0 (mce2 i (ifft' c1) * 0.5))}}
 > in withSC3 run

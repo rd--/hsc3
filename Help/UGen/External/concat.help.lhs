@@ -4,7 +4,7 @@
 > import Sound.SC3.ID
 
 > let fileName = "/home/rohan/data/audio/pf-c5.snd"
-> in withSC3 (\fd -> async fd (b_allocRead 12 fileName 0 0))
+> in withSC3 (async (b_allocRead 12 fileName 0 0))
 
 Granulator
 > let {y0 = mouseY KR 0.01 1 Linear 0.2

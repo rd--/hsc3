@@ -9,7 +9,5 @@ Compare a sine tone derived from sample rate with a 440Hz tone.
 
 The server status command can extract nominal and actual sample rates
 from a running server.
-> withSC3 (\fd -> Control.Monad.liftM2
->                 (,)
->                 (serverSampleRateNominal fd)
->                 (serverSampleRateActual fd))
+> import Control.Monad
+> withSC3 (liftM2 (,) serverSampleRateNominal serverSampleRateActual)

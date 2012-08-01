@@ -4,7 +4,7 @@
 > import Sound.SC3
 
 Assume hop of half fftsize
-> withSC3 (\fd -> async fd (b_alloc 10 1024 1))
+> withSC3 (async (b_alloc 10 1024 1))
 
 > let { x = mouseX' KR 0.001 0.1 Exponential 0.2
 >     ; i = sinOsc AR 1000 0 * x

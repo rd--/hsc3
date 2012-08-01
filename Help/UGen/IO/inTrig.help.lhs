@@ -12,4 +12,4 @@ Run an oscillator with the trigger at bus 10.
 > in audition (out 0 (sinOsc AR 440 0 * e))
 
 Set bus 10, each set will trigger a ping.
-> withSC3 (\fd -> send fd (c_set1 10 0.1))
+> withSC3 (send (c_set1 10 0.1))

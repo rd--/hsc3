@@ -3,7 +3,7 @@
 
 > import Sound.SC3.ID
 
-> withSC3 (\fd -> async fd (b_alloc 10 2048 1))
+> withSC3 (async (b_alloc 10 2048 1))
 
 > let { n = whiteNoise 'a' AR
 >     ; x = mouseX KR 0 0.5 Linear 0.1

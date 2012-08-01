@@ -4,8 +4,8 @@
 > import Sound.SC3.ID
 
 > let fileName = "/home/rohan/data/audio/pf-c5.snd"
-> in withSC3 (\fd -> do { _ <- async fd (b_alloc 10 1024 1)
->                       ; async fd (b_allocRead 11 fileName 0 0) })
+> in withSC3 (do {_ <- async (b_alloc 10 1024 1)
+>                ;async (b_allocRead 11 fileName 0 0)})
 
 > let {no_op m p _ = (m,p)
 >     ;combf m p i = ((fmod i 7.0 ==* 0) * m,p)

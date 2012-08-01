@@ -3,7 +3,7 @@
 
 > import Sound.SC3.ID
 
-> withSC3 (\fd -> async fd (b_alloc 10 2048 1))
+> withSC3 (async (b_alloc 10 2048 1))
 
 > let { x  = mouseX KR (-10) 100 Linear 0.1
 >     ; y  = mouseY KR 1 4 Linear 0.1

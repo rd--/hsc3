@@ -7,9 +7,10 @@
 Load required data file (edit path as required)
 > let {d = "/home/rohan/opt/share/SuperCollider/Extensions/SC3plugins"
 >     ;qf = d </> "PitchDetection/extraqitchfiles/QspeckernN2048SR48000.wav"}
-> in withSC3 (\fd -> async fd (b_allocRead 10 qf 0 0))
+> in withSC3 (async (b_allocRead 10 qf 0 0))
 
 Comparison of input frequency (x) and tracked oscillator frequency (f).
+Output is printed to the console by scsynth.
 > let {x = mouseX KR 440 880 Exponential 0.1
 >     ;o = sinOsc AR x 0 * 0.1
 >     ;MCE [f,e] = qitch KR o 10 1e-2 1 0 0 2500

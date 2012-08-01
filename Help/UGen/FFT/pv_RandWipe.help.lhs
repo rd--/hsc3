@@ -4,8 +4,8 @@
 > import Sound.SC3.ID
 > import qualified System.Random as R
 
-> withSC3 (\fd -> do { _ <- async fd (b_alloc 10 2048 1)
->                    ; async fd (b_alloc 11 2048 1) })
+> withSC3 (do {_ <- async (b_alloc 10 2048 1)
+>             ;async (b_alloc 11 2048 1)})
 
 > let { n0 = R.randomRs (400.0, 1000.0) (R.mkStdGen 0)
 >     ; n1 = R.randomRs (80.0, 400.0) (R.mkStdGen 1)

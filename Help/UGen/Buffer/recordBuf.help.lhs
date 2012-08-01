@@ -7,7 +7,7 @@ reorders inputArray from last to first argument.
 > import Sound.SC3
 
 Allocate a buffer (assume SR of 48k)
-> withSC3 (\fd -> async fd (b_alloc 0 (48000 * 4) 1))
+> withSC3 (async (b_alloc 0 (48000 * 4) 1))
 
 Record for four seconds (until end of buffer)
 > let o = formant AR (xLine KR 400 1000 4 DoNothing) 2000 800 * 0.125

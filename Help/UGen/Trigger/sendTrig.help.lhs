@@ -7,10 +7,5 @@
 >     ;o = sinOsc AR (s * 200 + 500) 0 * 0.1}
 > in audition (mrg [sendTrig s 0 s,out 0 o])
 
-> import Sound.OpenSoundControl
-
 Retrieve a single message
-> withSC3 (\fd -> do {_ <- async fd (notify True)
->                    ;tr <- waitAddressDatum fd "/tr"
->                    ;putStrLn (show tr)
->                    ;async fd (notify False)})
+> withSC3 (withNotifications (wait "/tr"))

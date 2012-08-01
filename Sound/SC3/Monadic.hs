@@ -9,7 +9,7 @@ import Sound.SC3.UGen.Composite.Monadic as M
 import Sound.SC3.UGen.Demand.Monadic as M
 import Sound.SC3.UGen.FFT.Monadic as M
 import Sound.SC3.UGen.Noise.Monadic as M
-import Sound.SC3.Server as M
+import Sound.SC3.Server.Monad as M
 
 -- | Clone a unit generator (mce . replicateM).
 clone :: (UId m) => Int -> m UGen -> m UGen

@@ -7,17 +7,34 @@ import Sound.SC3.Server.NRT
 import Sound.SC3.Server.Synthdef
 import Sound.SC3.UGen.UGen
 
+-- * hosc variants.
+
 -- | Synonym for 'sendMessage'.
 send :: (Transport m) => Message -> m ()
 send = sendMessage
 
+-- | Synonym for 'waitReply'.
+wait :: Transport m => String -> m Message
+wait = waitReply
+
+-- | Send a 'Message' and 'wait' for a @\/done@ reply.
+async :: Transport m => Message -> m Message
+async m = send m >> wait "/done"
+
+-- | Bracket @SC3@ communication. 'withTransport' at standard SC3 UDP
+-- port.
+--
+-- > import Sound.SC3.Server.Command
+--
+-- > withSC3 (send status >> wait "/status.reply")
+withSC3 :: Connection UDP a -> IO a
+withSC3 = withTransport (openUDP "127.0.0.1" 57110)
+
+-- * Server control
+
 -- | Free all nodes ('g_freeAll') at group @1@.
 stop :: Transport m => m ()
 stop = send (g_freeAll [1])
-
--- | Send a 'Message' and wait for a @\/done@ reply.
-async :: Transport m => Message -> m Message
-async m = send m >> waitReply "/done"
 
 -- | Free all nodes ('g_freeAll') at and re-create groups @1@ and @2@.
 reset :: Transport m => m ()
@@ -25,15 +42,6 @@ reset =
     let m = [g_freeAll [1,2],g_new [(1,AddToTail,0),(2,AddToTail,0)]]
     in sendBundle (Bundle immediately m)
 
-
--- | Bracket @SC3@ communication. 'withTransport' at standard SC3 UDP
--- port.
---
--- > import Sound.SC3.Server.Command
---
--- > withSC3 (sendOSC status >> recvPacket)
-withSC3 :: Connection UDP a -> IO a
-withSC3 = withTransport (openUDP "127.0.0.1" 57110)
 
 -- | Send 'd_recv' and 's_new' messages to scsynth.
 playSynthdef :: Transport m => Synthdef -> m ()
@@ -87,3 +95,14 @@ instance Audible NRT where
 
 audition :: Audible e => e -> IO ()
 audition e = withSC3 (play e)
+
+-- * Notifications
+
+-- | Turn on notifications, run /f/, turn off notifications, return
+-- result.
+withNotifications :: Transport m => m a -> m a
+withNotifications f = do
+  _ <- async (notify True)
+  r <- f
+  _ <- async (notify False)
+  return r

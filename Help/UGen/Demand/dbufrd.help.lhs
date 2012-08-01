@@ -6,7 +6,7 @@
 
 setup pattern at buffer 10
 > let n = randomRs (200.0,500.0) (mkStdGen 0)
-> in withSC3 (\fd -> async fd (b_alloc_setn1 10 0 (take 24 n)))
+> in withSC3 (async (b_alloc_setn1 10 0 (take 24 n)))
 
 pattern as frequency input
 > let {s = dseq 'a' 3 (mce [0,3,5,0,3,7,0,5,9])
@@ -19,7 +19,7 @@ pattern as frequency input
 setup time pattern
 > let {i = randomRs (0,2) (mkStdGen 0)
 >     ;n = map ([1,0.5,0.25] !!) i}
-> in withSC3 (\fd -> async fd (b_alloc_setn1 11 0 (take 24 n)))
+> in withSC3 (async (b_alloc_setn1 11 0 (take 24 n)))
 
 requires buffers 10 and 11 as allocated above
 > let {s = dseq 'a' 3 (mce [0,3,5,0,3,7,0,5,9])
@@ -32,5 +32,4 @@ requires buffers 10 and 11 as allocated above
 > in audition (out 0 (sinOsc AR f 0 * 0.1))
 
 free buffers
-> withSC3 (\fd -> do {async fd (b_free 10)
->                    ;async fd (b_free 11)})
+> withSC3 (async (b_free 10) >> async (b_free 11))

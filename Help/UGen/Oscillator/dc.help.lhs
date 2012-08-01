@@ -5,7 +5,7 @@
 
 nothing
 > audition (out 0 0)
-> withSC3 (\fd -> send fd (n_trace [-1]))
+> withSC3 (send (n_trace [-1]))
 
 zero
 > audition (out 0 (dc AR 0))

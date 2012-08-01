@@ -50,7 +50,7 @@ several frequecies and widths combined
 >     ;o = sinOsc AR (200 * (1.3 ** mce [0..5])) 0}
 > in audition (out 0 (mix (g * o) * 0.1))
 
-> withSC3 (\fd -> send fd (n_trace [-1]))
+> withSC3 (send (n_trace [-1]))
 
 gabor grain
 > let {b = control IR "out" 0
@@ -63,7 +63,7 @@ gabor grain
 >     ;o = fSinOsc AR f (pi / 2) * e
 >     ;u = offsetOut b (pan2 o p a)
 >     ;i = synthdef "gabor" u}
-> in withSC3 (\fd -> async fd (d_recv i))
+> in withSC3 (async (d_recv i))
 
 > import Sound.SC3.Lang.Pattern.ID
 

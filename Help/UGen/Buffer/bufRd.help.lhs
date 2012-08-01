@@ -5,7 +5,7 @@
 
 Load sound file to buffer zero (required for examples)
 > let fn = "/home/rohan/data/audio/pf-c5.aif"
-> in withSC3 (\fd -> async fd (b_allocRead 0 fn 0 0))
+> in withSC3 (async (b_allocRead 0 fn 0 0))
 
 Audio rate sine oscillator as phase input
 > let phase = (sinOsc AR 0.1 0 * bufFrames KR 0)

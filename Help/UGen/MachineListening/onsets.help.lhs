@@ -4,9 +4,9 @@
 > import Sound.SC3.ID
 
 allocate buffer 10
-> withSC3 (\fd -> async fd (b_alloc 10 512 1))
+> withSC3 (async (b_alloc 10 512 1))
 
-> let { x = mouseX' KR 0 1 Linear 0.2
+> let { x = mouseX KR 0 1 Linear 0.2
 >     ; i = soundIn 0
 >     ; c = fft' 10 i
 >     ; o = onsets' c x (onsetType "rcomplex")

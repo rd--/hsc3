@@ -9,10 +9,10 @@ allocate and fill tables 0 to 7.
 >     ;harm i = let {n = square (i + 1)
 >                   ;f j = square ((n - j) / n)}
 >                in map f [0 .. n - 1]
->     ;setup fd i = do {i' <- return (fromIntegral i)
->                      ;_ <- async fd (b_alloc i 1024 1)
->                      ;send fd (b_gen_sine1 i bf (harm i'))}}
-> in withSC3 (\fd -> mapM_ (setup fd) [0 .. 7])
+>     ;setup i = do {i' <- return (fromIntegral i)
+>                   ;_ <- async (b_alloc i 1024 1)
+>                   ;send (b_gen_sine1 i bf (harm i'))}}
+> in withSC3 (mapM_ setup [0 .. 7])
 
 oscillator at buffers 0 through 7, mouse selects buffer.
 > let {x = mouseX KR 0 7 Linear 0.1

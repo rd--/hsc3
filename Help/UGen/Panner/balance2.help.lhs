@@ -28,7 +28,7 @@
 >     ;o = balance2 s s p 0.2}
 > in audition (out 0 o) {- >> Sound.SC3.UGen.Dot.draw (out 0 o) -}
 
-> withSC3 (\fd -> send fd (n_trace [-1]))
+> withSC3 (send (n_trace [-1]))
 
 {var s=SinOsc.ar(440);Out.ar(0,Balance2.ar(s,s,MouseX.kr(-1,1),0.2))}.play
 > let {s0 = sinOsc AR 440 0

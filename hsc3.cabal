@@ -77,6 +77,7 @@ Library
                    Sound.SC3.Server.Play.Monad
                    Sound.SC3.Server.Status
                    Sound.SC3.Server.Status.FD
+                   Sound.SC3.Server.Status.Monad
                    Sound.SC3.Server.Synthdef
                    Sound.SC3.Server.Synthdef.Reconstruct
                    Sound.SC3.Server.Synthdef.Transform

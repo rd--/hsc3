@@ -4,11 +4,11 @@
 > import Sound.SC3.ID
 
 allocate & initialise buffer zero
-> withSC3 (\fd -> async fd (b_alloc_setn1 0 0 [0,2,3.2,5,7,9,10]))
+> withSC3 (async (b_alloc_setn1 0 0 [0,2,3.2,5,7,9,10]))
 
 modal space, mouse x controls discrete pitch in dorian mode
 > let {n = lfNoise1 'a' KR (mce [3,3.05])
->     ;x = mouseX' KR 0 15 Linear 0.1
+>     ;x = mouseX KR 0 15 Linear 0.1
 >     ;k = degreeToKey 0 x 12
 >     ;f b = let {o = sinOsc AR (midiCPS (b + k + n * 0.04)) 0 * 0.1
 >                ;t = lfPulse AR (midiCPS (mce [48,55])) 0.15 0.5

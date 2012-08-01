@@ -2,7 +2,6 @@
 module Sound.SC3.Server.Status where
 
 import Sound.OpenSoundControl.Type
-import Sound.SC3.Server.Command
 
 -- | Get /n/th field of status as 'Double'.
 extractStatusField :: Int -> [Datum] -> Double

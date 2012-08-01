@@ -31,12 +31,11 @@ Using Stepper and BufRd for sequencing
 >                        ,\s -> delayL s 0.1 lfo + s
 >                        ,\s -> onePole s 0.9]}
 >             in compose chn top
->     ;stprInit fd =
+>     ;stprInit =
 >      let n = [97.999,195.998,523.251,466.164,195.998
 >              ,233.082,87.307,391.995,87.307,261.626
 >              ,195.998,77.782,233.082,195.998,97.999
 >              ,155.563]
->      in do {_ <- async fd (b_alloc 10 128 1)
->            ;send fd (b_setn 10 [(0,n)])}}
-> in withSC3 (\fd -> do {stprInit fd
->                       ;audition (out 0 stpr)})
+>      in do {_ <- async (b_alloc 10 128 1)
+>            ;send (b_setn 10 [(0,n)])}}
+> in withSC3 (stprInit >> play (out 0 stpr))

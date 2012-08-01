@@ -10,8 +10,7 @@
 
 direct synthesis via writing values to buffer (try changing wavelet
 type...)
-> withSC3 (\fd -> do {_ <- async fd (b_alloc 10 1024 1)
->                    ;send fd (b_zero 10)})
+> withSC3 (async (b_alloc 10 1024 1) >> send (b_zero 10))
 
 > let {c = fftTrigger 10 0.5 0
 >     ;i = idwt c (-1) 0 0}
@@ -20,14 +19,14 @@ type...)
 > import Control.Monad.Random
 > import Sound.SC3.Lang.Random.Monad
 
-> withSC3 (\fd -> send fd (b_zero 10))
+> withSC3 (send (b_zero 10))
 
 run this to change sound: WARNING, NOISY!
 > do {a <- evalRandIO (nrrand 1024 (-1) 1)
->    ;withSC3 (\fd -> send fd (b_setn 10 [(0,a)]))}
+>    ;withSC3 (send (b_setn 10 [(0,a)]))}
 
 > let a = map (/ 1024) [0..1023]
-> in withSC3 (\fd -> send fd (b_setn 10 [(0,a)]))
+> in withSC3 (send (b_setn 10 [(0,a)]))
 
 > let a = map (\i -> 1 - i / 1024) [0..1023]
-> in withSC3 (\fd -> send fd (b_setn 10 [(0,a)]))
+> in withSC3 (send (b_setn 10 [(0,a)]))

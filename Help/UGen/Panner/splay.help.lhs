@@ -28,16 +28,16 @@ n_set control
 > in audition (out 0 (splay (sinOsc AR n 0) s l c True))
 
 full stereo
-> withSC3 (\fd -> send fd (n_set (-1) [("spread",1),("center",0)]))
+> withSC3 (send (n_set (-1) [("spread",1),("center",0)]))
 
 less wide
-> withSC3 (\fd -> send fd (n_set (-1) [("spread",0.5),("center",0)]))
+> withSC3 (send (n_set (-1) [("spread",0.5),("center",0)]))
 
 mono center
-> withSC3 (\fd -> send fd (n_set (-1) [("spread",0),("center",0)]))
+> withSC3 (send (n_set (-1) [("spread",0),("center",0)]))
 
 from center to right
-> withSC3 (\fd -> send fd (n_set (-1) [("spread",0.5),("center",0.5)]))
+> withSC3 (send (n_set (-1) [("spread",0.5),("center",0.5)]))
 
 all left
-> withSC3 (\fd -> send fd (n_set (-1) [("spread",0),("center",-1)]))
+> withSC3 (send (n_set (-1) [("spread",0),("center",-1)]))

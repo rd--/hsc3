@@ -4,7 +4,7 @@
 > import Sound.SC3.ID
 
 > let fn = "/home/rohan/data/audio/pf-c5.snd"
-> in withSC3 (\fd -> send fd (b_allocRead 10 fn 0 0))
+> in withSC3 (send (b_allocRead 10 fn 0 0))
 
 > let {buf = 10
 >     ;dur = 15

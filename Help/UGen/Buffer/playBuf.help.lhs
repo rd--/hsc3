@@ -5,7 +5,7 @@
 
 Load sound file to buffer zero (single channel file required for examples)
 > let fn = "/home/rohan/data/audio/pf-c5.aif"
-> in withSC3 (\fd -> async fd (b_allocRead 0 fn 0 0))
+> in withSC3 (async (b_allocRead 0 fn 0 0))
 
 Play once only.
 > let s = bufRateScale KR 0
@@ -37,4 +37,4 @@ Sine wave control of playback rate, negative rate plays backwards.
 > in audition (out 0 (playBuf 1 AR 0 s 1 0 Loop DoNothing))
 
 Release buffer.
-> withSC3 (\fd -> send fd (b_free 0))
+> withSC3 (send (b_free 0))

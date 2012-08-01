@@ -2,8 +2,6 @@
 -- "Sound.SC3.Server.Command".
 module Sound.SC3.Server.Buffer where
 
-import Sound.SC3.Server.Command
-
 -- | Segment a request for /m/ places into sets of at most /n/.
 --
 -- > b_segment 1024 2056 == [8,1024,1024]

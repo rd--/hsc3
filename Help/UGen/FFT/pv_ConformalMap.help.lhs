@@ -3,7 +3,7 @@
 
 > import Sound.SC3.ID
 
-> withSC3 (\fd -> async fd (b_alloc 10 1024 1))
+> withSC3 (async (b_alloc 10 1024 1))
 
 > let { i = in' 1 AR numOutputBuses * 0.5
 >     ; x = mouseX KR (-1) 1 Linear 0.1
@@ -11,7 +11,7 @@
 > in audition (out 0 (pan2 (ifft' (pv_ConformalMap (fft' 10 i) x y)) 0 1))
 
 With filtering.
-> withSC3 (\fd -> async fd (b_alloc 0 2048 1))
+> withSC3 (async (b_alloc 0 2048 1))
 
 > let { o = mce [1, 1.1, 1.5, 1.78, 2.45, 6.7, 8] * 220
 >     ; f = sinOsc KR (mce [0.16, 0.33, 0.41]) 0 * 10 + o

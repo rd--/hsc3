@@ -11,7 +11,7 @@ Using sweep to modulate sine frequency
 
 Load audio to buffer
 > let fn = "/home/rohan/data/audio/pf-c5.aif"
-> in withSC3 (\fd -> send fd (b_allocRead 0 fn 0 0))
+> in withSC3 (send (b_allocRead 0 fn 0 0))
 
 Using sweep to index into a buffer
 > let {x = mouseX KR 0.5 20 Exponential 0.1
