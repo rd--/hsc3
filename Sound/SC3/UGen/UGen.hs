@@ -5,7 +5,7 @@ import Data.Bits
 import qualified Data.Char as C
 import Data.List
 import Data.Maybe
-import Sound.SC3.Identifier
+import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Rate
 import System.Random {- random -}

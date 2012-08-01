@@ -1,7 +1,7 @@
 -- | Non-deterministic FFT 'UGen's.
 module Sound.SC3.UGen.FFT.ID where
 
-import Sound.SC3.Identifier
+import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
 

@@ -3,7 +3,7 @@
 -- psuedo-random nodes.
 module Sound.SC3.UGen.Protect where
 
-import Sound.SC3.Identifier
+import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.UGen
 
 -- | Collect Ids at UGen graph

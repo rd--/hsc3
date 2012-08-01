@@ -1,8 +1,8 @@
 -- | Explicit identifier demand rate 'UGen' functions.
 module Sound.SC3.UGen.Demand.ID where
 
-import Sound.SC3.Identifier
 import Sound.SC3.UGen.Enum
+import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
 

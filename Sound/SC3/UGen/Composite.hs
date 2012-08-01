@@ -4,10 +4,10 @@ module Sound.SC3.UGen.Composite where
 import Control.Monad
 import Data.List
 import Data.List.Split
-import Sound.SC3.Identifier
 import Sound.SC3.UGen.Buffer
 import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Filter
+import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.Information
 import Sound.SC3.UGen.IO
 import Sound.SC3.UGen.Math

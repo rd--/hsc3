@@ -1,5 +1,5 @@
 -- | Typeclass and functions to manage UGen identifiers.
-module Sound.SC3.Identifier where
+module Sound.SC3.UGen.Identifier where
 
 import Data.Char
 import qualified Data.Digest.Murmur32 as H

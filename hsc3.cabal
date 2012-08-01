@@ -3,20 +3,18 @@ Version:           0.12
 Synopsis:          Haskell SuperCollider
 Description:       hsc3 facilitates using haskell as a client to the
                    SuperCollider synthesis server.
-
-                   For detailed installation and configuration
-                   information please consult the /Tutorial/ and
-                   /Introduction/ documents at
-                   <http://slavepianos.org/rd/ut/hsc3-texts/>
-
+                   .
+                   For details on installation and configuration
+                   see the /Tutorial/ and /Introduction/ at
+                   <http://rd.slavepianos.org/?t=hsc3-texts>
 License:           GPL
 Category:          Sound
 Copyright:         (c) Rohan Drape and others, 2006-2012
 Author:            Rohan Drape
 Maintainer:        rd@slavepianos.org
 Stability:         Experimental
-Homepage:          http://slavepianos.org/rd/?t=hsc3
-Tested-With:       GHC == 7.2.2
+Homepage:          http://rd.slavepianos.org/?t=hsc3
+Tested-With:       GHC == 7.0.4
 Build-Type:        Simple
 Cabal-Version:     >= 1.8
 
@@ -61,25 +59,19 @@ Library
   GHC-Options:     -Wall -fwarn-tabs
   Exposed-modules: Sound.SC3
                    Sound.SC3.FD
-                   Sound.SC3.Identifier
                    Sound.SC3.ID
                    Sound.SC3.ID.FD
                    Sound.SC3.Monadic
                    Sound.SC3.Monadic.FD
                    Sound.SC3.Server
-                   Sound.SC3.Server.Buffer
-                   Sound.SC3.Server.Buffer.FD
-                   Sound.SC3.Server.Buffer.Monad
                    Sound.SC3.Server.Command
                    Sound.SC3.Server.Command.Completion
                    Sound.SC3.Server.FD
                    Sound.SC3.Server.Monad
                    Sound.SC3.Server.NRT
-                   Sound.SC3.Server.Play.FD
-                   Sound.SC3.Server.Play.Monad
+                   Sound.SC3.Server.Transport.FD
+                   Sound.SC3.Server.Transport.Monad
                    Sound.SC3.Server.Status
-                   Sound.SC3.Server.Status.FD
-                   Sound.SC3.Server.Status.Monad
                    Sound.SC3.Server.Synthdef
                    Sound.SC3.Server.Synthdef.Reconstruct
                    Sound.SC3.Server.Synthdef.Transform
@@ -109,6 +101,7 @@ Library
                    Sound.SC3.UGen.Filter
                    Sound.SC3.UGen.Granular
                    Sound.SC3.UGen.Help
+                   Sound.SC3.UGen.Identifier
                    Sound.SC3.UGen.ID
                    Sound.SC3.UGen.IO
                    Sound.SC3.UGen.Information
@@ -132,4 +125,4 @@ Library
 
 Source-Repository  head
   Type:            darcs
-  Location:        http://slavepianos.org/rd/sw/hsc3/
+  Location:        http://rd.slavepianos.org/sw/hsc3/

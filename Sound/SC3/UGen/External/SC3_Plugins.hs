@@ -1,7 +1,7 @@
 -- | Bindings to unit generators in sc3-plugins.
 module Sound.SC3.UGen.External.SC3_Plugins where
 
-import Sound.SC3.Identifier
+import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen
 

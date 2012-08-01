@@ -1,9 +1,9 @@
 -- | Explicit identifier functions for composite 'UGen's.
 module Sound.SC3.UGen.Composite.ID where
 
-import Sound.SC3.Identifier
 import Sound.SC3.UGen.Demand.ID
 import Sound.SC3.UGen.Filter
+import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.Noise.ID
 import Sound.SC3.UGen.UGen
 

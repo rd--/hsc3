@@ -1,8 +1,11 @@
-module Sound.SC3.Server.Play.Monad where
+-- | /Monad/ variant of interaction with the scsynth server.
+module Sound.SC3.Server.Transport.Monad where
 
+import Control.Monad
 import Sound.OSC
 import Sound.SC3.Server.Command
 import Sound.SC3.Server.NRT
+import Sound.SC3.Server.Status
 import Sound.SC3.Server.Synthdef
 import Sound.SC3.UGen.UGen
 
@@ -105,3 +108,57 @@ withNotifications f = do
   r <- f
   _ <- async (notify False)
   return r
+
+-- * Buffer
+
+-- | Variant of 'b_getn1' that waits for return message and unpacks it.
+--
+-- > withSC3 (b_getn1_data 0 (0,5))
+b_getn1_data :: Transport m => Int -> (Int,Int) -> m [Double]
+b_getn1_data b s = do
+  let f d = case d of
+              Int _:Int _:Int _:x -> map datum_real_err x
+              _ -> error "b_getn1_data"
+  sendMessage (b_getn1 b s)
+  fmap f (waitDatum "/b_setn")
+
+-- | Variant of 'b_getn1_data' that segments individual 'b_getn'
+-- messages to /n/ elements.
+--
+-- > withSC3 (b_getn1_data_segment 1 0 (0,5))
+b_getn1_data_segment :: Transport m => Int -> Int -> (Int,Int) -> m [Double]
+b_getn1_data_segment n b (i,j) = do
+  let ix = b_indices n j i
+  d <- mapM (b_getn1_data b) ix
+  return (concat d)
+
+-- | Variant of 'b_getn1_data_segment' that gets the entire buffer.
+b_fetch :: Transport m => Int -> Int -> m [Double]
+b_fetch n b = do
+  let f d = case d of
+              [Int _,Int nf,Int nc,Float _] ->
+                  let ix = (0,nf * nc)
+                  in b_getn1_data_segment n b ix
+              _ -> error "b_fetch"
+  sendMessage (b_query1 b)
+  waitDatum "/b_info" >>= f
+
+-- * Status
+
+-- | Collect server status information.
+serverStatus :: Transport m => m [String]
+serverStatus = liftM statusFormat serverStatusData
+
+-- | Read nominal sample rate of server.
+serverSampleRateNominal :: (Transport m) => m Double
+serverSampleRateNominal = liftM (extractStatusField 7) serverStatusData
+
+-- | Read actual sample rate of server.
+serverSampleRateActual :: (Transport m) => m Double
+serverSampleRateActual = liftM (extractStatusField 8) serverStatusData
+
+-- | Retrieve status data from server.
+serverStatusData :: Transport m => m [Datum]
+serverStatusData = do
+  sendMessage status
+  waitDatum "/status.reply"
