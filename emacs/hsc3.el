@@ -51,14 +51,16 @@
   "Lookup up the name at point in the SC3 help files."
   (interactive)
   (hsc3-send-string
-   (format "Sound.SC3.viewSC3Help (Sound.SC3.toSC3Name \"%s\")"
-           (thing-at-point 'symbol))))
+   (format
+    "Sound.SC3.viewSC3Help (Sound.SC3.toSC3Name \"%s\")"
+    (thing-at-point 'symbol))))
 
 (defun hsc3-ugen-summary ()
   "Lookup up the UGen at point in hsc3-db"
   (interactive)
-  (hsc3-send-string (format "Sound.SC3.UGen.DB.ugenSummary_ci \"%s\""
-                            (thing-at-point 'symbol))))
+  (hsc3-send-string
+   (format "Sound.SC3.UGen.DB.ugenSummary_ci \"%s\""
+           (thing-at-point 'symbol))))
 
 (defun hsc3-request-type ()
   "Ask ghci for the type of the name at point."
@@ -143,7 +145,7 @@
 (defun hsc3-reset-scsynth ()
   "Reset scsynth"
   (interactive)
-  (hsc3-send-string "withSC3 reset"))
+  (hsc3-send-string "Sound.SC3.withSC3 Sound.SC3.reset"))
 
 (defun hsc3-stop ()
   "Interrup haskell interpreter & reset scsynth"
@@ -155,12 +157,14 @@
 (defun hsc3-status-scsynth ()
   "Status"
   (interactive)
-  (hsc3-send-string "withSC3 serverStatus >>= mapM putStrLn"))
+  (hsc3-send-string
+   "Sound.SC3.withSC3 Sound.SC3.serverStatus >>= mapM putStrLn"))
 
 (defun hsc3-quit-scsynth ()
   "Quit"
   (interactive)
-  (hsc3-send-string "withSC3 (\fd -> send fd quit)"))
+  (hsc3-send-string
+   "Sound.SC3.withSC3 (Sound.SC3.send Sound.SC3.quit)"))
 
 (defun hsc3-update-hsc3-tags ()
   "Update hsc3 TAGS file, must be run from hsc3 directory."
