@@ -3,7 +3,8 @@ module Sound.SC3.Server.Synthdef.Reconstruct where
 import Data.Char
 import Data.Function
 import Data.List
-import Sound.SC3.Server.Synthdef {- hsc3 -}
+import Sound.SC3.Server.Synthdef.Internal
+import Sound.SC3.Server.Synthdef.Type
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.UGen
 import Text.Printf

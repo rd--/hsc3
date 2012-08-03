@@ -6,6 +6,7 @@ import Data.Maybe
 import Sound.OpenSoundControl {- hosc -}
 import Sound.SC3.Server.Utilities
 import Sound.SC3.Server.Synthdef
+import Sound.SC3.Server.Synthdef.Type
 import Sound.SC3.UGen.Enum
 
 -- * Instrument definition commands

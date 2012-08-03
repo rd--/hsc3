@@ -4,7 +4,8 @@ module Sound.SC3.Server.Synthdef.Transform where
 import Data.Either
 import Data.List
 import Data.Maybe
-import Sound.SC3.Server.Synthdef
+import Sound.SC3.Server.Synthdef.Internal
+import Sound.SC3.Server.Synthdef.Type
 import Sound.SC3.UGen.Rate
 
 -- * Lift constants
