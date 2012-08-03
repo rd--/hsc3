@@ -13,15 +13,18 @@
 
 > import Sound.OSC
 
+Phase cancellation, the 'offsetOut' at bus 0 cancels, the 'out'
+at bus 1 doesn't (or at least is exceedingly unlikely to).
 > let a = do
->       {sr <- serverSampleRateActual
->       ;t <- utcr
->       ;let {b = control KR "bus" 0
->            ;g = synthdef "g" (offsetOut b (sinOsc AR 440 0 * 0.2))
->            ;m i = s_new "g" (-1) AddToTail 1 [("bus",i)]
->            ;p i = Bundle (UTCr (t + 1.0)) [m i]
->            ;q i = Bundle (UTCr (t + 1.1)) [m i]
->            ;r i = Bundle (UTCr (t + 1.0 + sr/1000)) [m i]}
+>       {t <- utcr
+>       ;sr <- serverSampleRateActual
+>       ;let {f = sr / 100
+>            ;c = 1 / f
+>            ;g = let o = sinOsc AR (constant f) 0 * 0.2
+>                 in synthdef "g" (mrg [offsetOut 0 o,out 1 o])
+>            ;m = s_new "g" (-1) AddToTail 1 []
+>            ;p = Bundle (UTCr (t + 0.1)) [m]
+>            ;q = Bundle (UTCr (t + 0.1 + c/2)) [m]}
 >       ;_ <- async (d_recv g)
->       ;mapM_ sendBundle [p 0,p 1,q 0,r 1]}
+>       ;mapM_ sendBundle [p,q]}
 > in withSC3 a

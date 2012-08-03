@@ -9,7 +9,7 @@ Impulse train that can be moved between samples
 >             ;i = impulse AR 2000 0 * 0.3
 >             ;d = sampleDur
 >             ;x = 4
->             ;o = (1 - subsampleOffset) + mouseX' KR 0 a Linear 0.1
+>             ;o = (1 - subsampleOffset) + mouseX KR 0 a Linear 0.1
 >             ;r = delayC i (d * (1 + x)) (d * (o + x))}
 >         in (synthdef "s" (offsetOut 0 r))
 
@@ -20,8 +20,9 @@ oscilloscope.
 > let run s = do
 >       {_ <- async (d_recv s)
 >       ;t <- utcr
+>       ;sr <- serverSampleRateActual
 >       ;let {t' = t + 0.2
->            ;dt = 1 / 44100.0
+>            ;dt = 1 / sr
 >            ;m n = s_new "s" (-1) AddToTail 1 [("a", n)]}
 >        in do {sendBundle (Bundle (UTCr t') [m 3])
 >              ;sendBundle (Bundle (UTCr (t' + dt)) [m 0]) }}
