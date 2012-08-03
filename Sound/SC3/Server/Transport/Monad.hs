@@ -10,7 +10,7 @@ import Sound.SC3.Server.Synthdef
 import Sound.SC3.Server.Synthdef.Type
 import Sound.SC3.UGen.UGen
 
--- * hosc variants.
+-- * hosc variants
 
 -- | Synonym for 'sendMessage'.
 send :: (Transport m) => Message -> m ()

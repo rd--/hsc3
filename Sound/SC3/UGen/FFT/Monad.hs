@@ -1,5 +1,5 @@
--- | Monadic constructors for non-deterministic FFT 'UGen's.
-module Sound.SC3.UGen.FFT.Monadic where
+-- | Monad constructors for non-deterministic FFT 'UGen's.
+module Sound.SC3.UGen.FFT.Monad where
 
 import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.UGen.Lift

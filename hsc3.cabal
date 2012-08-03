@@ -1,12 +1,15 @@
 Name:              hsc3
 Version:           0.12
 Synopsis:          Haskell SuperCollider
-Description:       hsc3 facilitates using haskell as a client to the
-                   SuperCollider synthesis server.
+Description:       Haskell client for the SuperCollider synthesis server,
+                   <http://audiosynth.com/>.
                    .
-                   For details on installation and configuration
-                   see the /Tutorial/ and /Introduction/ at
-                   <http://rd.slavepianos.org/?t=hsc3-texts>
+                   For installation and configuration see the Tutorial at
+                   <http://rd.slavepianos.org/?t=hsc3-texts>.
+                   .
+                   hsc3 has two implementations of the non-determinstic
+                   Unit Generators, "Sound.SC3.UGen.ID" and
+                   "Sound.SC3.UGen.Monad".
 License:           GPL
 Category:          Sound
 Copyright:         (c) Rohan Drape and others, 2006-2012
@@ -61,8 +64,8 @@ Library
                    Sound.SC3.FD
                    Sound.SC3.ID
                    Sound.SC3.ID.FD
-                   Sound.SC3.Monadic
-                   Sound.SC3.Monadic.FD
+                   Sound.SC3.Monad
+                   Sound.SC3.Monad.FD
                    Sound.SC3.Server
                    Sound.SC3.Server.Command
                    Sound.SC3.Server.Command.Completion
@@ -83,10 +86,10 @@ Library
                    Sound.SC3.UGen.Chaos
                    Sound.SC3.UGen.Composite
                    Sound.SC3.UGen.Composite.ID
-                   Sound.SC3.UGen.Composite.Monadic
+                   Sound.SC3.UGen.Composite.Monad
                    Sound.SC3.UGen.Demand
                    Sound.SC3.UGen.Demand.ID
-                   Sound.SC3.UGen.Demand.Monadic
+                   Sound.SC3.UGen.Demand.Monad
                    Sound.SC3.UGen.DiskIO
                    Sound.SC3.UGen.Enum
                    Sound.SC3.UGen.Envelope
@@ -99,7 +102,7 @@ Library
                    Sound.SC3.UGen.External.SC3_Plugins
                    Sound.SC3.UGen.FFT
                    Sound.SC3.UGen.FFT.ID
-                   Sound.SC3.UGen.FFT.Monadic
+                   Sound.SC3.UGen.FFT.Monad
                    Sound.SC3.UGen.Filter
                    Sound.SC3.UGen.Granular
                    Sound.SC3.UGen.Help
@@ -109,10 +112,10 @@ Library
                    Sound.SC3.UGen.Information
                    Sound.SC3.UGen.MachineListening
                    Sound.SC3.UGen.Math
-                   Sound.SC3.UGen.Monadic
+                   Sound.SC3.UGen.Monad
                    Sound.SC3.UGen.Name
                    Sound.SC3.UGen.Noise.ID
-                   Sound.SC3.UGen.Noise.Monadic
+                   Sound.SC3.UGen.Noise.Monad
                    Sound.SC3.UGen.Operator
                    Sound.SC3.UGen.Oscillator
                    Sound.SC3.UGen.Panner

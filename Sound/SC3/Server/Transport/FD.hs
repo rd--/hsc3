@@ -13,7 +13,7 @@ import Sound.SC3.Server.Synthdef
 import Sound.SC3.Server.Synthdef.Type
 import Sound.SC3.UGen.UGen
 
--- * hosc variants.
+-- * hosc variants
 
 -- | Synonym for 'sendMessage'.
 send :: (Transport t) => t -> Message -> IO ()
@@ -94,6 +94,17 @@ instance Audible UGen where
 
 instance Audible NRT where
     play = performNRT
+
+-- * Notifications
+
+-- | Turn on notifications, run /f/, turn off notifications, return
+-- result.
+withNotifications :: Transport t => t -> (t -> IO a) -> IO a
+withNotifications fd f = do
+  _ <- async fd (notify True)
+  r <- f fd
+  _ <- async fd (notify False)
+  return r
 
 -- * Buffer
 

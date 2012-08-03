@@ -1,6 +1,6 @@
--- | Monadic constructors for demand 'UGen's, see also
+-- | Monad constructors for demand 'UGen's, see also
 -- "Sound.SC3.UGen.Demand.ID".
-module Sound.SC3.UGen.Demand.Monadic where
+module Sound.SC3.UGen.Demand.Monad where
 
 import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.UGen.Lift

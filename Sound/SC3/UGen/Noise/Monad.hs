@@ -1,5 +1,5 @@
--- | Monadic constructors for noise 'UGen's.
-module Sound.SC3.UGen.Noise.Monadic where
+-- | Monad constructors for noise 'UGen's.
+module Sound.SC3.UGen.Noise.Monad where
 
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.UGen

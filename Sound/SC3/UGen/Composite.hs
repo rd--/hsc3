@@ -66,7 +66,7 @@ mixN n u =
 mixFill :: Integral n => Int -> (n -> UGen) -> UGen
 mixFill n f = mix (mce (map f [0 .. fromIntegral n - 1]))
 
--- | Monadic variant on mixFill.
+-- | Monad variant on mixFill.
 mixFillM :: (Integral n,Monad m) => Int -> (n -> m UGen) -> m UGen
 mixFillM n f = liftM sum (mapM f [0 .. fromIntegral n - 1])
 
