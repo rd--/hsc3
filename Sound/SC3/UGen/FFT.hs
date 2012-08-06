@@ -4,6 +4,7 @@ module Sound.SC3.UGen.FFT where
 import Sound.OpenSoundControl
 import Sound.SC3.Server.Command
 import Sound.SC3.UGen.Rate
+import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
 -- | Fast fourier transform.

@@ -2,6 +2,7 @@
 module Sound.SC3.UGen.Granular where
 
 import Sound.SC3.UGen.Rate
+import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
 -- | Granular synthesis with sound stored in a buffer.

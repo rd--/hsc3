@@ -3,11 +3,12 @@ module Sound.SC3.UGen.Demand where
 
 import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Rate
+import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
 -- | Infinte repeat counter for demand rate unit generators.
 dinf :: UGen
-dinf = Constant 9E8
+dinf = constant (9E8::Double)
 
 -- | Demand results from demand rate ugens.
 demand :: UGen -> UGen -> UGen -> UGen

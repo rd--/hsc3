@@ -8,7 +8,7 @@ import Sound.OpenSoundControl.Coding.Byte {- hosc -}
 import Sound.OpenSoundControl.Coding.Cast
 import Sound.SC3.Server.Synthdef.Internal
 import Sound.SC3.Server.Synthdef.Type
-import Sound.SC3.UGen.UGen
+import Sound.SC3.UGen.Type
 import System.FilePath {- filepath -}
 
 -- | Transform a unit generator into a graph.

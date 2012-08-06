@@ -3,6 +3,7 @@ module Sound.SC3.UGen.External.SC3_Plugins where
 
 import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.Rate
+import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
 -- * AY

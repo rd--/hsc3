@@ -122,6 +122,7 @@ Library
                    Sound.SC3.UGen.Plain
                    Sound.SC3.UGen.Protect
                    Sound.SC3.UGen.Rate
+                   Sound.SC3.UGen.Type
                    Sound.SC3.UGen.UGen
                    Sound.SC3.UGen.UGen.Lift
                    Sound.SC3.UGen.UId

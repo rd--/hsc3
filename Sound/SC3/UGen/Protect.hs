@@ -4,13 +4,14 @@
 module Sound.SC3.UGen.Protect where
 
 import Sound.SC3.UGen.Identifier
+import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
 -- | Collect Ids at UGen graph
 ugenIds :: UGen -> [UGenId]
 ugenIds =
-    let f u = case ugenType u of
-                Primitive_U -> [ugenId u]
+    let f u = case u of
+                Primitive_U p -> [ugenId p]
                 _ -> []
     in ugenFoldr ((++) . f) []
 
@@ -25,8 +26,8 @@ atUGenId f z =
 uprotect :: ID a => a -> UGen -> UGen
 uprotect e =
     let e' = idHash e
-        f u = case ugenType u of
-                Primitive_U -> u {ugenId = atUGenId (+ e') (ugenId u)}
+        f u = case u of
+                Primitive_U p -> Primitive_U (p {ugenId = atUGenId (+ e') (ugenId p)})
                 _ -> u
     in ugenTraverse f
 

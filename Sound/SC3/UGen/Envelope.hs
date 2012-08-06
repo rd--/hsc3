@@ -5,6 +5,7 @@ import Data.List
 import Data.Maybe
 import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Rate
+import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
 -- * Envelope

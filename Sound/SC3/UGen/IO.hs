@@ -3,6 +3,7 @@ module Sound.SC3.UGen.IO where
 
 import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Rate
+import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
 -- | Read signal from an audio or control bus.

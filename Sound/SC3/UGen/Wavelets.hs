@@ -2,6 +2,7 @@
 module Sound.SC3.UGen.Wavelets where
 
 import Sound.SC3.UGen.Rate
+import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
 -- | Forward wavelet transform.

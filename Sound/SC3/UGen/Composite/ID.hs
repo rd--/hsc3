@@ -5,6 +5,7 @@ import Sound.SC3.UGen.Demand.ID
 import Sound.SC3.UGen.Filter
 import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.Noise.ID
+import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
 -- | Demand rate (:) function.

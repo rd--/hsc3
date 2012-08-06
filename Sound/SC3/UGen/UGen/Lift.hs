@@ -2,7 +2,7 @@
 -- monadic 'UGen' constructors.
 module Sound.SC3.UGen.UGen.Lift where
 
-import Sound.SC3.UGen.UGen
+import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UId
 
 -- | Lift base UGen to monadic form.

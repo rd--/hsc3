@@ -3,6 +3,7 @@ module Sound.SC3.UGen.Filter where
 
 import Data.List
 import Sound.SC3.UGen.Rate
+import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
 -- | Audio to control rate converter.

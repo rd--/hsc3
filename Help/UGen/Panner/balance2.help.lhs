@@ -11,7 +11,7 @@
 > in audition (out 0 o)
 
 {var s=SinOsc.ar([440,550]);Balance2.ar(s[0],s[1],LFNoise0.kr(4),0.3)}.play
-> let {MCE [s0,s1] = sinOsc AR (mce2 440 550) 0
+> let {[s0,s1] = mceChannels (sinOsc AR (mce2 440 550) 0)
 >     ;n = lfNoise0 'a' KR 4
 >     ;o = balance2 s0 s1 n 0.3}
 > in audition (out 0 o)

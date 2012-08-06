@@ -2,11 +2,11 @@
 -- "Sound.SC3.UGen.Demand.ID".
 module Sound.SC3.UGen.Demand.Monad where
 
-import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.UGen.Lift
-import qualified Sound.SC3.UGen.Demand.ID as D
-import Sound.SC3.UGen.UId
+import Sound.SC3.UGen.Demand.ID as D
 import Sound.SC3.UGen.Enum
+import Sound.SC3.UGen.Type
+import Sound.SC3.UGen.UGen.Lift
+import Sound.SC3.UGen.UId
 
 -- | Buffer demand ugen.
 dbufrd :: (UId m) => UGen -> UGen -> Loop -> m UGen

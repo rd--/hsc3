@@ -8,8 +8,9 @@ import Data.Maybe
 import Sound.OpenSoundControl.Coding.Byte {- hosc -}
 import Sound.OpenSoundControl.Coding.Cast
 import Sound.SC3.Server.Synthdef.Type
-import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.Rate
+import Sound.SC3.UGen.Type
+import Sound.SC3.UGen.UGen
 
 -- | Find 'Node' with indicated 'NodeId'.
 find_node :: Graph -> NodeId -> Maybe Node
@@ -142,13 +143,10 @@ push_c x g =
             ,nextId = nextId g + 1})
 
 -- | Either find existing 'Constant' 'Node', or insert a new 'Node'.
-mk_node_c :: UGen -> Graph -> (Node,Graph)
-mk_node_c u g =
-    case u of
-      Constant x ->
-          let y = find (find_c_p x) (constants g)
-          in maybe (push_c x g) (\y' -> (y',g)) y
-      _ -> error "mk_node_c"
+mk_node_c :: Constant -> Graph -> (Node,Graph)
+mk_node_c (Constant x) g =
+    let y = find (find_c_p x) (constants g)
+    in maybe (push_c x g) (\y' -> (y',g)) y
 
 -- | Predicate to determine if 'Node' is a control with indicated
 -- /name/.  Names must be unique.
@@ -166,13 +164,10 @@ push_k (r,nm,d,tr) g =
             ,nextId = nextId g + 1})
 
 -- | Either find existing 'Control' 'Node', or insert a new 'Node'.
-mk_node_k :: UGen -> Graph -> (Node,Graph)
-mk_node_k u g =
-    case u of
-      Control r nm d tr ->
-          let y = find (find_k_p nm) (controls g)
-          in maybe (push_k (r,nm,d,tr) g) (\y' -> (y',g)) y
-      _ -> error "mk_node_k"
+mk_node_k :: Control -> Graph -> (Node,Graph)
+mk_node_k (Control r nm d tr) g =
+    let y = find (find_k_p nm) (controls g)
+    in maybe (push_k (r,nm,d,tr) g) (\y' -> (y',g)) y
 
 type UGenParts = (Rate,String,[FromPort],[Output],Special,UGenId)
 
@@ -199,16 +194,13 @@ mk_node_u_acc u n g =
               in mk_node_u_acc xs (y:n) g'
 
 -- | Either find existing 'Primitive' node, or insert a new 'Node'.
-mk_node_u :: UGen -> Graph -> (Node,Graph)
-mk_node_u ug g =
-    case ug of
-      Primitive r nm i o s d ->
-          let (i',g') = mk_node_u_acc i [] g
-              i'' = map as_from_port i'
-              u = (r,nm,i'',o,s,d)
-              y = find (find_u_p u) (ugens g')
-          in maybe (push_u u g') (\y' -> (y',g')) y
-      _ -> error "mk_node_u"
+mk_node_u :: Primitive -> Graph -> (Node,Graph)
+mk_node_u (Primitive r nm i o s d) g =
+    let (i',g') = mk_node_u_acc i [] g
+        i'' = map as_from_port i'
+        u = (r,nm,i'',o,s,d)
+        y = find (find_u_p u) (ugens g')
+    in maybe (push_u u g') (\y' -> (y',g')) y
 
 -- | Proxies do not get stored in the graph.
 mk_node_p :: Node -> PortIndex -> Graph -> (Node,Graph)
@@ -218,18 +210,18 @@ mk_node_p n p g =
 
 mk_node :: UGen -> Graph -> (Node,Graph)
 mk_node u g =
-    case ugenType u of
-      Constant_U -> mk_node_c u g
-      Control_U -> mk_node_k u g
-      Label_U -> error "mk_node: label"
-      Primitive_U -> mk_node_u u g
-      Proxy_U ->
-          let (n,g') = mk_node_u (proxySource u) g
-          in mk_node_p n (proxyIndex u) g'
-      MRG_U ->
-          let (_,g') = mk_node (mrgRight u) g
-          in mk_node (mrgLeft u) g'
-      MCE_U -> error "mk_node: mce"
+    case u of
+      Constant_U c -> mk_node_c c g
+      Control_U k -> mk_node_k k g
+      Label_U _ -> error "mk_node: label"
+      Primitive_U p -> mk_node_u p g
+      Proxy_U p ->
+          let (n,g') = mk_node_u (proxySource p) g
+          in mk_node_p n (proxyIndex p) g'
+      MRG_U m ->
+          let (_,g') = mk_node (mrgRight m) g
+          in mk_node (mrgLeft m) g'
+      MCE_U _ -> error "mk_node: mce"
 
 type Map = M.IntMap Int
 
@@ -381,7 +373,7 @@ mk_implicit ks =
 -- | Transform /mce/ nodes to /mrg/ nodes
 prepare_root :: UGen -> UGen
 prepare_root u =
-    case ugenType u of
-      MCE_U -> mrg (mceProxies u)
-      MRG_U -> MRG (prepare_root (mrgLeft u)) (prepare_root (mrgRight u))
+    case u of
+      MCE_U m -> mrg (mceProxies m)
+      MRG_U m -> mrg2 (prepare_root (mrgLeft m)) (prepare_root (mrgRight m))
       _ -> u

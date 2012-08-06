@@ -2,6 +2,7 @@
 --   environment.
 module Sound.SC3.UGen.Information where
 
+import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
 -- | Sample rate of synthesis server, frames per second.

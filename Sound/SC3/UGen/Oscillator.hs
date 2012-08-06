@@ -4,6 +4,7 @@ module Sound.SC3.UGen.Oscillator where
 import Data.List
 import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Rate
+import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
 -- | Band Limited ImPulse generator.

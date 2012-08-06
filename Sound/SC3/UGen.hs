@@ -27,6 +27,7 @@ import Sound.SC3.UGen.Operator as U
 import Sound.SC3.UGen.Oscillator as U
 import Sound.SC3.UGen.Panner as U
 import Sound.SC3.UGen.Rate as U
+import Sound.SC3.UGen.Type as U
 import Sound.SC3.UGen.UGen as U
 import Sound.SC3.UGen.UId as U
 import Sound.SC3.UGen.Wavelets as U

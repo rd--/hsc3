@@ -15,7 +15,7 @@ import Sound.SC3.UGen.Noise.ID
 import Sound.SC3.UGen.Oscillator
 import Sound.SC3.UGen.Panner
 import Sound.SC3.UGen.Rate
-import Sound.SC3.UGen.UGen
+import Sound.SC3.UGen.Type
 
 -- | Dynamic klang, dynamic sine oscillator bank
 dynKlang :: Rate -> UGen -> UGen -> UGen -> UGen
@@ -130,9 +130,10 @@ soundIn :: UGen -> UGen
 soundIn u =
     let r = in' 1 AR (numOutputBuses + u)
     in case u of
-         MCE ns -> if all (==1) (zipWith (-) (tail ns) ns)
-                   then in' (length ns) AR (numOutputBuses + head ns)
-                   else r
+         MCE_U (MCE ns) ->
+             if all (==1) (zipWith (-) (tail ns) ns)
+             then in' (length ns) AR (numOutputBuses + head ns)
+             else r
          _ -> r
 
 -- | Pan a set of channels across the stereo field.

@@ -1,8 +1,8 @@
 -- | Data types for enumerated and non signal unit generator inputs.
 module Sound.SC3.UGen.Enum where
 
-import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.Envelope.Interpolate
+import Sound.SC3.UGen.Type
 
 -- | Loop indicator input.
 data Loop = Loop
@@ -14,8 +14,8 @@ data Loop = Loop
 from_loop :: Loop -> UGen
 from_loop e =
     case e of
-      NoLoop -> Constant 0
-      Loop -> Constant 1
+      NoLoop -> 0
+      Loop -> 1
       WithLoop u -> u
 
 -- | Interpolation indicator input.
@@ -29,9 +29,9 @@ data Interpolation = NoInterpolation
 from_interpolation :: Interpolation -> UGen
 from_interpolation e =
     case e of
-      NoInterpolation -> Constant 1
-      LinearInterpolation -> Constant 2
-      CubicInterpolation -> Constant 4
+      NoInterpolation -> 1
+      LinearInterpolation -> 2
+      CubicInterpolation -> 4
       Interpolation u -> u
 
 -- | Completion mode indicator input.
@@ -45,9 +45,9 @@ data DoneAction = DoNothing
 from_done_action :: DoneAction -> UGen
 from_done_action e =
     case e of
-      DoNothing -> Constant 0
-      PauseSynth -> Constant 1
-      RemoveSynth -> Constant 2
+      DoNothing -> 0
+      PauseSynth -> 1
+      RemoveSynth -> 2
       DoneAction u -> u
 
 -- | Warp interpolation indicator input.
@@ -60,8 +60,8 @@ data Warp = Linear
 from_warp :: Warp -> UGen
 from_warp e =
     case e of
-      Linear -> Constant 0
-      Exponential -> Constant 1
+      Linear -> 0
+      Exponential -> 1
       Warp u -> u
 
 -- | Envelope curve indicator input.

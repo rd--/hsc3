@@ -2,8 +2,8 @@
 module Sound.SC3.Server.Synthdef.Type where
 
 import qualified Data.ByteString.Lazy as B {- bytestring -}
-import Sound.SC3.UGen.UGen
 import Sound.SC3.UGen.Rate
+import Sound.SC3.UGen.Type
 
 -- | Node identifier.
 type NodeId = Int

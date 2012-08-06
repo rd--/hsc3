@@ -32,3 +32,6 @@ rate_color r =
       IR -> "yellow"
       DR -> "red"
 
+-- | Set of all 'Rate' values.
+all_rates :: [Rate]
+all_rates = [minBound .. maxBound]

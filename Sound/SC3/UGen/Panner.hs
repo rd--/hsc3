@@ -1,6 +1,7 @@
 -- | Sound field location and analysis unit generators.
 module Sound.SC3.UGen.Panner where
 
+import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
 -- | Two channel equal power panner.

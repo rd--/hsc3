@@ -1,9 +1,9 @@
 -- | Monad constructors for non-deterministic FFT 'UGen's.
 module Sound.SC3.UGen.FFT.Monad where
 
-import Sound.SC3.UGen.UGen
+import Sound.SC3.UGen.FFT.ID as F
+import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen.Lift
-import qualified Sound.SC3.UGen.FFT.ID as F
 import Sound.SC3.UGen.UId
 
 -- | Randomize order of bins.
