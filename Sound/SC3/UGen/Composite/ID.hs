@@ -19,13 +19,13 @@ dcons (z0,z1,z2) x xs =
 mceN :: UGen -> UGen
 mceN = constant . length . mceChannels
 
--- | Randomly select one of several inputs (initialiastion rate).
-choose :: ID m => m -> [UGen] -> UGen
-choose e a = select (iRand e 0 (fromIntegral (length a))) (mce a)
+-- | Randomly select one of a list of UGens (initialiastion rate).
+lchoose :: ID m => m -> [UGen] -> UGen
+lchoose e a = select (iRand e 0 (fromIntegral (length a))) (mce a)
 
--- | 'mce' variant of 'iChoose'.
-choose' :: ID m => m -> UGen -> UGen
-choose' e = choose e . mceChannels
+-- | 'mce' variant of 'lchoose'.
+choose :: ID m => m -> UGen -> UGen
+choose e = lchoose e . mceChannels
 
 -- | Randomly select one of several inputs on trigger.
 tChoose :: ID m => m -> UGen -> UGen -> UGen

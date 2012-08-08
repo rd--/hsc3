@@ -17,13 +17,13 @@ dcons x xs = do
   a <- dseq 1 (mce2 x xs)
   dswitch i a
 
--- | 'liftU' of 'C.choose''.
-choose' :: UId m => UGen -> m UGen
-choose' = liftU C.choose'
-
 -- | 'liftU' of 'C.choose'.
-choose :: UId m => [UGen] -> m UGen
+choose :: UId m => UGen -> m UGen
 choose = liftU C.choose
+
+-- | 'liftU' of 'C.lchoose'.
+lchoose :: UId m => [UGen] -> m UGen
+lchoose = liftU C.lchoose
 
 -- | Randomly select one of several inputs.
 tChoose :: (UId m) => UGen -> UGen -> m UGen
