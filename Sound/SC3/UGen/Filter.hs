@@ -98,6 +98,14 @@ delayL i mt dly = mkFilter "DelayL" [i,mt,dly] 1
 delayN :: UGen -> UGen -> UGen -> UGen
 delayN i mt dly = mkFilter "DelayN" [i,mt,dly] 1
 
+-- | Tap a delay line from a DelTapWr UGen
+delTapRd :: UGen -> UGen -> UGen -> UGen -> UGen
+delTapRd buffer phase delTime interp = mkFilter "DelTapRd" [buffer,phase,delTime,interp] 1
+
+-- | Write to a buffer for a DelTapRd UGen
+delTapWr :: Rate -> UGen -> UGen -> UGen
+delTapWr rate buffer in_ = mkOscR [AR,KR] rate "DelTapWr" [buffer,in_] 1
+
 -- | Fold to range.
 fold :: UGen -> UGen -> UGen -> UGen
 fold i j k = mkFilter "Fold" [i,j,k] 1
