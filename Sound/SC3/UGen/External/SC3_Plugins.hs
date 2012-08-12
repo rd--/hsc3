@@ -76,6 +76,12 @@ membraneCircle i t l = mkOsc AR "MembraneCircle" [i, t, l] 1
 membraneHexagon :: UGen -> UGen -> UGen -> UGen
 membraneHexagon i t l = mkOsc AR "MembraneHexagon" [i, t, l] 1
 
+-- * NCAnalysisUGens
+
+-- | Tracking Phase Vocoder
+tpv :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+tpv chain windowsize hopsize maxpeaks currentpeaks freqmult tolerance noisefloor = mkOsc AR "TPV" [chain,windowsize,hopsize,maxpeaks,currentpeaks,freqmult,tolerance,noisefloor] 1
+
 -- * Stk
 
 -- | STK bowed string model.
@@ -88,7 +94,7 @@ stkFlute rt f jd ng vf vg bp tr = mkOsc rt "StkFlute" [f, jd, ng, vf, vg, bp, tr
 
 -- | STK mandolin model.
 stkMandolin :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-stkMandolin rt f bs pp dm dt at tr = mkOsc rt "StkMandolin" [f, bs, pp, dm, dt, at, tr] 1 
+stkMandolin rt f bs pp dm dt at tr = mkOsc rt "StkMandolin" [f, bs, pp, dm, dt, at, tr] 1
 
 -- | STK modal bar models.
 stkModalBar :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
