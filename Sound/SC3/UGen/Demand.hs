@@ -16,9 +16,9 @@ demand t r d =
     let d' = mceChannels d
     in mkFilterKeyed "Demand" 0 (t : r : d') (length d')
 
--- | Demand envlope generator.
-demandEnvGen :: Rate -> UGen -> UGen -> EnvCurve -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> DoneAction -> UGen
-demandEnvGen r l d s c g rst ls lb ts a = mkOsc r "DemandEnvGen" [l, d, env_curve_shape s, c, g, rst, ls, lb, ts, from_done_action a] 1
+-- | Demand envelope generator.
+demandEnvGen :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> DoneAction -> UGen
+demandEnvGen r l d s c g rst ls lb ts a = mkOsc r "DemandEnvGen" [l, d, s, c, g, rst, ls, lb, ts, from_done_action a] 1
 
 -- | Demand results from demand rate ugens.
 duty :: Rate -> UGen -> UGen -> DoneAction -> UGen -> UGen
