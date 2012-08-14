@@ -6,7 +6,7 @@ import Control.Monad
 import Control.Monad.IO.Class as M {- transformers -}
 import Control.Monad.Trans.Reader
 import Data.Unique
-import Sound.OpenSoundControl.Transport.FD as T
+import Sound.OSC.Transport.FD as T
 
 -- | A class indicating a monad that will generate a sequence of
 --   unique integer identifiers.
