@@ -176,6 +176,18 @@
        nil)
     (error "not at hsc3 directory?")))
 
+(defun hsc3-draw-graph ()
+  "Draw the UGen graph at point."
+  (interactive)
+  (hsc3-send-string
+   (concat "Sound.SC3.UGen.Dot.draw " (thing-at-point 'symbol))))
+
+(defun hsc3-local-dot ()
+  "Copy '/tmp/hsc3.dot' to 'buffer-name' .dot."
+  (interactive)
+  (let ((nm (concat (file-name-sans-extension (buffer-name)) ".dot")))
+    (copy-file "/tmp/hsc3.dot" nm t)))
+
 (defun hsc3-set-prompt ()
   "Set ghci prompt to hsc3."
   (interactive)
@@ -206,6 +218,7 @@
   (define-key map [?\C-c ?\C-e] 'hsc3-run-multiple-lines)
   (define-key map [?\C-c ?\C-r] 'hsc3-run-consecutive-lines)
   (define-key map [?\C-c ?\C-h] 'hsc3-help)
+  (define-key map [?\C-c ?\C-g] 'hsc3-draw-graph)
   (define-key map [?\C-c ?\C-j] 'hsc3-sc3-help)
   (define-key map [?\C-c ?\C-i] 'hsc3-interrupt-haskell)
   (define-key map [?\C-c ?\C-k] 'hsc3-reset-scsynth)
