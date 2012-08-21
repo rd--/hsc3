@@ -68,8 +68,8 @@ sc3HelpInstanceMethod d = sc3HelpMethod d '-'
 --
 -- > import Sound.SC3.UGen.Name
 -- >
--- > ugenSC3HelpFile (toSC3Name "Collection.*fill")
--- > ugenSC3HelpFile (toSC3Name "Collection.inject")
+-- > ugenSC3HelpFile "Collection.*fill"
+-- > ugenSC3HelpFile "Collection.inject"
 -- > ugenSC3HelpFile (toSC3Name "sinOsc")
 ugenSC3HelpFile :: String -> IO FilePath
 ugenSC3HelpFile x = do

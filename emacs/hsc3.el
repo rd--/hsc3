@@ -47,13 +47,20 @@
 				      (thing-at-point 'symbol)
 				      "\\.help\\.lhs"))))
 
-(defun hsc3-sc3-help ()
-  "Lookup up the name at point in the SC3 help files."
+(defun hsc3-sc3-ugen-help ()
+  "Lookup up the UGen name at point in the SC3 help files."
   (interactive)
   (hsc3-send-string
    (format
     "Sound.SC3.viewSC3Help (Sound.SC3.toSC3Name \"%s\")"
     (thing-at-point 'symbol))))
+
+(defun hsc3-sc3-server-help ()
+  "Lookup up the Server Command name at point in the SC3 help files."
+  (interactive)
+  (hsc3-send-string
+   (format "Sound.SC3.Server.Help.viewServerHelp \"%s\""
+           (thing-at-point 'symbol))))
 
 (defun hsc3-ugen-summary ()
   "Lookup up the UGen at point in hsc3-db"
@@ -219,7 +226,8 @@
   (define-key map [?\C-c ?\C-r] 'hsc3-run-consecutive-lines)
   (define-key map [?\C-c ?\C-h] 'hsc3-help)
   (define-key map [?\C-c ?\C-g] 'hsc3-draw-graph)
-  (define-key map [?\C-c ?\C-j] 'hsc3-sc3-help)
+  (define-key map [?\C-c ?\C-j] 'hsc3-sc3-ugen-help)
+  (define-key map [?\C-c ?\C-/] 'hsc3-sc3-server-help)
   (define-key map [?\C-c ?\C-i] 'hsc3-interrupt-haskell)
   (define-key map [?\C-c ?\C-k] 'hsc3-reset-scsynth)
   (define-key map [?\C-c ?\C-m] 'hsc3-run-main)
@@ -239,8 +247,10 @@
     '("Haskell SuperCollider help" . hsc3-help))
   (define-key map [menu-bar hsc3 help ugen]
     '("UGen parameter summary" . hsc3-ugen-summary))
-  (define-key map [menu-bar hsc3 help sc3]
-    '("SuperCollider help" . hsc3-sc3-help))
+  (define-key map [menu-bar hsc3 help sc3-server]
+    '("SuperCollider Server Command help" . hsc3-sc3-server-help))
+  (define-key map [menu-bar hsc3 help sc3-ugen]
+    '("SuperCollider UGen help" . hsc3-sc3-ugen-help))
   (define-key map [menu-bar hsc3 expression]
     (cons "Expression" (make-sparse-keymap "Expression")))
   (define-key map [menu-bar hsc3 expression stop]

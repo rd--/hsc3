@@ -1,3 +1,1 @@
-/clearSched                           Clear all scheduled bundles
-
-Removes all bundles from the scheduling queue.
+> Sound.SC3.Server.Help.viewServerHelp "/clearSched"

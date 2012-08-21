@@ -1,3 +1,5 @@
+> Sound.SC3.Server.Help.viewServerHelp "/notify"
+
 > import Sound.OSC
 > import Sound.SC3.ID
 

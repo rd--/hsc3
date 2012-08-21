@@ -1,3 +1,5 @@
+> Sound.SC3.Server.Help.viewServerHelp "/b_getn"
+
 > import Sound.OSC {- hosc -}
 > import Sound.SC3 {- hsc3 -}
 > import Sound.SC3.Plot {- hsc3-plot -}

@@ -1,6 +1,1 @@
-/b_close        Close attached soundfile and write header information
-
-int - buffer number
-
-After using a buffer with DiskOut, close the soundfile and write
-header information.
+> Sound.SC3.Server.Help.viewServerHelp "/b_close"
