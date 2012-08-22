@@ -26,7 +26,7 @@ Not clearing the buffer accesses old data, slowly overwrite data with noise
 > let {m = maxLocalBufs 1
 >     ;b = mrg2 (localBuf 'α' 2048 2) m
 >     ;nf = bufFrames KR b
->     ;x = mouseX' KR 1 2 Linear 0.2
+>     ;x = mouseX KR 1 2 Linear 0.2
 >     ;r = playBuf 2 AR b x 1 0 Loop DoNothing * 0.1
 >     ;wr p i = bufWr b (linLin p (-1) 1 0 nf) Loop i
 >     ;n = udup 2 (whiteNoise 'α' AR)
@@ -45,7 +45,7 @@ bufCombC needs no clearing, because the delay line is filled by the ugen
 
 asLocalBuf combines localBuf and setBuf
 > let {b = asLocalBuf 'α' [2,1,5,3,4,0]
->     ;x = mouseX' KR 0 (bufFrames KR b) Linear 0.2
+>     ;x = mouseX KR 0 (bufFrames KR b) Linear 0.2
 >     ;f = indexL b x * 100 + 40
 >     ;o = saw AR (f * mce2 1 1.1) * 0.1}
 > in audition (out 0 o)
@@ -53,13 +53,13 @@ asLocalBuf combines localBuf and setBuf
 detectIndex example using local buffer
 > let {b = asLocalBuf 'α' [2,3,4,0,1,5]
 >     ;n = bufFrames KR b
->     ;x = floorE (mouseX' KR 0 n Linear 0.1)
+>     ;x = floorE (mouseX KR 0 n Linear 0.1)
 >     ;i = detectIndex b x}
 > in audition (out 0 (sinOsc AR (linExp i 0 n 200 700) 0 * 0.1))
 
 degreeToKey example using local buffer
 > let {n = lfNoise1 'a' KR (mce [3,3.05])
->     ;x = mouseX' KR 0 15 Linear 0.1
+>     ;x = mouseX KR 0 15 Linear 0.1
 >     ;b = asLocalBuf 'α' [0,2,3.2,5,7,9,10]
 >     ;k = degreeToKey b x 12
 >     ;mk_c bf = let {f0 = midiCPS (bf + k + n * 0.04)

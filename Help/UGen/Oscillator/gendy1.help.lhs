@@ -12,13 +12,13 @@ Wandering bass
 > in audition (out 0 (pan2 g 0 0.15))
 
 Play me
-> let {x = mouseX' KR 100 1000 Exponential 0.1
+> let {x = mouseX KR 100 1000 Exponential 0.1
 >     ;g = gendy1 AR 1 1 1.0 1.0 30 100 0.3 0.05 5 5}
 > in audition (out 0 (pan2 (rlpf g 500 0.3 * 0.2) 0 0.25))
 
 Scream!
-> let {x = mouseX' KR 220 440 Exponential 0.1
->     ;y = mouseY' KR 0.0 1.0 Linear 0.1}
+> let {x = mouseX KR 220 440 Exponential 0.1
+>     ;y = mouseY KR 0.0 1.0 Linear 0.1}
 > in audition (out 0 (pan2 (gendy1 AR 2 3 1 1 x (8 * x) y y 7 7) 0.0 0.3))
 
 1 CP = random noise
@@ -43,19 +43,19 @@ Wasp
 
 Modulate distributions. Change of pitch as distributions change
 the duration structure and spectrum
-> let {x = mouseX' KR 0 7 Linear 0.1
->     ;y = mouseY' KR 0 7 Linear 0.1
+> let {x = mouseX KR 0 7 Linear 0.1
+>     ;y = mouseY KR 0 7 Linear 0.1
 >     ;g = gendy1 AR x y 1 1 440 660 0.5 0.5 12 12}
 > in audition (out 0 (pan2 g 0 0.2))
 
 Modulate number of CPs.
-> let {x = mouseX' KR 1 13 Linear 0.1
+> let {x = mouseX KR 1 13 Linear 0.1
 >     ;g = gendy1 AR 1 1 1 1 440 660 0.5 0.5 12 x}
 > in audition (out 0 (pan2 g 0 0.2))
 
 Self modulation.
-> let {x = mouseX' KR 1   13 Linear 0.1
->     ;y = mouseY' KR 0.1 10 Linear 0.1
+> let {x = mouseX KR 1   13 Linear 0.1
+>     ;y = mouseY KR 0.1 10 Linear 0.1
 >     ;g0 = gendy1 AR 5 4 0.3 0.7 0.1 y 1.0 1.0 5 5
 >     ;g1 = gendy1 AR 1 1 1 1 440 (g0 * 500 + 600) 0.5 0.5 12 x}
 > in audition (out 0 (pan2 g1 0 0.2))
@@ -68,8 +68,8 @@ adParam and ddParam as the inputs to sample.
 > in audition (out 0 (pan2 g 0 0.2))
 
 Near the corners are interesting.
-> let {x = mouseX' KR 0 200 Linear 0.1
->     ;y = mouseY' KR 0 200 Linear 0.1
+> let {x = mouseX KR 0 200 Linear 0.1
+>     ;y = mouseY KR 0 200 Linear 0.1
 >     ;p = lfPulse KR x 0 0.4
 >     ;s = sinOsc KR y 0 * 0.5
 >     ;g = gendy1 AR 6 6 p s 440 660 0.5 0.5 12 12}
@@ -90,7 +90,7 @@ Texture
 > in audition (out 0 (mix (mce (map node ['a'..'i']))))
 
 Try durscale 10.0 and 0.0 too.
-> let {x = mouseX' KR 10 700 Linear 0.1
->     ;y = mouseY' KR 50 1000 Linear 0.1
+> let {x = mouseX KR 10 700 Linear 0.1
+>     ;y = mouseY KR 50 1000 Linear 0.1
 >     ;g = gendy1 AR 2 3 1 1 1 x 0.5 0.1 10 10}
 > in audition (out 0 (pan2 (combN (resonz g y 0.1) 0.1 0.1 5) 0.0 0.6))

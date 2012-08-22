@@ -5,7 +5,7 @@
 
 Follow a sine lfo, reset rate controlled by mouseX
 > let {o = sinOsc KR 2 0
->     ;x = mouseX' KR 0.01 10 Exponential 0.1
+>     ;x = mouseX KR 0.01 10 Exponential 0.1
 >     ;t = impulse AR x 0
 >     ;f = runningMin o t * 500 + 200 }
 > in audition (out 0 (sinOsc AR f 0 * 0.2))

@@ -8,5 +8,5 @@
 > in audition (out 0 (lpf (saw AR 200 * 0.1) ff))
 
 Control rate filtering.
-> let ctl = lpf (lfPulse KR 8 0 0.5) (mouseX' KR 2 50 Exponential 0.1)
+> let ctl = lpf (lfPulse KR 8 0 0.5) (mouseX KR 2 50 Exponential 0.1)
 > in audition (out 0 (sinOsc AR (ctl * 200 + 400) 0 * 0.1))

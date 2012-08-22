@@ -6,7 +6,7 @@
 Assume hop of half fftsize
 > withSC3 (async (b_alloc 10 1024 1))
 
-> let { x = mouseX' KR 0.001 0.1 Exponential 0.2
+> let { x = mouseX KR 0.001 0.1 Exponential 0.2
 >     ; i = sinOsc AR 1000 0 * x
 >     ; f = fft' 10 i
 >     ; l = loudness f 0.25 6

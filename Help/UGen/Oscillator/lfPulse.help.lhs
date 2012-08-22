@@ -9,5 +9,5 @@ The initial phase argument was not present in SC2.
 > let f = lfPulse KR 3 0 0.3 * 200 + 200
 > in audition (out 0 (lfPulse AR f 0 0.2 * 0.1))
 
-> let x = mouseX' KR 0 1 Linear 0.2
+> let x = mouseX KR 0 1 Linear 0.2
 > in audition (out 0 (lfPulse AR 220 0 x * 0.1))

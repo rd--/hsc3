@@ -27,7 +27,7 @@ a generative signal with distinct onsets!
 
 x varies threshold, whitenoise bursts indicate detected onsets
 > let {c = fft' 10 z
->     ;x = mouseX' KR 0 1 Linear 0.2
+>     ;x = mouseX KR 0 1 Linear 0.2
 >     ;o = onsets' c x (onsetType "rcomplex")
 >     ;p = let d = envPerc 0.001 0.1
 >          in whiteNoise 'a' AR * envGen KR o 0.2 0 1 DoNothing d}

@@ -11,7 +11,7 @@ start a noise patch
 
 reset the seed at a variable rate
 > let {s = control KR "seed" 1956
->     ;r = randSeed KR (impulse KR (mouseX' KR 0.1 100 Linear 0.2) 0) s}
+>     ;r = randSeed KR (impulse KR (mouseX KR 0.1 100 Linear 0.2) 0) s}
 > in audition r
 
 always the same (for a given seed)...

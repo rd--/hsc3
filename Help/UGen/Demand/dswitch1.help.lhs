@@ -3,8 +3,8 @@
 
 > import Sound.SC3.ID
 
-> let {x = mouseX' KR 0 4 Linear 0.1
->     ;y = mouseY' KR 1 15 Linear 0.1
+> let {x = mouseX KR 0 4 Linear 0.1
+>     ;y = mouseY KR 1 15 Linear 0.1
 >     ;t = impulse KR 3 0
 >     ;w = dwhite 'a' dinf 20 23
 >     ;n = dswitch1 'a' x (mce [1, 3, y, 2, w])

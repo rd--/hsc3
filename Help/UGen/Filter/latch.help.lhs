@@ -17,5 +17,5 @@ http://create.ucsb.edu/pipermail/sc-users/2006-December/029991.html
 > do {n0 <- lfNoise2 KR 8
 >    ;n1 <- lfNoise2 KR 3
 >    ;let {s = blip AR (n0 * 200 + 300) (n1 * 10 + 20)
->         ;x = mouseX' KR 1000 (sampleRate * 0.1) Exponential 0.1}
+>         ;x = mouseX KR 1000 (sampleRate * 0.1) Exponential 0.1}
 >     in audition (out 0 (latch s (impulse AR x 0)))}

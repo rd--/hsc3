@@ -5,7 +5,7 @@
 > import Sound.SC3.ID
 > import qualified Sound.SC3.Monadic as M
 
-> let {x = mouseX' KR 0.25 4 Linear 0.2
+> let {x = mouseX KR 0.25 4 Linear 0.2
 >     ;tr = impulse KR x 0 - 0.5
 >     ;tR = M.tRand 0 127 tr}
 > in do {i <- M.tRand 0 9 tr
@@ -14,7 +14,7 @@
 >       ;let s = stkModalBar AR (midiCPS mn) i sh sp vg vf mx v tr
 >        in audition (out 0 s)}
 
-> let {x = mouseX' KR 1 6 Linear 0.2
+> let {x = mouseX KR 1 6 Linear 0.2
 >     ;t = impulse KR x 0 - 0.5
 >     ;tr = pulseDivider t 6 0}
 > in do {mn <- M.tIRand 52 64 t

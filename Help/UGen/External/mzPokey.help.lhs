@@ -16,8 +16,8 @@
 > audition (out 0 (mz1c bln (b "10101111") (b "01000001")))
 
 > let mz2c i j p q c = mzPokey i j p q 0 0 0 0 c
-> let bX = mouseX' KR 0 255 Linear 0.1
-> let bY = mouseY' KR 0 255 Linear 0.1
+> let bX = mouseX KR 0 255 Linear 0.1
+> let bY = mouseY KR 0 255 Linear 0.1
 
 > audition (out 0 (mz2c bX (b "10101010") bY (b "10101010") (b "00000001")))
 

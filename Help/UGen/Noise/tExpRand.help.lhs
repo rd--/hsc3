@@ -1,11 +1,7 @@
-tExpRand lo hi trig
+> Sound.SC3.UGen.Help.viewSC3Help "TExpRand"
+> Sound.SC3.UGen.DB.ugenSummary "TExpRand"
 
-Generates a random float value in exponential distribution from lo
-to hi each time the trig signal changes from nonpositive to
-positive values lo and hi must both have the same sign and be
-non-zero.
-
-> import Sound.SC3.Monadic
+> import Sound.SC3.Monad
 
 > do { f <- tExpRand 300.0 3000.0 =<< dust KR 10
 >    ; audition (out 0 (sinOsc AR f 0 * 0.1)) }

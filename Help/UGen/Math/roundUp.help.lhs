@@ -3,7 +3,7 @@
 
 > import Sound.SC3
 
-> let { x = mouseX' KR 60 4000 Linear 0.1
+> let { x = mouseX KR 60 4000 Linear 0.1
 >     ; f = roundUp x 100 }
 > in audition (out 0 (sinOsc ar f 0 * 0.1))
 
