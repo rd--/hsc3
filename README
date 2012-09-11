@@ -3,10 +3,19 @@ hsc3 - haskell supercollider
 
 [hsc3][hsc3] provides Sound.SC3, a module that facilitates using
 [Haskell][hs] as a client to the [SuperCollider][sc3] synthesis
-server.
+server.  hsc3 requires [hosc](?t=hosc).
 
 For installation and configuration information please consult the
 [tutorial][tutorial] at [hsc3-texts][hsc3-texts].
+
+There are a number of related projects:
+
+- [hsc3-dot](?t=hsc3-dot): UGen Graph Drawing
+- [hsc3-graphs](?t=hsc3-graphs): UGen Graphs
+- [hsc3-lang](?t=hsc3-lang): SC3 Language
+- [hsc3-cairo](?t=hsc3-cairo) & [hsc3-plot](?t=hsc3-plot): Drawing & Plotting
+- [hsc3-rec](?t=hsc3-rec) & [hsc3-unsafe](?t=hsc3-rec): UGen Variants
+- [hsc3-db](?t=hsc3-db): UGen Database
 
 The hsc3 interaction environment is written for [GNU][gnu]
 [Emacs][emacs].
