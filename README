@@ -22,12 +22,12 @@ with contributions by:
 
 see the [darcs][darcs] [history][hsc3-history] for details
 
-[rd]:  http://rd.slavepianos.org/
-[hsc3]:  http://rd.slavepianos.org/?t=hsc3
+[rd]: http://rd.slavepianos.org/
+[hsc3]: http://rd.slavepianos.org/?t=hsc3
 [hs]: http://haskell.org/
 [sc3]: http://audiosynth.com/
-[tutorial]: http://rd.slavepianos.org/ut/hsc3-texts/hsc3-tutorial.html
-[hsc3-texts]: http://rd.slavepianos.org/ut/hsc3-texts/
+[tutorial]: http://rd.slavepianos.org/?t=hsc3-texts&l=lhs/hsc3-tutorial.lhs
+[hsc3-texts]: http://rd.slavepianos.org/?t=hsc3-texts
 [gnu]: http://gnu.org/
 [emacs]: http://gnu.org/software/emacs/
 [darcs]: http://darcs.net/
