@@ -17,7 +17,7 @@ oscWithSize o =
     in B.append l b
 
 -- | An 'NRT' score is a sequence of 'Bundle's.
-data NRT = NRT {nrt_bundles :: [Bundle]}
+data NRT = NRT {nrt_bundles :: [Bundle]} deriving (Show)
 
 -- | Encode an 'NRT' score.
 encodeNRT :: NRT -> B.ByteString

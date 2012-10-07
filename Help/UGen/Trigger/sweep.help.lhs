@@ -42,3 +42,16 @@ f0 (sc-users, 2012-02-09)
 >     ;fr = linExp ph 0 1 400 800
 >     ;os = sinOsc AR fr 0 * 0.2}
 > in audition (out 0 os)
+
+line segments, set start & end values, transition time and trigger.
+continues past end point if not re-triggered.
+> let {tr = tr_control "tr" 0
+>     ;st = control KR "st" 440
+>     ;en = control KR "en" 880
+>     ;tm = control KR "tm" 2
+>     ;rt = ((en - st) / tm)
+>     ;sw = sweep tr rt + st}
+> in audition (out 0 (sinOsc AR sw 0 * 0.2))
+
+> withSC3 (send (n_set (-1) [("st",660),("en",550),("tm",4),("tr",1)]))
+> withSC3 (send (n_set (-1) [("st",110),("en",990),("tm",1),("tr",1)]))
