@@ -401,6 +401,10 @@ twoPole i freq radius = mkFilter "TwoPole" [i,freq,radius] 1
 twoZero :: UGen -> UGen -> UGen -> UGen
 twoZero i freq radius = mkFilter "TwoZero" [i,freq,radius] 1
 
+-- | Variable shaped lag.
+varLag :: UGen -> UGen -> UGen -> UGen
+varLag i t s = mkFilter "VarLag" [i,t,s] 1
+
 -- | Wrap to range.
 wrap :: UGen -> UGen -> UGen -> UGen
 wrap i j k = mkFilter "Wrap" [i,j,k] 1

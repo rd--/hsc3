@@ -2,7 +2,7 @@
 > Sound.SC3.UGen.DB.ugenSummary "Demand"
 
 > import Sound.SC3.ID
-> import qualified Sound.SC3.Monadic as M
+> import qualified Sound.SC3.Monad as M
 
 > do {r <- M.dust KR 1
 >    ;s <- M.dgeom dinf (midiCPS 72) (midiRatio 1)
