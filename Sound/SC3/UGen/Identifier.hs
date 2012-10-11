@@ -2,7 +2,7 @@
 module Sound.SC3.UGen.Identifier where
 
 import Data.Char
-import qualified Data.Digest.Murmur32 as H
+import qualified Data.Digest.Murmur32 as H {- murmur-hash -}
 
 -- | Typeclass to constrain UGen identifiers.
 class ID a where
@@ -10,6 +10,9 @@ class ID a where
 
 instance ID Int where
     resolveID = id
+
+instance ID Integer where
+    resolveID = fromInteger
 
 instance ID Char where
     resolveID = ord
