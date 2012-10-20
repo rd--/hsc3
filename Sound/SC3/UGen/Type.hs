@@ -5,6 +5,7 @@ import Data.Bits
 import Data.List
 import Data.Maybe
 import Sound.SC3.UGen.Identifier
+import Sound.SC3.UGen.MCE
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Rate
 import System.Random {- random -}
@@ -54,10 +55,6 @@ data Proxy = Proxy {proxySource :: Primitive
                    ,proxyIndex :: Int}
             deriving (Eq,Show)
 
--- | Multiple channel expansion.
-data MCE = MCE {mceProxies :: [UGen]}
-            deriving (Eq,Show)
-
 -- | Multiple root graph.
 data MRG = MRG {mrgLeft :: UGen
                ,mrgRight :: UGen}
@@ -69,7 +66,7 @@ data UGen = Constant_U Constant
           | Label_U Label
           | Primitive_U Primitive
           | Proxy_U Proxy
-          | MCE_U MCE
+          | MCE_U (MCE UGen)
           | MRG_U MRG
             deriving (Eq,Show)
 
@@ -121,7 +118,7 @@ mce xs =
     case xs of
       [] -> error "mce: empty list"
       [x] -> x
-      _ -> MCE_U (MCE xs)
+      _ -> MCE_U (MCE_Vector xs)
 
 -- | Multiple root graph constructor.
 mrg :: [UGen] -> UGen
@@ -140,6 +137,10 @@ proxy u n =
 
 -- * MCE
 
+-- | Type specified 'mce_elem'.
+mceProxies :: MCE UGen -> [UGen]
+mceProxies = mce_elem
+
 -- | Multiple channel expansion node ('MCE_U') predicate.
 isMCE :: UGen -> Bool
 isMCE u =
@@ -151,7 +152,7 @@ isMCE u =
 mceChannels :: UGen -> [UGen]
 mceChannels u =
     case u of
-      MCE_U (MCE l) -> l
+      MCE_U m -> mceProxies m
       MRG_U (MRG x y) -> let r:rs = mceChannels x in MRG_U (MRG r y) : rs
       _ -> [u]
 
@@ -159,7 +160,7 @@ mceChannels u =
 mceDegree :: UGen -> Int
 mceDegree u =
     case u of
-      MCE_U (MCE l) -> length l
+      MCE_U m -> length (mceProxies m)
       MRG_U (MRG x _) -> mceDegree x
       _ -> error "mceDegree: illegal ugen"
 
@@ -167,7 +168,7 @@ mceDegree u =
 mceExtend :: Int -> UGen -> [UGen]
 mceExtend n u =
     case u of
-      MCE_U (MCE l) -> take n (cycle l)
+      MCE_U m -> mceProxies (mce_extend n m)
       MRG_U (MRG x y) -> let (r:rs) = mceExtend n x
                          in MRG_U (MRG r y) : rs
       _ -> replicate n u
@@ -185,7 +186,7 @@ mceBuild :: ([UGen] -> UGen) -> [UGen] -> UGen
 mceBuild f i =
     case mceInputTransform i of
       Nothing -> f i
-      Just i' -> MCE_U (MCE (map (mceBuild f) i'))
+      Just i' -> MCE_U (MCE_Vector (map (mceBuild f) i'))
 
 -- | Determine the rate of a UGen.
 rateOf :: UGen -> Rate

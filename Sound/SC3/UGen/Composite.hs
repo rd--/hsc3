@@ -130,10 +130,11 @@ soundIn :: UGen -> UGen
 soundIn u =
     let r = in' 1 AR (numOutputBuses + u)
     in case u of
-         MCE_U (MCE ns) ->
-             if all (==1) (zipWith (-) (tail ns) ns)
-             then in' (length ns) AR (numOutputBuses + head ns)
-             else r
+         MCE_U m ->
+             let n = mceProxies m
+             in if all (==1) (zipWith (-) (tail n) n)
+                then in' (length n) AR (numOutputBuses + head n)
+                else r
          _ -> r
 
 -- | Pan a set of channels across the stereo field.

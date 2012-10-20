@@ -113,6 +113,7 @@ Library
                    Sound.SC3.UGen.Information
                    Sound.SC3.UGen.MachineListening
                    Sound.SC3.UGen.Math
+                   Sound.SC3.UGen.MCE
                    Sound.SC3.UGen.Monad
                    Sound.SC3.UGen.Name
                    Sound.SC3.UGen.Noise.ID

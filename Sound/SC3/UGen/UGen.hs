@@ -31,7 +31,7 @@ ugenTraverse f u =
              in case rec s of
                   Primitive_U p' -> f (Proxy_U (p {proxySource = p'}))
                   _ -> error "ugenTraverse"
-         MCE_U (MCE m) -> f (MCE_U (MCE (map rec m)))
+         MCE_U m -> f (mce (map rec (mceProxies m)))
          MRG_U (MRG l r) -> f (MRG_U (MRG (rec l) (rec r)))
          _ -> f u
 
@@ -46,7 +46,7 @@ ugenFoldr f st u =
          Proxy_U p ->
              let s = proxySource p
              in f u (f (Primitive_U s) st)
-         MCE_U (MCE p) -> f u (foldr rec st p)
+         MCE_U m -> f u (foldr rec st (mceProxies m))
          MRG_U (MRG l r) -> f u (f l (f r st))
          _ -> f u st
 
@@ -73,13 +73,16 @@ mrg2 u = MRG_U . MRG u
 
 -- | Multiple channel expansion for two inputs.
 mce2 :: UGen -> UGen -> UGen
-mce2 x y = mce [x, y]
+mce2 x y = mce [x,y]
 
 -- | Extract two channels from possible MCE.
 mce2c :: UGen -> (UGen,UGen)
 mce2c u =
     case u of
-      MCE_U (MCE (p:q:_)) -> (p,q)
+      MCE_U m -> case mceProxies m of
+                     [] -> error "mce2c: nil mce"
+                     p:[] -> (p,p)
+                     p:q:_ -> (p,q)
       _ -> (u,u)
 
 -- | Multiple channel expansion for two inputs.
@@ -94,7 +97,7 @@ mceMap f u = mce (map f (mceChannels u))
 mceEdit :: ([UGen] -> [UGen]) -> UGen -> UGen
 mceEdit f u =
     case u of
-      MCE_U (MCE l) -> MCE_U (MCE (f l))
+      MCE_U m -> mce (f (mceProxies m))
       _ -> error "mceEdit: non MCE value"
 
 -- | Reverse order of channels at MCE.
@@ -105,7 +108,7 @@ mceReverse = mceEdit reverse
 mceChannel :: Int -> UGen -> UGen
 mceChannel n u =
     case u of
-      MCE_U (MCE l) -> l !! n
+      MCE_U m -> mceProxies m !! n
       _ -> error "mceChannel: non MCE value"
 
 -- | Transpose rows and columns, ie. {{a,b},{c,d}} to {{a,c},{b,d}}.
@@ -144,10 +147,10 @@ unpackLabel u =
               s' = map (fromIntegral . f) s
               n = fromIntegral (length s)
           in n : s'
-      MCE_U (MCE x) ->
-          let x' = map unpackLabel x
-          in if equal_length_p x'
-             then map mce (transpose x')
+      MCE_U m ->
+          let x = map unpackLabel (mceProxies m)
+          in if equal_length_p x
+             then map mce (transpose x)
              else error (show ("unpackLabel: mce length /=",x))
       _ -> error (show ("unpackLabel: non-label",u))
 
