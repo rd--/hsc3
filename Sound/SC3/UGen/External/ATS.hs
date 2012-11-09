@@ -61,7 +61,7 @@ atsRead fn = do
 
 -- | Extract set of 'ATSFrame's from 'ATS'.
 atsFrames :: ATS -> [ATSFrame]
-atsFrames a = splitEvery (atsFrameLength (atsHeader a)) (atsData a)
+atsFrames a = chunksOf (atsFrameLength (atsHeader a)) (atsData a)
 
 -- Determine endianess and hence decoder.
 get_decoder :: B.ByteString -> B.ByteString -> Double

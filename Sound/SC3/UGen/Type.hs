@@ -376,6 +376,9 @@ instance Bits UGen where
     shift = error "Bits/UGen is partial"
     rotate = error "Bits/UGen is partial"
     bitSize = error "Bits/UGen is partial"
+    bit = error "Bits/UGen is partial"
+    testBit = error "Bits/UGen is partial"
+    popCount = error "Bits/UGen is partial"
     isSigned _ = True
 
 -- * UGen ID Instance

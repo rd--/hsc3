@@ -17,7 +17,7 @@ Author:            Rohan Drape
 Maintainer:        rd@slavepianos.org
 Stability:         Experimental
 Homepage:          http://rd.slavepianos.org/?t=hsc3
-Tested-With:       GHC == 7.0.4
+Tested-With:       GHC == 7.6.1
 Build-Type:        Simple
 Cabal-Version:     >= 1.8
 

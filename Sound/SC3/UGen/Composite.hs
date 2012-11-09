@@ -59,7 +59,7 @@ mix = sum . mceChannels
 -- | Mix variant, sum to n channels.
 mixN :: Int -> UGen -> UGen
 mixN n u =
-    let xs = transpose (splitEvery n (mceChannels u))
+    let xs = transpose (chunksOf n (mceChannels u))
     in mce (map sum xs)
 
 -- | Construct and sum a set of UGens.
