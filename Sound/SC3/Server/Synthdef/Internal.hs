@@ -53,14 +53,14 @@ is_node_c n =
 is_node_k :: Node -> Bool
 is_node_k n =
     case n of
-      NodeK _ _ _ _ _ -> True
+      NodeK {} -> True
       _ -> False
 
 -- | Is 'Node' a /UGen/.
 is_node_u :: Node -> Bool
 is_node_u n =
     case n of
-      NodeU _ _ _ _ _ _ _-> True
+      NodeU {} -> True
       _ -> False
 
 -- | Calculate all edges given a set of 'NodeU'.

@@ -6,6 +6,7 @@ import Data.List
 import Sound.SC3.Server.Synthdef.Internal
 import Sound.SC3.Server.Synthdef.Type
 import Sound.SC3.UGen.Operator
+import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 import Text.Printf
@@ -58,19 +59,22 @@ reconstruct_c_str u =
 reconstruct_c_ugen :: Node -> UGen
 reconstruct_c_ugen u = constant (node_c_value u)
 
+reconstruct_k_rnd :: Node -> (Rate,String,Double)
+reconstruct_k_rnd u =
+    let r = node_k_rate u
+        n = node_k_name u
+        d = node_k_default u
+    in (r,n,d)
+
 reconstruct_k_str :: Node -> String
 reconstruct_k_str u =
     let l = node_label u
-        r = node_k_rate u
-        n = node_k_name u
-        d = node_k_default u
+        (r,n,d) = reconstruct_k_rnd u
     in printf "%s = control %s \"%s\" %f" l (show r) n d
 
 reconstruct_k_ugen :: Node -> UGen
 reconstruct_k_ugen u =
-    let r = node_k_rate u
-        n = node_k_name u
-        d = node_k_default u
+    let (r,n,d) = reconstruct_k_rnd u
     in control r n d
 
 ugen_qname :: String -> Special -> (String,String)
@@ -84,7 +88,7 @@ reconstruct_mce_str :: Node -> String
 reconstruct_mce_str u =
     let o = length (node_u_outputs u)
         l = node_label u
-        p = map (\i -> printf "%s_o_%d" l i) [0 .. o - 1]
+        p = map (printf "%s_o_%d" l) [0 .. o - 1]
         p' = intercalate "," p
     in if o <= 1
        then ""

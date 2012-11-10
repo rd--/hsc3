@@ -37,7 +37,7 @@ sc3HelpClassFile :: FilePath -> String -> IO (Maybe FilePath)
 sc3HelpClassFile d c = do
   let f = d </> "Classes" </> c <.> "html"
   e <- doesFileExist f
-  if e then return (Just f) else return Nothing
+  return (if e then Just f else Nothing)
 
 -- | Generate path to indicated SC3 operator help file.
 --

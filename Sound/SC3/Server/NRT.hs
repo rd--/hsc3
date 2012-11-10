@@ -40,7 +40,7 @@ decode_nrt_bundles s =
         r' = decodeBundle r
     in if B.null s'
        then [r']
-       else (r' : decode_nrt_bundles s')
+       else r' : decode_nrt_bundles s'
 
 -- | Decode an 'NRT' 'B.ByteString'.
 decodeNRT :: B.ByteString -> NRT
@@ -95,7 +95,7 @@ renderNRT_opt (NRT_Render c_fn i_fn o_fn nc sr hdr fmt) =
 -- > renderNRT_cmd [] (NRT_Render "s.osc" Nothing "s.flac" 2 44100 FLAC I24)
 renderNRT_cmd :: [String] -> NRT_Render -> String
 renderNRT_cmd x =
-    let protect s = '\'' : s ++ ['\'']
+    let protect s = '\'' : s ++ "\'"
     in unwords . ("scsynth" :) . map protect . (x ++) . renderNRT_opt
 
 -- | Run @scsynth@ to render 'NRT_Render' with given @scsynth@ options.

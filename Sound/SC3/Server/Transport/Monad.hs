@@ -64,7 +64,7 @@ playUGen = playSynthdef . synthdef "Anonymous"
 run_bundle :: (Transport m) => Double -> Bundle -> m ()
 run_bundle i (Bundle t x) =
     let wr m = if isAsync m
-               then async m >> return ()
+               then void (async m)
                else send m
     in case t of
           NTPr n -> do

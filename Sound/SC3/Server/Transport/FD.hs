@@ -21,7 +21,7 @@ send = sendMessage
 
 -- | Synonym for 'waitReply'.
 wait :: Transport t => t -> String -> IO Message
-wait fd = waitReply fd
+wait = waitReply
 
 -- | Send a 'Message' and 'wait' for a @\/done@ reply.
 async :: Transport t => t -> Message -> IO Message
@@ -61,7 +61,7 @@ playUGen fd = playSynthdef fd . synthdef "Anonymous"
 run_bundle :: Transport t => t -> Double -> Bundle -> IO ()
 run_bundle fd i (Bundle t x) =
     let wr m = if isAsync m
-               then async fd m >> return ()
+               then void (async fd m)
                else sendMessage fd m
     in case t of
           NTPr n -> do

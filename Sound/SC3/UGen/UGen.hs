@@ -180,11 +180,11 @@ toUId = UId . resolveID
 
 -- | Rate restricted oscillator constructor, setting identifier.
 mkOscIdR :: (ID a) => [Rate] -> a -> Rate -> String -> [UGen] -> Int -> UGen
-mkOscIdR rr z r nm = mk_osc rr (toUId z) r nm
+mkOscIdR rr z = mk_osc rr (toUId z)
 
 -- | Oscillator constructor, setting identifier.
 mkOscId :: (ID a) => a -> Rate -> String -> [UGen] -> Int -> UGen
-mkOscId z r nm = mk_osc all_rates (toUId z) r nm
+mkOscId z = mk_osc all_rates (toUId z)
 
 -- | Provided 'UGenId' variant of 'mkOscMCE'.
 mk_osc_mce :: UGenId -> Rate -> String -> [UGen] -> UGen -> Int -> UGen
@@ -198,7 +198,7 @@ mkOscMCE = mk_osc_mce no_id
 
 -- | Variant oscillator constructor with MCE collapsing input.
 mkOscMCEId :: ID a => a -> Rate -> String -> [UGen] -> UGen -> Int -> UGen
-mkOscMCEId z r nm = mk_osc_mce (toUId z) r nm
+mkOscMCEId z = mk_osc_mce (toUId z)
 
 -- | Rate constrained filter 'UGen' constructor.
 mk_filter :: [Rate] -> UGenId -> String -> [UGen] -> Int -> UGen
@@ -214,7 +214,7 @@ mkFilterR rs = mk_filter rs no_id
 
 -- | Filter UGen constructor.
 mkFilterId :: (ID a) => a -> String -> [UGen] -> Int -> UGen
-mkFilterId z nm = mk_filter all_rates (toUId z) nm
+mkFilterId z = mk_filter all_rates (toUId z)
 
 -- | Variant filter with rate derived from keyed input.
 mkFilterKeyed :: String -> Int -> [UGen] -> Int -> UGen
@@ -236,7 +236,7 @@ mkFilterMCE = mk_filter_mce all_rates no_id
 
 -- | Variant filter constructor with MCE collapsing input.
 mkFilterMCEId :: ID a => a -> String -> [UGen] -> UGen -> Int -> UGen
-mkFilterMCEId z nm = mk_filter_mce all_rates (toUId z) nm
+mkFilterMCEId z = mk_filter_mce all_rates (toUId z)
 
 -- | Information unit generators are very specialized.
 mkInfo :: String -> UGen

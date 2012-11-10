@@ -266,7 +266,7 @@ mkBinaryOperator_optimize i f o a b =
              (_,Constant_U (Constant b')) ->
                  if o (Right b') then Just a else Nothing
              _ -> Nothing
-   in maybe (mkOperator g "BinaryOpUGen" [a, b] (fromEnum i)) id r
+   in fromMaybe (mkOperator g "BinaryOpUGen" [a, b] (fromEnum i)) r
 
 -- | Binary math constructor with constant optimization.
 mkBinaryOperator :: Binary -> (Double -> Double -> Double) ->
@@ -282,7 +282,7 @@ mkBinaryOperator i f a b =
 instance Num UGen where
     negate = mkUnaryOperator Neg negate
     (+) = mkBinaryOperator_optimize Add (+) (`elem` [Left 0,Right 0])
-    (-) = mkBinaryOperator_optimize Sub (-) ((==) (Right 0))
+    (-) = mkBinaryOperator_optimize Sub (-) (Right 0 ==)
     (*) = mkBinaryOperator_optimize Mul (*) (`elem` [Left 1,Right 1])
     abs = mkUnaryOperator Abs abs
     signum = mkUnaryOperator Sign signum
@@ -291,7 +291,7 @@ instance Num UGen where
 -- | Unit generators are fractional.
 instance Fractional UGen where
     recip = mkUnaryOperator Recip recip
-    (/) = mkBinaryOperator_optimize FDiv (/) ((==) (Right 1))
+    (/) = mkBinaryOperator_optimize FDiv (/) (Right 1 ==)
     fromRational = Constant_U . Constant . fromRational
 
 -- | Unit generators are floating point.
@@ -300,7 +300,7 @@ instance Floating UGen where
     exp = mkUnaryOperator Exp exp
     log = mkUnaryOperator Log log
     sqrt = mkUnaryOperator Sqrt sqrt
-    (**) = mkBinaryOperator_optimize Pow (**) ((==) (Right 1))
+    (**) = mkBinaryOperator_optimize Pow (**) (Right 1 ==)
     logBase a b = log b / log a
     sin = mkUnaryOperator Sin sin
     cos = mkUnaryOperator Cos cos

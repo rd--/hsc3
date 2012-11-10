@@ -23,7 +23,7 @@ loudness fft smask tmask = mkOsc KR "Loudness" [fft, smask, tmask] 1
 onsetType :: Num a => String -> a
 onsetType s =
     let t = ["power", "magsum", "complex", "rcomplex", "phase", "wphase", "mkl"]
-    in fromIntegral (fromMaybe 3 (findIndex (== s) t))
+    in fromIntegral (fromMaybe 3 (elemIndex s t))
 
 -- | Onset detector.
 onsets :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
