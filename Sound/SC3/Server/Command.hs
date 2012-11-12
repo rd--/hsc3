@@ -308,8 +308,8 @@ data PrintLevel = NoPrinter
                   deriving (Eq, Show, Enum)
 
 -- | Select printing of incoming Open Sound Control messages.
-dumpMessage :: PrintLevel -> Message
-dumpMessage c = message "/dumpMessage" [Int (fromEnum c)]
+dumpOSC :: PrintLevel -> Message
+dumpOSC c = message "/dumpOSC" [Int (fromEnum c)]
 
 -- | Select reception of notification messages. (Asynchronous)
 notify :: Bool -> Message
