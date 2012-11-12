@@ -25,6 +25,7 @@ module Sound.SC3.Server.Command.Completion
   ) where
 
 import Sound.OpenSoundControl
+import Sound.SC3.Server.Enum
 import Sound.SC3.Server.Synthdef
 import Sound.SC3.Server.Synthdef.Type
 
@@ -73,8 +74,8 @@ b_readChannel' :: OSC o => o -> Int -> String -> Int -> Int -> Int -> Bool -> [I
 b_readChannel' osc nid p f n f' z cs = message "/b_readChannel" ([Int nid, String p, Int f, Int n, Int f', Int (fromEnum z)] ++ map Int cs ++ [encode_blob osc])
 
 -- | Write sound file data. (Asynchronous)
-b_write' :: OSC o => o -> Int -> String -> String -> String -> Int -> Int -> Bool -> Message
-b_write' osc nid p h t f s z = message "/b_write" [Int nid, String p, String h, String t, Int f, Int s, Int (fromEnum z), encode_blob osc]
+b_write' :: OSC o => o -> Int -> String -> SoundFileFormat -> SampleFormat -> Int -> Int -> Bool -> Message
+b_write' osc nid p h t f s z = message "/b_write" [Int nid, String p, String (soundFileFormatString h), String (sampleFormatString t), Int f, Int s, Int (fromEnum z), encode_blob osc]
 
 -- | Zero sample data. (Asynchronous)
 b_zero' :: OSC o => o -> Int -> Message
