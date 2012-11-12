@@ -404,15 +404,16 @@ async_cmds =
 isAsync :: Message -> Bool
 isAsync (Message a _) = a `elem` async_cmds
 
--- | Add a completion message to an existing asynchronous command.
+-- | Add a completion message (or bundle, the name is misleading) to
+-- an existing asynchronous command.
 --
 -- > let {m = n_set1 0 "0" 0
 -- >     ;m' = encodeMessage m}
 -- > in withCM (b_close 0) m == Message "/b_close" [Int 0,Blob m']
-withCM :: Message -> Message -> Message
+withCM :: OSC o => Message -> o -> Message
 withCM (Message c xs) cm =
     if c `elem` async_cmds
-    then let xs' = xs ++ [Blob (encodeMessage cm)]
+    then let xs' = xs ++ [Blob (encodeOSC cm)]
          in message c xs'
     else error ("withCM: not async: " ++ c)
 
