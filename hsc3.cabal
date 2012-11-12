@@ -69,6 +69,7 @@ Library
                    Sound.SC3.Server
                    Sound.SC3.Server.Command
                    Sound.SC3.Server.Command.Completion
+                   Sound.SC3.Server.Enum
                    Sound.SC3.Server.FD
                    Sound.SC3.Server.Help
                    Sound.SC3.Server.Monad

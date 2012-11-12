@@ -5,6 +5,7 @@ import qualified Data.ByteString.Lazy as B {- bytestring -}
 import Data.Maybe
 import Sound.OpenSoundControl {- hosc -}
 import Sound.OpenSoundControl.Coding.Byte
+import Sound.SC3.Server.Enum
 import System.Exit
 import System.IO
 import System.Process {- process -}
@@ -50,12 +51,6 @@ decodeNRT = NRT . decode_nrt_bundles
 readNRT :: FilePath -> IO NRT
 readNRT = fmap decodeNRT . B.readFile
 
--- | File formats @scsynth@ renders to.
-data NRT_File_Format = AIFF | FLAC | NeXT | WAVE deriving (Eq,Show)
-
--- | Sample formats @scsynth@ renders to.
-data NRT_Sample_Format = I16 | I24 | I32 | F32 | F64 deriving (Eq,Show)
-
 -- | Data required to render an 'NRT' score using @scsynth@.  The
 -- input file is optional.
 data NRT_Render = NRT_Render {nrt_score :: FilePath
@@ -63,18 +58,8 @@ data NRT_Render = NRT_Render {nrt_score :: FilePath
                              ,nrt_output_file :: FilePath
                              ,nrt_channels :: Int
                              ,nrt_sample_rate :: Double
-                             ,nrt_file_format :: NRT_File_Format
-                             ,nrt_sample_format :: NRT_Sample_Format}
-
--- | Format 'NRT_Sample_Format' for @scsynth@.
-nrt_sf_pp :: NRT_Sample_Format -> String
-nrt_sf_pp f =
-    case f of
-         I16 -> "int16"
-         I24 -> "int24"
-         I32 -> "int32"
-         F32 -> "float"
-         F64 -> "double"
+                             ,nrt_file_format :: SoundFileFormat
+                             ,nrt_sample_format :: SampleFormat}
 
 -- | Format 'NRT_Render' as list of arguments to @scsynth@.
 --
@@ -86,8 +71,8 @@ renderNRT_opt (NRT_Render c_fn i_fn o_fn nc sr hdr fmt) =
     let i_fn' = fromMaybe "_" i_fn
         nc' = show nc
         sr' = show (round sr :: Integer)
-        hdr' = show hdr
-        fmt' = nrt_sf_pp fmt
+        hdr' = soundFileFormatString hdr
+        fmt' = sampleFormatString fmt
     in ["-o",nc',"-N",c_fn,i_fn',o_fn,sr',hdr',fmt']
 
 -- | 'renderNRT' command as 'String', with shell protected arguments.

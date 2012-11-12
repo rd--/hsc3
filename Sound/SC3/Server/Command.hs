@@ -4,6 +4,7 @@ module Sound.SC3.Server.Command where
 
 import Data.Maybe
 import Sound.OpenSoundControl {- hosc -}
+import Sound.SC3.Server.Enum
 import Sound.SC3.Server.Utilities
 import Sound.SC3.Server.Synthdef
 import Sound.SC3.Server.Synthdef.Type
@@ -264,8 +265,8 @@ b_setn nid l = message "/b_setn" (Int nid : concatMap f l)
     where f (i,d) = Int i : Int (length d) : map Float d
 
 -- | Write sound file data. (Asynchronous)
-b_write :: Int -> String -> String -> String -> Int -> Int -> Bool -> Message
-b_write nid p h t f s z = message "/b_write" [Int nid, String p, String h, String t, Int f, Int s, Int (fromEnum z)]
+b_write :: Int -> String -> SoundFileFormat -> SampleFormat -> Int -> Int -> Bool -> Message
+b_write nid p h t f s z = message "/b_write" [Int nid, String p, String (soundFileFormatString h), String (sampleFormatString t), Int f, Int s, Int (fromEnum z)]
 
 -- | Zero sample data. (Asynchronous)
 b_zero :: Int -> Message
