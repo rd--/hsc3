@@ -13,7 +13,7 @@ import Sound.SC3.UGen.Type
 -- * hosc variants
 
 -- | Synonym for 'sendMessage'.
-send :: (Transport m) => Message -> m ()
+send :: SendOSC m => Message -> m ()
 send = sendMessage
 
 -- | Synonym for 'waitReply'.
@@ -36,11 +36,11 @@ withSC3 = withTransport (openUDP "127.0.0.1" 57110)
 -- * Server control
 
 -- | Free all nodes ('g_freeAll') at group @1@.
-stop :: Transport m => m ()
+stop :: SendOSC m => m ()
 stop = send (g_freeAll [1])
 
 -- | Free all nodes ('g_freeAll') at and re-create groups @1@ and @2@.
-reset :: Transport m => m ()
+reset :: SendOSC m => m ()
 reset =
     let m = [g_freeAll [1,2],g_new [(1,AddToTail,0),(2,AddToTail,0)]]
     in sendBundle (Bundle immediately m)
@@ -61,10 +61,10 @@ playUGen = playSynthdef . synthdef "Anonymous"
 -- | Wait ('pauseThreadUntil') until bundle is due to be sent relative
 -- to initial 'UTCr' time, then send each message, asynchronously if
 -- required.
-run_bundle :: (Transport m) => Double -> Bundle -> m ()
+run_bundle :: (MonadIO m,Transport m) => Double -> Bundle -> m ()
 run_bundle i (Bundle t x) =
     let wr m = if isAsync m
-               then void (async m)
+               then async m >> return ()
                else send m
     in case t of
           NTPr n -> do
@@ -74,7 +74,7 @@ run_bundle i (Bundle t x) =
 
 -- | Perform an 'NRT' score (as would be rendered by 'writeNRT').  In
 -- particular note that all timestamps /must/ be in 'NTPr' form.
-performNRT :: (Transport m) => NRT -> m ()
+performNRT :: (MonadIO m,Transport m) => NRT -> m ()
 performNRT s = liftIO utcr >>= \i -> mapM_ (run_bundle i) (nrt_bundles s)
 
 -- * Audible
@@ -82,7 +82,7 @@ performNRT s = liftIO utcr >>= \i -> mapM_ (run_bundle i) (nrt_bundles s)
 -- | Class for values that can be encoded and send to @scsynth@ for
 -- audition.
 class Audible e where
-    play :: (Transport m) => e -> m ()
+    play :: (MonadIO m,Transport m) => e -> m ()
 
 instance Audible Graph where
     play g = playSynthdef (Synthdef "Anonymous" g)
@@ -121,7 +121,7 @@ b_getn1_data b s = do
               Int _:Int _:Int _:x -> map datum_real_err x
               _ -> error "b_getn1_data"
   sendMessage (b_getn1 b s)
-  fmap f (waitDatum "/b_setn")
+  liftM f (waitDatum "/b_setn")
 
 -- | Variant of 'b_getn1_data' that segments individual 'b_getn'
 -- messages to /n/ elements.
