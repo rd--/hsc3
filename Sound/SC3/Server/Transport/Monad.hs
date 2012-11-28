@@ -17,11 +17,11 @@ send :: SendOSC m => Message -> m ()
 send = sendMessage
 
 -- | Synonym for 'waitReply'.
-wait :: Transport m => String -> m Message
+wait :: RecvOSC m => String -> m Message
 wait = waitReply
 
 -- | Send a 'Message' and 'wait' for a @\/done@ reply.
-async :: Transport m => Message -> m Message
+async :: DuplexOSC m => Message -> m Message
 async m = send m >> wait "/done"
 
 -- | Bracket @SC3@ communication. 'withTransport' at standard SC3 UDP
@@ -47,13 +47,13 @@ reset =
 
 
 -- | Send 'd_recv' and 's_new' messages to scsynth.
-playSynthdef :: Transport m => Synthdef -> m ()
+playSynthdef :: DuplexOSC m => Synthdef -> m ()
 playSynthdef s = do
   _ <- async (d_recv s)
   send (s_new (synthdefName s) (-1) AddToTail 1 [])
 
 -- | Send an /anonymous/ instrument definition using 'playSynthdef'.
-playUGen :: Transport m => UGen -> m ()
+playUGen :: DuplexOSC m => UGen -> m ()
 playUGen = playSynthdef . synthdef "Anonymous"
 
 -- * NRT
@@ -103,7 +103,7 @@ audition e = withSC3 (play e)
 
 -- | Turn on notifications, run /f/, turn off notifications, return
 -- result.
-withNotifications :: Transport m => m a -> m a
+withNotifications :: DuplexOSC m => m a -> m a
 withNotifications f = do
   _ <- async (notify True)
   r <- f
@@ -115,7 +115,7 @@ withNotifications f = do
 -- | Variant of 'b_getn1' that waits for return message and unpacks it.
 --
 -- > withSC3 (b_getn1_data 0 (0,5))
-b_getn1_data :: Transport m => Int -> (Int,Int) -> m [Double]
+b_getn1_data :: DuplexOSC m => Int -> (Int,Int) -> m [Double]
 b_getn1_data b s = do
   let f d = case d of
               Int _:Int _:Int _:x -> map datum_real_err x
@@ -127,14 +127,14 @@ b_getn1_data b s = do
 -- messages to /n/ elements.
 --
 -- > withSC3 (b_getn1_data_segment 1 0 (0,5))
-b_getn1_data_segment :: Transport m => Int -> Int -> (Int,Int) -> m [Double]
+b_getn1_data_segment :: DuplexOSC m => Int -> Int -> (Int,Int) -> m [Double]
 b_getn1_data_segment n b (i,j) = do
   let ix = b_indices n j i
   d <- mapM (b_getn1_data b) ix
   return (concat d)
 
 -- | Variant of 'b_getn1_data_segment' that gets the entire buffer.
-b_fetch :: Transport m => Int -> Int -> m [Double]
+b_fetch :: DuplexOSC m => Int -> Int -> m [Double]
 b_fetch n b = do
   let f d = case d of
               [Int _,Int nf,Int nc,Float _] ->
@@ -147,19 +147,19 @@ b_fetch n b = do
 -- * Status
 
 -- | Collect server status information.
-serverStatus :: Transport m => m [String]
+serverStatus :: DuplexOSC m => m [String]
 serverStatus = liftM statusFormat serverStatusData
 
 -- | Read nominal sample rate of server.
-serverSampleRateNominal :: (Transport m) => m Double
+serverSampleRateNominal :: DuplexOSC m => m Double
 serverSampleRateNominal = liftM (extractStatusField 7) serverStatusData
 
 -- | Read actual sample rate of server.
-serverSampleRateActual :: (Transport m) => m Double
+serverSampleRateActual :: DuplexOSC m => m Double
 serverSampleRateActual = liftM (extractStatusField 8) serverStatusData
 
 -- | Retrieve status data from server.
-serverStatusData :: Transport m => m [Datum]
+serverStatusData :: DuplexOSC m => m [Datum]
 serverStatusData = do
   sendMessage status
   waitDatum "/status.reply"
