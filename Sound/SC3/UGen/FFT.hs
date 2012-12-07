@@ -32,6 +32,18 @@ ifft' buf = ifft buf 0 0
 convolution :: UGen -> UGen -> UGen -> UGen
 convolution i kernel frameSize = mkOsc AR "Convolution" [i, kernel, frameSize] 1
 
+-- | Real-time fixed kernel convolver.
+convolution2 :: UGen -> UGen -> UGen -> UGen -> UGen
+convolution2 in_ kernel trigger framesize = mkOsc AR "Convolution2" [in_,kernel,trigger,framesize] 1
+
+-- | Real-time convolver with linear interpolation
+convolution2L :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+convolution2L in_ kernel trigger framesize crossfade = mkOsc AR "Convolution2L" [in_,kernel,trigger,framesize,crossfade] 1
+
+-- | Time based convolver.
+convolution3 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+convolution3 rate in_ kernel trigger framesize = mkOscR [AR,KR] rate "Convolution3" [in_,kernel,trigger,framesize] 1
+
 -- | Pack demand-rate FFT bin streams into an FFT chain.
 packFFT :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 packFFT b sz from to z mp =
