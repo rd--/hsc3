@@ -59,23 +59,20 @@ playUGen = playSynthdef . synthdef "Anonymous"
 -- * NRT
 
 -- | Wait ('pauseThreadUntil') until bundle is due to be sent relative
--- to initial 'UTCr' time, then send each message, asynchronously if
+-- to the initial 'Time', then send each message, asynchronously if
 -- required.
-run_bundle :: Transport m => Double -> Bundle -> m ()
-run_bundle i (Bundle t x) =
-    let wr m = if isAsync m
-               then async m >> return ()
-               else send m
-    in case t of
-          NTPr n -> do
-                liftIO (pauseThreadUntil (i + n))
-                mapM_ wr x
-          _ -> error "run_bundle: non-NTPr bundle"
+run_bundle :: Transport m => Time -> Bundle -> m ()
+run_bundle i (Bundle t x) = do
+  let wr m = if isAsync m
+             then async m >> return ()
+             else send m
+  liftIO (pauseThreadUntil (i + t))
+  mapM_ wr x
 
 -- | Perform an 'NRT' score (as would be rendered by 'writeNRT').  In
 -- particular note that all timestamps /must/ be in 'NTPr' form.
 performNRT :: Transport m => NRT -> m ()
-performNRT s = liftIO utcr >>= \i -> mapM_ (run_bundle i) (nrt_bundles s)
+performNRT s = liftIO time >>= \i -> mapM_ (run_bundle i) (nrt_bundles s)
 
 -- * Audible
 
