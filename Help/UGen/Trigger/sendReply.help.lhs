@@ -8,4 +8,4 @@
 >     ;o = sinOsc AR (s0 * 200 + 500) 0 * s1 * 0.1}
 > in audition (mrg [sendReply s0 0 "/send-reply" [s0,s1],out 0 o])
 
-> withSC3 (withNotifications (wait "/send-reply"))
+> withSC3 (withNotifications (waitReply "/send-reply"))

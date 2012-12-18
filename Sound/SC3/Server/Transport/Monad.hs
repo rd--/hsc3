@@ -16,20 +16,16 @@ import Sound.SC3.UGen.Type
 send :: SendOSC m => Message -> m ()
 send = sendMessage
 
--- | Synonym for 'waitReply'.
-wait :: RecvOSC m => String -> m Message
-wait = waitReply
-
--- | Send a 'Message' and 'wait' for a @\/done@ reply.
+-- | Send a 'Message' and 'waitReply' for a @\/done@ reply.
 async :: DuplexOSC m => Message -> m Message
-async m = send m >> wait "/done"
+async m = send m >> waitReply "/done"
 
 -- | Bracket @SC3@ communication. 'withTransport' at standard SC3 UDP
 -- port.
 --
 -- > import Sound.SC3.Server.Command
 --
--- > withSC3 (send status >> wait "/status.reply")
+-- > withSC3 (send status >> waitReply "/status.reply")
 withSC3 :: Connection UDP a -> IO a
 withSC3 = withTransport (openUDP "127.0.0.1" 57110)
 

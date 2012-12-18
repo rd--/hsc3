@@ -19,13 +19,9 @@ import Sound.SC3.UGen.Type
 send :: (Transport t) => t -> Message -> IO ()
 send = sendMessage
 
--- | Synonym for 'waitReply'.
-wait :: Transport t => t -> String -> IO Message
-wait = waitReply
-
--- | Send a 'Message' and 'wait' for a @\/done@ reply.
+-- | Send a 'Message' and 'waitReply' for a @\/done@ reply.
 async :: Transport t => t -> Message -> IO Message
-async fd m = sendMessage fd m >> wait fd "/done"
+async fd m = sendMessage fd m >> waitReply fd "/done"
 
 -- | Bracket @SC3@ communication.
 withSC3 :: (UDP -> IO a) -> IO a

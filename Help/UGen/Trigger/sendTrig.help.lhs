@@ -8,4 +8,4 @@
 > in audition (mrg [sendTrig s 0 s,out 0 o])
 
 Retrieve a single message
-> withSC3 (withNotifications (wait "/tr"))
+> withSC3 (withNotifications (waitReply "/tr"))
