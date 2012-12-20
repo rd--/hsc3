@@ -19,12 +19,12 @@ right, they are exactly 1 sample apart.  View this with an
 oscilloscope.
 > let run s = do
 >       {_ <- async (d_recv s)
->       ;t <- utcr
+>       ;t <- time
 >       ;sr <- serverSampleRateActual
 >       ;let {t' = t + 0.2
 >            ;dt = 1 / sr
 >            ;m n = s_new "s" (-1) AddToTail 1 [("a", n)]}
->        in do {sendBundle (Bundle (UTCr t') [m 3])
->              ;sendBundle (Bundle (UTCr (t' + dt)) [m 0]) }}
+>        in do {sendBundle (bundle t' [m 3])
+>              ;sendBundle (bundle (t' + dt) [m 0]) }}
 
 > withSC3 (run g)

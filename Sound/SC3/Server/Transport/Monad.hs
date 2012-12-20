@@ -39,7 +39,7 @@ stop = send (g_freeAll [1])
 reset :: SendOSC m => m ()
 reset =
     let m = [g_freeAll [1,2],g_new [(1,AddToTail,0),(2,AddToTail,0)]]
-    in sendBundle (Bundle immediately m)
+    in sendBundle (bundle immediately m)
 
 
 -- | Send 'd_recv' and 's_new' messages to scsynth.
