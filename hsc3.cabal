@@ -57,7 +57,7 @@ Library
                    network,
                    process,
                    random,
-                   split,
+                   split >= 0.2,
                    transformers
   GHC-Options:     -Wall -fwarn-tabs
   Exposed-modules: Sound.SC3
