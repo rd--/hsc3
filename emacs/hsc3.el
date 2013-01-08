@@ -136,6 +136,13 @@
   (mapcar 'hsc3-send-string
           (mapcar 'hsc3-unlit (split-string (region-string) "\n"))))
 
+(defun hsc3-run-layout-block ()
+  "Variant of `hsc3-run-consecutive-lines' with ghci layout quoting."
+  (interactive)
+  (hsc3-send-string ":{")
+  (hsc3-run-consecutive-lines)
+  (hsc3-send-string ":}"))
+
 (defun hsc3-run-main ()
   "Run current main."
   (interactive)
@@ -224,6 +231,7 @@
   (define-key map [?\C-c ?\C-c] 'hsc3-run-line)
   (define-key map [?\C-c ?\C-e] 'hsc3-run-multiple-lines)
   (define-key map [?\C-c ?\C-r] 'hsc3-run-consecutive-lines)
+  (define-key map [?\C-c ?\C-f] 'hsc3-run-layout-block)
   (define-key map [?\C-c ?\C-h] 'hsc3-help)
   (define-key map [?\C-c ?\C-g] 'hsc3-draw-graph)
   (define-key map [?\C-c ?\C-j] 'hsc3-sc3-ugen-help)
@@ -261,6 +269,8 @@
     '("Load buffer" . hsc3-load-buffer))
   (define-key map [menu-bar hsc3 expression run-main]
     '("Run main" . hsc3-run-main))
+  (define-key map [menu-bar hsc3 expression run-layout-block]
+    '("Run layout block" . hsc3-run-layout-block))
   (define-key map [menu-bar hsc3 expression run-consecutive-lines]
     '("Run consecutive lines" . hsc3-run-consecutive-lines))
   (define-key map [menu-bar hsc3 expression run-multiple-lines]
