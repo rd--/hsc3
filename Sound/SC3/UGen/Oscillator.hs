@@ -86,9 +86,9 @@ lfTri r freq phase = mkOsc r "LFTri" [freq, phase] 1
 phasor :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 phasor r t f s e p = mkOsc r "Phasor" [t, f, s, e, p] 1
 
--- | Pulse wave generator (band limited).
+-- | Band limited pulse wave.
 pulse :: Rate -> UGen -> UGen -> UGen
-pulse r freq width = mkOscR [AR] r "Pulse" [freq, width] 1
+pulse rate freq width = mkOscR [AR,KR] rate "Pulse" [freq,width] 1
 
 -- | Sawtooth oscillator (band limited).
 saw :: Rate -> UGen -> UGen
