@@ -12,7 +12,10 @@ varying OnePole coef.
 >     ;dl = 1 / 440}
 > in audition (out 0 (pluck (n * 0.25) t dl (dl * y) 10 x))
 
-> let {n = 25
+> import Sound.SC3.UGen.Protect
+
+> let {n = 50
+>     ;udup = uclone 'a'
 >     ;f = udup n (rand 'a' 0.05 0.2)
 >     ;p = udup n (rand 'a' 0 1)
 >     ;w = udup n (whiteNoise 'a' AR)

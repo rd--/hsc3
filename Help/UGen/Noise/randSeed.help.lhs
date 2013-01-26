@@ -4,7 +4,7 @@
 > import Sound.SC3.ID
 
 start a noise patch
-> let {n = udup 2 (whiteNoise 'a' AR * 0.05 + dust2 'a' AR 70)
+> let {n = uclone 'a' 2 (whiteNoise 'a' AR * 0.05 + dust2 'a' AR 70)
 >     ;f = lfNoise1 'a' KR 3 * 5500 + 6000
 >     ;r = resonz (n * 5) f 0.5 + n * 0.5}
 > in audition (out 0 r)
