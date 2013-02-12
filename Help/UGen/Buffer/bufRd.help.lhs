@@ -8,7 +8,7 @@ Load sound file to buffer zero (required for examples)
 > in withSC3 (async (b_allocRead 0 fn 0 0))
 
 Audio rate sine oscillator as phase input
-> let phase = (sinOsc AR 0.1 0 * bufFrames KR 0)
+> let phase = sinOsc AR 0.1 0 * bufFrames KR 0
 > in audition (out 0 (bufRd 1 AR 0 phase Loop NoInterpolation))
 
 There are constructors, bufRd{N|L|C}, for the fixed cases.
