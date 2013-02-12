@@ -114,6 +114,16 @@ env_curve_interpolation_f c =
       EnvSqr -> squared
       EnvCub -> cubed
 
+data Buffer = Buffer_Id Int
+            | Buffer UGen
+              deriving (Eq, Show)
+
+from_buffer :: Buffer -> UGen
+from_buffer b =
+    case b of
+      Buffer_Id i -> constant i
+      Buffer u -> u
+
 -- | Enumeration of flags for '/b_gen' command.
 data B_Gen = Normalise | Wavetable | Clear
              deriving (Eq,Enum,Bounded,Show)
