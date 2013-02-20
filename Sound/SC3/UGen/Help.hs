@@ -4,6 +4,7 @@ module Sound.SC3.UGen.Help where
 import Control.Exception
 import Control.Monad
 import Data.List.Split {- split -}
+import Data.Maybe
 import System.IO.Error
 import System.Cmd {- process -}
 import System.Directory {- directory -}
@@ -17,6 +18,12 @@ get_env_default e k = do
   case r of
     Right v -> return v
     _ -> return k
+
+-- | 'lookupEnv' with default value.
+--
+-- > lookup_env_default "PATH" "/usr/bin"
+lookup_env_default :: String -> String -> IO String
+lookup_env_default e k = fmap (fromMaybe k) (lookupEnv e)
 
 -- | Read the environment variable @SC3_HELP@, the default value is
 -- @~\/.local\/share\/SuperCollider/Help@.
