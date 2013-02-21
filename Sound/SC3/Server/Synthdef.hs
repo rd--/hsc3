@@ -4,6 +4,7 @@ module Sound.SC3.Server.Synthdef where
 
 import qualified Data.ByteString.Lazy as B {- bytestring -}
 import Data.List
+import Data.Maybe
 import Sound.OpenSoundControl.Coding.Byte {- hosc -}
 import Sound.OpenSoundControl.Coding.Cast
 import Sound.SC3.Server.Synthdef.Internal
@@ -24,6 +25,16 @@ synth u =
 -- | Transform a unit generator graph into bytecode.
 graphdef :: Graph -> Graphdef
 graphdef = encode_graphdef
+
+-- | Find the indices of the named UGen at 'Graph'.  The index is
+-- required when using 'Sound.SC3.Server.Command.u_cmd'.
+ugenIndices :: String -> Graph -> [Integer]
+ugenIndices nm =
+    let f (k,nd) =
+            case nd of
+              NodeU _ _ nm' _ _ _ _ -> if nm == nm' then Just k else Nothing
+              _ -> Nothing
+    in mapMaybe f . zip [0..] . ugens
 
 -- | Encode 'Synthdef' as a binary data stream.
 synthdefData :: Synthdef -> Graphdef
