@@ -16,11 +16,12 @@ There are a number of related projects:
 - [hsc3-cairo](?t=hsc3-cairo) & [hsc3-plot](?t=hsc3-plot): Drawing & Plotting
 - [hsc3-rec](?t=hsc3-rec) & [hsc3-unsafe](?t=hsc3-rec): UGen Variants
 - [hsc3-db](?t=hsc3-db): UGen Database
+- [hsc3-rw](?t=hsc3-rw): UGen Graph Re-writing
 
 The hsc3 interaction environment is written for [GNU][gnu]
 [Emacs][emacs].
 
-© [rohan drape][rd] and others, 2006-2012, [gpl][gpl].
+© [rohan drape][rd] and others, 2006-2013, [gpl][gpl].
 with contributions by:
 
 - henning thielemann
