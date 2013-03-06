@@ -2,11 +2,11 @@
 -- non-sharable (demand) unit generators.
 module Sound.SC3.UGen.UId where
 
-import Control.Monad
+import Control.Monad {- base -}
 import Control.Monad.IO.Class as M {- transformers -}
-import Control.Monad.Trans.Reader
-import Data.Unique
-import Sound.OSC.Transport.FD as T
+import Control.Monad.Trans.Reader {- transformers -}
+import Data.Unique {- base -}
+import Sound.OSC.Transport.FD as T {- hosc -}
 
 -- | A class indicating a monad that will generate a sequence of
 --   unique integer identifiers.

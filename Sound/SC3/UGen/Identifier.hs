@@ -1,7 +1,7 @@
 -- | Typeclass and functions to manage UGen identifiers.
 module Sound.SC3.UGen.Identifier where
 
-import Data.Char
+import Data.Char {- base -}
 import qualified Data.Digest.Murmur32 as H {- murmur-hash -}
 
 -- | Typeclass to constrain UGen identifiers.
