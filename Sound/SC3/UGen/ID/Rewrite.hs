@@ -1,4 +1,7 @@
-module Sound.SC3.UGen.ID.Rewrite (hsc3_id_rewrite) where
+module Sound.SC3.UGen.ID.Rewrite where
+
+import Data.Char {- base -}
+import System.Directory {- directory -}
 
 -- | Table of greek letters (upper-case,lower-case,name).
 --
@@ -35,23 +38,36 @@ greek_letters =
 -- | Rewrite each haskell character literal at string /l/ with values
 -- from the character supply /s/.
 --
--- > putStrLn (rewrite ['α'..] "'a','a'")
--- > > 'α','β'
+-- > putStrLn (rewrite ['α'..] "'a',' ','a'")
+-- > > 'α',' ','β'
 rewrite :: String -> String -> String
 rewrite s l =
     case s of
       k:s' -> case l of
                 [] -> []
-                '\'' : _ : '\'' : l' -> '\'' : k : '\'' : rewrite s' l'
+                '\'' : c : '\'' : l' ->
+                    if isLetter c
+                    then '\'' : k : '\'' : rewrite s' l'
+                    else '\'' : c : rewrite s ('\'' : l')
                 c : l' -> c : rewrite s l'
       _ -> undefined
 
 -- | Rewrite haskell character literals using greek letters as supply.
 --
--- > putStrLn (hsc3_id_rewrite "'.','.'")
--- > > 'α','β'
+-- > putStrLn (hsc3_id_rewrite "'a','.','a'")
+-- > > 'α','.','β'
 hsc3_id_rewrite :: String -> String
 hsc3_id_rewrite =
     let uc = map (\(c,_,_) -> c) greek_letters
         lc = map (\(_,c,_) -> c) greek_letters
     in rewrite (lc ++ uc)
+
+-- | File based variant of 'hsc3_id_rewrite'.
+--
+-- > hsc3_id_rewrite_file "/home/rohan/sw/hsc3-graphs/gr/resonant-dust.hs"
+hsc3_id_rewrite_file :: FilePath -> IO ()
+hsc3_id_rewrite_file fn = do
+  let fn' = fn ++ "~"
+  copyFile fn fn'
+  s <- readFile fn'
+  writeFile fn (hsc3_id_rewrite s)

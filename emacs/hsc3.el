@@ -148,29 +148,21 @@
   (interactive)
   (hsc3-send-string "main"))
 
-(defun hsc3-buffer-filter (fn)
-  "Run named function over buffer string and replace buffer
-contents with result."
+(defun hsc3-wait ()
+  "Wait for prompt after sending command."
   (interactive)
-  (let* ((s (buffer-string))
-         (p (inferior-haskell-process))
-         (r (with-current-buffer (process-buffer p)
-              (let ((e (marker-position (process-mark p))))
-                (inferior-haskell-send-command p (format "%s \"%s\"" fn s))
-                (inferior-haskell-wait-for-prompt p)
-                (goto-char (point-max))
-                (end-of-line 0)
-                (buffer-substring-no-properties
-                 (save-excursion (goto-char e)
-                                 (line-beginning-position 2))
-                 (point))))))
-    (delete-region (point-min) (point-max))
-    (beginning-of-buffer)
-    (insert r)))
+  (inferior-haskell-wait-for-prompt (inferior-haskell-process)))
 
 (defun hsc3-id-rewrite ()
   (interactive)
-  (hsc3-buffer-filter "Sound.SC3.UGen.ID.Rewrite.hsc3_id_rewrite"))
+  (save-buffer)
+  (let* ((fn "Sound.SC3.UGen.ID.Rewrite.hsc3_id_rewrite_file")
+         (nm (buffer-file-name)))
+    (when nm
+      (progn
+        (hsc3-send-string (format "%s \"%s\"" fn nm))
+        (sleep-for 0.5)
+        (revert-buffer t t)))))
 
 (defun hsc3-interrupt-haskell ()
   "Interrup haskell interpreter"
