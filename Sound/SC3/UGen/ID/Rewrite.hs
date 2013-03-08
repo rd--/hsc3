@@ -62,12 +62,19 @@ hsc3_id_rewrite =
         lc = map (\(_,c,_) -> c) greek_letters
     in rewrite (lc ++ uc)
 
--- | File based variant of 'hsc3_id_rewrite'.
+-- | File based (haskell pre-processor) variant of 'hsc3_id_rewrite'.
+hsc3_id_rewrite_preprocessor :: FilePath -> FilePath -> FilePath -> IO ()
+hsc3_id_rewrite_preprocessor _ i_fn o_fn = do
+  s <- readFile i_fn
+  writeFile o_fn (hsc3_id_rewrite s)
+
+-- | File based (inplace) variant of 'hsc3_id_rewrite'.  Copies file
+-- to @~@ suffix and replaces initial file.
 --
--- > hsc3_id_rewrite_file "/home/rohan/sw/hsc3-graphs/gr/resonant-dust.hs"
-hsc3_id_rewrite_file :: FilePath -> IO ()
-hsc3_id_rewrite_file fn = do
+-- > let fn = "/home/rohan/sw/hsc3-graphs/gr/resonant-dust.hs"
+-- > in hsc3_id_rewrite_file fn
+hsc3_id_rewrite_inplace :: FilePath -> IO ()
+hsc3_id_rewrite_inplace fn = do
   let fn' = fn ++ "~"
   copyFile fn fn'
-  s <- readFile fn'
-  writeFile fn (hsc3_id_rewrite s)
+  hsc3_id_rewrite_preprocessor fn fn' fn

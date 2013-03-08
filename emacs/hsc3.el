@@ -153,16 +153,18 @@
   (interactive)
   (inferior-haskell-wait-for-prompt (inferior-haskell-process)))
 
+(defun hsc3-id-rewrite-region ()
+  (interactive)
+  (shell-command-on-region
+   (region-beginning)
+   (region-end)
+   "hsc3-id-rewrite"
+   nil
+   t))
+
 (defun hsc3-id-rewrite ()
   (interactive)
-  (save-buffer)
-  (let* ((fn "Sound.SC3.UGen.ID.Rewrite.hsc3_id_rewrite_file")
-         (nm (buffer-file-name)))
-    (when nm
-      (progn
-        (hsc3-send-string (format "%s \"%s\"" fn nm))
-        (sleep-for 0.5)
-        (revert-buffer t t)))))
+  (shell-command-on-region (point-min) (point-max) "hsc3-id-rewrite" nil t))
 
 (defun hsc3-interrupt-haskell ()
   "Interrup haskell interpreter"
@@ -212,6 +214,12 @@
   (hsc3-send-string
    (concat "Sound.SC3.UGen.Dot.draw " (thing-at-point 'symbol))))
 
+(defun hsc3-draw-graph-m ()
+  "Draw the UGen graph at point."
+  (interactive)
+  (hsc3-send-string
+   (concat "Sound.SC3.UGen.Dot.draw =<<" (thing-at-point 'symbol))))
+
 (defun hsc3-local-dot ()
   "Copy '/tmp/hsc3.dot' to 'buffer-name' .dot."
   (interactive)
@@ -250,6 +258,7 @@
   (define-key map [?\C-c ?\C-f] 'hsc3-run-layout-block)
   (define-key map [?\C-c ?\C-h] 'hsc3-help)
   (define-key map [?\C-c ?\C-g] 'hsc3-draw-graph)
+  (define-key map [?\C-c ?\C-G] 'hsc3-draw-graph-m)
   (define-key map [?\C-c ?\C-j] 'hsc3-sc3-ugen-help)
   (define-key map [?\C-c ?\C-/] 'hsc3-sc3-server-help)
   (define-key map [?\C-c ?\C-i] 'hsc3-interrupt-haskell)

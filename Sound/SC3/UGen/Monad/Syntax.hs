@@ -2,6 +2,9 @@ module Sound.SC3.UGen.Monad.Syntax where
 
 import Control.Monad
 
+infixl 7  .*,*.,.*.
+infixl 6  .+,+.,.+.
+
 -- | Infix 'fmap'.
 --
 -- > filter even # return [1..5]
