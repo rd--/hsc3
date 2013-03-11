@@ -258,7 +258,7 @@
   (define-key map [?\C-c ?\C-f] 'hsc3-run-layout-block)
   (define-key map [?\C-c ?\C-h] 'hsc3-help)
   (define-key map [?\C-c ?\C-g] 'hsc3-draw-graph)
-  (define-key map [?\C-c ?\C-G] 'hsc3-draw-graph-m)
+  (define-key map [?\C-c ?\M-g] 'hsc3-draw-graph-m)
   (define-key map [?\C-c ?\C-j] 'hsc3-sc3-ugen-help)
   (define-key map [?\C-c ?\C-/] 'hsc3-sc3-server-help)
   (define-key map [?\C-c ?\C-i] 'hsc3-interrupt-haskell)
