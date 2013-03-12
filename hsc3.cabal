@@ -110,7 +110,6 @@ Library
                    Sound.SC3.UGen.Help
                    Sound.SC3.UGen.Identifier
                    Sound.SC3.UGen.ID
-                   Sound.SC3.UGen.ID.Rewrite
                    Sound.SC3.UGen.IO
                    Sound.SC3.UGen.Information
                    Sound.SC3.UGen.MachineListening
