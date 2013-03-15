@@ -66,6 +66,7 @@ Library
                    Sound.SC3.ID.FD
                    Sound.SC3.Monad
                    Sound.SC3.Monad.FD
+                   Sound.SC3.Monad.Syntax
                    Sound.SC3.Server
                    Sound.SC3.Server.Command
                    Sound.SC3.Server.Command.Completion
@@ -116,7 +117,6 @@ Library
                    Sound.SC3.UGen.Math
                    Sound.SC3.UGen.MCE
                    Sound.SC3.UGen.Monad
-                   Sound.SC3.UGen.Monad.Syntax
                    Sound.SC3.UGen.Name
                    Sound.SC3.UGen.Noise.ID
                    Sound.SC3.UGen.Noise.Monad
