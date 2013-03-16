@@ -3,9 +3,9 @@ module Sound.SC3.Server.Status where
 
 import Sound.OSC.Type {- hosc -}
 
--- | Get /n/th field of status as 'Double'.
-extractStatusField :: Int -> [Datum] -> Double
-extractStatusField n = datum_real_err . (!! n)
+-- | Get /n/th field of status as 'Float'.
+extractStatusField :: Int -> [Datum] -> Float
+extractStatusField n = d_float . (!! n)
 
 -- | Names of status fields.
 statusFields :: [String]

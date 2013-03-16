@@ -108,10 +108,10 @@ withNotifications f = do
 -- | Variant of 'b_getn1' that waits for return message and unpacks it.
 --
 -- > withSC3 (b_getn1_data 0 (0,5))
-b_getn1_data :: DuplexOSC m => Int -> (Int,Int) -> m [Double]
+b_getn1_data :: DuplexOSC m => Int -> (Int,Int) -> m [Float]
 b_getn1_data b s = do
   let f d = case d of
-              Int _:Int _:Int _:x -> map datum_real_err x
+              Int _:Int _:Int _:x -> map d_float x
               _ -> error "b_getn1_data"
   sendMessage (b_getn1 b s)
   liftM f (waitDatum "/b_setn")
@@ -120,14 +120,14 @@ b_getn1_data b s = do
 -- messages to /n/ elements.
 --
 -- > withSC3 (b_getn1_data_segment 1 0 (0,5))
-b_getn1_data_segment :: DuplexOSC m => Int -> Int -> (Int,Int) -> m [Double]
+b_getn1_data_segment :: DuplexOSC m => Int -> Int -> (Int,Int) -> m [Float]
 b_getn1_data_segment n b (i,j) = do
   let ix = b_indices n j i
   d <- mapM (b_getn1_data b) ix
   return (concat d)
 
 -- | Variant of 'b_getn1_data_segment' that gets the entire buffer.
-b_fetch :: DuplexOSC m => Int -> Int -> m [Double]
+b_fetch :: DuplexOSC m => Int -> Int -> m [Float]
 b_fetch n b = do
   let f d = case d of
               [Int _,Int nf,Int nc,Float _] ->
@@ -144,11 +144,11 @@ serverStatus :: DuplexOSC m => m [String]
 serverStatus = liftM statusFormat serverStatusData
 
 -- | Read nominal sample rate of server.
-serverSampleRateNominal :: DuplexOSC m => m Double
+serverSampleRateNominal :: DuplexOSC m => m Float
 serverSampleRateNominal = liftM (extractStatusField 7) serverStatusData
 
 -- | Read actual sample rate of server.
-serverSampleRateActual :: DuplexOSC m => m Double
+serverSampleRateActual :: DuplexOSC m => m Float
 serverSampleRateActual = liftM (extractStatusField 8) serverStatusData
 
 -- | Retrieve status data from server.
