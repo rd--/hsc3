@@ -131,7 +131,6 @@ b_fetch fd n b = do
   sendMessage fd (b_query1 b)
   waitDatum fd "/b_info" >>= f
 
-
 -- * Status
 
 -- | Collect server status information.

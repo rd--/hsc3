@@ -144,10 +144,14 @@ serverStatus :: DuplexOSC m => m [String]
 serverStatus = liftM statusFormat serverStatusData
 
 -- | Read nominal sample rate of server.
+--
+-- > withSC3 serverSampleRateNominal
 serverSampleRateNominal :: DuplexOSC m => m Float
 serverSampleRateNominal = liftM (extractStatusField 7) serverStatusData
 
 -- | Read actual sample rate of server.
+--
+-- > withSC3 serverSampleRateActual
 serverSampleRateActual :: DuplexOSC m => m Float
 serverSampleRateActual = liftM (extractStatusField 8) serverStatusData
 
