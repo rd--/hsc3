@@ -22,5 +22,6 @@ class Num n => Tagged n where
 
 instance Tagged Int
 instance Tagged Integer
+instance Tagged Float
 instance Tagged Double
 instance Tagged UGen where tag = tag_ugen

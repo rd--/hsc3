@@ -47,7 +47,7 @@ klangSpec :: [UGen] -> [UGen] -> [UGen] -> UGen
 klangSpec f a p = mce ((concat . transpose) [f, a, p])
 
 -- | Variant of 'klangSpec' for non-UGen inputs.
-klangSpec' :: [Double] -> [Double] -> [Double] -> UGen
+klangSpec' :: [Float] -> [Float] -> [Float] -> UGen
 klangSpec' f a p =
     let u = map constant
     in klangSpec (u f) (u a) (u p)

@@ -1,3 +1,4 @@
+-- | A /disasembler/ for UGen graphs.
 module Sound.SC3.Server.Synthdef.Reconstruct where
 
 import Data.Char {- base -}
@@ -35,6 +36,8 @@ parenthesise_operator nm =
     then printf "(%s)" nm
     else nm
 
+-- | Generate a reconstruction of a 'Graph'.
+--
 -- > import Sound.SC3.ID
 --
 -- > let {k = control KR "bus" 0

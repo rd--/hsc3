@@ -1,10 +1,11 @@
 -- | Functions to provide mediated access to the SC3 help system.
 module Sound.SC3.Server.Help where
 
-import Control.Monad
-import Sound.SC3.UGen.Help
+import Control.Monad {- base -}
 import System.Cmd {- process -}
 import System.FilePath {- filepath -}
+
+import Sound.SC3.UGen.Help
 
 -- | Generate path to indicated SC3 instance method help.
 --

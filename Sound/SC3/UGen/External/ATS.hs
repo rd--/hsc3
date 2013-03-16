@@ -4,10 +4,10 @@ module Sound.SC3.UGen.External.ATS (ATS(..)
                                    ,ATSFrame,atsFrames
                                    ,atsRead) where
 
-import qualified Data.ByteString.Lazy as B
-import Data.Int
-import Data.List.Split
-import Sound.OSC.Coding.Byte
+import qualified Data.ByteString.Lazy as B {- bytestring -}
+import Data.Int {- base -}
+import Data.List.Split {- split -}
+import Sound.OSC.Coding.Byte {- hosc -}
 
 -- | ATS analysis data.
 data ATS = ATS { atsHeader :: ATSHeader
