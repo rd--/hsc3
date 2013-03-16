@@ -8,7 +8,7 @@ module Sound.SC3.UGen.External.LPC ( LPC(..)
 import Control.Monad
 import qualified Data.ByteString.Lazy as B
 import Data.List
-import Sound.OpenSoundControl.Coding.Byte
+import Sound.OSC.Coding.Byte
 import System.IO
 
 -- | LPC analysis data.
@@ -21,14 +21,14 @@ data LPCHeader = LPCHeader { lpcHeaderSize :: Int
                            , lpcMagic :: Int
                            , lpcNPoles :: Int
                            , lpcFrameSize :: Int
-                           , lpcFrameRate :: Double
-                           , lpcSampleRate :: Double
-                           , lpcAnalysisDuration :: Double
+                           , lpcFrameRate :: Float
+                           , lpcSampleRate :: Float
+                           , lpcAnalysisDuration :: Float
                            , lpcNFrames :: Int
                            } deriving (Eq, Show)
 
 -- | LPC analysis frame data.
-type LPCFrame = [Double]
+type LPCFrame = [Float]
 
 -- | Read an lpanal format LPC data file.
 lpcRead :: FilePath -> IO LPC
@@ -47,7 +47,7 @@ lpcRead fn = do
   return (LPC hdr d)
 
 -- | Analysis data in format required by the sc3 LPC UGens.
-lpcSC3 :: LPC -> [Double]
+lpcSC3 :: LPC -> [Float]
 lpcSC3 (LPC h d) = let f = fromIntegral
                        np = f (lpcNPoles h)
                        nf = f (lpcNFrames h)
@@ -57,6 +57,6 @@ lpcSC3 (LPC h d) = let f = fromIntegral
 read_i32 :: Handle -> IO Int
 read_i32 h = liftM decode_i32 (B.hGet h 4)
 
-read_f32 :: Handle -> IO Double
+read_f32 :: Handle -> IO Float
 read_f32 h = liftM decode_f32 (B.hGet h 4)
 

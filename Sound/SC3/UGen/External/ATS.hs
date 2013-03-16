@@ -7,7 +7,7 @@ module Sound.SC3.UGen.External.ATS (ATS(..)
 import qualified Data.ByteString.Lazy as B
 import Data.Int
 import Data.List.Split
-import Sound.OpenSoundControl.Coding.Byte
+import Sound.OSC.Coding.Byte
 
 -- | ATS analysis data.
 data ATS = ATS { atsHeader :: ATSHeader

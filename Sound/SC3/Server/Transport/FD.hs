@@ -1,11 +1,9 @@
 -- | /FD/ variant of interaction with the scsynth server.
 module Sound.SC3.Server.Transport.FD where
 
-import Control.Monad
-import Sound.OpenSoundControl.Time
-import Sound.OpenSoundControl.Type
-import Sound.OSC.Transport.FD
-import Sound.OSC.Transport.FD.UDP
+import Control.Monad {- base -}
+import Sound.OSC.FD {- hosc -}
+
 import Sound.SC3.Server.Command
 import Sound.SC3.Server.NRT
 import Sound.SC3.Server.Status

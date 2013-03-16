@@ -1,15 +1,16 @@
 module Sound.SC3.Server.Synthdef.Reconstruct where
 
-import Data.Char
-import Data.Function
-import Data.List
+import Data.Char {- base -}
+import Data.Function {- base -}
+import Data.List {- base -}
+import Text.Printf {- base -}
+
 import Sound.SC3.Server.Synthdef.Internal
 import Sound.SC3.Server.Synthdef.Type
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
-import Text.Printf
 
 node_sort :: [Node] -> [Node]
 node_sort = sortBy (compare `on` node_id)
@@ -54,12 +55,12 @@ reconstruct_c_str :: Node -> String
 reconstruct_c_str u =
     let l = node_label u
         c = node_c_value u
-    in printf "%s = constant (%f::Double)" l c
+    in printf "%s = constant (%f::Float)" l c
 
 reconstruct_c_ugen :: Node -> UGen
 reconstruct_c_ugen u = constant (node_c_value u)
 
-reconstruct_k_rnd :: Node -> (Rate,String,Double)
+reconstruct_k_rnd :: Node -> (Rate,String,Float)
 reconstruct_k_rnd u =
     let r = node_k_rate u
         n = node_k_name u

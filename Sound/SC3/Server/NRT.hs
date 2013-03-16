@@ -2,9 +2,9 @@
 module Sound.SC3.Server.NRT where
 
 import qualified Data.ByteString.Lazy as B {- bytestring -}
-import Sound.OpenSoundControl {- hosc -}
-import Sound.OpenSoundControl.Coding.Byte
-import System.IO
+import Sound.OSC.Core {- hosc -}
+import Sound.OSC.Coding.Byte {- hosc -}
+import System.IO {- base -}
 
 -- | Encode and prefix with encoded length.
 oscWithSize :: Bundle -> B.ByteString

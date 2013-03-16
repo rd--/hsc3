@@ -1,8 +1,9 @@
 -- | UGen data structure representation and associated functions.
 module Sound.SC3.UGen.UGen where
 
-import qualified Data.Char as C
-import Data.List
+import qualified Data.Char as C {- base -}
+import Data.List {- base -}
+
 import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Rate
@@ -56,11 +57,11 @@ ugenFoldr f st u =
 --
 --   Note that if the name begins with a t_ prefix the control is
 --   not converted to a triggered control.  Please see tr_control.
-control :: Rate -> String -> Double -> UGen
+control :: Rate -> String -> Float -> UGen
 control r n d = Control_U (Control r n d False)
 
 -- | Triggered (kr) control input node constructor.
-tr_control :: String -> Double -> UGen
+tr_control :: String -> Float -> UGen
 tr_control n d = Control_U (Control KR n d True)
 
 -- | Multiple root graph node constructor.

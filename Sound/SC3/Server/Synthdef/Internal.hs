@@ -2,11 +2,12 @@ module Sound.SC3.Server.Synthdef.Internal where
 
 import qualified Data.ByteString.Lazy as B {- bytestring -}
 import qualified Data.IntMap as M {- containers -}
-import Data.Function
-import Data.List
-import Data.Maybe
-import Sound.OpenSoundControl.Coding.Byte {- hosc -}
-import Sound.OpenSoundControl.Coding.Cast
+import Data.Function {- base -}
+import Data.List{- base -}
+import Data.Maybe{- base -}
+import Sound.OSC.Coding.Byte {- hosc -}
+import Sound.OSC.Coding.Cast {- hosc -}
+
 import Sound.SC3.Server.Synthdef.Type
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
@@ -129,14 +130,14 @@ add_implicit g =
     in Graph z cs ks' us'
 
 -- | Predicate to determine if 'Node' is a constant with indicated /value/.
-find_c_p :: Double -> Node -> Bool
+find_c_p :: Float -> Node -> Bool
 find_c_p x n =
     case n of
       NodeC _ y -> x == y
       _ -> error "find_c_p: non NodeC"
 
 -- | Insert a constant 'Node' into the 'Graph'.
-push_c :: Double -> Graph -> (Node,Graph)
+push_c :: Float -> Graph -> (Node,Graph)
 push_c x g =
     let n = NodeC (nextId g) x
     in (n,g {constants = n : constants g
@@ -157,7 +158,7 @@ find_k_p x n =
       _ -> error "find_k_p"
 
 -- | Insert a control node into the 'Graph'.
-push_k :: (Rate,String,Double,Bool) -> Graph -> (Node,Graph)
+push_k :: (Rate,String,Float,Bool) -> Graph -> (Node,Graph)
 push_k (r,nm,d,tr) g =
     let n = NodeK (nextId g) r nm d (ktype r tr)
     in (n,g {controls = n : controls g
@@ -322,14 +323,15 @@ encode_graphdef :: Graph -> B.ByteString
 encode_graphdef g =
     let (Graph _ cs ks us) = g
         mm = mk_maps g
-    in B.concat [encode_i16 (length cs)
-                ,B.concat (map (encode_f32 . node_c_value) cs)
-                ,encode_i16 (length ks)
-                ,B.concat (map (encode_f32 . node_k_default) ks)
-                ,encode_i16 (length ks)
-                ,B.concat (map (encode_node_k mm) ks)
-                ,encode_i16 (length us)
-                ,B.concat (map (encode_node_u mm) us)]
+    in B.concat
+           [encode_i16 (length cs)
+           ,B.concat (map (encode_f32 . node_c_value) cs)
+           ,encode_i16 (length ks)
+           ,B.concat (map (encode_f32 . node_k_default) ks)
+           ,encode_i16 (length ks)
+           ,B.concat (map (encode_node_k mm) ks)
+           ,encode_i16 (length us)
+           ,B.concat (map (encode_node_u mm) us)]
 
 -- | 4-tuple to count 'KType's.
 type KS_COUNT = (Int,Int,Int,Int)

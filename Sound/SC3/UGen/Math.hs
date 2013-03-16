@@ -1,7 +1,8 @@
 -- | Non-standard mathematical classes and class instances.
 module Sound.SC3.UGen.Math where
 
-import qualified Data.Fixed as F
+import qualified Data.Fixed as F {- base -}
+
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Type
 
@@ -9,30 +10,36 @@ import Sound.SC3.UGen.Type
 -- mangling.  True is 1.0, False is 0.0
 
 -- | Variant on Eq class, result is of the same type as the values compared.
-class EqE a where
+class (Eq a,Num a) => EqE a where
     (==*) :: a -> a -> a
+    a ==* b = if a == b then 1 else 0
     (/=*) :: a -> a -> a
+    a /=* b = if a /= b then 1 else 0
 
+instance EqE Int where
+instance EqE Integer where
+instance EqE Float where
 instance EqE Double where
-    a ==* b = if a == b then 1.0 else 0.0
-    a /=* b = if a /= b then 1.0 else 0.0
 
 instance EqE UGen where
     (==*) = mkBinaryOperator EQ_ (==*)
     (/=*) = mkBinaryOperator NE (/=*)
 
 -- | Variant on Ord class, result is of the same type as the values compared.
-class OrdE a where
+class (Ord a,Num a) => OrdE a where
     (<*) :: a -> a -> a
+    a <* b = if a < b then 1 else 0
     (<=*) :: a -> a -> a
+    a <=* b = if a <= b then 1 else 0
     (>*) :: a -> a -> a
+    a >* b = if a > b then 1 else 0
     (>=*) :: a -> a -> a
+    a >=* b = if a >= b then 1 else 0
 
-instance OrdE Double where
-    a <* b = if a < b then 1.0 else 0.0
-    a <=* b = if a <= b then 1.0 else 0.0
-    a >* b = if a > b then 1.0 else 0.0
-    a >=* b = if a >= b then 1.0 else 0.0
+instance OrdE Int
+instance OrdE Integer
+instance OrdE Float
+instance OrdE Double
 
 instance OrdE UGen where
     (<*) = mkBinaryOperator LT_ (<*)
@@ -64,7 +71,7 @@ ceilingf a = fromIntegral (ceiling a :: Integer)
 floorf :: RealFrac a => a -> a
 floorf a = fromIntegral (floor a :: Integer)
 
-instance RealFracE Double where
+instance RealFracE Float where
     properFractionE n =
         let (i,j) = properFraction n
         in (fromIntegral (i::Integer),j)
@@ -74,7 +81,7 @@ instance RealFracE Double where
     floorE = floorf
 
 -- | Variant of @SC3@ @roundTo@ function.
-roundTo_ :: Double -> Double -> Double
+roundTo_ :: RealFrac a => a -> a -> a
 roundTo_ a b = if b == 0 then a else floorf (a/b + 0.5) * b
 
 -- | 'UGen' form or 'roundTo_'.
@@ -143,6 +150,7 @@ class (Floating a, Ord a) => UnaryOp a where
     squared :: a -> a
     squared a = a * a
 
+instance UnaryOp Float where
 instance UnaryOp Double where
 
 instance UnaryOp UGen where
@@ -246,10 +254,10 @@ class (Floating a, Ord a) => BinaryOp a where
 -- > (-1.2) `fmod` 1.5 -- ~= 0.3
 -- > 1.2 `fmod` (-1.5) -- ~= -0.3
 -- > (-1.2) `fmod` (-1.5) -- ~= -1.2
-fmod :: Double -> Double -> Double
+fmod :: Float -> Float -> Float
 fmod = F.mod'
 
-instance BinaryOp Double where
+instance BinaryOp Float where
     fold2 a b = fold_ a (-b) b
     modE = fmod
     roundUp a b = if b == 0 then a else ceilingf (a/b + 0.5) * b
@@ -289,7 +297,7 @@ instance BinaryOp UGen where
 -- | Wrap /k/ to within range /(i,j)/, ie. @AbstractFunction.wrap@.
 --
 -- > map (wrap' 5 10) [3..12] == [8,9,5,6,7,8,9,10,6,7]
-wrap' :: Double -> Double -> Double -> Double
+wrap' :: Float -> Float -> Float -> Float
 wrap' i j k =
     let r = j - i
     in if k >= i && k <= j
@@ -310,7 +318,7 @@ genericWrap l r n =
 -- | Variant of 'wrap'' with @SC3@ argument ordering.
 --
 -- > map (\n -> wrap_ n 5 10) [3..12] == map (wrap' 5 10) [3..12]
-wrap_ :: Double -> Double -> Double -> Double
+wrap_ :: Float -> Float -> Float -> Float
 wrap_ a b c = wrap' b c a
 
 -- | Fold /k/ to within range /(i,j)/, ie. @AbstractFunction.fold@

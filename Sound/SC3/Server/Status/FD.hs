@@ -1,10 +1,8 @@
 -- | Request and display status information from the synthesis server.
 module Sound.SC3.Server.Status.FD where
 
-import Control.Monad
-import Sound.OpenSoundControl.Transport.FD {- hosc -}
-import Sound.OpenSoundControl.Type
-import Sound.OpenSoundControl.Wait.FD
+import Control.Monad {- base -}
+import Sound.OSC.FD {- hosc -}
 
 import Sound.SC3.Server.Command
 import Sound.SC3.Server.Status

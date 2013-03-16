@@ -1,7 +1,7 @@
 -- | Request and display status information from the synthesis server.
 module Sound.SC3.Server.Status where
 
-import Sound.OpenSoundControl.Type
+import Sound.OSC.Type {- hosc -}
 
 -- | Get /n/th field of status as 'Double'.
 extractStatusField :: Int -> [Datum] -> Double

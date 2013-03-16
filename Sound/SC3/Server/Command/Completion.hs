@@ -24,7 +24,7 @@ module Sound.SC3.Server.Command.Completion
   , b_zero'
   ) where
 
-import Sound.OpenSoundControl
+import Sound.OSC {- hosc -}
 import Sound.SC3.Server.Enum
 import Sound.SC3.Server.Synthdef
 import Sound.SC3.Server.Synthdef.Type

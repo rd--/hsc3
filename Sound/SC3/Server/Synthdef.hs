@@ -3,14 +3,15 @@
 module Sound.SC3.Server.Synthdef where
 
 import qualified Data.ByteString.Lazy as B {- bytestring -}
-import Data.List
-import Data.Maybe
-import Sound.OpenSoundControl.Coding.Byte {- hosc -}
-import Sound.OpenSoundControl.Coding.Cast
+import Data.List {- base -}
+import Data.Maybe {- base -}
+import Sound.OSC.Coding.Byte {- hosc -}
+import Sound.OSC.Coding.Cast {- hosc -}
+import System.FilePath {- filepath -}
+
 import Sound.SC3.Server.Synthdef.Internal
 import Sound.SC3.Server.Synthdef.Type
 import Sound.SC3.UGen.Type
-import System.FilePath {- filepath -}
 
 -- | Transform a unit generator into a graph.
 --

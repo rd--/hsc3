@@ -2,6 +2,7 @@
 module Sound.SC3.Server.Synthdef.Type where
 
 import qualified Data.ByteString.Lazy as B {- bytestring -}
+
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 
@@ -40,11 +41,11 @@ type Edge = (FromPort,ToPort)
 
 -- | Type to represent nodes in unit generator graph.
 data Node = NodeC {node_id :: NodeId
-                  ,node_c_value :: Double}
+                  ,node_c_value :: Float}
           | NodeK {node_id :: NodeId
                   ,node_k_rate :: Rate
                   ,node_k_name :: String
-                  ,node_k_default :: Double
+                  ,node_k_default :: Float
                   ,node_k_type :: KType}
           | NodeU {node_id :: NodeId
                   ,node_u_rate :: Rate

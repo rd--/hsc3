@@ -1,14 +1,15 @@
 --  | Unit Generator ('UGen'), and associated types and instances.
 module Sound.SC3.UGen.Type where
 
-import Data.Bits
-import Data.List
-import Data.Maybe
+import Data.Bits {- base -}
+import Data.List {- base -}
+import Data.Maybe {- base -}
+import System.Random {- random -}
+
 import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.MCE
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Rate
-import System.Random {- random -}
 
 -- * Basic types
 
@@ -20,13 +21,13 @@ data UGenId = NoId | UId Int
 --
 -- > Constant 3 == Constant 3
 -- > (Constant 3 > Constant 1) == True
-data Constant = Constant {constantValue :: Double}
+data Constant = Constant {constantValue :: Float}
                 deriving (Eq,Ord,Show)
 
 -- | Control inputs.
 data Control = Control {controlOperatingRate :: Rate
                        ,controlName :: String
-                       ,controlDefault :: Double
+                       ,controlDefault :: Float
                        ,controlTriggered :: Bool}
                deriving (Eq,Show)
 
@@ -100,7 +101,7 @@ checkInput u =
 -- * Accessors
 
 -- | Value of 'Constant_U' 'Constant'.
-u_constant :: UGen -> Double
+u_constant :: UGen -> Float
 u_constant u =
     case u of
       Constant_U (Constant n) -> n
@@ -215,7 +216,7 @@ proxify u =
       _ -> error "proxify: illegal ugen"
 
 -- | Construct proxied and multiple channel expanded UGen.
-mkUGen :: Maybe ([Double] -> Double) -> [Rate] -> Maybe Rate ->
+mkUGen :: Maybe ([Float] -> Float) -> [Rate] -> Maybe Rate ->
           String -> [UGen] -> Int -> Special -> UGenId -> UGen
 mkUGen cf rs r nm i o s z =
     let f h = let r' = fromMaybe (maximum (map rateOf h)) r
@@ -234,12 +235,12 @@ mkUGen cf rs r nm i o s z =
 -- * Operators
 
 -- | Operator UGen constructor.
-mkOperator :: ([Double] -> Double) -> String -> [UGen] -> Int -> UGen
+mkOperator :: ([Float] -> Float) -> String -> [UGen] -> Int -> UGen
 mkOperator f c i s =
     mkUGen (Just f) all_rates Nothing c i 1 (Special s) NoId
 
 -- | Unary math constructor with constant optimization.
-mkUnaryOperator :: Unary -> (Double -> Double) -> UGen -> UGen
+mkUnaryOperator :: Unary -> (Float -> Float) -> UGen -> UGen
 mkUnaryOperator i f a =
     let g [x] = f x
         g _ = error "mkUnaryOperator: non unary input"
@@ -254,8 +255,8 @@ mkUnaryOperator i f a =
 -- > o - 0 == o && 0 - o /= o
 -- > o / 1 == o && 1 / o /= o
 -- > o ** 1 == o && o ** 2 /= o
-mkBinaryOperator_optimize :: Binary -> (Double -> Double -> Double) ->
-                             (Either Double Double -> Bool) ->
+mkBinaryOperator_optimize :: Binary -> (Float -> Float -> Float) ->
+                             (Either Float Float -> Bool) ->
                              UGen -> UGen -> UGen
 mkBinaryOperator_optimize i f o a b =
    let g [x,y] = f x y
@@ -269,7 +270,7 @@ mkBinaryOperator_optimize i f o a b =
    in fromMaybe (mkOperator g "BinaryOpUGen" [a, b] (fromEnum i)) r
 
 -- | Binary math constructor with constant optimization.
-mkBinaryOperator :: Binary -> (Double -> Double -> Double) ->
+mkBinaryOperator :: Binary -> (Float -> Float -> Float) ->
                     UGen -> UGen -> UGen
 mkBinaryOperator i f a b =
    let g [x,y] = f x y
