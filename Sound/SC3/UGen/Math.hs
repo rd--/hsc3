@@ -206,6 +206,7 @@ class (Floating a, Ord a) => BinaryOp a where
     firstArg :: a -> a -> a
     firstArg a _ = a
     fold2 :: a -> a -> a
+    fold2 a b = fold_ a (-b) b
     gcdE :: a -> a -> a
     gcdE = error "gcdE"
     hypot :: a -> a -> a
@@ -217,6 +218,7 @@ class (Floating a, Ord a) => BinaryOp a where
     lcmE :: a -> a -> a
     lcmE = error "lcmE"
     modE :: a -> a -> a
+    modE = error "modE"
     randRange :: a -> a -> a
     randRange = error "randRange"
     ring1 :: a -> a -> a
@@ -228,6 +230,7 @@ class (Floating a, Ord a) => BinaryOp a where
     ring4 :: a -> a -> a
     ring4 a b = a * a * b - a * b * b
     roundUp :: a -> a -> a
+    roundUp = error "roundUp"
     scaleNeg :: a -> a -> a
     scaleNeg a b = (abs a - a) * b' + a where b' = 0.5 * b + 0.5
     sqrDif :: a -> a -> a
@@ -241,6 +244,7 @@ class (Floating a, Ord a) => BinaryOp a where
     trunc :: a -> a -> a
     trunc = error "trunc"
     wrap2 :: a -> a -> a
+    wrap2 = error "wrap2"
 
 -- | The SC3 @%@ operator is libc fmod function.
 --
