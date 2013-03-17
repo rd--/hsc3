@@ -57,12 +57,12 @@ ugenFoldr f st u =
 --
 --   Note that if the name begins with a t_ prefix the control is
 --   not converted to a triggered control.  Please see tr_control.
-control :: Real n => Rate -> String -> n -> UGen
-control r nm d = Control_U (Control r nm (realToFrac d) False)
+control :: Rate -> String -> Float -> UGen
+control r nm d = Control_U (Control r nm d False)
 
 -- | Triggered (kr) control input node constructor.
-tr_control :: Real n => String -> n -> UGen
-tr_control nm d = Control_U (Control KR nm (realToFrac d) True)
+tr_control :: String -> Float -> UGen
+tr_control nm d = Control_U (Control KR nm d True)
 
 -- | Multiple root graph node constructor.
 mrg2 :: UGen -> UGen -> UGen
