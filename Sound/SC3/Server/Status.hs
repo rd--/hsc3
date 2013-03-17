@@ -4,7 +4,7 @@ module Sound.SC3.Server.Status where
 import Data.Maybe {- base -}
 import Sound.OSC.Type {- hosc -}
 
--- | Get /n/th field of status as 'Float'.
+-- | Get /n/th field of status as 'Floating'.
 extractStatusField :: Floating n => Int -> [Datum] -> n
 extractStatusField n =
     fromMaybe (error "extractStatusField")

@@ -110,7 +110,7 @@ u_constant u =
 -- * Constructors
 
 -- | Constant value node constructor.
-constant :: (Real a) => a -> UGen
+constant :: Real n => n -> UGen
 constant = Constant_U . Constant . realToFrac
 
 -- | Multiple channel expansion node constructor.

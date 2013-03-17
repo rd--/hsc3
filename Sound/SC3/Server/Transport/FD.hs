@@ -1,6 +1,7 @@
 -- | /FD/ variant of interaction with the scsynth server.
 module Sound.SC3.Server.Transport.FD where
 
+import Data.Maybe {- base -}
 import Control.Monad {- base -}
 import Sound.OSC.FD {- hosc -}
 
@@ -102,10 +103,10 @@ withNotifications fd f = do
 -- | Variant of 'b_getn1' that waits for return message and unpacks it.
 --
 -- > withSC3 (\fd -> b_getn1_data fd 0 (0,5))
-b_getn1_data :: Transport t => t -> Int -> (Int,Int) -> IO [Float]
+b_getn1_data :: (Floating n,Transport t) => t -> Int -> (Int,Int) -> IO [n]
 b_getn1_data fd b s = do
   let f d = case d of
-              Int _:Int _:Int _:x -> map d_float x
+              Int _:Int _:Int _:x -> mapMaybe datum_floating x
               _ -> error "b_getn1_data"
   sendMessage fd (b_getn1 b s)
   fmap f (waitDatum fd "/b_setn")
@@ -114,14 +115,15 @@ b_getn1_data fd b s = do
 -- messages to /n/ elements.
 --
 -- > withSC3 (\fd -> b_getn1_data_segment fd 1 0 (0,5))
-b_getn1_data_segment :: Transport t => t -> Int -> Int -> (Int,Int) -> IO [Float]
+b_getn1_data_segment :: (Floating n,Transport t) =>
+                        t -> Int -> Int -> (Int,Int) -> IO [n]
 b_getn1_data_segment fd n b (i,j) = do
   let ix = b_indices n j i
   d <- mapM (b_getn1_data fd b) ix
   return (concat d)
 
 -- | Variant of 'b_getn1_data_segment' that gets the entire buffer.
-b_fetch :: Transport t => t -> Int -> Int -> IO [Float]
+b_fetch :: (Floating n,Transport t) => t -> Int -> Int -> IO [n]
 b_fetch fd n b = do
   let f d = case d of
               [Int _,Int nf,Int nc,Float _] ->
@@ -138,11 +140,11 @@ serverStatus :: Transport t => t -> IO [String]
 serverStatus = liftM statusFormat . serverStatusData
 
 -- | Read nominal sample rate of server.
-serverSampleRateNominal :: (Transport t) => t -> IO Float
+serverSampleRateNominal :: (Floating n,Transport t) => t -> IO n
 serverSampleRateNominal = liftM (extractStatusField 7) . serverStatusData
 
 -- | Read actual sample rate of server.
-serverSampleRateActual :: (Transport t) => t -> IO Float
+serverSampleRateActual :: (Floating n,Transport t) => t -> IO n
 serverSampleRateActual = liftM (extractStatusField 8) . serverStatusData
 
 -- | Retrieve status data from server.

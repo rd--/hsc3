@@ -17,5 +17,6 @@ mk_duples_l i a b = concatMap (\(x,y) -> a x : i (length y) : map b y)
 mk_triples :: (a -> d) -> (b -> d) -> (c -> d) -> [(a, b, c)] -> [d]
 mk_triples a b c = concatMap (\(x,y,z) -> [a x, b y, c z])
 
+-- | Type generalised 'Float'.
 mk_float :: Real n => n -> Datum
 mk_float = Float . realToFrac
