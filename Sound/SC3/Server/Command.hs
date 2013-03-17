@@ -40,8 +40,8 @@ n_before :: [(Int,Int)] -> Message
 n_before = message "/n_before" . mk_duples Int Int
 
 -- | Fill ranges of a node's control values.
-n_fill :: Real n => Int -> [(String,Int,n)] -> Message
-n_fill nid l = message "/n_fill" (Int nid : mk_triples String Int mk_float l)
+n_fill :: Int -> [(String,Int,Double)] -> Message
+n_fill nid l = message "/n_fill" (Int nid : mk_triples String Int Double l)
 
 -- | Delete a node.
 n_free :: [Int] -> Message
@@ -72,13 +72,13 @@ n_run :: [(Int,Bool)] -> Message
 n_run = message "/n_run" . mk_duples Int (Int . fromEnum)
 
 -- | Set a node's control values.
-n_set :: Real n => Int -> [(String,n)] -> Message
-n_set nid c = message "/n_set" (Int nid : mk_duples String mk_float c)
+n_set :: Int -> [(String,Double)] -> Message
+n_set nid c = message "/n_set" (Int nid : mk_duples String Double c)
 
 -- | Set ranges of a node's control values.
-n_setn :: Real n => Int -> [(String,[n])] -> Message
+n_setn :: Int -> [(String,[Double])] -> Message
 n_setn nid l = message "/n_setn" (Int nid : concatMap f l)
-    where f (s,d) = String s : Int (length d) : map mk_float d
+    where f (s,d) = String s : Int (length d) : map Double d
 
 -- | Trace a node.
 n_trace :: [Int] -> Message
@@ -107,8 +107,8 @@ data AddAction = AddToHead
                  deriving (Eq,Show,Enum)
 
 -- | Create a new synth.
-s_new :: Real n => String -> Int -> AddAction -> Int -> [(String,n)] -> Message
-s_new n i a t c = message "/s_new" (String n : Int i : Int (fromEnum a) : Int t : mk_duples String mk_float c)
+s_new :: String -> Int -> AddAction -> Int -> [(String,Double)] -> Message
+s_new n i a t c = message "/s_new" (String n : Int i : Int (fromEnum a) : Int t : mk_duples String Double c)
 
 -- | Auto-reassign synth's ID to a reserved value.
 s_noid :: [Int] -> Message
@@ -203,8 +203,8 @@ b_close :: Int -> Message
 b_close nid = message "/b_close" [Int nid]
 
 -- | Fill ranges of sample values.
-b_fill :: Real n => Int -> [(Int,Int,n)] -> Message
-b_fill nid l = message "/b_fill" (Int nid : mk_triples Int Int mk_float l)
+b_fill :: Int -> [(Int,Int,Double)] -> Message
+b_fill nid l = message "/b_fill" (Int nid : mk_triples Int Int Double l)
 
 -- | Free buffer data. (Asynchronous)
 b_free :: Int -> Message
@@ -215,20 +215,20 @@ b_gen :: Int -> String -> [Datum] -> Message
 b_gen bid name arg = message "/b_gen" (Int bid : String name : arg)
 
 -- | Call @sine1@ 'b_gen' command.
-b_gen_sine1 :: Real n => Int -> [B_Gen] -> [n] -> Message
-b_gen_sine1 z f n = b_gen z "sine1" (Int (b_gen_flag f) : map mk_float n)
+b_gen_sine1 :: Int -> [B_Gen] -> [Double] -> Message
+b_gen_sine1 z f n = b_gen z "sine1" (Int (b_gen_flag f) : map Double n)
 
 -- | Call @sine2@ 'b_gen' command.
-b_gen_sine2 :: Real n => Int -> [B_Gen] -> [(n,n)] -> Message
-b_gen_sine2 z f n = b_gen z "sine2" (Int (b_gen_flag f) : mk_duples mk_float mk_float n)
+b_gen_sine2 :: Int -> [B_Gen] -> [(Double,Double)] -> Message
+b_gen_sine2 z f n = b_gen z "sine2" (Int (b_gen_flag f) : mk_duples Double Double n)
 
 -- | Call @sine3@ 'b_gen' command.
-b_gen_sine3 :: Real n => Int -> [B_Gen] -> [(n,n,n)] -> Message
-b_gen_sine3 z f n = b_gen z "sine3" (Int (b_gen_flag f) : mk_triples mk_float mk_float mk_float n)
+b_gen_sine3 :: Int -> [B_Gen] -> [(Double,Double,Double)] -> Message
+b_gen_sine3 z f n = b_gen z "sine3" (Int (b_gen_flag f) : mk_triples Double Double Double n)
 
 -- | Call @cheby@ 'b_gen' command.
-b_gen_cheby :: Real n => Int -> [B_Gen] -> [n] -> Message
-b_gen_cheby z f n = b_gen z "cheby" (Int (b_gen_flag f) : map mk_float n)
+b_gen_cheby :: Int -> [B_Gen] -> [Double] -> Message
+b_gen_cheby z f n = b_gen z "cheby" (Int (b_gen_flag f) : map Double n)
 
 -- | Call @copy@ 'b_gen' command.
 b_gen_copy :: Int -> Int -> Int -> Int -> Maybe Int -> Message
@@ -257,13 +257,13 @@ b_readChannel :: Int -> String -> Int -> Int -> Int -> Bool -> [Int] -> Message
 b_readChannel nid p f n f' z cs = message "/b_readChannel" ([Int nid,String p,Int f,Int n,Int f',Int (fromEnum z)] ++ map Int cs)
 
 -- | Set sample values.
-b_set :: Real n => Int -> [(Int,n)] -> Message
-b_set nid l = message "/b_set" (Int nid : mk_duples Int mk_float l)
+b_set :: Int -> [(Int,Double)] -> Message
+b_set nid l = message "/b_set" (Int nid : mk_duples Int Double l)
 
 -- | Set ranges of sample values.
-b_setn :: Real n => Int -> [(Int,[n])] -> Message
+b_setn :: Int -> [(Int,[Double])] -> Message
 b_setn nid l = message "/b_setn" (Int nid : concatMap f l)
-    where f (i,d) = Int i : Int (length d) : map mk_float d
+    where f (i,d) = Int i : Int (length d) : map Double d
 
 -- | Write sound file data. (Asynchronous)
 b_write :: Int -> String -> SoundFileFormat -> SampleFormat -> Int -> Int -> Bool -> Message
@@ -276,8 +276,8 @@ b_zero nid = message "/b_zero" [Int nid]
 -- * Control bus commands
 
 -- |  Fill ranges of bus values.
-c_fill :: Real n => [(Int,Int,n)] -> Message
-c_fill = message "/c_fill" . mk_triples Int Int mk_float
+c_fill :: [(Int,Int,Double)] -> Message
+c_fill = message "/c_fill" . mk_triples Int Int Double
 
 -- | Get bus values.
 c_get :: [Int] -> Message
@@ -288,13 +288,13 @@ c_getn :: [(Int,Int)] -> Message
 c_getn = message "/c_getn" . mk_duples Int Int
 
 -- | Set bus values.
-c_set :: Real n => [(Int,n)] -> Message
-c_set = message "/c_set" . mk_duples Int mk_float
+c_set :: [(Int,Double)] -> Message
+c_set = message "/c_set" . mk_duples Int Double
 
 -- | Set ranges of bus values.
-c_setn :: Real n => [(Int,[n])] -> Message
+c_setn :: [(Int,[Double])] -> Message
 c_setn l = message "/c_setn" (concatMap f l)
-    where f (i,d) = Int i : Int (length d) : map mk_float d
+    where f (i,d) = Int i : Int (length d) : map Double d
 
 -- * Server operation commands
 
@@ -349,7 +349,7 @@ errorMode scope mode = message "/error" [Int e]
 -- * Variants to simplify common cases
 
 -- | Pre-allocate for b_setn1, values preceding offset are zeroed.
-b_alloc_setn1 :: Real n => Int -> Int -> [n] -> Message
+b_alloc_setn1 :: Int -> Int -> [Double] -> Message
 b_alloc_setn1 nid i xs =
     let k = i + length xs
         xs' = replicate i 0 ++ xs
@@ -360,11 +360,11 @@ b_getn1 :: Int -> (Int,Int) -> Message
 b_getn1 nid = b_getn nid . return
 
 -- | Set single sample value.
-b_set1 :: Real n => Int -> Int -> n -> Message
+b_set1 :: Int -> Int -> Double ->Message
 b_set1 nid i x = b_set nid [(i,x)]
 
 -- | Set a range of sample values.
-b_setn1 :: Real n => Int -> Int -> [n] -> Message
+b_setn1 :: Int -> Int -> [Double] -> Message
 b_setn1 nid i xs = b_setn nid [(i,xs)]
 
 -- | Variant on 'b_query'.
@@ -372,16 +372,16 @@ b_query1 :: Int -> Message
 b_query1 = b_query . return
 
 -- | Set single bus values.
-c_set1 :: Real n => Int -> n -> Message
+c_set1 :: Int -> Double ->Message
 c_set1 i x = c_set [(i,x)]
 
 -- | Set a signle node control value.
-n_set1 :: Real n => Int -> String -> n -> Message
+n_set1 :: Int -> String -> Double ->Message
 n_set1 nid k n = n_set nid [(k,n)]
 
 -- | @s_new@ with no parameters.
 s_new0 :: String -> Int -> AddAction -> Int -> Message
-s_new0 n i a t = s_new n i a t ([]::[(String,Float)])
+s_new0 n i a t = s_new n i a t []
 
 -- * Modify existing message to include completion message
 
