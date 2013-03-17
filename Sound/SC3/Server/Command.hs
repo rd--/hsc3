@@ -32,35 +32,35 @@ d_free = message "/d_free" . map String
 -- * Node commands
 
 -- | Place a node after another.
-n_after :: [(Int, Int)] -> Message
+n_after :: [(Int,Int)] -> Message
 n_after = message "/n_after" . mk_duples Int Int
 
 -- | Place a node before another.
-n_before :: [(Int, Int)] -> Message
+n_before :: [(Int,Int)] -> Message
 n_before = message "/n_before" . mk_duples Int Int
 
 -- | Fill ranges of a node's control values.
-n_fill :: Int -> [(String, Int, Float)] -> Message
-n_fill nid l = message "/n_fill" (Int nid : mk_triples String Int Float l)
+n_fill :: Real n => Int -> [(String,Int,n)] -> Message
+n_fill nid l = message "/n_fill" (Int nid : mk_triples String Int mk_float l)
 
 -- | Delete a node.
 n_free :: [Int] -> Message
 n_free = message "/n_free" . map Int
 
 -- | Map a node's controls to read from a bus.
-n_map :: Int -> [(String, Int)] -> Message
+n_map :: Int -> [(String,Int)] -> Message
 n_map nid l = message "/n_map" (Int nid : mk_duples String Int l)
 
 -- | Map a node's controls to read from buses.
-n_mapn :: Int -> [(String, Int, Int)] -> Message
+n_mapn :: Int -> [(String,Int,Int)] -> Message
 n_mapn nid l = message "/n_mapn" (Int nid : mk_triples String Int Int l)
 
 -- | Map a node's controls to read from an audio bus.
-n_mapa :: Int -> [(String, Int)] -> Message
+n_mapa :: Int -> [(String,Int)] -> Message
 n_mapa nid l = message "/n_mapa" (Int nid : mk_duples String Int l)
 
 -- | Map a node's controls to read from audio buses.
-n_mapan :: Int -> [(String, Int, Int)] -> Message
+n_mapan :: Int -> [(String,Int,Int)] -> Message
 n_mapan nid l = message "/n_mapan" (Int nid : mk_triples String Int Int l)
 
 -- | Get info about a node.
@@ -68,17 +68,17 @@ n_query :: [Int] -> Message
 n_query = message "/n_query" . map Int
 
 -- | Turn node on or off.
-n_run :: [(Int, Bool)] -> Message
+n_run :: [(Int,Bool)] -> Message
 n_run = message "/n_run" . mk_duples Int (Int . fromEnum)
 
 -- | Set a node's control values.
-n_set :: Int -> [(String, Float)] -> Message
-n_set nid c = message "/n_set" (Int nid : mk_duples String Float c)
+n_set :: Real n => Int -> [(String,n)] -> Message
+n_set nid c = message "/n_set" (Int nid : mk_duples String mk_float c)
 
 -- | Set ranges of a node's control values.
-n_setn :: Int -> [(String, [Float])] -> Message
+n_setn :: Real n => Int -> [(String,[n])] -> Message
 n_setn nid l = message "/n_setn" (Int nid : concatMap f l)
-    where f (s,d) = String s : Int (length d) : map Float d
+    where f (s,d) = String s : Int (length d) : map mk_float d
 
 -- | Trace a node.
 n_trace :: [Int] -> Message
@@ -95,7 +95,7 @@ s_get :: Int -> [String] -> Message
 s_get nid i = message "/s_get" (Int nid : map String i)
 
 -- | Get ranges of control values.
-s_getn :: Int -> [(String, Int)] -> Message
+s_getn :: Int -> [(String,Int)] -> Message
 s_getn nid l = message "/s_getn" (Int nid : mk_duples String Int l)
 
 -- | Enumeration of possible locations to add new nodes (s_new and g_new).
@@ -104,11 +104,11 @@ data AddAction = AddToHead
                | AddBefore
                | AddAfter
                | AddReplace
-                 deriving (Eq, Show, Enum)
+                 deriving (Eq,Show,Enum)
 
 -- | Create a new synth.
-s_new :: String -> Int -> AddAction -> Int -> [(String, Float)] -> Message
-s_new n i a t c = message "/s_new" (String n : Int i : Int (fromEnum a) : Int t : mk_duples String Float c)
+s_new :: Real n => String -> Int -> AddAction -> Int -> [(String,n)] -> Message
+s_new n i a t c = message "/s_new" (String n : Int i : Int (fromEnum a) : Int t : mk_duples String mk_float c)
 
 -- | Auto-reassign synth's ID to a reserved value.
 s_noid :: [Int] -> Message
@@ -125,19 +125,19 @@ g_freeAll :: [Int] -> Message
 g_freeAll = message "/g_freeAll" . map Int
 
 -- | Add node to head of group.
-g_head :: [(Int, Int)] -> Message
+g_head :: [(Int,Int)] -> Message
 g_head = message "/g_head" . mk_duples Int Int
 
 -- | Create a new group.
-g_new :: [(Int, AddAction, Int)] -> Message
+g_new :: [(Int,AddAction,Int)] -> Message
 g_new = message "/g_new" . mk_triples Int (Int . fromEnum) Int
 
 -- | Add node to tail of group.
-g_tail :: [(Int, Int)] -> Message
+g_tail :: [(Int,Int)] -> Message
 g_tail = message "/g_tail" . mk_duples Int Int
 
 -- | Post a representation of a group's node subtree, optionally including the current control values for synths.
-g_dumpTree :: [(Int, Bool)] -> Message
+g_dumpTree :: [(Int,Bool)] -> Message
 g_dumpTree = message "/g_dumpTree" . mk_duples Int (Int . fromEnum)
 
 -- | Request a representation of a group's node subtree, optionally including the current control values for synths.
@@ -165,11 +165,11 @@ g_dumpTree = message "/g_dumpTree" . mk_duples Int (Int . fromEnum)
 -- > ] * the number of nodes in the subtree
 --
 -- N.B. The order of nodes corresponds to their execution order on the server. Thus child nodes (those contained within a group) are listed immediately following their parent.
-g_queryTree :: [(Int, Bool)] -> Message
+g_queryTree :: [(Int,Bool)] -> Message
 g_queryTree = message "/g_queryTree" . mk_duples Int (Int . fromEnum)
 
 -- | Create a new parallel group (supernova specific).
-p_new :: [(Int, AddAction, Int)] -> Message
+p_new :: [(Int,AddAction,Int)] -> Message
 p_new = message "/p_new" . mk_triples Int (Int . fromEnum) Int
 
 -- * Plugin commands
@@ -182,29 +182,29 @@ cmd name = message "/cmd" . (String name :)
 
 -- | Send a command to a unit generator.
 u_cmd :: Int -> Int -> String -> [Datum] -> Message
-u_cmd nid uid name arg = message "/u_cmd" ([Int nid, Int uid, String name] ++ arg)
+u_cmd nid uid name arg = message "/u_cmd" ([Int nid,Int uid,String name] ++ arg)
 
 -- * Buffer commands
 
 -- | Allocates zero filled buffer to number of channels and samples. (Asynchronous)
 b_alloc :: Int -> Int -> Int -> Message
-b_alloc nid frames channels = message "/b_alloc" [Int nid, Int frames, Int channels]
+b_alloc nid frames channels = message "/b_alloc" [Int nid,Int frames,Int channels]
 
 -- | Allocate buffer space and read a sound file. (Asynchronous)
 b_allocRead :: Int -> String -> Int -> Int -> Message
-b_allocRead nid p f n = message "/b_allocRead" [Int nid, String p, Int f, Int n]
+b_allocRead nid p f n = message "/b_allocRead" [Int nid,String p,Int f,Int n]
 
 -- | Allocate buffer space and read a sound file, picking specific channels. (Asynchronous)
 b_allocReadChannel :: Int -> String -> Int -> Int -> [Int] -> Message
-b_allocReadChannel nid p f n cs = message "/b_allocReadChannel" ([Int nid, String p, Int f, Int n] ++ map Int cs)
+b_allocReadChannel nid p f n cs = message "/b_allocReadChannel" ([Int nid,String p,Int f,Int n] ++ map Int cs)
 
 -- | Close attached soundfile and write header information. (Asynchronous)
 b_close :: Int -> Message
 b_close nid = message "/b_close" [Int nid]
 
 -- | Fill ranges of sample values.
-b_fill :: Int -> [(Int, Int, Float)] -> Message
-b_fill nid l = message "/b_fill" (Int nid : mk_triples Int Int Float l)
+b_fill :: Real n => Int -> [(Int,Int,n)] -> Message
+b_fill nid l = message "/b_fill" (Int nid : mk_triples Int Int mk_float l)
 
 -- | Free buffer data. (Asynchronous)
 b_free :: Int -> Message
@@ -215,20 +215,20 @@ b_gen :: Int -> String -> [Datum] -> Message
 b_gen bid name arg = message "/b_gen" (Int bid : String name : arg)
 
 -- | Call @sine1@ 'b_gen' command.
-b_gen_sine1 :: Int -> [B_Gen] -> [Float] -> Message
-b_gen_sine1 z f n = b_gen z "sine1" (Int (b_gen_flag f) : map Float n)
+b_gen_sine1 :: Real n => Int -> [B_Gen] -> [n] -> Message
+b_gen_sine1 z f n = b_gen z "sine1" (Int (b_gen_flag f) : map mk_float n)
 
 -- | Call @sine2@ 'b_gen' command.
-b_gen_sine2 :: Int -> [B_Gen] -> [(Float,Float)] -> Message
-b_gen_sine2 z f n = b_gen z "sine2" (Int (b_gen_flag f) : mk_duples Float Float n)
+b_gen_sine2 :: Real n => Int -> [B_Gen] -> [(n,n)] -> Message
+b_gen_sine2 z f n = b_gen z "sine2" (Int (b_gen_flag f) : mk_duples mk_float mk_float n)
 
 -- | Call @sine3@ 'b_gen' command.
-b_gen_sine3 :: Int -> [B_Gen] -> [(Float,Float,Float)] -> Message
-b_gen_sine3 z f n = b_gen z "sine3" (Int (b_gen_flag f) : mk_triples Float Float Float n)
+b_gen_sine3 :: Real n => Int -> [B_Gen] -> [(n,n,n)] -> Message
+b_gen_sine3 z f n = b_gen z "sine3" (Int (b_gen_flag f) : mk_triples mk_float mk_float mk_float n)
 
 -- | Call @cheby@ 'b_gen' command.
-b_gen_cheby :: Int -> [B_Gen] -> [Float] -> Message
-b_gen_cheby z f n = b_gen z "cheby" (Int (b_gen_flag f) : map Float n)
+b_gen_cheby :: Real n => Int -> [B_Gen] -> [n] -> Message
+b_gen_cheby z f n = b_gen z "cheby" (Int (b_gen_flag f) : map mk_float n)
 
 -- | Call @copy@ 'b_gen' command.
 b_gen_copy :: Int -> Int -> Int -> Int -> Maybe Int -> Message
@@ -241,7 +241,7 @@ b_get :: Int -> [Int] -> Message
 b_get nid i = message "/b_get" (Int nid : map Int i)
 
 -- | Get ranges of sample values.
-b_getn :: Int -> [(Int, Int)] -> Message
+b_getn :: Int -> [(Int,Int)] -> Message
 b_getn nid l = message "/b_getn" (Int nid : mk_duples Int Int l)
 
 -- | Request \/b_info messages.
@@ -250,24 +250,24 @@ b_query = message "/b_query" . map Int
 
 -- | Read sound file data into an existing buffer. (Asynchronous)
 b_read :: Int -> String -> Int -> Int -> Int -> Bool -> Message
-b_read nid p f n f' z = message "/b_read" [Int nid, String p, Int f, Int n, Int f', Int (fromEnum z)]
+b_read nid p f n f' z = message "/b_read" [Int nid,String p,Int f,Int n,Int f',Int (fromEnum z)]
 
 -- | Read sound file data into an existing buffer, picking specific channels. (Asynchronous)
 b_readChannel :: Int -> String -> Int -> Int -> Int -> Bool -> [Int] -> Message
-b_readChannel nid p f n f' z cs = message "/b_readChannel" ([Int nid, String p, Int f, Int n, Int f', Int (fromEnum z)] ++ map Int cs)
+b_readChannel nid p f n f' z cs = message "/b_readChannel" ([Int nid,String p,Int f,Int n,Int f',Int (fromEnum z)] ++ map Int cs)
 
 -- | Set sample values.
-b_set :: Int -> [(Int, Float)] -> Message
-b_set nid l = message "/b_set" (Int nid : mk_duples Int Float l)
+b_set :: Real n => Int -> [(Int,n)] -> Message
+b_set nid l = message "/b_set" (Int nid : mk_duples Int mk_float l)
 
 -- | Set ranges of sample values.
-b_setn :: Int -> [(Int, [Float])] -> Message
+b_setn :: Real n => Int -> [(Int,[n])] -> Message
 b_setn nid l = message "/b_setn" (Int nid : concatMap f l)
-    where f (i,d) = Int i : Int (length d) : map Float d
+    where f (i,d) = Int i : Int (length d) : map mk_float d
 
 -- | Write sound file data. (Asynchronous)
 b_write :: Int -> String -> SoundFileFormat -> SampleFormat -> Int -> Int -> Bool -> Message
-b_write nid p h t f s z = message "/b_write" [Int nid, String p, String (soundFileFormatString h), String (sampleFormatString t), Int f, Int s, Int (fromEnum z)]
+b_write nid p h t f s z = message "/b_write" [Int nid,String p,String (soundFileFormatString h),String (sampleFormatString t),Int f,Int s,Int (fromEnum z)]
 
 -- | Zero sample data. (Asynchronous)
 b_zero :: Int -> Message
@@ -276,25 +276,25 @@ b_zero nid = message "/b_zero" [Int nid]
 -- * Control bus commands
 
 -- |  Fill ranges of bus values.
-c_fill :: [(Int, Int, Float)] -> Message
-c_fill = message "/c_fill" . mk_triples Int Int Float
+c_fill :: Real n => [(Int,Int,n)] -> Message
+c_fill = message "/c_fill" . mk_triples Int Int mk_float
 
 -- | Get bus values.
 c_get :: [Int] -> Message
 c_get = message "/c_get" . map Int
 
 -- | Get ranges of bus values.
-c_getn :: [(Int, Int)] -> Message
+c_getn :: [(Int,Int)] -> Message
 c_getn = message "/c_getn" . mk_duples Int Int
 
 -- | Set bus values.
-c_set :: [(Int, Float)] -> Message
-c_set = message "/c_set" . mk_duples Int Float
+c_set :: Real n => [(Int,n)] -> Message
+c_set = message "/c_set" . mk_duples Int mk_float
 
 -- | Set ranges of bus values.
-c_setn :: [(Int, [Float])] -> Message
+c_setn :: Real n => [(Int,[n])] -> Message
 c_setn l = message "/c_setn" (concatMap f l)
-    where f (i,d) = Int i : Int (length d) : map Float d
+    where f (i,d) = Int i : Int (length d) : map mk_float d
 
 -- * Server operation commands
 
@@ -307,7 +307,7 @@ data PrintLevel = NoPrinter
                 | TextPrinter
                 | HexPrinter
                 | AllPrinter
-                  deriving (Eq, Show, Enum)
+                  deriving (Eq,Show,Enum)
 
 -- | Select printing of incoming Open Sound Control messages.
 dumpOSC :: PrintLevel -> Message
@@ -332,12 +332,12 @@ sync sid = message "/sync" [Int sid]
 -- | Error posting scope.
 data ErrorScope = Globally  -- ^ Global scope
                 | Locally   -- ^ Bundle scope
-                  deriving (Eq, Show, Enum)
+                  deriving (Eq,Show,Enum)
 
 -- | Error posting mode.
 data ErrorMode = ErrorsOff  -- ^ Turn error posting off
                | ErrorsOn   -- ^ Turn error posting on
-                 deriving (Eq, Show, Enum)
+                 deriving (Eq,Show,Enum)
 
 -- | Set error posting scope and mode.
 errorMode :: ErrorScope -> ErrorMode -> Message
@@ -349,7 +349,7 @@ errorMode scope mode = message "/error" [Int e]
 -- * Variants to simplify common cases
 
 -- | Pre-allocate for b_setn1, values preceding offset are zeroed.
-b_alloc_setn1 :: Int -> Int -> [Float] -> Message
+b_alloc_setn1 :: Real n => Int -> Int -> [n] -> Message
 b_alloc_setn1 nid i xs =
     let k = i + length xs
         xs' = replicate i 0 ++ xs
@@ -360,11 +360,11 @@ b_getn1 :: Int -> (Int,Int) -> Message
 b_getn1 nid = b_getn nid . return
 
 -- | Set single sample value.
-b_set1 :: Int -> Int -> Float -> Message
+b_set1 :: Real n => Int -> Int -> n -> Message
 b_set1 nid i x = b_set nid [(i,x)]
 
 -- | Set a range of sample values.
-b_setn1 :: Int -> Int -> [Float] -> Message
+b_setn1 :: Real n => Int -> Int -> [n] -> Message
 b_setn1 nid i xs = b_setn nid [(i,xs)]
 
 -- | Variant on 'b_query'.
@@ -372,12 +372,16 @@ b_query1 :: Int -> Message
 b_query1 = b_query . return
 
 -- | Set single bus values.
-c_set1 :: Int -> Float -> Message
-c_set1 i x = c_set [(i, x)]
+c_set1 :: Real n => Int -> n -> Message
+c_set1 i x = c_set [(i,x)]
 
 -- | Set a signle node control value.
-n_set1 :: Int -> String -> Float -> Message
-n_set1 nid k n = n_set nid [(k, n)]
+n_set1 :: Real n => Int -> String -> n -> Message
+n_set1 nid k n = n_set nid [(k,n)]
+
+-- | @s_new@ with no parameters.
+s_new0 :: String -> Int -> AddAction -> Int -> Message
+s_new0 n i a t = s_new n i a t ([]::[(String,Float)])
 
 -- * Modify existing message to include completion message
 

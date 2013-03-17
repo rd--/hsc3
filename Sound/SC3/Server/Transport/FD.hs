@@ -41,7 +41,7 @@ reset fd = do
 playSynthdef :: Transport t => t -> Synthdef -> IO ()
 playSynthdef fd s = do
   _ <- async fd (d_recv s)
-  sendMessage fd (s_new (synthdefName s) (-1) AddToTail 1 [])
+  sendMessage fd (s_new0 (synthdefName s) (-1) AddToTail 1)
 
 -- | Send an /anonymous/ instrument definition using 'playSynthdef'.
 playUGen :: Transport t => t -> UGen -> IO ()

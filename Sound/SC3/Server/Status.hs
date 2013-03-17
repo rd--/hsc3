@@ -5,7 +5,7 @@ import Data.Maybe {- base -}
 import Sound.OSC.Type {- hosc -}
 
 -- | Get /n/th field of status as 'Float'.
-extractStatusField :: Int -> [Datum] -> Float
+extractStatusField :: Floating n => Int -> [Datum] -> n
 extractStatusField n =
     fromMaybe (error "extractStatusField")
     . datum_floating

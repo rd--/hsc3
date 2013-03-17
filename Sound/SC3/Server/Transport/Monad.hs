@@ -46,7 +46,7 @@ reset =
 playSynthdef :: DuplexOSC m => Synthdef -> m ()
 playSynthdef s = do
   _ <- async (d_recv s)
-  send (s_new (synthdefName s) (-1) AddToTail 1 [])
+  send (s_new0 (synthdefName s) (-1) AddToTail 1)
 
 -- | Send an /anonymous/ instrument definition using 'playSynthdef'.
 playUGen :: DuplexOSC m => UGen -> m ()

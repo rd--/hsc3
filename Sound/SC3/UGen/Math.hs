@@ -80,6 +80,15 @@ instance RealFracE Float where
     ceilingE = ceilingf
     floorE = floorf
 
+instance RealFracE Double where
+    properFractionE n =
+        let (i,j) = properFraction n
+        in (fromIntegral (i::Integer),j)
+    truncateE = truncatef
+    roundE = roundf
+    ceilingE = ceilingf
+    floorE = floorf
+
 -- | Variant of @SC3@ @roundTo@ function.
 roundTo_ :: RealFrac a => a -> a -> a
 roundTo_ a b = if b == 0 then a else floorf (a/b + 0.5) * b
@@ -254,18 +263,24 @@ class (Floating a, Ord a) => BinaryOp a where
 -- > (-1.2) `fmod` 1.5 -- ~= 0.3
 -- > 1.2 `fmod` (-1.5) -- ~= -0.3
 -- > (-1.2) `fmod` (-1.5) -- ~= -1.2
-fmod :: Float -> Float -> Float
-fmod = F.mod'
+fmod_f32 :: Float -> Float -> Float
+fmod_f32 = F.mod'
 
 instance BinaryOp Float where
     fold2 a b = fold_ a (-b) b
-    modE = fmod
+    modE = F.mod'
+    roundUp a b = if b == 0 then a else ceilingf (a/b + 0.5) * b
+    wrap2 a b = wrap_ a (-b) b
+
+instance BinaryOp Double where
+    fold2 a b = fold_ a (-b) b
+    modE = F.mod'
     roundUp a b = if b == 0 then a else ceilingf (a/b + 0.5) * b
     wrap2 a b = wrap_ a (-b) b
 
 instance BinaryOp UGen where
     iDiv = mkBinaryOperator IDiv iDiv
-    modE = mkBinaryOperator Mod fmod
+    modE = mkBinaryOperator Mod F.mod'
     lcmE = mkBinaryOperator LCM lcmE
     gcdE = mkBinaryOperator GCD gcdE
     roundUp = mkBinaryOperator RoundUp roundUp
@@ -297,7 +312,7 @@ instance BinaryOp UGen where
 -- | Wrap /k/ to within range /(i,j)/, ie. @AbstractFunction.wrap@.
 --
 -- > map (wrap' 5 10) [3..12] == [8,9,5,6,7,8,9,10,6,7]
-wrap' :: Float -> Float -> Float -> Float
+wrap' :: RealFrac n => n -> n -> n -> n
 wrap' i j k =
     let r = j - i
     in if k >= i && k <= j
@@ -318,7 +333,7 @@ genericWrap l r n =
 -- | Variant of 'wrap'' with @SC3@ argument ordering.
 --
 -- > map (\n -> wrap_ n 5 10) [3..12] == map (wrap' 5 10) [3..12]
-wrap_ :: Float -> Float -> Float -> Float
+wrap_ :: RealFrac n => n -> n -> n -> n
 wrap_ a b c = wrap' b c a
 
 -- | Fold /k/ to within range /(i,j)/, ie. @AbstractFunction.fold@

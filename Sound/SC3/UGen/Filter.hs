@@ -171,7 +171,7 @@ klankSpec :: [UGen] -> [UGen] -> [UGen] -> UGen
 klankSpec f a dt = mce ((concat . transpose) [f,a,dt])
 
 -- | Variant for non-UGen inputs.
-klankSpec' :: [Float] -> [Float] -> [Float] -> UGen
+klankSpec' :: Real n => [n] -> [n] -> [n] -> UGen
 klankSpec' f a dt =
     let u = map constant
     in klankSpec (u f) (u a) (u dt)
