@@ -11,6 +11,12 @@ import Sound.SC3.Server.Synthdef
 import Sound.SC3.Server.Synthdef.Type
 import Sound.SC3.UGen.Enum
 
+-- * Storage
+
+-- | At haskell use 'Double', at SC3 and for transport use 'Float'.
+double_F32 :: Double -> Datum
+double_F32 = Float . realToFrac
+
 -- * Instrument definition commands
 
 -- | Install a bytecode instrument definition. (Asynchronous)
@@ -41,7 +47,7 @@ n_before = message "/n_before" . mk_duples Int Int
 
 -- | Fill ranges of a node's control values.
 n_fill :: Int -> [(String,Int,Double)] -> Message
-n_fill nid l = message "/n_fill" (Int nid : mk_triples String Int Double l)
+n_fill nid l = message "/n_fill" (Int nid : mk_triples String Int double_F32 l)
 
 -- | Delete a node.
 n_free :: [Int] -> Message
@@ -73,12 +79,12 @@ n_run = message "/n_run" . mk_duples Int (Int . fromEnum)
 
 -- | Set a node's control values.
 n_set :: Int -> [(String,Double)] -> Message
-n_set nid c = message "/n_set" (Int nid : mk_duples String Double c)
+n_set nid c = message "/n_set" (Int nid : mk_duples String double_F32 c)
 
 -- | Set ranges of a node's control values.
 n_setn :: Int -> [(String,[Double])] -> Message
 n_setn nid l = message "/n_setn" (Int nid : concatMap f l)
-    where f (s,d) = String s : Int (length d) : map Double d
+    where f (s,d) = String s : Int (length d) : map double_F32 d
 
 -- | Trace a node.
 n_trace :: [Int] -> Message
@@ -108,7 +114,7 @@ data AddAction = AddToHead
 
 -- | Create a new synth.
 s_new :: String -> Int -> AddAction -> Int -> [(String,Double)] -> Message
-s_new n i a t c = message "/s_new" (String n : Int i : Int (fromEnum a) : Int t : mk_duples String Double c)
+s_new n i a t c = message "/s_new" (String n : Int i : Int (fromEnum a) : Int t : mk_duples String double_F32 c)
 
 -- | Auto-reassign synth's ID to a reserved value.
 s_noid :: [Int] -> Message
@@ -204,7 +210,7 @@ b_close nid = message "/b_close" [Int nid]
 
 -- | Fill ranges of sample values.
 b_fill :: Int -> [(Int,Int,Double)] -> Message
-b_fill nid l = message "/b_fill" (Int nid : mk_triples Int Int Double l)
+b_fill nid l = message "/b_fill" (Int nid : mk_triples Int Int double_F32 l)
 
 -- | Free buffer data. (Asynchronous)
 b_free :: Int -> Message
@@ -216,19 +222,19 @@ b_gen bid name arg = message "/b_gen" (Int bid : String name : arg)
 
 -- | Call @sine1@ 'b_gen' command.
 b_gen_sine1 :: Int -> [B_Gen] -> [Double] -> Message
-b_gen_sine1 z f n = b_gen z "sine1" (Int (b_gen_flag f) : map Double n)
+b_gen_sine1 z f n = b_gen z "sine1" (Int (b_gen_flag f) : map double_F32 n)
 
 -- | Call @sine2@ 'b_gen' command.
 b_gen_sine2 :: Int -> [B_Gen] -> [(Double,Double)] -> Message
-b_gen_sine2 z f n = b_gen z "sine2" (Int (b_gen_flag f) : mk_duples Double Double n)
+b_gen_sine2 z f n = b_gen z "sine2" (Int (b_gen_flag f) : mk_duples double_F32 Double n)
 
 -- | Call @sine3@ 'b_gen' command.
 b_gen_sine3 :: Int -> [B_Gen] -> [(Double,Double,Double)] -> Message
-b_gen_sine3 z f n = b_gen z "sine3" (Int (b_gen_flag f) : mk_triples Double Double Double n)
+b_gen_sine3 z f n = b_gen z "sine3" (Int (b_gen_flag f) : mk_triples double_F32 Double double_F32 n)
 
 -- | Call @cheby@ 'b_gen' command.
 b_gen_cheby :: Int -> [B_Gen] -> [Double] -> Message
-b_gen_cheby z f n = b_gen z "cheby" (Int (b_gen_flag f) : map Double n)
+b_gen_cheby z f n = b_gen z "cheby" (Int (b_gen_flag f) : map double_F32 n)
 
 -- | Call @copy@ 'b_gen' command.
 b_gen_copy :: Int -> Int -> Int -> Int -> Maybe Int -> Message
@@ -258,12 +264,12 @@ b_readChannel nid p f n f' z cs = message "/b_readChannel" ([Int nid,String p,In
 
 -- | Set sample values.
 b_set :: Int -> [(Int,Double)] -> Message
-b_set nid l = message "/b_set" (Int nid : mk_duples Int Double l)
+b_set nid l = message "/b_set" (Int nid : mk_duples Int double_F32 l)
 
 -- | Set ranges of sample values.
 b_setn :: Int -> [(Int,[Double])] -> Message
 b_setn nid l = message "/b_setn" (Int nid : concatMap f l)
-    where f (i,d) = Int i : Int (length d) : map Double d
+    where f (i,d) = Int i : Int (length d) : map double_F32 d
 
 -- | Write sound file data. (Asynchronous)
 b_write :: Int -> String -> SoundFileFormat -> SampleFormat -> Int -> Int -> Bool -> Message
@@ -294,7 +300,7 @@ c_set = message "/c_set" . mk_duples Int Double
 -- | Set ranges of bus values.
 c_setn :: [(Int,[Double])] -> Message
 c_setn l = message "/c_setn" (concatMap f l)
-    where f (i,d) = Int i : Int (length d) : map Double d
+    where f (i,d) = Int i : Int (length d) : map double_F32 d
 
 -- * Server operation commands
 
