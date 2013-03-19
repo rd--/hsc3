@@ -48,61 +48,36 @@ instance OrdE UGen where
     (>=*) = mkBinaryOperator GE (>=*)
 
 -- | Variant of 'RealFrac' with non 'Integral' results.
-class RealFracE a where
+class RealFrac a => RealFracE a where
   properFractionE :: a -> (a,a)
+  properFractionE a = let (p,q) = properFraction a
+                      in (fromInteger p,q)
   truncateE :: a -> a
+  truncateE a = fromInteger (truncate a)
   roundE :: a -> a
+  roundE a = fromInteger (round a)
   ceilingE :: a -> a
+  ceilingE a = fromInteger (ceiling a)
   floorE :: a -> a
+  floorE a = fromInteger (floor a)
 
--- | Variant of 'truncate'.
-truncatef :: RealFrac a => a -> a
-truncatef a = fromIntegral (truncate a :: Integer)
-
--- | Variant of 'round'.
-roundf :: RealFrac a => a -> a
-roundf a = fromIntegral (round a :: Integer)
-
--- | Variant of 'ceiling'.
-ceilingf :: RealFrac a => a -> a
-ceilingf a = fromIntegral (ceiling a :: Integer)
-
--- | Variant of 'floor'.
-floorf :: RealFrac a => a -> a
-floorf a = fromIntegral (floor a :: Integer)
-
-instance RealFracE Float where
-    properFractionE n =
-        let (i,j) = properFraction n
-        in (fromIntegral (i::Integer),j)
-    truncateE = truncatef
-    roundE = roundf
-    ceilingE = ceilingf
-    floorE = floorf
-
-instance RealFracE Double where
-    properFractionE n =
-        let (i,j) = properFraction n
-        in (fromIntegral (i::Integer),j)
-    truncateE = truncatef
-    roundE = roundf
-    ceilingE = ceilingf
-    floorE = floorf
+instance RealFracE Float
+instance RealFracE Double
 
 -- | Variant of @SC3@ @roundTo@ function.
-roundTo_ :: RealFrac a => a -> a -> a
-roundTo_ a b = if b == 0 then a else floorf (a/b + 0.5) * b
+roundTo_ :: RealFracE a => a -> a -> a
+roundTo_ a b = if b == 0 then a else floorE (a/b + 0.5) * b
 
 -- | 'UGen' form or 'roundTo_'.
 roundTo :: UGen -> UGen -> UGen
 roundTo = mkBinaryOperator Round roundTo_
 
 instance RealFracE UGen where
-    properFractionE = error "RealFracE,UGen,partial"
-    truncateE = error "RealFracE,UGen,partial"
+    properFractionE = error "UGen.properFractionE"
+    truncateE = error "UGen.truncateE"
     roundE i = roundTo i 1
-    ceilingE = mkUnaryOperator Ceil ceilingf
-    floorE = mkUnaryOperator Floor floorf
+    ceilingE = mkUnaryOperator Ceil ceilingE
+    floorE = mkUnaryOperator Floor floorE
 
 -- | 'UGen' form of 'ceilingE'.
 ceil :: UGen -> UGen
@@ -273,13 +248,13 @@ fmod_f32 = F.mod'
 instance BinaryOp Float where
     fold2 a b = fold_ a (-b) b
     modE = F.mod'
-    roundUp a b = if b == 0 then a else ceilingf (a/b + 0.5) * b
+    roundUp a b = if b == 0 then a else ceilingE (a/b + 0.5) * b
     wrap2 a b = wrap_ a (-b) b
 
 instance BinaryOp Double where
     fold2 a b = fold_ a (-b) b
     modE = F.mod'
-    roundUp a b = if b == 0 then a else ceilingf (a/b + 0.5) * b
+    roundUp a b = if b == 0 then a else ceilingE (a/b + 0.5) * b
     wrap2 a b = wrap_ a (-b) b
 
 instance BinaryOp UGen where
@@ -316,12 +291,12 @@ instance BinaryOp UGen where
 -- | Wrap /k/ to within range /(i,j)/, ie. @AbstractFunction.wrap@.
 --
 -- > map (wrap' 5 10) [3..12] == [8,9,5,6,7,8,9,10,6,7]
-wrap' :: RealFrac n => n -> n -> n -> n
+wrap' :: RealFracE n => n -> n -> n -> n
 wrap' i j k =
     let r = j - i
     in if k >= i && k <= j
        then k
-       else k - r * floorf ((k-i) / r)
+       else k - r * floorE ((k-i) / r)
 
 -- | Generic variant of 'wrap''.
 --
@@ -337,7 +312,7 @@ genericWrap l r n =
 -- | Variant of 'wrap'' with @SC3@ argument ordering.
 --
 -- > map (\n -> wrap_ n 5 10) [3..12] == map (wrap' 5 10) [3..12]
-wrap_ :: RealFrac n => n -> n -> n -> n
+wrap_ :: RealFracE n => n -> n -> n -> n
 wrap_ a b c = wrap' b c a
 
 -- | Fold /k/ to within range /(i,j)/, ie. @AbstractFunction.fold@

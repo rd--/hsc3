@@ -95,7 +95,7 @@ isSink u =
 checkInput :: UGen -> UGen
 checkInput u =
     if isSink u
-    then error ("checkInput: illegal input: " ++ show u)
+    then error ("checkInput: " ++ show u)
     else u
 
 -- * Accessors
@@ -117,7 +117,7 @@ constant = Constant_U . Constant . realToFrac
 mce :: [UGen] -> UGen
 mce xs =
     case xs of
-      [] -> error "mce: empty list"
+      [] -> error "mce: []"
       [x] -> x
       _ -> MCE_U (MCE_Vector xs)
 
@@ -125,7 +125,7 @@ mce xs =
 mrg :: [UGen] -> UGen
 mrg u =
     case u of
-      [] -> error "mrg: null"
+      [] -> error "mrg: []"
       [x] -> x
       (x:xs) -> MRG_U (MRG x (mrg xs))
 
@@ -134,7 +134,7 @@ proxy :: UGen -> Int -> UGen
 proxy u n =
     case u of
       Primitive_U p -> Proxy_U (Proxy p n)
-      _ -> error "proxy"
+      _ -> error "proxy: not primitive"
 
 -- * MCE
 
@@ -163,7 +163,7 @@ mceDegree u =
     case u of
       MCE_U m -> length (mceProxies m)
       MRG_U (MRG x _) -> mceDegree x
-      _ -> error "mceDegree: illegal ugen"
+      _ -> error "mceDegree: not mce"
 
 -- | Extend UGen to specified degree.
 mceExtend :: Int -> UGen -> [UGen]
@@ -319,30 +319,36 @@ instance Floating UGen where
 -- | Unit generators are real.
 instance Real UGen where
     toRational (Constant_U (Constant n)) = toRational n
-    toRational _ = error "toRational at non-constant UGen"
+    toRational _ = error "UGen.toRational: non-constant"
 
 -- | Unit generators are integral.
 instance Integral UGen where
-    quot = mkBinaryOperator IDiv (error "ugen: quot")
-    rem = mkBinaryOperator Mod (error "ugen: rem")
+    quot = mkBinaryOperator IDiv (error "UGen.quot")
+    rem = mkBinaryOperator Mod (error "UGen.rem")
     quotRem a b = (quot a b, rem a b)
-    div = mkBinaryOperator IDiv (error "ugen: div")
-    mod = mkBinaryOperator Mod (error "ugen: mod")
+    div = mkBinaryOperator IDiv (error "UGen.div")
+    mod = mkBinaryOperator Mod (error "UGen.mod")
     toInteger (Constant_U (Constant n)) = floor n
-    toInteger _ = error "toInteger at non-constant UGen"
+    toInteger _ = error "UGen.toInteger: non-constant"
+
+instance RealFrac UGen where
+  properFraction = error "UGen.properFraction"
+  round = error "UGen.round"
+  ceiling = error "UGen.ceiling"
+  floor = error "UGen.floor"
 
 -- | Unit generators are orderable (when 'Constants').
 --
 -- > (constant 2 > constant 1) == True
 instance Ord UGen where
     (Constant_U a) < (Constant_U b) = a < b
-    _ < _ = error "< at UGen is partial, see <*"
+    _ < _ = error "UGen.<, see <*"
     (Constant_U a) <= (Constant_U b) = a <= b
-    _ <= _ = error "<= at UGen is partial, see <=*"
+    _ <= _ = error "UGen.<= at, see <=*"
     (Constant_U a) > (Constant_U b) = a > b
-    _ > _ = error "> at UGen is partial, see >*"
+    _ > _ = error "UGen.>, see >*"
     (Constant_U a) >= (Constant_U b) = a >= b
-    _ >= _ = error ">= at UGen is partial, see >=*"
+    _ >= _ = error "UGen.>=, see >=*"
     min = mkBinaryOperator Min min
     max = mkBinaryOperator Max max
 
@@ -352,7 +358,7 @@ instance Enum UGen where
     pred u = u - 1
     toEnum n = Constant_U (Constant (fromIntegral n))
     fromEnum (Constant_U (Constant n)) = truncate n
-    fromEnum _ = error "cannot enumerate non-constant UGens"
+    fromEnum _ = error "UGen.fromEnum: non-constant"
     enumFrom = iterate (+1)
     enumFromThen n m = iterate (+(m-n)) n
     enumFromTo n m = takeWhile (<= m+1/2) (enumFrom n)
@@ -365,7 +371,7 @@ instance Random UGen where
     randomR (Constant_U (Constant l),Constant_U (Constant r)) g =
         let (n, g') = randomR (l,r) g
         in (Constant_U (Constant n), g')
-    randomR _ _ = error "randomR: non constant (l,r)"
+    randomR _ _ = error "UGen.randomR: non constant (l,r)"
     random = randomR (-1.0, 1.0)
 
 -- | UGens are bit patterns.
@@ -374,12 +380,12 @@ instance Bits UGen where
     (.|.) = mkBinaryOperator BitOr undefined
     xor = mkBinaryOperator BitXor undefined
     complement = mkUnaryOperator BitNot undefined
-    shift = error "Bits/UGen is partial"
-    rotate = error "Bits/UGen is partial"
-    bitSize = error "Bits/UGen is partial"
-    bit = error "Bits/UGen is partial"
-    testBit = error "Bits/UGen is partial"
-    popCount = error "Bits/UGen is partial"
+    shift = error "UGen.shift"
+    rotate = error "UGen.rotate"
+    bitSize = error "UGen.bitSize"
+    bit = error "UGen.bit"
+    testBit = error "UGen.testBit"
+    popCount = error "UGen.popCount"
     isSigned _ = True
 
 -- * UGen ID Instance
