@@ -9,10 +9,6 @@ import Sound.SC3.UGen.UGen
 amplitude :: Rate -> UGen -> UGen -> UGen -> UGen
 amplitude r i at rt = mkOsc r "Amplitude" [i, at, rt] 1
 
--- | Calculates mean average of audio or control rate signal.
-averageOutput :: UGen -> UGen -> UGen
-averageOutput in_ trig_ = mkFilter "AverageOutput" [in_,trig_] 1
-
 -- | Autocorrelation pitch follower.
 pitch :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 pitch i initFreq minFreq maxFreq execFreq maxBinsPerOctave median ampThreshold peakThreshold downSample = mkOsc KR "Pitch" [i, initFreq, minFreq, maxFreq, execFreq, maxBinsPerOctave, median, ampThreshold, peakThreshold, downSample] 2

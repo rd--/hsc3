@@ -407,10 +407,6 @@ async_cmds =
     ,"/quit"
     ,"/sync"]
 
--- | 'ASCII' form of 'async_cmds'.
-async_cmds_ascii :: [ASCII]
-async_cmds_ascii = map string_to_ascii async_cmds
-
 -- | 'True' if 'Message' is an asynchronous 'Message'.
 --
 -- > map isAsync [b_close 0,n_set1 0 "0" 0] == [True,False]
