@@ -54,15 +54,23 @@ ugenFoldr f st u =
 -- * Unit generator node constructors
 
 -- | Control input node constructor.
+control_f32 :: Rate -> String -> Float -> UGen
+control_f32 r nm d = Control_U (Control r nm d False)
+
+-- | Control input node constructor.
 --
---   Note that if the name begins with a t_ prefix the control is
---   not converted to a triggered control.  Please see tr_control.
-control :: Rate -> String -> Float -> UGen
-control r nm d = Control_U (Control r nm d False)
+-- Note that if the name begins with a t_ prefix the control is /not/
+-- converted to a triggered control.  Please see tr_control.
+control :: Rate -> String -> Double -> UGen
+control r nm = control_f32 r nm . realToFrac
 
 -- | Triggered (kr) control input node constructor.
-tr_control :: String -> Float -> UGen
-tr_control nm d = Control_U (Control KR nm d True)
+tr_control_f32 :: String -> Float -> UGen
+tr_control_f32 nm d = Control_U (Control KR nm d True)
+
+-- | Triggered (kr) control input node constructor.
+tr_control :: String -> Double -> UGen
+tr_control nm = tr_control_f32 nm . realToFrac
 
 -- | Multiple root graph node constructor.
 mrg2 :: UGen -> UGen -> UGen

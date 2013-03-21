@@ -79,7 +79,7 @@ reconstruct_k_str u =
 reconstruct_k_ugen :: Node -> UGen
 reconstruct_k_ugen u =
     let (r,n,d) = reconstruct_k_rnd u
-    in control r n d
+    in control_f32 r n d
 
 ugen_qname :: String -> Special -> (String,String)
 ugen_qname nm (Special n) =
