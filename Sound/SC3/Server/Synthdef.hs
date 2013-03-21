@@ -5,6 +5,7 @@ module Sound.SC3.Server.Synthdef where
 import qualified Data.ByteString.Lazy as B {- bytestring -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
+import Sound.OSC.Type {- hosc -}
 import Sound.OSC.Coding.Byte {- hosc -}
 import Sound.OSC.Coding.Cast {- hosc -}
 import System.FilePath {- filepath -}
@@ -40,7 +41,7 @@ ugenIndices nm =
 -- | Encode 'Synthdef' as a binary data stream.
 synthdefData :: Synthdef -> Graphdef
 synthdefData (Synthdef s g) =
-    B.concat [encode_str "SCgf"
+    B.concat [encode_str (string_to_ascii "SCgf")
              ,encode_i32 0
              ,encode_i16 1
              ,B.pack (str_pstr s)
