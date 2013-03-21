@@ -106,7 +106,7 @@ withNotifications fd f = do
 b_getn1_data :: Transport t => t -> Int -> (Int,Int) -> IO [Double]
 b_getn1_data fd b s = do
   let f d = case d of
-              Int _:Int _:Int _:x -> mapMaybe datum_floating x
+              Int32 _:Int32 _:Int32 _:x -> mapMaybe datum_floating x
               _ -> error "b_getn1_data"
   sendMessage fd (b_getn1 b s)
   fmap f (waitDatum fd "/b_setn")
@@ -125,8 +125,8 @@ b_getn1_data_segment fd n b (i,j) = do
 b_fetch :: Transport t => t -> Int -> Int -> IO [Double]
 b_fetch fd n b = do
   let f d = case d of
-              [Int _,Int nf,Int nc,Float _] ->
-                  let ix = (0,nf * nc)
+              [Int32 _,Int32 nf,Int32 nc,Float _] ->
+                  let ix = (0,fromIntegral (nf * nc))
                   in b_getn1_data_segment fd n b ix
               _ -> error "b_fetch"
   sendMessage fd (b_query1 b)

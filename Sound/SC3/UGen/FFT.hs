@@ -198,7 +198,7 @@ pc_calcAccumSize fft_size ir_length =
 -- | Generate accumulation buffer given time-domain IR buffer and FFT size.
 pc_preparePartConv :: Int -> Int -> Int -> Message
 pc_preparePartConv b irb fft_size =
-    b_gen b "PreparePartConv" (map Int [irb, fft_size])
+    b_gen b "PreparePartConv" (map int32 [irb, fft_size])
 
 -- | Partitioned convolution.
 partConv :: UGen -> UGen -> UGen -> UGen

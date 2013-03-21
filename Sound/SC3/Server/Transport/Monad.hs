@@ -112,7 +112,7 @@ withNotifications f = do
 b_getn1_data :: DuplexOSC m => Int -> (Int,Int) -> m [Double]
 b_getn1_data b s = do
   let f d = case d of
-              Int _:Int _:Int _:x -> mapMaybe datum_floating x
+              Int32 _:Int32 _:Int32 _:x -> mapMaybe datum_floating x
               _ -> error "b_getn1_data"
   sendMessage (b_getn1 b s)
   liftM f (waitDatum "/b_setn")
@@ -132,8 +132,8 @@ b_getn1_data_segment n b (i,j) = do
 b_fetch :: DuplexOSC m => Int -> Int -> m [Double]
 b_fetch n b = do
   let f d = case d of
-              [Int _,Int nf,Int nc,Float _] ->
-                  let ix = (0,nf * nc)
+              [Int32 _,Int32 nf,Int32 nc,Float _] ->
+                  let ix = (0,fromIntegral (nf * nc))
                   in b_getn1_data_segment n b ix
               _ -> error "b_fetch"
   sendMessage (b_query1 b)
