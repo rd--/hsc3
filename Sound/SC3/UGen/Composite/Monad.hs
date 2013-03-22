@@ -7,7 +7,6 @@ import Sound.SC3.UGen.Filter
 import Sound.SC3.UGen.Noise.Monad
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.UGen.Lift
 import Sound.SC3.UGen.UId
 
 -- | Demand rate (:) function.
@@ -17,13 +16,13 @@ dcons x xs = do
   a <- dseq 1 (mce2 x xs)
   dswitch i a
 
--- | 'liftU' of 'C.choose'.
+-- | 'liftUId' of 'C.choose'.
 choose :: UId m => UGen -> m UGen
-choose = liftU C.choose
+choose = liftUId C.choose
 
--- | 'liftU' of 'C.lchoose'.
+-- | 'liftUId' of 'C.lchoose'.
 lchoose :: UId m => [UGen] -> m UGen
-lchoose = liftU C.lchoose
+lchoose = liftUId C.lchoose
 
 -- | Randomly select one of several inputs.
 tChoose :: (UId m) => UGen -> UGen -> m UGen

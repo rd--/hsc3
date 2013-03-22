@@ -4,109 +4,108 @@ module Sound.SC3.UGen.Noise.Monad where
 import Sound.SC3.UGen.Noise.ID as N
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
-import Sound.SC3.UGen.UGen.Lift
 import Sound.SC3.UGen.UId
 
 -- | Brown noise.
 brownNoise :: (UId m) => Rate -> m UGen
-brownNoise = liftU N.brownNoise
+brownNoise = liftUId N.brownNoise
 
 -- | Clip noise.
 clipNoise :: (UId m) => Rate -> m UGen
-clipNoise = liftU N.clipNoise
+clipNoise = liftUId N.clipNoise
 
 -- | Randomly pass or block triggers.
 coinGate :: (UId m) => UGen -> UGen -> m UGen
-coinGate = liftU2 N.coinGate
+coinGate = liftUId2 N.coinGate
 
 -- | Random impulses in (-1, 1).
 dust2 :: (UId m) => Rate -> UGen -> m UGen
-dust2 = liftU2 N.dust2
+dust2 = liftUId2 N.dust2
 
 -- | Random impulse in (0,1).
 dust :: (UId m) => Rate -> UGen -> m UGen
-dust = liftU2 N.dust
+dust = liftUId2 N.dust
 
 -- | Random value in exponential distribution.
 expRand :: (UId m) => UGen -> UGen -> m UGen
-expRand = liftU2 N.expRand
+expRand = liftUId2 N.expRand
 
 -- | Gray noise.
 grayNoise :: (UId m) => Rate -> m UGen
-grayNoise = liftU N.grayNoise
+grayNoise = liftUId N.grayNoise
 
 -- | Random integer in uniform distribution.
 iRand :: (UId m) => UGen -> UGen -> m UGen
-iRand = liftU2 N.iRand
+iRand = liftUId2 N.iRand
 
 -- | Clip noise.
 lfClipNoise :: (UId m) => Rate -> UGen -> m UGen
-lfClipNoise = liftU2 N.lfClipNoise
+lfClipNoise = liftUId2 N.lfClipNoise
 
 -- | Dynamic clip noise.
 lfdClipNoise :: (UId m) => Rate -> UGen -> m UGen
-lfdClipNoise = liftU2 N.lfdClipNoise
+lfdClipNoise = liftUId2 N.lfdClipNoise
 
 -- | Dynamic step noise.
 lfdNoise0 :: (UId m) => Rate -> UGen -> m UGen
-lfdNoise0 = liftU2 N.lfdNoise0
+lfdNoise0 = liftUId2 N.lfdNoise0
 
 -- | Dynamic ramp noise.
 lfdNoise1 :: (UId m) => Rate -> UGen -> m UGen
-lfdNoise1 = liftU2 N.lfdNoise1
+lfdNoise1 = liftUId2 N.lfdNoise1
 
 -- | Dynamic quadratic noise
 lfdNoise2 :: (UId m) => Rate -> UGen -> m UGen
-lfdNoise2 = liftU2 N.lfdNoise2
+lfdNoise2 = liftUId2 N.lfdNoise2
 
 -- | Dynamic cubic noise
 lfdNoise3 :: (UId m) => Rate -> UGen -> m UGen
-lfdNoise3 = liftU2 N.lfdNoise3
+lfdNoise3 = liftUId2 N.lfdNoise3
 
 -- | Step noise.
 lfNoise0 :: (UId m) => Rate -> UGen -> m UGen
-lfNoise0 = liftU2 N.lfNoise0
+lfNoise0 = liftUId2 N.lfNoise0
 
 -- | Ramp noise.
 lfNoise1 :: (UId m) => Rate -> UGen -> m UGen
-lfNoise1 = liftU2 N.lfNoise1
+lfNoise1 = liftUId2 N.lfNoise1
 
 -- | Quadratic noise.
 lfNoise2 :: (UId m) => Rate -> UGen -> m UGen
-lfNoise2 = liftU2 N.lfNoise2
+lfNoise2 = liftUId2 N.lfNoise2
 
 -- | Random value in skewed linear distribution.
 linRand :: (UId m) => UGen -> UGen -> UGen -> m UGen
-linRand = liftU3 N.linRand
+linRand = liftUId3 N.linRand
 
 -- | Random value in sum of n linear distribution.
 nRand :: (UId m) => UGen -> UGen -> UGen -> m UGen
-nRand = liftU3 N.nRand
+nRand = liftUId3 N.nRand
 
 -- | Pink noise.
 pinkNoise :: (UId m) => Rate -> m UGen
-pinkNoise = liftU N.pinkNoise
+pinkNoise = liftUId N.pinkNoise
 
 -- | Random value in uniform distribution.
 rand :: (UId m) => UGen -> UGen -> m UGen
-rand = liftU2 N.rand
+rand = liftUId2 N.rand
 
 -- | Random value in exponential distribution on trigger.
 tExpRand :: (UId m) => UGen -> UGen -> UGen -> m UGen
-tExpRand = liftU3 N.tExpRand
+tExpRand = liftUId3 N.tExpRand
 
 -- | Random integer in uniform distribution on trigger.
 tIRand :: (UId m) => UGen -> UGen -> UGen -> m UGen
-tIRand = liftU3 N.tIRand
+tIRand = liftUId3 N.tIRand
 
 -- | Random value in uniform distribution on trigger.
 tRand :: (UId m) => UGen -> UGen -> UGen -> m UGen
-tRand = liftU3 N.tRand
+tRand = liftUId3 N.tRand
 
 -- | Triggered windex.
 tWindex :: (UId m) => UGen -> UGen -> UGen -> m UGen
-tWindex = liftU3 N.tWindex
+tWindex = liftUId3 N.tWindex
 
 -- | White noise.
 whiteNoise :: (UId m) => Rate -> m UGen
-whiteNoise = liftU N.whiteNoise
+whiteNoise = liftUId N.whiteNoise

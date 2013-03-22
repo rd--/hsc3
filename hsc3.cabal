@@ -128,7 +128,6 @@ Library
                    Sound.SC3.UGen.Rate
                    Sound.SC3.UGen.Type
                    Sound.SC3.UGen.UGen
-                   Sound.SC3.UGen.UGen.Lift
                    Sound.SC3.UGen.UId
                    Sound.SC3.UGen.Wavelets
   Other-modules:   Sound.SC3.Server.Utilities
