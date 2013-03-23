@@ -290,20 +290,28 @@ instance BinaryOp UGen where
 
 -- | Wrap /k/ to within range /(i,j)/, ie. @AbstractFunction.wrap@.
 --
--- > map (wrap' 5 10) [3..12] == [8,9,5,6,7,8,9,10,6,7]
+-- > > [5,6].wrap(0,5) == [5,0]
+-- > map (wrap' 0 5) [5,6] == [5,0]
+--
+-- > > [9,10,5,6,7,8,9,10,5,6].wrap(5,10) == [9,10,5,6,7,8,9,10,5,6]
+-- > map (wrap' 5 10) [3..12] == [9,10,5,6,7,8,9,10,5,6]
 wrap' :: RealFracE n => n -> n -> n -> n
 wrap' i j k =
-    let r = j - i
+    let r = j - i + 1
     in if k >= i && k <= j
        then k
        else k - r * floorE ((k-i) / r)
 
 -- | Generic variant of 'wrap''.
 --
--- > map (genericWrap (5::Integer) 10) [3..12] == [8,9,5,6,7,8,9,10,6,7]
+-- > > [5,6].wrap(0,5) == [5,0]
+-- > map (genericWrap 0 5) [5,6] == [5,0]
+--
+-- > > [9,10,5,6,7,8,9,10,5,6].wrap(5,10) == [9,10,5,6,7,8,9,10,5,6]
+-- > map (genericWrap (5::Integer) 10) [3..12] == [9,10,5,6,7,8,9,10,5,6]
 genericWrap :: (Ord a, Num a) => a -> a -> a -> a
 genericWrap l r n =
-    let d = r - l
+    let d = r - l + 1
         f = genericWrap l r
     in if n < l
        then f (n + d)
