@@ -9,6 +9,7 @@
 (require 'thingatpt)
 (require 'find-lisp)
 (require 'inf-haskell)
+;;(require 'sclang)
 
 (defvar hsc3-help-directory
   nil
@@ -27,11 +28,11 @@
 
 (defun hsc3-unlit (s)
   "Remove bird literate marks and preceding comment marker"
-   (replace-regexp-in-string "^[- ]*> ?" "" s))
+   (replace-regexp-in-string "^[> ]* ?" "" s))
 
 (defun hsc3-uncomment (s)
   "Remove initial comment and Bird-literate markers if present"
-   (replace-regexp-in-string "^[- ]*>*" "" s))
+   (replace-regexp-in-string "^[- ]*[> ]*" "" s))
 
 (defun hsc3-remove-non-literates (s)
   "Remove non-bird literate lines"
@@ -121,14 +122,23 @@
 (defun hsc3-concat (l)
   (apply #'concat l))
 
-(defun hsc3-run-multiple-lines ()
-  "Send the current region to the interpreter as a single line."
-  (interactive)
+(defun hsc3-region-string ()
+  "Translate the current region into a single line (unlit, uncomment)."
   (let* ((s (region-string))
 	 (s* (if hsc3-literate-p
 		 (hsc3-unlit (hsc3-remove-non-literates s))
 	       (hsc3-concat (mapcar 'hsc3-uncomment (split-string s "\n"))))))
-    (hsc3-send-string (replace-regexp-in-string "\n" " " s*))))
+    (replace-regexp-in-string "\n" " " s*)))
+
+(defun hsc3-run-multiple-lines ()
+  "Send the current region to the haskell interpreter as a single line."
+  (interactive)
+  (hsc3-send-string (hsc3-region-string)))
+
+(defun hsc3-run-multiple-lines-sclang ()
+  "Send the current region to the sclang interpreter as a single line."
+  (interactive)
+  (sclang-eval-string (hsc3-region-string) t))
 
 (defun hsc3-run-consecutive-lines ()
   "Send the current region to the interpreter one line at a time."
@@ -254,6 +264,7 @@
   (define-key map [?\C-c ?>] 'hsc3-see-haskell)
   (define-key map [?\C-c ?\C-c] 'hsc3-run-line)
   (define-key map [?\C-c ?\C-e] 'hsc3-run-multiple-lines)
+  (define-key map [?\C-c ?\M-e] 'hsc3-run-multiple-lines-sclang)
   (define-key map [?\C-c ?\C-r] 'hsc3-run-consecutive-lines)
   (define-key map [?\C-c ?\C-f] 'hsc3-run-layout-block)
   (define-key map [?\C-c ?\C-h] 'hsc3-help)
