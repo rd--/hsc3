@@ -1,4 +1,4 @@
--- | The 'Graph' and 'Synthdef' types.
+-- | 'Node', 'Graph' and related types.
 module Sound.SC3.Server.Synthdef.Type where
 
 import qualified Data.ByteString.Lazy as B {- bytestring -}
@@ -58,9 +58,4 @@ data Node = NodeC {node_id :: NodeId
                   ,node_p_node :: Node
                   ,node_p_index :: PortIndex}
             deriving (Eq,Show)
-
--- | Binary representation of a unit generator synth definition.
-data Synthdef = Synthdef {synthdefName :: String
-                         ,synthdefGraph :: Graph}
-                deriving (Eq,Show)
 

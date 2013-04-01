@@ -50,6 +50,7 @@ Library
                    binary,
                    bytestring,
                    containers,
+                   data-default,
                    directory,
                    filepath,
                    hosc == 0.14.*,
@@ -107,6 +108,7 @@ Library
                    Sound.SC3.UGen.FFT.ID
                    Sound.SC3.UGen.FFT.Monad
                    Sound.SC3.UGen.Filter
+                   Sound.SC3.UGen.Graph
                    Sound.SC3.UGen.Granular
                    Sound.SC3.UGen.Help
                    Sound.SC3.UGen.Identifier

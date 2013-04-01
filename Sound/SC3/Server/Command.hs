@@ -8,7 +8,6 @@ import Sound.OSC.Core {- hosc -}
 import Sound.SC3.Server.Enum
 import Sound.SC3.Server.Utilities
 import Sound.SC3.Server.Synthdef
-import Sound.SC3.Server.Synthdef.Type
 import Sound.SC3.UGen.Enum
 
 -- * Instrument definition commands
@@ -449,6 +448,13 @@ b_indices n m k =
         s = b_segment n m
         i = 0 : dx_d s
     in zip (map (+ k) i) s
+
+-- * UGen commands.
+
+-- | Generate accumulation buffer given time-domain IR buffer and FFT size.
+pc_preparePartConv :: Int -> Int -> Int -> Message
+pc_preparePartConv b irb fft_size =
+    b_gen b "PreparePartConv" (map int32 [irb, fft_size])
 
 -- Local Variables:
 -- truncate-lines:t

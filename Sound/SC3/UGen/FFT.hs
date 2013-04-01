@@ -1,9 +1,7 @@
 -- | Frequency domain unit generators.
 module Sound.SC3.UGen.FFT where
 
-import Sound.OSC.Core {- hosc -}
-
-import Sound.SC3.Server.Command
+--import Sound.SC3.Server.Command
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
@@ -194,11 +192,6 @@ pc_calcAccumSize fft_size ir_length =
     let partition_size = fft_size `div` 2
         num_partitions = (ir_length `div` partition_size) + 1
     in fft_size * num_partitions
-
--- | Generate accumulation buffer given time-domain IR buffer and FFT size.
-pc_preparePartConv :: Int -> Int -> Int -> Message
-pc_preparePartConv b irb fft_size =
-    b_gen b "PreparePartConv" (map int32 [irb, fft_size])
 
 -- | Partitioned convolution.
 partConv :: UGen -> UGen -> UGen -> UGen

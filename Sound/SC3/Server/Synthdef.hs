@@ -4,6 +4,7 @@ module Sound.SC3.Server.Synthdef where
 
 import qualified Data.ByteString.Char8 as C {- bytestring -}
 import qualified Data.ByteString.Lazy as B {- bytestring -}
+import Data.Default {- data-default -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
 import Sound.OSC.Coding.Byte {- hosc -}
@@ -12,6 +13,8 @@ import System.FilePath {- filepath -}
 
 import Sound.SC3.Server.Synthdef.Internal
 import Sound.SC3.Server.Synthdef.Type
+import Sound.SC3.UGen.Graph
+import Sound.SC3.UGen.IO
 import Sound.SC3.UGen.Type
 
 -- | Transform a unit generator into a graph.
@@ -23,6 +26,21 @@ synth u =
     let (_,g) = mk_node (prepare_root u) empty_graph
         g' = g {ugens = reverse (ugens g)}
     in add_implicit g'
+
+-- | Binary representation of a unit generator synth definition.
+data Synthdef = Synthdef {synthdefName :: String
+                         ,synthdefGraph :: Graph}
+                deriving (Eq,Show)
+
+instance Default Synthdef where def = defaultSynthdef
+
+-- | Transform a unit generator synth definition into bytecode.
+synthdef :: String -> UGen -> Synthdef
+synthdef s u = Synthdef s (synth u)
+
+-- | The SC3 /default/ instrument 'Synthdef'.
+defaultSynthdef :: Synthdef
+defaultSynthdef = synthdef "default" (out 0 default_ugen_graph)
 
 -- | Transform a unit generator graph into bytecode.
 graphdef :: Graph -> Graphdef
@@ -47,10 +65,6 @@ synthdefData (Synthdef s g) =
              ,B.pack (str_pstr s)
              ,encode_graphdef g]
 
--- | Transform a unit generator synth definition into bytecode.
-synthdef :: String -> UGen -> Synthdef
-synthdef s u = Synthdef s (synth u)
-
 -- | Write 'Synthdef' to indicated directory.  The filename is the
 -- 'synthdefName' with the appropriate extension (@scsyndef@).
 synthdefWrite :: Synthdef -> FilePath -> IO ()
@@ -73,5 +87,3 @@ synthstat u =
                ,"control rates             : " ++ f node_k_rate ks
                ,"number of unit generators : " ++ show (length us)
                ,"unit generator rates      : " ++ f node_u_rate us]
-
-

@@ -27,7 +27,6 @@ module Sound.SC3.Server.Command.Completion
 import Sound.OSC {- hosc -}
 import Sound.SC3.Server.Enum
 import Sound.SC3.Server.Synthdef
-import Sound.SC3.Server.Synthdef.Type
 
 -- Encode an OSC packet as an OSC blob.
 encode_blob :: OSC o => o -> Datum
