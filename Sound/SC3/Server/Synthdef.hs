@@ -14,7 +14,6 @@ import System.FilePath {- filepath -}
 import Sound.SC3.Server.Synthdef.Internal
 import Sound.SC3.Server.Synthdef.Type
 import Sound.SC3.UGen.Graph
-import Sound.SC3.UGen.IO
 import Sound.SC3.UGen.Type
 
 -- | Transform a unit generator into a graph.
@@ -34,13 +33,19 @@ data Synthdef = Synthdef {synthdefName :: String
 
 instance Default Synthdef where def = defaultSynthdef
 
--- | Transform a unit generator synth definition into bytecode.
+-- | Lift a 'UGen' graph into a 'Synthdef'.
 synthdef :: String -> UGen -> Synthdef
 synthdef s u = Synthdef s (synth u)
 
 -- | The SC3 /default/ instrument 'Synthdef'.
 defaultSynthdef :: Synthdef
-defaultSynthdef = synthdef "default" (out 0 default_ugen_graph)
+defaultSynthdef = synthdef "default" default_ugen_graph
+
+-- | Parameter names at 'Synthdef'.
+--
+-- > synthdefParam def == ["amp","pan","gate","freq"]
+synthdefParam :: Synthdef -> [String]
+synthdefParam = map node_k_name . controls . synthdefGraph
 
 -- | Transform a unit generator graph into bytecode.
 graphdef :: Graph -> Graphdef
