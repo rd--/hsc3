@@ -28,3 +28,16 @@ gabor_grain_ugen_graph =
         e = lfGauss AR d w 0 NoLoop RemoveSynth
         s = fSinOsc AR f (0.5 * pi) * e
     in offsetOut o (pan2 s l a)
+
+-- | A /sine/ grain, envelope is by 'envGen' of 'envSine'.
+sine_grain_ugen_graph :: UGen
+sine_grain_ugen_graph =
+    let o = control IR "out" 0
+        f = control IR "freq" 440
+        d = control IR "sustain" 1
+        l = control IR "pan" 1
+        a = control IR "amp" 0.1
+        w = control IR "width" 0.25
+        e = envGen AR 1 1 0 1 DoNothing (envSine (d * w) 1)
+        s = fSinOsc AR f (0.5 * pi) * e
+    in offsetOut o (pan2 s l a)

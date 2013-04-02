@@ -40,26 +40,29 @@
 
 > import Sound.SC3.Lang.Pattern.ID
 
-> let p = [("dur",0.125)
->         ,("amp",0.5)
+> let p = [(K_instr,ati)
+>         ,(K_dur,0.125)
+>         ,(K_amp,0.5)
 >         ,("tone0",pseq [pn 3 64,pn 2 128,pn 10 8] inf)
->         ,("tone1",pseqn [32,12] [8,pwhite 'a' 0 15 inf] inf)
->         ,("freq0",pseqn [17,4,3] [10,prand 'a' [1,2,3] inf,10] inf)
->         ,("freq1",pseq1 [10,3,pwrand 'c' [20,1] [0.6,0.4] inf] inf)]
-> in audition (ati,pbind p)
+>         ,("tone1",pseqn [32,12] [8,pwhite 'α' 0 15 inf] inf)
+>         ,("freq0",pseqn [17,4,3] [10,prand 'β' [1,2,3] inf,10] inf)
+>         ,("freq1",pseq1 [10,3,pwrand 'γ' [20,1] [0.6,0.4] inf] inf)]
+> in audition (pbind p)
 
-> let p = [("dur",pseq [0.25,0.25,0.25,0.45] inf)
->         ,("amp",0.5)
+> let p = [(K_instr,ati)
+>         ,(K_dur,pseq [0.25,0.25,0.25,0.45] inf)
+>         ,(K_amp,0.5)
 >         ,("tone0",pseq [pseq [2,5] 32,pseq [3,5] 32] inf)
 >         ,("tone1",14)
->         ,("freq0",pseq [pbrown 'a' 28 31 1 32,pbrown 'b' 23 26 3 32] inf)
+>         ,("freq0",pseq [pbrown 'α' 28 31 1 32,pbrown 'β' 23 26 3 32] inf)
 >         ,("freq1",pseq [pn 10 16,pn 11 16] inf)]
-> in audition (ati,pbind p)
+> in audition (pbind p)
 
-> let p = [("dur",pbrown 'a' 0.1 0.15 0.1 inf)
->         ,("amp",0.5)
+> let p = [(K_instr,ati)
+>         ,(K_dur,pbrown 'α' 0.1 0.15 0.1 inf)
+>         ,(K_amp,0.5)
 >         ,("tone0",1)
 >         ,("tone1",2)
->         ,("freq0",pseqn [2,1] [24,pwrand 'b' [20,23] [0.6,0.4] inf] inf)
->         ,("freq1",pseqn [1,1,1] [1,3,pwrand 'c' [2,1] [0.6,0.4] inf] inf)]
-> in audition (ati,pbind p)
+>         ,("freq0",pseqn [2,1] [24,pwrand 'β' [20,23] [0.6,0.4] inf] inf)
+>         ,("freq1",pseqn [1,1,1] [1,3,pwrand 'γ' [2,1] [0.6,0.4] inf] inf)]
+> in audition (pbind p)
