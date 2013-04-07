@@ -11,8 +11,8 @@ default_ugen_graph =
         p = control KR "pan" 0
         g = control KR "gate" 1
         e = linen g 0.01 0.7 0.3 RemoveSynth
-        f3 = mce [f,f + rand 'a' (-0.4) 0,f + rand 'b' 0 0.4]
-        l = xLine KR (rand 'c' 4000 5000) (rand 'd' 2500 3200) 1 DoNothing
+        f3 = mce [f,f + rand 'α' (-0.4) 0,f + rand 'β' 0 0.4]
+        l = xLine KR (rand 'γ' 4000 5000) (rand 'δ' 2500 3200) 1 DoNothing
         z = lpf (mix (varSaw AR f3 0 0.3 * 0.3)) l * e
     in out 0 (pan2 z p a)
 

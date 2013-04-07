@@ -2,6 +2,7 @@
 module Sound.SC3.UGen.Math where
 
 import qualified Data.Fixed as F {- base -}
+import Data.Int
 
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Type
@@ -18,6 +19,8 @@ class (Eq a,Num a) => EqE a where
 
 instance EqE Int where
 instance EqE Integer where
+instance EqE Int32 where
+instance EqE Int64 where
 instance EqE Float where
 instance EqE Double where
 
@@ -38,6 +41,8 @@ class (Ord a,Num a) => OrdE a where
 
 instance OrdE Int
 instance OrdE Integer
+instance OrdE Int32 where
+instance OrdE Int64 where
 instance OrdE Float
 instance OrdE Double
 
