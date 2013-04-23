@@ -76,8 +76,6 @@ tr_control nm = tr_control_f32 nm . realToFrac
 mrg2 :: UGen -> UGen -> UGen
 mrg2 u = MRG_U . MRG u
 
--- * Unit generator node predicates
-
 -- * Multiple channel expansion
 
 -- | Multiple channel expansion for two inputs.

@@ -9,7 +9,7 @@
 Granulator
 > let {y0 = mouseY KR 0.01 1 Linear 0.2
 >     ;y1 = mouseY KR 12 100 Linear 0.2
->     ;n = lfNoise0 'a' KR y0 * 3 + 4.5
+>     ;n = lfNoise0 'α' KR y0 * 3 + 4.5
 >     ;k = saw AR (sinOsc KR n 0 * 10 + y1)
 >     ;i = playBuf 1 AR 12 (bufRateScale KR 12) 0 0 Loop DoNothing
 >     ;x0 = mouseX KR 0.01 0.1 Linear 0.2

@@ -38,31 +38,31 @@
 >               ;o = out 0 (pan2 (z * eg) pan 1)}
 >           in synthdef "atari2600" o
 
-> import Sound.SC3.Lang.Pattern.ID
+> import Sound.SC3.Lang.Pattern
 
-> let p = [(K_instr,ati)
+> let p = [(K_instr,psynth ati)
 >         ,(K_dur,0.125)
 >         ,(K_amp,0.5)
->         ,("tone0",pseq [pn 3 64,pn 2 128,pn 10 8] inf)
->         ,("tone1",pseqn [32,12] [8,pwhite 'α' 0 15 inf] inf)
->         ,("freq0",pseqn [17,4,3] [10,prand 'β' [1,2,3] inf,10] inf)
->         ,("freq1",pseq1 [10,3,pwrand 'γ' [20,1] [0.6,0.4] inf] inf)]
+>         ,(K_param "tone0",pseq [pn 3 64,pn 2 128,pn 10 8] inf)
+>         ,(K_param "tone1",pseqn [32,12] [8,pwhite 'α' 0 15 inf] inf)
+>         ,(K_param "freq0",pseqn [17,4,3] [10,prand 'β' [1,2,3] inf,10] inf)
+>         ,(K_param "freq1",pseq1 [10,3,pwrand 'γ' [20,1] [0.6,0.4] inf] inf)]
 > in audition (pbind p)
 
-> let p = [(K_instr,ati)
+> let p = [(K_instr,psynth ati)
 >         ,(K_dur,pseq [0.25,0.25,0.25,0.45] inf)
 >         ,(K_amp,0.5)
->         ,("tone0",pseq [pseq [2,5] 32,pseq [3,5] 32] inf)
->         ,("tone1",14)
->         ,("freq0",pseq [pbrown 'α' 28 31 1 32,pbrown 'β' 23 26 3 32] inf)
->         ,("freq1",pseq [pn 10 16,pn 11 16] inf)]
+>         ,(K_param "tone0",pseq [pseq [2,5] 32,pseq [3,5] 32] inf)
+>         ,(K_param "tone1",14)
+>         ,(K_param "freq0",pseq [pbrown 'α' 28 31 1 32,pbrown 'β' 23 26 3 32] inf)
+>         ,(K_param "freq1",pseq [pn 10 16,pn 11 16] inf)]
 > in audition (pbind p)
 
-> let p = [(K_instr,ati)
+> let p = [(K_instr,psynth ati)
 >         ,(K_dur,pbrown 'α' 0.1 0.15 0.1 inf)
 >         ,(K_amp,0.5)
->         ,("tone0",1)
->         ,("tone1",2)
->         ,("freq0",pseqn [2,1] [24,pwrand 'β' [20,23] [0.6,0.4] inf] inf)
->         ,("freq1",pseqn [1,1,1] [1,3,pwrand 'γ' [2,1] [0.6,0.4] inf] inf)]
+>         ,(K_param "tone0",1)
+>         ,(K_param "tone1",2)
+>         ,(K_param "freq0",pseqn [2,1] [24,pwrand 'β' [20,23] [0.6,0.4] inf] inf)
+>         ,(K_param "freq1",pseqn [1,1,1] [1,3,pwrand 'γ' [2,1] [0.6,0.4] inf] inf)]
 > in audition (pbind p)

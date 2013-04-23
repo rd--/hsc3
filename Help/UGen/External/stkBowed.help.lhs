@@ -3,5 +3,6 @@
 
 > import Sound.SC3
 
+no longer working...
 > let g = toggleFF (impulse KR 1 0)
 > in audition (out 0 (stkBowed AR 220 64 64 64 64 64 g 1 1))

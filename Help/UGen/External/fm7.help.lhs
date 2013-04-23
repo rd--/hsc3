@@ -3,19 +3,19 @@
 
 > import Sound.SC3
 
-> let { c = [[xLine KR 300 310 4 DoNothing,0,1]
->           ,[xLine KR 300 310 8 DoNothing,0,1]
->           ,[0,0,1]
->           ,[0,0,1]
->           ,[0,0,1]
->           ,[0,0,1] ]
->     ; m = [[line KR 0 0.001 2 DoNothing,line KR 0.1 0 4 DoNothing,0,0,0,0]
->           ,[line KR 0 6 1 DoNothing,0,0,0,0,0]
->           ,[0,0,0,0,0,0]
->           ,[0,0,0,0,0,0]
->           ,[0,0,0,0,0,0]
->           ,[0,0,0,0,0,0] ]
->     ; MCE [l,r,_,_,_,_] = fm7 c m }
+> let {c = [[xLine KR 300 310 4 DoNothing,0,1]
+>          ,[xLine KR 300 310 8 DoNothing,0,1]
+>          ,[0,0,1]
+>          ,[0,0,1]
+>          ,[0,0,1]
+>          ,[0,0,1] ]
+>     ;m = [[line KR 0 0.001 2 DoNothing,line KR 0.1 0 4 DoNothing,0,0,0,0]
+>          ,[line KR 0 6 1 DoNothing,0,0,0,0,0]
+>          ,[0,0,0,0,0,0]
+>          ,[0,0,0,0,0,0]
+>          ,[0,0,0,0,0,0]
+>          ,[0,0,0,0,0,0] ]
+>     ;[l,r,_,_,_,_] = mceChannels (fm7 c m)}
 > in audition (out 0 (mce2 l r * 0.1))
 
 An algorithmically generated graph courtesy f0.
@@ -75,7 +75,7 @@ An algorithmically generated graph courtesy f0.
 >            ,[1.0,0.5,-1/6,0.5]]]
 >     ; cs = map (map (\[f,p,m,a] -> sinOsc AR f p * m + a)) x
 >     ; ms = map (map (\[f,w,m,a] -> pulse AR f w * m + a)) y
->     ; MCE [c1,c2,c3,_,c4,c5] = fm7 cs ms
+>     ; [c1,c2,c3,_,c4,c5] = mceChannels (fm7 cs ms)
 >     ; g3 = linLin (lfSaw KR 0.1 0) (-1) 1 0 (dbAmp (-12))
 >     ; g5 = dbAmp (-3) }
 > in audition (out 0 (mce [c1 + c3 * g3 + c5 * g5,c2 + c4 + c5 * g5]))

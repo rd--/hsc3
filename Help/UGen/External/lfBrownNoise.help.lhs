@@ -5,9 +5,9 @@
 
 Modulate frequency.
 > let {x = mouseX KR 0 5 Linear 0.2
->     ;n = lfBrownNoise2 'a' AR 1000 1 x}
+>     ;n = lfBrownNoise2 'α' AR 1000 1 x}
 > in audition (out 0 (n * 0.25))
 
 Use as frequency control.
-> let f = lfBrownNoise2 'a' KR 8 0.2 0 * 400 + 450
+> let f = lfBrownNoise2 'α' KR 8 0.2 0 * 400 + 450
 > in audition (out 0 (sinOsc AR f 0 * 0.2))
