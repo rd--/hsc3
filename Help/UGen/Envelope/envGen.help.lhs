@@ -25,7 +25,7 @@ Env([0,1],[0.1]).asArray == [0,1,-99,-99,1,0.1,1,0]
 > in envelope_sc3_array e == Just [0,1,-99,-99,1,0.1,1,0]
 
 https://www.listarc.bham.ac.uk/lists/sc-users/msg14815.html
-> let {n = range 0.01 0.1 (lfNoise1 'a' KR 2)
+> let {n = range 0.01 0.1 (lfNoise1 'α' KR 2)
 >     ;e = Envelope [0,1] [n] [EnvLin] Nothing (Just 0)
 >     ;a = envGen AR 1 1 0 1 DoNothing (env_circle e 0 EnvLin)
 >     ;o = sinOsc AR (a * 400 + 500) 0 * 0.1}

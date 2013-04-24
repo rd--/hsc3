@@ -16,6 +16,12 @@ ay ta tb tc n c va vb vc ef es ct = mkOsc AR "AY" [ta, tb, tc, n, c, va, vb, vc,
 ayFreqToTone :: Fractional a => a -> a
 ayFreqToTone f = 110300 / (f - 0.5)
 
+-- * Bhob
+
+-- | String resonance filter
+streson :: UGen -> UGen -> UGen -> UGen
+streson input delayTime res = mkFilter "Streson" [input,delayTime,res] 1
+
 -- * Concat
 
 -- | Concatenative cross-synthesis.
@@ -66,6 +72,12 @@ metro rt bpm nb = mkOsc rt "Metro" [bpm,nb] 1
 pv_Invert :: UGen -> UGen
 pv_Invert b = mkOsc KR "PV_Invert" [b] 1
 
+-- * MCLD
+
+-- | 3D Perlin Noise
+perlin3 :: Rate -> UGen -> UGen -> UGen -> UGen
+perlin3 rate x y z = mkOscR [AR,KR] rate "Perlin3" [x,y,z] 1
+
 -- * Membrane
 
 -- | Triangular waveguide mesh of a drum-like membrane.
@@ -81,6 +93,16 @@ membraneHexagon i t l = mkOsc AR "MembraneHexagon" [i, t, l] 1
 -- | Tracking Phase Vocoder
 tpv :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 tpv chain windowsize hopsize maxpeaks currentpeaks freqmult tolerance noisefloor = mkOsc AR "TPV" [chain,windowsize,hopsize,maxpeaks,currentpeaks,freqmult,tolerance,noisefloor] 1
+
+-- * SLU
+
+-- | Prigogine oscillator
+brusselator :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+brusselator rate reset rate_ mu gamma initx inity = mkOscR [AR] rate "Brusselator" [reset,rate_,mu,gamma,initx,inity] 2
+
+-- | Forced DoubleWell Oscillator
+doubleWell3 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+doubleWell3 rate reset rate_ f delta initx inity = mkOscR [AR] rate "DoubleWell3" [reset,rate_,f,delta,initx,inity] 1
 
 -- * Stk
 

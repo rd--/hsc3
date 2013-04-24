@@ -26,4 +26,3 @@ plotting
 > let {c0 = [(0,0),(0.35,0.1),(0.55,1),(1,0)]
 >     ;c1 = [(0,0),(0.15,0.6),(0.35,0.2),(1,0)]}
 > in plotEnvelope [envCoord c0 9 0.1 EnvLin,envCoord c1 6 0.1 EnvLin]
-
