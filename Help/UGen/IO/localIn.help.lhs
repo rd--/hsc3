@@ -4,7 +4,7 @@
 > import Sound.SC3.ID
 
 Ping-pong delay
-> let {n = whiteNoise 'a' AR
+> let {n = whiteNoise 'α' AR
 >     ;a0 = decay (impulse AR 0.3 0) 0.1 * n * 0.2
 >     ;a1 = localIn 2 AR + mce [a0,0]
 >     ;a2 = delayN a1 0.2 0.2

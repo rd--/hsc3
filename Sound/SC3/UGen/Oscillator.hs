@@ -9,7 +9,7 @@ import Sound.SC3.UGen.UGen
 
 -- | Band Limited ImPulse generator.
 blip :: Rate -> UGen -> UGen -> UGen
-blip r freq nharm = mkOscR [AR] r "Blip" [freq, nharm] 1
+blip r freq nharm = mkOscR [AR,KR] r "Blip" [freq, nharm] 1
 
 -- | Chorusing wavetable oscillator.
 cOsc :: Rate -> UGen -> UGen -> UGen -> UGen

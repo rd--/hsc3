@@ -20,6 +20,17 @@ line segments, set target value & transition time and trigger
 > withSC3 (send (n_set (-1) [("en",990),("tm",1),("tr",1)]))
 > withSC3 (send (n_set (-1) [("en",110),("tm",2),("tr",1)]))
 
+> import Sound.SC3.ID
+
+likewise, but internal graph triggers and line end points
+> let {tr = dust 'α' KR 2
+>     ;st = 440
+>     ;en = tRand 'β' 300 900 tr
+>     ;tm = tRand 'γ' 0.5 1.5 tr
+>     ;p = envCoord [(0,st),(tm,en)] 1 1 EnvLin
+>     ;e = envGen KR tr 1 0 1 DoNothing p}
+> in audition (out 0 (sinOsc AR e 0 * 0.2))
+
 plotting
 > import Sound.SC3.Plot
 
