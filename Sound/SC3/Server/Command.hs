@@ -19,7 +19,7 @@ n_before :: [(Int,Int)] -> Message
 n_before = G.n_before
 
 -- | Fill ranges of a node's control values.
-n_fill :: Int -> [(String,Int,Double)] -> Message
+n_fill :: Int -> [(String,Int,Float)] -> Message
 n_fill = G.n_fill
 
 -- | Delete a node.
@@ -50,11 +50,11 @@ n_run :: [(Int,Bool)] -> Message
 n_run = G.n_run
 
 -- | Set a node's control values.
-n_set :: Int -> [(String,Double)] -> Message
+n_set :: Int -> [(String,Float)] -> Message
 n_set = G.n_set
 
 -- | Set ranges of a node's control values.
-n_setn :: Int -> [(String,[Double])] -> Message
+n_setn :: Int -> [(String,[Float])] -> Message
 n_setn = G.n_setn
 
 -- | Trace a node.
@@ -76,7 +76,7 @@ s_getn :: Int -> [(String,Int)] -> Message
 s_getn = G.s_getn
 
 -- | Create a new synth.
-s_new :: String -> Int -> AddAction -> Int -> [(String,Double)] -> Message
+s_new :: String -> Int -> AddAction -> Int -> [(String,Float)] -> Message
 s_new = G.s_new
 
 -- | Auto-reassign synth's ID to a reserved value.
@@ -166,7 +166,7 @@ b_close :: Int -> Message
 b_close = G.b_close
 
 -- | Fill ranges of sample values.
-b_fill :: Int -> [(Int,Int,Double)] -> Message
+b_fill :: Int -> [(Int,Int,Float)] -> Message
 b_fill = G.b_fill
 
 -- | Free buffer data. (Asynchronous)
@@ -178,19 +178,19 @@ b_gen :: Int -> String -> [Datum] -> Message
 b_gen = G.b_gen
 
 -- | Call @sine1@ 'b_gen' command.
-b_gen_sine1 :: Int -> [B_Gen] -> [Double] -> Message
+b_gen_sine1 :: Int -> [B_Gen] -> [Float] -> Message
 b_gen_sine1 = G.b_gen_sine1
 
 -- | Call @sine2@ 'b_gen' command.
-b_gen_sine2 :: Int -> [B_Gen] -> [(Double,Double)] -> Message
+b_gen_sine2 :: Int -> [B_Gen] -> [(Float,Float)] -> Message
 b_gen_sine2 = G.b_gen_sine2
 
 -- | Call @sine3@ 'b_gen' command.
-b_gen_sine3 :: Int -> [B_Gen] -> [(Double,Double,Double)] -> Message
+b_gen_sine3 :: Int -> [B_Gen] -> [(Float,Float,Float)] -> Message
 b_gen_sine3 = G.b_gen_sine3
 
 -- | Call @cheby@ 'b_gen' command.
-b_gen_cheby :: Int -> [B_Gen] -> [Double] -> Message
+b_gen_cheby :: Int -> [B_Gen] -> [Float] -> Message
 b_gen_cheby = G.b_gen_cheby
 
 -- | Call @copy@ 'b_gen' command.
@@ -218,11 +218,11 @@ b_readChannel :: Int -> String -> Int -> Int -> Int -> Bool -> [Int] -> Message
 b_readChannel = G.b_readChannel
 
 -- | Set sample values.
-b_set :: Int -> [(Int,Double)] -> Message
+b_set :: Int -> [(Int,Float)] -> Message
 b_set = G.b_set
 
 -- | Set ranges of sample values.
-b_setn :: Int -> [(Int,[Double])] -> Message
+b_setn :: Int -> [(Int,[Float])] -> Message
 b_setn = G.b_setn
 
 -- | Write sound file data. (Asynchronous)
@@ -236,7 +236,7 @@ b_zero = G.b_zero
 -- * Control bus commands
 
 -- |  Fill ranges of bus values.
-c_fill :: [(Int,Int,Double)] -> Message
+c_fill :: [(Int,Int,Float)] -> Message
 c_fill = G.c_fill
 
 -- | Get bus values.
@@ -248,23 +248,24 @@ c_getn :: [(Int,Int)] -> Message
 c_getn = G.c_getn
 
 -- | Set bus values.
-c_set :: [(Int,Double)] -> Message
+c_set :: [(Int,Float)] -> Message
 c_set = G.c_set
 
 -- | Set ranges of bus values.
-c_setn :: [(Int,[Double])] -> Message
+c_setn :: [(Int,[Float])] -> Message
 c_setn = G.c_setn
 
 -- * Server operation commands
 
--- | Request \/synced message when all current asynchronous commands complete.
+-- | Request \/synced message when all current asynchronous commands
+-- complete.
 sync :: Int -> Message
 sync = G.sync
 
 -- * Variants to simplify common cases
 
 -- | Pre-allocate for b_setn1, values preceding offset are zeroed.
-b_alloc_setn1 :: Int -> Int -> [Double] -> Message
+b_alloc_setn1 :: Int -> Int -> [Float] -> Message
 b_alloc_setn1 = G.b_alloc_setn1
 
 -- | Get ranges of sample values.
@@ -272,11 +273,11 @@ b_getn1 :: Int -> (Int,Int) -> Message
 b_getn1 = G.b_getn1
 
 -- | Set single sample value.
-b_set1 :: Int -> Int -> Double -> Message
+b_set1 :: Int -> Int -> Float -> Message
 b_set1 = G.b_set1
 
 -- | Set a range of sample values.
-b_setn1 :: Int -> Int -> [Double] -> Message
+b_setn1 :: Int -> Int -> [Float] -> Message
 b_setn1 = G.b_setn1
 
 -- | Variant on 'b_query'.
@@ -284,11 +285,11 @@ b_query1 :: Int -> Message
 b_query1 = b_query . return
 
 -- | Set single bus values.
-c_set1 :: Int -> Double -> Message
+c_set1 :: Int -> Float -> Message
 c_set1 = G.c_set1
 
 -- | Set a single node control value.
-n_set1 :: Int -> String -> Double -> Message
+n_set1 :: Int -> String -> Float -> Message
 n_set1 = G.n_set1
 
 -- | @s_new@ with no parameters.
@@ -304,8 +305,7 @@ s_new0 = G.s_new0
 b_segment :: Int -> Int -> [Int]
 b_segment = G.b_segment
 
--- | Variant of 'b_segment' that takes a starting index and returns
--- /(index,size)/ duples.
+-- | Variant of 'b_segment' that takes a starting index and returns /(index,size)/ duples.
 --
 -- > b_indices 1 5 0 == zip [0..4] (replicate 5 1)
 -- > b_indices 1024 2056 16 == [(16,8),(24,1024),(1048,1024)]

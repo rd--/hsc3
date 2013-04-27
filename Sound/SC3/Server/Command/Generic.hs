@@ -1,5 +1,4 @@
--- | Constructors for the command set implemented by the SuperCollider
---   synthesis server.
+-- | Generic constructors for the command set implemented by the SuperCollider synthesis server.
 module Sound.SC3.Server.Command.Generic where
 
 import Data.List {- base -}
