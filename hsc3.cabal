@@ -1,5 +1,5 @@
 Name:              hsc3
-Version:           0.14
+Version:           0.15
 Synopsis:          Haskell SuperCollider
 Description:       Haskell client for the SuperCollider synthesis server,
                    <http://audiosynth.com/>.
@@ -53,7 +53,7 @@ Library
                    data-default,
                    directory,
                    filepath,
-                   hosc == 0.14.*,
+                   hosc == 0.15.*,
                    murmur-hash,
                    network,
                    process,
