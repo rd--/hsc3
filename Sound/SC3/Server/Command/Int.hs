@@ -1,5 +1,4 @@
--- | Constructors for the command set implemented by the SuperCollider
---   synthesis server.
+-- | Functions from "Sound.SC3.Server.Command.Generic" specialised to 'Int'.
 module Sound.SC3.Server.Command.Int where
 
 import Sound.OSC.Core {- hosc -}

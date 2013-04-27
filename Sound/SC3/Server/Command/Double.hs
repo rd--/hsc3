@@ -1,4 +1,4 @@
--- | Specialised to 'Int' and 'Double'.
+-- | Functions from "Sound.SC3.Server.Command.Generic" specialised to 'Int' and 'Double'.
 module Sound.SC3.Server.Command.Double where
 
 import Sound.OSC.Core {- hosc -}

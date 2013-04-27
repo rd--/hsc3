@@ -1,4 +1,4 @@
--- | Specialised to 'Int' and 'Float'.
+-- | Functions from "Sound.SC3.Server.Command.Generic" specialised to 'Int' and 'Float'.
 module Sound.SC3.Server.Command.Float where
 
 import Sound.OSC.Core {- hosc -}
