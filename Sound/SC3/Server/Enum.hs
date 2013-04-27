@@ -1,6 +1,14 @@
 -- | Server input enumerations.
 module Sound.SC3.Server.Enum where
 
+-- | Enumeration of possible locations to add new nodes (s_new and g_new).
+data AddAction = AddToHead
+               | AddToTail
+               | AddBefore
+               | AddAfter
+               | AddReplace
+                 deriving (Eq,Show,Enum)
+
 -- | Sound file format.
 data SoundFileFormat = Aiff | Flac | Ircam | Next | Raw | Wave
   deriving (Enum, Eq, Read, Show)

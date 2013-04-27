@@ -5,7 +5,9 @@ import Data.Maybe {- base -}
 import Control.Monad {- base -}
 import Sound.OSC.FD {- hosc -}
 
+import Sound.SC3.Server.Command.Core
 import Sound.SC3.Server.Command
+import Sound.SC3.Server.Enum
 import Sound.SC3.Server.NRT
 import Sound.SC3.Server.Status
 import Sound.SC3.Server.Synthdef
