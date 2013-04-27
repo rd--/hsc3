@@ -3,6 +3,7 @@ module Sound.SC3.Server.Command.Core where
 
 import Sound.OSC.Core {- hosc -}
 
+import Sound.SC3.Server.Enum
 import Sound.SC3.Server.Synthdef
 
 -- * Instrument definition commands
@@ -35,13 +36,6 @@ cmd name = message "/cmd" . (string name :)
 clearSched :: Message
 clearSched = message "/clearSched" []
 
--- | Enumeration of Message printer types.
-data PrintLevel = NoPrinter
-                | TextPrinter
-                | HexPrinter
-                | AllPrinter
-                  deriving (Eq,Show,Enum)
-
 -- | Select printing of incoming Open Sound Control messages.
 dumpOSC :: PrintLevel -> Message
 dumpOSC c = message "/dumpOSC" [int32 (fromEnum c)]
@@ -57,16 +51,6 @@ quit = message "/quit" []
 -- | Request \/status.reply message.
 status :: Message
 status = message "/status" []
-
--- | Error posting scope.
-data ErrorScope = Globally  -- ^ Global scope
-                | Locally   -- ^ Bundle scope
-                  deriving (Eq,Show,Enum)
-
--- | Error posting mode.
-data ErrorMode = ErrorsOff  -- ^ Turn error posting off
-               | ErrorsOn   -- ^ Turn error posting on
-                 deriving (Eq,Show,Enum)
 
 -- | Set error posting scope and mode.
 errorMode :: ErrorScope -> ErrorMode -> Message

@@ -9,6 +9,23 @@ data AddAction = AddToHead
                | AddReplace
                  deriving (Eq,Show,Enum)
 
+-- | Error posting scope.
+data ErrorScope = Globally  -- ^ Global scope
+                | Locally   -- ^ Bundle scope
+                  deriving (Eq,Show,Enum)
+
+-- | Error posting mode.
+data ErrorMode = ErrorsOff  -- ^ Turn error posting off
+               | ErrorsOn   -- ^ Turn error posting on
+                 deriving (Eq,Show,Enum)
+
+-- | Enumeration of Message printer types.
+data PrintLevel = NoPrinter
+                | TextPrinter
+                | HexPrinter
+                | AllPrinter
+                  deriving (Eq,Show,Enum)
+
 -- | Sound file format.
 data SoundFileFormat = Aiff | Flac | Ircam | Next | Raw | Wave
   deriving (Enum, Eq, Read, Show)
