@@ -1,12 +1,11 @@
 -- | Constructors for the command set implemented by the SuperCollider
 --   synthesis server.
-module Sound.SC3.Server.Command where
+module Sound.SC3.Server.Command.Int where
 
 import Sound.OSC.Core {- hosc -}
 
 import qualified Sound.SC3.Server.Command.Generic as G
 import Sound.SC3.Server.Enum
-import Sound.SC3.UGen.Enum
 
 -- * Node commands
 
@@ -17,10 +16,6 @@ n_after = G.n_after
 -- | Place a node before another.
 n_before :: [(Int,Int)] -> Message
 n_before = G.n_before
-
--- | Fill ranges of a node's control values.
-n_fill :: Int -> [(String,Int,Float)] -> Message
-n_fill = G.n_fill
 
 -- | Delete a node.
 n_free :: [Int] -> Message
@@ -49,14 +44,6 @@ n_query = G.n_query
 n_run :: [(Int,Bool)] -> Message
 n_run = G.n_run
 
--- | Set a node's control values.
-n_set :: Int -> [(String,Float)] -> Message
-n_set = G.n_set
-
--- | Set ranges of a node's control values.
-n_setn :: Int -> [(String,[Float])] -> Message
-n_setn = G.n_setn
-
 -- | Trace a node.
 n_trace :: [Int] -> Message
 n_trace = G.n_trace
@@ -74,10 +61,6 @@ s_get = G.s_get
 -- | Get ranges of control values.
 s_getn :: Int -> [(String,Int)] -> Message
 s_getn = G.s_getn
-
--- | Create a new synth.
-s_new :: String -> Int -> AddAction -> Int -> [(String,Float)] -> Message
-s_new = G.s_new
 
 -- | Auto-reassign synth's ID to a reserved value.
 s_noid :: [Int] -> Message
@@ -165,10 +148,6 @@ b_allocReadChannel = G.b_allocReadChannel
 b_close :: Int -> Message
 b_close = G.b_close
 
--- | Fill ranges of sample values.
-b_fill :: Int -> [(Int,Int,Float)] -> Message
-b_fill = G.b_fill
-
 -- | Free buffer data. (Asynchronous)
 b_free :: Int -> Message
 b_free = G.b_free
@@ -176,22 +155,6 @@ b_free = G.b_free
 -- | Call a command to fill a buffer.  (Asynchronous)
 b_gen :: Int -> String -> [Datum] -> Message
 b_gen = G.b_gen
-
--- | Call @sine1@ 'b_gen' command.
-b_gen_sine1 :: Int -> [B_Gen] -> [Float] -> Message
-b_gen_sine1 = G.b_gen_sine1
-
--- | Call @sine2@ 'b_gen' command.
-b_gen_sine2 :: Int -> [B_Gen] -> [(Float,Float)] -> Message
-b_gen_sine2 = G.b_gen_sine2
-
--- | Call @sine3@ 'b_gen' command.
-b_gen_sine3 :: Int -> [B_Gen] -> [(Float,Float,Float)] -> Message
-b_gen_sine3 = G.b_gen_sine3
-
--- | Call @cheby@ 'b_gen' command.
-b_gen_cheby :: Int -> [B_Gen] -> [Float] -> Message
-b_gen_cheby = G.b_gen_cheby
 
 -- | Call @copy@ 'b_gen' command.
 b_gen_copy :: Int -> Int -> Int -> Int -> Maybe Int -> Message
@@ -217,14 +180,6 @@ b_read = G.b_read
 b_readChannel :: Int -> String -> Int -> Int -> Int -> Bool -> [Int] -> Message
 b_readChannel = G.b_readChannel
 
--- | Set sample values.
-b_set :: Int -> [(Int,Float)] -> Message
-b_set = G.b_set
-
--- | Set ranges of sample values.
-b_setn :: Int -> [(Int,[Float])] -> Message
-b_setn = G.b_setn
-
 -- | Write sound file data. (Asynchronous)
 b_write :: Int -> String -> SoundFileFormat -> SampleFormat -> Int -> Int -> Bool -> Message
 b_write = G.b_write
@@ -235,10 +190,6 @@ b_zero = G.b_zero
 
 -- * Control bus commands
 
--- |  Fill ranges of bus values.
-c_fill :: [(Int,Int,Float)] -> Message
-c_fill = G.c_fill
-
 -- | Get bus values.
 c_get :: [Int] -> Message
 c_get = G.c_get
@@ -246,14 +197,6 @@ c_get = G.c_get
 -- | Get ranges of bus values.
 c_getn :: [(Int,Int)] -> Message
 c_getn = G.c_getn
-
--- | Set bus values.
-c_set :: [(Int,Float)] -> Message
-c_set = G.c_set
-
--- | Set ranges of bus values.
-c_setn :: [(Int,[Float])] -> Message
-c_setn = G.c_setn
 
 -- * Server operation commands
 
@@ -264,33 +207,13 @@ sync = G.sync
 
 -- * Variants to simplify common cases
 
--- | Pre-allocate for b_setn1, values preceding offset are zeroed.
-b_alloc_setn1 :: Int -> Int -> [Float] -> Message
-b_alloc_setn1 = G.b_alloc_setn1
-
 -- | Get ranges of sample values.
 b_getn1 :: Int -> (Int,Int) -> Message
 b_getn1 = G.b_getn1
 
--- | Set single sample value.
-b_set1 :: Int -> Int -> Float -> Message
-b_set1 = G.b_set1
-
--- | Set a range of sample values.
-b_setn1 :: Int -> Int -> [Float] -> Message
-b_setn1 = G.b_setn1
-
 -- | Variant on 'b_query'.
 b_query1 :: Int -> Message
 b_query1 = b_query . return
-
--- | Set single bus values.
-c_set1 :: Int -> Float -> Message
-c_set1 = G.c_set1
-
--- | Set a single node control value.
-n_set1 :: Int -> String -> Float -> Message
-n_set1 = G.n_set1
 
 -- | @s_new@ with no parameters.
 s_new0 :: String -> Int -> AddAction -> Int -> Message

@@ -69,10 +69,11 @@ Library
                    Sound.SC3.Monad.FD
                    Sound.SC3.Monad.Syntax
                    Sound.SC3.Server
-                   Sound.SC3.Server.Command
                    Sound.SC3.Server.Command.Completion
                    Sound.SC3.Server.Command.Core
                    Sound.SC3.Server.Command.Double
+                   Sound.SC3.Server.Command.Float
+                   Sound.SC3.Server.Command.Int
                    Sound.SC3.Server.Command.Generic
                    Sound.SC3.Server.Enum
                    Sound.SC3.Server.FD
