@@ -76,13 +76,13 @@ envLinen aT sT rT l =
     in envLinen' aT sT rT l c
 
 -- | Parameters for ADSR envelopes.
-data ADSR a = ADSR {attackTime :: a
-                   ,decayTime :: a
-                   ,sustainLevel :: a
-                   ,releaseTime :: a
-                   ,peakLevel :: a
-                   ,curve :: (Envelope_Curve a,Envelope_Curve a,Envelope_Curve a)
-                   ,bias :: a}
+data ADSR a = ADSR {adsr_attackTime :: a
+                   ,adsr_decayTime :: a
+                   ,adsr_sustainLevel :: a
+                   ,adsr_releaseTime :: a
+                   ,adsr_peakLevel :: a
+                   ,adsr_curve :: (Envelope_Curve a,Envelope_Curve a,Envelope_Curve a)
+                   ,adsr_bias :: a}
 
 -- | Attack, decay, sustain, release envelope parameter constructor.
 envADSR :: Num a => a -> a -> a -> a -> a -> Envelope_Curve a -> a -> Envelope a
@@ -96,10 +96,20 @@ envADSR_r (ADSR aT dT sL rT pL (c0,c1,c2) b) =
         c = [c0,c1,c2]
     in Envelope l t c (Just 2) Nothing
 
+-- | Parameters for ADSR envelopes.
+data ASR a = ASR {asr_attackTime :: a
+                 ,asr_sustainLevel :: a
+                 ,asr_releaseTime :: a
+                 ,asr_curve :: (Envelope_Curve a,Envelope_Curve a)}
+
 -- | Attack, sustain, release envelope parameter constructor.
 envASR :: Num a => a -> a -> a -> Envelope_Curve a -> Envelope a
-envASR aT sL rT c =
+envASR aT sL rT c = envASR_r (ASR aT sL rT (c,c))
+
+-- | Record ('ASR') variant of 'envASR'.
+envASR_r :: Num a => ASR a -> Envelope a
+envASR_r (ASR aT sL rT (c0,c1)) =
     let l = [0,sL,0]
         t = [aT,rT]
-        c' = [c,c]
+        c' = [c0,c1]
     in Envelope l t c' (Just 1) Nothing

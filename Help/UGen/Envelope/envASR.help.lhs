@@ -1,5 +1,5 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Env.*asr"
-> :t Sound.SC3.envASR
+> :i Sound.SC3.ASR
 
 > import Sound.SC3
 
@@ -13,4 +13,5 @@
 > import Sound.SC3.Plot
 
 > plotEnvelope [envASR 0.1 1 1 (EnvNum (-4))
->              ,envASR 0.3 0.25 1 EnvSin]
+>              ,envASR 0.3 0.25 1 EnvSin
+>              ,envASR 0.01 0.5 1.25 EnvLin]
