@@ -64,10 +64,27 @@ envSine dur lvl =
         d = replicate 2 (dur / 2)
     in Envelope [0,lvl,0] d c Nothing Nothing
 
+-- | Parameters for LINEN envelopes.
+data LINEN a = LINEN {linen_attackTime :: a
+                     ,linen_sustainTime :: a
+                     ,linen_releaseTime :: a
+                     ,linen_level :: a
+                     ,linen_curve :: T3 (Envelope_Curve a)}
+
+-- | Record ('LINEN') variant of 'envLinen'.
+envLinen_r :: Num a => LINEN a -> Envelope a
+envLinen_r (LINEN aT sT rT lv (c0,c1,c2)) =
+    let l = [0,lv,lv,0]
+        t = [aT,sT,rT]
+        c = [c0,c1,c2]
+    in Envelope l t c Nothing Nothing
+
+-- | Regular three tuple.
+type T3 a = (a,a,a)
+
 -- | Variant of 'envLinen' with user specified 'Envelope_Curve a'.
-envLinen' :: Num a => a -> a -> a -> a -> (Envelope_Curve a,Envelope_Curve a,Envelope_Curve a) -> Envelope a
-envLinen' aT sT rT l (c0, c1, c2) =
-    Envelope [0, l, l, 0] [aT, sT, rT] [c0, c1, c2] Nothing Nothing
+envLinen' :: Num a => a -> a -> a -> a -> T3 (Envelope_Curve a) -> Envelope a
+envLinen' aT sT rT lv c = envLinen_r (LINEN aT sT rT lv c)
 
 -- | Linear envelope parameter constructor.
 envLinen :: Num a => a -> a -> a -> a -> Envelope a
