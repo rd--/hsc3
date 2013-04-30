@@ -1,4 +1,7 @@
 -- | /FD/ variant of interaction with the scsynth server.
+--
+-- This duplicates functions at 'Sound.SC3.Server.Transport.Monad' and
+-- at some point at least part of the duplication will be removed.
 module Sound.SC3.Server.Transport.FD where
 
 import Data.Maybe {- base -}
@@ -56,12 +59,14 @@ playUGen fd = playSynthdef fd . synthdef "Anonymous"
 -- to initial 'Time', then send each message, asynchronously if
 -- required.
 run_bundle :: Transport t => t -> Time -> Bundle -> IO ()
-run_bundle fd i (Bundle t x) = do
-  let wr m = if isAsync m
-             then void (async fd m)
-             else sendMessage fd m
-  pauseThreadUntil (i + t)
-  mapM_ wr x
+run_bundle fd st b = do
+  let t = bundleTime b
+      latency = 0.1
+      wr m = if isAsync m
+             then async fd m >> return ()
+             else sendBundle fd (bundle (st + t) [m])
+  pauseThreadUntil (st + t - latency)
+  mapM_ wr (bundleMessages b)
 
 -- | Perform an 'NRT' score (as would be rendered by 'writeNRT').  In
 -- particular note that all timestamps /must/ be in 'NTPr' form.

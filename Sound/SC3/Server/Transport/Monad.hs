@@ -62,15 +62,20 @@ playUGen = playSynthdef . synthdef "Anonymous"
 -- to the initial 'Time', then send each message, asynchronously if
 -- required.
 run_bundle :: Transport m => Time -> Bundle -> m ()
-run_bundle i (Bundle t x) = do
-  let wr m = if isAsync m
+run_bundle st b = do
+  let t = bundleTime b
+      latency = 0.1
+      wr m = if isAsync m
              then async m >> return ()
-             else send m
-  liftIO (pauseThreadUntil (i + t))
-  mapM_ wr x
+             else sendBundle (bundle (st + t) [m])
+  liftIO (pauseThreadUntil (st + t - latency))
+  mapM_ wr (bundleMessages b)
 
--- | Perform an 'NRT' score (as would be rendered by 'writeNRT').  In
--- particular note that all timestamps /must/ be in 'NTPr' form.
+-- | Perform an 'NRT' score (as would be rendered by 'writeNRT').
+--
+-- > let sc = NRT [bundle 1 [s_new0 "default" (-1) AddToTail 1]
+-- >              ,bundle 2 [n_set1 (-1) "gate" 0]]
+-- > in withSC3 (performNRT sc)
 performNRT :: Transport m => NRT -> m ()
 performNRT s = liftIO time >>= \i -> mapM_ (run_bundle i) (nrt_bundles s)
 
