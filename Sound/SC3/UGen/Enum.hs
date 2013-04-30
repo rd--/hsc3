@@ -75,6 +75,13 @@ data Envelope_Curve a = EnvStep
                       | EnvCub
                         deriving (Eq, Show)
 
+-- | Envelope curve pair.
+type Envelope_Curve2 a = (Envelope_Curve a,Envelope_Curve a)
+
+-- | Envelope curve triple.
+type Envelope_Curve3 a = (Envelope_Curve a,Envelope_Curve a,Envelope_Curve a)
+
+-- | Type specialised ('UGen') envelope curve.
 type EnvCurve = Envelope_Curve UGen
 
 -- | Convert 'Envelope_Curve' to shape value.
@@ -101,6 +108,7 @@ env_curve_value e =
       EnvNum u -> u
       _ -> 0
 
+-- | 'Interpolation_F' of 'Envelope_Curve'.
 env_curve_interpolation_f :: (Ord t, Floating t) =>
                              Envelope_Curve t -> Interpolation_F t
 env_curve_interpolation_f c =
@@ -114,10 +122,12 @@ env_curve_interpolation_f c =
       EnvSqr -> squared
       EnvCub -> cubed
 
+-- | Unification of integer and 'UGen' buffer identifiers.
 data Buffer = Buffer_Id Int
             | Buffer UGen
               deriving (Eq, Show)
 
+-- | Lift to 'UGen'.
 from_buffer :: Buffer -> UGen
 from_buffer b =
     case b of

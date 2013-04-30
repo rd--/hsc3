@@ -32,7 +32,7 @@ envTrapezoid shape skew dur amp =
     in envCoord bp dur amp EnvLin
 
 -- | Variant 'envPerc' with user specified 'Envelope_Curve a'.
-envPerc' :: Num a => a -> a -> a -> (Envelope_Curve a,Envelope_Curve a) -> Envelope a
+envPerc' :: Num a => a -> a -> a -> Envelope_Curve2 a -> Envelope a
 envPerc' atk rls lvl (c0, c1) =
     let c = [c0, c1]
     in Envelope [0, lvl, 0] [atk, rls] c Nothing Nothing
@@ -69,7 +69,7 @@ data LINEN a = LINEN {linen_attackTime :: a
                      ,linen_sustainTime :: a
                      ,linen_releaseTime :: a
                      ,linen_level :: a
-                     ,linen_curve :: T3 (Envelope_Curve a)}
+                     ,linen_curve :: Envelope_Curve3 a}
 
 -- | Record ('LINEN') variant of 'envLinen'.
 envLinen_r :: Num a => LINEN a -> Envelope a
@@ -79,17 +79,14 @@ envLinen_r (LINEN aT sT rT lv (c0,c1,c2)) =
         c = [c0,c1,c2]
     in Envelope l t c Nothing Nothing
 
--- | Regular three tuple.
-type T3 a = (a,a,a)
-
 -- | Variant of 'envLinen' with user specified 'Envelope_Curve a'.
-envLinen' :: Num a => a -> a -> a -> a -> T3 (Envelope_Curve a) -> Envelope a
+envLinen' :: Num a => a -> a -> a -> a -> Envelope_Curve3 a -> Envelope a
 envLinen' aT sT rT lv c = envLinen_r (LINEN aT sT rT lv c)
 
 -- | Linear envelope parameter constructor.
 envLinen :: Num a => a -> a -> a -> a -> Envelope a
 envLinen aT sT rT l =
-    let c = (EnvLin, EnvLin, EnvLin)
+    let c = (EnvLin,EnvLin,EnvLin)
     in envLinen' aT sT rT l c
 
 -- | Parameters for ADSR envelopes.
@@ -98,7 +95,7 @@ data ADSR a = ADSR {adsr_attackTime :: a
                    ,adsr_sustainLevel :: a
                    ,adsr_releaseTime :: a
                    ,adsr_peakLevel :: a
-                   ,adsr_curve :: (Envelope_Curve a,Envelope_Curve a,Envelope_Curve a)
+                   ,adsr_curve :: Envelope_Curve3 a
                    ,adsr_bias :: a}
 
 -- | Attack, decay, sustain, release envelope parameter constructor.
@@ -117,7 +114,7 @@ envADSR_r (ADSR aT dT sL rT pL (c0,c1,c2) b) =
 data ASR a = ASR {asr_attackTime :: a
                  ,asr_sustainLevel :: a
                  ,asr_releaseTime :: a
-                 ,asr_curve :: (Envelope_Curve a,Envelope_Curve a)}
+                 ,asr_curve :: Envelope_Curve2 a}
 
 -- | Attack, sustain, release envelope parameter constructor.
 envASR :: Num a => a -> a -> a -> Envelope_Curve a -> Envelope a
