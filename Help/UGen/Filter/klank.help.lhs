@@ -1,14 +1,10 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Klank"
 > Sound.SC3.UGen.DB.ugenSummary "Klank"
-
-# SC3
-SC3 reorders the inputs, hsc3 does not.
-
-# hsc3
-The function klankSpec can help create the 'spec' entry.
+# inputReordering: [4,0,1,2,3]
 
 > import Sound.SC3
 
+The function klankSpec can help create the 'spec' entry.
 > let s = klankSpec [800,1071,1153,1723] [1,1,1,1] [1,1,1,1]
 > in audition (out 0 (klank (impulse AR 2 0 * 0.1) 1 0 1 s))
 

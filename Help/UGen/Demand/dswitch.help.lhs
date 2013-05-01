@@ -1,8 +1,9 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Dswitch"
 > Sound.SC3.UGen.DB.ugenSummary "Dswitch"
+# inputReordering: [1,0]
 
 > import Sound.SC3
-> import qualified Sound.SC3.Monadic as M
+> import qualified Sound.SC3.Monad as M
 
 > do {a0 <- M.dwhite 2 3 4
 >    ;a1 <- M.dwhite 2 0 1
