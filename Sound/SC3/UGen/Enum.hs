@@ -75,11 +75,18 @@ data Envelope_Curve a = EnvStep
                       | EnvCub
                         deriving (Eq, Show)
 
+type T2 a = (a,a)
+type T3 a = (a,a,a)
+type T4 a = (a,a,a,a)
+
 -- | Envelope curve pair.
-type Envelope_Curve2 a = (Envelope_Curve a,Envelope_Curve a)
+type Envelope_Curve2 a = T2 (Envelope_Curve a)
 
 -- | Envelope curve triple.
-type Envelope_Curve3 a = (Envelope_Curve a,Envelope_Curve a,Envelope_Curve a)
+type Envelope_Curve3 a = T3 (Envelope_Curve a)
+
+-- | Envelope curve triple.
+type Envelope_Curve4 a = T4 (Envelope_Curve a)
 
 -- | Type specialised ('UGen') envelope curve.
 type EnvCurve = Envelope_Curve UGen

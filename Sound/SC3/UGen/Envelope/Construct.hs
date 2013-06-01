@@ -89,7 +89,7 @@ envLinen aT sT rT l =
     let c = (EnvLin,EnvLin,EnvLin)
     in envLinen' aT sT rT l c
 
--- | Parameters for ADSR envelopes.
+-- | Parameters for ADSR envelopes.  The sustain level is given as a proportion of the peak level.
 data ADSR a = ADSR {adsr_attackTime :: a
                    ,adsr_decayTime :: a
                    ,adsr_sustainLevel :: a
@@ -109,6 +109,29 @@ envADSR_r (ADSR aT dT sL rT pL (c0,c1,c2) b) =
         t = [aT,dT,rT]
         c = [c0,c1,c2]
     in Envelope l t c (Just 2) Nothing
+
+-- | Parameters for Roland type ADSSR envelopes.
+data ADSSR a = ADSSR {adssr_attackTime :: a
+                     ,adssr_attackLevel :: a
+                     ,adssr_decayTime :: a
+                     ,adssr_decayLevel :: a
+                     ,adssr_slopeTime :: a
+                     ,adssr_sustainLevel :: a
+                     ,adssr_releaseTime :: a
+                     ,adssr_curve :: Envelope_Curve4 a
+                     ,adssr_bias :: a}
+
+-- | Attack, decay, slope, sustain, release envelope parameter constructor.
+envADSSR :: Num a => a -> a -> a -> a -> a -> a -> a -> Envelope_Curve a -> a -> Envelope a
+envADSSR t1 l1 t2 l2 t3 l3 t4 c b = envADSSR_r (ADSSR t1 l1 t2 l2 t3 l3 t4 (c,c,c,c) b)
+
+-- | Record ('ADSSR') variant of 'envADSSR'.
+envADSSR_r :: Num a => ADSSR a -> Envelope a
+envADSSR_r (ADSSR t1 l1 t2 l2 t3 l3 t4 (c1,c2,c3,c4) b) =
+    let l = map (+ b) [0,l1,l2,l3,0]
+        t = [t1,t2,t3,t4]
+        c = [c1,c2,c3,c4]
+    in Envelope l t c (Just 3) Nothing
 
 -- | Parameters for ADSR envelopes.
 data ASR a = ASR {asr_attackTime :: a
