@@ -18,7 +18,7 @@ Play it back
 > let p = playBuf 1 AR 0 1 1 0 NoLoop RemoveSynth
 > in audition (out 0 p)
 
-Mix second signal equally with existing signal
+Mix second signal equally with existing signal, replay to hear
 > let o = formant AR (xLine KR 200 1000 4 DoNothing) 2000 800 * 0.125
 > in audition (mrg2 (out 0 o)
 >                   (recordBuf AR 0 0 0.5 0.5 1 NoLoop 1 RemoveSynth o))

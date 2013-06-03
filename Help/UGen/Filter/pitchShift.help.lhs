@@ -3,6 +3,12 @@
 
 > import Sound.SC3
 
-> let {r = mouseX KR 0.5 2.0 Linear 0.1
+> let {s = sinOsc AR 440 0 * 0.1
+>     ;r = mouseX KR 0.5 2.0 Linear 0.1
 >     ;d = mouseY KR 0.0 0.1 Linear 0.1}
-> in audition (out 0 (pitchShift (sinOsc AR 440 0) 0.2 r d 0))
+> in audition (out 0 (pitchShift s 0.2 r d 0))
+
+> let {s = soundIn 4
+>     ;pd = mouseX KR 0.0 0.1 Linear 0.1
+>     ;td = mouseY KR 0.0 0.1 Linear 0.1}
+> in audition (out 0 (pitchShift s 0.2 (mce2 1.0 1.5) pd td))

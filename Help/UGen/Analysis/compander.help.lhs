@@ -8,6 +8,8 @@ Example signal to process.
 >             ;p = mix (pulse AR (mce [80, 81]) 0.3)}
 >         in e * p
 
+> let z = soundIn 4
+
 > audition (out 0 z)
 
 Noise gate

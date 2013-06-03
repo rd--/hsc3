@@ -7,7 +7,7 @@ allocate buffer 10
 > withSC3 (async (b_alloc 10 512 1))
 
 > let { x = mouseX KR 0 1 Linear 0.2
->     ; i = soundIn 0
+>     ; i = soundIn 4
 >     ; c = fft' 10 i
 >     ; o = onsets' c x (onsetType "rcomplex")
 >     ; s = sinOsc AR 440 0 * 0.2

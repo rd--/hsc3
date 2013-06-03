@@ -25,24 +25,24 @@ envCoord bp dur amp c =
 envTrapezoid :: (Num a,OrdE a) => a -> a -> a -> a -> Envelope a
 envTrapezoid shape skew dur amp =
     let x1 = skew * (1 - shape)
-        bp = [ (0, skew <=* 0)
-             , (x1, 1)
-             , (shape + x1, 1)
-             , (1, skew >=* 1) ]
+        bp = [(0,skew <=* 0)
+             ,(x1,1)
+             ,(shape + x1,1)
+             ,(1,skew >=* 1)]
     in envCoord bp dur amp EnvLin
 
 -- | Variant 'envPerc' with user specified 'Envelope_Curve a'.
 envPerc' :: Num a => a -> a -> a -> Envelope_Curve2 a -> Envelope a
-envPerc' atk rls lvl (c0, c1) =
-    let c = [c0, c1]
-    in Envelope [0, lvl, 0] [atk, rls] c Nothing Nothing
+envPerc' atk rls lvl (c0,c1) =
+    let c = [c0,c1]
+    in Envelope [0,lvl,0] [atk,rls] c Nothing Nothing
 
 -- | Percussive envelope, with attack, release, level and curve
 --   inputs.
 envPerc :: Num a => a -> a -> Envelope a
 envPerc atk rls =
     let cn = EnvNum (-4)
-    in envPerc' atk rls 1 (cn, cn)
+    in envPerc' atk rls 1 (cn,cn)
 
 -- | Triangular envelope, with duration and level inputs.
 --

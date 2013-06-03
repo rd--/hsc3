@@ -108,6 +108,7 @@ Library
                    Sound.SC3.UGen.External.ID
                    Sound.SC3.UGen.External.LPC
                    Sound.SC3.UGen.External.SC3_Plugins
+                   Sound.SC3.UGen.External.Zita
                    Sound.SC3.UGen.FFT
                    Sound.SC3.UGen.FFT.ID
                    Sound.SC3.UGen.FFT.Monad
