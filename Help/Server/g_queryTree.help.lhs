@@ -1,4 +1,4 @@
-> Sound.SC3.Server.Help.viewServerHelp "/n_query"
+> Sound.SC3.Server.Help.viewServerHelp "/g_queryTree"
 
 > import Sound.OSC
 > import Sound.SC3
@@ -10,7 +10,7 @@
 > withSC3 (async (d_recv d) >>
 >          send (s_new0 "saw" 1000 AddToTail 1))
 
-> r <- withSC3 (send (n_query [1000]) >>
->               waitReply "/n_info")
+> r <- withSC3 (send (g_queryTree [(0,True)]) >>
+>               waitReply "/g_queryTree.reply")
 
 > print r
