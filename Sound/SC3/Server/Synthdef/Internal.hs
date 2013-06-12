@@ -13,26 +13,20 @@ import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
+-- * Building
+
 -- | Find 'Node' with indicated 'NodeId'.
 find_node :: Graph -> NodeId -> Maybe Node
 find_node (Graph _ cs ks us) n =
     let f x = node_id x == n
     in find f (cs ++ ks ++ us)
 
--- | Is 'Node' an /implicit/ control UGen?
-is_implicit_control :: Node -> Bool
-is_implicit_control n =
-    let cs = ["AudioControl","Control","TrigControl"]
-    in case n of
-        NodeU x _ s _ _ _ _ -> x == -1 && s `elem` cs
-        _ -> False
-
 -- | Generate a label for 'Node' using the /type/ and the 'node_id'.
 node_label :: Node -> String
 node_label nd =
     case nd of
       NodeC n _ -> "c_" ++ show n
-      NodeK n _ _ _ _ -> "k_" ++ show n
+      NodeK n _ _ _ _ _ -> "k_" ++ show n
       NodeU n _ _ _ _ _ _ -> "u_" ++ show n
       NodeP n _ _ -> "p_" ++ show n
 
@@ -77,7 +71,7 @@ as_from_port :: Node -> FromPort
 as_from_port d =
     case d of
       NodeC n _ -> FromPort_C n
-      NodeK n _ _ _ t -> FromPort_K n t
+      NodeK n _ _ _ _ t -> FromPort_K n t
       NodeU n _ _ _ o _ _ ->
           case o of
             [_] -> FromPort_U n Nothing
@@ -114,21 +108,6 @@ ktype r tr =
            AR -> K_AR
            DR -> error "ktype: DR control"
 
--- | Remove implicit /control/ UGens from 'Graph'
-remove_implicit :: Graph -> Graph
-remove_implicit g =
-    let u = filter (not . is_implicit_control) (ugens g)
-    in g {ugens = u}
-
--- | Add implicit /control/ UGens to 'Graph'.
-add_implicit :: Graph -> Graph
-add_implicit g =
-    let (Graph z cs ks us) = g
-        ks' = sortBy node_k_cmp ks
-        im = if null ks' then [] else mk_implicit ks'
-        us' = im ++ us
-    in Graph z cs ks' us'
-
 -- | Predicate to determine if 'Node' is a constant with indicated /value/.
 find_c_p :: Float -> Node -> Bool
 find_c_p x n =
@@ -154,21 +133,21 @@ mk_node_c (Constant x) g =
 find_k_p :: String -> Node -> Bool
 find_k_p x n =
     case n of
-      NodeK _ _ y _ _ -> x == y
+      NodeK _ _ _ y _ _ -> x == y
       _ -> error "find_k_p"
 
 -- | Insert a control node into the 'Graph'.
-push_k :: (Rate,String,Float,Bool) -> Graph -> (Node,Graph)
-push_k (r,nm,d,tr) g =
-    let n = NodeK (nextId g) r nm d (ktype r tr)
+push_k :: (Rate,Maybe Int,String,Float,Bool) -> Graph -> (Node,Graph)
+push_k (r,ix,nm,d,tr) g =
+    let n = NodeK (nextId g) r ix nm d (ktype r tr)
     in (n,g {controls = n : controls g
             ,nextId = nextId g + 1})
 
 -- | Either find existing 'Control' 'Node', or insert a new 'Node'.
 mk_node_k :: Control -> Graph -> (Node,Graph)
-mk_node_k (Control r nm d tr) g =
+mk_node_k (Control r ix nm d tr) g =
     let y = find (find_k_p nm) (controls g)
-    in maybe (push_k (r,nm,d,tr) g) (\y' -> (y',g)) y
+    in maybe (push_k (r,ix,nm,d,tr) g) (\y' -> (y',g)) y
 
 type UGenParts = (Rate,String,[FromPort],[Output],Special,UGenId)
 
@@ -209,6 +188,7 @@ mk_node_p n p g =
     let z = nextId g
     in (NodeP z n p,g {nextId = z + 1})
 
+-- | Transform 'UGen' into 'Graph', appending to existing 'Graph'.
 mk_node :: UGen -> Graph -> (Node,Graph)
 mk_node u g =
     case u of
@@ -223,6 +203,35 @@ mk_node u g =
           let (_,g') = mk_node (mrgRight m) g
           in mk_node (mrgLeft m) g'
       MCE_U _ -> error "mk_node: mce"
+
+-- | Transform /mce/ nodes to /mrg/ nodes
+prepare_root :: UGen -> UGen
+prepare_root u =
+    case u of
+      MCE_U m -> mrg (mceProxies m)
+      MRG_U m -> mrg2 (prepare_root (mrgLeft m)) (prepare_root (mrgRight m))
+      _ -> u
+
+-- | If controls have been given indices they must be coherent.
+sort_controls :: [Node] -> [Node]
+sort_controls c =
+    let node_k_ix n = maybe maxBound id (node_k_index n)
+        cmp = compare `on` node_k_ix
+        c' = sortBy cmp c
+        coheres z = maybe True (== z) . node_k_index
+        coherent = all id (zipWith coheres [0..] c')
+    in if coherent then c' else error (show ("sort_controls: incoherent",c))
+
+-- | Variant on 'mk_node' starting with an empty graph, reverses the
+-- 'UGen' list and sorts the 'Control' list, and adds implicit nodes.
+mk_graph :: UGen -> Graph
+mk_graph u =
+    let (_,g) = mk_node (prepare_root u) empty_graph
+        g' = g {ugens = reverse (ugens g)
+               ,controls = sort_controls (controls g)}
+    in add_implicit g'
+
+-- * Encoding
 
 type Map = M.IntMap Int
 
@@ -297,8 +306,8 @@ encode_input (Input u p) = B.append (encode_i16 u) (encode_i16 p)
 encode_node_k :: Maps -> Node -> B.ByteString
 encode_node_k (_,_,ks,_,_) nd =
     case nd of
-      NodeK n _ nm _ _ -> B.concat [B.pack (str_pstr nm)
-                                   ,encode_i16 (fetch n ks)]
+      NodeK n _ _ nm _ _ -> B.concat [B.pack (str_pstr nm)
+                                     ,encode_i16 (fetch n ks)]
       _ -> error "encode_node_k"
 
 -- | Byte-encode 'NodeU' primitive node.
@@ -333,10 +342,12 @@ encode_graphdef g =
            ,encode_i16 (length us)
            ,B.concat (map (encode_node_u mm) us)]
 
+-- * Implicit
+
 -- | 4-tuple to count 'KType's.
 type KS_COUNT = (Int,Int,Int,Int)
 
--- | Count the number of /controls/ if each 'KType'.
+-- | Count the number of /controls/ of each 'KType'.
 ks_count :: [Node] -> KS_COUNT
 ks_count =
     let rec r ns =
@@ -372,10 +383,25 @@ mk_implicit ks =
                  ,mk_n K_TR nt (ni + nk)
                  ,mk_n K_AR na (ni + nk + nt)]
 
--- | Transform /mce/ nodes to /mrg/ nodes
-prepare_root :: UGen -> UGen
-prepare_root u =
-    case u of
-      MCE_U m -> mrg (mceProxies m)
-      MRG_U m -> mrg2 (prepare_root (mrgLeft m)) (prepare_root (mrgRight m))
-      _ -> u
+-- | Is 'Node' an /implicit/ control UGen?
+is_implicit_control :: Node -> Bool
+is_implicit_control n =
+    let cs = ["AudioControl","Control","TrigControl"]
+    in case n of
+        NodeU x _ s _ _ _ _ -> x == -1 && s `elem` cs
+        _ -> False
+
+-- | Remove implicit /control/ UGens from 'Graph'
+remove_implicit :: Graph -> Graph
+remove_implicit g =
+    let u = filter (not . is_implicit_control) (ugens g)
+    in g {ugens = u}
+
+-- | Add implicit /control/ UGens to 'Graph'.
+add_implicit :: Graph -> Graph
+add_implicit g =
+    let (Graph z cs ks us) = g
+        ks' = sortBy node_k_cmp ks
+        im = if null ks' then [] else mk_implicit ks'
+        us' = im ++ us
+    in Graph z cs ks' us'

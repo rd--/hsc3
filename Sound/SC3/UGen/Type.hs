@@ -26,6 +26,7 @@ data Constant = Constant {constantValue :: Float}
 
 -- | Control inputs.
 data Control = Control {controlOperatingRate :: Rate
+                       ,controlIndex :: Maybe Int
                        ,controlName :: String
                        ,controlDefault :: Float
                        ,controlTriggered :: Bool}

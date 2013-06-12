@@ -63,6 +63,7 @@ reconstruct_c_str u =
 reconstruct_c_ugen :: Node -> UGen
 reconstruct_c_ugen u = constant (node_c_value u)
 
+-- | Discards index.
 reconstruct_k_rnd :: Node -> (Rate,String,Float)
 reconstruct_k_rnd u =
     let r = node_k_rate u
@@ -79,7 +80,7 @@ reconstruct_k_str u =
 reconstruct_k_ugen :: Node -> UGen
 reconstruct_k_ugen u =
     let (r,n,d) = reconstruct_k_rnd u
-    in control_f32 r n d
+    in control_f32 r Nothing n d
 
 ugen_qname :: String -> Special -> (String,String)
 ugen_qname nm (Special n) =

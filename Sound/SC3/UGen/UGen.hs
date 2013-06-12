@@ -54,23 +54,31 @@ ugenFoldr f st u =
 -- * Unit generator node constructors
 
 -- | Control input node constructor.
-control_f32 :: Rate -> String -> Float -> UGen
-control_f32 r nm d = Control_U (Control r nm d False)
+control_f32 :: Rate -> Maybe Int -> String -> Float -> UGen
+control_f32 r ix nm d = Control_U (Control r ix nm d False)
 
 -- | Control input node constructor.
 --
 -- Note that if the name begins with a t_ prefix the control is /not/
 -- converted to a triggered control.  Please see tr_control.
 control :: Rate -> String -> Double -> UGen
-control r nm = control_f32 r nm . realToFrac
+control r nm = control_f32 r Nothing nm . realToFrac
 
 -- | Triggered (kr) control input node constructor.
-tr_control_f32 :: String -> Float -> UGen
-tr_control_f32 nm d = Control_U (Control KR nm d True)
+tr_control_f32 :: Maybe Int -> String -> Float -> UGen
+tr_control_f32 ix nm d = Control_U (Control KR ix nm d True)
 
 -- | Triggered (kr) control input node constructor.
 tr_control :: String -> Double -> UGen
-tr_control nm = tr_control_f32 nm . realToFrac
+tr_control nm = tr_control_f32 Nothing nm . realToFrac
+
+-- | Generate a set of controls with fixed indices.
+control_set :: [UGen] -> [UGen]
+control_set =
+    let f ix u = case u of
+                   Control_U c -> Control_U (c {controlIndex = Just ix})
+                   _ -> error "control_set: non control input?"
+    in zipWith f [0..]
 
 -- | Multiple root graph node constructor.
 mrg2 :: UGen -> UGen -> UGen

@@ -44,6 +44,7 @@ data Node = NodeC {node_id :: NodeId
                   ,node_c_value :: Float}
           | NodeK {node_id :: NodeId
                   ,node_k_rate :: Rate
+                  ,node_k_index :: Maybe Int
                   ,node_k_name :: String
                   ,node_k_default :: Float
                   ,node_k_type :: KType}

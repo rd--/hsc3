@@ -21,10 +21,7 @@ import Sound.SC3.UGen.Type
 -- > import Sound.SC3.UGen
 -- > synth (out 0 (pan2 (sinOsc AR 440 0) 0.5 0.1))
 synth :: UGen -> Graph
-synth u =
-    let (_,g) = mk_node (prepare_root u) empty_graph
-        g' = g {ugens = reverse (ugens g)}
-    in add_implicit g'
+synth = mk_graph
 
 -- | Binary representation of a unit generator synth definition.
 data Synthdef = Synthdef {synthdefName :: String

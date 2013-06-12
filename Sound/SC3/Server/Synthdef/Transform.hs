@@ -13,11 +13,12 @@ import Sound.SC3.UGen.Rate
 
 -- | Transform 'NodeC' to 'NodeK', 'id' for other 'Node' types.
 --
--- > constant_to_control 8 (NodeC 0 0.1) == (NodeK 8 KR "k_8" 0.1 K_KR,9)
+-- > let r = (NodeK 8 KR Nothing "k_8" 0.1 K_KR,9)
+-- > in constant_to_control 8 (NodeC 0 0.1) == r
 constant_to_control :: NodeId -> Node -> (NodeId,Node)
 constant_to_control z n =
     case n of
-      NodeC _ k -> (z+1,NodeK z KR ("k_" ++ show z) k K_KR)
+      NodeC _ k -> (z+1,NodeK z KR Nothing ("k_" ++ show z) k K_KR)
       _ -> (z,n)
 
 -- | Erroring variant of 'from_port_node'.
