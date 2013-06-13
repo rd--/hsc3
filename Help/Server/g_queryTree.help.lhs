@@ -8,9 +8,12 @@
 >         in synthdef "saw" (out 0 o)
 
 > withSC3 (async (d_recv d) >>
->          send (s_new0 "saw" 1000 AddToTail 1))
+>          send (g_new [(100,AddToTail,1)]) >>
+>          send (s_new0 "saw" 1000 AddToTail 100))
 
 > r <- withSC3 (send (g_queryTree [(0,True)]) >>
 >               waitReply "/g_queryTree.reply")
 
 > print r
+
+> withSC3 (send (g_dumpTree [(0,True)]))

@@ -72,7 +72,7 @@ tr_control_f32 ix nm d = Control_U (Control KR ix nm d True)
 tr_control :: String -> Double -> UGen
 tr_control nm = tr_control_f32 Nothing nm . realToFrac
 
--- | Generate a set of controls with fixed indices.
+-- | Set indices at a list of controls.
 control_set :: [UGen] -> [UGen]
 control_set =
     let f ix u = case u of
