@@ -43,11 +43,3 @@ decodeB2 nc w x y o = mkFilter "DecodeB2" [w,x,y,o] nc
 -- | Azimuth panner.
 panAz :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 panAz nc i p l w o = mkFilter "PanAz" [i, p, l, w, o] nc
-
--- | Equal power two channel cross fade.
-xFade2 :: UGen -> UGen -> UGen -> UGen -> UGen
-xFade2 inA inB pan level = mkFilter "XFade2" [inA, inB, pan, level] 2
-
--- | Two channel linear crossfade.
-linXFade2 :: UGen -> UGen -> UGen -> UGen
-linXFade2 inA inB pan = mkFilter "LinXFade2" [inA, inB, pan] 2

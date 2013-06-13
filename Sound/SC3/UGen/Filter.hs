@@ -226,6 +226,10 @@ limiter i l d = mkFilter "Limiter" [i,l,d] 1
 linExp :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 linExp i sl sh dl dh = mkFilter "LinExp" [i,sl,sh,dl,dh] 1
 
+-- | Two channel linear crossfade.
+linXFade2 :: UGen -> UGen -> UGen -> UGen
+linXFade2 inA inB pan = mkFilter "LinXFade2" [inA, inB, pan] 1
+
 -- | Lowpass filter.
 lpf :: UGen -> UGen -> UGen
 lpf i f = mkFilter "LPF" [i,f] 1
@@ -412,6 +416,10 @@ wrap i j k = mkFilter "Wrap" [i,j,k] 1
 -- | Index into a table with a signal.
 wrapIndex :: UGen -> UGen -> UGen
 wrapIndex b i = mkFilter "WrapIndex" [b,i] 1
+
+-- | Equal power two channel cross fade.
+xFade2 :: UGen -> UGen -> UGen -> UGen -> UGen
+xFade2 inA inB pan level = mkFilter "XFade2" [inA, inB, pan, level] 1
 
 -- * BEQ filters
 
