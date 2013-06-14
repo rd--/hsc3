@@ -31,9 +31,9 @@ dynKlank i fs fo ds s =
         gen _ = 0
     in gen (mceChannels s)
 
--- | Frequency shifter, in terms of Hilbert UGen.
-freqShift :: UGen -> UGen -> UGen -> UGen
-freqShift i f p =
+-- | Frequency shifter, in terms of 'hilbert' (see also 'freqShift').
+freqShift_hilbert :: UGen -> UGen -> UGen -> UGen
+freqShift_hilbert i f p =
     let o = sinOsc AR f (mce [p + 0.5 * pi, p])
         h = hilbert i
     in mix (h * o)

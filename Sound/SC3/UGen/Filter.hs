@@ -126,6 +126,10 @@ freeVerb i mx room damp = mkFilter "FreeVerb" [i,mx,room,damp] 1
 freeVerb2 :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 freeVerb2 i1 i2 mx room damp = mkFilter "FreeVerb2" [i1,i2,mx,room,damp] 2
 
+-- | Frequency shifter (see also 'freqShift_hilbert').
+freqShift :: UGen -> UGen -> UGen -> UGen
+freqShift i f p = mkFilter "FreqShift" [i,f,p] 1
+
 -- | Gate.
 gate :: UGen -> UGen -> UGen
 gate i t = mkFilter "Gate" [i,t] 1

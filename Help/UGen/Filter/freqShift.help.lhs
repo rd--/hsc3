@@ -15,14 +15,14 @@ shifting a complex tone by 1 Hz rising to 500Hz
 > in audition (out 0 (freqShift i s 0 * 0.1))
 
 modulating shift and phase
-> let {s = lfNoise2 'a' AR 0.3
+> let {s = lfNoise2 'α' AR 0.3
 >     ;i = sinOsc AR 10 0
 >     ;p = linLin (sinOsc AR 500 0) (-1) 1 0 (2 * pi)}
 > in audition (out 0 (freqShift i (s * 1500) p * 0.1))
 
 shifting bandpassed noise
-> let {n1 = whiteNoise 'a' AR
->     ;n2 = lfNoise0 'a' AR 5.5
+> let {n1 = whiteNoise 'α' AR
+>     ;n2 = lfNoise0 'β' AR 5.5
 >     ;i = bpf n1 1000 0.001
 >     ;s = n2 * 1000}
 > in audition (out 0 (freqShift i s 0 * 32))
@@ -35,6 +35,6 @@ shifting bandpassed noise
 > let {e = lfGauss AR 4 (1/8) 0 Loop DoNothing
 >     ;o = blip AR 60 4 * e
 >     ;a = o / 4 + localIn 2 AR
->     ;s = freqShift a (lfNoise0 'a' KR (1/4) * 90) 0
+>     ;s = freqShift a (lfNoise0 'α' KR (1/4) * 90) 0
 >     ;z = delayC s 1 0.1 * 0.9}
 > in audition (mrg2 (out 0 s) (localOut z))
