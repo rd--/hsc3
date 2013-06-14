@@ -4,7 +4,7 @@
 > import Sound.SC3.ID
 
 > let {i = whiteNoise 'α' AR * 0.2
->     ;b = mrg2 (localBuf 'α' 2048 1) (maxLocalBufs 1)
+>     ;b = localBuf 'β' 2048 1
 >     ;c = dwt b i 0.5 0 1 0 0
 >     ;x = mouseX KR 0 1 Linear 0.1
 >     ;c' = wt_TimeWipe c x}

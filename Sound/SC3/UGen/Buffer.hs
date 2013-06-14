@@ -141,6 +141,7 @@ localBuf z nf nc = mkOscId z IR "LocalBuf" [nc, nf] 1
 -- note that nf & nc are swapped at actual ugen
 
 -- | Set the maximum number of local buffers in a synth.
+-- Added implicitly by the graph constructor if required and not present.
 maxLocalBufs :: UGen -> UGen
 maxLocalBufs n = mkOsc IR "MaxLocalBufs" [n] 0
 
@@ -151,8 +152,7 @@ setBuf b xs o = mkOsc IR "SetBuf" ([b, o, fromIntegral (length xs)] ++ xs) 1
 -- | Generate a localBuf and use setBuf to initialise it.
 asLocalBuf :: ID i => i -> [UGen] -> UGen
 asLocalBuf i xs =
-    let m = maxLocalBufs 8
-        b = mrg2 (localBuf i (fromIntegral (length xs)) 1) m
+    let b = localBuf i (fromIntegral (length xs)) 1
         s = setBuf b xs 0
     in mrg2 b s
 

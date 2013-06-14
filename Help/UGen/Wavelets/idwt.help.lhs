@@ -3,8 +3,8 @@
 
 > import Sound.SC3.ID
 
-> let {i = whiteNoise 'a' AR * 0.05
->     ;b = mrg2 (localBuf 'α' 1024 1) (maxLocalBufs 1)
+> let {i = whiteNoise 'α' AR * 0.05
+>     ;b = localBuf 'β' 1024 1
 >     ;c = dwt b i 0.5 0 1 0 0}
 > in audition (out 0 (mce2 (idwt c 0 0 0) i))
 

@@ -68,6 +68,9 @@ lpcVals r b ptr = mkOsc r "LPCVals" [b, ptr] 3
 metro :: Rate -> UGen -> UGen -> UGen
 metro rt bpm nb = mkOsc rt "Metro" [bpm,nb] 1
 
+pv_BinDelay :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+pv_BinDelay buffer maxdelay delaybuf fbbuf hop = mkOsc KR "PV_BinDelay" [buffer,maxdelay,delaybuf,fbbuf,hop] 1
+
 -- | Invert FFT amplitude data.
 pv_Invert :: UGen -> UGen
 pv_Invert b = mkOsc KR "PV_Invert" [b] 1

@@ -6,8 +6,8 @@
 > let c = pulseCount (impulse AR 10 0) (impulse AR 0.4 0)
 > in audition (out 0 (sinOsc AR (c * 200) 0 * 0.05))
 
-> let {m = maxLocalBufs 1
->     ;b = mrg2 (localBuf 'α' 11 1) m
+printer
+> let {b = localBuf 'α' 11 1
 >     ;t = impulse AR 10 0
 >     ;p = pulseCount t 0
 >     ;d = demand t 0 (dbufwr 'α' (-666) b p NoLoop)}

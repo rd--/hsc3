@@ -69,8 +69,8 @@ pv_Add :: UGen -> UGen -> UGen
 pv_Add ba bb = mkOsc KR "PV_Add" [ba,bb] 1
 
 -- | Shift and scale the bin positions.
-pv_BinShift :: UGen -> UGen -> UGen -> UGen
-pv_BinShift buf str shift = mkOsc KR "PV_BinShift" [buf,str,shift] 1
+pv_BinShift :: UGen -> UGen -> UGen -> UGen -> UGen
+pv_BinShift buf str shift interp = mkOsc KR "PV_BinShift" [buf,str,shift,interp] 1
 
 -- | Combine low and high bins from two inputs.
 pv_BinWipe :: UGen -> UGen -> UGen -> UGen

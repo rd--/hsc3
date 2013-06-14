@@ -342,7 +342,7 @@ encode_graphdef g =
            ,encode_i16 (length us)
            ,B.concat (map (encode_node_u mm) us)]
 
--- * Implicit
+-- * Implicit (Control, MaxLocalBuf)
 
 -- | 4-tuple to count 'KType's.
 type KS_COUNT = (Int,Int,Int,Int)
@@ -365,8 +365,8 @@ ks_count =
 -- | Construct implicit /control/ unit generator 'Nodes'.  Unit
 -- generators are only constructed for instances of control types that
 -- are present.
-mk_implicit :: [Node] -> [Node]
-mk_implicit ks =
+mk_implicit_ctl :: [Node] -> [Node]
+mk_implicit_ctl ks =
     let (ni,nk,nt,na) = ks_count ks
         mk_n t n o =
             let (nm,r) = case t of
@@ -383,6 +383,36 @@ mk_implicit ks =
                  ,mk_n K_TR nt (ni + nk)
                  ,mk_n K_AR na (ni + nk + nt)]
 
+-- | Add implicit /control/ UGens to 'Graph'.
+add_implicit_ctl :: Graph -> Graph
+add_implicit_ctl g =
+    let (Graph z cs ks us) = g
+        ks' = sortBy node_k_cmp ks
+        im = if null ks' then [] else mk_implicit_ctl ks'
+        us' = im ++ us
+    in Graph z cs ks' us'
+
+-- | Zero if no local buffers, or if maxLocalBufs is given.
+localbuf_count :: [Node] -> Int
+localbuf_count us =
+    case find ((==) "MaxLocalBufs" . node_u_name) us of
+      Nothing -> length (filter ((==) "LocalBuf" . node_u_name) us)
+      Just _ -> 0
+
+-- | Add implicit 'maxLocalBufs' if not present.
+add_implicit_buf :: Graph -> Graph
+add_implicit_buf g =
+    case localbuf_count (ugens g) of
+      0 -> g
+      n -> let (c,g') = mk_node_c (Constant (fromIntegral n)) g
+               p = as_from_port c
+               u = NodeU (-1) IR "MaxLocalBufs" [p] [] (Special 0) no_id
+           in g' {ugens = u : ugens g'}
+
+-- | 'add_implicit_buf' and 'add_implicit_ctl'.
+add_implicit :: Graph -> Graph
+add_implicit = add_implicit_buf . add_implicit_ctl
+
 -- | Is 'Node' an /implicit/ control UGen?
 is_implicit_control :: Node -> Bool
 is_implicit_control n =
@@ -391,17 +421,12 @@ is_implicit_control n =
         NodeU x _ s _ _ _ _ -> x == -1 && s `elem` cs
         _ -> False
 
--- | Remove implicit /control/ UGens from 'Graph'
+-- | Is Node implicit?
+is_implicit :: Node -> Bool
+is_implicit n = node_u_name n == "MaxLocalBufs" || is_implicit_control n
+
+-- | Remove implicit UGens from 'Graph'
 remove_implicit :: Graph -> Graph
 remove_implicit g =
-    let u = filter (not . is_implicit_control) (ugens g)
+    let u = filter (not . is_implicit) (ugens g)
     in g {ugens = u}
-
--- | Add implicit /control/ UGens to 'Graph'.
-add_implicit :: Graph -> Graph
-add_implicit g =
-    let (Graph z cs ks us) = g
-        ks' = sortBy node_k_cmp ks
-        im = if null ks' then [] else mk_implicit ks'
-        us' = im ++ us
-    in Graph z cs ks' us'
