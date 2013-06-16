@@ -5,9 +5,9 @@ import Data.List {- base -}
 import Data.Maybe {- base -}
 import Sound.OSC.Core {- hosc -}
 
+import Sound.SC3.Internal
 import Sound.SC3.Server.Command.Core
 import Sound.SC3.Server.Enum
-import Sound.SC3.Server.Utilities
 import Sound.SC3.UGen.Enum
 
 -- * Node commands

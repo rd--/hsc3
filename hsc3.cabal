@@ -137,7 +137,7 @@ Library
                    Sound.SC3.UGen.UGen
                    Sound.SC3.UGen.UId
                    Sound.SC3.UGen.Wavelets
-  Other-modules:   Sound.SC3.Server.Utilities
+  Other-modules:   Sound.SC3.Internal
 
 Source-Repository  head
   Type:            darcs

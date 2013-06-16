@@ -1,6 +1,7 @@
 -- | Data types for enumerated and non signal unit generator inputs.
 module Sound.SC3.UGen.Enum where
 
+import Sound.SC3.Internal
 import Sound.SC3.UGen.Envelope.Interpolate
 import Sound.SC3.UGen.Type
 
@@ -74,10 +75,6 @@ data Envelope_Curve a = EnvStep
                       | EnvSqr
                       | EnvCub
                         deriving (Eq, Show)
-
-type T2 a = (a,a)
-type T3 a = (a,a,a)
-type T4 a = (a,a,a,a)
 
 -- | Envelope curve pair.
 type Envelope_Curve2 a = T2 (Envelope_Curve a)
