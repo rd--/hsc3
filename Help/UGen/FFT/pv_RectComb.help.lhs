@@ -5,14 +5,18 @@
 
 > withSC3 (async (b_alloc 10 2048 1))
 
-> let { n = whiteNoise 'a' AR
->     ; x = mouseX KR 0 0.5 Linear 0.1
->     ; y = mouseY KR 0 0.5 Linear 0.1
->     ; c = pv_RectComb (fft' 10 (n * 0.3)) 8 x y }
+noise source
+> let z = whiteNoise 'a' AR * 0.3
+
+outside world
+> let z = soundIn 4
+
+> let {x = mouseX KR 0 0.5 Linear 0.1
+>     ;y = mouseY KR 0 0.5 Linear 0.1
+>     ;c = pv_RectComb (fft' 10 z) 8 x y}
 > in audition (out 0 (pan2 (ifft' c) 0 1))
 
-> let { n = whiteNoise 'a' AR
->     ; p = lfTri KR 0.097 0 *   0.4  + 0.5
->     ; w = lfTri KR 0.240 0 * (-0.5) + 0.5
->     ; c = pv_RectComb (fft' 10 (n * 0.3)) 8 p w }
+> let {p = lfTri KR 0.097 0 *   0.4  + 0.5
+>     ;w = lfTri KR 0.240 0 * (-0.5) + 0.5
+>     ;c = pv_RectComb (fft' 10 z) 8 p w}
 > in audition (out 0 (pan2 (ifft' c) 0 1))

@@ -17,8 +17,8 @@
 careful - feedback loop!
 > let {a = soundIn (mce2 4 5) * 4
 >     ;f = fft' 10 a
->     ;x = mouseX KR 0.25 1 Linear 0.1
->     ;y = mouseY KR 0.25 1 Linear 0.1
+>     ;x = mouseX KR 0.15 1 Linear 0.1
+>     ;y = mouseY KR 0.15 1 Linear 0.1
 >     ;i = impulse KR (lfNoise0 'a' KR 2 * 8 + 10) 0
 >     ;g = pv_BinScramble 'a' f x y i
 >     ;h = ifft' g}
