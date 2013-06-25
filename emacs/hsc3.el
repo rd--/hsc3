@@ -46,7 +46,7 @@
 	(find-lisp-find-files hsc3-help-directory
 			      (concat "^"
 				      (thing-at-point 'symbol)
-				      "\\.help\\.lhs"))))
+				      "\\.help\\.l?hs$"))))
 
 (defun hsc3-sc3-ugen-help ()
   "Lookup up the UGen name at point in the SC3 help files."
