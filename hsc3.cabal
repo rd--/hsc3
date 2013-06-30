@@ -23,27 +23,27 @@ Cabal-Version:     >= 1.8
 
 Data-files:        README
                    emacs/hsc3.el
-                   Help/Server/*.help.*hs
-                   Help/UGen/Analysis/*.help.*hs
-                   Help/UGen/Buffer/*.help.*hs
-                   Help/UGen/Chaos/*.help.*hs
-                   Help/UGen/Control/*.help.*hs
-                   Help/UGen/Demand/*.help.*hs
-                   Help/UGen/DiskIO/*.help.*hs
-                   Help/UGen/Envelope/*.help.*hs
-                   Help/UGen/External/*.help.*hs
-                   Help/UGen/FFT/*.help.*hs
-                   Help/UGen/Filter/*.help.*hs
-                   Help/UGen/Granular/*.help.*hs
-                   Help/UGen/Information/*.help.*hs
-                   Help/UGen/IO/*.help.*hs
-                   Help/UGen/MachineListening/*.help.*hs
-                   Help/UGen/Math/*.help.*hs
-                   Help/UGen/Noise/*.help.*hs
-                   Help/UGen/Oscillator/*.help.*hs
-                   Help/UGen/Panner/*.help.*hs
-                   Help/UGen/Trigger/*.help.*hs
-                   Help/UGen/Wavelets/*.help.*hs
+                   Help/Server/*.help.lhs
+                   Help/UGen/Analysis/*.help.lhs
+                   Help/UGen/Buffer/*.help.lhs
+                   Help/UGen/Chaos/*.help.lhs
+                   Help/UGen/Control/*.help.lhs
+                   Help/UGen/Demand/*.help.lhs
+                   Help/UGen/DiskIO/*.help.lhs
+                   Help/UGen/Envelope/*.help.lhs
+                   Help/UGen/External/*.help.lhs
+                   Help/UGen/FFT/*.help.lhs
+                   Help/UGen/Filter/*.help.lhs
+                   Help/UGen/Granular/*.help.lhs
+                   Help/UGen/Information/*.help.lhs
+                   Help/UGen/IO/*.help.lhs
+                   Help/UGen/MachineListening/*.help.lhs
+                   Help/UGen/Math/*.help.lhs
+                   Help/UGen/Noise/*.help.lhs
+                   Help/UGen/Oscillator/*.help.lhs
+                   Help/UGen/Panner/*.help.lhs
+                   Help/UGen/Trigger/*.help.lhs
+                   Help/UGen/Wavelets/*.help.lhs
 
 Library
   Build-Depends:   base == 4.*,

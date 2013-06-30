@@ -162,6 +162,10 @@ hpz2 i = mkFilter "HPZ2" [i] 1
 inRange :: UGen -> UGen -> UGen -> UGen
 inRange i lo hi = mkFilter "InRange" [i,lo,hi] 1
 
+-- | A leaky integrator.
+integrator :: UGen -> UGen -> UGen
+integrator i coef = mkFilter "Integrator" [i,coef] 1
+
 -- | Control to audio rate converter.
 k2A :: UGen -> UGen
 k2A i = mkOscR [AR] AR "K2A" [i] 1

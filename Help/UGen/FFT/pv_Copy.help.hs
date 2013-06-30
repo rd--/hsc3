@@ -9,7 +9,7 @@ Proof of concept, silence.  This is very fragile.
 If c0 and c1 are swapped the output is no longer
 silence.  pv_Copy is required to run before the
 ifft of c0, which mutates c0, however that is not
-apparent from the wire structure of the graph.  In
+apparent from the edge structure of the graph.  In
 the case of cpy0 the graph happens to sort as
 required, in cpy1 it does not.
 

@@ -165,8 +165,8 @@ pv_PhaseShift90 :: UGen -> UGen
 pv_PhaseShift90 buf = mkOsc KR "PV_PhaseShift90" [buf] 1
 
 -- | Shift phase.
-pv_PhaseShift :: UGen -> UGen -> UGen
-pv_PhaseShift buf shift = mkOsc KR "PV_PhaseShift" [buf,shift] 1
+pv_PhaseShift :: UGen -> UGen -> UGen -> UGen
+pv_PhaseShift buf shift integrate = mkOsc KR "PV_PhaseShift" [buf,shift,integrate] 1
 
 -- | Make gaps in spectrum.
 pv_RectComb2 :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen

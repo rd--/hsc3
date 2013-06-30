@@ -18,5 +18,6 @@ Random parameters, linear modulation index motion over n seconds
 
 PM textures
 > import qualified Sound.SC3.Lang.Control.OverlapTexture as L
-> L.overlapTextureU (0,1,5,maxBound) (pmi 1)
+> L.overlapTextureU (0,1,8,maxBound) (pmi 1)
+> L.overlapTextureU (1,2,7,maxBound) (pmi 2)
 > L.overlapTextureU (6,6,6,maxBound) (pmi 12)
