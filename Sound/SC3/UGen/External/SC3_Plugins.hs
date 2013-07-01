@@ -6,6 +6,32 @@ import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
+-- * AntiAliasingOscillators (Nick Collins)
+
+-- | Band limited impulse generation
+blitB3 :: Rate -> UGen -> UGen
+blitB3 rate freq = mkOscR [AR] rate "BlitB3" [freq] 1
+
+-- | BLIT derived sawtooth
+blitB3Saw :: Rate -> UGen -> UGen -> UGen
+blitB3Saw rate freq leak = mkOscR [AR] rate "BlitB3Saw" [freq,leak] 1
+
+-- | Bipolar BLIT derived square waveform
+blitB3Square :: Rate -> UGen -> UGen -> UGen
+blitB3Square rate freq leak = mkOscR [AR] rate "BlitB3Square" [freq,leak] 1
+
+-- | Bipolar BLIT derived triangle
+blitB3Tri :: Rate -> UGen -> UGen -> UGen -> UGen
+blitB3Tri rate freq leak leak2 = mkOscR [AR] rate "BlitB3Tri" [freq,leak,leak2] 1
+
+-- | Triangle via 3rd order differerentiated polynomial waveform
+dPW3Tri :: Rate -> UGen -> UGen
+dPW3Tri rate freq = mkOscR [AR] rate "DPW3Tri" [freq] 1
+
+-- | Sawtooth via 4th order differerentiated polynomial waveform
+dPW4Saw :: Rate -> UGen -> UGen
+dPW4Saw rate freq = mkOscR [AR] rate "DPW4Saw" [freq] 1
+
 -- * AY
 
 -- | Emulation of AY (aka YM) soundchip, used in Spectrum\/Atari.
