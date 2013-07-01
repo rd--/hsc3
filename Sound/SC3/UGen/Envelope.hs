@@ -84,6 +84,13 @@ envelope_curves e =
        else take n (cycle c)
 
 -- | Linear SC3 form of 'Envelope' data.
+--
+-- > let {l = [0,0.6,0.3,1.0,0]
+-- >     ;t = [0.1,0.02,0.4,1.1]
+-- >     ;c = [EnvLin,EnvExp,EnvNum (-6),EnvSin]
+-- >     ;e = Envelope l t c Nothing Nothing
+-- >     ;r = [0,4,-99,-99,0.6,0.1,1,0,0.3,0.02,2,0,1,0.4,5,-6,0,1.1,3,0]}
+-- > in envelope_sc3_array e == Just r
 envelope_sc3_array :: Num a => Envelope a -> Maybe [a]
 envelope_sc3_array e =
     let Envelope l t _ rn ln = e
@@ -95,6 +102,25 @@ envelope_sc3_array e =
         f i j k = [i,j,env_curve_shape k,env_curve_value k]
     in case l of
          l0:l' -> Just (l0 : n' : rn' : ln' : concat (zipWith3 f l' t c))
+         _ -> Nothing
+
+-- | @IEnvGen@ SC3 form of 'Envelope' data.  Offset not supported (zero).
+--
+-- > let {l = [0,0.6,0.3,1.0,0]
+-- >     ;t = [0.1,0.02,0.4,1.1]
+-- >     ;c = [EnvLin,EnvExp,EnvNum (-6),EnvSin]
+-- >     ;e = Envelope l t c Nothing Nothing
+-- >     ;r = [0,0,4,1.62,0.1,1,0,0.6,0.02,2,0,0.3,0.4,5,-6,1,1.1,3,0,0]}
+-- > in envelope_sc3_ienvgen_array e == Just r
+envelope_sc3_ienvgen_array :: Num a => Envelope a -> Maybe [a]
+envelope_sc3_ienvgen_array e =
+    let Envelope l t _ _ _ = e
+        n = length t
+        n' = fromIntegral n
+        c = envelope_curves e
+        f i j k = [j,env_curve_shape k,env_curve_value k,i]
+    in case l of
+         l0:l' -> Just (0 : l0 : n' : sum t : concat (zipWith3 f l' t c))
          _ -> Nothing
 
 env_is_sustained :: Envelope a -> Bool
@@ -137,6 +163,14 @@ envGen r gate lvl bias scale act e =
         z = fromMaybe err (envelope_sc3_array e)
         i = [gate, lvl, bias, scale, from_done_action act] ++ z
     in mkOsc r "EnvGen" i 1
+
+-- | Envelope generator for polling values from an Env
+iEnvGen :: Rate -> UGen -> Envelope UGen -> UGen
+iEnvGen r ix e =
+    let err = error "iEnvGen: bad Envelope"
+        z = fromMaybe err (envelope_sc3_ienvgen_array e)
+        i = ix : z
+    in mkOscR [AR,KR] r "IEnvGen" i 1
 
 -- | Line generator.
 line :: Rate -> UGen -> UGen -> UGen -> DoneAction -> UGen
