@@ -42,6 +42,12 @@ ay ta tb tc n c va vb vc ef es ct = mkOsc AR "AY" [ta, tb, tc, n, c, va, vb, vc,
 ayFreqToTone :: Fractional a => a -> a
 ayFreqToTone f = 110300 / (f - 0.5)
 
+-- * BatUGens
+
+-- | An amplitude tracking based onset detector
+coyote :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+coyote rate in_ trackFall slowLag fastLag fastMul thresh minDur = mkOscR [KR] rate "Coyote" [in_,trackFall,slowLag,fastLag,fastMul,thresh,minDur] 1
+
 -- * Bhob
 
 -- | String resonance filter
@@ -132,6 +138,18 @@ brusselator rate reset rate_ mu gamma initx inity = mkOscR [AR] rate "Brusselato
 -- | Forced DoubleWell Oscillator
 doubleWell3 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 doubleWell3 rate reset rate_ f delta initx inity = mkOscR [AR] rate "DoubleWell3" [reset,rate_,f,delta,initx,inity] 1
+
+-- | Envelope Follower Filter
+envDetect :: Rate -> UGen -> UGen -> UGen -> UGen
+envDetect rate in_ attack release = mkOscR [AR] rate "EnvDetect" [in_,attack,release] 1
+
+-- | Envelope Follower
+envFollow :: Rate -> UGen -> UGen -> UGen
+envFollow rate input decaycoeff = mkOscR [AR,KR] rate "EnvFollow" [input,decaycoeff] 1
+
+-- | Experimental time domain onset detector
+sLOnset :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+sLOnset rate input memorysize1 before after threshold hysteresis = mkOscR [KR] rate "SLOnset" [input,memorysize1,before,after,threshold,hysteresis] 1
 
 -- * Stk
 
