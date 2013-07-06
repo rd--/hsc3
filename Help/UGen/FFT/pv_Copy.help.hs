@@ -12,7 +12,7 @@ PV_Split.
 
 > audition (out 0 cpy0)
 -}
-cpy =
+cpy0 =
     let z = lfClipNoise 'α' AR 100 * 0.1
         c0 = fft' (localBuf 'β' 2048 1) z
         c1 = pv_Copy c0 (localBuf 'γ' 2048 1)

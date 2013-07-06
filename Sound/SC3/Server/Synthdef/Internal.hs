@@ -466,7 +466,7 @@ pv_multiple_out_edges g =
     in filter (primitive_is_pv_rate . node_u_name) n
 
 -- | Error if graph has invalid @PV@ subgraph, ie. multiple out edges
--- at @PV@ node not connecting to @Unpack1FFT@.
+-- at @PV@ node not connecting to @Unpack1FFT@ & @PackFFT@.
 pv_validate :: Graph -> Graph
 pv_validate g =
     case pv_multiple_out_edges g of

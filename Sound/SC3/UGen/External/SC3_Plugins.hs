@@ -107,6 +107,10 @@ pv_BinDelay buffer maxdelay delaybuf fbbuf hop = mkOsc KR "PV_BinDelay" [buffer,
 pv_Invert :: UGen -> UGen
 pv_Invert b = mkOsc KR "PV_Invert" [b] 1
 
+-- | Sample looping oscillator
+loopBuf :: Int -> Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+loopBuf numChannels rate bufnum rate_ gate_ startPos startLoop endLoop interpolation = mkOscR [AR] rate "LoopBuf" [bufnum,rate_,gate_,startPos,startLoop,endLoop,interpolation] numChannels
+
 -- * MCLD
 
 -- | 3D Perlin Noise
