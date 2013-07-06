@@ -5,6 +5,6 @@
 
 > withSC3 (async (b_alloc 10 2048 1))
 
-> let {n = whiteNoise 'a' AR
+> let {n = whiteNoise 'α' AR
 >     ;x = mouseX KR (-1) 1 Linear 0.1}
 > in audition (out 0 (ifft' (pv_BrickWall (fft' 10 (n * 0.2)) x)))

@@ -2,18 +2,19 @@
 > Sound.SC3.UGen.DB.ugenSummary "PackFFT"
 
 > import Sound.SC3.ID
+> import Sound.SC3.UGen.Protect
 
 > withSC3 (async (b_alloc 10 512 1))
 
 > let {n = 100
 >     ;square a = a * a
->     ;r1 = let f = expRand 'a' 0.1 1
+>     ;r1 = let f = expRand 'α' 0.1 1
 >           in linLin (fSinOsc KR f 0) (-1) 1 0 1
->     ;m1 = uclone' 'a' n r1
+>     ;m1 = uclone' 'β' n r1
 >     ;m2 = zipWith (*) m1 (map square [1.0, 0.99 ..])
->     ;r2 = let r = iRand 'a' (-3) 5
+>     ;r2 = let r = iRand 'γ' (-3) 5
 >           in lfPulse KR (2 ** r) 0 0.3
->     ;i = uclone' 'a' n r2
+>     ;i = uclone' 'δ' n r2
 >     ;m3 = zipWith (*) m2 i
 >     ;p = replicate n 0.0
 >     ;c1 = fft' 10 (fSinOsc AR 440 0)

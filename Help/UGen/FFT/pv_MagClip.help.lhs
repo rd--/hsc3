@@ -7,16 +7,19 @@
 > in withSC3 (do {_ <- async (b_alloc 10 2048 1)
 >                ;async (b_allocRead 12 fileName 0 0)})
 
-> let { a = playBuf 1 AR 12 (bufRateScale KR 12) 0 0 Loop DoNothing
->     ; f = fft' 10 a
->     ; x = mouseX KR 0 5 Linear 0.1
->     ; h = pv_MagClip f x }
-> in audition (out 0 (ifft' h * 0.5))
+File input
+> let z = playBuf 1 AR 12 (bufRateScale KR 12) 0 0 Loop DoNothing
 
 Synthesised input.
-> let { a = sinOsc KR (squared (sinOsc KR 0.08 0 * 6 + 6.2)) 0 * 100 + 800
->     ; b = sinOsc AR a 0
->     ; f = fft' 10 b
->     ; x = mouseX KR 0 128 Linear 0.1
->     ; h = pv_MagClip f x }
+> let z = let {f0 = squared (sinOsc KR 0.08 0 * 6 + 6.2)
+>             ;f1 = sinOsc KR f0 0 * 100 + 800}
+>         in sinOsc AR f1 0
+
+Outside world
+> let z = soundIn 4
+
+> let {f = fft' 10 z
+>     ;c = 128
+>     ;x = mouseX KR 0 c Linear 0.1
+>     ;h = pv_MagClip f x}
 > in audition (out 0 (ifft' h * 0.5))

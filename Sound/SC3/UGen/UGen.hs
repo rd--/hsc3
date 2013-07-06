@@ -3,9 +3,9 @@ module Sound.SC3.UGen.UGen where
 
 import qualified Data.Char as C {- base -}
 import Data.List {- base -}
-import Data.Maybe {- base -}
 
 import Sound.SC3.UGen.Identifier
+import Sound.SC3.UGen.MCE
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
@@ -289,16 +289,17 @@ unsignedShift = mkBinaryOperator UnsignedShift undefined
 
 -- * Analysis
 
--- | UGen primitive.  Sees through Proxy and MRG.  Errors on MCE.
-ugen_primitive :: UGen -> Maybe Primitive
+-- | UGen primitive.  Sees through Proxy and MRG, possible multiple
+-- primitives for MCE.
+ugen_primitive :: UGen -> [Primitive]
 ugen_primitive u =
     case u of
-      Constant_U _ -> Nothing
-      Control_U _ -> Nothing
-      Label_U _ -> Nothing
-      Primitive_U p -> Just p
-      Proxy_U p -> Just (proxySource p)
-      MCE_U _ -> error "ugen_primitive: MCE"
+      Constant_U _ -> []
+      Control_U _ -> []
+      Label_U _ -> []
+      Primitive_U p -> [p]
+      Proxy_U p -> [proxySource p]
+      MCE_U m -> concatMap ugen_primitive (mce_elem m)
       MRG_U m -> ugen_primitive (mrgLeft m)
 
 -- | Heuristic based on primitive name (@FFT@, @PV_@).  Note that
@@ -308,29 +309,30 @@ primitive_is_pv_rate nm = nm == "FFT" || "PV_" `isPrefixOf` nm
 
 -- | Variant on primitive_is_pv_rate.
 ugen_is_pv_rate :: UGen -> Bool
-ugen_is_pv_rate = fromMaybe False
-                  . fmap (primitive_is_pv_rate . ugenName)
+ugen_is_pv_rate = any (primitive_is_pv_rate . ugenName)
                   . ugen_primitive
 
 -- | Traverse input graph until an @FFT@ or @PV_Split@ node is
--- encountered, and then locates the buffer input.
+-- encountered, and then locates the buffer input.  Biases left at MCE
+-- nodes.
 pv_track_buffer :: UGen -> Either String UGen
 pv_track_buffer u =
     case ugen_primitive u of
-      Nothing -> Left "pv_track_buffer: not located"
-      Just p -> case ugenName p of
-                  "FFT" -> Right (ugenInputs p !! 0)
-                  "PV_Split" -> Right (ugenInputs p !! 1)
-                  _ -> pv_track_buffer (ugenInputs p !! 0)
+      [] -> Left "pv_track_buffer: not located"
+      p:_ -> case ugenName p of
+               "FFT" -> Right (ugenInputs p !! 0)
+               "PV_Split" -> Right (ugenInputs p !! 1)
+               _ -> pv_track_buffer (ugenInputs p !! 0)
 
 -- | Buffer node number of frames, only implemented for @LocalBuf@.
+-- Biases left at MCE nodes.
 buffer_nframes :: UGen -> Either String UGen
 buffer_nframes u =
     case ugen_primitive u of
-      Nothing -> Left "buffer_nframes: not primitive"
-      Just p -> case ugenName p of
-                  "LocalBuf" -> Right (ugenInputs p !! 1)
-                  _ -> Left "buffer_nframes: not LocalBuf"
+      [] -> Left "buffer_nframes: not primitive"
+      p:_ -> case ugenName p of
+               "LocalBuf" -> Right (ugenInputs p !! 1)
+               _ -> Left "buffer_nframes: not LocalBuf"
 
 -- | 'pv_track_buffer' then 'buffer_nframes'.
 pv_track_nframes :: UGen -> Either String UGen

@@ -450,16 +450,29 @@ multiple_u_out_edges e =
 -- | List @PV@ 'Node's at 'Graph' with multiple out edges.
 pv_multiple_out_edges :: Graph -> [Node]
 pv_multiple_out_edges g =
-    let pv_n = filter (primitive_is_pv_rate . node_u_name) (ugens g)
-        pv_e = edges pv_n
-    in mapMaybe (find_node g) (map port_nid (multiple_u_out_edges pv_e))
+    let e = edges (ugens g)
+        p = multiple_u_out_edges e
+        n = mapMaybe (find_node g) (map port_nid p)
+    in filter (primitive_is_pv_rate . node_u_name) n
 
--- | Error if graph has invalid @PV@ subgraph.
---
--- > pv_validate (synthdefGraph g2s)
+-- | Descendents at 'Graph' of 'Node'.
+node_descendents :: Graph -> Node -> [Node]
+node_descendents g n =
+    let e = edges (ugens g)
+        c = filter ((== node_id n) . port_nid . fst) e
+        f (ToPort k _) = k
+    in mapMaybe (find_node g) (map (f . snd) c)
+
+-- | Error if graph has invalid @PV@ subgraph.  Conditions are:
+-- 1. multiple out edges at @PV@ node not connecting to @Unpack1FFT@.
 pv_validate :: Graph -> Graph
 pv_validate g =
     case pv_multiple_out_edges g of
       [] -> g
-      n -> error (show ("pv_validate: multiple out edges, see pv_split"
-                       ,map node_u_name n))
+      n -> let d = concatMap (map node_u_name . node_descendents g) n
+           in if all (`elem` ["Unpack1FFT","PackFFT"]) d
+              then g
+              else error (show
+                          ("pv_validate: multiple out edges, see pv_split"
+                          ,map node_u_name n
+                          ,d))

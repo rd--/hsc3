@@ -19,9 +19,16 @@
 
 > let pv_g nf cf =
 >   let {no_op m p _ = (m,p)
->       ;combf m p i = ((fmod i 7.0 ==* 0) * m,p)
+>       ;combf m p i = ((modE i 7.0 ==* 0) * m,p)
 >       ;sf = playBuf 1 AR 11 (bufRateScale KR 11) 1 0 Loop DoNothing
 >       ;c1 = fft' 10 sf
+>       ;c2 = pvcollect c1 nf cf 0 250 0}
+>   in out 0 (0.1 * ifft' c2)
+
+> let pv_au nf cf =
+>   let {no_op m p _ = (m,p)
+>       ;combf m p i = ((modE i 7.0 ==* 0) * m,p)
+>       ;c1 = fft' 10 (soundIn 4)
 >       ;c2 = pvcollect c1 nf cf 0 250 0}
 >   in out 0 (0.1 * ifft' c2)
 
@@ -35,6 +42,9 @@
 > synthstat (pv_g 1024 (bpf_sweep 1024))
 > audition (pv_g 1024 spectral_delay)
 > audition (pv_g 1024 (bpf_sweep 1024))
+
+> audition (pv_au 1024 spectral_delay)
+> audition (pv_au 1024 (bpf_sweep 1024))
 
 > import Sound.SC3.UGen.Dot
 > draw_svg (pv_g 1024 (bpf_sweep 1024))

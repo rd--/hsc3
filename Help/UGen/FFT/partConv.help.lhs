@@ -4,8 +4,8 @@
 > import Sound.SC3.ID
 
 > let { fft_size = 2048
->     ; ir_file = "/home/rohan/data/audio/church.ir.wav"
->     ; ir_length = 82756
+>     ; ir_file = "/home/rohan/data/audio/reverbs/chapel.wav"
+>     ; ir_length = 62494 {- frame count of ir_file -}
 >     ; accum_size = pc_calcAccumSize fft_size ir_length
 >     ; ir_td_b = 10 {- time domain -}
 >     ; ir_fd_b = 11 {- frequency domain -}

@@ -8,7 +8,7 @@
 >                ;_ <- async (b_alloc 11 2048 1)
 >                ;async (b_allocRead 12 fileName 0 0)})
 
-> let {n = whiteNoise 'a' AR
+> let {n = whiteNoise 'α' AR
 >     ;b = playBuf 1 AR 12 (bufRateScale KR 12) 0 0 Loop DoNothing
 >     ;f = fft' 10 (n * 0.2)
 >     ;g = fft' 11 b

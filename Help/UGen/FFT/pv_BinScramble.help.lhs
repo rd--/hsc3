@@ -11,7 +11,7 @@
 >     ;f = fft' 10 a
 >     ;x = mouseX KR 0.0 1.0 Linear 0.1
 >     ;y = mouseY KR 0.0 1.0 Linear 0.1
->     ;g = pv_BinScramble 'a' f x y (impulse KR 4 0)}
+>     ;g = pv_BinScramble 'α' f x y (impulse KR 4 0)}
 > in audition (out 0 (pan2 (ifft' g) 0 0.5))
 
 careful - feedback loop!
@@ -19,7 +19,7 @@ careful - feedback loop!
 >     ;f = fft' 10 a
 >     ;x = mouseX KR 0.15 1 Linear 0.1
 >     ;y = mouseY KR 0.15 1 Linear 0.1
->     ;i = impulse KR (lfNoise0 'a' KR 2 * 8 + 10) 0
->     ;g = pv_BinScramble 'a' f x y i
+>     ;i = impulse KR (lfNoise0 'α' KR 2 * 8 + 10) 0
+>     ;g = pv_BinScramble 'β' f x y i
 >     ;h = ifft' g}
 > in audition (out 0 (pan2 h 0 0.5))
