@@ -3,6 +3,7 @@ module Sound.SC3.UGen.UGen where
 
 import qualified Data.Char as C {- base -}
 import Data.List {- base -}
+import Data.Maybe {- base -}
 
 import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.Operator
@@ -300,12 +301,16 @@ ugen_primitive u =
       MCE_U _ -> error "ugen_primitive: MCE"
       MRG_U m -> ugen_primitive (mrgLeft m)
 
--- | Heuristic, based on primitive name (@FFT@, @IFFT@, @PV_@).
+-- | Heuristic based on primitive name (@FFT@, @PV_@).  Note that
+-- @IFFT@ is at /control/ rate, not @PV@ rate.
+primitive_is_pv_rate :: String -> Bool
+primitive_is_pv_rate nm = nm == "FFT" || "PV_" `isPrefixOf` nm
+
+-- | Variant on primitive_is_pv_rate.
 ugen_is_pv_rate :: UGen -> Bool
-ugen_is_pv_rate u =
-    case fmap ugenName (ugen_primitive u) of
-      Just nm -> nm `elem` ["FFT","IFFT"] || "PV_" `isPrefixOf` nm
-      Nothing -> False
+ugen_is_pv_rate = fromMaybe False
+                  . fmap (primitive_is_pv_rate . ugenName)
+                  . ugen_primitive
 
 -- | Traverse input graph until an @FFT@ or @PV_Split@ node is
 -- encountered, and then locates the buffer input.

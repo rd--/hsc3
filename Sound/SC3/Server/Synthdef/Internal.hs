@@ -430,3 +430,36 @@ remove_implicit :: Graph -> Graph
 remove_implicit g =
     let u = filter (not . is_implicit) (ugens g)
     in g {ugens = u}
+
+-- * PV edge accounting
+
+-- | Is 'FromPort' 'FromPort_U'.
+is_from_port_u :: FromPort -> Bool
+is_from_port_u p =
+    case p of
+      FromPort_U _ _ -> True
+      _ -> False
+
+-- | List of 'FromPort_U' at /e/ with multiple out edges.
+multiple_u_out_edges :: [Edge] -> [FromPort]
+multiple_u_out_edges e =
+    let p = filter is_from_port_u (map fst e)
+        p' = group (sortBy (compare `on` port_nid) p)
+    in map head (filter ((> 1) . length) p')
+
+-- | List @PV@ 'Node's at 'Graph' with multiple out edges.
+pv_multiple_out_edges :: Graph -> [Node]
+pv_multiple_out_edges g =
+    let pv_n = filter (primitive_is_pv_rate . node_u_name) (ugens g)
+        pv_e = edges pv_n
+    in mapMaybe (find_node g) (map port_nid (multiple_u_out_edges pv_e))
+
+-- | Error if graph has invalid @PV@ subgraph.
+--
+-- > pv_validate (synthdefGraph g2s)
+pv_validate :: Graph -> Graph
+pv_validate g =
+    case pv_multiple_out_edges g of
+      [] -> g
+      n -> error (show ("pv_validate: multiple out edges, see pv_split"
+                       ,map node_u_name n))

@@ -5,28 +5,18 @@ import Sound.SC3.ID
 
 {-|
 
-Proof of concept, silence.  This is very fragile.
-If c0 and c1 are swapped the output is no longer
-silence.  pv_Copy is required to run before the
-ifft of c0, which mutates c0, however that is not
-apparent from the edge structure of the graph.  In
-the case of cpy0 the graph happens to sort as
-required, in cpy1 it does not.
+Proof of concept, silence.  This graph is disallowed.  pv_Copy is
+required to run before the ifft of c0, which mutates c0, however that
+is not apparent from the edge structure of the graph.  See instead
+PV_Split.
 
 > audition (out 0 cpy0)
 -}
-cpy0 =
+cpy =
     let z = lfClipNoise 'α' AR 100 * 0.1
         c0 = fft' (localBuf 'β' 2048 1) z
         c1 = pv_Copy c0 (localBuf 'γ' 2048 1)
     in ifft' c1 - ifft' c0
-
--- > audition (out 0 cpy1)
-cpy1 =
-    let z = lfClipNoise 'α' AR 100 * 0.1
-        c0 = fft' (localBuf 'β' 2048 1) z
-        c1 = pv_Copy c0 (localBuf 'γ' 2048 1)
-    in ifft' c0 - ifft' c1
 
 {-
 The equivalent situation in sclang.
