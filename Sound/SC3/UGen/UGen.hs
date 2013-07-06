@@ -285,3 +285,48 @@ unsignedShift = mkBinaryOperator UnsignedShift undefined
 
 (.>>.) :: UGen -> UGen -> UGen
 (.>>.) = shiftRight
+
+-- * Analysis
+
+-- | UGen primitive.  Sees through Proxy and MRG.  Errors on MCE.
+ugen_primitive :: UGen -> Maybe Primitive
+ugen_primitive u =
+    case u of
+      Constant_U _ -> Nothing
+      Control_U _ -> Nothing
+      Label_U _ -> Nothing
+      Primitive_U p -> Just p
+      Proxy_U p -> Just (proxySource p)
+      MCE_U _ -> error "ugen_primitive: MCE"
+      MRG_U m -> ugen_primitive (mrgLeft m)
+
+-- | Heuristic, based on primitive name (@FFT@, @IFFT@, @PV_@).
+ugen_is_pv_rate :: UGen -> Bool
+ugen_is_pv_rate u =
+    case fmap ugenName (ugen_primitive u) of
+      Just nm -> nm `elem` ["FFT","IFFT"] || "PV_" `isPrefixOf` nm
+      Nothing -> False
+
+-- | Traverse input graph until an @FFT@ or @PV_Split@ node is
+-- encountered, and then locates the buffer input.
+pv_track_buffer :: UGen -> Either String UGen
+pv_track_buffer u =
+    case ugen_primitive u of
+      Nothing -> Left "pv_track_buffer: not located"
+      Just p -> case ugenName p of
+                  "FFT" -> Right (ugenInputs p !! 0)
+                  "PV_Split" -> Right (ugenInputs p !! 1)
+                  _ -> pv_track_buffer (ugenInputs p !! 0)
+
+-- | Buffer node number of frames, only implemented for @LocalBuf@.
+buffer_nframes :: UGen -> Either String UGen
+buffer_nframes u =
+    case ugen_primitive u of
+      Nothing -> Left "buffer_nframes: not primitive"
+      Just p -> case ugenName p of
+                  "LocalBuf" -> Right (ugenInputs p !! 1)
+                  _ -> Left "buffer_nframes: not LocalBuf"
+
+-- | 'pv_track_buffer' then 'buffer_nframes'.
+pv_track_nframes :: UGen -> Either String UGen
+pv_track_nframes u = pv_track_buffer u >>= buffer_nframes

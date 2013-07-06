@@ -15,3 +15,12 @@ There are constructors, bufRd{N|L|C}, for the fixed cases.
 > let {x = mouseX KR (mce [5, 10]) 100 Linear 0.1
 >     ;n = lfNoise1 'a' AR x}
 > in audition (out 0 (bufRdL 1 AR 0 (n * bufFrames KR 0) Loop))
+
+Allocate and generate (non-wavetable) buffer
+> withSC3 (do {_ <- async (b_alloc 11 256 1)
+>             ;let f = [Normalise,Clear]
+>              in send (b_gen_sine1 11 f [1,1/2,1/3,1/4,1/5])})
+
+Fixed frequency wavetable oscillator
+> let phase = linLin (saw AR 440) (-1) 1 0 1 * bufFrames KR 11
+> in audition (out 0 (bufRd 1 AR 11 phase Loop NoInterpolation * 0.1))

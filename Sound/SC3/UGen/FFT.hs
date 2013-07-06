@@ -1,7 +1,8 @@
 -- | Frequency domain unit generators.
 module Sound.SC3.UGen.FFT where
 
---import Sound.SC3.Server.Command
+import Sound.SC3.UGen.Buffer
+import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
@@ -9,6 +10,15 @@ import Sound.SC3.UGen.UGen
 -- | Fast fourier transform.
 fft :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 fft buf i h wt a ws = mkOsc KR "FFT" [buf,i,h,wt,a,ws] 1
+
+-- | 'fft' variant that allocates 'localBuf'.
+--
+-- > let c = ffta 'α' 2048 (soundIn 4) 0.5 0 1 0
+-- > in audition (out 0 (ifft c 0 0))
+ffta :: ID i => i -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+ffta z nf i h wt a ws =
+    let b = localBuf z nf 1
+    in fft b i h wt a ws
 
 -- | Variant FFT constructor with default values for hop size, window
 -- | type, active status and window size.
@@ -178,7 +188,7 @@ pv_RectComb buf teeth phase width = mkOsc KR "PV_RectComb" [buf,teeth,phase,widt
 
 -- | Unpack a single value (magnitude or phase) from an FFT chain
 unpack1FFT :: UGen -> UGen -> UGen -> UGen -> UGen
-unpack1FFT buf size index which = mkOsc DR "Unpack1FFT" [buf, size, index, which] 1
+unpack1FFT buf size index' which = mkOsc DR "Unpack1FFT" [buf, size, index', which] 1
 
 -- | Unpack an FFT chain into separate demand-rate FFT bin streams.
 unpackFFT :: UGen -> UGen -> UGen -> UGen -> UGen -> [UGen]

@@ -45,11 +45,21 @@ indexL b i =
         y = index b (i + 1)
     in linLin (frac i) 0 1 x y
 
+-- | Calculate multiplier and add values for 'linLin' transform.
+--
+-- > range_muladd 3 4 == (0.5,3.5)
+-- > linLin_muladd (-1) 1 3 4 == (0.5,3.5)
+-- > linLin_muladd 0 1 3 4 == (1,3)
+linLin_muladd :: Fractional t => t -> t -> t -> t -> (t, t)
+linLin_muladd sl sr dl dr =
+    let m = (dr - dl) / (sr - sl)
+        a = dl - (m * sl)
+    in (m,a)
+
 -- | Map from one linear range to another linear range.
 linLin :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 linLin i sl sr dl dr =
-    let m = (dr - dl) / (sr - sl)
-        a = dl - (m * sl)
+    let (m,a) = linLin_muladd sl sr dl dr
     in mulAdd i m a
 
 -- | Collapse possible mce by summing.
@@ -105,13 +115,20 @@ urange l r =
     let m = r - l
     in (+ l) . (* m)
 
--- | Scale bi-polar (-1,1) input to linear (l,r) range
+-- | Calculate multiplier and add values for 'range' transform.
+--
+-- > range_muladd 3 4 == (0.5,3.5)
+range_muladd :: Fractional t => t -> t -> (t, t)
+range_muladd = linLin_muladd (-1) 1
+
+-- | Scale bi-polar (-1,1) input to linear (l,r) range.  Note that the
+-- argument order is not the same as @linLin@.
 --
 -- > map (range 3 4) [-1,0,1] == [3,3.5,4]
+-- > map (\x -> let (m,a) = linLin_muladd (-1) 1 3 4 in x * m + a) [-1,0,1]
 range :: Fractional c => c -> c -> c -> c
 range l r =
-    let m = (r - l) * 0.5
-        a = m + l
+    let (m,a) = range_muladd l r
     in (+ a) . (* m)
 
 -- | Mix one output from many sources
