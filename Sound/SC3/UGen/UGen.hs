@@ -313,8 +313,15 @@ ugen_is_pv_rate = any (primitive_is_pv_rate . ugenName)
                   . ugen_primitive
 
 -- | Traverse input graph until an @FFT@ or @PV_Split@ node is
--- encountered, and then locates the buffer input.  Biases left at MCE
+-- encountered, and then locate the buffer input.  Biases left at MCE
 -- nodes.
+--
+-- > import Sound.SC3.ID
+-- > let z = soundIn 4
+-- > let f1 = fft 10 z 0.5 0 1 0
+-- > let f2 = ffta 'a' 1024 z 0.5 0 1 0
+-- > pv_track_buffer (pv_BrickWall f1 0.5) == Right 10
+-- > pv_track_buffer (pv_BrickWall f2 0.5) == Right (localBuf 'a' 1024 1)
 pv_track_buffer :: UGen -> Either String UGen
 pv_track_buffer u =
     case ugen_primitive u of
@@ -324,16 +331,21 @@ pv_track_buffer u =
                "PV_Split" -> Right (ugenInputs p !! 1)
                _ -> pv_track_buffer (ugenInputs p !! 0)
 
--- | Buffer node number of frames, only implemented for @LocalBuf@.
--- Biases left at MCE nodes.
-buffer_nframes :: UGen -> Either String UGen
+-- | Buffer node number of frames. Biases left at MCE nodes.  Sees
+-- through @LocalBuf@, otherwise uses 'bufFrames'.
+--
+-- > buffer_nframes 10 == bufFrames IR 10
+-- > buffer_nframes (control KR "b" 0) == bufFrames KR (control KR "b" 0)
+-- > buffer_nframes (localBuf 'α' 2048 1) == 2048
+buffer_nframes :: UGen -> UGen
 buffer_nframes u =
-    case ugen_primitive u of
-      [] -> Left "buffer_nframes: not primitive"
-      p:_ -> case ugenName p of
-               "LocalBuf" -> Right (ugenInputs p !! 1)
-               _ -> Left "buffer_nframes: not LocalBuf"
+    let b = mkOsc (rateOf u) "BufFrames" [u] 1
+    in case ugen_primitive u of
+         [] -> b
+         p:_ -> case ugenName p of
+                  "LocalBuf" -> ugenInputs p !! 1
+                  _ -> b
 
 -- | 'pv_track_buffer' then 'buffer_nframes'.
 pv_track_nframes :: UGen -> Either String UGen
-pv_track_nframes u = pv_track_buffer u >>= buffer_nframes
+pv_track_nframes u = pv_track_buffer u >>= Right . buffer_nframes
