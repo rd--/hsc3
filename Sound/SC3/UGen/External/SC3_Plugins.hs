@@ -48,11 +48,27 @@ ayFreqToTone f = 110300 / (f - 0.5)
 coyote :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 coyote rate in_ trackFall slowLag fastLag fastMul thresh minDur = mkOscR [KR] rate "Coyote" [in_,trackFall,slowLag,fastLag,fastMul,thresh,minDur] 1
 
--- * Bhob
+-- * BhobUGens
+
+-- | Impulses around a certain frequency
+gaussTrig :: Rate -> UGen -> UGen -> UGen
+gaussTrig rate freq dev = mkOscR [AR,KR] rate "GaussTrig" [freq,dev] 1
 
 -- | String resonance filter
 streson :: UGen -> UGen -> UGen -> UGen
 streson input delayTime res = mkFilter "Streson" [input,delayTime,res] 1
+
+-- | Triggered beta random distribution
+tBetaRand :: ID a => a -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+tBetaRand z lo hi prob1 prob2 trig_ = mkFilterIdR [AR,KR] z "TBetaRand" [lo,hi,prob1,prob2,trig_] 1
+
+-- | Triggered random walk generator
+tBrownRand :: ID a => a -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+tBrownRand z lo hi dev dist trig_ = mkFilterIdR [AR,KR] z "TBrownRand" [lo,hi,dev,dist,trig_] 1
+
+-- | Triggered gaussian random distribution
+tGaussRand :: ID a => a -> UGen -> UGen -> UGen -> UGen
+tGaussRand z lo hi trig_ = mkFilterIdR [AR,KR] z "TGaussRand" [lo,hi,trig_] 1
 
 -- * Concat
 

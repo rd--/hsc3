@@ -232,6 +232,10 @@ mkFilterR rs = mk_filter rs no_id
 mkFilterId :: (ID a) => a -> String -> [UGen] -> Int -> UGen
 mkFilterId z = mk_filter all_rates (toUId z)
 
+-- | Filter UGen constructor.
+mkFilterIdR :: (ID a) => [Rate] -> a -> String -> [UGen] -> Int -> UGen
+mkFilterIdR rs z = mk_filter rs (toUId z)
+
 -- | Variant filter with rate derived from keyed input.
 mkFilterKeyed :: String -> Int -> [UGen] -> Int -> UGen
 mkFilterKeyed c k i o =
