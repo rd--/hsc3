@@ -43,7 +43,7 @@ dur and width can be modulated at audio rate
 >     ;g = lfGauss AR d w 0 Loop DoNothing}
 > in audition (out 0 (g * 0.2))
 
-several frequecies and widths combined
+several frequencies and widths combined
 > let {x = mouseX KR 1 0.07 Exponential 0.2
 >     ;y = mouseY KR 1 3 Linear 0.2
 >     ;g = lfGauss AR x (y ** mce [-1,-2 .. -6]) 0 Loop DoNothing

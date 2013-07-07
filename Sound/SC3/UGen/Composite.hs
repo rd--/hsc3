@@ -62,6 +62,12 @@ linLin i sl sr dl dr =
     let (m,a) = linLin_muladd sl sr dl dr
     in mulAdd i m a
 
+-- | Map from one linear range to another linear range.
+linlin :: Fractional a => a -> a -> a -> a -> a -> a
+linlin i sl sr dl dr =
+    let (m,a) = linLin_muladd sl sr dl dr
+    in i * m + a
+
 -- | Collapse possible mce by summing.
 mix :: UGen -> UGen
 mix = sum . mceChannels
