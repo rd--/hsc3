@@ -86,6 +86,12 @@ concat2 ctl src sz sk sd ml fs zcr lms sc st rs th = mkOsc AR "Concat2" [ctl,src
 disintegrator :: ID a => a -> UGen -> UGen -> UGen -> UGen
 disintegrator z i p m = mkFilterId z "Disintegrator" [i,p,m] 1
 
+-- * DWGUGens
+
+-- | Plucked physical model.
+dWGPlucked2 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dWGPlucked2 rate freq amp gate_ pos c1 c3 inp release mistune mp gc = mkOscR [AR] rate "DWGPlucked2" [freq,amp,gate_,pos,c1,c3,inp,release,mistune,mp,gc] 1
+
 -- * Josh
 
 -- | Resynthesize sinusoidal ATS analysis data.
