@@ -15,6 +15,7 @@ import Sound.SC3.Server.Synthdef.Internal
 import Sound.SC3.Server.Synthdef.Type
 import Sound.SC3.UGen.Graph
 import Sound.SC3.UGen.Type
+import Sound.SC3.UGen.UGen
 
 -- | Transform a unit generator into a graph.
 --
@@ -83,6 +84,7 @@ synthstat u =
         cs = constants s
         ks = controls s
         us = ugens s
+        u_nm z = ugen_user_name (node_u_name z) (node_u_special z)
         f g = let h (x:xs) = (x,length (x:xs))
                   h [] = error "synthstat"
               in show . map h . group . sort . map g
@@ -90,4 +92,5 @@ synthstat u =
                ,"number of controls        : " ++ show (length ks)
                ,"control rates             : " ++ f node_k_rate ks
                ,"number of unit generators : " ++ show (length us)
-               ,"unit generator rates      : " ++ f node_u_rate us]
+               ,"unit generator rates      : " ++ f node_u_rate us
+               ,"unit generator sequence   : " ++ show (map u_nm us)]
