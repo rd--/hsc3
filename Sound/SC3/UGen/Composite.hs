@@ -113,6 +113,14 @@ mouseY' = mouseR 'y'
 pmOsc :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
 pmOsc r cf mf pm mp = sinOsc r cf (sinOsc r mf mp * pm)
 
+-- | Variant of 'poll' that generates an 'mrg' value with the input
+-- signal at left, and that allows a constant /frequency/ input in
+-- place of a trigger.
+poll' :: UGen -> UGen -> UGen -> UGen -> UGen
+poll' t i l tr =
+    let t' = if isConstant t then impulse KR t 0 else t
+    in mrg [i,poll t' i l tr]
+
 -- | Scale uni-polar (0,1) input to linear (l,r) range
 --
 -- > map (urange 3 4) [0,0.5,1] == [3,3.5,4]
@@ -136,6 +144,10 @@ range :: Fractional c => c -> c -> c -> c
 range l r =
     let (m,a) = range_muladd l r
     in (+ a) . (* m)
+
+-- | RMS variant of 'runningSum'.
+runningSumRMS :: UGen -> UGen -> UGen
+runningSumRMS z n = sqrt (runningSum (z * z) n * (recip n))
 
 -- | Mix one output from many sources
 selectX :: UGen -> UGen -> UGen

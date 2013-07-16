@@ -48,6 +48,10 @@ ayFreqToTone f = 110300 / (f - 0.5)
 coyote :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 coyote rate in_ trackFall slowLag fastLag fastMul thresh minDur = mkOscR [KR] rate "Coyote" [in_,trackFall,slowLag,fastLag,fastMul,thresh,minDur] 1
 
+-- | Windowed amplitude follower
+wAmp :: Rate -> UGen -> UGen -> UGen
+wAmp rate in_ winSize = mkOscR [KR] rate "WAmp" [in_,winSize] 1
+
 -- * BhobUGens
 
 -- | Impulses around a certain frequency
@@ -135,6 +139,22 @@ loopBuf numChannels rate bufnum rate_ gate_ startPos startLoop endLoop interpola
 
 -- * MCLD
 
+-- | Detect the largest value (and its position) in an array of UGens
+arrayMax :: Rate -> UGen -> UGen
+arrayMax rate array = mkOscR [AR,KR] rate "ArrayMax" [array] 2
+
+-- | Detect the smallest value (and its position) in an array of UGens
+arrayMin :: Rate -> UGen -> UGen
+arrayMin rate array = mkOscR [AR,KR] rate "ArrayMin" [array] 2
+
+-- | Detect the largest value (and its position) in an array of UGens
+bufMax :: Rate -> UGen -> UGen -> UGen
+bufMax rate bufnum gate_ = mkOscR [KR] rate "BufMax" [bufnum,gate_] 2
+
+-- | Detect the largest value (and its position) in an array of UGens
+bufMin :: Rate -> UGen -> UGen -> UGen
+bufMin rate bufnum gate_ = mkOscR [KR] rate "BufMin" [bufnum,gate_] 2
+
 -- | 3D Perlin Noise
 perlin3 :: Rate -> UGen -> UGen -> UGen -> UGen
 perlin3 rate x y z = mkOscR [AR,KR] rate "Perlin3" [x,y,z] 1
@@ -151,9 +171,35 @@ membraneHexagon i t l = mkOsc AR "MembraneHexagon" [i, t, l] 1
 
 -- * NCAnalysisUGens
 
+-- | Spectral Modeling Synthesis
+sms :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+sms input maxpeaks currentpeaks tolerance noisefloor freqmult freqadd formantpreserve useifft ampmult graphicsbufnum = mkFilterR [AR] "SMS" [input,maxpeaks,currentpeaks,tolerance,noisefloor,freqmult,freqadd,formantpreserve,useifft,ampmult,graphicsbufnum] 2
+
 -- | Tracking Phase Vocoder
 tpv :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 tpv chain windowsize hopsize maxpeaks currentpeaks freqmult tolerance noisefloor = mkOsc AR "TPV" [chain,windowsize,hopsize,maxpeaks,currentpeaks,freqmult,tolerance,noisefloor] 1
+
+-- * PitchDetection
+
+-- | Tartini model pitch tracker.
+tartini ::  Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+tartini r input threshold n k overlap smallCutoff = mkOscR [KR] r "Tartini" [input,threshold,n,k,overlap,smallCutoff] 2
+
+-- | Constant Q transform pitch follower.
+qitch ::  Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+qitch r input databufnum ampThreshold algoflag ampbufnum minfreq maxfreq = mkOscR [KR] r "Qitch" [input,databufnum,ampThreshold,algoflag,ampbufnum,minfreq,maxfreq] 2
+
+-- * RFWUGens
+
+-- | Calculates mean average of audio or control rate signal.
+averageOutput :: UGen -> UGen -> UGen
+averageOutput in_ trig_ = mkFilterR [KR,AR] "AverageOutput" [in_,trig_] 1
+
+-- * SCMIRUGens
+
+-- | Octave chroma band based representation of energy in a signal; Chromagram for nTET tuning systems with any base reference
+chromagram :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+chromagram rate fft_ fftsize n tuningbase octaves integrationflag coeff = mkOscR [KR] rate "Chromagram" [fft_,fftsize,n,tuningbase,octaves,integrationflag,coeff] 1
 
 -- * SLU
 
@@ -172,6 +218,10 @@ envDetect rate in_ attack release = mkOscR [AR] rate "EnvDetect" [in_,attack,rel
 -- | Envelope Follower
 envFollow :: Rate -> UGen -> UGen -> UGen
 envFollow rate input decaycoeff = mkOscR [AR,KR] rate "EnvFollow" [input,decaycoeff] 1
+
+-- | Linear Time Invariant General Filter Equation
+lti :: Rate -> UGen -> UGen -> UGen -> UGen
+lti rate input bufnuma bufnumb = mkOscR [AR] rate "LTI" [input,bufnuma,bufnumb] 1
 
 -- | Experimental time domain onset detector
 sLOnset :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -198,6 +248,12 @@ stkModalBar rt f i sh sp vg vf mx v tr = mkOsc rt "StkModalBar" [f, i, sh, sp, v
 -- | STK shaker models.
 stkShakers :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 stkShakers rt i e d o rf tr = mkOsc rt "StkShakers" [i, e, d, o, rf, tr] 1
+
+-- * TJUGens
+
+-- | Digitally modelled analog filter
+dfm1 :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dfm1 i f r g ty nl = mkFilter "DFM1" [i,f,r,g,ty,nl] 1
 
 -- * VOSIM
 

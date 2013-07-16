@@ -472,9 +472,9 @@ pv_validate g =
     case pv_multiple_out_edges g of
       [] -> g
       n -> let d = concatMap (map node_u_name . node_descendents g) n
-           in if all (`elem` ["Unpack1FFT","PackFFT"]) d
-              then g
-              else error (show
+           in if any primitive_is_pv_rate d || any (`elem` ["IFFT"]) d
+              then error (show
                           ("pv_validate: multiple out edges, see pv_split"
                           ,map node_u_name n
                           ,d))
+              else g

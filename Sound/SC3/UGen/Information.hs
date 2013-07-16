@@ -49,12 +49,6 @@ numBuffers = mkInfo "NumBuffers"
 numRunningSynths :: UGen
 numRunningSynths = mkInfo "NumRunningSynths"
 
-
 -- | Poll value of input UGen when triggered.
 poll :: UGen -> UGen -> UGen -> UGen -> UGen
 poll t i l tr = mkFilter "Poll" ([t,i,tr] ++ unpackLabel l) 0
-
--- | Variant of 'poll' that generates an 'mrg' value with the input
--- signal at left.
-poll' :: UGen -> UGen -> UGen -> UGen -> UGen
-poll' t i l tr = mrg [i,poll t i l tr]
