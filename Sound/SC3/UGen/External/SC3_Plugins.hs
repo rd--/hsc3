@@ -32,6 +32,20 @@ dPW3Tri rate freq = mkOscR [AR] rate "DPW3Tri" [freq] 1
 dPW4Saw :: Rate -> UGen -> UGen
 dPW4Saw rate freq = mkOscR [AR] rate "DPW4Saw" [freq] 1
 
+-- * AuditoryModeling
+
+-- | Single gammatone filter
+gammatone :: UGen -> UGen -> UGen -> UGen
+gammatone input centrefrequency bandwidth = mkFilterR [AR] "Gammatone" [input,centrefrequency,bandwidth] 1
+
+-- | Simple cochlear hair cell model
+hairCell :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+hairCell input spontaneousrate boostrate restorerate loss = mkFilterR [AR,KR] "HairCell" [input,spontaneousrate,boostrate,restorerate,loss] 1
+
+-- | Meddis cochlear hair cell model
+meddis :: UGen -> UGen
+meddis input = mkFilterR [AR,KR] "Meddis" [input] 1
+
 -- * AY
 
 -- | Emulation of AY (aka YM) soundchip, used in Spectrum\/Atari.
