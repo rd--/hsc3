@@ -12,6 +12,7 @@ import Sound.SC3.Server.NRT
 import Sound.SC3.Server.Status
 import Sound.SC3.Server.Synthdef
 import Sound.SC3.Server.Synthdef.Type
+import Sound.SC3.UGen.Transform
 import Sound.SC3.UGen.Type
 
 -- * hosc variants
@@ -54,7 +55,7 @@ playSynthdef s = do
 
 -- | Send an /anonymous/ instrument definition using 'playSynthdef'.
 playUGen :: DuplexOSC m => UGen -> m ()
-playUGen = playSynthdef . synthdef "Anonymous"
+playUGen = playSynthdef . synthdef "Anonymous" . wrapOut (0.1::Double)
 
 -- * NRT
 

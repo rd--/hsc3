@@ -218,6 +218,18 @@
        nil)
     (error "not at hsc3 directory?")))
 
+(defun hsc3-audition-graph ()
+  "Audition the UGen graph at point."
+  (interactive)
+  (hsc3-send-string
+   (concat "Sound.SC3.audition " (thing-at-point 'symbol))))
+
+(defun hsc3-audition-graph-m ()
+  "Audition the (monadic) UGen graph at point."
+  (interactive)
+  (hsc3-send-string
+   (concat "Sound.SC3.audition =<<" (thing-at-point 'symbol))))
+
 (defun hsc3-draw-graph ()
   "Draw the UGen graph at point."
   (interactive)
@@ -225,7 +237,7 @@
    (concat "Sound.SC3.UGen.Dot.draw " (thing-at-point 'symbol))))
 
 (defun hsc3-draw-graph-m ()
-  "Draw the UGen graph at point."
+  "Draw the (monadic) UGen graph at point."
   (interactive)
   (hsc3-send-string
    (concat "Sound.SC3.UGen.Dot.draw =<<" (thing-at-point 'symbol))))
@@ -268,6 +280,8 @@
   (define-key map [?\C-c ?\C-r] 'hsc3-run-consecutive-lines)
   (define-key map [?\C-c ?\C-f] 'hsc3-run-layout-block)
   (define-key map [?\C-c ?\C-h] 'hsc3-help)
+  (define-key map [?\C-c ?\C-a] 'hsc3-audition-graph)
+  (define-key map [?\C-c ?\M-a] 'hsc3-audition-graph-m)
   (define-key map [?\C-c ?\C-g] 'hsc3-draw-graph)
   (define-key map [?\C-c ?\M-g] 'hsc3-draw-graph-m)
   (define-key map [?\C-c ?\C-j] 'hsc3-sc3-ugen-help)

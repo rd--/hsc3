@@ -1,27 +1,35 @@
 module Sound.SC3.UGen.Transform where
 
+import Sound.SC3.UGen.Enum
+import Sound.SC3.UGen.Envelope
+import Sound.SC3.UGen.IO
+import Sound.SC3.UGen.Math
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
+import Sound.SC3.UGen.UGen
 
--- | Lift a 'Constant' to a named 'KR' 'Control'.
-lift_constant :: String -> Constant -> Control
-lift_constant nm (Constant n) = Control KR nm n False
+-- | Generate an 'envGen' UGen with @fadeTime@ and @gate@ controls.
+--
+-- > import Sound.SC3
+-- > audition (out 0 (makeFadeEnv 1 * sinOsc AR 440 0 * 0.1))
+-- > withSC3 (send (n_set1 (-1) "gate" 0))
+makeFadeEnv :: Real n => n -> UGen
+makeFadeEnv fadeTime =
+    let dt = control KR "fadeTime" (realToFrac fadeTime)
+        gate = control KR "gate" 1
+        startVal = dt <=* 0
+        env = Envelope [startVal,1,0] [1,1] [EnvLin,EnvLin] (Just 1) Nothing
+    in envGen KR gate 1 0 dt RemoveSynth env
 
--- | If 'UGen' /u/ is a 'Constant' apply 'lift_constant', else 'id'.
-tag_ugen :: String -> UGen -> UGen
-tag_ugen nm u =
-    case u of
-      Constant_U c -> Control_U (lift_constant nm c)
-      _ -> u
-
--- | Typeclass for values that can be 'Tagged'.  The default 'tag'
--- operation is 'id'.
-class Num n => Tagged n where
-    tag :: String -> n -> n
-    tag = flip const
-
-instance Tagged Int
-instance Tagged Integer
-instance Tagged Float
-instance Tagged Double
-instance Tagged UGen where tag = tag_ugen
+-- | If @z@ isn't a sink node, multiply by 'makeFadeEnv' and route to
+-- an @out@ node writing to @bus@.
+--
+-- > import Sound.SC3
+-- > audition (wrapOut (sinOsc AR 440 0 * 0.1) 1)
+-- > withSC3 (send (n_set1 (-1) "gate" 0))
+wrapOut :: Real n => n -> UGen -> UGen
+wrapOut fadeTime z =
+    let bus = control KR "out" 0
+    in if isSink z
+       then z
+       else out bus (z * makeFadeEnv fadeTime)
