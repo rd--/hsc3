@@ -209,6 +209,10 @@ qitch r input databufnum ampThreshold algoflag ampbufnum minfreq maxfreq = mkOsc
 averageOutput :: UGen -> UGen -> UGen
 averageOutput in_ trig_ = mkFilterR [KR,AR] "AverageOutput" [in_,trig_] 1
 
+-- | Feedback delay line implementing switch-and-ramp buffer jumping.
+switchDelay :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+switchDelay in_ drylevel wetlevel delaytime delayfactor maxdelaytime = mkFilterR [AR] "SwitchDelay" [in_,drylevel,wetlevel,delaytime,delayfactor,maxdelaytime] 1
+
 -- * SCMIRUGens
 
 -- | Octave chroma band based representation of energy in a signal; Chromagram for nTET tuning systems with any base reference
