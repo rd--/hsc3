@@ -6,7 +6,7 @@ hsc3 renames UGen to in' since in is a reserved keyword
 
 > import Sound.SC3.ID
 
-Patching input to output.
+Patching input to output (see also soundIn).
 > audition (out 0 (in' 2 AR numOutputBuses))
 
 Patching input to output, with delay.
@@ -14,17 +14,19 @@ Patching input to output, with delay.
 >     ;d = delayN i 0.5 0.5}
 > in audition (out 0 (i + d))
 
-Write noise to bus 10, then read it out, the multiple root graph is ordered.
+Write noise to first private bus, then read it out.
+The multiple root graph is ordered.
 > let {n = pinkNoise 'a' AR
->     ;wr = out 10 (n * 0.3)
->     ;rd = out 0 (in' 1 AR 10)}
-> in audition (mrg [rd, wr])
+>     ;b = numOutputBuses + numInputBuses
+>     ;wr = out b (n * 0.3)
+>     ;rd = out 0 (in' 1 AR b)}
+> in audition (mrg [rd,wr])
 
 Set value on a control bus
-> withSC3 (send (c_set [(0, 300)]))
+> withSC3 (send (c_set [(0,300)]))
 
 Read a control bus
 > audition (out 0 (sinOsc AR (in' 1 KR 0) 0 * 0.1))
 
 Re-set value on bus
-> withSC3 (send (c_set [(0, 600)]))
+> withSC3 (send (c_set [(0,600)]))
