@@ -18,6 +18,10 @@ radiansPerSample :: UGen
 radiansPerSample = mkInfo "RadiansPerSample"
 
 -- | Control rate of synthesis server, periods per second.
+controlDur :: UGen
+controlDur = mkInfo "ControlDur"
+
+-- | Control rate of synthesis server, periods per second.
 controlRate :: UGen
 controlRate = mkInfo "ControlRate"
 

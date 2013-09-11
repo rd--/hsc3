@@ -30,8 +30,9 @@
   "Remove bird literate marks and preceding comment marker"
    (replace-regexp-in-string "^[> ]* ?" "" s))
 
+;; (hsc3-uncomment "  no comment")
 (defun hsc3-uncomment (s)
-  "Remove initial comment and Bird-literate markers if present"
+  "Remove initial comment and Bird-literate markers if present."
    (replace-regexp-in-string "^[- ]*[> ]*" "" s))
 
 (defun hsc3-remove-non-literates (s)
@@ -116,8 +117,9 @@
 
 (defun region-string ()
   "Get region as string (no properties)"
-  (buffer-substring-no-properties (region-beginning)
-                                  (region-end)))
+  (buffer-substring-no-properties
+   (region-beginning)
+   (region-end)))
 
 (defun hsc3-concat (l)
   (apply #'concat l))

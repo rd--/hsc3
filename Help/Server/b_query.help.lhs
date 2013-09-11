@@ -14,4 +14,12 @@ Query buffer
 >             ;liftIO (print r)})
 
 Play buffer
-> audition (out 0 (osc AR 10 220 0 * 0.1))
+> audition (out 0 (osc AR 0 220 0 * 0.1))
+
+Free buffer
+> withSC3 (async (b_free 0))
+
+Query multiple un-allocated buffers
+> withSC3 (do {send (b_query [2^14,2^15])
+>             ;r <- waitReply "/b_info"
+>             ;liftIO (print r)})

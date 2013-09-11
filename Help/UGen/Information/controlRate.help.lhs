@@ -3,5 +3,6 @@
 
 > import Sound.SC3
 
-play a sine tone at control rate
-> audition (out 0 (sinOsc AR controlRate 0 * 0.1))
+play a sine tone at control rate, the reciprocal of controlDur
+> let f = mce2 controlRate (recip controlDur)
+> in audition (out 0 (sinOsc AR f 0 * 0.1))
