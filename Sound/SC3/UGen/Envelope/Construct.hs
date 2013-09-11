@@ -138,7 +138,7 @@ envADSSR_r (ADSSR t1 l1 t2 l2 t3 l3 t4 (c1,c2,c3,c4) b) =
         c = [c1,c2,c3,c4]
     in Envelope l t c (Just 3) Nothing
 
--- | Parameters for ADSR envelopes.
+-- | Parameters for ASR envelopes.
 data ASR a = ASR {asr_attackTime :: a
                  ,asr_sustainLevel :: a
                  ,asr_releaseTime :: a
