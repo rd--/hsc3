@@ -79,7 +79,7 @@ run_bundle st b = do
 -- > in withSC3 (performNRT sc)
 performNRT :: Transport m => NRT -> m ()
 performNRT s = do
-  let (i,r) = nrt_split_at 0 s
+  let (i,r) = nrt_span (<= 0) s
   t0 <- liftIO time
   mapM_ (run_bundle t0) i
   t1 <- liftIO time
