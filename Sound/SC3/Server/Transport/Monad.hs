@@ -78,7 +78,12 @@ run_bundle st b = do
 -- >              ,bundle 2 [n_set1 (-1) "gate" 0]]
 -- > in withSC3 (performNRT sc)
 performNRT :: Transport m => NRT -> m ()
-performNRT s = liftIO time >>= \i -> mapM_ (run_bundle i) (nrt_bundles s)
+performNRT s = do
+  let (i,r) = nrt_split_at 0 s
+  t0 <- liftIO time
+  mapM_ (run_bundle t0) i
+  t1 <- liftIO time
+  mapM_ (run_bundle t1) r
 
 -- * Audible
 

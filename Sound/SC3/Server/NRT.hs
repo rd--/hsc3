@@ -16,6 +16,14 @@ oscWithSize o =
 -- | An 'NRT' score is a sequence of 'Bundle's.
 data NRT = NRT {nrt_bundles :: [Bundle]} deriving (Show)
 
+-- | Split NRT at time /t/.  Bundles before or at /t/ are at the left,
+-- the remainder at the right.  If /t/ is @0@ this gives the
+-- /initialisation/ and /remainder/ parts.
+nrt_split_at :: Time -> NRT -> ([Bundle],[Bundle])
+nrt_split_at t (NRT l) =
+    let f (Bundle t' _) = t' <= t
+    in span f l
+
 -- | Encode an 'NRT' score.
 encodeNRT :: NRT -> B.ByteString
 encodeNRT = B.concat . map oscWithSize . nrt_bundles
