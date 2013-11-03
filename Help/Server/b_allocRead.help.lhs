@@ -1,5 +1,7 @@
 > Sound.SC3.Server.Help.viewServerHelp "/b_allocRead"
 
+> import Sound.SC3
+
 Read a large audio file into a buffer.
 
 > let fn = "/home/rohan/data/audio/xenakis/jonchaies.wav"
@@ -27,8 +29,8 @@ Query buffer.
 
 Play buffer.
 
-> let s = bufRateScale KR 0
-> in audition (out 0 (playBuf 1 AR 0 s 1 0 NoLoop RemoveSynth))
+> let {n = 257; s = bufRateScale KR n}
+> in audition (out 0 (playBuf 1 AR n s 1 0 NoLoop RemoveSynth))
 
 Re-read file into buffer with the same identifier.  The existing
 buffer is freed but not before further memory is allocated,

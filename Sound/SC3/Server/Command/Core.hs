@@ -60,6 +60,10 @@ errorMode scope mode =
               Locally  -> -1 - fromEnum mode
     in message "/error" [int32 e]
 
+-- | End real time mode, close file (un-implemented).
+nrt_end :: Message
+nrt_end = message "/nrt_end" []
+
 -- * Modify existing message to include completion message
 
 -- | List of asynchronous server commands.
