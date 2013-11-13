@@ -160,6 +160,12 @@
   (interactive)
   (hsc3-send-string "main"))
 
+(defun hsc3-load-main ()
+  "Load current buffer and run main."
+  (interactive)
+  (hsc3-load-buffer)
+  (hsc3-run-main))
+
 (defun hsc3-wait ()
   "Wait for prompt after sending command."
   (interactive)
@@ -291,6 +297,7 @@
   (define-key map [?\C-c ?\C-i] 'hsc3-interrupt-haskell)
   (define-key map [?\C-c ?\C-k] 'hsc3-reset-scsynth)
   (define-key map [?\C-c ?\C-m] 'hsc3-run-main)
+  (define-key map [?\C-c ?\M-m] 'hsc3-load-main)
   (define-key map [?\C-c ?\C-p] 'hsc3-status-scsynth)
   (define-key map [?\C-c ?\C-q] 'hsc3-quit-haskell)
   (define-key map [?\C-c ?\C-0] 'hsc3-quit-scsynth)
