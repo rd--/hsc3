@@ -1,7 +1,7 @@
 hsc3 - haskell supercollider
 ----------------------------
 
-[hsc3][hsc3] provides Sound.SC3, a module that facilitates using
+[hsc3][hsc3] provides `Sound.SC3`, a module that facilitates using
 [Haskell][hs] as a client to the [SuperCollider][sc3] synthesis
 server.  hsc3 requires [hosc](?t=hosc).
 
