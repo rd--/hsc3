@@ -48,14 +48,17 @@ reset =
 
 
 -- | Send 'd_recv' and 's_new' messages to scsynth.
-playSynthdef :: DuplexOSC m => Synthdef -> m ()
-playSynthdef s = do
+playSynthdef :: DuplexOSC m => Int -> Synthdef -> m ()
+playSynthdef nid s = do
   _ <- async (d_recv s)
-  send (s_new0 (synthdefName s) (-1) AddToTail 1)
+  send (s_new0 (synthdefName s) nid AddToTail 1)
 
 -- | Send an /anonymous/ instrument definition using 'playSynthdef'.
-playUGen :: DuplexOSC m => UGen -> m ()
-playUGen = playSynthdef . synthdef "Anonymous" . wrapOut (0.1::Double)
+playUGen :: DuplexOSC m => Int -> UGen -> m ()
+playUGen nid =
+    playSynthdef nid .
+    synthdef "Anonymous" .
+    wrapOut (0.1::Double)
 
 -- * NRT
 
@@ -93,13 +96,13 @@ class Audible e where
     play :: Transport m => e -> m ()
 
 instance Audible Graph where
-    play g = playSynthdef (Synthdef "Anonymous" g)
+    play g = playSynthdef (-1) (Synthdef "Anonymous" g)
 
 instance Audible Synthdef where
-    play = playSynthdef
+    play = playSynthdef (-1)
 
 instance Audible UGen where
-    play = playUGen
+    play = playUGen (-1)
 
 instance Audible NRT where
     play = performNRT

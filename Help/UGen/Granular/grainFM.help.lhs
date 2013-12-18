@@ -12,7 +12,7 @@
 > in audition (out 0 (grainFM 2 t 0.1 f 200 i l (-1) 512 * 0.1))
 
 > let {n1 = whiteNoise 'α' KR
->     ;n2 = lfNoise1 'α' KR 500
+>     ;n2 = lfNoise1 'β' KR 500
 >     ;d = 5
 >     ;x = mouseX KR (-0.5) 0.5 Linear 0.1
 >     ;y = mouseY KR 0 400 Linear 0.1

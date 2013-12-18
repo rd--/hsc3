@@ -47,7 +47,8 @@ Release buffer.
 
 > withSC3 (send (b_free 0))
 
-Channel mismatch, single channel buffer, two channel playBuf, result is silence.
+Channel mismatch, single channel buffer, two channel playBuf, result
+is silence and channel mismatch message in server log.
 
 > let fn = "/home/rohan/data/audio/pf-c5.aif"
 > in withSC3 (async (b_allocRead 0 fn 0 0))
@@ -55,7 +56,30 @@ Channel mismatch, single channel buffer, two channel playBuf, result is silence.
 > let s = bufRateScale KR 0
 > in audition (out 0 (playBuf 2 AR 0 s 1 0 Loop DoNothing))
 
-Graph will sounds after loading a two channel signal to buffer.
+Graph will sound after loading a two channel signal to buffer, and
+stop again after loading a single channel sound file.
 
 > let fn = "/home/rohan/data/audio/sp/tinguely.aif"
 > in withSC3 (async (b_allocRead 0 fn 0 0))
+
+Scan sequence of buffers:
+
+> let {n = 29 * 6
+>     ;b = mouseX KR 0 n Linear 0.2
+>     ;r = bufRateScale KR b}
+> in audition (out 0 (playBuf 1 AR b r 1 0 Loop DoNothing))
+
+In sclanguage:
+
+{var fn = "/home/rohan/data/audio/pf-c5.aif"
+;s.sendMsg("/b_allocRead",0,fn,0,0)}.value
+
+{var sc = BufRateScale.kr(0)
+;Out.ar(0,PlayBuf.ar(2,0,sc,1,0,1,0))}.play
+
+{var fn = "/home/rohan/data/audio/sp/tinguely.aif"
+;s.sendMsg("/b_allocRead",0,fn,0,0)}.value
+
+{var b = MouseX.kr(32,64,0,0.2)
+;var r = BufRateScale.kr(b)
+;Out.ar(0,PlayBuf.ar(1,b,r,1,0,1,0))}.play
