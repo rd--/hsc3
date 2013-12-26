@@ -3,14 +3,15 @@
 
 > import Sound.SC3.ID
 
-> let {inp = dseq 'a' dinf (mce [1,2,3])
->     ;nse = diwhite 'a' dinf 2 8
->     ;rep = dstutter 'a' nse inp
+> let {inp = dseq 'α' dinf (mce [1,2,3])
+>     ;nse = diwhite 'β' dinf 2 8
+>     ;rep = dstutter 'γ' nse inp
 >     ;trg = impulse KR (mouseX KR 1 40 Exponential 0.2) 0
 >     ;frq = demand trg 0 rep * 30 + 340}
 > in audition (out 0 (sinOsc AR frq 0 * 0.1))
 
 https://www.listarc.bham.ac.uk/lists/sc-users/msg14775.html
+
 > let {a z = let {xr = dxrand z dinf (mce [0.1,0.2,0.3,0.4,0.5])
 >                ;lf = dstutter z 2 xr
 >                ;du = duty AR lf 0 DoNothing lf

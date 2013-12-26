@@ -1,5 +1,6 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Dseries"
 > Sound.SC3.UGen.DB.ugenSummary "Dseries"
+# sc3:reordering
 
 > import Sound.SC3.ID
 

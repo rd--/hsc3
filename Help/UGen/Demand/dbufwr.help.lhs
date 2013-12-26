@@ -1,8 +1,8 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Dbufwr"
 > Sound.SC3.UGen.DB.ugenSummary "Dbufwr"
 
-> import Sound.SC3
-> import qualified Sound.SC3.Monadic as M
+> import Sound.SC3 {- hsc3 -}
+> import qualified Sound.SC3.Monad as M {- hsc3 -}
 
 > do {s1 <- M.dseries 30 0 3
 >    ;s2 <- M.dseries 30 0 1

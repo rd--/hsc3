@@ -16,6 +16,7 @@
 >      in audition (out 0 o)}
 
 compare with dswitch1
+
 > do {a0 <- M.dwhite 2 3 4
 >    ;a1 <- M.dwhite 2 0 1
 >    ;a2 <- M.dseq 2 (mce [1,1,1,0])

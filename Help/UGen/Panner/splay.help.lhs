@@ -6,6 +6,7 @@ splay is a composite UGen.
 > import Sound.SC3.ID
 
 mouse control
+
 > let {i = 6
 >     ;r = map (\e -> rand e 10 20) (take i ['a'..])
 >     ;n = lfNoise2 'a' KR (mce r)
@@ -17,6 +18,7 @@ mouse control
 > in audition (out 0 (splay o y 0.2 x True))
 
 n_set control
+
 > let {i = 10
 >     ;s = control KR "spread" 1
 >     ;l = control KR "level" 0.2
@@ -28,16 +30,21 @@ n_set control
 > in audition (out 0 (splay (sinOsc AR n 0) s l c True))
 
 full stereo
+
 > withSC3 (send (n_set (-1) [("spread",1),("center",0)]))
 
 less wide
+
 > withSC3 (send (n_set (-1) [("spread",0.5),("center",0)]))
 
 mono center
+
 > withSC3 (send (n_set (-1) [("spread",0),("center",0)]))
 
 from center to right
+
 > withSC3 (send (n_set (-1) [("spread",0.5),("center",0.5)]))
 
 all left
+
 > withSC3 (send (n_set (-1) [("spread",0),("center",-1)]))

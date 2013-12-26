@@ -27,7 +27,8 @@ The SC2 Sequencer UGen is somewhat like the sequ function below
 >     ;o = lfSaw AR (midiCPS (mce2 n0 n1)) 0 * 0.1}
 > in audition (out 0 o)
 
-Rather than MCE expansion at /tr/, it can be clearer view /tr/ as a functor.
+Rather than MCE expansion at /tr/, it can be clearer to view /tr/ as a
+functor.
 
 > let {tr = impulse KR (mce [2,3,5]) 0
 >     ;f t = demand t 0 (dseq t dinf (mce [60,63,67,69]))

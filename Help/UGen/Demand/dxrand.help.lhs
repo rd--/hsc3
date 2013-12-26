@@ -19,6 +19,7 @@ simple-minded mce rule sets the rate of the operator primitive to the
 maximum rate of the inputs and then does not revise this after mce
 transformation, where it may be lower.  The hsc3 constructors attempt
 to get this right!
+
 > let {i = mce [0.2,0.4,dseq 'α' 2 (mce [0.1,0.1])]
 >     ;i' = mceMap (* 0.5) i
 >     ;i'' = i * 0.5

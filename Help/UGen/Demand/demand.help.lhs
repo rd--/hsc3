@@ -11,7 +11,7 @@
 >         ;o = sinOsc AR (mce [f,f + 0.7]) 0}
 >     in audition (out 0 (max (cubed o) 0 * 0.1))}
 
-> let {n = diwhite 'a' dinf 60 72
+> let {n = diwhite 'α' dinf 60 72
 >     ;t = impulse KR 10 0
 >     ;s = midiCPS n
 >     ;f = demand t 0 s
@@ -19,8 +19,9 @@
 > in audition (out 0 (cubed (cubed o) * 0.1))
 
 audio rate (poll output is equal for x1 and x2)
-> let {i = lfNoise2 'a' AR 8000
->     ;d = dseq 'a' dinf (mce [i])
+
+> let {i = lfNoise2 'α' AR 8000
+>     ;d = dseq 'β' dinf (mce [i])
 >     ;x = mouseX KR 1 3000 Exponential 0.2
 >     ;t = impulse AR x 0
 >     ;x1 = demand t 0 d
