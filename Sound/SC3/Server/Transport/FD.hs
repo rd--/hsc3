@@ -75,7 +75,7 @@ performNRT fd s = time >>= \i -> mapM_ (run_bundle fd i) (nrt_bundles s)
 
 -- * Audible
 
--- | Class for values that can be encoded and send to @scsynth@ for
+-- | Class for values that can be encoded and sent to @scsynth@ for
 -- audition.
 class Audible e where
     play :: Transport t => t -> e -> IO ()

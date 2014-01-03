@@ -5,6 +5,7 @@ import Control.Monad
 import Data.List
 import Data.List.Split
 import Sound.SC3.UGen.Buffer
+import Sound.SC3.UGen.Demand
 import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Filter
 import Sound.SC3.UGen.Identifier
@@ -180,3 +181,29 @@ splay i s l c lc =
         p = map ( (+ (-1.0)) . (* (2 / m)) ) [0 .. m]
         a = if lc then sqrt (1 / n) else 1
     in mix (pan2 i (mce p * s + c) 1) * l * a
+
+-- * wslib
+
+playBufCF :: Int -> UGen -> UGen -> UGen -> UGen -> Loop -> UGen -> Int -> UGen
+playBufCF nc bufnum rate trigger startPos loop lag' n =
+    let trigger' = if rateOf trigger == DR
+                   then tDuty AR trigger 0 DoNothing 1 0
+                   else trigger
+        index' = stepper trigger' 0 0 (constant n - 1) 1 0
+        on = map
+             (\i -> inRange index' (i - 0.5) (i + 0.5))
+             [0 .. constant n - 1]
+        rate' = case rateOf rate of
+                  DR -> map (\on' -> demand on' 0 rate) on
+                  KR -> map (\on' -> gate rate on') on
+                  AR -> map (\on' -> gate rate on') on
+                  IR -> map (const rate) on
+        startPos' = if rateOf startPos == DR
+                    then demand trigger' 0 startPos
+                    else startPos
+        lag'' = 1 / lag'
+        s = map
+            (\(on',r) -> let p = playBuf nc AR bufnum r on' startPos' loop DoNothing
+                         in p * sqrt (slew on' lag'' lag''))
+            (zip on rate')
+    in sum s
