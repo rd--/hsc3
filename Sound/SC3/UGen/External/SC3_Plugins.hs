@@ -140,12 +140,35 @@ lpcVals r b ptr = mkOsc r "LPCVals" [b, ptr] 3
 metro :: Rate -> UGen -> UGen -> UGen
 metro rt bpm nb = mkOsc rt "Metro" [bpm,nb] 1
 
+-- | Delay and Feedback on a bin by bin basis.
 pv_BinDelay :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 pv_BinDelay buffer maxdelay delaybuf fbbuf hop = mkOsc KR "PV_BinDelay" [buffer,maxdelay,delaybuf,fbbuf,hop] 1
+
+-- | Play FFT data from a memory buffer.
+pv_BufRd :: UGen -> UGen -> UGen -> UGen
+pv_BufRd buffer playbuf_ point = mkOsc KR "PV_BufRd" [buffer,playbuf_,point] 1
+
+-- | /dur/ and /hop/ are in seconds, /frameSize/ and /sampleRate/ in
+-- frames, though the latter maybe fractional.
+--
+-- > pv_calcPVRecSize 4.2832879818594 1024 0.25 48000.0 == 823299
+pv_calcPVRecSize :: Double -> Int -> Double -> Double -> Int
+pv_calcPVRecSize dur frameSize hop sampleRate =
+    let frameSize' = fromIntegral frameSize
+        rawsize = ceiling ((dur * sampleRate) / frameSize') * frameSize
+    in ceiling (fromIntegral rawsize * recip hop + 3)
 
 -- | Invert FFT amplitude data.
 pv_Invert :: UGen -> UGen
 pv_Invert b = mkOsc KR "PV_Invert" [b] 1
+
+-- | Plays FFT data from a memory buffer.
+pv_PlayBuf :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+pv_PlayBuf buffer playbuf_ rate_ offset loop = mkOsc KR "PV_PlayBuf" [buffer,playbuf_,rate_,offset,loop] 1
+
+-- | Records FFT data to a memory buffer.
+pv_RecordBuf :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+pv_RecordBuf buffer recbuf offset run loop hop wintype = mkOsc KR "PV_RecordBuf" [buffer,recbuf,offset,run,loop,hop,wintype] 1
 
 -- | Sample looping oscillator
 loopBuf :: Int -> Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
