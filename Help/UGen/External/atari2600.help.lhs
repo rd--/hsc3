@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Atari2600"
 > Sound.SC3.UGen.DB.ugenSummary "Atari2600"
 
-> import Sound.SC3
+> import Sound.SC3 {- hsc3 -}
 
 > audition (out 0 (atari2600 1 2 3 4 5 5 1))
 > audition (out 0 (atari2600 2 3 10 10 5 5 1))

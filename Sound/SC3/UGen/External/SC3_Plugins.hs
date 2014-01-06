@@ -196,6 +196,10 @@ bufMin rate bufnum gate_ = mkOscR [KR] rate "BufMin" [bufnum,gate_] 2
 perlin3 :: Rate -> UGen -> UGen -> UGen -> UGen
 perlin3 rate x y z = mkOscR [AR,KR] rate "Perlin3" [x,y,z] 1
 
+-- | Wave squeezer. Maybe a kind of pitch shifter.
+squiz :: UGen -> UGen -> UGen -> UGen -> UGen
+squiz in_ pitchratio zcperchunk memlen = mkFilterR [AR,KR] "Squiz" [in_,pitchratio,zcperchunk,memlen] 1
+
 -- * Membrane
 
 -- | Triangular waveguide mesh of a drum-like membrane.
@@ -267,6 +271,10 @@ lti rate input bufnuma bufnumb = mkOscR [AR] rate "LTI" [input,bufnuma,bufnumb] 
 -- | Experimental time domain onset detector
 sLOnset :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 sLOnset rate input memorysize1 before after threshold hysteresis = mkOscR [KR] rate "SLOnset" [input,memorysize1,before,after,threshold,hysteresis] 1
+
+-- | wave terrain synthesis
+waveTerrain :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+waveTerrain rate bufnum x y xsize ysize = mkOscR [AR] rate "WaveTerrain" [bufnum,x,y,xsize,ysize] 1
 
 -- * Stk
 

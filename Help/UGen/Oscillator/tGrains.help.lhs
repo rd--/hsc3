@@ -4,10 +4,12 @@
 > import Sound.SC3.ID
 
 Load audio data
+
 > let fn = "/home/rohan/data/audio/pf-c5.aif"
 > in withSC3 (async (b_allocRead 10 fn 0 0))
 
 Mouse control
+
 > let {tRate = mouseY KR 2 200 Exponential 0.1
 >     ;ctr = mouseX KR 0 (bufDur KR 10) Linear 0.1
 >     ;tr = impulse AR tRate 0}
@@ -33,7 +35,8 @@ Mouse control
 >     ;rate = shiftLeft 1.2 (roundTo (n0 * 3) 1)}
 > in audition (out 0 (tGrains 2 clk b rate pos dur (n1 * 0.6) 0.25 2))
 
-Demand UGens as inputs (will eventually hang scsynth...)
+Demand UGens as inputs (may eventually hang scsynth?)
+
 > let {b = 10
 >     ;rt = mouseY KR 2 100 Linear 0.2
 >     ;d e = dwhite e 1 0.1 0.2
