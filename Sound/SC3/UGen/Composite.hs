@@ -18,6 +18,10 @@ import Sound.SC3.UGen.Panner
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 
+-- | Triggers when a value changes
+changed :: UGen -> UGen -> UGen
+changed input threshold = abs (hpz1 input) >* threshold
+
 -- | Dynamic klang, dynamic sine oscillator bank
 dynKlang :: Rate -> UGen -> UGen -> UGen -> UGen
 dynKlang r fs fo s =

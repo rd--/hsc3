@@ -15,8 +15,11 @@ Create terrain given function.
 > let t z = let {w = 100 {- width -}
 >               ;h = 50 {- height -}
 >               ;tk n = take (round n)
->               ;ix = [(x,y) | y <- tk h [0,1/h ..], x <- tk w [0,1/w ..]]}
->           in map (\(x,y) -> (x,y,z (x,y))) ix
+>               ;xs = tk w [0,1/w ..]
+>               ;ys = tk h [0,1/h ..]
+>               ;ix = map (\y -> map (\x -> (x,y)) xs) ys
+>               ;add_z = map (\(x,y) -> (x,y,z (x,y)))}
+>           in concatMap add_z ix
 
 Confirm terrain
 
@@ -49,3 +52,23 @@ Alternate terrain function.
 > let z (x,y) = let {a = (cos(5 * x + 1.7)) ** 3
 >                   ;b = abs (sin (23 * y)) ** (1/3)}
 >               in (a - b)
+
+Free buffer
+
+> withSC3 (async (b_free 0))
+
+Gerate mesh given terrain given function.
+
+> let t z = let {w = 100 {- width -}
+>               ;h = 50 {- height -}
+>               ;tk n = take (round n)
+>               ;xs = tk w [0,1/w ..]
+>               ;ys = tk h [0,1/h ..]
+>               ;ix0 = map (\y -> map (\x -> (x,y)) xs) ys
+>               ;ix1 = map (\x -> map (\y -> (x,y)) ys) xs
+>               ;add_z = map (\(x,y) -> (x,y,z (x,y)))}
+>           in (map add_z ix0,map add_z ix1)
+
+Confirm terrain mesh
+
+> plot_p3_ln ((\(p,q) -> p ++ q) (t z))
