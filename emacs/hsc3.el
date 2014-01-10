@@ -202,6 +202,7 @@
   (interactive)
   (progn
     (hsc3-interrupt-haskell)
+    (sleep-for 0.15)
     (hsc3-reset-scsynth)))
 
 (defun hsc3-status-scsynth ()

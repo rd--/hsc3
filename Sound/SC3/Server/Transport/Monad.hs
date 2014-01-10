@@ -40,10 +40,15 @@ withSC3 = withTransport (openUDP "127.0.0.1" 57110)
 stop :: SendOSC m => m ()
 stop = send (g_freeAll [1])
 
--- | Free all nodes ('g_freeAll') at and re-create groups @1@ and @2@.
+-- * Composite
+
+-- | 'clearSched', free all nodes ('g_freeAll') at, and then
+-- re-create, groups @1@ and @2@.
 reset :: SendOSC m => m ()
 reset =
-    let m = [g_freeAll [1,2],g_new [(1,AddToTail,0),(2,AddToTail,0)]]
+    let m = [clearSched
+            ,g_freeAll [1,2]
+            ,g_new [(1,AddToTail,0),(2,AddToTail,0)]]
     in sendBundle (bundle immediately m)
 
 -- | Send 'd_recv' and 's_new' messages to scsynth.

@@ -38,6 +38,7 @@ synthdef s u = Synthdef s (synth u)
 -- | The SC3 /default/ instrument 'Synthdef'.
 --
 -- > withSC3 (send (d_recv defaultSynthdef))
+-- > audition defaultSynthdef
 defaultSynthdef :: Synthdef
 defaultSynthdef = synthdef "default" default_ugen_graph
 
