@@ -37,6 +37,7 @@ data SampleFormat =
   | PcmMulaw | PcmAlaw
   deriving (Enum, Eq, Read, Show)
 
+-- | Sample format to standard file extension name.
 soundFileFormatString :: SoundFileFormat -> String
 soundFileFormatString f =
     case f of
@@ -46,6 +47,18 @@ soundFileFormatString f =
       Next -> "next"
       Raw -> "raw"
       Wave -> "wav"
+
+-- | Infer sample format from file extension name.
+soundFileFormat_from_extension :: String -> Maybe SoundFileFormat
+soundFileFormat_from_extension =
+    let tbl = [("aif",Aiff)
+              ,("aiff",Aiff)
+              ,("flac",Flac)
+              ,("ircam",Ircam)
+              ,("next",Next)
+              ,("raw",Raw)
+              ,("wav",Wave)]
+    in flip lookup tbl
 
 sampleFormatString :: SampleFormat -> String
 sampleFormatString f =

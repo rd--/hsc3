@@ -4,14 +4,17 @@
 > import Sound.OSC {- hosc -}
 > import Sound.SC3.ID {- hsc3 -}
 
+Example graph
+
 > let gr = let d = xLine KR 20000 2 10 RemoveSynth
->          in out 0 (dust 'a' AR d * 0.15)
+>          in out 0 (dust 'α' AR d * 0.15)
 
-Check incoming signal
+Check incoming signal (either graph above or the outside world)
 
+> audition gr
 > audition (out 0 (soundIn 4))
 
-Record incoming signal (or above...)
+Record incoming signal (or above...), print some informational traces...
 
 > let trace str = liftIO (putStrLn str)
 
@@ -26,3 +29,12 @@ Record incoming signal (or above...)
 >             ;_ <- async (b_close 0)
 >             ;_ <- async (b_free 0)
 >             ;return ()})
+
+Listen to recording (on loop...)
+
+> let {fn = "/tmp/disk-out.aiff"
+>     ;nc = 1
+>     ;gr = out 0 (diskIn nc 0 Loop)}
+> in withSC3 (do {_ <- async (b_alloc 0 65536 nc)
+>                ;_ <- async (b_read 0 fn 0 (-1) 0 True)
+>                ;play gr})
