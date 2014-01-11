@@ -6,6 +6,7 @@ import Data.Maybe {- base -}
 import Sound.OSC {- hosc -}
 
 import Sound.SC3.Server.Command.Core
+import Sound.SC3.Server.Command.Enum
 import Sound.SC3.Server.Command.Int
 import Sound.SC3.Server.Enum
 import Sound.SC3.Server.NRT

@@ -3,6 +3,7 @@ module Sound.SC3.Server.Command.Core where
 
 import Sound.OSC.Core {- hosc -}
 
+import Sound.SC3.Server.Command.Enum
 import Sound.SC3.Server.Enum
 import Sound.SC3.Server.Synthdef
 
@@ -66,31 +67,6 @@ nrt_end = message "/nrt_end" []
 
 -- * Modify existing message to include completion message
 
--- | List of asynchronous server commands.
-async_cmds :: [String]
-async_cmds =
-    ["/b_alloc"
-    ,"/b_allocRead"
-    ,"/b_allocReadChannel"
-    ,"/b_close"
-    ,"/b_free"
-    ,"/b_read"
-    ,"/b_readChannel"
-    ,"/b_write"
-    ,"/b_zero"
-    ,"/d_load"
-    ,"/d_loadDir"
-    ,"/d_recv"
-    ,"/notify"
-    ,"/quit"
-    ,"/sync"]
-
--- | 'True' if 'Message' is an asynchronous 'Message'.
---
--- > map isAsync [b_close 0,n_set1 0 "0" 0] == [True,False]
-isAsync :: Message -> Bool
-isAsync (Message a _) = a `elem` async_cmds
-
 -- | Add a completion message (or bundle, the name is misleading) to
 -- an existing asynchronous command.
 --
@@ -103,4 +79,3 @@ withCM (Message c xs) cm =
     then let xs' = xs ++ [Blob (encodeOSC cm)]
          in Message c xs'
     else error ("withCM: not async: " ++ c)
-
