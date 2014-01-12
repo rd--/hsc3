@@ -10,3 +10,4 @@ import Sound.SC3.Server.Synthdef.Type as S
 import Sound.SC3.Server.Status as S
 import Sound.SC3.Server.NRT as S
 import Sound.SC3.Server.NRT.Edit as S
+import Sound.SC3.Server.Recorder as S

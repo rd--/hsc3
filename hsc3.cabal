@@ -84,14 +84,15 @@ Library
                    Sound.SC3.Server.Monad
                    Sound.SC3.Server.NRT
                    Sound.SC3.Server.NRT.Edit
-                   Sound.SC3.Server.Transport.FD
-                   Sound.SC3.Server.Transport.Monad
+                   Sound.SC3.Server.Recorder
                    Sound.SC3.Server.Status
                    Sound.SC3.Server.Synthdef
                    Sound.SC3.Server.Synthdef.Internal
                    Sound.SC3.Server.Synthdef.Reconstruct
                    Sound.SC3.Server.Synthdef.Transform
                    Sound.SC3.Server.Synthdef.Type
+                   Sound.SC3.Server.Transport.FD
+                   Sound.SC3.Server.Transport.Monad
                    Sound.SC3.UGen
                    Sound.SC3.UGen.Analysis
                    Sound.SC3.UGen.Buffer
