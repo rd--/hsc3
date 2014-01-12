@@ -1,6 +1,7 @@
 -- | Recording @scsynth@.
 module Sound.SC3.Server.Recorder where
 
+import Data.Default {- data-default -}
 import Sound.OSC {- hosc -}
 
 import Sound.SC3.Server.Command
@@ -37,6 +38,8 @@ default_SC3_Recorder =
                  ,rec_group_id = 0
                  ,rec_dur = Just 60}
 
+instance Default SC3_Recorder where def = default_SC3_Recorder
+
 -- | Generate 'Synthdef' with required number of channels.
 rec_synthdef :: SC3_Recorder -> Synthdef
 rec_synthdef r =
@@ -47,6 +50,8 @@ rec_synthdef r =
 
 -- | Asyncronous initialisation 'Message's ('d_recv', 'b_alloc' and
 -- 'b_write').
+--
+-- > withSC3 (sendBundle (bundle immediately (rec_init_m def)))
 rec_init_m :: SC3_Recorder -> [Message]
 rec_init_m r =
     let buf = rec_buf_id r
@@ -55,6 +60,8 @@ rec_init_m r =
        ,b_write buf (rec_fname r) (rec_sftype r) (rec_coding r) (-1) 0 True]
 
 -- | Begin recording 'Message' ('s_new').
+--
+-- > withSC3 (sendMessage (rec_begin_m def))
 rec_begin_m :: SC3_Recorder -> Message
 rec_begin_m r =
     s_new (synthdefName (rec_synthdef r))
@@ -65,6 +72,8 @@ rec_begin_m r =
           ,("bufnum",fromIntegral (rec_buf_id r))]
 
 -- | End recording 'Message's ('n_free', 'b_close' and 'b_free').
+--
+-- > withSC3 (sendBundle (bundle immediately (rec_end_m def)))
 rec_end_m :: SC3_Recorder -> [Message]
 rec_end_m r =
     [n_free [rec_node_id r]
