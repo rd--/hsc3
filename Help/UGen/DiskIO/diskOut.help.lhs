@@ -20,7 +20,7 @@ Record incoming signal (or above...), print some informational traces...
 
 > withSC3 (do {trace "b_alloc & b_write"
 >             ;_ <- async (b_alloc 0 65536 1)
->             ;_ <- async (b_write 0 "/tmp/disk-out.aiff" Aiff PcmInt16 0 0 True)
+>             ;_ <- async (b_write 0 "/tmp/disk-out.aiff" Aiff PcmInt16 (-1) 0 True)
 >             ;trace "record for 10 seconds"
 >             ;playSynthdef 2001 (synthdef "disk-out" (diskOut 0 (soundIn 4)))
 >             ;pauseThread 10

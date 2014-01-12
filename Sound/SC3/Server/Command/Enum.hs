@@ -1,6 +1,7 @@
 -- | Enumeration of SC3 server commands.
 module Sound.SC3.Server.Command.Enum where
 
+import Data.List {- base -}
 import Data.Maybe {- base -}
 import Sound.OSC.Type {- hosc -}
 
@@ -124,7 +125,13 @@ async_cmds =
 
 -- | 'True' if 'Message' is an asynchronous 'Message'.
 --
--- > import Sound.SC3.Server.Command.Core
 -- > map isAsync [b_close 0,n_set1 0 "0" 0] == [True,False]
 isAsync :: Message -> Bool
 isAsync (Message a _) = a `elem` async_cmds
+
+-- | Asynchronous commands are at the left.  This function should
+-- preserve the ordering of both branches.
+--
+-- > partition_async [b_close 0,n_set1 0 "0" 0]
+partition_async :: [Message] -> ([Message],[Message])
+partition_async = partition isAsync

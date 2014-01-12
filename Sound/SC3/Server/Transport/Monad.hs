@@ -81,6 +81,9 @@ run_bundle st b = do
   mapM_ wr (bundleMessages b)
 
 -- | Perform an 'NRT' score (as would be rendered by 'writeNRT').
+-- Asynchronous commands at time @0@ are separated out and run before
+-- the initial time-stamp is taken.  This re-orders synchronous
+-- commands in relation to asynchronous at time @0@.
 --
 -- > let sc = NRT [bundle 1 [s_new0 "default" (-1) AddToTail 1]
 -- >              ,bundle 2 [n_set1 (-1) "gate" 0]]
@@ -88,10 +91,11 @@ run_bundle st b = do
 performNRT :: Transport m => NRT -> m ()
 performNRT s = do
   let (i,r) = nrt_span (<= 0) s
-  t0 <- liftIO time
-  mapM_ (run_bundle t0) i
-  t1 <- liftIO time
-  mapM_ (run_bundle t1) r
+      i' = concatMap bundleMessages i
+      (a,b) = partition_async i'
+  mapM_ async a
+  t <- liftIO time
+  mapM_ (run_bundle t) (Bundle 0 b : r)
 
 -- * Audible
 
