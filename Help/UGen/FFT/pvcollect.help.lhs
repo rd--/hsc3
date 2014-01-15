@@ -1,7 +1,8 @@
 > Sound.SC3.UGen.Help.viewSC3Help "PV_ChainUGen.pvcollect"
 > :t pvcollect
 
-> import Sound.SC3.ID
+> import Data.List {- base -}
+> import Sound.SC3.ID {- hsc3 -}
 
 > let fileName = "/home/rohan/data/audio/pf-c5.snd"
 > in withSC3 (do {_ <- async (b_alloc 10 1024 1)
@@ -37,7 +38,7 @@
 >                 ,"control rates             : []"
 >                 ,"number of unit generators : 1013"
 >                 ,"unit generator rates      : [(KR,5),(AR,4),(DR,1004)]"]
-> in synthstat (pv_g 1024 spectral_delay) == r
+> in r `isPrefixOf` synthstat (pv_g 1024 spectral_delay)
 
 > synthstat (pv_g 1024 (bpf_sweep 1024))
 > audition (pv_g 1024 spectral_delay)
@@ -46,5 +47,6 @@
 > audition (pv_au 1024 spectral_delay)
 > audition (pv_au 1024 (bpf_sweep 1024))
 
-> import Sound.SC3.UGen.Dot
+> import Sound.SC3.UGen.Dot {- hsc3-dot -}
+
 > draw_svg (pv_g 1024 (bpf_sweep 1024))

@@ -17,6 +17,7 @@ SC3 reorders inputs so that the envelope is the first argument.
 
 index with an SinOsc ... mouse controls amplitude of SinOsc
 use offset so negative values of SinOsc will map into the Env
+
 > let {l = [-1,-0.7,0.7,1]
 >     ;t = [0.8666,0.2666,0.8668]
 >     ;c = [EnvLin,EnvLin]

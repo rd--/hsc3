@@ -193,9 +193,9 @@ class (Floating a, Ord a) => BinaryOp a where
     gcdE :: a -> a -> a
     gcdE = error "gcdE"
     hypot :: a -> a -> a
-    hypot = error "hypot"
+    hypot x y = sqrt (x * x + y * y)
     hypotx :: a -> a -> a
-    hypotx = error "hypotx"
+    hypotx x y = abs x + abs y - ((sqrt 2 - 1) * min (abs x) (abs y))
     iDiv :: a -> a -> a
     iDiv = error "iDiv"
     lcmE :: a -> a -> a
@@ -356,3 +356,6 @@ clip' i j n = if n < i then i else if n > j then j else n
 -- | Variant of 'clip'' with @SC3@ argument ordering.
 clip_ :: (Ord a) => a -> a -> a -> a
 clip_ n i j = clip' i j n
+
+hypot_ :: (Floating a) => a -> a -> a
+hypot_ x y = sqrt (x * x + y * y)

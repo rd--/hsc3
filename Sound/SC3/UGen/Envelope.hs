@@ -123,6 +123,7 @@ envelope_sc3_ienvgen_array e =
          l0:l' -> Just (0 : l0 : n' : sum t : concat (zipWith3 f l' t c))
          _ -> Nothing
 
+-- | 'True' if 'env_release_node' is not 'Nothing'.
 env_is_sustained :: Envelope a -> Bool
 env_is_sustained = isJust . env_release_node
 
