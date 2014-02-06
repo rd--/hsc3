@@ -4,12 +4,16 @@
 > import Sound.SC3.ID
 
 vibrato at 1 Hz, note the use of DC.ar
+
 {SinOsc.ar(Vibrato.ar(DC.ar(400.0),1,0.02))*0.1}.play
+
 > let v = vibrato AR (dc AR 400) 1 0.02 0 0 0.04 0.1 0
 > in audition (out 0 (sinOsc AR v 0 * 0.1))
 
 compare: k-rate freq input can be a constant
+
 {SinOsc.ar(Vibrato.kr(400.0,1,0.02))}.play
+
 > let v = vibrato KR 400 1 0.02 0 0 0.04 0.1 0
 > in audition (out 0 (sinOsc AR v 0 * 0.1))
 
@@ -24,11 +28,13 @@ control rate and rateVariation
 > in audition (out 0 (sinOsc AR v 0 * 0.1))
 
 control depth and depthVariation
+
 {n=LFNoise1.kr(1,3,7)
 ;x=MouseX.kr(0.0,1.0)
 ;y=MouseY.kr(0.0,1.0)
 ;v=Vibrato.ar(DC.ar(400.0),n,x,1.0,1.0,y,0.1)
 ;SinOsc.ar(v)}.play
+
 > let {n = lfNoise1 'a' KR 1 * 3 + 7
 >     ;x = mouseX KR 0 1 Linear 0.2
 >     ;y = mouseY KR 0 1 Linear 0.2

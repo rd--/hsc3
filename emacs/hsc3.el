@@ -125,34 +125,37 @@
   (apply #'concat l))
 
 (defun hsc3-region-string ()
-  "Translate the current region into a single line (unlit, uncomment)."
-  (let* ((s (region-string))
-	 (s* (if hsc3-literate-p
-		 (hsc3-unlit (hsc3-remove-non-literates s))
-	       (hsc3-concat (mapcar 'hsc3-uncomment (split-string s "\n"))))))
-    (replace-regexp-in-string "\n" " " s*)))
+  "The current region (unlit, uncomment)."
+  (let* ((s (region-string)))
+    (if hsc3-literate-p
+        (hsc3-unlit (hsc3-remove-non-literates s))
+      (hsc3-concat (mapcar 'hsc3-uncomment (split-string s "\n"))))))
+
+(defun hsc3-region-string-one-line ()
+  "Replace newlines with spaces in `hsc3-region-string'."
+  (replace-regexp-in-string "\n" " " (hsc3-region-string)))
 
 (defun hsc3-run-multiple-lines ()
   "Send the current region to the haskell interpreter as a single line."
   (interactive)
-  (hsc3-send-string (hsc3-region-string)))
+  (hsc3-send-string (hsc3-region-string-one-line)))
 
 (defun hsc3-run-multiple-lines-sclang ()
   "Send the current region to the sclang interpreter as a single line."
   (interactive)
-  (sclang-eval-string (hsc3-region-string) t))
+  (sclang-eval-string (hsc3-region-string-one-line) t))
 
 (defun hsc3-run-consecutive-lines ()
   "Send the current region to the interpreter one line at a time."
   (interactive)
   (mapcar 'hsc3-send-string
-          (mapcar 'hsc3-unlit (split-string (region-string) "\n"))))
+          (split-string (hsc3-region-string) "\n")))
 
 (defun hsc3-run-layout-block ()
   "Variant of `hsc3-run-consecutive-lines' with ghci layout quoting."
   (interactive)
   (hsc3-send-string ":{")
-  (hsc3-run-consecutive-lines)
+  (hsc3-send-string (hsc3-region-string))
   (hsc3-send-string ":}"))
 
 (defun hsc3-run-main ()

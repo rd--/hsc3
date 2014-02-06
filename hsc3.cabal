@@ -12,7 +12,7 @@ Description:       Haskell client for the SuperCollider synthesis server,
                    "Sound.SC3.UGen.Monad".
 License:           GPL
 Category:          Sound
-Copyright:         (c) Rohan Drape and others, 2006-2013
+Copyright:         (c) Rohan Drape and others, 2006-2014
 Author:            Rohan Drape
 Maintainer:        rd@slavepianos.org
 Stability:         Experimental
