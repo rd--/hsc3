@@ -41,3 +41,34 @@ sine_grain_ugen_graph =
         e = envGen AR 1 1 0 1 DoNothing (envSine (d * w) 1)
         s = fSinOsc AR f (0.5 * pi) * e
     in offsetOut o (pan2 s l a)
+
+-- | Trivial file playback instrument.
+--
+-- If /use_gate/ is 'True' there is a /gate/ parameter and the synth
+-- ends either when the sound file ends or the gate closes, else there
+-- is a /sustain/ parameter to indicate the duration.  In both cases a
+-- linear envelope with a decay time of /decay/ is applied.
+--
+-- The /rdelay/ parameter sets the maximum pre-delay time (in
+-- seconds), each instance is randomly pre-delayed between zero and
+-- the indicated time.  The /ramplitude/ parameter sets the maximum
+-- amplitude offset of the /amp/ parameter, each instance is randomly
+-- amplified between zero and the indicated value.
+default_sampler_ugen_graph :: Bool -> UGen
+default_sampler_ugen_graph use_gate =
+    let b = control KR "bufnum" 0
+        l = control KR "pan" 0
+        a = control KR "amp" 0.1
+        r = control KR "rate" 1
+        m = control KR "rdelay" 0
+        v = control KR "ramplitude" 0
+        y = control KR "decay" 0.5
+        g = control KR "gate" 1
+        r' = bufRateScale KR b * r
+        p = playBuf 1 AR b r' 1 0 NoLoop RemoveSynth
+        e = if use_gate
+            then envGen KR g 1 0 1 RemoveSynth (envASR 0 1 y EnvSin)
+            else let s = control KR "sustain" 1
+                 in envGen KR 1 1 0 1 RemoveSynth (envLinen 0 s y 1)
+        d = delayC (p * e) m (rand 'α' 0 m)
+    in out 0 (pan2 d l (a + rand 'β' 0 v))

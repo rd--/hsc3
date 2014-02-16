@@ -35,12 +35,18 @@ instance Default Synthdef where def = defaultSynthdef
 synthdef :: String -> UGen -> Synthdef
 synthdef s u = Synthdef s (synth u)
 
--- | The SC3 /default/ instrument 'Synthdef'.
+-- | The SC3 /default/ instrument 'Synthdef', see
+-- 'default_ugen_graph'.
 --
 -- > withSC3 (send (d_recv defaultSynthdef))
 -- > audition defaultSynthdef
 defaultSynthdef :: Synthdef
 defaultSynthdef = synthdef "default" default_ugen_graph
+
+-- | The SC3 /default/ sample (buffer) playback instrument 'Synthdef',
+-- see 'default_sampler_ugen_graph'.
+defaultSampler :: Bool -> Synthdef
+defaultSampler = synthdef "default-sampler" . default_sampler_ugen_graph
 
 -- | Parameter names at 'Synthdef'.
 --
