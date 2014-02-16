@@ -46,7 +46,9 @@ defaultSynthdef = synthdef "default" default_ugen_graph
 -- | The SC3 /default/ sample (buffer) playback instrument 'Synthdef',
 -- see 'default_sampler_ugen_graph'.
 defaultSampler :: Bool -> Synthdef
-defaultSampler = synthdef "default-sampler" . default_sampler_ugen_graph
+defaultSampler use_gate =
+    let nm = "default-sampler-" ++ if use_gate then "gate" else "fixed"
+    in synthdef nm (default_sampler_ugen_graph use_gate)
 
 -- | Parameter names at 'Synthdef'.
 --
