@@ -17,7 +17,7 @@ data ZitaRev1 a =
              ,zr1_eq1gn :: a
              ,zr1_eq2fr :: a
              ,zr1_eq2gn :: a
-             ,zr1_opmix :: a
+             ,zr1_opmix :: a -- ^ (-1,+1)
              ,zr1_level :: a}
 
 zitaRev1_r :: ZitaRev1 UGen -> UGen

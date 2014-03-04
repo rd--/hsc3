@@ -11,19 +11,19 @@ import Sound.SC3.UGen.UGen
 fft :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 fft buf i h wt a ws = mkOsc KR "FFT" [buf,i,h,wt,a,ws] 1
 
+-- | Variant FFT constructor with default values for hop size (0.5),
+-- window type (0), active status (1) and window size (0).
+fft' :: UGen -> UGen -> UGen
+fft' buf i = fft buf i 0.5 0 1 0
+
 -- | 'fft' variant that allocates 'localBuf'.
 --
--- > let c = ffta 'α' 2048 (soundIn 4) 0.5 0 1 0
+-- > let c = ffta 'α' 2048 (soundIn 0) 0.5 0 1 0
 -- > in audition (out 0 (ifft c 0 0))
 ffta :: ID i => i -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 ffta z nf i h wt a ws =
     let b = localBuf z nf 1
     in fft b i h wt a ws
-
--- | Variant FFT constructor with default values for hop size, window
--- | type, active status and window size.
-fft' :: UGen -> UGen -> UGen
-fft' buf i = fft buf i 0.5 0 1 0
 
 -- | Outputs signal for @FFT@ chains, without performing FFT.
 fftTrigger :: UGen -> UGen -> UGen -> UGen

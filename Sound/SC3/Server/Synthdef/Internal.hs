@@ -194,7 +194,7 @@ mk_node u g =
     case u of
       Constant_U c -> mk_node_c c g
       Control_U k -> mk_node_k k g
-      Label_U _ -> error "mk_node: label"
+      Label_U _ -> error (show ("mk_node: label",u))
       Primitive_U p -> mk_node_u p g
       Proxy_U p ->
           let (n,g') = mk_node_u (proxySource p) g
@@ -202,7 +202,7 @@ mk_node u g =
       MRG_U m ->
           let (_,g') = mk_node (mrgRight m) g
           in mk_node (mrgLeft m) g'
-      MCE_U _ -> error "mk_node: mce"
+      MCE_U _ -> error (show ("mk_node: mce",u))
 
 -- | Transform /mce/ nodes to /mrg/ nodes
 prepare_root :: UGen -> UGen

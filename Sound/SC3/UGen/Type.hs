@@ -148,6 +148,7 @@ isMCE :: UGen -> Bool
 isMCE u =
     case u of
       MCE_U _ -> True
+      MRG_U (MRG u' _) -> isMCE u'
       _ -> False
 
 -- | Output channels of UGen as a list.

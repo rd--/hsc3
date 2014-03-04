@@ -4,6 +4,7 @@ module Sound.SC3.UGen.Envelope where
 import Data.List
 import Data.Maybe
 import Sound.SC3.UGen.Enum
+import Sound.SC3.UGen.Math
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
@@ -216,6 +217,25 @@ free i n = mkFilter "Free" [i, n] 1
 -- | Linear envelope generator.
 linen :: UGen -> UGen -> UGen -> UGen -> DoneAction -> UGen
 linen g at sl rt da = mkFilter "Linen" [g, at, sl, rt, from_done_action da] 1
+
+-- | Singleton fade envelope.
+envGate :: UGen -> UGen -> UGen -> DoneAction -> Envelope_Curve UGen -> UGen
+envGate level gate fadeTime doneAction curve =
+    let startVal = fadeTime <=* 0
+        e = Envelope [startVal,1,0] [1,1] [curve] (Just 1) Nothing
+    in envGen KR gate level 0 fadeTime doneAction e
+
+-- | Variant with default values for all inputs.  @gate@ and
+-- @fadeTime@ are 'control's, @doneAction@ is 'RemoveSynth', @curve@
+-- is 'EnvSin'.
+envGate' :: UGen
+envGate' =
+    let level = 1
+        gate = control KR "gate" 1
+        fadeTime = control KR "fadeTime" 0.02
+        doneAction = RemoveSynth
+        curve = EnvSin
+    in envGate level gate fadeTime doneAction curve
 
 -- * List
 

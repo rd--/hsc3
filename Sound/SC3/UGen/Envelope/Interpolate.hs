@@ -1,16 +1,21 @@
--- | Interpolation function for envelope segments.  Each function
--- takes three arguments, /x0/ is the left or begin value, /x1/ is the
--- right or end value, and /t/ is a (0,1) index.
+-- | Interpolation function for envelope segments.
 module Sound.SC3.UGen.Envelope.Interpolate where
 
+-- | Interpolation functions take three arguments. /x0/ is the left or
+-- begin value, /x1/ is the right or end value, and /t/ is a (0,1)
+-- index.
 type Interpolation_F t = t -> t -> t -> t
 
+-- | Step function, ignores /t/ and returns /x1/.
 step :: Interpolation_F t
 step _ x1 _ = x1
 
+-- | Linear interpolation.
 linear :: Num t => Interpolation_F t
 linear x0 x1 t = t * (x1 - x0) + x0
 
+-- | Exponential interpolation, /x0/ must not be @0@, (/x0/,/x1/) must
+-- not span @0@.
 exponential :: Floating t => Interpolation_F t
 exponential x0 x1 t = x0 * ((x1 / x0) ** t)
 
@@ -47,4 +52,3 @@ cubed x0 x1 t =
         x1' = x1 ** (1/3)
         l = t * (x1' - x0') + x0'
     in l * l * l
-
