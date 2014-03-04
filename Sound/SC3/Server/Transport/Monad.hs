@@ -102,22 +102,30 @@ performNRT s = do
 -- | Class for values that can be encoded and send to @scsynth@ for
 -- audition.
 class Audible e where
+    play_id :: Transport m => Int -> e -> m ()
+    -- | Variant where /id/ is @-1@.
     play :: Transport m => e -> m ()
+    play = play_id (-1)
 
 instance Audible Graph where
-    play g = playSynthdef (-1) (Synthdef "Anonymous" g)
+    play_id k = playSynthdef k . Synthdef "Anonymous"
 
 instance Audible Synthdef where
-    play = playSynthdef (-1)
+    play_id = playSynthdef
 
 instance Audible UGen where
-    play = playUGen (-1)
+    play_id = playUGen
 
 instance Audible NRT where
-    play = performNRT
+    play_id _ = performNRT
 
+-- | 'withSC3' of 'play_id'.
+audition_id :: Audible e => Int -> e -> IO ()
+audition_id k = withSC3 . play_id k
+
+-- | Variant where /id/ is @-1@.
 audition :: Audible e => e -> IO ()
-audition e = withSC3 (play e)
+audition = audition_id (-1)
 
 -- * Notifications
 

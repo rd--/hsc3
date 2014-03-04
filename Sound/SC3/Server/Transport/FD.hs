@@ -45,14 +45,14 @@ reset fd = do
   sendMessage fd (g_new [(1,AddToTail,0),(2,AddToTail,0)])
 
 -- | Send 'd_recv' and 's_new' messages to scsynth.
-playSynthdef :: Transport t => t -> Synthdef -> IO ()
-playSynthdef fd s = do
+playSynthdef :: Transport t => Int -> t -> Synthdef -> IO ()
+playSynthdef k fd s = do
   _ <- async fd (d_recv s)
-  sendMessage fd (s_new0 (synthdefName s) (-1) AddToTail 1)
+  sendMessage fd (s_new0 (synthdefName s) k AddToTail 1)
 
 -- | Send an /anonymous/ instrument definition using 'playSynthdef'.
-playUGen :: Transport t => t -> UGen -> IO ()
-playUGen fd = playSynthdef fd . synthdef "Anonymous"
+playUGen :: Transport t => Int -> t -> UGen -> IO ()
+playUGen k fd = playSynthdef k fd . synthdef "Anonymous"
 
 -- * Non-real time
 
@@ -79,21 +79,27 @@ performNRT fd s = time >>= \i -> mapM_ (run_bundle fd i) (nrt_bundles s)
 -- | Class for values that can be encoded and sent to @scsynth@ for
 -- audition.
 class Audible e where
+    play_id :: Transport t => Int -> t -> e -> IO ()
     play :: Transport t => t -> e -> IO ()
-    audition :: e -> IO ()
-    audition e = withSC3 (`play` e)
+    play = play_id (-1)
 
 instance Audible Graph where
-    play fd g = playSynthdef fd (Synthdef "Anonymous" g)
+    play_id k fd = playSynthdef k fd . Synthdef "Anonymous"
 
 instance Audible Synthdef where
-    play = playSynthdef
+    play_id = playSynthdef
 
 instance Audible UGen where
-    play = playUGen
+    play_id = playUGen
 
 instance Audible NRT where
-    play = performNRT
+    play_id _ = performNRT
+
+audition_id :: Audible e => Int -> e -> IO ()
+audition_id k e = withSC3 (\fd -> play_id k fd e)
+
+audition :: Audible e => e -> IO ()
+audition = audition_id (-1)
 
 -- * Notifications
 
