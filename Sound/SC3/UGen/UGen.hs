@@ -61,7 +61,7 @@ control_f32 r ix nm d = Control_U (Control r ix nm d False)
 -- | Control input node constructor.
 --
 -- Note that if the name begins with a t_ prefix the control is /not/
--- converted to a triggered control.  Please see tr_control.
+-- converted to a triggered control.  Please see 'tr_control'.
 control :: Rate -> String -> Double -> UGen
 control r nm = control_f32 r Nothing nm . realToFrac
 
