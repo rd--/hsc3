@@ -1,8 +1,8 @@
--- | Interpolation function for envelope segments.
+-- | Interpolation functions for envelope segments.
 module Sound.SC3.UGen.Envelope.Interpolate where
 
--- | Interpolation functions take three arguments. /x0/ is the left or
--- begin value, /x1/ is the right or end value, and /t/ is a (0,1)
+-- | An interpolation function take three arguments. /x0/ is the left
+-- or begin value, /x1/ is the right or end value, and /t/ is a (0,1)
 -- index.
 type Interpolation_F t = t -> t -> t -> t
 
@@ -16,21 +16,56 @@ linear x0 x1 t = t * (x1 - x0) + x0
 
 -- | Exponential interpolation, /x0/ must not be @0@, (/x0/,/x1/) must
 -- not span @0@.
+--
+-- > import Sound.SC3.Plot
+-- > plotTable1 (map (exponential 0.001 1) [0,0.01 .. 1])
 exponential :: Floating t => Interpolation_F t
 exponential x0 x1 t = x0 * ((x1 / x0) ** t)
 
+-- | Variant that allows /x0/ to be @0@, though (/x0/,/x1/) must not
+-- span @0@.
+--
+-- > plotTable1 (map (exponential' 0 1) [0,0.01 .. 1])
+-- > plotTable1 (map (exponential' 0 (-1)) [0,0.01 .. 1])
+exponential' :: (Eq t,Floating t) => Interpolation_F t
+exponential' x0 x1 =
+    let epsilon = 1e-6
+        x0' = if x0 == 0 then epsilon * signum x1 else x0
+    in exponential x0' x1
+
+-- | 'linear' of 'exponential'', ie. allows (/x0/,/x1/) to span @0@.
+--
+-- > plotTable1 (map (exponential'' (-1) 1) [0,0.01 .. 1])
+exponential'' :: (Eq t,Floating t) => Interpolation_F t
+exponential'' x0 x1 t = linear x0 x1 (exponential' 0 1 t)
+
+-- | 'linear' with /t/ transformed by sine function over (-pi/2,pi/2).
+--
+-- > plotTable1 (map (sine (-1) 1) [0,0.01 .. 1])
 sine :: Floating t => Interpolation_F t
-sine x0 x1 t = x0 + (x1 - x0) * (- cos (pi * t) * 0.5 + 0.5)
+sine x0 x1 t =
+    let t' = - cos (pi * t) * 0.5 + 0.5
+    in linear x0 x1 t'
 
 half_pi :: Floating a => a
 half_pi = pi / 2
 
+-- | If /x0/ '<' /x1/ rising sine segment (0,pi/2), else falling
+-- segment (pi/2,pi).
+--
+-- > plotTable1 (map (welch (-1) 1) [0,0.01 .. 1])
+-- > plotTable1 (map (welch 1 (-1)) [0,0.01 .. 1])
 welch :: (Ord t, Floating t) => Interpolation_F t
 welch x0 x1 t =
     if x0 < x1
     then x0 + (x1 - x0) * sin (half_pi * t)
     else x1 - (x1 - x0) * sin (half_pi - (half_pi * t))
 
+-- | Curvature controlled by single parameter /c/.  @0@ is 'linear',
+-- increasing /c/ approaches 'exponential'.
+--
+-- > plotTable1 (map (curve 0 (-1) 1) [0,0.01 .. 1])
+-- > plotTable1 (map (curve 9 (-1) 1) [0,0.01 .. 1])
 curve :: (Ord t, Floating t) => t -> Interpolation_F t
 curve c x0 x1 t =
     if abs c < 0.0001
@@ -39,16 +74,23 @@ curve c x0 x1 t =
              n = 1 - exp (t * c)
          in x0 + (x1 - x0) * (n/d)
 
+-- | Square of 'linear' of 'sqrt' of /x0/ and /x1/, threfore neither
+-- may be negative.
+--
+-- > plotTable1 (map (squared 0 1) [0,0.01 .. 1])
 squared :: Floating t => Interpolation_F t
 squared x0 x1 t =
     let x0' = sqrt x0
         x1' = sqrt x1
-        l = t * (x1' - x0') + x0'
+        l = linear x0' x1' t
     in l * l
 
+-- | Cubic variant of 'squared'.
+--
+-- > plotTable1 (map (cubed 0 1) [0,0.01 .. 1])
 cubed :: Floating t => Interpolation_F t
 cubed x0 x1 t =
     let x0' = x0 ** (1/3)
         x1' = x1 ** (1/3)
-        l = t * (x1' - x0') + x0'
+        l = linear x0' x1' t
     in l * l * l
