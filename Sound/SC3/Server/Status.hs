@@ -62,23 +62,26 @@ query_node_pp n =
 -- > queryTree_ctl (int32 1,string "c0") == (Right 1,Right 0)
 queryTree_ctl :: (Datum,Datum) -> Query_Ctl
 queryTree_ctl (p,q) =
-    let f d = case d of
+    let err msg val = error (show ("queryTree_ctl",msg,val))
+        f d = case d of
                 ASCII_String nm -> Left (C.unpack nm)
                 Int32 ix -> Right (fromIntegral ix)
-                _ -> error "queryTree_ctl"
+                _ -> err "string/int32" d
         g d = case d of
                 Float k -> Left (realToFrac k)
                 ASCII_String b -> case C.unpack b of
                                     'c' : n -> Right (read n)
-                                    _ -> error "queryTree_ctl"
-                _ -> error "queryTree_ctl"
+                                    _ -> err "c:_" d
+                _ -> err "float/string" d
     in (f p,g q)
 
 -- > let d = [int32 1,string "freq",float 440]
 -- > in queryTree_synth True 1000 "saw" d
 queryTree_synth :: Bool -> Int -> String -> [Datum] -> (Query_Node,[Datum])
 queryTree_synth rc k nm d =
-    let pairs l = zip l (tail l)
+    let pairs l = case l of
+                    e0:e1:l' -> (e0,e1) : pairs l'
+                    _ -> []
         f r = case r of
                 Int32 n : r' -> let (p,r'') = genericSplitAt (n * 2) r'
                                 in (map queryTree_ctl (pairs p),r'')
