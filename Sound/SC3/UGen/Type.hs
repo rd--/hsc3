@@ -41,7 +41,8 @@ type C_Meta' n = (n,n,String,n,String)
 c_meta' :: (n -> m) -> C_Meta' n -> C_Meta m
 c_meta' f (l,r,w,stp,u) = C_Meta (f l) (f r) w (f stp) u
 
--- | Control inputs.
+-- | Control inputs.  It is an invariant that controls with equal
+-- names within a UGen graph must be equal in all other respects.
 data Control = Control {controlOperatingRate :: Rate
                        ,controlIndex :: Maybe Int
                        ,controlName :: String

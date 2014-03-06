@@ -26,7 +26,7 @@ node_label :: Node -> String
 node_label nd =
     case nd of
       NodeC n _ -> "c_" ++ show n
-      NodeK n _ _ _ _ _ -> "k_" ++ show n
+      NodeK n _ _ _ _ _ _ -> "k_" ++ show n
       NodeU n _ _ _ _ _ _ -> "u_" ++ show n
       NodeP n _ _ -> "p_" ++ show n
 
@@ -71,7 +71,7 @@ as_from_port :: Node -> FromPort
 as_from_port d =
     case d of
       NodeC n _ -> FromPort_C n
-      NodeK n _ _ _ _ t -> FromPort_K n t
+      NodeK n _ _ _ _ t _ -> FromPort_K n t
       NodeU n _ _ _ o _ _ ->
           case o of
             [_] -> FromPort_U n Nothing
@@ -133,21 +133,22 @@ mk_node_c (Constant x) g =
 find_k_p :: String -> Node -> Bool
 find_k_p x n =
     case n of
-      NodeK _ _ _ y _ _ -> x == y
+      NodeK _ _ _ y _ _ _ -> x == y
       _ -> error "find_k_p"
 
 -- | Insert a control node into the 'Graph'.
-push_k :: (Rate,Maybe Int,String,Float,Bool) -> Graph -> (Node,Graph)
-push_k (r,ix,nm,d,tr) g =
-    let n = NodeK (nextId g) r ix nm d (ktype r tr)
+push_k :: Control -> Graph -> (Node,Graph)
+push_k (Control r ix nm d tr meta) g =
+    let n = NodeK (nextId g) r ix nm d (ktype r tr) meta
     in (n,g {controls = n : controls g
             ,nextId = nextId g + 1})
 
 -- | Either find existing 'Control' 'Node', or insert a new 'Node'.
 mk_node_k :: Control -> Graph -> (Node,Graph)
-mk_node_k (Control r ix nm d tr _) g =
-    let y = find (find_k_p nm) (controls g)
-    in maybe (push_k (r,ix,nm,d,tr) g) (\y' -> (y',g)) y
+mk_node_k c g =
+    let nm = controlName c
+        y = find (find_k_p nm) (controls g)
+    in maybe (push_k c g) (\y' -> (y',g)) y
 
 type UGenParts = (Rate,String,[FromPort],[Output],Special,UGenId)
 
@@ -306,8 +307,9 @@ encode_input (Input u p) = B.append (encode_i16 u) (encode_i16 p)
 encode_node_k :: Maps -> Node -> B.ByteString
 encode_node_k (_,_,ks,_,_) nd =
     case nd of
-      NodeK n _ _ nm _ _ -> B.concat [B.pack (str_pstr nm)
-                                     ,encode_i16 (fetch n ks)]
+      NodeK n _ _ nm _ _ _ ->
+          B.concat [B.pack (str_pstr nm)
+                   ,encode_i16 (fetch n ks)]
       _ -> error "encode_node_k"
 
 -- | Byte-encode 'NodeU' primitive node.

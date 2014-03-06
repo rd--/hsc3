@@ -65,12 +65,12 @@ control_f32 r ix nm d = Control_U (Control r ix nm d False Nothing)
 control :: Rate -> String -> Double -> UGen
 control r nm = control_f32 r Nothing nm . realToFrac
 
--- | Variant if 'control' with meta data.
-meta_control :: Rate -> String -> Double -> C_Meta' Double -> Control
+-- | Variant of 'control' with meta data.
+meta_control :: Rate -> String -> Double -> C_Meta' Double -> UGen
 meta_control rt nm df meta =
     let f = realToFrac
         m = c_meta' realToFrac meta
-    in Control rt Nothing nm (f df) False (Just m)
+    in Control_U (Control rt Nothing nm (f df) False (Just m))
 
 -- | Triggered (kr) control input node constructor.
 tr_control_f32 :: Maybe Int -> String -> Float -> UGen

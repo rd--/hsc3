@@ -18,7 +18,7 @@ import Sound.SC3.UGen.Rate
 constant_to_control :: NodeId -> Node -> (NodeId,Node)
 constant_to_control z n =
     case n of
-      NodeC _ k -> (z+1,NodeK z KR Nothing ("k_" ++ show z) k K_KR)
+      NodeC _ k -> (z+1,NodeK z KR Nothing ("k_" ++ show z) k K_KR Nothing)
       _ -> (z,n)
 
 -- | Erroring variant of 'from_port_node'.

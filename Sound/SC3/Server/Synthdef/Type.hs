@@ -47,7 +47,8 @@ data Node = NodeC {node_id :: NodeId
                   ,node_k_index :: Maybe Int
                   ,node_k_name :: String
                   ,node_k_default :: Float
-                  ,node_k_type :: KType}
+                  ,node_k_type :: KType
+                  ,node_k_meta :: Maybe (C_Meta Float)}
           | NodeU {node_id :: NodeId
                   ,node_u_rate :: Rate
                   ,node_u_name :: String
