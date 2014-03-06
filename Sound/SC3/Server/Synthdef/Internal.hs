@@ -145,7 +145,7 @@ push_k (r,ix,nm,d,tr) g =
 
 -- | Either find existing 'Control' 'Node', or insert a new 'Node'.
 mk_node_k :: Control -> Graph -> (Node,Graph)
-mk_node_k (Control r ix nm d tr) g =
+mk_node_k (Control r ix nm d tr _) g =
     let y = find (find_k_p nm) (controls g)
     in maybe (push_k (r,ix,nm,d,tr) g) (\y' -> (y',g)) y
 

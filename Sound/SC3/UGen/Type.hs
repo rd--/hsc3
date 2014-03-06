@@ -24,12 +24,30 @@ data UGenId = NoId | UId Int
 data Constant = Constant {constantValue :: Float}
                 deriving (Eq,Ord,Show)
 
+-- | Control meta-data.
+data C_Meta n =
+    C_Meta {ctl_min :: n -- ^ Minimum
+           ,ctl_max :: n -- ^ Maximum
+           ,ctl_warp :: String -- ^ @(0,1)@ @(min,max)@ transfer function.
+           ,ctl_step :: n -- ^ The step to increment & decrement by.
+           ,ctl_units :: String -- ^ Unit of measure (ie hz, ms etc.).
+           }
+    deriving (Eq,Show)
+
+-- | 5-tuple form of 'C_Meta' data.
+type C_Meta' n = (n,n,String,n,String)
+
+-- | Lift 'C_Meta'' to 'C_Meta' allowing type coercion.
+c_meta' :: (n -> m) -> C_Meta' n -> C_Meta m
+c_meta' f (l,r,w,stp,u) = C_Meta (f l) (f r) w (f stp) u
+
 -- | Control inputs.
 data Control = Control {controlOperatingRate :: Rate
                        ,controlIndex :: Maybe Int
                        ,controlName :: String
                        ,controlDefault :: Float
-                       ,controlTriggered :: Bool}
+                       ,controlTriggered :: Bool
+                       ,controlMeta :: Maybe (C_Meta Float)}
                deriving (Eq,Show)
 
 -- | Labels.

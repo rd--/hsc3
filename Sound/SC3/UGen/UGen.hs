@@ -56,7 +56,7 @@ ugenFoldr f st u =
 
 -- | Control input node constructor.
 control_f32 :: Rate -> Maybe Int -> String -> Float -> UGen
-control_f32 r ix nm d = Control_U (Control r ix nm d False)
+control_f32 r ix nm d = Control_U (Control r ix nm d False Nothing)
 
 -- | Control input node constructor.
 --
@@ -65,9 +65,16 @@ control_f32 r ix nm d = Control_U (Control r ix nm d False)
 control :: Rate -> String -> Double -> UGen
 control r nm = control_f32 r Nothing nm . realToFrac
 
+-- | Variant if 'control' with meta data.
+meta_control :: Rate -> String -> Double -> C_Meta' Double -> Control
+meta_control rt nm df meta =
+    let f = realToFrac
+        m = c_meta' realToFrac meta
+    in Control rt Nothing nm (f df) False (Just m)
+
 -- | Triggered (kr) control input node constructor.
 tr_control_f32 :: Maybe Int -> String -> Float -> UGen
-tr_control_f32 ix nm d = Control_U (Control KR ix nm d True)
+tr_control_f32 ix nm d = Control_U (Control KR ix nm d True Nothing)
 
 -- | Triggered (kr) control input node constructor.
 tr_control :: String -> Double -> UGen
