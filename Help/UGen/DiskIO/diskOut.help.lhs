@@ -7,12 +7,13 @@
 Example graph
 
 > let gr = let d = xLine KR 20000 2 10 RemoveSynth
->          in out 0 (dust 'α' AR d * 0.15)
+>          in dust 'α' AR d * 0.15
+
+> let gr = soundIn 0
 
 Check incoming signal (either graph above or the outside world)
 
-> audition gr
-> audition (out 0 (soundIn 4))
+> audition (out 0 gr)
 
 Record incoming signal (or above...), print some informational traces...
 
@@ -22,7 +23,7 @@ Record incoming signal (or above...), print some informational traces...
 >             ;_ <- async (b_alloc 0 65536 1)
 >             ;_ <- async (b_write 0 "/tmp/disk-out.aiff" Aiff PcmInt16 (-1) 0 True)
 >             ;trace "record for 10 seconds"
->             ;playSynthdef 2001 (synthdef "disk-out" (diskOut 0 (soundIn 4)))
+>             ;playSynthdef 2001 (synthdef "disk-out" (diskOut 0 gr))
 >             ;pauseThread 10
 >             ;trace "stop recording and tidy up"
 >             ;send (n_free [2001])
