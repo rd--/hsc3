@@ -39,6 +39,7 @@ from_interpolation e =
 data DoneAction = DoNothing
                 | PauseSynth
                 | RemoveSynth
+                | RemoveGroup
                 | DoneAction UGen
                   deriving (Eq, Show)
 
@@ -49,6 +50,7 @@ from_done_action e =
       DoNothing -> 0
       PauseSynth -> 1
       RemoveSynth -> 2
+      RemoveGroup -> 14
       DoneAction u -> u
 
 -- | Warp interpolation indicator input.
