@@ -1,4 +1,8 @@
 -- | Zita UGen definitions.
+--
+-- To build the SC3 plugin run @faust2supercollider -d@ on
+-- @zita_rev1.dsp@, which is in the @examples@ directory of Faust, see
+-- <http://faust.grame.fr/>.
 module Sound.SC3.UGen.External.Zita where
 
 import Sound.SC3.UGen.Rate
