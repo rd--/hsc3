@@ -53,15 +53,15 @@ reset =
     in sendBundle (bundle immediately m)
 
 -- | Send 'd_recv' and 's_new' messages to scsynth.
-playSynthdef :: DuplexOSC m => Int -> Synthdef -> m ()
-playSynthdef nid s = do
+playSynthdef :: DuplexOSC m => (Int,AddAction,Int) -> Synthdef -> m ()
+playSynthdef (nid,act,gid) s = do
   _ <- async (d_recv s)
-  send (s_new0 (synthdefName s) nid AddToTail 1)
+  send (s_new0 (synthdefName s) nid act gid)
 
 -- | Send an /anonymous/ instrument definition using 'playSynthdef'.
-playUGen :: DuplexOSC m => Int -> UGen -> m ()
-playUGen nid =
-    playSynthdef nid .
+playUGen :: DuplexOSC m => (Int,AddAction,Int) -> UGen -> m ()
+playUGen loc =
+    playSynthdef loc .
     synthdef "Anonymous" .
     wrapOut (0.1::Double)
 
@@ -102,30 +102,30 @@ performNRT s = do
 -- | Class for values that can be encoded and send to @scsynth@ for
 -- audition.
 class Audible e where
-    play_id :: Transport m => Int -> e -> m ()
+    play_at :: Transport m => (Int,AddAction,Int) -> e -> m ()
     -- | Variant where /id/ is @-1@.
     play :: Transport m => e -> m ()
-    play = play_id (-1)
+    play = play_at (-1,AddToTail,1)
 
 instance Audible Graph where
-    play_id k = playSynthdef k . Synthdef "Anonymous"
+    play_at k = playSynthdef k . Synthdef "Anonymous"
 
 instance Audible Synthdef where
-    play_id = playSynthdef
+    play_at = playSynthdef
 
 instance Audible UGen where
-    play_id = playUGen
+    play_at = playUGen
 
 instance Audible NRT where
-    play_id _ = performNRT
+    play_at _ = performNRT
 
--- | 'withSC3' of 'play_id'.
-audition_id :: Audible e => Int -> e -> IO ()
-audition_id k = withSC3 . play_id k
+-- | 'withSC3' of 'play_at'.
+audition_at :: Audible e => (Int,AddAction,Int) -> e -> IO ()
+audition_at k = withSC3 . play_at k
 
 -- | Variant where /id/ is @-1@.
 audition :: Audible e => e -> IO ()
-audition = audition_id (-1)
+audition = audition_at (-1,AddToTail,1)
 
 -- * Notifications
 
