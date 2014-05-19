@@ -1,10 +1,16 @@
 -- | Non-realtime score generation.
 module Sound.SC3.Server.NRT where
 
+import Data.Maybe {- base -}
 import qualified Data.ByteString.Lazy as B {- bytestring -}
+import System.FilePath {- filepath -}
+import System.IO {- base -}
+import System.Process {- process -}
+
 import Sound.OSC.Core {- hosc -}
 import Sound.OSC.Coding.Byte {- hosc -}
-import System.IO {- base -}
+
+import Sound.SC3.Server.Enum
 
 -- | Encode and prefix with encoded length.
 oscWithSize :: Bundle -> B.ByteString
@@ -51,3 +57,30 @@ decodeNRT = NRT . decode_nrt_bundles
 -- | 'decodeNRT' of 'B.readFile'.
 readNRT :: FilePath -> IO NRT
 readNRT = fmap decodeNRT . B.readFile
+
+-- * Render
+
+-- | Minimal NRT rendering options.  The sound file type is inferred
+-- from the file name extension.  Structure is: OSC file name, output
+-- audio file name, output number of channels, sample rate, sample
+-- format.
+type NRT_Render_Plain = (FilePath,FilePath,Int,Int,SampleFormat)
+
+-- | Minimal NRT rendering, for more control see Stefan Kersten's
+-- /hsc3-process/ package at:
+-- <https://github.com/kaoskorobase/hsc3-process>.
+nrt_render_plain :: NRT_Render_Plain -> NRT -> IO ()
+nrt_render_plain (osc_nm,sf_nm,nc,sr,sf) sc = do
+  let sf_ty = case takeExtension sf_nm of
+                '.':ext -> let fmt = soundFileFormat_from_extension ext
+                           in fromMaybe (error "nrt_render_plain: unknown sf extension") fmt
+                _ -> error "nrt_render_plain: invalid sf extension"
+      sys = unwords ["scsynth"
+                    ,"-i","0"
+                    ,"-o",show nc
+                    ,"-N"
+                    ,osc_nm,"_"
+                    ,sf_nm,show sr,soundFileFormatString sf_ty,sampleFormatString sf]
+  writeNRT osc_nm sc
+  _ <- system sys
+  return ()
