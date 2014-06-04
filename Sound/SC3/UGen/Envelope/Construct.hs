@@ -84,6 +84,11 @@ envLinen' :: Num a => a -> a -> a -> a -> Envelope_Curve3 a -> Envelope a
 envLinen' aT sT rT lv c = envLinen_r (LINEN aT sT rT lv c)
 
 -- | Linear envelope parameter constructor.
+--
+-- > let {e = envLinen 0 1 0 1
+-- >     ;s = envelope_segments e
+-- >     ;p = pack_envelope_segments s}
+-- > in p == (env_levels e,env_times e,env_curves e)
 envLinen :: Num a => a -> a -> a -> a -> Envelope a
 envLinen aT sT rT l =
     let c = (EnvLin,EnvLin,EnvLin)

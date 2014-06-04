@@ -50,8 +50,42 @@ envelope_segment e i =
         c = envelope_curves e !! i
     in (t0,x0,t1,x1,c)
 
+-- | Extract all segments.
+envelope_segments :: Num t => Envelope t -> [Envelope_Segment t]
+envelope_segments e =
+    let n = envelope_n_segments e
+    in map (envelope_segment e) [0 .. n - 1]
+
+-- | Transform list of 'Envelope_Segment's into lists ('env_levels','env_times','env_curves').
+pack_envelope_segments :: Num t => [Envelope_Segment t] -> ([t],[t],[Envelope_Curve t])
+pack_envelope_segments s =
+    case s of
+      [] -> error ""
+      [(t0,l0,t1,l1,c)] -> ([l0,l1],[t1 - t0],[c])
+      (_,l0,_,_,_) : _ ->
+          let t (t0,_,t1,_,_) = t1 - t0
+              c (_,_,_,_,x) = x
+              l (_,_,_,x,_) = x
+          in (l0 : map l s,map t s,map c s)
+
+-- | An envelope is /normal/ if it has no segments with zero duration.
+envelope_is_normal :: (Eq n,Num n) => Envelope n -> Bool
+envelope_is_normal = null . filter (== 0) . env_times
+
+-- | Normalise envelope by deleting segments of zero duration.
+envelope_normalise :: (Num a, Ord a) => Envelope a -> Envelope a
+envelope_normalise e =
+    let s = envelope_segments e
+        f (t0,_,t1,_,_) = t1 <= t0
+        s' = filter (not . f) s
+        (l,t,c) = pack_envelope_segments s'
+    in case e of
+         Envelope _ _ _ Nothing Nothing -> Envelope l t c Nothing Nothing
+         _ -> error "envelope_normalise: has release or loop node..."
+
 -- | Get value for 'Envelope' at time /t/, or zero if /t/ is out of
--- range.
+-- range.  By convention if the envelope has a segment of zero
+-- duration we give the rightmost value.
 envelope_at :: (Ord t, Floating t) => Envelope t -> t -> t
 envelope_at e t =
     case envelope_segment_ix e t of
@@ -59,10 +93,12 @@ envelope_at e t =
                     d = t1 - t0
                     t' = (t - t0) / d
                     f = env_curve_interpolation_f c
-                in f x0 x1 t'
+                in if d <= 0
+                   then x1
+                   else f x0 x1 t'
       Nothing -> 0
 
--- | Render 'Envelope' to breakpoint set of /n/ places.
+-- | Render 'Envelope' to breakpoint set of /n/ equi-distant places.
 envelope_render :: (Ord t, Floating t, Enum t) => t -> Envelope t -> [(t,t)]
 envelope_render n e =
     let d = envelope_duration e
