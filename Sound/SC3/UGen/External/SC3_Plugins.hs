@@ -98,6 +98,28 @@ concat' ctl src sz sk sd ml fs zcr lms sc st rs = mkOsc AR "Concat" [ctl,src,sz,
 concat2 :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 concat2 ctl src sz sk sd ml fs zcr lms sc st rs th = mkOsc AR "Concat2" [ctl,src,sz,sk,sd,ml,fs,zcr,lms,sc,st,rs,th] 1
 
+-- * DEIND UGens
+
+-- | FM-modulable resonating filter
+complexRes :: Rate -> UGen -> UGen -> UGen -> UGen
+complexRes rate in_ freq decay_ = mkOscR [AR] rate "ComplexRes" [in_,freq,decay_] 1
+
+-- | Ring modulation based on the physical model of a diode.
+diodeRingMod :: Rate -> UGen -> UGen -> UGen
+diodeRingMod rate car mod_ = mkOscR [AR] rate "DiodeRingMod" [car,mod_] 1
+
+-- | Demand rate implementation of a Wiard noise ring
+dNoiseRing :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dNoiseRing rate change chance shift numBits resetval = mkOscR [] rate "DNoiseRing" [change,chance,shift,numBits,resetval] 1
+
+-- | algorithmic delay
+greyholeRaw :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+greyholeRaw rate in1 in2 damping delaytime diffusion feedback moddepth modfreq size = mkOscR [AR] rate "GreyholeRaw" [in1,in2,damping,delaytime,diffusion,feedback,moddepth,modfreq,size] 1
+
+-- | Raw version of the JPverb algorithmic reverberator, designed to produce long tails with chorusing
+jPverbRaw :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+jPverbRaw rate in1 in2 damp earlydiff highband highx lowband lowx mdepth mfreq midx size t60 = mkOscR [AR,KR] rate "JPverbRaw" [in1,in2,damp,earlydiff,highband,highx,lowband,lowx,mdepth,mfreq,midx,size,t60] 1
+
 -- * Distortion
 
 -- | Brown noise.
