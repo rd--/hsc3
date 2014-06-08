@@ -1,8 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "FSinOsc"
 > Sound.SC3.UGen.DB.ugenSummary "FSinOsc"
 
-# SC2
-The initial phase argument was not in the SC2 variant.
+# SC2 did not have the initial phase argument.
 
 > import Sound.SC3
 

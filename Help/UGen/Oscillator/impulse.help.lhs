@@ -1,6 +1,8 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Impulse"
 > Sound.SC3.UGen.DB.ugenSummary "Impulse"
 
+# SC2 had no phase input.
+
 > import Sound.SC3
 
 > audition (out 0 (impulse AR 800 0 * 0.1))
