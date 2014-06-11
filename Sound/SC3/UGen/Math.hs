@@ -392,7 +392,7 @@ range_muladd :: Fractional t => t -> t -> (t, t)
 range_muladd = linLin_muladd (-1) 1
 
 -- | Scale bi-polar (-1,1) input to linear (l,r) range.  Note that the
--- argument order is not the same as @linLin@.
+-- argument order is not the same as 'linLin'.
 --
 -- > map (range 3 4) [-1,0,1] == [3,3.5,4]
 -- > map (\x -> let (m,a) = linLin_muladd (-1) 1 3 4 in x * m + a) [-1,0,1]

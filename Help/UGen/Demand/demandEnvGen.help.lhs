@@ -65,22 +65,27 @@ layout is (initial-level,duration,level,..,loop-duration)
 
 > withSC3 (async (b_alloc_setn1 0 0 [0,0.5,0.1,0.5,1,0.01]))
 
-> let {l_i = dseries 'α' dinf 0 2
->     ;d_i = dseries 'β' dinf 1 2
->     ;l = dbufrd 'γ' 0 l_i Loop
->     ;d = dbufrd 'δ' 0 d_i Loop
+> let {b = 0
+>     ;l_i = dseries 'β' dinf 0 2
+>     ;d_i = dseries 'γ' dinf 1 2
+>     ;l = dbufrd 'δ' b l_i Loop
+>     ;d = dbufrd 'ε' b d_i Loop
 >     ;s = env_curve_shape EnvLin
 >     ;e = demandEnvGen KR l d s 0 1 1 1 0 5 RemoveSynth
 >     ;f = midiCPS (60 + (e * 12))}
 > in audition (out 0 (sinOsc AR (f * mce2 1 1.01) 0 * 0.1))
 
-read envelope break-points from buffer, here simply duration/level pairs
+change envelope by setting values or indeed reallocating buffer
 
-> withSC3 (async (b_alloc_setn1 0 0 [60,2,72,1,55,5,67]))
+> withSC3 (send (b_set1 0 1 0.1))
+> withSC3 (async (b_alloc_setn1 0 0 [0.5,0.9,0.1,0.1,1,0.01]))
 
-> let {b = 0
->     ;lvl = dbufrd 'α' b (dseries 'β' 4 0 2) Loop
->     ;dur = dbufrd 'γ' b (dseries 'δ' 3 1 2) Loop
+read envelope break-points from buffer, here simply duration/level pairs.
+the behavior is odd if the curve is zero (ie. flat segments).
+
+> let {b = asLocalBuf 'α' [61,1,60,2,72,1,55,5,67,9,67]
+>     ;lvl = dbufrd 'β' b (dseries 'γ' 6 0 2) Loop
+>     ;dur = dbufrd 'δ' b (dseries 'ε' 5 1 2) Loop
 >     ;e = demandEnvGen KR lvl dur 1 0 1 1 1 0 1 RemoveSynth
 >     ;o = sinOsc AR (midiCPS e) 0 * 0.1}
 > in audition (out 0 o)

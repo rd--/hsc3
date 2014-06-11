@@ -18,6 +18,8 @@ instance ID Char where
     resolveID = ord
 
 -- | Hash value to 'Int'.
+--
+-- > hash "string" == 2177686720
 hash :: H.Hashable32 a => a -> Int
 hash = fromIntegral . H.asWord32 . H.hash32
 

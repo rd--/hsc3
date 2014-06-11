@@ -3,5 +3,6 @@
 
 > import Sound.SC3.ID
 
-> let d = dust 'a' AR 1
-> in audition (out 0 (trig1 d 0.2 * fSinOsc AR 800 0 * 0.2))
+> let {d = dust 'α' AR 1
+>     ;o = fSinOsc AR 800 0 * 0.2}
+> in audition (out 0 (trig1 d 0.2 * o))

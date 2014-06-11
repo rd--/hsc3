@@ -93,6 +93,8 @@ ugenSC3HelpFile x = do
 
 -- | Use @BROWSER@ or @x-www-browser@ to view SC3 help file for `u'.
 --
+-- > get_env_default "BROWSER" "x-www-browser"
+--
 -- > import Sound.SC3.UGen.Name
 -- >
 -- > viewSC3Help (toSC3Name "Collection.*fill")
