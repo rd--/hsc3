@@ -373,6 +373,14 @@ sos i a0 a1 a2 b1 b2 = mkFilter "SOS" [i,a0,a1,a2,b1,b2] 1
 stepper :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 stepper t r mn mx s v = mkFilter "Stepper" [t,r,mn,mx,s,v] 1
 
+-- | Three input adder.
+sum3 :: UGen -> UGen -> UGen -> UGen
+sum3 p q r = mkFilter "Sum3" [p,q,r] 1
+
+-- | Four input adder.
+sum4 :: UGen -> UGen -> UGen -> UGen -> UGen
+sum4 p q r s = mkFilter "Sum4" [p,q,r,s] 1
+
 -- | Triggered linear ramp.
 sweep :: UGen -> UGen -> UGen
 sweep t r = mkFilter "Sweep" [t,r] 1

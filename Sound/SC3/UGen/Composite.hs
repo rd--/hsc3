@@ -56,9 +56,17 @@ linLin i sl sr dl dr =
     let (m,a) = linLin_muladd sl sr dl dr
     in mulAdd i m a
 
+-- | Optimised sum function.
+sum_opt :: [UGen] -> UGen
+sum_opt l =
+    case l of
+      p:q:r:s:l' -> sum_opt (sum4 p q r s : l')
+      p:q:r:l' -> sum_opt (sum3 p q r : l')
+      _ -> sum l
+
 -- | Collapse possible mce by summing.
 mix :: UGen -> UGen
-mix = sum . mceChannels
+mix = sum_opt . mceChannels
 
 -- | Mix variant, sum to n channels.
 mixN :: Int -> UGen -> UGen
