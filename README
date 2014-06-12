@@ -30,7 +30,7 @@ with contributions by:
 - brent yorgey
 - shae erisson
 
-see the [darcs][darcs] [history][hsc3-history] for details
+see the [darcs][darcs] [history][?t=hsc3&q=history] for details
 
 [rd]: http://rd.slavepianos.org/
 [hsc3]: http://rd.slavepianos.org/?t=hsc3
@@ -42,4 +42,3 @@ see the [darcs][darcs] [history][hsc3-history] for details
 [emacs]: http://gnu.org/software/emacs/
 [darcs]: http://darcs.net/
 [gpl]: http://gnu.org/copyleft/
-[hsc3-history]:  http://rd.slavepianos.org/r/d/darcsweb.cgi?r=hsc3
