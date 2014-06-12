@@ -3,10 +3,10 @@
 
 > import Sound.SC3.ID
 
-> let n = brownNoise 'a' AR
+> let n = brownNoise 'α' AR
 > in audition (out 0 (n * 0.1))
 
-> let {n = brownNoise 'a' KR
+> let {n = brownNoise 'α' KR
 >     ;o = sinOsc AR (linExp n (-1) 1 64 9600) 0 * 0.1}
 > in audition (out 0 o)
 
