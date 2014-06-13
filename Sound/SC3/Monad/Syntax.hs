@@ -11,18 +11,22 @@ infixl 6  .+,+.,.+.
 -- | '+' variant with 'Functor' at left.
 --
 -- > fmap (== 5) (return 3 .+ 2)
+-- > [3,4] .+ 2 == [5,6]
 (.+) :: (Functor f, Num a) => f a -> a -> f a
 m .+ n = fmap (+ n) m
 
 -- | '+' variant with 'Functor' at right.
 --
 -- > fmap (== 5) (3 +. return 2)
+-- > 3 +. [2,3] == [5,6]
 (+.) :: (Functor f, Num a) => a -> f a -> f a
 m +. n = fmap (+ m) n
 
 -- | '+' variant with 'Applicative' at left and right.
 --
 -- > fmap (== 5) (return 3 .+. return 2)
+-- > [3,4] .+. [2,3] == [5,6,6,7]
+-- > getZipList (ZipList [3,4] .+. ZipList [2,3]) == [5,7]
 (.+.) :: (Applicative m, Num a) => m a -> m a -> m a
 (.+.) = liftA2 (+)
 

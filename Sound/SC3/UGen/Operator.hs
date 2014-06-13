@@ -166,3 +166,18 @@ unaryIndex :: String -> Int
 unaryIndex nm =
     let e = fromEnum (read nm :: Unary)
     in fromMaybe e (rlookup nm unaryTable)
+
+-- | Association table for 'Binary' to haskell function implementing operator.
+binop_hs_tbl :: (Floating n,Ord n) => [(Binary,n -> n -> n)]
+binop_hs_tbl =
+    [(Add,(+))
+    ,(Sub,(-))
+    ,(FDiv,(/))
+    ,(Mul,(*))
+    ,(Pow,(**))
+    ,(Min,min)
+    ,(Max,max)]
+
+-- | 'lookup' 'binop_hs_tbl' via 'toEnum'.
+binop_special_hs :: (Floating n, Ord n) => Int -> Maybe (n -> n -> n)
+binop_special_hs z = lookup (toEnum z) binop_hs_tbl
