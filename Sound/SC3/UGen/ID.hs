@@ -10,3 +10,4 @@ import Sound.SC3.UGen.External.ID as I
 import Sound.SC3.UGen.FFT.ID as I
 import Sound.SC3.UGen.Identifier as I
 import Sound.SC3.UGen.Noise.ID as I
+import Sound.SC3.UGen.Protect as I
