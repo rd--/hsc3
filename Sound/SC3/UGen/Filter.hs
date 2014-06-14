@@ -234,6 +234,14 @@ limiter i l d = mkFilter "Limiter" [i,l,d] 1
 linExp :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 linExp i sl sh dl dh = mkFilter "LinExp" [i,sl,sh,dl,dh] 1
 
+-- | 'linExp' of (-1,1).
+linExp_b :: UGen -> UGen -> UGen -> UGen
+linExp_b i = linExp i (-1) 1
+
+-- | 'linExp' of (0,1).
+linExp_u :: UGen -> UGen -> UGen -> UGen
+linExp_u i = linExp i 0 1
+
 -- | Two channel linear crossfade.
 linXFade2 :: UGen -> UGen -> UGen -> UGen
 linXFade2 inA inB pan = mkFilter "LinXFade2" [inA, inB, pan] 1

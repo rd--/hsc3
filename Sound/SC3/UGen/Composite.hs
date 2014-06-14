@@ -56,6 +56,14 @@ linLin i sl sr dl dr =
     let (m,a) = linLin_muladd sl sr dl dr
     in mulAdd i m a
 
+-- | 'linLin' where source is (0,1).
+linLin_u :: UGen -> UGen -> UGen -> UGen
+linLin_u i = linLin i 0 1
+
+-- | 'linLin' where source is (-1,1).
+linLin_b :: UGen -> UGen -> UGen -> UGen
+linLin_b i = linLin i (-1) 1
+
 -- | Optimised sum function.
 sum_opt :: [UGen] -> UGen
 sum_opt l =
