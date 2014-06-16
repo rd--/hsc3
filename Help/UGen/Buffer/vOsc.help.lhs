@@ -4,6 +4,7 @@
 > import Sound.SC3
 
 Allocate and fill tables 0 to 7.
+
 > let {square a = a * a
 >     ;bf = [Normalise,Wavetable,Clear]
 >     ;harm i = let {n = square (i + 1)
@@ -15,12 +16,15 @@ Allocate and fill tables 0 to 7.
 > in withSC3 (mapM_ setup [0 .. 7])
 
 Oscillator at buffers 0 through 7, mouse selects buffer.
-> let x = mouseX KR 0 7 Linear 0.1
-> in audition (out 0 (vOsc AR x (mce [120, 121]) 0 * 0.3))
 
-> import Sound.SC3.Lang.Random.IO
+> let {x = mouseX KR 0 7 Linear 0.1
+>     ;y = mouseY KR 0.01 0.2 Exponential 0.2}
+> in audition (out 0 (vOsc AR x (mce [120, 121]) 0 * y))
+
+> import Sound.SC3.Lang.Random.IO {- hsc3-lang -}
 
 Reallocate buffers while oscillator is running.
+
 > let {bf = [Normalise,Wavetable,Clear]
 >     ;resetTable i = do {h <- nrrand 12 0 1
 >                        ;send (b_gen_sine1 i bf h)}}
