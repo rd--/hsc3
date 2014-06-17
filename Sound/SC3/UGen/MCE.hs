@@ -37,8 +37,10 @@ mce_binop f m1 m2 =
 
 instance Num n => Num (MCE n) where
     (+) = mce_binop (+)
+    (-) = mce_binop (-)
     (*) = mce_binop (*)
     abs = mce_map abs
+    negate = mce_map negate
     signum = mce_map signum
     fromInteger = MCE_Unit . fromInteger
 

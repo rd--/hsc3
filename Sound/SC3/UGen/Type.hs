@@ -407,6 +407,7 @@ instance Bits UGen where
     bit = error "UGen.bit"
     testBit = error "UGen.testBit"
     popCount = error "UGen.popCount"
+    bitSizeMaybe = error "UGen.bitSizeMaybe"
     isSigned _ = True
 
 -- * UGen ID Instance

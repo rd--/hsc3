@@ -214,6 +214,10 @@ b_getn1 = G.b_getn1
 b_query1 :: Int -> Message
 b_query1 = b_query . return
 
+-- | Get ranges of sample values.
+c_getn1 :: (Int,Int) -> Message
+c_getn1 = G.c_getn1
+
 -- | @s_new@ with no parameters.
 s_new0 :: String -> Int -> AddAction -> Int -> Message
 s_new0 = G.s_new0

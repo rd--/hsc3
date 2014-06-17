@@ -6,7 +6,7 @@ import Control.Monad
 import Data.List.Split {- split -}
 import Data.Maybe
 import System.IO.Error
-import System.Cmd {- process -}
+import System.Process {- process -}
 import System.Directory {- directory -}
 import System.Environment
 import System.FilePath {- filepath -}

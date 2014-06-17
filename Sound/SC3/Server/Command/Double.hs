@@ -79,6 +79,10 @@ b_setn1 = G.b_setn1
 c_set1 :: Int -> Double -> Message
 c_set1 = G.c_set1
 
+-- | Set single range of bus values.
+c_setn1 :: (Int,[Double]) -> Message
+c_setn1 = G.c_setn1
+
 -- | Set a single node control value.
 n_set1 :: Int -> String -> Double -> Message
 n_set1 = G.n_set1

@@ -296,9 +296,17 @@ b_setn1 nid i xs = b_setn nid [(i,xs)]
 b_query1 :: (Integral i) => i -> Message
 b_query1 = b_query . return
 
+-- | Get ranges of sample values.
+c_getn1 :: (Integral i) => (i,i) -> Message
+c_getn1 = c_getn . return
+
 -- | Set single bus values.
 c_set1 :: (Integral i,Real n) => i -> n -> Message
 c_set1 i x = c_set [(i,x)]
+
+-- | Set single range of bus values.
+c_setn1 :: (Integral i,Real n) => (i,[n]) -> Message
+c_setn1 = c_setn . return
 
 -- | Set a single node control value.
 n_set1 :: (Integral i,Real n) => i -> String -> n -> Message
