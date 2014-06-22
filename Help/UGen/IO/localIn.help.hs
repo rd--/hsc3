@@ -1,5 +1,5 @@
--- Sound.SC3.UGen.Help.viewSC3Help "LocalIn"
--- Sound.SC3.UGen.DB.ugenSummary "LocalIn"
+-- > Sound.SC3.UGen.Help.viewSC3Help "LocalIn"
+-- > Sound.SC3.UGen.DB.ugenSummary "LocalIn"
 
 import Sound.SC3.ID
 
@@ -9,8 +9,8 @@ noise_signal =
 
 outside_world = soundIn 4
 
--- audition (out 0 (ping_pong noise_signal))
--- audition (out 0 (ping_pong outside_world))
+-- > audition (out 0 (ping_pong noise_signal))
+-- > audition (out 0 (ping_pong outside_world))
 ping_pong z =
     let a1 = localIn 2 AR + mce [z,0]
         a2 = delayN a1 0.2 0.2

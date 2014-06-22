@@ -15,6 +15,7 @@
 
 Phase cancellation, the 'offsetOut' at bus 0 cancels, the 'out'
 at bus 1 doesn't (or at least is exceedingly unlikely to).
+
 > let a = do
 >       {t <- time
 >       ;sr <- serverSampleRateActual

@@ -4,6 +4,7 @@
 > import Sound.SC3.ID
 
 Allocate a buffer local to the synthesis graph.
+
 > let {n = whiteNoise 'α' AR
 >     ;b = localBuf 'β' 2048 1
 >     ;f = fft' b n
@@ -13,6 +14,7 @@ Allocate a buffer local to the synthesis graph.
 > import Sound.SC3.UGen.Protect
 
 Variant with two local buffers
+
 > let {n = uclone 'α' 2 (whiteNoise 'β' AR)
 >     ;b = uclone 'γ' 2 (localBuf 'δ' 2048 1)
 >     ;f = fft' b n
@@ -20,6 +22,7 @@ Variant with two local buffers
 > in audition (out 0 (ifft' c * 0.1))
 
 Not clearing the buffer accesses old data, slowly overwrite data with noise
+
 > let {b = localBuf 'α' 2048 2
 >     ;nf = bufFrames KR b
 >     ;x = mouseX KR 1 2 Linear 0.2
@@ -30,6 +33,7 @@ Not clearing the buffer accesses old data, slowly overwrite data with noise
 > in audition (mrg2 (out 0 r) (wr ph n))
 
 bufCombC needs no clearing, because the delay line is filled by the ugen
+
 > let {d = uclone 'α' 2 (dust 'β' AR 1)
 >     ;n = whiteNoise 'γ' AR
 >     ;z = decay d 0.3 * n
@@ -39,6 +43,7 @@ bufCombC needs no clearing, because the delay line is filled by the ugen
 > in audition (out 0 (bufCombC b z l 0.2))
 
 asLocalBuf combines localBuf and setBuf
+
 > let {b = asLocalBuf 'α' [2,1,5,3,4,0]
 >     ;x = mouseX KR 0 (bufFrames KR b) Linear 0.2
 >     ;f = indexL b x * 100 + 40
@@ -46,13 +51,15 @@ asLocalBuf combines localBuf and setBuf
 > in audition (out 0 o)
 
 detectIndex example using local buffer
+
 > let {b = asLocalBuf 'α' [2,3,4,0,1,5]
 >     ;n = bufFrames KR b
 >     ;x = floorE (mouseX KR 0 n Linear 0.1)
 >     ;i = detectIndex b x}
 > in audition (out 0 (sinOsc AR (linExp i 0 n 200 700) 0 * 0.1))
 
-degreeToKey example using local buffer
+degreeToKey example ('modal space') using local buffer
+
 > let {n = lfNoise1 'α' KR (mce [3,3.05])
 >     ;x = mouseX KR 0 15 Linear 0.1
 >     ;b = asLocalBuf 'β' [0,2,3.2,5,7,9,10]

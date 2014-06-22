@@ -36,6 +36,10 @@ dynKlank i fs fo ds s =
         gen _ = 0
     in gen (mceChannels s)
 
+-- | Sum of 'numInputBuses' and 'numOutputBuses'.
+firstPrivateBus :: UGen
+firstPrivateBus = numInputBuses + numOutputBuses
+
 -- | Frequency shifter, in terms of 'hilbert' (see also 'freqShift').
 freqShift_hilbert :: UGen -> UGen -> UGen -> UGen
 freqShift_hilbert i f p =
@@ -124,6 +128,14 @@ poll' :: UGen -> UGen -> UGen -> UGen -> UGen
 poll' t i l tr =
     let t' = if isConstant t then impulse KR t 0 else t
     in mrg [i,poll t' i l tr]
+
+-- | Variant of 'in'' offset so zero if the first private bus.
+privateIn :: Int -> Rate -> UGen -> UGen
+privateIn nc rt k = in' nc rt (k + firstPrivateBus)
+
+-- | Variant of 'out' offset so zero if the first private bus.
+privateOut :: UGen -> UGen -> UGen
+privateOut k = out (k + firstPrivateBus)
 
 -- | RMS variant of 'runningSum'.
 runningSumRMS :: UGen -> UGen -> UGen
