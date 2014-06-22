@@ -2,7 +2,7 @@
 module Sound.SC3.UGen.Enum where
 
 import Sound.SC3.Internal
-import Sound.SC3.UGen.Envelope.Interpolate
+import qualified Sound.SC3.UGen.Envelope.Interpolate as I
 import Sound.SC3.UGen.Type
 
 -- | Loop indicator input.
@@ -72,10 +72,11 @@ data Envelope_Curve a = EnvStep
                       | EnvLin
                       | EnvExp
                       | EnvSin
-                      | EnvCos -- ^ Note: not implemented at SC3
+                      | EnvWelch -- ^ Note: not implemented at SC3
                       | EnvNum a
                       | EnvSqr
                       | EnvCub
+                      | EnvHold
                         deriving (Eq, Show)
 
 -- | Envelope curve pair.
@@ -100,14 +101,15 @@ env_curve_shape e =
       EnvLin -> 1
       EnvExp -> 2
       EnvSin -> 3
-      EnvCos -> 4
+      EnvWelch -> 4
       EnvNum _ -> 5
       EnvSqr -> 6
       EnvCub -> 7
+      EnvHold -> 8
 
 -- | The /value/ of 'EnvCurve' is non-zero for 'EnvNum'.
 --
--- > map env_curve_value [EnvCos,EnvNum 2] == [0,2]
+-- > map env_curve_value [EnvWelch,EnvNum 2] == [0,2]
 env_curve_value :: Num a => Envelope_Curve a -> a
 env_curve_value e =
     case e of
@@ -116,17 +118,18 @@ env_curve_value e =
 
 -- | 'Interpolation_F' of 'Envelope_Curve'.
 env_curve_interpolation_f :: (Ord t, Floating t) =>
-                             Envelope_Curve t -> Interpolation_F t
+                             Envelope_Curve t -> I.Interpolation_F t
 env_curve_interpolation_f c =
     case c of
-      EnvStep -> step
-      EnvLin -> linear
-      EnvExp -> exponential
-      EnvSin -> sine
-      EnvCos -> error "env_curve_interpolation_f:EnvCos"
-      EnvNum n -> curve n
-      EnvSqr -> squared
-      EnvCub -> cubed
+      EnvStep -> I.step
+      EnvLin -> I.linear
+      EnvExp -> I.exponential
+      EnvSin -> I.sine
+      EnvWelch -> I.welch
+      EnvNum n -> I.curve n
+      EnvSqr -> I.squared
+      EnvCub -> I.cubed
+      EnvHold -> undefined
 
 -- | Unification of integer and 'UGen' buffer identifiers.
 data Buffer = Buffer_Id Int

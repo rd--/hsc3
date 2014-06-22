@@ -94,3 +94,7 @@ cubed x0 x1 t =
         x1' = x1 ** (1/3)
         l = linear x0' x1' t
     in l * l * l
+
+-- | x0 until end, then immediately x1.
+hold :: (Num t,Eq t) => Interpolation_F t
+hold x0 x1 t = if t == 1 then x1 else x0

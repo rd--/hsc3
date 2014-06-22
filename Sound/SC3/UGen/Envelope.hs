@@ -21,6 +21,10 @@ data Envelope a =
              }
     deriving (Eq,Show)
 
+-- | Variant without release and loop node inputs (defaulting to nil).
+envelope :: [a] -> [a] -> [Envelope_Curve a] -> Envelope a
+envelope l t c = Envelope l t c Nothing Nothing
+
 -- | Duration of 'Envelope', ie. 'sum' '.' 'env_times'.
 envelope_duration :: Num n => Envelope n -> n
 envelope_duration = sum . env_times
