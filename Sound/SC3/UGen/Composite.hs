@@ -204,7 +204,7 @@ playBufCF nc bufnum rate trigger startPos loop lag' n =
 -- * adc
 
 -- | An oscillator that reads through a table once.
-osc1 :: UGen -> UGen -> DoneAction -> UGen
-osc1 buf dur doneAction =
-    let ph = line AR 0 (bufFrames IR buf - 1) dur doneAction
-    in bufRd 1 AR buf ph NoLoop LinearInterpolation
+osc1 :: Rate -> UGen -> UGen -> DoneAction -> UGen
+osc1 rt buf dur doneAction =
+    let ph = line rt 0 (bufFrames IR buf - 1) dur doneAction
+    in bufRd 1 rt buf ph NoLoop LinearInterpolation
