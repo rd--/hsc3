@@ -4,9 +4,11 @@ module Sound.SC3.UGen.Composite where
 import Control.Monad
 import Data.List
 import Data.List.Split
+
 import Sound.SC3.UGen.Buffer
 import Sound.SC3.UGen.Demand
 import Sound.SC3.UGen.Enum
+import Sound.SC3.UGen.Envelope
 import Sound.SC3.UGen.Filter
 import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.Information
@@ -198,3 +200,11 @@ playBufCF nc bufnum rate trigger startPos loop lag' n =
                          in p * sqrt (slew on' lag'' lag''))
             (zip on rate')
     in sum s
+
+-- * adc
+
+-- | An oscillator that reads through a table once.
+osc1 :: UGen -> UGen -> DoneAction -> UGen
+osc1 buf dur doneAction =
+    let ph = line AR 0 (bufFrames IR buf - 1) dur doneAction
+    in bufRd 1 AR buf ph NoLoop LinearInterpolation

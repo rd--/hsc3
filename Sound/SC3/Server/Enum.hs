@@ -9,6 +9,22 @@ data AddAction = AddToHead
                | AddReplace
                  deriving (Eq,Show,Enum)
 
+-- | Enumeration of flags for '/b_gen' command.
+data B_Gen = Normalise | Wavetable | Clear
+             deriving (Eq,Enum,Bounded,Show)
+
+-- | 'B_Gen' to bit number.
+--
+-- > map b_gen_bit [minBound .. maxBound]
+b_gen_bit :: B_Gen -> Int
+b_gen_bit = fromEnum
+
+-- | Set of 'B_Gen' to flag.
+--
+-- > b_gen_flag [minBound .. maxBound] == 7
+b_gen_flag :: [B_Gen] -> Int
+b_gen_flag = sum . map ((2 ^) . b_gen_bit)
+
 -- | Error posting scope.
 data ErrorScope = Globally  -- ^ Global scope
                 | Locally   -- ^ Bundle scope
