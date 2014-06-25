@@ -88,6 +88,7 @@ Library
                    Sound.SC3.Server.Status
                    Sound.SC3.Server.Synthdef
                    Sound.SC3.Server.Synthdef.Internal
+                   Sound.SC3.Server.Synthdef.Read
                    Sound.SC3.Server.Synthdef.Reconstruct
                    Sound.SC3.Server.Synthdef.Transform
                    Sound.SC3.Server.Synthdef.Type
