@@ -90,15 +90,14 @@ synthdefWrite s dir =
     in B.writeFile nm (synthdefData s)
 
 -- | Simple statistical analysis of a unit generator graph.
-synthstat :: UGen -> String
-synthstat u =
-    let s = synth u
-        cs = constants s
+graph_stat :: Graph -> String
+graph_stat s =
+    let cs = constants s
         ks = controls s
         us = ugens s
         u_nm z = ugen_user_name (node_u_name z) (node_u_special z)
         f g = let h (x:xs) = (x,length (x:xs))
-                  h [] = error "synthstat"
+                  h [] = error "graph_stat"
               in show . map h . group . sort . map g
         sq = intercalate "," (map u_nm us)
     in unlines ["number of constants       : " ++ show (length cs)
@@ -107,3 +106,7 @@ synthstat u =
                ,"number of unit generators : " ++ show (length us)
                ,"unit generator rates      : " ++ f node_u_rate us
                ,"unit generator sequence   : " ++ sq]
+
+-- | 'graph_stat' of 'synth'.
+synthstat :: UGen -> String
+synthstat = graph_stat . synth

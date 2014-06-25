@@ -9,6 +9,11 @@ import System.IO {- base -}
 import Sound.OSC.Coding.Byte {- hosc -}
 import Sound.OSC.Type {- hosc -}
 
+import qualified Sound.SC3.Server.Synthdef as S
+import qualified Sound.SC3.Server.Synthdef.Type as G
+import qualified Sound.SC3.UGen.Rate as R
+import qualified Sound.SC3.UGen.Type as U
+
 read_i8 :: Handle -> IO Int
 read_i8 h = fmap decode_i8 (L.hGet h 1)
 
@@ -63,6 +68,9 @@ type UGen = (Name,Rate,[Input],[Output],Special)
 ugen_inputs :: UGen -> [Input]
 ugen_inputs (_,_,i,_,_) = i
 
+ugen_outputs :: UGen -> [Output]
+ugen_outputs (_,_,_,o,_) = o
+
 read_ugen :: Handle -> IO UGen
 read_ugen h = do
   name <- read_pstr h
@@ -78,9 +86,28 @@ read_ugen h = do
          ,outputs
          ,special)
 
-type GraphDef = (Name, [Float], [Float], [Control], [UGen])
+data Graphdef = Graphdef {graphdef_name :: Name
+                         ,graphdef_constants :: [Float]
+                         ,graphdef_controls :: [(Control,Float)]
+                         ,graphdef_ugens :: [UGen]}
+                deriving (Eq,Show)
 
-read_graphdef :: Handle -> IO GraphDef
+graphdef_ugen :: Graphdef -> Int -> UGen
+graphdef_ugen g = (graphdef_ugens g !!)
+
+graphdef_control :: Graphdef -> Int -> (Control,Float)
+graphdef_control g = (graphdef_controls g !!)
+
+graphdef_constant_nid :: Graphdef -> Int -> Int
+graphdef_constant_nid _ = id
+
+graphdef_control_nid :: Graphdef -> Int -> Int
+graphdef_control_nid g = (+) (length (graphdef_constants g))
+
+graphdef_ugen_nid :: Graphdef -> Int -> Int
+graphdef_ugen_nid g n = graphdef_control_nid g 0 + length (graphdef_controls g) + n
+
+read_graphdef :: Handle -> IO Graphdef
 read_graphdef h = do
   magic <- L.hGet h 4
   version <- read_i32 h
@@ -100,19 +127,67 @@ read_graphdef h = do
   controls <- replicateM number_of_controls (read_control h)
   number_of_ugens <- read_i16 h
   ugens <- replicateM number_of_ugens (read_ugen h)
-  return (name
-         ,constants
-         ,control_defaults
-         ,controls
-         ,ugens)
+  return (Graphdef name
+                   constants
+                   (zip controls control_defaults)
+                   ugens)
 
--- > read_graphdef_file "/home/rohan/sw/rsc3-disassembler/scsyndef/simple.scsyndef"
+-- > g <- read_graphdef_file "/home/rohan/sw/rsc3-disassembler/scsyndef/simple.scsyndef"
 -- > g <- read_graphdef_file "/home/rohan/sw/rsc3-disassembler/scsyndef/with-ctl.scsyndef"
--- > read_graphdef_file "/home/rohan/sw/rsc3-disassembler/scsyndef/mce.scsyndef"
+-- > g <- read_graphdef_file "/home/rohan/sw/rsc3-disassembler/scsyndef/mce.scsyndef"
 -- > g <- read_graphdef_file "/home/rohan/sw/rsc3-disassembler/scsyndef/mrg.scsyndef"
-read_graphdef_file :: FilePath -> IO GraphDef
+read_graphdef_file :: FilePath -> IO Graphdef
 read_graphdef_file nm = do
   h <- openFile nm ReadMode
   g <- read_graphdef h
   hClose h
   return g
+
+mk_node_k :: Graphdef -> G.NodeId -> (Control,Float) -> G.Node
+mk_node_k g z ((nm,ix),v) =
+    let z' = graphdef_control_nid g z
+        nm' = ascii_to_string nm
+    in G.NodeK z' R.KR (Just ix) nm' v G.K_KR Nothing
+
+is_control_ugen :: UGen -> Bool
+is_control_ugen (nm,_,_,_,_) = ascii_to_string nm `elem` ["Control","LagControl","TrigControl"]
+
+is_control_input :: Graphdef -> Input -> Bool
+is_control_input g (u,_) =
+    if u == -1
+    then False
+    else is_control_ugen (graphdef_ugen g u)
+
+input_to_from_port :: Graphdef -> Input -> G.FromPort
+input_to_from_port g (u,p) =
+    if u == -1
+    then G.FromPort_C (graphdef_constant_nid g p)
+    else if is_control_input g (u,p)
+         then if u /= 0
+              then error "multiple control UGens..."
+              else G.FromPort_K (graphdef_control_nid g p) G.K_KR
+         else let ugen = graphdef_ugens g !! u
+                  port = if length (ugen_outputs ugen) > 1
+                         then Just p
+                         else Nothing
+              in G.FromPort_U (graphdef_ugen_nid g u) port
+
+mk_node_u :: Graphdef -> G.NodeId -> UGen -> G.Node
+mk_node_u g z u =
+    let (name,rate,inputs,outputs,special) = u
+        z' = graphdef_ugen_nid g z
+        rate' = toEnum rate
+        name' = ascii_to_string name
+        inputs' = map (input_to_from_port g) inputs
+        outputs' = map toEnum outputs
+        special' = U.Special special
+    in G.NodeU z' rate' name' inputs' outputs' special' (U.UId z')
+
+graphdef_to_synthdef :: Graphdef -> S.Synthdef
+graphdef_to_synthdef g =
+    let constants_nd = zipWith G.NodeC [0..] (graphdef_constants g)
+        controls_nd = zipWith (mk_node_k g) [0 ..] (graphdef_controls g)
+        ugens_nd = zipWith (mk_node_u g) [0 ..] (graphdef_ugens g)
+        nm = ascii_to_string (graphdef_name g)
+        gr = G.Graph (-1) constants_nd controls_nd ugens_nd
+    in S.Synthdef nm gr
