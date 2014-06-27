@@ -4,9 +4,11 @@ module Sound.SC3.Server.Graphdef where
 import Control.Monad {- base -}
 import qualified Data.ByteString.Lazy as L {- bytestring -}
 import qualified Data.ByteString.Char8 as C {- bytestring -}
+import Data.List
 import System.IO {- base -}
 
 import Sound.OSC.Coding.Byte {- hosc -}
+import Sound.OSC.Coding.Cast {- hosc -}
 import Sound.OSC.Type {- hosc -}
 
 -- * Type
@@ -36,6 +38,9 @@ ugen_outputs (_,_,_,o,_) = o
 
 ugen_is_control :: UGen -> Bool
 ugen_is_control (nm,_,_,_,_) = ascii_to_string nm `elem` ["Control","LagControl","TrigControl"]
+
+ugen_rate :: UGen -> Rate
+ugen_rate (_,r,_,_,_) = r
 
 input_is_control :: Graphdef -> Input -> Bool
 input_is_control g (Input u _) =
@@ -151,17 +156,21 @@ read_graphdef_file nm = do
 
 -- * Encode
 
+-- | Pascal (length prefixed) encoding of string.
+encode_pstr :: ASCII -> L.ByteString
+encode_pstr = L.pack . str_pstr . ascii_to_string
+
 -- | Byte-encode 'Input' value.
 encode_input :: Input -> L.ByteString
 encode_input (Input u p) = L.append (encode_i16 u) (encode_i16 p)
 
 encode_control :: Control -> L.ByteString
-encode_control (nm,k) = L.concat [encode_str nm,encode_i16 k]
+encode_control (nm,k) = L.concat [encode_pstr nm,encode_i16 k]
 
 -- | Byte-encode 'UGen'.
 encode_ugen :: UGen -> L.ByteString
 encode_ugen (nm,r,i,o,s) =
-    L.concat [encode_str nm
+    L.concat [encode_pstr nm
              ,encode_i8 r
              ,encode_i16 (length i)
              ,encode_i16 (length o)
@@ -175,7 +184,7 @@ encode_graphdef (Graphdef nm cs ks us) =
     in L.concat [encode_str (C.pack "SCgf")
                 ,encode_i32 0 -- version
                 ,encode_i16 1 -- number of graphs
-                ,encode_str nm
+                ,encode_pstr nm
                 ,encode_i16 (length cs)
                 ,L.concat (map encode_f32 cs)
                 ,encode_i16 (length ks_def)
@@ -185,3 +194,17 @@ encode_graphdef (Graphdef nm cs ks us) =
                 ,encode_i16 (length us)
                 ,L.concat (map encode_ugen us)]
 
+-- * Stat
+
+graphdef_stat :: Graphdef -> String
+graphdef_stat (Graphdef _ cs ks us) =
+    let u_nm (sc3_nm,_,_,_,_) = ascii_to_string sc3_nm
+        f g = let h (x:xs) = (x,length (x:xs))
+                  h [] = error "graphdef_stat"
+              in show . map h . group . sort . map g
+        sq = intercalate "," (map u_nm us)
+    in unlines ["number of constants       : " ++ show (length cs)
+               ,"number of controls        : " ++ show (length ks)
+               ,"number of unit generators : " ++ show (length us)
+               ,"unit generator rates      : " ++ f ugen_rate us
+               ,"unit generator sequence   : " ++ sq]
