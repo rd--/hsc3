@@ -100,3 +100,4 @@ graph_stat s =
 -- | 'graph_stat' of 'synth'.
 synthstat :: UGen -> String
 synthstat = graph_stat . ugen_to_graph
+

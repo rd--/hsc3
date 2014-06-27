@@ -1,4 +1,4 @@
--- | Binary 'Graph Definition'.
+-- | Binary 'Graph Definition' as understood by @scsynth@.
 module Sound.SC3.Server.Graphdef where
 
 import Control.Monad {- base -}

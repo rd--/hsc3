@@ -1,3 +1,4 @@
+-- | Transform 'Graph' to 'Graphdef'.
 module Sound.SC3.Server.Graphdef.Graph where
 
 import Data.Maybe{- base -}

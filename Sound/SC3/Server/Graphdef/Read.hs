@@ -1,4 +1,4 @@
--- | Read a 'Graphdef' into a 'Graph'.
+-- | Transform (read) a 'Graphdef' into a 'Graph'.
 module Sound.SC3.Server.Graphdef.Read where
 
 import Sound.OSC.Type
@@ -38,8 +38,8 @@ mk_node_u g z u =
         special' = U.Special special
     in G.NodeU z' rate' name' inputs' outputs' special' (U.UId z')
 
-graphdef_to_synthdef :: Graphdef -> (String,G.Graph)
-graphdef_to_synthdef g =
+graphdef_to_graph :: Graphdef -> (String,G.Graph)
+graphdef_to_graph g =
     let constants_nd = zipWith G.NodeC [0..] (graphdef_constants g)
         controls_nd = zipWith (mk_node_k g) [0 ..] (graphdef_controls g)
         ugens_nd = zipWith (mk_node_u g) [0 ..] (graphdef_ugens g)
