@@ -1,12 +1,12 @@
 -- | A /disasembler/ for UGen graphs.
-module Sound.SC3.Server.Synthdef.Reconstruct where
+module Sound.SC3.UGen.Graph.Reconstruct where
 
 import Data.Char {- base -}
 import Data.Function {- base -}
 import Data.List {- base -}
 import Text.Printf {- base -}
 
-import Sound.SC3.Server.Graph
+import Sound.SC3.UGen.Graph
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type

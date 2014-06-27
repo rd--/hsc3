@@ -9,7 +9,8 @@ import Data.Maybe {- base -}
 import System.FilePath {- filepath -}
 
 import qualified Sound.SC3.Server.Graphdef as G
-import Sound.SC3.Server.Graph
+import qualified Sound.SC3.Server.Graphdef.Graph as G
+import Sound.SC3.UGen.Graph
 import Sound.SC3.UGen.Help.Graph
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
@@ -65,7 +66,7 @@ ugenIndices nm =
 
 -- | 'graph_to_graphdef' at 'Synthdef'.
 synthdef_to_graphdef :: Synthdef -> G.Graphdef
-synthdef_to_graphdef (Synthdef nm u) = graph_to_graphdef nm (ugen_to_graph u)
+synthdef_to_graphdef (Synthdef nm u) = G.graph_to_graphdef nm (ugen_to_graph u)
 
 -- | Encode 'Synthdef' as a binary data stream.
 synthdefData :: Synthdef -> L.ByteString

@@ -184,3 +184,4 @@ encode_graphdef (Graphdef nm cs ks us) =
                 ,L.concat (map encode_control ks_ctl)
                 ,encode_i16 (length us)
                 ,L.concat (map encode_ugen us)]
+
