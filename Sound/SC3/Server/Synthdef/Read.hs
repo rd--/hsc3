@@ -3,7 +3,7 @@ module Sound.SC3.Server.Synthdef.Read where
 
 import Sound.OSC.Type
 import Sound.SC3.Server.Graphdef
-import qualified Sound.SC3.Server.Synthdef.Type as G
+import qualified Sound.SC3.Server.Graph as G
 import qualified Sound.SC3.UGen.Rate as R
 import qualified Sound.SC3.UGen.Type as U
 

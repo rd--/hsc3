@@ -6,8 +6,7 @@ import Data.Function {- base -}
 import Data.List {- base -}
 import Text.Printf {- base -}
 
-import Sound.SC3.Server.Synthdef.Internal
-import Sound.SC3.Server.Synthdef.Type
+import Sound.SC3.Server.Graph
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type

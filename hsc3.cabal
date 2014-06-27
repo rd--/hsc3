@@ -79,6 +79,8 @@ Library
                    Sound.SC3.Server.Command.Int
                    Sound.SC3.Server.Command.Generic
                    Sound.SC3.Server.Enum
+                   Sound.SC3.Server.Graph
+                   Sound.SC3.Server.Graphdef
                    Sound.SC3.Server.FD
                    Sound.SC3.Server.Help
                    Sound.SC3.Server.Monad
@@ -87,11 +89,9 @@ Library
                    Sound.SC3.Server.Recorder
                    Sound.SC3.Server.Status
                    Sound.SC3.Server.Synthdef
-                   Sound.SC3.Server.Synthdef.Internal
                    Sound.SC3.Server.Synthdef.Read
                    Sound.SC3.Server.Synthdef.Reconstruct
                    Sound.SC3.Server.Synthdef.Transform
-                   Sound.SC3.Server.Synthdef.Type
                    Sound.SC3.Server.Transport.FD
                    Sound.SC3.Server.Transport.Monad
                    Sound.SC3.UGen

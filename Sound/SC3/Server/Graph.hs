@@ -1,16 +1,75 @@
-module Sound.SC3.Server.Synthdef.Internal where
+-- | 'Graph' and related types.
+module Sound.SC3.Server.Graph where
 
 import qualified Data.IntMap as M {- containers -}
 import Data.Function {- base -}
 import Data.List{- base -}
 import Data.Maybe{- base -}
+
 import Sound.OSC.Type {- hosc -}
 
 import qualified Sound.SC3.Server.Graphdef as G
-import Sound.SC3.Server.Synthdef.Type
+
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
+
+-- * Type
+
+-- | Node identifier.
+type NodeId = Int
+
+-- | Port index.
+type PortIndex = Int
+
+-- | Type to represent unit generator graph.
+data Graph = Graph {nextId :: NodeId
+                   ,constants :: [Node]
+                   ,controls :: [Node]
+                   ,ugens :: [Node]}
+            deriving (Eq,Show)
+
+-- | Binary representation of a unit generator graph.
+-- type Graphdef = B.ByteString
+
+-- | Enumeration of the four operating rates for controls.
+data KType = K_IR | K_KR | K_TR | K_AR
+             deriving (Eq,Show,Ord)
+
+-- | Type to represent the left hand side of an edge in a unit
+--   generator graph.
+data FromPort = FromPort_C {port_nid :: NodeId}
+              | FromPort_K {port_nid :: NodeId,port_kt :: KType}
+              | FromPort_U {port_nid :: NodeId,port_idx :: Maybe PortIndex}
+                deriving (Eq,Show)
+
+-- | A destination port.
+data ToPort = ToPort NodeId PortIndex deriving (Eq,Show)
+
+-- | A connection from 'FromPort' to 'ToPort'.
+type Edge = (FromPort,ToPort)
+
+-- | Type to represent nodes in unit generator graph.
+data Node = NodeC {node_id :: NodeId
+                  ,node_c_value :: Float}
+          | NodeK {node_id :: NodeId
+                  ,node_k_rate :: Rate
+                  ,node_k_index :: Maybe Int
+                  ,node_k_name :: String
+                  ,node_k_default :: Float
+                  ,node_k_type :: KType
+                  ,node_k_meta :: Maybe (C_Meta Float)}
+          | NodeU {node_id :: NodeId
+                  ,node_u_rate :: Rate
+                  ,node_u_name :: String
+                  ,node_u_inputs :: [FromPort]
+                  ,node_u_outputs :: [Output]
+                  ,node_u_special :: Special
+                  ,node_u_ugenid :: UGenId}
+          | NodeP {node_id :: NodeId
+                  ,node_p_node :: Node
+                  ,node_p_index :: PortIndex}
+            deriving (Eq,Show)
 
 -- * Building
 
@@ -286,41 +345,6 @@ fetch_k z t =
                             else rec i ns'
     in rec 0
 
--- | Construct 'Input' form required by byte-code generator.
-make_input :: Maps -> FromPort -> G.Input
-make_input (cs,ks,_,us,kt) fp =
-    case fp of
-      FromPort_C n -> G.Input (-1) (fetch n cs)
-      FromPort_K n t -> let i = ktype_map_lookup t kt
-                        in G.Input i (fetch_k n t ks)
-      FromPort_U n p -> G.Input (fetch n us) (fromMaybe 0 p)
-
-node_k_to_control :: Maps -> Node -> G.Control
-node_k_to_control (_,_,ks,_,_) nd =
-    case nd of
-      NodeK n _ _ nm _ _ _ -> (ascii nm,fetch n ks)
-      _ -> error "node_k_to_control"
-
--- | Byte-encode 'NodeU' primitive node.
-node_u_to_ugen :: Maps -> Node -> G.UGen
-node_u_to_ugen m n =
-    case n of
-      NodeU _ r nm i o (Special s) _ ->
-          let i' = map (make_input m) i
-          in (ascii nm,rateId r,i',map rateId o,s)
-      _ -> error "encode_node_u: illegal input"
-
--- | Construct instrument definition bytecode.
-graph_to_graphdef :: String -> Graph -> G.Graphdef
-graph_to_graphdef nm g =
-    let Graph _ cs ks us = g
-        cs' = map node_c_value cs
-        mm = mk_maps g
-        ks_def = map node_k_default ks
-        ks_ctl = map (node_k_to_control mm) ks
-        us' = map (node_u_to_ugen mm) us
-    in G.Graphdef (ascii nm) cs' (zip ks_ctl ks_def) us'
-
 -- * Implicit (Control, MaxLocalBuf)
 
 -- | 4-tuple to count 'KType's.
@@ -465,27 +489,39 @@ pv_validate g =
 ugen_to_graph :: UGen -> Graph
 ugen_to_graph = pv_validate . mk_graph
 
-{-
+-- * Encode to 'G.Graphdef'
 
-import qualified Data.ByteString.Lazy as B {- bytestring -}
-import Sound.OSC.Coding.Byte {- hosc -}
-import Sound.OSC.Coding.Cast {- hosc -}
+-- | Construct 'Input' form required by byte-code generator.
+make_input :: Maps -> FromPort -> G.Input
+make_input (cs,ks,_,us,kt) fp =
+    case fp of
+      FromPort_C n -> G.Input (-1) (fetch n cs)
+      FromPort_K n t -> let i = ktype_map_lookup t kt
+                        in G.Input i (fetch_k n t ks)
+      FromPort_U n p -> G.Input (fetch n us) (fromMaybe 0 p)
 
--- | Byte-encode 'NodeK' control node.
-encode_node_k :: Maps -> Node -> B.ByteString
-encode_node_k (_,_,ks,_,_) nd =
+node_k_to_control :: Maps -> Node -> G.Control
+node_k_to_control (_,_,ks,_,_) nd =
     case nd of
-      NodeK n _ _ nm _ _ _ ->
-          B.concat [B.pack (str_pstr nm)
-                   ,encode_i16 (fetch n ks)]
-      _ -> error "encode_node_k"
+      NodeK n _ _ nm _ _ _ -> (ascii nm,fetch n ks)
+      _ -> error "node_k_to_control"
 
 -- | Byte-encode 'NodeU' primitive node.
-encode_node_u :: Maps -> Node -> B.ByteString
-encode_node_u m = G.encode_ugen . node_u_to_ugen m
+node_u_to_ugen :: Maps -> Node -> G.UGen
+node_u_to_ugen m n =
+    case n of
+      NodeU _ r nm i o (Special s) _ ->
+          let i' = map (make_input m) i
+          in (ascii nm,rateId r,i',map rateId o,s)
+      _ -> error "encode_node_u: illegal input"
 
 -- | Construct instrument definition bytecode.
-encode_graph :: String -> Graph -> B.ByteString
-encode_graph nm = G.encode_graphdef . graph_to_graphdef nm
-
--}
+graph_to_graphdef :: String -> Graph -> G.Graphdef
+graph_to_graphdef nm g =
+    let Graph _ cs ks us = g
+        cs' = map node_c_value cs
+        mm = mk_maps g
+        ks_def = map node_k_default ks
+        ks_ctl = map (node_k_to_control mm) ks
+        us' = map (node_u_to_ugen mm) us
+    in G.Graphdef (ascii nm) cs' (zip ks_ctl ks_def) us'

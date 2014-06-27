@@ -5,8 +5,7 @@ import Data.Either {- base -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
 
-import Sound.SC3.Server.Synthdef.Internal
-import Sound.SC3.Server.Synthdef.Type
+import Sound.SC3.Server.Graph
 import Sound.SC3.UGen.Rate
 
 -- * Lift constants
