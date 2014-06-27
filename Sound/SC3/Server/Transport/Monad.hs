@@ -9,10 +9,10 @@ import Sound.SC3.Server.Command.Core
 import Sound.SC3.Server.Command.Enum
 import Sound.SC3.Server.Command.Int
 import Sound.SC3.Server.Enum
+import qualified Sound.SC3.Server.Graphdef as G
 import Sound.SC3.Server.NRT
 import Sound.SC3.Server.Status
 import Sound.SC3.Server.Synthdef
-import Sound.SC3.Server.Synthdef.Type
 import Sound.SC3.UGen.Transform
 import Sound.SC3.UGen.Type
 
@@ -53,10 +53,14 @@ reset =
     in sendBundle (bundle immediately m)
 
 -- | Send 'd_recv' and 's_new' messages to scsynth.
+playGraphdef :: DuplexOSC m => (Int,AddAction,Int) -> G.Graphdef -> m ()
+playGraphdef (nid,act,gid) g = do
+  _ <- async (d_recv' g)
+  send (s_new0 (ascii_to_string (G.graphdef_name g)) nid act gid)
+
+-- | Send 'd_recv' and 's_new' messages to scsynth.
 playSynthdef :: DuplexOSC m => (Int,AddAction,Int) -> Synthdef -> m ()
-playSynthdef (nid,act,gid) s = do
-  _ <- async (d_recv s)
-  send (s_new0 (synthdefName s) nid act gid)
+playSynthdef opt = playGraphdef opt . synthdef_to_graphdef
 
 -- | Send an /anonymous/ instrument definition using 'playSynthdef'.
 playUGen :: DuplexOSC m => (Int,AddAction,Int) -> UGen -> m ()
@@ -107,8 +111,8 @@ class Audible e where
     play :: Transport m => e -> m ()
     play = play_at (-1,AddToTail,1)
 
-instance Audible Graph where
-    play_at k = playSynthdef k . Synthdef "Anonymous"
+instance Audible G.Graphdef where
+    play_at k = playGraphdef k
 
 instance Audible Synthdef where
     play_at = playSynthdef

@@ -22,9 +22,6 @@ input_ugen_ix (Input u p) = if p == -1 then Nothing else Just u
 
 type Output = Int
 
-read_output :: Handle -> IO Int
-read_output = read_i8
-
 type Rate = Int
 
 type Special = Int
@@ -86,9 +83,6 @@ read_pstr h = do
   n <- fmap decode_u8 (L.hGet h 1)
   fmap decode_str (L.hGet h n)
 
-ascii_to_string :: ASCII -> String
-ascii_to_string = C.unpack
-
 read_control :: Handle -> IO Control
 read_control h = do
   nm <- read_pstr h
@@ -100,6 +94,9 @@ read_input h = do
   u <- read_i16 h
   p <- read_i16 h
   return (Input u p)
+
+read_output :: Handle -> IO Int
+read_output = read_i8
 
 read_ugen :: Handle -> IO UGen
 read_ugen h = do

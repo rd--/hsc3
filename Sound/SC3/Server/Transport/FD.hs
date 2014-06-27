@@ -12,10 +12,10 @@ import Sound.SC3.Server.Command.Core
 import Sound.SC3.Server.Command.Enum
 import Sound.SC3.Server.Command.Int
 import Sound.SC3.Server.Enum
+import qualified Sound.SC3.Server.Graphdef as G
 import Sound.SC3.Server.NRT
 import Sound.SC3.Server.Status
 import Sound.SC3.Server.Synthdef
-import Sound.SC3.Server.Synthdef.Type
 import Sound.SC3.UGen.Type
 
 -- * hosc variants
@@ -48,14 +48,11 @@ reset fd = do
 playGraphdef :: Transport t => Int -> t -> G.Graphdef -> IO ()
 playGraphdef k fd g = do
   _ <- async fd (d_recv' g)
-  sendMessage fd (s_new0 (graphdef_name s) k AddToTail 1)
+  sendMessage fd (s_new0 (ascii_to_string (G.graphdef_name g)) k AddToTail 1)
 
-
--- | Send 'd_recv' and 's_new' messages to scsynth.
+-- | 'playGraphdef' of 'synthdef_to_graphdef'.
 playSynthdef :: Transport t => Int -> t -> Synthdef -> IO ()
-playSynthdef k fd s = do
-  _ <- async fd (d_recv s)
-  sendMessage fd (s_new0 (synthdefName s) k AddToTail 1)
+playSynthdef k fd = playGraphdef k fd . synthdef_to_graphdef
 
 -- | Send an /anonymous/ instrument definition using 'playSynthdef'.
 playUGen :: Transport t => Int -> t -> UGen -> IO ()
@@ -90,8 +87,8 @@ class Audible e where
     play :: Transport t => t -> e -> IO ()
     play = play_id (-1)
 
-instance Audible Graph where
-    play_id k fd = playSynthdef k fd . Synthdef "Anonymous"
+instance Audible G.Graphdef where
+    play_id k fd = playGraphdef k fd
 
 instance Audible Synthdef where
     play_id = playSynthdef
