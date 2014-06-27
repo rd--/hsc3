@@ -5,9 +5,14 @@ import Sound.OSC.Core {- hosc -}
 
 import Sound.SC3.Server.Command.Enum
 import Sound.SC3.Server.Enum
+import qualified Sound.SC3.Server.Graphdef as G
 import Sound.SC3.Server.Synthdef
 
 -- * Instrument definition commands
+
+-- | Install a bytecode instrument definition. (Asynchronous)
+d_recv' :: G.Graphdef -> Message
+d_recv' g = message "/d_recv" [Blob (G.encode_graphdef g)]
 
 -- | Install a bytecode instrument definition. (Asynchronous)
 d_recv :: Synthdef -> Message

@@ -1,7 +1,7 @@
 -- | 'Node', 'Graph' and related types.
 module Sound.SC3.Server.Synthdef.Type where
 
-import qualified Data.ByteString.Lazy as B {- bytestring -}
+--import qualified Data.ByteString.Lazy as B {- bytestring -}
 
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
@@ -20,7 +20,7 @@ data Graph = Graph {nextId :: NodeId
             deriving (Eq,Show)
 
 -- | Binary representation of a unit generator graph.
-type Graphdef = B.ByteString
+-- type Graphdef = B.ByteString
 
 -- | Enumeration of the four operating rates for controls.
 data KType = K_IR | K_KR | K_TR | K_AR
@@ -60,4 +60,5 @@ data Node = NodeC {node_id :: NodeId
                   ,node_p_node :: Node
                   ,node_p_index :: PortIndex}
             deriving (Eq,Show)
+
 

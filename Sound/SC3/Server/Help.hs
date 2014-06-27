@@ -2,8 +2,8 @@
 module Sound.SC3.Server.Help where
 
 import Control.Monad {- base -}
-import System.Cmd {- process -}
 import System.FilePath {- filepath -}
+import System.Process {- process -}
 
 import Sound.SC3.UGen.Help
 

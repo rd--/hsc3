@@ -5,7 +5,6 @@ import Sound.OSC.Core {- hosc -}
 
 import qualified Sound.SC3.Server.Command.Generic as G
 import Sound.SC3.Server.Enum
-import Sound.SC3.UGen.Enum
 
 -- | Fill ranges of a node's control values.
 n_fill :: Int -> [(String,Int,Float)] -> Message

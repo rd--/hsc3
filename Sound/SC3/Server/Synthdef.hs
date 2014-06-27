@@ -2,38 +2,29 @@
 --   SuperCollider synthesis server.
 module Sound.SC3.Server.Synthdef where
 
-import qualified Data.ByteString.Char8 as C {- bytestring -}
-import qualified Data.ByteString.Lazy as B {- bytestring -}
+import qualified Data.ByteString.Lazy as L {- bytestring -}
 import Data.Default {- data-default -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
-import Sound.OSC.Coding.Byte {- hosc -}
-import Sound.OSC.Coding.Cast {- hosc -}
 import System.FilePath {- filepath -}
 
+import qualified Sound.SC3.Server.Graphdef as G
 import Sound.SC3.Server.Synthdef.Internal
 import Sound.SC3.Server.Synthdef.Type
 import Sound.SC3.UGen.Graph
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
--- | Transform a unit generator into a graph.
---
--- > import Sound.SC3.UGen
--- > synth (out 0 (pan2 (sinOsc AR 440 0) 0.5 0.1))
-synth :: UGen -> Graph
-synth = pv_validate . mk_graph
-
--- | Binary representation of a unit generator synth definition.
+-- | A named unit generator graph.
 data Synthdef = Synthdef {synthdefName :: String
-                         ,synthdefGraph :: Graph}
+                         ,synthdefUGen :: UGen}
                 deriving (Eq,Show)
 
 instance Default Synthdef where def = defaultSynthdef
 
 -- | Lift a 'UGen' graph into a 'Synthdef'.
 synthdef :: String -> UGen -> Synthdef
-synthdef s u = Synthdef s (synth u)
+synthdef = Synthdef
 
 -- | The SC3 /default/ instrument 'Synthdef', see
 -- 'default_ugen_graph'.
@@ -53,15 +44,15 @@ defaultSampler use_gate =
     let nm = "default-sampler-" ++ if use_gate then "gate" else "fixed"
     in synthdef nm (default_sampler_ugen_graph use_gate)
 
+-- | 'ugen_to_graph' of 'synthdefUGen'.
+synthdefGraph :: Synthdef -> Graph
+synthdefGraph = ugen_to_graph . synthdefUGen
+
 -- | Parameter names at 'Synthdef'.
 --
 -- > synthdefParam def == ["amp","pan","gate","freq"]
 synthdefParam :: Synthdef -> [String]
 synthdefParam = map node_k_name . controls . synthdefGraph
-
--- | Transform a unit generator graph into bytecode.
-graphdef :: Graph -> Graphdef
-graphdef = encode_graphdef
 
 -- | Find the indices of the named UGen at 'Graph'.  The index is
 -- required when using 'Sound.SC3.Server.Command.u_cmd'.
@@ -73,21 +64,20 @@ ugenIndices nm =
               _ -> Nothing
     in mapMaybe f . zip [0..] . ugens
 
+-- | 'graph_to_graphdef' at 'Synthdef'.
+synthdef_to_graphdef :: Synthdef -> G.Graphdef
+synthdef_to_graphdef (Synthdef nm u) = graph_to_graphdef nm (ugen_to_graph u)
+
 -- | Encode 'Synthdef' as a binary data stream.
-synthdefData :: Synthdef -> Graphdef
-synthdefData (Synthdef s g) =
-    B.concat [encode_str (C.pack "SCgf")
-             ,encode_i32 0
-             ,encode_i16 1
-             ,B.pack (str_pstr s)
-             ,encode_graphdef g]
+synthdefData :: Synthdef -> L.ByteString
+synthdefData = G.encode_graphdef . synthdef_to_graphdef
 
 -- | Write 'Synthdef' to indicated directory.  The filename is the
 -- 'synthdefName' with the appropriate extension (@scsyndef@).
 synthdefWrite :: Synthdef -> FilePath -> IO ()
 synthdefWrite s dir =
     let nm = dir </> synthdefName s <.> "scsyndef"
-    in B.writeFile nm (synthdefData s)
+    in L.writeFile nm (synthdefData s)
 
 -- | Simple statistical analysis of a unit generator graph.
 graph_stat :: Graph -> String
@@ -109,4 +99,4 @@ graph_stat s =
 
 -- | 'graph_stat' of 'synth'.
 synthstat :: UGen -> String
-synthstat = graph_stat . synth
+synthstat = graph_stat . ugen_to_graph

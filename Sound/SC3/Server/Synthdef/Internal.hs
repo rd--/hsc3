@@ -1,13 +1,12 @@
 module Sound.SC3.Server.Synthdef.Internal where
 
-import qualified Data.ByteString.Lazy as B {- bytestring -}
 import qualified Data.IntMap as M {- containers -}
 import Data.Function {- base -}
 import Data.List{- base -}
 import Data.Maybe{- base -}
-import Sound.OSC.Coding.Byte {- hosc -}
-import Sound.OSC.Coding.Cast {- hosc -}
+import Sound.OSC.Type {- hosc -}
 
+import qualified Sound.SC3.Server.Graphdef as G
 import Sound.SC3.Server.Synthdef.Type
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
@@ -238,9 +237,6 @@ type Map = M.IntMap Int
 
 type Maps = (Map,[Node],Map,Map,[(KType,Int)])
 
-data Input = Input Int Int
-             deriving (Eq,Show)
-
 -- | Determine 'KType' of a /control/ UGen at 'NodeU', or not.
 node_ktype :: Node -> Maybe KType
 node_ktype n =
@@ -291,58 +287,39 @@ fetch_k z t =
     in rec 0
 
 -- | Construct 'Input' form required by byte-code generator.
-make_input :: Maps -> FromPort -> Input
+make_input :: Maps -> FromPort -> G.Input
 make_input (cs,ks,_,us,kt) fp =
     case fp of
-      FromPort_C n -> Input (-1) (fetch n cs)
+      FromPort_C n -> G.Input (-1) (fetch n cs)
       FromPort_K n t -> let i = ktype_map_lookup t kt
-                        in Input i (fetch_k n t ks)
-      FromPort_U n p -> Input (fetch n us) (fromMaybe 0 p)
+                        in G.Input i (fetch_k n t ks)
+      FromPort_U n p -> G.Input (fetch n us) (fromMaybe 0 p)
 
--- | Byte-encode 'Input' value.
-encode_input :: Input -> B.ByteString
-encode_input (Input u p) = B.append (encode_i16 u) (encode_i16 p)
-
--- | Byte-encode 'NodeK' control node.
-encode_node_k :: Maps -> Node -> B.ByteString
-encode_node_k (_,_,ks,_,_) nd =
+node_k_to_control :: Maps -> Node -> G.Control
+node_k_to_control (_,_,ks,_,_) nd =
     case nd of
-      NodeK n _ _ nm _ _ _ ->
-          B.concat [B.pack (str_pstr nm)
-                   ,encode_i16 (fetch n ks)]
-      _ -> error "encode_node_k"
+      NodeK n _ _ nm _ _ _ -> (ascii nm,fetch n ks)
+      _ -> error "node_k_to_control"
 
 -- | Byte-encode 'NodeU' primitive node.
-encode_node_u :: Maps -> Node -> B.ByteString
-encode_node_u m n =
+node_u_to_ugen :: Maps -> Node -> G.UGen
+node_u_to_ugen m n =
     case n of
-      NodeU _ r nm i o s _ ->
-          let i' = map (encode_input . make_input m) i
-              o' = map (encode_i8 . rateId) o
-              (Special s') = s
-          in B.concat [B.pack (str_pstr nm)
-                      ,encode_i8 (rateId r)
-                      ,encode_i16 (length i)
-                      ,encode_i16 (length o)
-                      ,encode_i16 s'
-                      ,B.concat i'
-                      ,B.concat o']
+      NodeU _ r nm i o (Special s) _ ->
+          let i' = map (make_input m) i
+          in (ascii nm,rateId r,i',map rateId o,s)
       _ -> error "encode_node_u: illegal input"
 
 -- | Construct instrument definition bytecode.
-encode_graphdef :: Graph -> B.ByteString
-encode_graphdef g =
-    let (Graph _ cs ks us) = g
+graph_to_graphdef :: String -> Graph -> G.Graphdef
+graph_to_graphdef nm g =
+    let Graph _ cs ks us = g
+        cs' = map node_c_value cs
         mm = mk_maps g
-    in B.concat
-           [encode_i16 (length cs)
-           ,B.concat (map (encode_f32 . node_c_value) cs)
-           ,encode_i16 (length ks)
-           ,B.concat (map (encode_f32 . node_k_default) ks)
-           ,encode_i16 (length ks)
-           ,B.concat (map (encode_node_k mm) ks)
-           ,encode_i16 (length us)
-           ,B.concat (map (encode_node_u mm) us)]
+        ks_def = map node_k_default ks
+        ks_ctl = map (node_k_to_control mm) ks
+        us' = map (node_u_to_ugen mm) us
+    in G.Graphdef (ascii nm) cs' (zip ks_ctl ks_def) us'
 
 -- * Implicit (Control, MaxLocalBuf)
 
@@ -480,3 +457,35 @@ pv_validate g =
                           ,map node_u_name n
                           ,d))
               else g
+
+-- | Transform a unit generator into a graph.
+--
+-- > import Sound.SC3.UGen
+-- > ugen_to_graph (out 0 (pan2 (sinOsc AR 440 0) 0.5 0.1))
+ugen_to_graph :: UGen -> Graph
+ugen_to_graph = pv_validate . mk_graph
+
+{-
+
+import qualified Data.ByteString.Lazy as B {- bytestring -}
+import Sound.OSC.Coding.Byte {- hosc -}
+import Sound.OSC.Coding.Cast {- hosc -}
+
+-- | Byte-encode 'NodeK' control node.
+encode_node_k :: Maps -> Node -> B.ByteString
+encode_node_k (_,_,ks,_,_) nd =
+    case nd of
+      NodeK n _ _ nm _ _ _ ->
+          B.concat [B.pack (str_pstr nm)
+                   ,encode_i16 (fetch n ks)]
+      _ -> error "encode_node_k"
+
+-- | Byte-encode 'NodeU' primitive node.
+encode_node_u :: Maps -> Node -> B.ByteString
+encode_node_u m = G.encode_ugen . node_u_to_ugen m
+
+-- | Construct instrument definition bytecode.
+encode_graph :: String -> Graph -> B.ByteString
+encode_graph nm = G.encode_graphdef . graph_to_graphdef nm
+
+-}

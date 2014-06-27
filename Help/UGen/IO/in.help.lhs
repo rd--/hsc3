@@ -44,3 +44,11 @@ Read a control bus
 Re-set value on bus
 
 > withSC3 (send (c_set1 0 600))
+
+Control rate graph writing buses 0 & 1.
+
+> audition (out 0 (mce2 (tRand 'α' 220 2200 (dust 'β' KR 1)) (dust 'γ' KR 3)))
+
+Audio rate graph reading control buses 0 & 1.
+
+> audition (out 0 (sinOsc AR (in' 1 KR 0) 0 * decay (in' 1 KR 1) 0.2 * 0.1))

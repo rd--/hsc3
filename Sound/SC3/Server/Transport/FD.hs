@@ -45,6 +45,13 @@ reset fd = do
   sendMessage fd (g_new [(1,AddToTail,0),(2,AddToTail,0)])
 
 -- | Send 'd_recv' and 's_new' messages to scsynth.
+playGraphdef :: Transport t => Int -> t -> G.Graphdef -> IO ()
+playGraphdef k fd g = do
+  _ <- async fd (d_recv' g)
+  sendMessage fd (s_new0 (graphdef_name s) k AddToTail 1)
+
+
+-- | Send 'd_recv' and 's_new' messages to scsynth.
 playSynthdef :: Transport t => Int -> t -> Synthdef -> IO ()
 playSynthdef k fd s = do
   _ <- async fd (d_recv s)
