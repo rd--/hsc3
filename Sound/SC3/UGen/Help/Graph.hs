@@ -1,5 +1,5 @@
 -- | Standard SC3 graphs, referenced in documentation.
-module Sound.SC3.UGen.Graph where
+module Sound.SC3.UGen.Help.Graph where
 
 import Sound.SC3.UGen.ID
 

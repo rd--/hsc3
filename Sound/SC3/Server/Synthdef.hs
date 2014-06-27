@@ -10,7 +10,7 @@ import System.FilePath {- filepath -}
 
 import qualified Sound.SC3.Server.Graphdef as G
 import Sound.SC3.Server.Graph
-import Sound.SC3.UGen.Graph
+import Sound.SC3.UGen.Help.Graph
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
