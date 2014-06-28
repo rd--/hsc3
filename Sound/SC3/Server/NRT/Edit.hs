@@ -5,7 +5,7 @@ import Data.List {- base -}
 import qualified Data.List.Ordered as L {- data-ordlist -}
 import Sound.OSC {- hosc -}
 
-import Sound.SC3.Server.Command.Core
+import Sound.SC3.Server.Command
 import Sound.SC3.Server.NRT
 
 -- * List

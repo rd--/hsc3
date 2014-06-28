@@ -5,9 +5,7 @@ import Control.Monad {- base -}
 import Data.Maybe {- base -}
 import Sound.OSC {- hosc -}
 
-import Sound.SC3.Server.Command.Core
-import Sound.SC3.Server.Command.Enum
-import Sound.SC3.Server.Command.Int
+import Sound.SC3.Server.Command
 import Sound.SC3.Server.Enum
 import qualified Sound.SC3.Server.Graphdef as G
 import Sound.SC3.Server.NRT
