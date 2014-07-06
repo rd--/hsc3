@@ -72,7 +72,7 @@ instance RealFracE Double
 -- | Variant of @SC3@ @roundTo@ function.
 --
 -- > let r = [0,0,0.25,0.25,0.5,0.5,0.5,0.75,0.75,1,1]
--- > in map (flip roundTo_ 0.25) [0,0.1 .. 1] == r
+-- > in map (`roundTo_` 0.25) [0,0.1 .. 1] == r
 roundTo_ :: RealFracE a => a -> a -> a
 roundTo_ a b = if b == 0 then a else floorE (a/b + 0.5) * b
 
