@@ -268,6 +268,12 @@ switchDelay in_ drylevel wetlevel delaytime delayfactor maxdelaytime = mkFilterR
 chromagram :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 chromagram rate fft_ fftsize n tuningbase octaves integrationflag coeff = mkOscR [KR] rate "Chromagram" [fft_,fftsize,n,tuningbase,octaves,integrationflag,coeff] 1
 
+-- * skUG
+
+-- | Phase modulation oscillator matrix.
+fm7 :: [[UGen]] -> [[UGen]] -> UGen
+fm7 ctl m0d = mkOsc AR "FM7" (concat ctl ++ concat m0d) 6
+
 -- * SLU
 
 -- | Prigogine oscillator

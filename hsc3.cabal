@@ -106,6 +106,7 @@ Library
                    Sound.SC3.UGen.Envelope.Interpolate
                    Sound.SC3.UGen.External
                    Sound.SC3.UGen.External.ATS
+                   Sound.SC3.UGen.External.F0
                    Sound.SC3.UGen.External.ID
                    Sound.SC3.UGen.External.LPC
                    Sound.SC3.UGen.External.SC3_Plugins

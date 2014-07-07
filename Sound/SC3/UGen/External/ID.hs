@@ -6,6 +6,8 @@ import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
+-- * SC3plugins/BhobUGens
+
 -- | random walk step
 lfBrownNoise0 :: ID a => a -> Rate -> UGen -> UGen -> UGen -> UGen
 lfBrownNoise0 z r freq dev dist = mkOscIdR [AR,KR] z r "LFBrownNoise0" [freq,dev,dist] 1

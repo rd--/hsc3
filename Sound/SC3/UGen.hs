@@ -10,11 +10,6 @@ import Sound.SC3.UGen.DiskIO as U
 import Sound.SC3.UGen.Envelope as U
 import Sound.SC3.UGen.Envelope.Construct as U
 import Sound.SC3.UGen.Enum as U
-import Sound.SC3.UGen.External as U
-import Sound.SC3.UGen.External.SC3_Plugins as U
-import Sound.SC3.UGen.External.ATS as U
-import Sound.SC3.UGen.External.LPC as U
-import Sound.SC3.UGen.External.Zita as U
 import Sound.SC3.UGen.FFT as U
 import Sound.SC3.UGen.Filter as U
 import Sound.SC3.UGen.Granular as U
