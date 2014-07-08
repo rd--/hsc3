@@ -1,7 +1,10 @@
--- | Functions to normalise UGen names.
+-- | Functions to normalise UGen names.  @SC3@ UGen names are
+-- capitalised, @hsc3@ cannot use the same names for UGen constructor
+-- functions.  The functions here are heuristics, and are likely only
+-- partial.
 module Sound.SC3.UGen.Name where
 
-import Data.Char
+import Data.Char {- base -}
 
 -- | Convert from @hsc3@ name to @SC3@ name.
 --
