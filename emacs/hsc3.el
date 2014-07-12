@@ -260,6 +260,12 @@
   (let ((nm (concat (file-name-sans-extension (buffer-name)) ".dot")))
     (copy-file "/tmp/hsc3.dot" nm t)))
 
+(defun hsc3-gen-param ()
+  "Rewrite an SC3 argument list as control definitions."
+  (interactive)
+  (hsc3-send-string
+   (concat "putStrLn $ Sound.SC3.RW.PSynth.rewrite_param_list \"" (region-string) "\"")))
+
 (defun hsc3-set-prompt ()
   "Set ghci prompt to hsc3."
   (interactive)
