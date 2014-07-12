@@ -24,7 +24,7 @@ Using sweep to index into a buffer
 
 Backwards, variable offset
 
-> let {n = lfNoise0 'a' KR 15
+> let {n = lfNoise0 'α' KR 15
 >     ;x = mouseX KR 0.5 10 Exponential 0.1
 >     ;t = impulse AR x 0
 >     ;r = bufSampleRate KR 0
@@ -41,7 +41,7 @@ Raising rate
 
 f0 (sc-users, 2012-02-09)
 
-> let {lf = range 0.01 1.25 (lfNoise2 'a' KR 1)
+> let {lf = range 0.01 1.25 (lfNoise2 'α' KR 1)
 >     ;du = duty AR lf 0 DoNothing lf
 >     ;tr = abs (hpz1 du) >* 0
 >     ;ph = sweep tr (1/du)

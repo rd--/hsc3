@@ -389,9 +389,13 @@ sum3 p q r = mkFilter "Sum3" [p,q,r] 1
 sum4 :: UGen -> UGen -> UGen -> UGen -> UGen
 sum4 p q r s = mkFilter "Sum4" [p,q,r,s] 1
 
--- | Triggered linear ramp.
+-- | Triggered linear ramp (oscillator form).
+sweep' :: Rate -> UGen -> UGen -> UGen
+sweep' rt t r = mkOscR [AR,KR] rt "Sweep" [t,r] 1
+
+-- | Triggered linear ramp (filter form).
 sweep :: UGen -> UGen -> UGen
-sweep t r = mkFilter "Sweep" [t,r] 1
+sweep t r = mkFilterR [AR,KR] "Sweep" [t,r] 1
 
 -- | Control rate trigger to audio rate trigger converter
 t2A :: UGen -> UGen -> UGen

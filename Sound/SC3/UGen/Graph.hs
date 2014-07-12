@@ -25,9 +25,6 @@ data Graph = Graph {nextId :: NodeId
                    ,ugens :: [Node]}
             deriving (Eq,Show)
 
--- | Binary representation of a unit generator graph.
--- type Graphdef = B.ByteString
-
 -- | Enumeration of the four operating rates for controls.
 data KType = K_IR | K_KR | K_TR | K_AR
              deriving (Eq,Show,Ord)
