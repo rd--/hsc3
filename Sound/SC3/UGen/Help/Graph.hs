@@ -10,11 +10,12 @@ default_ugen_graph =
         a = control KR "amp" 0.1
         p = control KR "pan" 0
         g = control KR "gate" 1
+        o = control KR "out" 0
         e = linen g 0.01 0.7 0.3 RemoveSynth
         f3 = mce [f,f + rand 'α' (-0.4) 0,f + rand 'β' 0 0.4]
         l = xLine KR (rand 'γ' 4000 5000) (rand 'δ' 2500 3200) 1 DoNothing
         z = lpf (mix (varSaw AR f3 0 0.3 * 0.3)) l * e
-    in out 0 (pan2 z p a)
+    in out o (pan2 z p a)
 
 -- | A /Gabor/ grain, envelope is by 'lfGauss'.
 gabor_grain_ugen_graph :: UGen

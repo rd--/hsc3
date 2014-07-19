@@ -47,7 +47,7 @@ reset :: SendOSC m => m ()
 reset =
     let m = [clearSched
             ,g_freeAll [1,2]
-            ,g_new [(1,AddToTail,0),(2,AddToTail,0)]]
+            ,g_new [(1,AddToHead,0),(2,AddToTail,0)]]
     in sendBundle (bundle immediately m)
 
 -- | Send 'd_recv' and 's_new' messages to scsynth.
@@ -87,7 +87,7 @@ run_bundle st b = do
 -- the initial time-stamp is taken.  This re-orders synchronous
 -- commands in relation to asynchronous at time @0@.
 --
--- > let sc = NRT [bundle 1 [s_new0 "default" (-1) AddToTail 1]
+-- > let sc = NRT [bundle 1 [s_new0 "default" (-1) AddToHead 1]
 -- >              ,bundle 2 [n_set1 (-1) "gate" 0]]
 -- > in withSC3 (performNRT sc)
 performNRT :: Transport m => NRT -> m ()
@@ -107,7 +107,7 @@ class Audible e where
     play_at :: Transport m => (Int,AddAction,Int) -> e -> m ()
     -- | Variant where /id/ is @-1@.
     play :: Transport m => e -> m ()
-    play = play_at (-1,AddToTail,1)
+    play = play_at (-1,AddToHead,1)
 
 instance Audible G.Graphdef where
     play_at k = playGraphdef k
@@ -127,7 +127,7 @@ audition_at k = withSC3 . play_at k
 
 -- | Variant where /id/ is @-1@.
 audition :: Audible e => e -> IO ()
-audition = audition_at (-1,AddToTail,1)
+audition = audition_at (-1,AddToHead,1)
 
 -- * Notifications
 
