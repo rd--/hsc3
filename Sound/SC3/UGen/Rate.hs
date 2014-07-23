@@ -1,11 +1,12 @@
 -- | Operating rate definitions and utilities.
 module Sound.SC3.UGen.Rate where
 
-import Data.Function
+import Data.Char {- base -}
+import Data.Function {- base -}
 
 -- | Operating rate of unit generator.
 data Rate = IR | KR | AR | DR
-            deriving (Eq, Show, Enum, Bounded)
+            deriving (Eq,Enum,Bounded,Show,Read)
 
 instance Ord Rate where
     compare = compare `on` rate_ord
@@ -35,3 +36,15 @@ rate_color r =
 -- | Set of all 'Rate' values.
 all_rates :: [Rate]
 all_rates = [minBound .. maxBound]
+
+-- | Case insensitive parser for rate.
+--
+-- > Data.Maybe.mapMaybe rate_parse (words "ar kR IR Dr") == [AR,KR,IR,DR]
+rate_parse :: String -> Maybe Rate
+rate_parse r =
+    case map toUpper r of
+      "AR" -> Just AR
+      "KR" -> Just KR
+      "IR" -> Just IR
+      "DR" -> Just DR
+      _ -> Nothing

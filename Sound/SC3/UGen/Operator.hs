@@ -61,6 +61,17 @@ data Unary  = Neg
             | SCurve
               deriving (Eq,Show,Enum,Read)
 
+-- | Variant of 'reads' requiring exact match.
+reads_exact :: Read a => String -> Maybe a
+reads_exact s =
+    case reads s of
+      [(r,"")] -> Just r
+      _ -> Nothing
+
+-- | Type-specialised 'reads_exact'.
+parse_unary :: String -> Maybe Unary
+parse_unary = reads_exact
+
 -- | Enumeration of @SC3@ unary operator UGens.
 data Binary = Add
             | Sub
@@ -113,6 +124,10 @@ data Binary = Add
             | ExpRandRange
               deriving (Eq,Show,Enum,Read)
 
+-- | Type-specialised 'reads_exact'.
+parse_binary :: String -> Maybe Binary
+parse_binary = reads_exact
+
 -- | Table of symbolic names for standard unary operators.
 unaryTable :: [(Int,String)]
 unaryTable = [(0,"-")]
@@ -153,19 +168,17 @@ rlookup x = fmap fst . find ((== x) . snd)
 
 -- | Given name of binary operator derive index.
 --
--- > map binaryIndex ["*","Mul","Ring1"] == [2,2,30]
-binaryIndex :: String -> Int
-binaryIndex nm =
-    let e = fromEnum (read nm :: Binary)
-    in fromMaybe e (rlookup nm binaryTable)
+-- > mapMaybe binaryIndex ["*","Mul","Ring1"] == [2,2,30]
+-- > binaryIndex "SinOsc" == Nothing
+binaryIndex :: String -> Maybe Int
+binaryIndex nm = maybe (fmap fromEnum (parse_binary nm)) Just (rlookup nm binaryTable)
 
 -- | Given name of unary operator derive index.
 --
--- > map unaryIndex ["-","Neg","Cubed"] == [0,0,13]
-unaryIndex :: String -> Int
-unaryIndex nm =
-    let e = fromEnum (read nm :: Unary)
-    in fromMaybe e (rlookup nm unaryTable)
+-- > mapMaybe unaryIndex ["-","Neg","Cubed"] == [0,0,13]
+-- > unaryIndex "SinOsc" == Nothing
+unaryIndex :: String -> Maybe Int
+unaryIndex nm = maybe (fmap fromEnum (parse_unary nm)) Just (rlookup nm unaryTable)
 
 -- | Association table for 'Binary' to haskell function implementing operator.
 binop_hs_tbl :: (Floating n,Ord n) => [(Binary,n -> n -> n)]

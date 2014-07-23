@@ -21,8 +21,9 @@ mk_plain r = mkUGen Nothing all_rates (Just r)
 -- > uop "-" AR 1 == uop "Neg" AR 1
 uop :: String -> Rate -> UGen -> UGen
 uop nm r p =
-    let s = unaryIndex nm
-    in mk_plain r "UnaryOpUGen" [p] 1 (Special s) NoId
+    case unaryIndex nm of
+      Just s -> mk_plain r "UnaryOpUGen" [p] 1 (Special s) NoId
+      Nothing -> error "uop"
 
 -- | Construct binary operator, the name can textual or symbolic.
 --
@@ -31,8 +32,9 @@ uop nm r p =
 -- > ugenName (binop "*" AR 1 2) == "BinaryOpUGen"
 binop :: String -> Rate -> UGen -> UGen -> UGen
 binop nm r p q =
-    let s = binaryIndex nm
-    in mk_plain r "BinaryOpUGen" [p,q] 1 (Special s) NoId
+    case binaryIndex nm of
+      Just s -> mk_plain r "BinaryOpUGen" [p,q] 1 (Special s) NoId
+      Nothing -> error "binop"
 
 -- | Construct deterministic UGen.
 --
