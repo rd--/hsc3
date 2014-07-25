@@ -7,6 +7,40 @@ import Data.Int
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Type
 
+-- | Association table for 'Binary' to haskell function implementing operator.
+binop_hs_tbl :: (Floating n,Ord n) => [(Binary,n -> n -> n)]
+binop_hs_tbl =
+    [(Add,(+))
+    ,(Sub,(-))
+    ,(FDiv,(/))
+    ,(Mul,(*))
+    ,(Pow,(**))
+    ,(Min,min)
+    ,(Max,max)]
+
+-- | 'lookup' 'binop_hs_tbl' via 'toEnum'.
+binop_special_hs :: (Floating n, Ord n) => Int -> Maybe (n -> n -> n)
+binop_special_hs z = lookup (toEnum z) binop_hs_tbl
+
+-- | Association table for 'Unary' to haskell function implementing operator.
+uop_hs_tbl :: (RealFrac n,Floating n,Ord n) => [(Unary,n -> n)]
+uop_hs_tbl =
+    [(Neg,negate)
+    ,(Not,\z -> if z > 0 then 0 else 1)
+    ,(Abs,abs)
+    ,(Ceil,fromInteger . ceiling)
+    ,(Floor,fromInteger . floor)
+    ,(Squared,\z -> z * z)
+    ,(Cubed,\z -> z * z * z)
+    ,(Sqrt,sqrt)
+    ,(Recip,recip)
+    ,(MIDICPS,midiCPS')
+    ,(CPSMIDI,cpsMIDI')]
+
+-- | 'lookup' 'uop_hs_tbl' via 'toEnum'.
+uop_special_hs :: (RealFrac n,Floating n, Ord n) => Int -> Maybe (n -> n)
+uop_special_hs z = lookup (toEnum z) uop_hs_tbl
+
 -- The Eq and Ord classes in the Prelude require Bool, hence the name
 -- mangling.  True is 1.0, False is 0.0
 
@@ -95,6 +129,10 @@ ceil = ceilingE
 midiCPS' :: Floating a => a -> a
 midiCPS' i = 440.0 * (2.0 ** ((i - 69.0) * (1.0 / 12.0)))
 
+-- | 'Floating' form of 'cpsMIDI'.
+cpsMIDI' :: Floating a => a -> a
+cpsMIDI' a = (logBase 2 (a * (1.0 / 440.0)) * 12.0) + 69.0
+
 -- | Unary operator class.
 --
 -- > map (floor . (* 1e4) . dbAmp) [-90,-60,-30,0] == [0,10,316,10000]
@@ -106,7 +144,7 @@ class (Floating a, Ord a) => UnaryOp a where
     asInt :: a -> a
     asInt = error "asInt"
     cpsMIDI :: a -> a
-    cpsMIDI a = (log2 (a * (1.0 / 440.0)) * 12.0) + 69.0
+    cpsMIDI = cpsMIDI'
     cpsOct :: a -> a
     cpsOct a = log2 (a * (1.0 / 440.0)) + 4.75
     cubed :: a -> a
@@ -128,7 +166,7 @@ class (Floating a, Ord a) => UnaryOp a where
     midiRatio :: a -> a
     midiRatio a = 2.0 ** (a * (1.0 / 12.0))
     notE :: a -> a
-    notE a = if a >  0.0 then 0.0 else 1.0
+    notE a = if a > 0.0 then 0.0 else 1.0
     notNil :: a -> a
     notNil a = if a /= 0.0 then 0.0 else 1.0
     octCPS :: a -> a

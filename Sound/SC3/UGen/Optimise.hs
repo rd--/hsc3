@@ -3,7 +3,7 @@ module Sound.SC3.UGen.Optimise where
 
 import System.Random {- random -}
 
-import Sound.SC3.UGen.Operator
+import Sound.SC3.UGen.Math
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
@@ -43,15 +43,16 @@ ugen_optimise_ir_rand =
 -- | Optimise 'UGen' graph by re-writing binary operators with
 -- 'Constant' inputs.  The standard graph constructors already do
 -- this, however subsequent optimisations, ie. 'ugen_optimise_ir_rand'
--- can re-introduce these sub-graphs.
+-- can re-introduce these sub-graphs, and the /Plain/ graph
+-- constructors are un-optimised.
 --
 -- > constant 5 * 10 == constant 50
 --
 -- > let {u = lfPulse AR (2 ** rand 'α' (-9) 1) 0 0.5
 -- >     ;u' = ugen_optimise_ir_rand u}
--- > in draw (mix (mce [u,u',ugen_optimise_const_binop u']))
-ugen_optimise_const_binop :: UGen -> UGen
-ugen_optimise_const_binop =
+-- > in draw (mix (mce [u,u',ugen_optimise_const_operator u']))
+ugen_optimise_const_operator :: UGen -> UGen
+ugen_optimise_const_operator =
     let f u =
             case u of
               Primitive_U p ->
@@ -59,6 +60,10 @@ ugen_optimise_const_binop =
                     Primitive _ "BinaryOpUGen" [Constant_U (Constant l),Constant_U (Constant r)] [_] (Special z) _ ->
                         case binop_special_hs z of
                           Just fn -> Constant_U (Constant (fn l r))
+                          _ -> u
+                    Primitive _ "UnaryOpUGen" [Constant_U (Constant i)] [_] (Special z) _ ->
+                        case uop_special_hs z of
+                          Just fn -> Constant_U (Constant (fn i))
                           _ -> u
                     _ -> u
               _ -> u
