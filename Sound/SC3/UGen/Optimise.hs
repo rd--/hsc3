@@ -48,6 +48,8 @@ ugen_optimise_ir_rand =
 --
 -- > constant 5 * 10 == constant 50
 --
+-- > ugen_optimise_const_operator (abs (constant (-1)))
+--
 -- > let {u = lfPulse AR (2 ** rand 'α' (-9) 1) 0 0.5
 -- >     ;u' = ugen_optimise_ir_rand u}
 -- > in draw (mix (mce [u,u',ugen_optimise_const_operator u']))
