@@ -46,9 +46,12 @@ ugen_optimise_ir_rand =
 -- can re-introduce these sub-graphs, and the /Plain/ graph
 -- constructors are un-optimised.
 --
--- > constant 5 * 10 == constant 50
---
--- > ugen_optimise_const_operator (abs (constant (-1)))
+-- > let u = constant
+-- > u 5 * u 10 == u 50
+-- > u 5 ==* u 5 == u 1
+-- > u 5 >* u 4 == u 1
+-- > u 5 <=* u 5 == u 1
+-- > abs (u (-1)) == u 1
 --
 -- > let {u = lfPulse AR (2 ** rand 'α' (-9) 1) 0 0.5
 -- >     ;u' = ugen_optimise_ir_rand u}

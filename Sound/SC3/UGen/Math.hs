@@ -7,19 +7,75 @@ import Data.Int
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Type
 
+-- | True is conventionally 1.  The test to determine true is @> 0@.
+sc3_true :: Num n => n
+sc3_true = 1
+
+-- | False is conventionally 0.
+sc3_false :: Num n => n
+sc3_false = 0
+
+-- | Lifted 'not'.
+--
+-- > sc3_not sc3_true == sc3_false
+-- > sc3_not sc3_false == sc3_true
+sc3_not :: (Ord n,Num n) => n -> n
+sc3_not = sc3_bool . not . (> 0)
+
+-- | Translate 'Bool' to 'sc3_true' and 'sc3_false'.
+sc3_bool :: Num n => Bool -> n
+sc3_bool b = if b then sc3_true else sc3_false
+
+-- | Lift comparison function.
+sc3_comparison :: Num n => (n -> n -> Bool) -> n -> n -> n
+sc3_comparison f p q = sc3_bool (f p q)
+
+-- | Lifted '=='.
+sc3_eq :: (Num n, Eq n) => n -> n -> n
+sc3_eq = sc3_comparison (==)
+
+-- | Lifted '/='.
+sc3_neq :: (Num n, Eq n) => n -> n -> n
+sc3_neq = sc3_comparison (/=)
+
+-- | Lifted '<'.
+sc3_lt :: (Num n, Ord n) => n -> n -> n
+sc3_lt = sc3_comparison (<)
+
+-- | Lifted '<='.
+sc3_lte :: (Num n, Ord n) => n -> n -> n
+sc3_lte = sc3_comparison (<=)
+
+-- | Lifted '>'.
+sc3_gt :: (Num n, Ord n) => n -> n -> n
+sc3_gt = sc3_comparison (>)
+
+-- | Lifted '>='.
+sc3_gte :: (Num n, Ord n) => n -> n -> n
+sc3_gte = sc3_comparison (>=)
+
 -- | Association table for 'Binary' to haskell function implementing operator.
-binop_hs_tbl :: (Floating n,Ord n) => [(Binary,n -> n -> n)]
+binop_hs_tbl :: (Real n,Floating n,Ord n) => [(Binary,n -> n -> n)]
 binop_hs_tbl =
     [(Add,(+))
     ,(Sub,(-))
     ,(FDiv,(/))
+    ,(Mod,F.mod')
+    ,(EQ_,sc3_eq)
+    ,(NE,sc3_neq)
+    ,(LT_,sc3_lt)
+    ,(LE,sc3_lte)
+    ,(GT_,sc3_gt)
+    ,(GE,sc3_gte)
+    ,(Min,min)
+    ,(Max,max)
     ,(Mul,(*))
     ,(Pow,(**))
     ,(Min,min)
     ,(Max,max)]
 
 -- | 'lookup' 'binop_hs_tbl' via 'toEnum'.
-binop_special_hs :: (Floating n, Ord n) => Int -> Maybe (n -> n -> n)
+binop_special_hs :: (Real n,Floating n, Ord n) => Int -> Maybe (n -> n -> n)
 binop_special_hs z = lookup (toEnum z) binop_hs_tbl
 
 -- | Association table for 'Unary' to haskell function implementing operator.
@@ -47,9 +103,9 @@ uop_special_hs z = lookup (toEnum z) uop_hs_tbl
 -- | Variant on Eq class, result is of the same type as the values compared.
 class (Eq a,Num a) => EqE a where
     (==*) :: a -> a -> a
-    a ==* b = if a == b then 1 else 0
+    (==*) = sc3_eq
     (/=*) :: a -> a -> a
-    a /=* b = if a /= b then 1 else 0
+    (/=*) = sc3_neq
 
 instance EqE Int where
 instance EqE Integer where
@@ -65,13 +121,13 @@ instance EqE UGen where
 -- | Variant on Ord class, result is of the same type as the values compared.
 class (Ord a,Num a) => OrdE a where
     (<*) :: a -> a -> a
-    a <* b = if a < b then 1 else 0
+    (<*) = sc3_lt
     (<=*) :: a -> a -> a
-    a <=* b = if a <= b then 1 else 0
+    (<=*) = sc3_lte
     (>*) :: a -> a -> a
-    a >* b = if a > b then 1 else 0
+    (>*) = sc3_gt
     (>=*) :: a -> a -> a
-    a >=* b = if a >= b then 1 else 0
+    (>=*) = sc3_gte
 
 instance OrdE Int
 instance OrdE Integer
@@ -81,10 +137,10 @@ instance OrdE Float
 instance OrdE Double
 
 instance OrdE UGen where
-    (<*) = mkBinaryOperator LT_ (<*)
-    (<=*) = mkBinaryOperator LE (<=*)
-    (>*) = mkBinaryOperator GT_ (>*)
-    (>=*) = mkBinaryOperator GE (>=*)
+    (<*) = mkBinaryOperator LT_ sc3_lt
+    (<=*) = mkBinaryOperator LE sc3_lte
+    (>*) = mkBinaryOperator GT_ sc3_gt
+    (>=*) = mkBinaryOperator GE sc3_gte
 
 -- | Variant of 'RealFrac' with non 'Integral' results.
 class RealFrac a => RealFracE a where
@@ -267,22 +323,22 @@ class (Floating a, Ord a) => BinaryOp a where
     wrap2 :: a -> a -> a
     wrap2 = error "wrap2"
 
--- | The SC3 @%@ operator is libc fmod function.
+-- | The SC3 @%@ operator is the 'F.mod'' function.
 --
--- > 1.5 % 1.2 // ~= 0.3
--- > -1.5 % 1.2 // ~= 0.9
--- > 1.5 % -1.2 // ~= -0.9
--- > -1.5 % -1.2 // ~= -0.3
+-- > > 1.5 % 1.2 // ~= 0.3
+-- > > -1.5 % 1.2 // ~= 0.9
+-- > > 1.5 % -1.2 // ~= -0.9
+-- > > -1.5 % -1.2 // ~= -0.3
 --
--- > 1.5 `fmod` 1.2 -- ~= 0.3
--- > (-1.5) `fmod` 1.2 -- ~= 0.9
--- > 1.5 `fmod` (-1.2) -- ~= -0.9
--- > (-1.5) `fmod` (-1.2) -- ~= -0.3
+-- > 1.5 `fmod_f32` 1.2 -- ~= 0.3
+-- > (-1.5) `fmod_f32` 1.2 -- ~= 0.9
+-- > 1.5 `fmod_f32` (-1.2) -- ~= -0.9
+-- > (-1.5) `fmod_f32` (-1.2) -- ~= -0.3
 --
--- 1.2 % 1.5 // ~= 1.2
--- -1.2 % 1.5 // ~= 0.3
--- 1.2 % -1.5 // ~= -0.3
--- -1.2 % -1.5 // ~= -1.2
+-- > > 1.2 % 1.5 // ~= 1.2
+-- > > -1.2 % 1.5 // ~= 0.3
+-- > 1.2 % -1.5 // ~= -0.3
+-- > -1.2 % -1.5 // ~= -1.2
 --
 -- > 1.2 `fmod_f32` 1.5 -- ~= 1.2
 -- > (-1.2) `fmod_f32` 1.5 -- ~= 0.3
