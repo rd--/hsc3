@@ -17,6 +17,8 @@ type Name = ASCII
 
 type Control = (Name,Int)
 
+type Sample = Double
+
 data Input = Input Int Int deriving (Eq,Show)
 
 input_ugen_ix :: Input -> Maybe Int
@@ -49,15 +51,15 @@ input_is_control g (Input u _) =
     else ugen_is_control (graphdef_ugen g u)
 
 data Graphdef = Graphdef {graphdef_name :: Name
-                         ,graphdef_constants :: [Float]
-                         ,graphdef_controls :: [(Control,Float)]
+                         ,graphdef_constants :: [Sample]
+                         ,graphdef_controls :: [(Control,Sample)]
                          ,graphdef_ugens :: [UGen]}
                 deriving (Eq,Show)
 
 graphdef_ugen :: Graphdef -> Int -> UGen
 graphdef_ugen g = (graphdef_ugens g !!)
 
-graphdef_control :: Graphdef -> Int -> (Control,Float)
+graphdef_control :: Graphdef -> Int -> (Control,Sample)
 graphdef_control g = (graphdef_controls g !!)
 
 graphdef_constant_nid :: Graphdef -> Int -> Int
@@ -80,8 +82,8 @@ read_i16 h = fmap decode_i16 (L.hGet h 2)
 read_i32 :: Handle -> IO Int
 read_i32 h = fmap decode_i32 (L.hGet h 4)
 
-read_f32 :: Handle -> IO Float
-read_f32 h = fmap decode_f32 (L.hGet h 4)
+read_sample :: Handle -> IO Sample
+read_sample h = fmap (realToFrac . decode_f32) (L.hGet h 4)
 
 read_pstr :: Handle -> IO ASCII
 read_pstr h = do
@@ -131,9 +133,9 @@ read_graphdef h = do
        (error "read_graphdef: non unary graphdef file")
   name <- read_pstr h
   number_of_constants <- read_i16 h
-  constants <- replicateM number_of_constants (read_f32 h)
+  constants <- replicateM number_of_constants (read_sample h)
   number_of_control_defaults <- read_i16 h
-  control_defaults <- replicateM number_of_control_defaults (read_f32 h)
+  control_defaults <- replicateM number_of_control_defaults (read_sample h)
   number_of_controls <- read_i16 h
   controls <- replicateM number_of_controls (read_control h)
   number_of_ugens <- read_i16 h
@@ -178,6 +180,9 @@ encode_ugen (nm,r,i,o,s) =
              ,L.concat (map encode_input i)
              ,L.concat (map encode_i8 o)]
 
+encode_sample :: Sample -> L.ByteString
+encode_sample = encode_f32 . realToFrac
+
 encode_graphdef :: Graphdef -> L.ByteString
 encode_graphdef (Graphdef nm cs ks us) =
     let (ks_ctl,ks_def) = unzip ks
@@ -186,9 +191,9 @@ encode_graphdef (Graphdef nm cs ks us) =
                 ,encode_i16 1 -- number of graphs
                 ,encode_pstr nm
                 ,encode_i16 (length cs)
-                ,L.concat (map encode_f32 cs)
+                ,L.concat (map encode_sample cs)
                 ,encode_i16 (length ks_def)
-                ,L.concat (map encode_f32 ks_def)
+                ,L.concat (map encode_sample ks_def)
                 ,encode_i16 (length ks_ctl)
                 ,L.concat (map encode_control ks_ctl)
                 ,encode_i16 (length us)

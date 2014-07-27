@@ -55,30 +55,29 @@ ugenFoldr f st u =
 -- * Unit generator node constructors
 
 -- | Control input node constructor.
-control_f32 :: Rate -> Maybe Int -> String -> Float -> UGen
-control_f32 r ix nm d = Control_U (Control r ix nm d False Nothing)
+control_f64 :: Rate -> Maybe Int -> String -> Sample -> UGen
+control_f64 r ix nm d = Control_U (Control r ix nm d False Nothing)
 
 -- | Control input node constructor.
 --
 -- Note that if the name begins with a t_ prefix the control is /not/
 -- converted to a triggered control.  Please see 'tr_control'.
 control :: Rate -> String -> Double -> UGen
-control r nm = control_f32 r Nothing nm . realToFrac
+control r nm = control_f64 r Nothing nm -- . realToFrac
 
 -- | Variant of 'control' with meta data.
 meta_control :: Rate -> String -> Double -> C_Meta' Double -> UGen
 meta_control rt nm df meta =
-    let f = realToFrac
-        m = c_meta' realToFrac meta
-    in Control_U (Control rt Nothing nm (f df) False (Just m))
+    let m = c_meta' id meta
+    in Control_U (Control rt Nothing nm df False (Just m))
 
 -- | Triggered (kr) control input node constructor.
-tr_control_f32 :: Maybe Int -> String -> Float -> UGen
-tr_control_f32 ix nm d = Control_U (Control KR ix nm d True Nothing)
+tr_control_f64 :: Maybe Int -> String -> Sample -> UGen
+tr_control_f64 ix nm d = Control_U (Control KR ix nm d True Nothing)
 
 -- | Triggered (kr) control input node constructor.
 tr_control :: String -> Double -> UGen
-tr_control nm = tr_control_f32 Nothing nm . realToFrac
+tr_control nm = tr_control_f64 Nothing nm -- . realToFrac
 
 -- | Set indices at a list of controls.
 control_set :: [UGen] -> [UGen]

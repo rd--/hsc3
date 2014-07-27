@@ -57,13 +57,13 @@ reconstruct_c_str :: Node -> String
 reconstruct_c_str u =
     let l = node_label u
         c = node_c_value u
-    in printf "%s = constant (%f::Float)" l c
+    in printf "%s = constant (%f::Sample)" l c
 
 reconstruct_c_ugen :: Node -> UGen
 reconstruct_c_ugen u = constant (node_c_value u)
 
 -- | Discards index.
-reconstruct_k_rnd :: Node -> (Rate,String,Float)
+reconstruct_k_rnd :: Node -> (Rate,String,Sample)
 reconstruct_k_rnd u =
     let r = node_k_rate u
         n = node_k_name u
@@ -79,7 +79,7 @@ reconstruct_k_str u =
 reconstruct_k_ugen :: Node -> UGen
 reconstruct_k_ugen u =
     let (r,n,d) = reconstruct_k_rnd u
-    in control_f32 r Nothing n d
+    in control_f64 r Nothing n d
 
 ugen_qname :: String -> Special -> (String,String)
 ugen_qname nm (Special n) =

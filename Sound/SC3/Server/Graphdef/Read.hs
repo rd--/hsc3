@@ -7,7 +7,7 @@ import qualified Sound.SC3.UGen.Graph as G
 import qualified Sound.SC3.UGen.Rate as R
 import qualified Sound.SC3.UGen.Type as U
 
-mk_node_k :: Graphdef -> G.NodeId -> (Control,Float) -> G.Node
+mk_node_k :: Graphdef -> G.NodeId -> (Control,U.Sample) -> G.Node
 mk_node_k g z ((nm,ix),v) =
     let z' = graphdef_control_nid g z
         nm' = ascii_to_string nm

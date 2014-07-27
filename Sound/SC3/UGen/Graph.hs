@@ -44,14 +44,14 @@ type Edge = (FromPort,ToPort)
 
 -- | Type to represent nodes in unit generator graph.
 data Node = NodeC {node_id :: NodeId
-                  ,node_c_value :: Float}
+                  ,node_c_value :: Sample}
           | NodeK {node_id :: NodeId
                   ,node_k_rate :: Rate
                   ,node_k_index :: Maybe Int
                   ,node_k_name :: String
-                  ,node_k_default :: Float
+                  ,node_k_default :: Sample
                   ,node_k_type :: KType
-                  ,node_k_meta :: Maybe (C_Meta Float)}
+                  ,node_k_meta :: Maybe (C_Meta Sample)}
           | NodeU {node_id :: NodeId
                   ,node_u_rate :: Rate
                   ,node_u_name :: String
@@ -160,14 +160,14 @@ ktype r tr =
            DR -> error "ktype: DR control"
 
 -- | Predicate to determine if 'Node' is a constant with indicated /value/.
-find_c_p :: Float -> Node -> Bool
+find_c_p :: Sample -> Node -> Bool
 find_c_p x n =
     case n of
       NodeC _ y -> x == y
       _ -> error "find_c_p: non NodeC"
 
 -- | Insert a constant 'Node' into the 'Graph'.
-push_c :: Float -> Graph -> (Node,Graph)
+push_c :: Sample -> Graph -> (Node,Graph)
 push_c x g =
     let n = NodeC (nextId g) x
     in (n,g {constants = n : constants g

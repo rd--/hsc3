@@ -17,11 +17,17 @@ import Sound.SC3.UGen.Rate
 data UGenId = NoId | UId Int
               deriving (Eq,Show)
 
+-- | SC3 samples are 32-bit 'Float'.  hsc3 represents data as 64-bit
+-- 'Double'.  If 'UGen' values are used more generally (ie. see
+-- hsc3-forth) 'Float' may be too imprecise, ie. for representing time
+-- stamps.
+type Sample = Double
+
 -- | Constants.
 --
 -- > Constant 3 == Constant 3
 -- > (Constant 3 > Constant 1) == True
-data Constant = Constant {constantValue :: Float}
+data Constant = Constant {constantValue :: Sample}
                 deriving (Eq,Ord,Show)
 
 -- | Control meta-data.
@@ -46,9 +52,9 @@ c_meta' f (l,r,w,stp,u) = C_Meta (f l) (f r) w (f stp) u
 data Control = Control {controlOperatingRate :: Rate
                        ,controlIndex :: Maybe Int
                        ,controlName :: String
-                       ,controlDefault :: Float
+                       ,controlDefault :: Sample
                        ,controlTriggered :: Bool
-                       ,controlMeta :: Maybe (C_Meta Float)}
+                       ,controlMeta :: Maybe (C_Meta Sample)}
                deriving (Eq,Show)
 
 -- | Labels.
@@ -121,7 +127,7 @@ checkInput u =
 -- * Accessors
 
 -- | Value of 'Constant_U' 'Constant'.
-u_constant :: UGen -> Float
+u_constant :: UGen -> Sample
 u_constant u =
     case u of
       Constant_U (Constant n) -> n
@@ -237,7 +243,7 @@ proxify u =
       _ -> error "proxify: illegal ugen"
 
 -- | Construct proxied and multiple channel expanded UGen.
-mkUGen :: Maybe ([Float] -> Float) -> [Rate] -> Maybe Rate ->
+mkUGen :: Maybe ([Sample] -> Sample) -> [Rate] -> Maybe Rate ->
           String -> [UGen] -> Int -> Special -> UGenId -> UGen
 mkUGen cf rs r nm i o s z =
     let f h = let r' = fromMaybe (maximum (map rateOf h)) r
@@ -256,12 +262,12 @@ mkUGen cf rs r nm i o s z =
 -- * Operators
 
 -- | Operator UGen constructor.
-mkOperator :: ([Float] -> Float) -> String -> [UGen] -> Int -> UGen
+mkOperator :: ([Sample] -> Sample) -> String -> [UGen] -> Int -> UGen
 mkOperator f c i s =
     mkUGen (Just f) all_rates Nothing c i 1 (Special s) NoId
 
 -- | Unary math constructor with constant optimization.
-mkUnaryOperator :: Unary -> (Float -> Float) -> UGen -> UGen
+mkUnaryOperator :: Unary -> (Sample -> Sample) -> UGen -> UGen
 mkUnaryOperator i f a =
     let g [x] = f x
         g _ = error "mkUnaryOperator: non unary input"
@@ -276,8 +282,8 @@ mkUnaryOperator i f a =
 -- > o - 0 == o && 0 - o /= o
 -- > o / 1 == o && 1 / o /= o
 -- > o ** 1 == o && o ** 2 /= o
-mkBinaryOperator_optimize :: Binary -> (Float -> Float -> Float) ->
-                             (Either Float Float -> Bool) ->
+mkBinaryOperator_optimize :: Binary -> (Sample -> Sample -> Sample) ->
+                             (Either Sample Sample -> Bool) ->
                              UGen -> UGen -> UGen
 mkBinaryOperator_optimize i f o a b =
    let g [x,y] = f x y
@@ -291,7 +297,7 @@ mkBinaryOperator_optimize i f o a b =
    in fromMaybe (mkOperator g "BinaryOpUGen" [a, b] (fromEnum i)) r
 
 -- | Binary math constructor with constant optimization.
-mkBinaryOperator :: Binary -> (Float -> Float -> Float) ->
+mkBinaryOperator :: Binary -> (Sample -> Sample -> Sample) ->
                     UGen -> UGen -> UGen
 mkBinaryOperator i f a b =
    let g [x,y] = f x y
