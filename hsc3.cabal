@@ -128,6 +128,7 @@ Library
                    Sound.SC3.UGen.MachineListening
                    Sound.SC3.UGen.Math
                    Sound.SC3.UGen.MCE
+                   Sound.SC3.UGen.Meta
                    Sound.SC3.UGen.Monad
                    Sound.SC3.UGen.Name
                    Sound.SC3.UGen.Noise.ID
@@ -137,6 +138,7 @@ Library
                    Sound.SC3.UGen.Oscillator
                    Sound.SC3.UGen.Panner
                    Sound.SC3.UGen.Plain
+                   Sound.SC3.UGen.PP
                    Sound.SC3.UGen.Protect
                    Sound.SC3.UGen.Rate
                    Sound.SC3.UGen.Transform

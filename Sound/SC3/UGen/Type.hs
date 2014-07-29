@@ -99,12 +99,16 @@ data UGen = Constant_U Constant
 
 -- * Predicates
 
+-- | See into 'Constant_U'.
+un_constant :: UGen -> Maybe Constant
+un_constant u =
+    case u of
+      Constant_U c -> Just c
+      _ -> Nothing
+
 -- | Constant node predicate.
 isConstant :: UGen -> Bool
-isConstant u =
-    case u of
-      Constant_U _ -> True
-      _ -> False
+isConstant = isJust . un_constant
 
 -- | True if input is a sink 'UGen', ie. has no outputs.
 isSink :: UGen -> Bool
@@ -114,6 +118,16 @@ isSink u =
       MCE_U m -> all isSink (mceProxies m)
       MRG_U m -> isSink (mrgLeft m)
       _ -> False
+
+-- | See into 'Proxy_U'.
+un_proxy :: UGen -> Maybe Proxy
+un_proxy u =
+    case u of
+      Proxy_U p -> Just p
+      _ -> Nothing
+
+isProxy :: UGen -> Bool
+isProxy = isJust . un_proxy
 
 -- * Validators
 
@@ -215,6 +229,18 @@ mceBuild f i =
     case mceInputTransform i of
       Nothing -> f i
       Just i' -> MCE_U (MCE_Vector (map (mceBuild f) i'))
+
+-- | True if MCE is an immediate proxy for a multiple-out Primitive.
+mce_is_direct_proxy :: MCE UGen -> Bool
+mce_is_direct_proxy m =
+    case m of
+      MCE_Unit _ -> False
+      MCE_Vector v ->
+          let p = map un_proxy v
+              p' = catMaybes p
+          in all isJust p &&
+             length (nub (map proxySource p')) == 1 &&
+             map proxyIndex p' `isPrefixOf` [0..]
 
 -- | Determine the rate of a UGen.
 rateOf :: UGen -> Rate

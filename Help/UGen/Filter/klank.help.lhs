@@ -6,7 +6,7 @@
 
 The function klankSpec can help create the 'spec' entry.
 
-> let s = klankSpec [800,1071,1153,1723] [1,1,1,1] [1,1,1,1]
+> let s = klankSpec' [800,1071,1153,1723] [1,1,1,1] [1,1,1,1]
 > in audition (out 0 (klank (impulse AR 2 0 * 0.1) 1 0 1 s))
 
 A variant spec function takes non-UGen inputs

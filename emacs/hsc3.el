@@ -188,7 +188,7 @@
   (shell-command-on-region (point-min) (point-max) "hsc3-id-rewrite" nil t))
 
 (defun hsc3-interrupt-haskell ()
-  "Interrup haskell interpreter"
+  "Interrupt haskell interpreter"
   (interactive)
   (if (comint-check-proc inferior-haskell-buffer)
       (with-current-buffer inferior-haskell-buffer
@@ -201,7 +201,7 @@
   (hsc3-send-string "Sound.SC3.withSC3 Sound.SC3.reset"))
 
 (defun hsc3-stop ()
-  "Interrup haskell interpreter & reset scsynth"
+  "Interrupt haskell interpreter & reset scsynth"
   (interactive)
   (progn
     (hsc3-interrupt-haskell)
