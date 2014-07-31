@@ -141,11 +141,11 @@ checkInput u =
 -- * Accessors
 
 -- | Value of 'Constant_U' 'Constant'.
-u_constant :: UGen -> Sample
+u_constant :: UGen -> Maybe Sample
 u_constant u =
     case u of
-      Constant_U (Constant n) -> n
-      _ -> error "u_constant"
+      Constant_U (Constant n) -> Just n
+      _ -> Nothing
 
 -- * Constructors
 
@@ -279,7 +279,7 @@ mkUGen cf rs r nm i o s z =
                  then case cf of
                         Just cf' ->
                             if all isConstant h
-                            then constant (cf' (map u_constant h))
+                            then constant (cf' (mapMaybe u_constant h))
                             else u
                         Nothing -> u
                  else error ("mkUGen: rate restricted: " ++ show (r,rs,nm))

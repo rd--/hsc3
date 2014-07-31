@@ -64,6 +64,10 @@
    (format "Sound.SC3.Server.Help.viewServerHelp \"%s\""
            (thing-at-point 'symbol))))
 
+(defun hsc3-sc3-forth-pp () "Forth PP" (interactive)
+  (hsc3-send-string
+   (format "Sound.SC3.UGen.PP.ugen_graph_forth_pp False %s" (thing-at-point 'symbol))))
+
 (defun hsc3-ugen-summary ()
   "Lookup up the UGen at point in hsc3-db"
   (interactive)
@@ -304,6 +308,7 @@
   (define-key map [?\C-c ?\M-g] 'hsc3-draw-graph-m)
   (define-key map [?\C-c ?\C-j] 'hsc3-sc3-ugen-help)
   (define-key map [?\C-c ?\C-/] 'hsc3-sc3-server-help)
+  (define-key map [?\C-c ?\M-f] 'hsc3-sc3-forth-pp)
   (define-key map [?\C-c ?\C-i] 'hsc3-interrupt-haskell)
   (define-key map [?\C-c ?\C-k] 'hsc3-reset-scsynth)
   (define-key map [?\C-c ?\C-m] 'hsc3-run-main)
