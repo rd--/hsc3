@@ -106,6 +106,7 @@ meta_filters =
     ,("BBandStop",[0])
     ,("BHiPass",[0])
     ,("BHiShelf",[0])
+    ,("BinaryOpUGen",[0,1])
     ,("BLowPass",[0])
     ,("BLowShelf",[0])
     ,("BPF",[0])
@@ -193,6 +194,7 @@ meta_filters =
     ,("Trig1",[0])
     ,("TwoPole",[0])
     ,("TwoZero",[0])
+    ,("UnaryOpUGen",[0])
     ,("Wrap",[0])
     ,("WrapIndex",[0])
     -- SC3 Plugins
