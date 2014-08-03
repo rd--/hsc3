@@ -59,7 +59,7 @@ data Unary  = Neg
             | TriWindow
             | Ramp
             | SCurve
-              deriving (Eq,Show,Enum,Read)
+              deriving (Eq,Show,Enum,Bounded,Read)
 
 -- | Variant of 'reads' requiring exact match.
 reads_exact :: Read a => String -> Maybe a
@@ -122,7 +122,7 @@ data Binary = Add
             | FirstArg
             | RandRange
             | ExpRandRange
-              deriving (Eq,Show,Enum,Read)
+              deriving (Eq,Show,Enum,Bounded,Read)
 
 -- | Type-specialised 'reads_exact'.
 parse_binary :: String -> Maybe Binary

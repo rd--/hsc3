@@ -269,6 +269,9 @@ proxify u =
       _ -> error "proxify: illegal ugen"
 
 -- | Construct proxied and multiple channel expanded UGen.
+--
+-- cf = constant function, rs = rate set, r = rate, nm = name, i =
+-- inputs, o = outputs.
 mkUGen :: Maybe ([Sample] -> Sample) -> [Rate] -> Maybe Rate ->
           String -> [UGen] -> Int -> Special -> UGenId -> UGen
 mkUGen cf rs r nm i o s z =

@@ -167,6 +167,7 @@ meta_filters =
     ,("OnePole",[0])
     ,("OneZero",[0])
     ,("Out",[1])
+    ,("Pan2",[1])
     ,("Peak",[0])
     ,("PitchShift",[0])
     ,("Pluck",[0])
