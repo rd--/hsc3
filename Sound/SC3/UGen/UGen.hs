@@ -2,6 +2,7 @@
 module Sound.SC3.UGen.UGen where
 
 import qualified Data.Char as C {- base -}
+import Data.Maybe {- base -}
 import Data.List {- base -}
 
 import Sound.SC3.UGen.Identifier
@@ -140,6 +141,37 @@ mceTranspose = mce . map mce . transpose . map mceChannels . mceChannels
 -- | Collapse mce by summing (see also mix and mixN).
 mceSum :: UGen -> UGen
 mceSum = sum . mceChannels
+
+-- * Transform
+
+-- | Separate first list element.
+--
+-- > sep_first "astring" == Just ('a',"string")
+sep_first :: [t] -> Maybe (t,[t])
+sep_first l =
+    case l of
+      e:l' -> Just (e,l')
+      _ -> Nothing
+
+-- | Separate last list element.
+--
+-- > sep_last "stringb" == Just ("string",'b')
+sep_last :: [t] -> Maybe ([t], t)
+sep_last =
+    let f (e,l) = (reverse l,e)
+    in fmap f . sep_first . reverse
+
+-- | Given /unmce/ function make halt mce transform.
+halt_mce_transform' :: (a -> [a]) -> [a] -> [a]
+halt_mce_transform' f l =
+    let (l',e) = fromMaybe (error "halt_mce_transform: null?") (sep_last l)
+    in l' ++ f e
+
+-- | The halt MCE transform, ie. lift channels of last input into list.
+--
+-- > halt_mce_transform [1,2,mce2 3 4] == [1,2,3,4]
+halt_mce_transform :: [UGen] -> [UGen]
+halt_mce_transform = halt_mce_transform' mceChannels
 
 -- * Multiple root graphs
 

@@ -1,8 +1,11 @@
--- | Enumerations of the unary and binary math unit generators.
+-- | Enumerations of the unary and binary math unit generators.  Names
+-- that conflict with existing names have a @_@ suffix.
 module Sound.SC3.UGen.Operator where
 
-import Data.Maybe
-import Data.List
+import Data.Maybe {- base -}
+import Data.List {- base -}
+
+-- * Unary
 
 -- | Enumeration of @SC3@ unary operator UGens.
 data Unary  = Neg
@@ -42,9 +45,9 @@ data Unary  = Neg
             | SinH
             | CosH
             | TanH
-            | Rand
+            | Rand_ -- UGen
             | Rand2
-            | LinRand
+            | LinRand_ -- UGen
             | BiLinRand
             | Sum3Rand
             | Distort
@@ -61,30 +64,52 @@ data Unary  = Neg
             | SCurve
               deriving (Eq,Show,Enum,Bounded,Read)
 
--- | Variant of 'reads' requiring exact match.
-reads_exact :: Read a => String -> Maybe a
-reads_exact s =
-    case reads s of
-      [(r,"")] -> Just r
-      _ -> Nothing
-
 -- | Type-specialised 'reads_exact'.
 parse_unary :: String -> Maybe Unary
 parse_unary = reads_exact
 
+-- | Table of symbolic names for standard unary operators.
+unaryTable :: [(Unary,String)]
+unaryTable = [] -- (Neg,"-")
+
+-- | Lookup possibly symbolic name for standard unary operators.
+unaryName :: Int -> String
+unaryName n =
+    let e = toEnum n
+    in fromMaybe (show e) (lookup e unaryTable)
+
+-- | Given name of unary operator derive index.
+--
+-- > mapMaybe unaryIndex ["Neg","Cubed"] == [0,13]
+-- > unaryIndex "SinOsc" == Nothing
+unaryIndex :: String -> Maybe Int
+unaryIndex nm =
+    let ix = rlookup nm unaryTable
+        ix' = parse_unary nm
+    in fmap fromEnum (maybe ix' Just ix)
+
+-- | 'isJust' of 'unaryIndex'.
+--
+-- > map is_uop (words "Abs MIDICPS Neg")
+-- > map is_uop (words "- Rand")
+is_unary :: String -> Bool
+is_unary = isJust . unaryIndex
+
+-- * Binary
+
 -- | Enumeration of @SC3@ unary operator UGens.
-data Binary = Add
-            | Sub
-            | Mul
+data Binary = Add -- 0
+            | Sub -- 1
+            | Mul -- 2
             | IDiv
-            | FDiv
-            | Mod
-            | EQ_
-            | NE
-            | LT_
-            | GT_
-            | LE
-            | GE
+            | FDiv -- 4
+            | Mod -- 5
+            | EQ_ -- 6
+            | NE -- 7
+            | LT_ -- 8
+            | GT_ -- 9
+            | LE -- 10
+            | GE -- 11
             | Min
             | Max
             | BitAnd
@@ -98,7 +123,7 @@ data Binary = Add
             | Atan2
             | Hypot
             | Hypotx
-            | Pow
+            | Pow -- 25
             | ShiftLeft
             | ShiftRight
             | UnsignedShift
@@ -128,54 +153,68 @@ data Binary = Add
 parse_binary :: String -> Maybe Binary
 parse_binary = reads_exact
 
--- | Table of symbolic names for standard unary operators.
-unaryTable :: [(Int,String)]
-unaryTable = [(0,"-")]
-
--- | Lookup possibly symbolic name for standard unary operators.
-unaryName :: Int -> String
-unaryName n =
-    let s = show (toEnum n :: Unary)
-    in fromMaybe s (lookup n unaryTable)
-
 -- | Table of symbolic names for standard binary operators.
-binaryTable :: [(Int,String)]
+binaryTable :: [(Binary,String)]
 binaryTable =
-    [(0,"+")
-    ,(1,"-")
-    ,(2,"*")
-    ,(4,"/")
-    ,(5,"%")
-    ,(6,"==")
-    ,(7,"/=")
-    ,(8,"<")
-    ,(9,">")
-    ,(10,"<=")
-    ,(11,">=")
-    ,(25,"**")]
+    [(Add,"+")
+    ,(Sub,"-")
+    ,(Mul,"*")
+    ,(FDiv,"/")
+    ,(Mod,"%")
+    ,(EQ_,"==")
+    ,(NE,"/=")
+    ,(LT_,"<")
+    ,(GT_,">")
+    ,(LE,"<=")
+    ,(GE,">=")
+    ,(Pow,"**")]
 
 -- | Lookup possibly symbolic name for standard binary operators.
 --
 -- > map binaryName [1,2,8] == ["-","*","<"]
 binaryName :: Int -> String
 binaryName n =
-    let s = show (toEnum n :: Binary)
-    in fromMaybe s (lookup n binaryTable)
-
--- | Reverse 'lookup'.
-rlookup :: Eq b => b -> [(a,b)] -> Maybe a
-rlookup x = fmap fst . find ((== x) . snd)
+    let e = toEnum n
+    in fromMaybe (show e) (lookup e binaryTable)
 
 -- | Given name of binary operator derive index.
 --
 -- > mapMaybe binaryIndex ["*","Mul","Ring1"] == [2,2,30]
 -- > binaryIndex "SinOsc" == Nothing
 binaryIndex :: String -> Maybe Int
-binaryIndex nm = maybe (fmap fromEnum (parse_binary nm)) Just (rlookup nm binaryTable)
+binaryIndex nm =
+    let ix = rlookup nm binaryTable
+        ix' = parse_binary nm
+    in fmap fromEnum (maybe ix' Just ix)
 
--- | Given name of unary operator derive index.
+-- | 'isJust' of 'binaryIndex'.
 --
--- > mapMaybe unaryIndex ["-","Neg","Cubed"] == [0,0,13]
--- > unaryIndex "SinOsc" == Nothing
-unaryIndex :: String -> Maybe Int
-unaryIndex nm = maybe (fmap fromEnum (parse_unary nm)) Just (rlookup nm unaryTable)
+-- > map is_binary (words "== > % Trunc Max")
+is_binary :: String -> Bool
+is_binary = isJust . binaryIndex
+
+-- * Operator
+
+-- | Order of lookup: binary then unary.
+--
+-- > map resolve_operator (words "+ - Add Sub Neg")
+resolve_operator :: String -> (String,Maybe Int)
+resolve_operator nm =
+    case binaryIndex nm of
+      Just sp -> ("BinaryOpUGen",Just sp)
+      Nothing -> case unaryIndex nm of
+                   Just sp -> ("UnaryOpUGen",Just sp)
+                   _ -> (nm,Nothing)
+
+-- * UTIL
+
+-- | Variant of 'reads' requiring exact match.
+reads_exact :: Read a => String -> Maybe a
+reads_exact s =
+    case reads s of
+      [(r,"")] -> Just r
+      _ -> Nothing
+
+-- | Reverse 'lookup'.
+rlookup :: Eq b => b -> [(a,b)] -> Maybe a
+rlookup x = fmap fst . find ((== x) . snd)

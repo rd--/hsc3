@@ -73,3 +73,7 @@ ugen_optimise_const_operator =
                     _ -> u
               _ -> u
     in ugenTraverse f
+
+constant_opt :: UGen -> Maybe Sample
+constant_opt = u_constant . ugen_optimise_ir_rand
+

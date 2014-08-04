@@ -5,6 +5,7 @@ import Data.Bits {- base -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
 import System.Random {- random -}
+import qualified Text.Read as R {- base -}
 
 import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.MCE
@@ -97,7 +98,15 @@ data UGen = Constant_U Constant
           | MRG_U MRG
             deriving (Eq,Show)
 
--- * Predicates
+-- * Parser
+
+parse_constant :: String -> Maybe UGen
+parse_constant s =
+    let d :: Maybe Double
+        d = R.readMaybe s
+    in fmap constant d
+
+-- * Accessors
 
 -- | See into 'Constant_U'.
 un_constant :: UGen -> Maybe Constant
@@ -105,6 +114,12 @@ un_constant u =
     case u of
       Constant_U c -> Just c
       _ -> Nothing
+
+-- | Value of 'Constant_U' 'Constant'.
+u_constant :: UGen -> Maybe Sample
+u_constant = fmap constantValue . un_constant
+
+-- * Predicates
 
 -- | Constant node predicate.
 isConstant :: UGen -> Bool
@@ -137,15 +152,6 @@ checkInput u =
     if isSink u
     then error ("checkInput: " ++ show u)
     else u
-
--- * Accessors
-
--- | Value of 'Constant_U' 'Constant'.
-u_constant :: UGen -> Maybe Sample
-u_constant u =
-    case u of
-      Constant_U (Constant n) -> Just n
-      _ -> Nothing
 
 -- * Constructors
 

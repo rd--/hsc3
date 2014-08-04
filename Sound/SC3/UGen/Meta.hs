@@ -190,6 +190,8 @@ meta_filters =
     ,("Shaper",[1])
     ,("Slew",[0])
     ,("Stepper",[0])
+    ,("Sum3",[0,1,2])
+    ,("Sum4",[0,1,2,3])
     ,("Sweep",[0])
     ,("TDelay",[0])
     ,("Timer",[0])
