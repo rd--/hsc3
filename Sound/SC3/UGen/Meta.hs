@@ -2,6 +2,8 @@ module Sound.SC3.UGen.Meta where
 
 import Data.Maybe {- base -}
 
+import Sound.SC3.UGen.Rate {- hsc3 -}
+
 -- | Indices are sclang indices.
 meta_nc_input :: [(String,Int)]
 meta_nc_input =
@@ -127,6 +129,7 @@ meta_filters =
     ,("DelayC",[0])
     ,("DelayL",[0])
     ,("DelayN",[0])
+    ,("Demand",[0])
     ,("FOS",[0])
     ,("Fold",[0])
     ,("Formlet",[0])
@@ -156,6 +159,7 @@ meta_filters =
     ,("LeakDC",[0])
     ,("Limiter",[0])
     ,("LinExp",[0])
+    ,("LinPan2",[0])
     ,("LocalOut",[0])
     ,("MantissaMask",[0])
     ,("Median",[1])
@@ -167,7 +171,7 @@ meta_filters =
     ,("OnePole",[0])
     ,("OneZero",[0])
     ,("Out",[1])
-    ,("Pan2",[1])
+    ,("Pan2",[0])
     ,("Peak",[0])
     ,("PitchShift",[0])
     ,("Pluck",[0])
@@ -194,8 +198,11 @@ meta_filters =
     ,("Sum4",[0,1,2,3])
     ,("Sweep",[0])
     ,("TDelay",[0])
+    ,("TExpRand",[2])
     ,("Timer",[0])
+    ,("TIRand",[2])
     ,("ToggleFF",[0])
+    ,("TRand",[2])
     ,("Trig",[0])
     ,("Trig1",[0])
     ,("TwoPole",[0])
@@ -210,6 +217,14 @@ meta_filters =
     ,("DiodeRingMod",[0])
     ,("Greyhole",[0])]
 
+meta_fixed_rate :: [(String,Rate)]
+meta_fixed_rate =
+    [("ExpRand",IR)
+    ,("IRand",IR)
+    ,("LinRand",IR)
+    ,("NRand",IR)
+    ,("Rand",IR)]
+
 -- | nondet = non-deterministic.
 meta_nondet :: [String]
 meta_nondet =
@@ -222,6 +237,7 @@ meta_nondet =
     ,"Dust"
     ,"Dust2"
     ,"Dwrand"
+    ,"Dxrand"
     ,"ExpRand"
     ,"Gendy1"
     ,"Gendy2"
@@ -253,8 +269,7 @@ meta_nondet =
     ]
 
 meta_demand :: [String]
-meta_demand =
-    ["DNoiseRing"]
+meta_demand = words "Dbrown Dbufrd Dbufwr Dgeom Dibrown Diwhite DNoiseRing Dpoll Drand Dreset Dseq Dser Dseries Dshuf Dstutter Dswitch Dswitch1 Dunique Duty Dwhite Dwrand Dxrand"
 
 -- * Predicates
 
