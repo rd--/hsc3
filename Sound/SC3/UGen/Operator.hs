@@ -60,7 +60,7 @@ data Unary  = Neg
             | HanWindow
             | WelchWindow
             | TriWindow
-            | Ramp
+            | Ramp_ -- UGen
             | SCurve
               deriving (Eq,Show,Enum,Bounded,Read)
 

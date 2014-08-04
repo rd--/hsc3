@@ -22,7 +22,7 @@ rate_ord r =
       IR -> 0
       KR -> 1
       AR -> 2
-      DR -> 3
+      DR -> 3 -- ?
 
 -- | Color identifiers for each 'Rate'.
 rate_color :: Rate -> String
