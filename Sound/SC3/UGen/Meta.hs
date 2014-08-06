@@ -222,7 +222,7 @@ meta_filters =
     ,("TwoZero",[0])
     ,("UnaryOpUGen",[0])
     ,("Wrap",[0])
-    ,("WrapIndex",[0])
+    ,("WrapIndex",[1])
     ,("XOut",[2])
     -- SC3 Plugins
     ,("ComplexRes",[0])
@@ -241,6 +241,7 @@ meta_fixed_rate =
     ,("GrainIn",AR)
     ,("GrainSin",AR)
     ,("IRand",IR)
+    ,("K2A",AR)
     ,("LinRand",IR)
     ,("LocalBuf",IR)
     ,("NRand",IR)
