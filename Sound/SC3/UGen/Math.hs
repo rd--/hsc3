@@ -54,8 +54,11 @@ sc3_gt = sc3_comparison (>)
 sc3_gte :: (Num n, Ord n) => n -> n -> n
 sc3_gte = sc3_comparison (>=)
 
+sc3_round :: (RealFrac n, Ord n) => n -> n -> n
+sc3_round a b = if b == 0 then a else sc3_floor ((a / b) + 0.5) * b
+
 -- | Association table for 'Binary' to haskell function implementing operator.
-binop_hs_tbl :: (Real n,Floating n,Ord n) => [(Binary,n -> n -> n)]
+binop_hs_tbl :: (Real n,Floating n,RealFrac n,Ord n) => [(Binary,n -> n -> n)]
 binop_hs_tbl =
     [(Add,(+))
     ,(Sub,(-))
@@ -72,11 +75,18 @@ binop_hs_tbl =
     ,(Mul,(*))
     ,(Pow,(**))
     ,(Min,min)
-    ,(Max,max)]
+    ,(Max,max)
+    ,(Round,sc3_round)]
 
 -- | 'lookup' 'binop_hs_tbl' via 'toEnum'.
-binop_special_hs :: (Real n,Floating n, Ord n) => Int -> Maybe (n -> n -> n)
+binop_special_hs :: (Real n,RealFrac n,Floating n, Ord n) => Int -> Maybe (n -> n -> n)
 binop_special_hs z = lookup (toEnum z) binop_hs_tbl
+
+sc3_ceil :: RealFrac n => n -> n
+sc3_ceil = fromInteger . ceiling
+
+sc3_floor :: RealFrac n => n -> n
+sc3_floor = fromInteger . floor
 
 -- | Association table for 'Unary' to haskell function implementing operator.
 uop_hs_tbl :: (RealFrac n,Floating n,Ord n) => [(Unary,n -> n)]
@@ -84,14 +94,17 @@ uop_hs_tbl =
     [(Neg,negate)
     ,(Not,\z -> if z > 0 then 0 else 1)
     ,(Abs,abs)
-    ,(Ceil,fromInteger . ceiling)
-    ,(Floor,fromInteger . floor)
+    ,(Ceil,sc3_ceil)
+    ,(Floor,sc3_floor)
     ,(Squared,\z -> z * z)
     ,(Cubed,\z -> z * z * z)
     ,(Sqrt,sqrt)
     ,(Recip,recip)
     ,(MIDICPS,midiCPS')
-    ,(CPSMIDI,cpsMIDI')]
+    ,(CPSMIDI,cpsMIDI')
+    ,(Sin,sin)
+    ,(Cos,cos)
+    ,(Tan,tan)]
 
 -- | 'lookup' 'uop_hs_tbl' via 'toEnum'.
 uop_special_hs :: (RealFrac n,Floating n, Ord n) => Int -> Maybe (n -> n)

@@ -65,6 +65,7 @@ meta_flattens_mce =
     ,("EnvGen",5)
     ,("Klang",2)
     ,("Klank",4)
+    ,("LocalIn",0) -- defaults
     ,("LocalOut",0)
     ,("OffsetOut",1)
     ,("Out",1)
@@ -108,7 +109,6 @@ meta_filters =
     ,("BBandStop",[0])
     ,("BHiPass",[0])
     ,("BHiShelf",[0])
-    ,("BinaryOpUGen",[0,1])
     ,("BLowPass",[0])
     ,("BLowShelf",[0])
     ,("BPF",[0])
@@ -116,7 +116,10 @@ meta_filters =
     ,("BPeakEQ",[0])
     ,("BRF",[0])
     ,("BRZ2",[0])
+    ,("BinaryOpUGen",[0,1])
+    ,("CheckBadValues",[0])
     ,("Clip",[0])
+    ,("CoinGate",[1])
     ,("CombC",[0])
     ,("CombL",[0])
     ,("CombN",[0])
@@ -130,6 +133,7 @@ meta_filters =
     ,("DelayL",[0])
     ,("DelayN",[0])
     ,("Demand",[0])
+    ,("ExpRand",[0,1])
     ,("FOS",[0])
     ,("Fold",[0])
     ,("Formlet",[0])
@@ -142,6 +146,7 @@ meta_filters =
     ,("HPZ2",[0])
     ,("Hasher",[0])
     ,("Hilbert",[0])
+    ,("IRand",[0,1])
     ,("InRange",[0])
     ,("Integrator",[0])
     ,("Klank",[0])
@@ -160,6 +165,7 @@ meta_filters =
     ,("Limiter",[0])
     ,("LinExp",[0])
     ,("LinPan2",[0])
+    ,("LinRand",[0,1])
     ,("LocalOut",[0])
     ,("MantissaMask",[0])
     ,("Median",[1])
@@ -167,44 +173,51 @@ meta_filters =
     ,("MoogFF",[0])
     ,("MostChange",[0,1])
     ,("MulAdd",[0])
+    ,("NRand",[0,1,2])
     ,("Normalizer",[0])
     ,("OnePole",[0])
     ,("OneZero",[0])
     ,("Out",[1])
     ,("Pan2",[0])
     ,("Peak",[0])
+    ,("PeakFollower",[0])
     ,("PitchShift",[0])
     ,("Pluck",[0])
+    ,("Poll",[1])
     ,("PulseCount",[0])
     ,("PulseDivider",[0])
-    ,("ReplaceOut",[1])
     ,("RHPF",[0])
     ,("RLPF",[0])
     ,("Ramp",[0])
+    ,("Rand",[0,1])
+    ,("ReplaceOut",[1])
     ,("Resonz",[0])
     ,("Ringz",[0])
+    ,("Rotate2",[0,1])
     ,("RunningMax",[0])
     ,("RunningMin",[0])
     ,("RunningSum",[0])
     ,("SOS",[0])
-    ,("Select",[0])
+    ,("Select",[0,1])
     ,("SendReply",[0])
     ,("SendTrig",[0])
     ,("SetResetFF",[0])
     ,("Shaper",[1])
     ,("Slew",[0])
+    ,("Slope",[0])
     ,("Stepper",[0])
     ,("Sum3",[0,1,2])
     ,("Sum4",[0,1,2,3])
     ,("Sweep",[0])
     ,("TDelay",[0])
     ,("TExpRand",[2])
-    ,("Timer",[0])
     ,("TIRand",[2])
-    ,("ToggleFF",[0])
     ,("TRand",[2])
+    ,("Timer",[0])
+    ,("ToggleFF",[0])
     ,("Trig",[0])
     ,("Trig1",[0])
+    ,("TWindex",[0])
     ,("TwoPole",[0])
     ,("TwoZero",[0])
     ,("UnaryOpUGen",[0])
@@ -217,13 +230,33 @@ meta_filters =
     ,("DiodeRingMod",[0])
     ,("Greyhole",[0])]
 
+-- | Some of the fixed rate UGens are also at filter...
 meta_fixed_rate :: [(String,Rate)]
 meta_fixed_rate =
-    [("ExpRand",IR)
+    [("ControlDur",IR)
+    ,("ControlRate",IR)
+    ,("ExpRand",IR)
+    ,("GrainBuf",AR)
+    ,("GrainFM",AR)
+    ,("GrainIn",AR)
+    ,("GrainSin",AR)
     ,("IRand",IR)
     ,("LinRand",IR)
+    ,("LocalBuf",IR)
     ,("NRand",IR)
-    ,("Rand",IR)]
+    ,("NumAudioBuses",IR)
+    ,("NumBuffers",IR)
+    ,("NumControlBuses",IR)
+    ,("NumInputBuses",IR)
+    ,("NumOutputBuses",IR)
+    ,("NumRunningSynths",IR)
+    ,("RadiansPerSample",IR)
+    ,("Rand",IR)
+    ,("SampleDur",IR)
+    ,("SampleRate",IR)
+    ,("SetBuf",IR)
+    ,("SubsampleOffset",IR)
+    ,("Warp1",AR)]
 
 -- | nondet = non-deterministic.
 meta_nondet :: [String]
@@ -268,8 +301,9 @@ meta_nondet =
     ,"WhiteNoise"
     ]
 
+-- | This is unnecessary, it's generated from 'u_is_demand_rate'.
 meta_demand :: [String]
-meta_demand = words "Dbrown Dbufrd Dbufwr Dgeom Dibrown Diwhite DNoiseRing Dpoll Drand Dreset Dseq Dser Dseries Dshuf Dstutter Dswitch Dswitch1 Dunique Duty Dwhite Dwrand Dxrand"
+meta_demand = ["Dbrown","Dbufrd","Dbufwr","Dgeom","Dibrown","Diwhite","Donce","Dpoll","Drand","Dreset","Dseq","Dser","Dseries","Dshuf","Dstutter","Dswitch","Dswitch1","Dunique","Dwhite","Dwrand","Dxrand"]
 
 -- * Predicates
 

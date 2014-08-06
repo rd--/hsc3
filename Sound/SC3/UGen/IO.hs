@@ -11,8 +11,12 @@ in' :: Int -> Rate -> UGen -> UGen
 in' nc r bus = mkOsc r "In" [bus] nc
 
 -- | Define and read from buses local to a synthesis node.
-localIn :: Int -> Rate -> UGen
-localIn nc r = mkOsc r "LocalIn" [] nc
+localIn :: Int -> Rate -> UGen -> UGen
+localIn nc r def = mkOscMCE r "LocalIn" [] def nc
+
+-- | Variant with defaults of zero.
+localIn' :: Int -> Rate -> UGen
+localIn' nc r = localIn nc r (mce (replicate nc 0))
 
 -- | Control rate bus input with lag.
 lagIn :: Int -> UGen -> UGen -> UGen
