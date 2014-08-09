@@ -215,9 +215,7 @@ find_u_p :: UGenParts -> Node -> Bool
 find_u_p (r,n,i,o,s,d) nd =
     case nd of
       NodeU _ r' n' i' o' s' d' ->
-          if d == LinearId || d' == LinearId
-          then False
-          else r == r' && n == n' && i == i' && o == o' && s == s' && d == d'
+          r == r' && n == n' && i == i' && o == o' && s == s' && d == d'
       _ ->  error "find_u_p"
 
 -- | Insert a /primitive/ 'NodeU' into the 'Graph'.

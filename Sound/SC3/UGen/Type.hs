@@ -16,7 +16,7 @@ import Sound.SC3.UGen.Rate
 -- * Basic types
 
 -- | Data type for internalised identifier at 'UGen'.
-data UGenId = NoId | LinearId | UId Int
+data UGenId = NoId | UId Int
               deriving (Eq,Show)
 
 -- | SC3 samples are 32-bit 'Float'.  hsc3 represents data as 64-bit
@@ -77,13 +77,7 @@ data Primitive = Primitive {ugenRate :: Rate
                            ,ugenOutputs :: [Output]
                            ,ugenSpecial :: Special
                            ,ugenId :: UGenId}
-                 deriving (Show)
-
-instance Eq Primitive where
-    Primitive rt nm inp outp sp k == Primitive rt' nm' inp' outp' sp' k' =
-        if k == LinearId || k' == LinearId
-        then False
-        else rt == rt' && nm == nm' && inp == inp' && outp == outp' && sp == sp'
+                 deriving (Eq,Show)
 
 -- | Proxy to multiple channel input.
 data Proxy = Proxy {proxySource :: Primitive
