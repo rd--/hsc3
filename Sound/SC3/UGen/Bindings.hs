@@ -494,16 +494,16 @@ formlet :: UGen -> UGen -> UGen -> UGen -> UGen
 formlet in_ freq attacktime decaytime = mkUGen Nothing [AR,KR] (Right [0]) "Formlet" [in_,freq,attacktime,decaytime] Nothing 1 (Special 0) NoId
 
 -- | When triggered, frees a node.
-free :: Rate -> UGen -> UGen -> UGen
-free rate trig_ id_ = mkUGen Nothing [KR] (Left rate) "Free" [trig_,id_] Nothing 1 (Special 0) NoId
+free :: UGen -> UGen -> UGen
+free trig_ id_ = mkUGen Nothing [KR] (Right [0]) "Free" [trig_,id_] Nothing 1 (Special 0) NoId
 
 -- | When triggered, free enclosing synth.
-freeSelf :: Rate -> UGen -> UGen
-freeSelf rate in_ = mkUGen Nothing [KR] (Left rate) "FreeSelf" [in_] Nothing 1 (Special 0) NoId
+freeSelf :: UGen -> UGen
+freeSelf in_ = mkUGen Nothing [KR] (Left KR) "FreeSelf" [in_] Nothing 1 (Special 0) NoId
 
 -- | Free the enclosing synth when a UGen is finished
-freeSelfWhenDone :: Rate -> UGen -> UGen
-freeSelfWhenDone rate src = mkUGen Nothing [KR] (Left rate) "FreeSelfWhenDone" [src] Nothing 1 (Special 0) NoId
+freeSelfWhenDone :: UGen -> UGen
+freeSelfWhenDone src = mkUGen Nothing [KR] (Left KR) "FreeSelfWhenDone" [src] Nothing 1 (Special 0) NoId
 
 -- | A reverb
 freeVerb :: UGen -> UGen -> UGen -> UGen -> UGen
