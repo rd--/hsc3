@@ -1,15 +1,13 @@
 > Sound.SC3.UGen.Help.viewSC3Help "EnvGen"
 > Sound.SC3.UGen.DB.ugenSummary "EnvGen"
 
-# SC3
-SC3 reorders inputs so that the envelope is the first argument.
-
 The following envelope constructors are provided: envPerc, envSine,
 envCoord, envTrapezoid, and envLinen.
 
 > import Sound.SC3.ID
 
 env_circle joins the end of the envelope to the start
+
 > let {e = Envelope [6000,700,100] [1,1] [EnvExp,EnvLin] Nothing Nothing
 >     ;f = envGen KR 1 1 0 1 DoNothing (env_circle e 0 EnvLin)
 >     ;o = sinOsc AR f 0 * 0.1 + impulse AR 1 0}

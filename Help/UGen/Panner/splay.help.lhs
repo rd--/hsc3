@@ -3,7 +3,7 @@ splay inArray spread=1 level=1 center=0 levelComp=true
 
 splay is a composite UGen.
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 mouse control
 

@@ -14,12 +14,14 @@ import Sound.SC3.UGen.Rate {- hsc3 -}
 -- > toSC3Name "sinOsc" == "SinOsc"
 -- > toSC3Name "lfSaw" == "LFSaw"
 -- > toSC3Name "pv_Copy" == "PV_Copy"
--- > map toSC3Name ["bpf","fft","tpv"] == ["BPF","FFT","TPV"]
+-- > map toSC3Name ["bpf","fft","tpv","out"]
 toSC3Name :: String -> String
 toSC3Name nm =
     case nm of
+      'l':'f':'d':nm' -> "LFD" ++ nm'
       'l':'f':nm' -> "LF" ++ nm'
       'p':'v':'_':nm' -> "PV_" ++ nm'
+      "out" -> "Out"
       p:q -> if all isLower nm && length nm <= 3
              then map toUpper nm
              else toUpper p : q
@@ -31,9 +33,12 @@ toSC3Name nm =
 -- > in map fromSC3Name nm == ["sinOsc","lfSaw","pv_Copy"]
 --
 -- > map fromSC3Name ["BPF","FFT","TPV"] == ["bpf","fft","tpv"]
+--
+-- > map fromSC3Name (words "HPZ1 RLPF")
 fromSC3Name :: String -> String
 fromSC3Name nm =
     case nm of
+      'L':'F':'D':nm' -> "lfd"++nm'
       'L':'F':nm' -> "lf"++nm'
       'P':'V':'_':nm' -> "pv_"++nm'
       p:q -> if all isUpper nm && length nm <= 3
@@ -65,8 +70,8 @@ sc3_name_edges =
 
 -- | Convert from SC3 name to Lisp style name.
 --
--- > let {s = words "SinOsc LFSaw FFT PV_Add AllpassN BHiPass BinaryOpUGen"
--- >     ;l = ["sin-osc","lf-saw","fft","pv-add","allpass-n","b-hi-pass","binary-op-ugen"]}
+-- > let {s = words "SinOsc LFSaw FFT PV_Add AllpassN BHiPass BinaryOpUGen HPZ1 RLPF"
+-- >     ;l = ["sin-osc","lf-saw","fft","pv-add","allpass-n","b-hi-pass","binary-op-ugen","hpz1","rlpf"]}
 -- > in map sc3_name_to_lisp_name s == l
 sc3_name_to_lisp_name :: String -> String
 sc3_name_to_lisp_name s =

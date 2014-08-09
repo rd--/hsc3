@@ -52,6 +52,7 @@ ugen_optimise_ir_rand =
 -- > u 5 >* u 4 == u 1
 -- > u 5 <=* u 5 == u 1
 -- > abs (u (-1)) == u 1
+-- > u 5 / u 2 == u 2.5
 --
 -- > let {u = lfPulse AR (2 ** rand 'α' (-9) 1) 0 0.5
 -- >     ;u' = ugen_optimise_ir_rand u}

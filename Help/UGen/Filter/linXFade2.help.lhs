@@ -1,8 +1,6 @@
 > Sound.SC3.UGen.Help.viewSC3Help "LinXFade2"
 > Sound.SC3.UGen.DB.ugenSummary "LinXFade2"
 
-#sc3: psuedo level input (multiplier)
-
 > import Sound.SC3.ID
 
 > let o = linXFade2 (saw AR 440) (sinOsc AR 440 0) (lfTri KR 0.1 0) * 0.1

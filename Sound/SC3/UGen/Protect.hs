@@ -20,6 +20,7 @@ atUGenId :: (Int -> Int) -> UGenId -> UGenId
 atUGenId f z =
     case z of
       NoId -> NoId
+      LinearId -> LinearId
       UId i -> UId (f i)
 
 -- | Add 'idHash' of /e/ to all 'Primitive_U' at /u/.

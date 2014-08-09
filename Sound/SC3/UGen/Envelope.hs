@@ -4,10 +4,7 @@ module Sound.SC3.UGen.Envelope where
 import Data.List
 import Data.Maybe
 import Sound.SC3.UGen.Enum
-import Sound.SC3.UGen.Math
-import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
-import Sound.SC3.UGen.UGen
 
 -- * Envelope
 
@@ -200,84 +197,10 @@ env_circle (Envelope l t c rn _) tc cc =
 
 -- * UGen
 
--- | Segment based envelope generator.
-envGen :: Rate -> UGen -> UGen -> UGen -> UGen -> DoneAction -> Envelope UGen -> UGen
-envGen r gate lvl bias scale act e =
+envelope_to_ugen :: Envelope UGen -> UGen
+envelope_to_ugen =
     let err = error "envGen: bad Envelope"
-        z = fromMaybe err (envelope_sc3_array e)
-        i = [gate, lvl, bias, scale, from_done_action act] ++ z
-    in mkOsc r "EnvGen" i 1
-
--- | Envelope generator for polling values from an Env
-iEnvGen :: Rate -> UGen -> Envelope UGen -> UGen
-iEnvGen r ix e =
-    let err = error "iEnvGen: bad Envelope"
-        z = fromMaybe err (envelope_sc3_ienvgen_array e)
-        i = ix : z
-    in mkOscR [AR,KR] r "IEnvGen" i 1
-
--- | Line generator.
-line :: Rate -> UGen -> UGen -> UGen -> DoneAction -> UGen
-line r start end dur act = mkOsc r "Line" [start, end, dur, from_done_action act] 1
-
--- | Exponential line generator.
-xLine :: Rate -> UGen -> UGen -> UGen -> DoneAction -> UGen
-xLine r start end dur act = mkOsc r "XLine" [start, end, dur, from_done_action act] 1
-
--- | Free node on trigger.
-freeSelf :: UGen -> UGen
-freeSelf i = mkFilter "FreeSelf" [i] 1
-
--- | Free node on done action at source.
-freeSelfWhenDone :: UGen -> UGen
-freeSelfWhenDone i = mkFilter "FreeSelfWhenDone" [i] 1
-
--- | Pause specified node on trigger.
-pause :: UGen -> UGen -> UGen
-pause t n = mkFilter "Pause" [t, n] 1
-
--- | Pause node on trigger.
-pauseSelf :: UGen -> UGen
-pauseSelf i = mkFilter "PauseSelf" [i] 1
-
--- | Pause node on done action at source.
-pauseSelfWhenDone :: UGen -> UGen
-pauseSelfWhenDone i = mkFilter "PauseSelfWhenDone" [i] 1
-
--- | One while the source is marked done, else zero.
-done :: UGen -> UGen
-done i = mkFilter "Done" [i] 1
-
--- | Raise specified done action when input goes silent.
-detectSilence ::  UGen -> UGen -> UGen -> DoneAction -> UGen
-detectSilence i a t act = mkFilter "DetectSilence" [i, a, t, from_done_action act] 1
-
--- | When triggered free specified node.
-free :: UGen -> UGen -> UGen
-free i n = mkFilter "Free" [i, n] 1
-
--- | Linear envelope generator.
-linen :: UGen -> UGen -> UGen -> UGen -> DoneAction -> UGen
-linen g at sl rt da = mkFilter "Linen" [g, at, sl, rt, from_done_action da] 1
-
--- | Singleton fade envelope.
-envGate :: UGen -> UGen -> UGen -> DoneAction -> Envelope_Curve UGen -> UGen
-envGate level gate fadeTime doneAction curve =
-    let startVal = fadeTime <=* 0
-        e = Envelope [startVal,1,0] [1,1] [curve] (Just 1) Nothing
-    in envGen KR gate level 0 fadeTime doneAction e
-
--- | Variant with default values for all inputs.  @gate@ and
--- @fadeTime@ are 'control's, @doneAction@ is 'RemoveSynth', @curve@
--- is 'EnvSin'.
-envGate' :: UGen
-envGate' =
-    let level = 1
-        gate = meta_control KR "gate" 1 (0,1,"lin",1,"")
-        fadeTime = meta_control KR "fadeTime" 0.02 (0,10,"lin",0,"s")
-        doneAction = RemoveSynth
-        curve = EnvSin
-    in envGate level gate fadeTime doneAction curve
+    in mce . fromMaybe err . envelope_sc3_array
 
 -- * List
 

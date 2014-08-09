@@ -210,95 +210,12 @@ unpackLabel u =
 
 -- * Unit generator function builders
 
--- | Oscillator constructor with constrained set of operating 'Rate's.
-mk_osc :: [Rate] -> UGenId -> Rate -> String -> [UGen] -> Int -> UGen
-mk_osc rs z r c i o =
-    if r `elem` rs
-    then mkUGen Nothing rs (Just r) c i o (Special 0) z
-    else error ("mk_osc: rate restricted: " ++ show (r, rs, c))
+toUId :: (ID a) => a -> UGenId
+toUId = UId . resolveID
 
 -- | 'UGenId' used for deterministic UGens.
 no_id :: UGenId
 no_id = NoId
-
--- | Oscillator constructor with 'all_rates'.
-mkOsc :: Rate -> String -> [UGen] -> Int -> UGen
-mkOsc = mk_osc all_rates no_id
-
--- | Oscillator constructor, rate restricted variant.
-mkOscR :: [Rate] -> Rate -> String -> [UGen] -> Int -> UGen
-mkOscR rs = mk_osc rs no_id
-
-toUId :: (ID a) => a -> UGenId
-toUId = UId . resolveID
-
--- | Rate restricted oscillator constructor, setting identifier.
-mkOscIdR :: (ID a) => [Rate] -> a -> Rate -> String -> [UGen] -> Int -> UGen
-mkOscIdR rr z = mk_osc rr (toUId z)
-
--- | Oscillator constructor, setting identifier.
-mkOscId :: (ID a) => a -> Rate -> String -> [UGen] -> Int -> UGen
-mkOscId z = mk_osc all_rates (toUId z)
-
--- | Provided 'UGenId' variant of 'mkOscMCE'.
-mk_osc_mce :: UGenId -> Rate -> String -> [UGen] -> UGen -> Int -> UGen
-mk_osc_mce z r c i j =
-    let i' = i ++ mceChannels j
-    in mk_osc all_rates z r c i'
-
--- | Variant oscillator constructor with MCE collapsing input.
-mkOscMCE :: Rate -> String -> [UGen] -> UGen -> Int -> UGen
-mkOscMCE = mk_osc_mce no_id
-
--- | Variant oscillator constructor with MCE collapsing input.
-mkOscMCEId :: ID a => a -> Rate -> String -> [UGen] -> UGen -> Int -> UGen
-mkOscMCEId z = mk_osc_mce (toUId z)
-
--- | Rate constrained filter 'UGen' constructor.
-mk_filter :: [Rate] -> UGenId -> String -> [UGen] -> Int -> UGen
-mk_filter rs z c i o = mkUGen Nothing rs Nothing c i o (Special 0) z
-
--- | Filter 'UGen' constructor.
-mkFilter :: String -> [UGen] -> Int -> UGen
-mkFilter = mk_filter all_rates no_id
-
--- | Filter UGen constructor.
-mkFilterR :: [Rate] -> String -> [UGen] -> Int -> UGen
-mkFilterR rs = mk_filter rs no_id
-
--- | Filter UGen constructor.
-mkFilterId :: (ID a) => a -> String -> [UGen] -> Int -> UGen
-mkFilterId z = mk_filter all_rates (toUId z)
-
--- | Filter UGen constructor.
-mkFilterIdR :: (ID a) => [Rate] -> a -> String -> [UGen] -> Int -> UGen
-mkFilterIdR rs z = mk_filter rs (toUId z)
-
--- | Variant filter with rate derived from keyed input.
-mkFilterKeyed :: String -> Int -> [UGen] -> Int -> UGen
-mkFilterKeyed c k i o =
-    let r = rateOf (i !! k)
-    in mkUGen Nothing all_rates (Just r) c i o (Special 0) no_id
-
--- | Provided 'UGenId' filter with 'mce' input.
-mk_filter_mce :: [Rate] -> UGenId -> String -> [UGen] -> UGen -> Int -> UGen
-mk_filter_mce rs z c i j = mk_filter rs z c (i ++ mceChannels j)
-
--- | Variant filter constructor with MCE collapsing input.
-mkFilterMCER :: [Rate] -> String -> [UGen] -> UGen -> Int -> UGen
-mkFilterMCER rs = mk_filter_mce rs no_id
-
--- | Variant filter constructor with MCE collapsing input.
-mkFilterMCE :: String -> [UGen] -> UGen -> Int -> UGen
-mkFilterMCE = mk_filter_mce all_rates no_id
-
--- | Variant filter constructor with MCE collapsing input.
-mkFilterMCEId :: ID a => a -> String -> [UGen] -> UGen -> Int -> UGen
-mkFilterMCEId z = mk_filter_mce all_rates (toUId z)
-
--- | Information unit generators are very specialized.
-mkInfo :: String -> UGen
-mkInfo name = mkOsc IR name [] 1
 
 -- * Bitwise
 
@@ -358,7 +275,7 @@ ugen_is_pv_rate = any (primitive_is_pv_rate . ugenName)
 -- encountered, and then locate the buffer input.  Biases left at MCE
 -- nodes.
 --
--- > import Sound.SC3.ID
+-- > import Sound.SC3
 -- > let z = soundIn 4
 -- > let f1 = fft 10 z 0.5 0 1 0
 -- > let f2 = ffta 'a' 1024 z 0.5 0 1 0
@@ -381,7 +298,7 @@ pv_track_buffer u =
 -- > buffer_nframes (localBuf 'α' 2048 1) == 2048
 buffer_nframes :: UGen -> UGen
 buffer_nframes u =
-    let b = mkOsc (rateOf u) "BufFrames" [u] 1
+    let b = mkUGen Nothing [IR,KR] (Left (rateOf u)) "BufFrames" [u] Nothing 1 (Special 0) NoId
     in case ugen_primitive u of
          [] -> b
          p:_ -> case ugenName p of

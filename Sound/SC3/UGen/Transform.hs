@@ -1,8 +1,8 @@
 module Sound.SC3.UGen.Transform where
 
+import Sound.SC3.UGen.Bindings
 import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Envelope
-import Sound.SC3.UGen.IO
 import Sound.SC3.UGen.Math
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
@@ -16,10 +16,10 @@ import Sound.SC3.UGen.UGen
 makeFadeEnv :: Real n => n -> UGen
 makeFadeEnv fadeTime =
     let dt = control KR "fadeTime" (realToFrac fadeTime)
-        gate = control KR "gate" 1
+        gate_ = control KR "gate" 1
         startVal = dt <=* 0
         env = Envelope [startVal,1,0] [1,1] [EnvLin,EnvLin] (Just 1) Nothing
-    in envGen KR gate 1 0 dt RemoveSynth env
+    in envGen KR gate_ 1 0 dt RemoveSynth env
 
 -- | If @z@ isn't a sink node, multiply by 'makeFadeEnv' and route to
 -- an @out@ node writing to @bus@.

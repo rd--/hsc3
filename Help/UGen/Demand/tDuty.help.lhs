@@ -1,6 +1,5 @@
 > Sound.SC3.UGen.Help.viewSC3Help "TDuty"
 > Sound.SC3.UGen.DB.ugenSummary "TDuty"
-# sclang re-ordering: [0,1,3,2,4]
 
 > import Sound.SC3.ID
 

@@ -1,6 +1,5 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Dswitch1"
 > Sound.SC3.UGen.DB.ugenSummary "Dswitch1"
-# inputReordering: [1,0]
 
 > import Sound.SC3.ID
 

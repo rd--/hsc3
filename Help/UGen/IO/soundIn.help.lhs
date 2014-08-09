@@ -1,6 +1,6 @@
 > Sound.SC3.UGen.Help.viewSC3Help "SoundIn"
 
-# composite
+# composite of in' and numOutputBuses
 
 > import Sound.SC3
 

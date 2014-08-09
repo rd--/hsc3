@@ -1,6 +1,5 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Dswitch"
 > Sound.SC3.UGen.DB.ugenSummary "Dswitch"
-# inputReordering: [1,0]
 
 > import Sound.SC3
 > import qualified Sound.SC3.Monad as M

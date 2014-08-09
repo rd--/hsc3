@@ -1,8 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "XLine"
 > Sound.SC3.UGen.DB.ugenSummary "XLine"
 
-# SC3
-At SC3 mul and add inputs precede the doneAction input.
+# SC3 reorders mul and add inputs to precede the doneAction input.
 
 > import Sound.SC3
 

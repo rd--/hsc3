@@ -5,24 +5,87 @@ import Control.Monad
 import Data.List
 import Data.List.Split
 
-import Sound.SC3.UGen.Buffer
-import Sound.SC3.UGen.Demand
+import Sound.SC3.UGen.Bindings
 import Sound.SC3.UGen.Enum
-import Sound.SC3.UGen.Envelope
-import Sound.SC3.UGen.Filter
 import Sound.SC3.UGen.Identifier
-import Sound.SC3.UGen.Information
-import Sound.SC3.UGen.IO
 import Sound.SC3.UGen.Math
-import Sound.SC3.UGen.Noise.ID
-import Sound.SC3.UGen.Oscillator
-import Sound.SC3.UGen.Panner
+import Sound.SC3.UGen.Monad
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
+import Sound.SC3.UGen.UGen
+import Sound.SC3.UGen.UGen.Construct
+import Sound.SC3.UGen.UId
+
+-- | Generate a localBuf and use setBuf to initialise it.
+asLocalBuf :: ID i => i -> [UGen] -> UGen
+asLocalBuf i xs =
+    let b = localBuf i (fromIntegral (length xs)) 1
+        s = setBuf b xs 0
+    in mrg2 b s
+
+-- | Calculate coefficients for bi-quad low pass filter.
+bLowPassCoef :: Floating a => a -> a -> a -> (a,a,a,a,a)
+bLowPassCoef sr freq rq =
+    let w0 = pi * 2 * freq * (1 / sr)
+        cos_w0 = cos w0
+        i = 1 - cos_w0
+        alpha = sin w0 * 0.5 * rq
+        b0rz = recip (1 + alpha)
+        a0 = i * 0.5 * b0rz
+        a1 = i * b0rz
+        b1 = cos_w0 * 2 * b0rz
+        b2 = (1 - alpha) * negate b0rz
+    in (a0,a1,a0,b1,b2)
+
+-- | Buffer reader (no interpolation).
+bufRdN :: Int -> Rate -> UGen -> UGen -> Loop -> UGen
+bufRdN n r b p l = bufRd n r b p l NoInterpolation
+
+-- | Buffer reader (linear interpolation).
+bufRdL :: Int -> Rate -> UGen -> UGen -> Loop -> UGen
+bufRdL n r b p l = bufRd n r b p l LinearInterpolation
+
+-- | Buffer reader (cubic interpolation).
+bufRdC :: Int -> Rate -> UGen -> UGen -> Loop -> UGen
+bufRdC n r b p l = bufRd n r b p l CubicInterpolation
 
 -- | Triggers when a value changes
 changed :: UGen -> UGen -> UGen
 changed input threshold = abs (hpz1 input) >* threshold
+
+-- | 'mce' variant of 'lchoose'.
+choose :: ID m => m -> UGen -> UGen
+choose e = lchoose e . mceChannels
+
+-- | 'liftUId' of 'choose'.
+chooseM :: UId m => UGen -> m UGen
+chooseM = liftUId choose
+
+-- | Demand rate (:) function.
+dcons :: ID m => (m,m,m) -> UGen -> UGen -> UGen
+dcons (z0,z1,z2) x xs =
+    let i = dseq z0 1 (mce2 0 1)
+        a = dseq z1 1 (mce2 x xs)
+    in dswitch z2 i a
+
+-- | Demand rate (:) function.
+dconsM :: (UId m) => UGen -> UGen -> m UGen
+dconsM x xs = do
+  i <- dseqM 1 (mce2 0 1)
+  a <- dseqM 1 (mce2 x xs)
+  dswitchM i a
+
+-- | Demand rate weighted random sequence generator.
+dwrand :: ID i => i -> UGen -> UGen -> UGen -> UGen
+dwrand z repeats weights list_ =
+    let n = mceDegree list_
+        weights' = mceExtend n weights
+        inp = repeats : constant n : weights'
+    in mkUGen Nothing [DR] (Left DR) "Dwrand" inp (Just list_) 1 (Special 0) (toUId z)
+
+-- | Demand rate weighted random sequence generator.
+dwrandM :: (UId m) => UGen -> UGen -> UGen -> m UGen
+dwrandM = liftUId3 dwrand
 
 -- | Dynamic klang, dynamic sine oscillator bank
 dynKlang :: Rate -> UGen -> UGen -> UGen -> UGen
@@ -38,6 +101,24 @@ dynKlank i fs fo ds s =
         gen _ = 0
     in gen (mceChannels s)
 
+-- | Variant FFT constructor with default values for hop size (0.5),
+-- window type (0), active status (1) and window size (0).
+fft' :: UGen -> UGen -> UGen
+fft' buf i = fft buf i 0.5 0 1 0
+
+-- | 'fft' variant that allocates 'localBuf'.
+--
+-- > let c = ffta 'α' 2048 (soundIn 0) 0.5 0 1 0
+-- > in audition (out 0 (ifft c 0 0))
+ffta :: ID i => i -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+ffta z nf i h wt a ws =
+    let b = localBuf z nf 1
+    in fft b i h wt a ws
+
+-- | Outputs signal for @FFT@ chains, without performing FFT.
+fftTrigger :: UGen -> UGen -> UGen -> UGen
+fftTrigger b h p = mkOsc KR "FFTTrigger" [b,h,p] 1
+
 -- | Sum of 'numInputBuses' and 'numOutputBuses'.
 firstPrivateBus :: UGen
 firstPrivateBus = numInputBuses + numOutputBuses
@@ -49,12 +130,58 @@ freqShift_hilbert i f p =
         h = hilbert i
     in mix (h * o)
 
+-- | Variant ifft with default value for window type.
+ifft' :: UGen -> UGen
+ifft' buf = ifft buf 0 0
+
+{-
 -- | Linear interpolating variant on index.
 indexL :: UGen -> UGen -> UGen
 indexL b i =
     let x = index b i
         y = index b (i + 1)
     in linLin (frac i) 0 1 x y
+-}
+
+-- | Format frequency, amplitude and phase data as required for klang.
+klangSpec :: [UGen] -> [UGen] -> [UGen] -> UGen
+klangSpec f a p = mce ((concat . transpose) [f, a, p])
+
+-- | Variant of 'klangSpec' for non-UGen inputs.
+klangSpec' :: Real n => [n] -> [n] -> [n] -> UGen
+klangSpec' f a p =
+    let u = map constant
+    in klangSpec (u f) (u a) (u p)
+
+-- | Variant of 'klangSpec' for 'MCE' inputs.
+klangSpec_mce :: UGen -> UGen -> UGen -> UGen
+klangSpec_mce f a p =
+    let m = mceChannels
+    in klangSpec (m f) (m a) (m p)
+
+-- | Format frequency, amplitude and decay time data as required for klank.
+klankSpec :: [UGen] -> [UGen] -> [UGen] -> UGen
+klankSpec f a dt = mce ((concat . transpose) [f,a,dt])
+
+-- | Variant for non-UGen inputs.
+klankSpec' :: Real n => [n] -> [n] -> [n] -> UGen
+klankSpec' f a dt =
+    let u = map constant
+    in klankSpec (u f) (u a) (u dt)
+
+-- | Variant of 'klankSpec' for 'MCE' inputs.
+klankSpec_mce :: UGen -> UGen -> UGen -> UGen
+klankSpec_mce f a dt =
+    let m = mceChannels
+    in klankSpec (m f) (m a) (m dt)
+
+-- | Randomly select one of a list of UGens (initialiastion rate).
+lchoose :: ID m => m -> [UGen] -> UGen
+lchoose e a = select (iRand e 0 (fromIntegral (length a))) (mce a)
+
+-- | 'liftUId' of 'lchoose'.
+lchooseM :: UId m => [UGen] -> m UGen
+lchooseM = liftUId lchoose
 
 -- | Map from one linear range to another linear range.
 linLin :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -69,6 +196,46 @@ linLin_u i = linLin i 0 1
 -- | 'linLin' where source is (-1,1).
 linLin_b :: UGen -> UGen -> UGen -> UGen
 linLin_b i = linLin i (-1) 1
+
+-- | Variant with defaults of zero.
+localIn' :: Int -> Rate -> UGen
+localIn' nc r = localIn nc r (mce (replicate nc 0))
+
+-- | Count 'mce' channels.
+mceN :: UGen -> UGen
+mceN = constant . length . mceChannels
+
+-- | Pack demand-rate FFT bin streams into an FFT chain.
+packFFT :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+packFFT b sz from to z mp =
+    let n = constant (mceDegree mp)
+    in mkOscMCE KR "PackFFT" [b, sz, from, to, z, n] mp 1
+
+-- | Format magnitude and phase data data as required for packFFT.
+packFFTSpec :: [UGen] -> [UGen] -> UGen
+packFFTSpec m p = mce (interleave m p)
+    where interleave x = concat . zipWith (\a b -> [a,b]) x
+
+-- | Calculate size of accumulation buffer given FFT and IR sizes.
+pc_calcAccumSize :: Int -> Int -> Int
+pc_calcAccumSize fft_size ir_length =
+    let partition_size = fft_size `div` 2
+        num_partitions = (ir_length `div` partition_size) + 1
+    in fft_size * num_partitions
+
+-- | Poll value of input UGen when triggered.
+poll :: UGen -> UGen -> UGen -> UGen -> UGen
+poll t i l tr = mkFilter "Poll" ([t,i,tr] ++ unpackLabel l) 0
+
+-- | Apply function /f/ to each bin of an @FFT@ chain, /f/ receives
+-- magnitude, phase and index and returns a (magnitude,phase).
+pvcollect :: UGen -> UGen -> (UGen -> UGen -> UGen -> (UGen, UGen)) -> UGen -> UGen -> UGen -> UGen
+pvcollect c nf f from to z = packFFT c nf from to z mp
+  where m = unpackFFT c nf from to 0
+        p = unpackFFT c nf from to 1
+        i = [from .. to]
+        e = zipWith3 f m p i
+        mp = uncurry packFFTSpec (unzip e)
 
 -- | Optimised sum function.
 sum_opt :: [UGen] -> UGen
@@ -150,6 +317,19 @@ selectX ix xs =
         s1 = select (trunc ix 2 + 1) xs
     in xFade2 s0 s1 (fold2 (ix * 2 - 1) 1) 1
 
+-- | Send a reply message from the server back to the all registered clients.
+sendReply :: UGen -> UGen -> String -> [UGen] -> UGen
+sendReply i k n v =
+    let n' = map (fromIntegral . fromEnum) n
+        s = fromIntegral (length n')
+    in mkFilter "SendReply" ([i,k,s] ++ n' ++ v) 0
+
+-- | Set local buffer values.
+setBuf :: UGen -> [UGen] -> UGen -> UGen
+setBuf b xs o =
+    let i = [b, o, fromIntegral (length xs)] ++ xs
+    in mkUGen Nothing [IR] (Left IR) "SetBuf" i Nothing 1 (Special 0) NoId
+
 -- | Silence.
 silent :: Int -> UGen
 silent n = let s = dc AR 0 in mce (replicate n s)
@@ -174,6 +354,36 @@ splay i s l c lc =
         p = map ( (+ (-1.0)) . (* (2 / m)) ) [0 .. m]
         a = if lc then sqrt (1 / n) else 1
     in mix (pan2 i (mce p * s + c) 1) * l * a
+
+-- | Randomly select one of several inputs on trigger.
+tChoose :: ID m => m -> UGen -> UGen -> UGen
+tChoose z t a = select (tIRand z 0 (mceN a) t) a
+
+-- | Randomly select one of several inputs.
+tChooseM :: (UId m) => UGen -> UGen -> m UGen
+tChooseM t a = do
+  r <- tIRandM 0 (constant (length (mceChannels a))) t
+  return (select r a)
+
+-- | Randomly select one of several inputs on trigger (weighted).
+tWChoose :: ID m => m -> UGen -> UGen -> UGen -> UGen -> UGen
+tWChoose z t a w n =
+    let i = tWindex z t n w
+    in select i a
+
+-- | Randomly select one of several inputs (weighted).
+tWChooseM :: (UId m) => UGen -> UGen -> UGen -> UGen -> m UGen
+tWChooseM t a w n = do
+  i <- tWindexM t n w
+  return (select i a)
+
+-- | Unpack a single value (magnitude or phase) from an FFT chain
+unpack1FFT :: UGen -> UGen -> UGen -> UGen -> UGen
+unpack1FFT buf size index' which = mkOsc DR "Unpack1FFT" [buf, size, index', which] 1
+
+-- | Unpack an FFT chain into separate demand-rate FFT bin streams.
+unpackFFT :: UGen -> UGen -> UGen -> UGen -> UGen -> [UGen]
+unpackFFT c nf from to w = map (\i -> unpack1FFT c nf i w) [from .. to]
 
 -- * wslib
 

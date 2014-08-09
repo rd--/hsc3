@@ -1,10 +1,9 @@
 > Sound.SC3.UGen.Help.viewSC3Help "TChoose"
 > :t tChoose
 
-# composite
-tChoose is a composite of tIRand and select.
+# tChoose is a composite of tIRand and select.
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {x = mouseX KR 1 1000 Exponential 0.1
 >     ;t = dust 'a' AR x

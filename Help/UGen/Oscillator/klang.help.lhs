@@ -2,7 +2,6 @@
 > Sound.SC3.UGen.DB.ugenSummary "Klang"
 
 # SC2 had mul/add inputs.
-# SC3 re-orders inputs to place specification array at start
 
 > import Sound.SC3.ID
 

@@ -1,4 +1,4 @@
--- | Plain UGen constructor functions.
+
 --
 -- > let {s = ugen "SinOsc" AR [440,0] 1
 -- >     ;m = binop "*" AR s 0.1
@@ -14,7 +14,7 @@ import Sound.SC3.UGen.Type
 
 -- | Variant of 'mkUGen'.
 mk_plain :: Rate -> String -> [UGen] -> Int -> Special -> UGenId -> UGen
-mk_plain r = mkUGen Nothing all_rates (Just r)
+mk_plain r nm inp = mkUGen Nothing all_rates (Left r) nm inp Nothing
 
 -- | Construct unary operator, the name can textual or symbolic.
 --

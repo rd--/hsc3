@@ -1,8 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "In"
 > Sound.SC3.UGen.DB.ugenSummary "In"
 
-# hsc3
-hsc3 renames UGen to in' since in is a reserved keyword
+# hsc3 renames UGen to in' since in is a reserved keyword
 
 > import Sound.SC3.ID
 

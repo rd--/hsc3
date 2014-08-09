@@ -76,8 +76,8 @@ bpf :: UGen -> UGen -> UGen -> UGen
 bpf in_ freq rq = mkUGen Nothing [AR,KR] (Right [0]) "BPF" [in_,freq,rq] Nothing 1 (Special 0) NoId
 
 -- | Two zero fixed midpass.
-bPZ2 :: UGen -> UGen
-bPZ2 in_ = mkUGen Nothing [AR,KR] (Right [0]) "BPZ2" [in_] Nothing 1 (Special 0) NoId
+bpz2 :: UGen -> UGen
+bpz2 in_ = mkUGen Nothing [AR,KR] (Right [0]) "BPZ2" [in_] Nothing 1 (Special 0) NoId
 
 -- | Parametric equalizer
 bPeakEQ :: UGen -> UGen -> UGen -> UGen -> UGen
@@ -439,9 +439,11 @@ duty rate dur reset doneAction level = mkUGen Nothing [AR,KR] (Left rate) "Duty"
 dwhite :: ID a => a -> UGen -> UGen -> UGen -> UGen
 dwhite z length_ lo hi = mkUGen Nothing [DR,DR] (Left DR) "Dwhite" [length_,lo,hi] Nothing 1 (Special 0) (toUId z)
 
+{-
 -- | Demand rate weighted random sequence generator
 dwrand :: ID a => a -> UGen -> UGen -> UGen -> UGen
 dwrand z repeats weights list_ = mkUGen Nothing [DR,DR] (Left DR) "Dwrand" [repeats,weights] (Just list_) 1 (Special 0) (toUId z)
+-}
 
 -- | Demand rate random sequence generator.
 dxrand :: ID a => a -> UGen -> UGen -> UGen
@@ -468,8 +470,8 @@ fBSineN :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 fBSineN rate freq im fb a c xi yi = mkUGen Nothing [AR] (Left rate) "FBSineN" [freq,im,fb,a,c,xi,yi] Nothing 1 (Special 0) NoId
 
 -- | Fast Fourier Transform
-fft :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-fft rate buffer in_ hop wintype active winsize = mkUGen Nothing [KR] (Left rate) "FFT" [buffer,in_,hop,wintype,active,winsize] Nothing 1 (Special 0) NoId
+fft :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+fft buffer in_ hop wintype active winsize = mkUGen Nothing [KR] (Left KR) "FFT" [buffer,in_,hop,wintype,active,winsize] Nothing 1 (Special 0) NoId
 
 -- | First order filter section.
 fos :: UGen -> UGen -> UGen -> UGen -> UGen
@@ -604,8 +606,8 @@ iEnvGen :: Rate -> UGen -> Envelope UGen -> UGen
 iEnvGen rate index_ envelope_ = mkUGen Nothing [AR,KR] (Left rate) "IEnvGen" [index_] (Just (envelope_to_ugen envelope_)) 1 (Special 0) NoId
 
 -- | Inverse Fast Fourier Transform
-iFFT :: Rate -> UGen -> UGen -> UGen -> UGen
-iFFT rate buffer wintype winsize = mkUGen Nothing [AR,KR] (Left rate) "IFFT" [buffer,wintype,winsize] Nothing 1 (Special 0) NoId
+ifft :: UGen -> UGen -> UGen -> UGen
+ifft buffer wintype winsize = mkUGen Nothing [AR,KR] (Left AR) "IFFT" [buffer,wintype,winsize] Nothing 1 (Special 0) NoId
 
 -- | Single integer random number generator.
 iRand :: ID a => a -> UGen -> UGen -> UGen
@@ -976,148 +978,148 @@ pSinGrain :: Rate -> UGen -> UGen -> UGen -> UGen
 pSinGrain rate freq dur amp = mkUGen Nothing [AR] (Left rate) "PSinGrain" [freq,dur,amp] Nothing 1 (Special 0) NoId
 
 -- | Complex addition.
-pv_Add :: Rate -> UGen -> UGen -> UGen
-pv_Add rate bufferA bufferB = mkUGen Nothing [KR] (Left rate) "PV_Add" [bufferA,bufferB] Nothing 1 (Special 0) NoId
+pv_Add :: UGen -> UGen -> UGen
+pv_Add bufferA bufferB = mkUGen Nothing [KR,KR] (Left KR) "PV_Add" [bufferA,bufferB] Nothing 1 (Special 0) NoId
 
 -- | Scramble bins.
-pv_BinScramble :: UGen -> UGen -> UGen -> UGen -> UGen
-pv_BinScramble buffer wipe width trig_ = mkUGen Nothing [KR] (Left ) "PV_BinScramble" [buffer,wipe,width,trig_] Nothing 1 (Special 0) NoId
+pv_BinScramble :: ID a => a -> UGen -> UGen -> UGen -> UGen -> UGen
+pv_BinScramble z buffer wipe width trig_ = mkUGen Nothing [KR,KR] (Left KR) "PV_BinScramble" [buffer,wipe,width,trig_] Nothing 1 (Special 0) (toUId z)
 
 -- | Shift and stretch bin position.
-pv_BinShift :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-pv_BinShift rate buffer stretch shift interp = mkUGen Nothing [KR] (Left rate) "PV_BinShift" [buffer,stretch,shift,interp] Nothing 1 (Special 0) NoId
+pv_BinShift :: UGen -> UGen -> UGen -> UGen -> UGen
+pv_BinShift buffer stretch shift interp = mkUGen Nothing [KR,KR] (Left KR) "PV_BinShift" [buffer,stretch,shift,interp] Nothing 1 (Special 0) NoId
 
 -- | Combine low and high bins from two inputs.
-pv_BinWipe :: Rate -> UGen -> UGen -> UGen -> UGen
-pv_BinWipe rate bufferA bufferB wipe = mkUGen Nothing [KR] (Left rate) "PV_BinWipe" [bufferA,bufferB,wipe] Nothing 1 (Special 0) NoId
+pv_BinWipe :: UGen -> UGen -> UGen -> UGen
+pv_BinWipe bufferA bufferB wipe = mkUGen Nothing [KR,KR] (Left KR) "PV_BinWipe" [bufferA,bufferB,wipe] Nothing 1 (Special 0) NoId
 
 -- | Zero bins.
-pv_BrickWall :: Rate -> UGen -> UGen -> UGen
-pv_BrickWall rate buffer wipe = mkUGen Nothing [KR] (Left rate) "PV_BrickWall" [buffer,wipe] Nothing 1 (Special 0) NoId
+pv_BrickWall :: UGen -> UGen -> UGen
+pv_BrickWall buffer wipe = mkUGen Nothing [KR,KR] (Left KR) "PV_BrickWall" [buffer,wipe] Nothing 1 (Special 0) NoId
 
 -- | Base class for UGens that alter FFT chains
-pv_ChainUGen :: Rate -> UGen -> UGen
-pv_ChainUGen rate maxSize = mkUGen Nothing [KR] (Left rate) "PV_ChainUGen" [maxSize] Nothing 1 (Special 0) NoId
+pv_ChainUGen :: UGen -> UGen
+pv_ChainUGen maxSize = mkUGen Nothing [KR,KR] (Left KR) "PV_ChainUGen" [maxSize] Nothing 1 (Special 0) NoId
 
 -- | Complex plane attack.
-pv_ConformalMap :: Rate -> UGen -> UGen -> UGen -> UGen
-pv_ConformalMap rate buffer areal aimag = mkUGen Nothing [KR] (Left rate) "PV_ConformalMap" [buffer,areal,aimag] Nothing 1 (Special 0) NoId
+pv_ConformalMap :: UGen -> UGen -> UGen -> UGen
+pv_ConformalMap buffer areal aimag = mkUGen Nothing [KR,KR] (Left KR) "PV_ConformalMap" [buffer,areal,aimag] Nothing 1 (Special 0) NoId
 
 -- | Complex conjugate
-pv_Conj :: Rate -> UGen -> UGen
-pv_Conj rate buffer = mkUGen Nothing [KR] (Left rate) "PV_Conj" [buffer] Nothing 1 (Special 0) NoId
+pv_Conj :: UGen -> UGen
+pv_Conj buffer = mkUGen Nothing [KR,KR] (Left KR) "PV_Conj" [buffer] Nothing 1 (Special 0) NoId
 
 -- | Copy an FFT buffer
-pv_Copy :: Rate -> UGen -> UGen -> UGen
-pv_Copy rate bufferA bufferB = mkUGen Nothing [KR] (Left rate) "PV_Copy" [bufferA,bufferB] Nothing 1 (Special 0) NoId
+pv_Copy :: UGen -> UGen -> UGen
+pv_Copy bufferA bufferB = mkUGen Nothing [KR,KR] (Left KR) "PV_Copy" [bufferA,bufferB] Nothing 1 (Special 0) NoId
 
 -- | Copy magnitudes and phases.
-pv_CopyPhase :: Rate -> UGen -> UGen -> UGen
-pv_CopyPhase rate bufferA bufferB = mkUGen Nothing [KR] (Left rate) "PV_CopyPhase" [bufferA,bufferB] Nothing 1 (Special 0) NoId
+pv_CopyPhase :: UGen -> UGen -> UGen
+pv_CopyPhase bufferA bufferB = mkUGen Nothing [KR,KR] (Left KR) "PV_CopyPhase" [bufferA,bufferB] Nothing 1 (Special 0) NoId
 
 -- | Random phase shifting.
-pv_Diffuser :: Rate -> UGen -> UGen -> UGen
-pv_Diffuser rate buffer trig_ = mkUGen Nothing [KR] (Left rate) "PV_Diffuser" [buffer,trig_] Nothing 1 (Special 0) NoId
+pv_Diffuser :: UGen -> UGen -> UGen
+pv_Diffuser buffer trig_ = mkUGen Nothing [KR,KR] (Left KR) "PV_Diffuser" [buffer,trig_] Nothing 1 (Special 0) NoId
 
 -- | Complex division
-pv_Div :: Rate -> UGen -> UGen -> UGen
-pv_Div rate bufferA bufferB = mkUGen Nothing [KR] (Left rate) "PV_Div" [bufferA,bufferB] Nothing 1 (Special 0) NoId
+pv_Div :: UGen -> UGen -> UGen
+pv_Div bufferA bufferB = mkUGen Nothing [KR,KR] (Left KR) "PV_Div" [bufferA,bufferB] Nothing 1 (Special 0) NoId
 
 -- | FFT onset detector.
-pv_HainsworthFoote :: Rate -> UGen -> UGen
-pv_HainsworthFoote rate maxSize = mkUGen Nothing [AR,KR] (Left rate) "PV_HainsworthFoote" [maxSize] Nothing 1 (Special 0) NoId
+pv_HainsworthFoote :: UGen -> UGen
+pv_HainsworthFoote maxSize = mkUGen Nothing [AR,KR,KR] (Left KR) "PV_HainsworthFoote" [maxSize] Nothing 1 (Special 0) NoId
 
 -- | FFT feature detector for onset detection.
-pv_JensenAndersen :: Rate -> UGen -> UGen
-pv_JensenAndersen rate maxSize = mkUGen Nothing [AR,KR] (Left rate) "PV_JensenAndersen" [maxSize] Nothing 1 (Special 0) NoId
+pv_JensenAndersen :: UGen -> UGen
+pv_JensenAndersen maxSize = mkUGen Nothing [AR,KR,KR] (Left KR) "PV_JensenAndersen" [maxSize] Nothing 1 (Special 0) NoId
 
 -- | Pass bins which are a local maximum.
-pv_LocalMax :: Rate -> UGen -> UGen -> UGen
-pv_LocalMax rate buffer threshold = mkUGen Nothing [KR] (Left rate) "PV_LocalMax" [buffer,threshold] Nothing 1 (Special 0) NoId
+pv_LocalMax :: UGen -> UGen -> UGen
+pv_LocalMax buffer threshold = mkUGen Nothing [KR,KR] (Left KR) "PV_LocalMax" [buffer,threshold] Nothing 1 (Special 0) NoId
 
 -- | Pass bins above a threshold.
-pv_MagAbove :: Rate -> UGen -> UGen -> UGen
-pv_MagAbove rate buffer threshold = mkUGen Nothing [KR] (Left rate) "PV_MagAbove" [buffer,threshold] Nothing 1 (Special 0) NoId
+pv_MagAbove :: UGen -> UGen -> UGen
+pv_MagAbove buffer threshold = mkUGen Nothing [KR,KR] (Left KR) "PV_MagAbove" [buffer,threshold] Nothing 1 (Special 0) NoId
 
 -- | Pass bins below a threshold.
-pv_MagBelow :: Rate -> UGen -> UGen -> UGen
-pv_MagBelow rate buffer threshold = mkUGen Nothing [KR] (Left rate) "PV_MagBelow" [buffer,threshold] Nothing 1 (Special 0) NoId
+pv_MagBelow :: UGen -> UGen -> UGen
+pv_MagBelow buffer threshold = mkUGen Nothing [KR,KR] (Left KR) "PV_MagBelow" [buffer,threshold] Nothing 1 (Special 0) NoId
 
 -- | Clip bins to a threshold.
-pv_MagClip :: Rate -> UGen -> UGen -> UGen
-pv_MagClip rate buffer threshold = mkUGen Nothing [KR] (Left rate) "PV_MagClip" [buffer,threshold] Nothing 1 (Special 0) NoId
+pv_MagClip :: UGen -> UGen -> UGen
+pv_MagClip buffer threshold = mkUGen Nothing [KR,KR] (Left KR) "PV_MagClip" [buffer,threshold] Nothing 1 (Special 0) NoId
 
 -- | Division of magnitudes
-pv_MagDiv :: Rate -> UGen -> UGen -> UGen -> UGen
-pv_MagDiv rate bufferA bufferB zeroed = mkUGen Nothing [KR] (Left rate) "PV_MagDiv" [bufferA,bufferB,zeroed] Nothing 1 (Special 0) NoId
+pv_MagDiv :: UGen -> UGen -> UGen -> UGen
+pv_MagDiv bufferA bufferB zeroed = mkUGen Nothing [KR,KR] (Left KR) "PV_MagDiv" [bufferA,bufferB,zeroed] Nothing 1 (Special 0) NoId
 
 -- | Freeze magnitudes.
-pv_MagFreeze :: Rate -> UGen -> UGen -> UGen
-pv_MagFreeze rate buffer freeze = mkUGen Nothing [KR] (Left rate) "PV_MagFreeze" [buffer,freeze] Nothing 1 (Special 0) NoId
+pv_MagFreeze :: UGen -> UGen -> UGen
+pv_MagFreeze buffer freeze = mkUGen Nothing [KR,KR] (Left KR) "PV_MagFreeze" [buffer,freeze] Nothing 1 (Special 0) NoId
 
 -- | Multiply magnitudes.
-pv_MagMul :: Rate -> UGen -> UGen -> UGen
-pv_MagMul rate bufferA bufferB = mkUGen Nothing [KR] (Left rate) "PV_MagMul" [bufferA,bufferB] Nothing 1 (Special 0) NoId
+pv_MagMul :: UGen -> UGen -> UGen
+pv_MagMul bufferA bufferB = mkUGen Nothing [KR,KR] (Left KR) "PV_MagMul" [bufferA,bufferB] Nothing 1 (Special 0) NoId
 
 -- | Multiply magnitudes by noise.
-pv_MagNoise :: Rate -> UGen -> UGen
-pv_MagNoise rate buffer = mkUGen Nothing [KR] (Left rate) "PV_MagNoise" [buffer] Nothing 1 (Special 0) NoId
+pv_MagNoise :: UGen -> UGen
+pv_MagNoise buffer = mkUGen Nothing [KR,KR] (Left KR) "PV_MagNoise" [buffer] Nothing 1 (Special 0) NoId
 
 -- | shift and stretch magnitude bin position.
-pv_MagShift :: Rate -> UGen -> UGen -> UGen -> UGen
-pv_MagShift rate buffer stretch shift = mkUGen Nothing [KR] (Left rate) "PV_MagShift" [buffer,stretch,shift] Nothing 1 (Special 0) NoId
+pv_MagShift :: UGen -> UGen -> UGen -> UGen
+pv_MagShift buffer stretch shift = mkUGen Nothing [KR,KR] (Left KR) "PV_MagShift" [buffer,stretch,shift] Nothing 1 (Special 0) NoId
 
 -- | Average magnitudes across bins.
-pv_MagSmear :: Rate -> UGen -> UGen -> UGen
-pv_MagSmear rate buffer bins = mkUGen Nothing [KR] (Left rate) "PV_MagSmear" [buffer,bins] Nothing 1 (Special 0) NoId
+pv_MagSmear :: UGen -> UGen -> UGen
+pv_MagSmear buffer bins = mkUGen Nothing [KR,KR] (Left KR) "PV_MagSmear" [buffer,bins] Nothing 1 (Special 0) NoId
 
 -- | Square magnitudes.
-pv_MagSquared :: Rate -> UGen -> UGen
-pv_MagSquared rate buffer = mkUGen Nothing [KR] (Left rate) "PV_MagSquared" [buffer] Nothing 1 (Special 0) NoId
+pv_MagSquared :: UGen -> UGen
+pv_MagSquared buffer = mkUGen Nothing [KR,KR] (Left KR) "PV_MagSquared" [buffer] Nothing 1 (Special 0) NoId
 
 -- | Maximum magnitude.
-pv_Max :: Rate -> UGen -> UGen -> UGen
-pv_Max rate bufferA bufferB = mkUGen Nothing [KR] (Left rate) "PV_Max" [bufferA,bufferB] Nothing 1 (Special 0) NoId
+pv_Max :: UGen -> UGen -> UGen
+pv_Max bufferA bufferB = mkUGen Nothing [KR,KR] (Left KR) "PV_Max" [bufferA,bufferB] Nothing 1 (Special 0) NoId
 
 -- | Minimum magnitude.
-pv_Min :: Rate -> UGen -> UGen -> UGen
-pv_Min rate bufferA bufferB = mkUGen Nothing [KR] (Left rate) "PV_Min" [bufferA,bufferB] Nothing 1 (Special 0) NoId
+pv_Min :: UGen -> UGen -> UGen
+pv_Min bufferA bufferB = mkUGen Nothing [KR,KR] (Left KR) "PV_Min" [bufferA,bufferB] Nothing 1 (Special 0) NoId
 
 -- | Complex multiply.
-pv_Mul :: Rate -> UGen -> UGen -> UGen
-pv_Mul rate bufferA bufferB = mkUGen Nothing [KR] (Left rate) "PV_Mul" [bufferA,bufferB] Nothing 1 (Special 0) NoId
+pv_Mul :: UGen -> UGen -> UGen
+pv_Mul bufferA bufferB = mkUGen Nothing [KR,KR] (Left KR) "PV_Mul" [bufferA,bufferB] Nothing 1 (Special 0) NoId
 
 -- | Shift phase.
-pv_PhaseShift :: Rate -> UGen -> UGen -> UGen -> UGen
-pv_PhaseShift rate buffer shift integrate = mkUGen Nothing [KR] (Left rate) "PV_PhaseShift" [buffer,shift,integrate] Nothing 1 (Special 0) NoId
+pv_PhaseShift :: UGen -> UGen -> UGen -> UGen
+pv_PhaseShift buffer shift integrate = mkUGen Nothing [KR,KR] (Left KR) "PV_PhaseShift" [buffer,shift,integrate] Nothing 1 (Special 0) NoId
 
 -- | Shift phase by 270 degrees.
-pv_PhaseShift270 :: Rate -> UGen -> UGen
-pv_PhaseShift270 rate buffer = mkUGen Nothing [KR] (Left rate) "PV_PhaseShift270" [buffer] Nothing 1 (Special 0) NoId
+pv_PhaseShift270 :: UGen -> UGen
+pv_PhaseShift270 buffer = mkUGen Nothing [KR,KR] (Left KR) "PV_PhaseShift270" [buffer] Nothing 1 (Special 0) NoId
 
 -- | Shift phase by 90 degrees.
-pv_PhaseShift90 :: Rate -> UGen -> UGen
-pv_PhaseShift90 rate buffer = mkUGen Nothing [KR] (Left rate) "PV_PhaseShift90" [buffer] Nothing 1 (Special 0) NoId
+pv_PhaseShift90 :: UGen -> UGen
+pv_PhaseShift90 buffer = mkUGen Nothing [KR,KR] (Left KR) "PV_PhaseShift90" [buffer] Nothing 1 (Special 0) NoId
 
 -- | Pass random bins.
-pv_RandComb :: Rate -> UGen -> UGen -> UGen -> UGen
-pv_RandComb rate buffer wipe trig_ = mkUGen Nothing [KR] (Left rate) "PV_RandComb" [buffer,wipe,trig_] Nothing 1 (Special 0) NoId
+pv_RandComb :: ID a => a -> UGen -> UGen -> UGen -> UGen
+pv_RandComb z buffer wipe trig_ = mkUGen Nothing [KR,KR] (Left KR) "PV_RandComb" [buffer,wipe,trig_] Nothing 1 (Special 0) (toUId z)
 
 -- | Crossfade in random bin order.
-pv_RandWipe :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-pv_RandWipe rate bufferA bufferB wipe trig_ = mkUGen Nothing [KR] (Left rate) "PV_RandWipe" [bufferA,bufferB,wipe,trig_] Nothing 1 (Special 0) NoId
+pv_RandWipe :: ID a => a -> UGen -> UGen -> UGen -> UGen -> UGen
+pv_RandWipe z bufferA bufferB wipe trig_ = mkUGen Nothing [KR,KR] (Left KR) "PV_RandWipe" [bufferA,bufferB,wipe,trig_] Nothing 1 (Special 0) (toUId z)
 
 -- | Make gaps in spectrum.
-pv_RectComb :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-pv_RectComb rate buffer numTeeth phase width = mkUGen Nothing [KR] (Left rate) "PV_RectComb" [buffer,numTeeth,phase,width] Nothing 1 (Special 0) NoId
+pv_RectComb :: UGen -> UGen -> UGen -> UGen -> UGen
+pv_RectComb buffer numTeeth phase width = mkUGen Nothing [KR,KR] (Left KR) "PV_RectComb" [buffer,numTeeth,phase,width] Nothing 1 (Special 0) NoId
 
 -- | Make gaps in spectrum.
-pv_RectComb2 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-pv_RectComb2 rate bufferA bufferB numTeeth phase width = mkUGen Nothing [KR] (Left rate) "PV_RectComb2" [bufferA,bufferB,numTeeth,phase,width] Nothing 1 (Special 0) NoId
+pv_RectComb2 :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+pv_RectComb2 bufferA bufferB numTeeth phase width = mkUGen Nothing [KR,KR] (Left KR) "PV_RectComb2" [bufferA,bufferB,numTeeth,phase,width] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 pv_Split :: UGen -> UGen -> UGen
-pv_Split bufferA bufferB = mkUGen Nothing [KR] (Left KR) "PV_Split" [bufferA,bufferB] Nothing 2 (Special 0) NoId
+pv_Split bufferA bufferB = mkUGen Nothing [KR,KR] (Left KR) "PV_Split" [bufferA,bufferB] Nothing 2 (Special 0) NoId
 
 -- | Two channel equal power pan.
 pan2 :: UGen -> UGen -> UGen -> UGen
@@ -1187,9 +1189,11 @@ playBuf numChannels rate bufnum rate_ trigger startPos loop doneAction = mkUGen 
 pluck :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 pluck in_ trig_ maxdelaytime delaytime decaytime coef = mkUGen Nothing [AR] (Right [0]) "Pluck" [in_,trig_,maxdelaytime,delaytime,decaytime,coef] Nothing 1 (Special 0) NoId
 
+{-
 -- | Print the current output value of a UGen
 poll :: UGen -> UGen -> UGen -> UGen -> UGen
 poll trig_ in_ label_ trigid = mkUGen Nothing [AR,KR] (Right [1]) "Poll" [trig_,in_,label_,trigid] Nothing 1 (Special 0) NoId
+-}
 
 -- | Band limited pulse wave.
 pulse :: Rate -> UGen -> UGen -> UGen
@@ -1257,7 +1261,7 @@ rPlayTrace rate bufnum degree rate_ axis = mkUGen Nothing [AR,KR] (Left rate) "R
 
 -- | (Undocumented class)
 rShufflerB :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-rShufflerB bufnum readLocationMinima readLocationMaxima readIncrementMinima readIncrementMaxima durationMinima durationMaxima envelopeAmplitudeMinima envelopeAmplitudeMaxima envelopeShapeMinima envelopeShapeMaxima envelopeSkewMinima envelopeSkewMaxima stereoLocationMinima stereoLocationMaxima interOffsetTimeMinima interOffsetTimeMaxima ftableReadLocationIncrement readIncrementQuanta interOffsetTimeQuanta = mkUGen Nothing [AR,KR] (Left AR) "RShufflerB" [bufnum,readLocationMinima,readLocationMaxima,readIncrementMinima,readIncrementMaxima,durationMinima,durationMaxima,envelopeAmplitudeMinima,envelopeAmplitudeMaxima,envelopeShapeMinima,envelopeShapeMaxima,envelopeSkewMinima,envelopeSkewMaxima,stereoLocationMinima,stereoLocationMaxima,interOffsetTimeMinima,interOffsetTimeMaxima,ftableReadLocationIncrement,readIncrementQuanta,interOffsetTimeQuanta] Nothing 2 (Special 0) NoId
+rShufflerB bufnum readLocationMinima readLocationMaxima readIncrementMinima readIncrementMaxima durationMinima durationMaxima envelopeAmplitudeMinima envelopeAmplitudeMaxima envelopeShapeMinima envelopeShapeMaxima envelopeSkewMinima envelopeSkewMaxima stereoLocationMinima stereoLocationMaxima interOffsetTimeMinima interOffsetTimeMaxima ftableReadLocationIncrement readIncrementQuanta interOffsetTimeQuanta = mkUGen Nothing [AR,KR,AR] (Left AR) "RShufflerB" [bufnum,readLocationMinima,readLocationMaxima,readIncrementMinima,readIncrementMaxima,durationMinima,durationMaxima,envelopeAmplitudeMinima,envelopeAmplitudeMaxima,envelopeShapeMinima,envelopeShapeMaxima,envelopeSkewMinima,envelopeSkewMaxima,stereoLocationMinima,stereoLocationMaxima,interOffsetTimeMinima,interOffsetTimeMaxima,ftableReadLocationIncrement,readIncrementQuanta,interOffsetTimeQuanta] Nothing 2 (Special 0) NoId
 
 -- | (Undocumented class)
 rShufflerL :: Rate -> UGen -> UGen -> UGen -> UGen
@@ -1361,7 +1365,7 @@ scopeOut2 rate inputArray scopeNum maxFrames scopeFrames = mkUGen Nothing [AR,KR
 
 -- | Select output from an array of inputs.
 select :: UGen -> UGen -> UGen
-select which array = mkUGen Nothing [AR,KR] (Right [0,1]) "Select" [which] (Just array) 1 (Special 0) NoId
+select which array = mkUGen Nothing [AR,KR,IR] (Right [0,1]) "Select" [which] (Just array) 1 (Special 0) NoId
 
 -- | Send a trigger message from the server back to the client.
 sendTrig :: UGen -> UGen -> UGen -> UGen

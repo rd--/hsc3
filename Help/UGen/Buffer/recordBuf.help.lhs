@@ -1,9 +1,6 @@
 > Sound.SC3.UGen.Help.viewSC3Help "RecordBuf"
 > Sound.SC3.UGen.DB.ugenSummary "RecordBuf"
 
-# SC3
-reorders inputArray from last to first argument.
-
 > import Sound.SC3
 
 Allocate a buffer (assume SR of 48k)

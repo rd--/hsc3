@@ -23,7 +23,7 @@ data Graph = Graph {nextId :: NodeId
                    ,constants :: [Node]
                    ,controls :: [Node]
                    ,ugens :: [Node]}
-            deriving (Eq,Show)
+            deriving (Show)
 
 -- | Enumeration of the four operating rates for controls.
 data KType = K_IR | K_KR | K_TR | K_AR
@@ -62,7 +62,14 @@ data Node = NodeC {node_id :: NodeId
           | NodeP {node_id :: NodeId
                   ,node_p_node :: Node
                   ,node_p_index :: PortIndex}
-            deriving (Eq,Show)
+            deriving (Show)
+
+node_k_eq :: Node -> Node -> Bool
+node_k_eq p q =
+    case (p,q) of
+      (NodeK k rt ix nm df tr me,NodeK k' rt' ix' nm' df' tr' me') ->
+          k == k' && rt == rt' && ix == ix' && nm == nm' && df == df' && tr == tr' && me == me'
+      _ -> error "node_k_eq? not Node_K"
 
 -- * Building
 
@@ -208,7 +215,9 @@ find_u_p :: UGenParts -> Node -> Bool
 find_u_p (r,n,i,o,s,d) nd =
     case nd of
       NodeU _ r' n' i' o' s' d' ->
-          r == r' && n == n' && i == i' && o == o' && s == s' && d == d'
+          if d == LinearId || d' == LinearId
+          then False
+          else r == r' && n == n' && i == i' && o == o' && s == s' && d == d'
       _ ->  error "find_u_p"
 
 -- | Insert a /primitive/ 'NodeU' into the 'Graph'.

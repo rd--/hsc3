@@ -1,6 +1,5 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Duty"
 > Sound.SC3.UGen.DB.ugenSummary "Duty"
-# inputReordering: [0,1,3,2]
 
 > import Sound.SC3
 > import qualified Sound.SC3.Monad as M

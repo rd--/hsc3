@@ -4,6 +4,7 @@ module Sound.SC3.UGen.Type where
 import Data.Bits {- base -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
+import Safe {- safe -}
 import System.Random {- random -}
 import qualified Text.Read as R {- base -}
 
@@ -15,7 +16,7 @@ import Sound.SC3.UGen.Rate
 -- * Basic types
 
 -- | Data type for internalised identifier at 'UGen'.
-data UGenId = NoId | UId Int
+data UGenId = NoId | LinearId | UId Int
               deriving (Eq,Show)
 
 -- | SC3 samples are 32-bit 'Float'.  hsc3 represents data as 64-bit
@@ -76,7 +77,13 @@ data Primitive = Primitive {ugenRate :: Rate
                            ,ugenOutputs :: [Output]
                            ,ugenSpecial :: Special
                            ,ugenId :: UGenId}
-                 deriving (Eq,Show)
+                 deriving (Show)
+
+instance Eq Primitive where
+    Primitive rt nm inp outp sp k == Primitive rt' nm' inp' outp' sp' k' =
+        if k == LinearId || k' == LinearId
+        then False
+        else rt == rt' && nm == nm' && inp == inp' && outp == outp' && sp == sp'
 
 -- | Proxy to multiple channel input.
 data Proxy = Proxy {proxySource :: Primitive
@@ -269,7 +276,7 @@ proxify u =
       Primitive_U p ->
           let o = ugenOutputs p
           in case o of
-               (_:_:_) -> mce (map (proxy u) [0..(length o - 1)])
+               _:_:_ -> mce (map (proxy u) [0..(length o - 1)])
                _ -> u
       Constant_U _ -> u
       _ -> error "proxify: illegal ugen"
@@ -278,10 +285,11 @@ proxify u =
 --
 -- cf = constant function, rs = rate set, r = rate, nm = name, i =
 -- inputs, o = outputs.
-mkUGen :: Maybe ([Sample] -> Sample) -> [Rate] -> Maybe Rate ->
-          String -> [UGen] -> Int -> Special -> UGenId -> UGen
-mkUGen cf rs r nm i o s z =
-    let f h = let r' = fromMaybe (maximum (map rateOf h)) r
+mkUGen :: Maybe ([Sample] -> Sample) -> [Rate] -> Either Rate [Int] ->
+          String -> [UGen] -> Maybe UGen -> Int -> Special -> UGenId -> UGen
+mkUGen cf rs r nm i i_mce o s z =
+    let i' = maybe i ((i ++) . mceChannels) i_mce
+        f h = let r' = either id (maximum . map (rateOf . (atNote ("mkUGen: " ++ nm) h))) r
                   o' = replicate o r'
                   u = Primitive_U (Primitive r' nm h o' s z)
               in if r' `elem` rs
@@ -292,14 +300,15 @@ mkUGen cf rs r nm i o s z =
                             else u
                         Nothing -> u
                  else error ("mkUGen: rate restricted: " ++ show (r,rs,nm))
-    in proxify (mceBuild f (map checkInput i))
+    in proxify (mceBuild f (map checkInput i'))
 
 -- * Operators
 
 -- | Operator UGen constructor.
 mkOperator :: ([Sample] -> Sample) -> String -> [UGen] -> Int -> UGen
 mkOperator f c i s =
-    mkUGen (Just f) all_rates Nothing c i 1 (Special s) NoId
+    let ix = [0 .. length i - 1]
+    in mkUGen (Just f) all_rates (Right ix) c i Nothing 1 (Special s) NoId
 
 -- | Unary math constructor with constant optimization.
 mkUnaryOperator :: Unary -> (Sample -> Sample) -> UGen -> UGen

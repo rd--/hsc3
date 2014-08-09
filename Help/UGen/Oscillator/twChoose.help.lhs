@@ -1,7 +1,6 @@
 > Sound.SC3.UGen.Help.viewSC3Help "TWChoose"
 
-# composite
-tWChoose is a composite of tWindex and select
+# tWChoose is a composite of tWindex and select
 
 > import Sound.SC3.ID
 

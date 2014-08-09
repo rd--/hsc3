@@ -1,6 +1,5 @@
 > Sound.SC3.UGen.Help.viewSC3Help "TWindex"
 > Sound.SC3.UGen.DB.ugenSummary "TWindex"
-# inputReordering: [0,2,1]
 
 > import Sound.SC3.ID
 

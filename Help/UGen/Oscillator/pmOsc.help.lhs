@@ -1,8 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "PMOsc"
 > :t pmOsc
 
-# composite
-sinOsc r cf (sinOsc r mf mp * pm)
+# pmOsc is a composite of sinOsc, ie. sinOsc r cf (sinOsc r mf mp * pm)
 
 > import Sound.SC3.ID
 

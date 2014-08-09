@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "SelectX"
 > :t selectX
 
-# composite
+# composite ugen graph
 
 > import Sound.SC3
 > import Sound.SC3.UGen.Dot

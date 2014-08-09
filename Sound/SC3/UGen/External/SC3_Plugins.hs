@@ -78,15 +78,15 @@ streson input delayTime res = mkFilter "Streson" [input,delayTime,res] 1
 
 -- | Triggered beta random distribution
 tBetaRand :: ID a => a -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-tBetaRand z lo hi prob1 prob2 trig_ = mkFilterIdR [AR,KR] z "TBetaRand" [lo,hi,prob1,prob2,trig_] 1
+tBetaRand z lo hi prob1 prob2 trig_ = mkFilterIdR [AR,KR] (toUId z) "TBetaRand" [lo,hi,prob1,prob2,trig_] 1
 
 -- | Triggered random walk generator
 tBrownRand :: ID a => a -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-tBrownRand z lo hi dev dist trig_ = mkFilterIdR [AR,KR] z "TBrownRand" [lo,hi,dev,dist,trig_] 1
+tBrownRand z lo hi dev dist trig_ = mkFilterIdR [AR,KR] (toUId z) "TBrownRand" [lo,hi,dev,dist,trig_] 1
 
 -- | Triggered gaussian random distribution
 tGaussRand :: ID a => a -> UGen -> UGen -> UGen -> UGen
-tGaussRand z lo hi trig_ = mkFilterIdR [AR,KR] z "TGaussRand" [lo,hi,trig_] 1
+tGaussRand z lo hi trig_ = mkFilterIdR [AR,KR] (toUId z) "TGaussRand" [lo,hi,trig_] 1
 
 -- * Concat
 
@@ -124,7 +124,7 @@ jPverbRaw rate in1 in2 damp earlydiff highband highx lowband lowx mdepth mfreq m
 
 -- | Brown noise.
 disintegrator :: ID a => a -> UGen -> UGen -> UGen -> UGen
-disintegrator z i p m = mkFilterId z "Disintegrator" [i,p,m] 1
+disintegrator z i p m = mkFilterId (toUId z) "Disintegrator" [i,p,m] 1
 
 -- * DWGUGens
 

@@ -1,9 +1,8 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Operator.=="
 > :t (==*)
 
-#hsc3
 The star suffixes (<*,<=*,>*,>=*) are because the result of the
-operatros is not of type Bool, as is required by the signature for the
+operators is not of type Bool, as is required by the signature for the
 class Ord.
 
 > import Sound.SC3

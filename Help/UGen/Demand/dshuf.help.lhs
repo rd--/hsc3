@@ -1,8 +1,6 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Dshuf"
 > Sound.SC3.UGen.DB.ugenSummary "Dshuf"
 
-# sclang re-orders inputs
-
 > import Sound.SC3.ID {- hsc3 -}
 
 > let {a = dseq 'α' dinf (dshuf 'β' 3 (mce [1,3,2,7,8.5]))

@@ -74,5 +74,5 @@ lift_constants :: Graph -> Graph
 lift_constants g =
     let (Graph z _ k u) = remove_implicit g
         (z',k',u') = c_lift_ugens g z u
-        g' = Graph z' [] (nub (k ++ k')) u'
+        g' = Graph z' [] (nubBy node_k_eq (k ++ k')) u'
     in add_implicit g'

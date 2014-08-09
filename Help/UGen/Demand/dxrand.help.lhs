@@ -1,6 +1,5 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Dxrand"
 > Sound.SC3.UGen.DB.ugenSummary "Dxrand"
-# inputReordering: [1,0]
 
 > import Sound.SC3.ID
 

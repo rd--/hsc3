@@ -7,7 +7,10 @@ import Control.Monad {- base -}
 import Control.Monad.IO.Class as M {- transformers -}
 import Control.Monad.Trans.Reader {- transformers -}
 import Data.Unique {- base -}
+
 import Sound.OSC.Transport.FD as T {- hosc -}
+
+import Sound.SC3.UGen.Type
 
 -- | A class indicating a monad that will generate a sequence of
 --   unique integer identifiers.
@@ -57,3 +60,9 @@ liftUId4 :: UId m => (Int -> Fn4 a b c d e) -> Fn4 a b c d (m e)
 liftUId4 f a b c d = do
   n <- generateUId
   return (f n a b c d)
+
+-- * Clone
+
+-- | Clone a unit generator (mce . replicateM).
+clone :: (UId m) => Int -> m UGen -> m UGen
+clone n = liftM mce . replicateM n

@@ -1,9 +1,6 @@
 > Sound.SC3.UGen.Help.viewSC3Help "IEnvGen"
 > Sound.SC3.UGen.DB.ugenSummary "IEnvGen"
 
-# SC3
-SC3 reorders inputs so that the envelope is the first argument.
-
 > import Sound.SC3.ID
 
 > let {l = [0,0.6,0.3,1.0,0]

@@ -66,7 +66,7 @@
 
 (defun hsc3-sc3-forth-pp () "Forth PP" (interactive)
   (hsc3-send-string
-   (format "Sound.SC3.UGen.PP.ugen_graph_forth_pp False %s" (thing-at-point 'symbol))))
+   (format "Sound.SC3.UGen.DB.PP.ugen_graph_forth_pp False %s" (thing-at-point 'symbol))))
 
 (defun hsc3-ugen-summary ()
   "Lookup up the UGen at point in hsc3-db"

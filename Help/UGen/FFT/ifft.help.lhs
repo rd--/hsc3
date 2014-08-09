@@ -2,5 +2,4 @@
 > Sound.SC3.UGen.DB.ugenSummary "IFFT"
 > :t ifft'
 
-# hsc3
-ifft' is a variant with the default window type and size
+# ifft' is a variant with the default window type and size

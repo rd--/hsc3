@@ -7,6 +7,10 @@ import Data.Int
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Type
 
+-- | Pseudo-infinite constant UGen.
+dinf :: UGen
+dinf = constant (9e8::Float)
+
 -- | True is conventionally 1.  The test to determine true is @> 0@.
 sc3_true :: Num n => n
 sc3_true = 1

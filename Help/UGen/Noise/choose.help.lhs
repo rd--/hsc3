@@ -1,7 +1,6 @@
 > :t choose
 
-# composite
-choose is a composite of iRand and select.
+# choose is a composite of iRand and select.
 
 > import Sound.SC3.ID
 
