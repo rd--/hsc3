@@ -340,12 +340,12 @@ demandEnvGen :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> 
 demandEnvGen rate level dur shape curve gate_ reset levelScale levelBias timeScale doneAction = mkUGen Nothing [AR,KR] (Left rate) "DemandEnvGen" [level,dur,shape,curve,gate_,reset,levelScale,levelBias,timeScale,(from_done_action doneAction)] Nothing 1 (Special 0) NoId
 
 -- | Search a buffer for a value
-detectIndex :: Rate -> UGen -> UGen -> UGen
-detectIndex rate bufnum in_ = mkUGen Nothing [AR,KR] (Left rate) "DetectIndex" [bufnum,in_] Nothing 1 (Special 0) NoId
+detectIndex :: UGen -> UGen -> UGen
+detectIndex bufnum in_ = mkUGen Nothing [AR,KR] (Right [1]) "DetectIndex" [bufnum,in_] Nothing 1 (Special 0) NoId
 
 -- | When input falls below a threshhold, evaluate doneAction.
-detectSilence :: Rate -> UGen -> UGen -> UGen -> DoneAction -> UGen
-detectSilence rate in_ amp time doneAction = mkUGen Nothing [AR,KR] (Left rate) "DetectSilence" [in_,amp,time,(from_done_action doneAction)] Nothing 1 (Special 0) NoId
+detectSilence :: UGen -> UGen -> UGen -> DoneAction -> UGen
+detectSilence in_ amp time doneAction = mkUGen Nothing [AR,KR] (Right [0]) "DetectSilence" [in_,amp,time,(from_done_action doneAction)] Nothing 1 (Special 0) NoId
 
 -- | Demand rate geometric series UGen.
 dgeom :: ID a => a -> UGen -> UGen -> UGen -> UGen
@@ -432,8 +432,8 @@ dustR :: Rate -> UGen -> UGen -> UGen
 dustR rate iot_min iot_max = mkUGen Nothing [AR] (Left rate) "DustR" [iot_min,iot_max] Nothing 1 (Special 0) NoId
 
 -- | Demand results from demand rate UGens.
-duty :: Rate -> UGen -> UGen -> UGen -> DoneAction -> UGen
-duty rate dur reset doneAction level = mkUGen Nothing [AR,KR] (Left rate) "Duty" [dur,reset,doneAction,(from_done_action level)] Nothing 1 (Special 0) NoId
+duty :: Rate -> UGen -> UGen -> DoneAction -> UGen -> UGen
+duty rate dur reset doneAction level = mkUGen Nothing [AR,KR] (Left rate) "Duty" [dur,reset,(from_done_action doneAction),level] Nothing 1 (Special 0) NoId
 
 -- | Demand rate white noise random generator.
 dwhite :: ID a => a -> UGen -> UGen -> UGen -> UGen
@@ -622,8 +622,8 @@ in' :: Int -> Rate -> UGen -> UGen
 in' numChannels rate bus = mkUGen Nothing [AR,KR] (Left rate) "In" [bus] Nothing numChannels (Special 0) NoId
 
 -- | Read signal from a bus with a current or one cycle old timestamp.
-inFeedback :: Int -> Rate -> UGen -> UGen
-inFeedback numChannels rate bus = mkUGen Nothing [AR] (Left rate) "InFeedback" [bus] Nothing numChannels (Special 0) NoId
+inFeedback :: Int -> UGen -> UGen
+inFeedback numChannels bus = mkUGen Nothing [AR] (Left AR) "InFeedback" [bus] Nothing numChannels (Special 0) NoId
 
 -- | Tests if a signal is within a given range.
 inRange :: UGen -> UGen -> UGen -> UGen
@@ -738,12 +738,12 @@ lpf :: UGen -> UGen -> UGen
 lpf in_ freq = mkUGen Nothing [AR,KR] (Right [0]) "LPF" [in_,freq] Nothing 1 (Special 0) NoId
 
 -- | Two point average filter
-lPZ1 :: UGen -> UGen
-lPZ1 in_ = mkUGen Nothing [AR,KR] (Right [0]) "LPZ1" [in_] Nothing 1 (Special 0) NoId
+lpz1 :: UGen -> UGen
+lpz1 in_ = mkUGen Nothing [AR,KR] (Right [0]) "LPZ1" [in_] Nothing 1 (Special 0) NoId
 
 -- | Two zero fixed lowpass
-lPZ2 :: UGen -> UGen
-lPZ2 in_ = mkUGen Nothing [AR,KR] (Right [0]) "LPZ2" [in_] Nothing 1 (Special 0) NoId
+lpz2 :: UGen -> UGen
+lpz2 in_ = mkUGen Nothing [AR,KR] (Right [0]) "LPZ2" [in_] Nothing 1 (Special 0) NoId
 
 -- | Exponential lag
 lag :: UGen -> UGen -> UGen
@@ -1472,8 +1472,8 @@ tExpRand :: ID a => a -> UGen -> UGen -> UGen -> UGen
 tExpRand z lo hi trig_ = mkUGen Nothing [AR,KR] (Right [2]) "TExpRand" [lo,hi,trig_] Nothing 1 (Special 0) (toUId z)
 
 -- | Buffer granulator.
-tGrains :: Int -> Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-tGrains numChannels rate trigger bufnum rate_ centerPos dur pan amp interp = mkUGen Nothing [AR] (Left rate) "TGrains" [trigger,bufnum,rate_,centerPos,dur,pan,amp,interp] Nothing numChannels (Special 0) NoId
+tGrains :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+tGrains numChannels trigger bufnum rate_ centerPos dur pan amp interp = mkUGen Nothing [AR] (Left AR) "TGrains" [trigger,bufnum,rate_,centerPos,dur,pan,amp,interp] Nothing numChannels (Special 0) NoId
 
 -- | Triggered integer random number generator.
 tIRand :: ID a => a -> UGen -> UGen -> UGen -> UGen

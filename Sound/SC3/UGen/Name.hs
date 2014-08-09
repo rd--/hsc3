@@ -19,6 +19,7 @@ toSC3Name :: String -> String
 toSC3Name nm =
     case nm of
       'l':'f':'d':nm' -> "LFD" ++ nm'
+      'l':'p':'z':nm' -> "LPZ" ++ nm'
       'l':'f':nm' -> "LF" ++ nm'
       'p':'v':'_':nm' -> "PV_" ++ nm'
       "out" -> "Out"
@@ -38,9 +39,10 @@ toSC3Name nm =
 fromSC3Name :: String -> String
 fromSC3Name nm =
     case nm of
-      'L':'F':'D':nm' -> "lfd"++nm'
-      'L':'F':nm' -> "lf"++nm'
-      'P':'V':'_':nm' -> "pv_"++nm'
+      'L':'F':'D':nm' -> "lfd" ++ nm'
+      'l':'p':'z':nm' -> "lpz" ++ nm'
+      'L':'F':nm' -> "lf" ++ nm'
+      'P':'V':'_':nm' -> "pv_" ++ nm'
       p:q -> if all isUpper nm && length nm <= 3
              then map toLower nm
              else toLower p : q
