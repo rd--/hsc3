@@ -11,6 +11,10 @@ import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 
+-- | 'UId' of 'resolveID'.
+toUId :: (ID a) => a -> UGenId
+toUId = UId . resolveID
+
 -- | Lookup operator name for operator UGens, else UGen name.
 ugen_user_name :: String -> Special -> String
 ugen_user_name nm (Special n) =
@@ -207,15 +211,6 @@ unpackLabel u =
              then map mce (transpose x)
              else error (show ("unpackLabel: mce length /=",x))
       _ -> error (show ("unpackLabel: non-label",u))
-
--- * Unit generator function builders
-
-toUId :: (ID a) => a -> UGenId
-toUId = UId . resolveID
-
--- | 'UGenId' used for deterministic UGens.
-no_id :: UGenId
-no_id = NoId
 
 -- * Bitwise
 

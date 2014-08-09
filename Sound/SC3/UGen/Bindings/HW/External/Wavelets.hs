@@ -1,9 +1,9 @@
 -- | Wavelet unit generators (Nick Collins).
-module Sound.SC3.UGen.Wavelets where
+module Sound.SC3.UGen.Bindings.HW.External.Wavelets where
 
+import Sound.SC3.UGen.Bindings.HW.Construct
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
-import Sound.SC3.UGen.UGen
 
 -- | Forward wavelet transform.
 dwt :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen

@@ -52,7 +52,3 @@ numBuffers = mkInfo "NumBuffers"
 -- | Number of runnings synthesis nodes.
 numRunningSynths :: UGen
 numRunningSynths = mkInfo "NumRunningSynths"
-
--- | Poll value of input UGen when triggered.
-poll :: UGen -> UGen -> UGen -> UGen -> UGen
-poll t i l tr = mkFilter "Poll" ([t,i,tr] ++ unpackLabel l) 0

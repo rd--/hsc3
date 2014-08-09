@@ -42,22 +42,6 @@ klang r fs fo a =
     then mkOscMCE r "Klang" [fs, fo] a 1
     else error "klang: not AR"
 
--- | Format frequency, amplitude and phase data as required for klang.
-klangSpec :: [UGen] -> [UGen] -> [UGen] -> UGen
-klangSpec f a p = mce ((concat . transpose) [f, a, p])
-
--- | Variant of 'klangSpec' for non-UGen inputs.
-klangSpec' :: Real n => [n] -> [n] -> [n] -> UGen
-klangSpec' f a p =
-    let u = map constant
-    in klangSpec (u f) (u a) (u p)
-
--- | Variant of 'klangSpec' for 'MCE' inputs.
-klangSpec_mce :: UGen -> UGen -> UGen -> UGen
-klangSpec_mce f a p =
-    let m = mceChannels
-    in klangSpec (m f) (m a) (m p)
-
 -- | A sine like shape made of two cubic pieces.
 lfCub :: Rate -> UGen -> UGen -> UGen
 lfCub r freq phase = mkOsc r "LFCub" [freq, phase] 1

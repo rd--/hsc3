@@ -1,8 +1,8 @@
 -- | Reader for ATS analyis data files.
-module Sound.SC3.UGen.External.ATS (ATS(..)
-                                   ,ATSHeader(..)
-                                   ,ATSFrame,atsFrames
-                                   ,atsRead) where
+module Sound.SC3.UGen.Bindings.HW.External.ATS (ATS(..)
+                                               ,ATSHeader(..)
+                                               ,ATSFrame,atsFrames
+                                               ,atsRead) where
 
 import qualified Data.ByteString.Lazy as B {- bytestring -}
 import Data.Int {- base -}

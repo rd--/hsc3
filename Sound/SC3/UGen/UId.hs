@@ -25,6 +25,8 @@ instance (T.Transport t,Functor io,Applicative io,MonadIO io) =>
     UId (ReaderT t io) where
    generateUId = ReaderT (M.liftIO . const generateUId)
 
+-- * Lift
+
 -- | Unary function.
 type Fn1 a b = a -> b
 

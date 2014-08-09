@@ -11,20 +11,6 @@ import Sound.SC3.UGen.UGen
 fft :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 fft buf i h wt a ws = mkOsc KR "FFT" [buf,i,h,wt,a,ws] 1
 
--- | Variant FFT constructor with default values for hop size (0.5),
--- window type (0), active status (1) and window size (0).
-fft' :: UGen -> UGen -> UGen
-fft' buf i = fft buf i 0.5 0 1 0
-
--- | 'fft' variant that allocates 'localBuf'.
---
--- > let c = ffta 'α' 2048 (soundIn 0) 0.5 0 1 0
--- > in audition (out 0 (ifft c 0 0))
-ffta :: ID i => i -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-ffta z nf i h wt a ws =
-    let b = localBuf z nf 1
-    in fft b i h wt a ws
-
 -- | Outputs signal for @FFT@ chains, without performing FFT.
 fftTrigger :: UGen -> UGen -> UGen -> UGen
 fftTrigger b h p = mkOsc KR "FFTTrigger" [b,h,p] 1
@@ -32,10 +18,6 @@ fftTrigger b h p = mkOsc KR "FFTTrigger" [b,h,p] 1
 -- | Inverse Fast Fourier Transform.
 ifft :: UGen -> UGen -> UGen -> UGen
 ifft buf wt ws = mkOsc AR "IFFT" [buf,wt,ws] 1
-
--- | Variant ifft with default value for window type.
-ifft' :: UGen -> UGen
-ifft' buf = ifft buf 0 0
 
 -- | Strict convolution of two continuously changing inputs.
 convolution :: UGen -> UGen -> UGen -> UGen
@@ -52,27 +34,6 @@ convolution2L in_ kernel trigger framesize crossfade = mkOsc AR "Convolution2L" 
 -- | Time based convolver.
 convolution3 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
 convolution3 rate in_ kernel trigger framesize = mkOscR [AR,KR] rate "Convolution3" [in_,kernel,trigger,framesize] 1
-
--- | Pack demand-rate FFT bin streams into an FFT chain.
-packFFT :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-packFFT b sz from to z mp =
-    let n = constant (mceDegree mp)
-    in mkOscMCE KR "PackFFT" [b, sz, from, to, z, n] mp 1
-
--- | Format magnitude and phase data data as required for packFFT.
-packFFTSpec :: [UGen] -> [UGen] -> UGen
-packFFTSpec m p = mce (interleave m p)
-    where interleave x = concat . zipWith (\a b -> [a,b]) x
-
--- | Apply function /f/ to each bin of an @FFT@ chain, /f/ receives
--- magnitude, phase and index and returns a (magnitude,phase).
-pvcollect :: UGen -> UGen -> (UGen -> UGen -> UGen -> (UGen, UGen)) -> UGen -> UGen -> UGen -> UGen
-pvcollect c nf f from to z = packFFT c nf from to z mp
-  where m = unpackFFT c nf from to 0
-        p = unpackFFT c nf from to 1
-        i = [from .. to]
-        e = zipWith3 f m p i
-        mp = uncurry packFFTSpec (unzip e)
 
 -- | Complex addition.
 pv_Add :: UGen -> UGen -> UGen
@@ -190,22 +151,23 @@ pv_RectComb buf teeth phase width = mkOsc KR "PV_RectComb" [buf,teeth,phase,widt
 unpack1FFT :: UGen -> UGen -> UGen -> UGen -> UGen
 unpack1FFT buf size index' which = mkOsc DR "Unpack1FFT" [buf, size, index', which] 1
 
--- | Unpack an FFT chain into separate demand-rate FFT bin streams.
-unpackFFT :: UGen -> UGen -> UGen -> UGen -> UGen -> [UGen]
-unpackFFT c nf from to w = map (\i -> unpack1FFT c nf i w) [from .. to]
-
--- * Partitioned convolution
-
--- | Calculate size of accumulation buffer given FFT and IR sizes.
-pc_calcAccumSize :: Int -> Int -> Int
-pc_calcAccumSize fft_size ir_length =
-    let partition_size = fft_size `div` 2
-        num_partitions = (ir_length `div` partition_size) + 1
-    in fft_size * num_partitions
-
 -- | Partitioned convolution.
 partConv :: UGen -> UGen -> UGen -> UGen
 partConv i sz ib = mkOsc AR "PartConv" [i, sz, ib] 1
+
+-- * NONDET
+
+-- | Randomize order of bins.
+pv_BinScramble :: ID i => i -> UGen -> UGen -> UGen -> UGen -> UGen
+pv_BinScramble z buf wp width trg = mkOscId z KR "PV_BinScramble" [buf,wp,width,trg] 1
+
+-- | Randomly clear bins.
+pv_RandComb :: ID i => i -> UGen -> UGen -> UGen -> UGen
+pv_RandComb z buf wp trg = mkOscId z KR "PV_RandComb" [buf,wp,trg] 1
+
+-- | Cross fade, copying bins in random order.
+pv_RandWipe :: ID i => i -> UGen -> UGen -> UGen -> UGen -> UGen
+pv_RandWipe z ba bb wp trg = mkOscId z KR "PV_RandWipe" [ba,bb,wp,trg] 1
 
 -- Local Variables:
 -- truncate-lines:t

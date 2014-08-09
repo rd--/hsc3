@@ -77,18 +77,6 @@ bufDelayN buf i dly = mkFilter "BufDelayN" [buf, i, dly] 1
 bufRd :: Int -> Rate -> UGen -> UGen -> Loop -> Interpolation -> UGen
 bufRd n r buf phs lp intp = mkOsc r "BufRd" [buf, phs, from_loop lp, from_interpolation intp] n
 
--- | Buffer reader (no interpolation).
-bufRdN :: Int -> Rate -> UGen -> UGen -> Loop -> UGen
-bufRdN n r b p l = bufRd n r b p l NoInterpolation
-
--- | Buffer reader (linear interpolation).
-bufRdL :: Int -> Rate -> UGen -> UGen -> Loop -> UGen
-bufRdL n r b p l = bufRd n r b p l LinearInterpolation
-
--- | Buffer reader (cubic interpolation).
-bufRdC :: Int -> Rate -> UGen -> UGen -> Loop -> UGen
-bufRdC n r b p l = bufRd n r b p l CubicInterpolation
-
 -- | Buffer writer.
 bufWr :: UGen -> UGen -> Loop -> UGen -> UGen
 bufWr buf phs lp i = mkFilterMCE "BufWr" [buf, phs, from_loop lp] i 0
@@ -144,17 +132,6 @@ localBuf z nf nc = mkOscId z IR "LocalBuf" [nc, nf] 1
 -- Added implicitly by the graph constructor if required and not present.
 maxLocalBufs :: UGen -> UGen
 maxLocalBufs n = mkOsc IR "MaxLocalBufs" [n] 0
-
--- | Set local buffer values.
-setBuf :: UGen -> [UGen] -> UGen -> UGen
-setBuf b xs o = mkOsc IR "SetBuf" ([b, o, fromIntegral (length xs)] ++ xs) 1
-
--- | Generate a localBuf and use setBuf to initialise it.
-asLocalBuf :: ID i => i -> [UGen] -> UGen
-asLocalBuf i xs =
-    let b = localBuf i (fromIntegral (length xs)) 1
-        s = setBuf b xs 0
-    in mrg2 b s
 
 -- Local Variables:
 -- truncate-lines:t

@@ -1,9 +1,9 @@
 -- | F0 UGens.
-module Sound.SC3.UGen.External.F0 where
+module Sound.SC3.UGen.Bindings.HW.External.F0 where
 
+import Sound.SC3.UGen.Bindings.HW.Construct
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
-import Sound.SC3.UGen.UGen
 
 -- * f0plugins
 

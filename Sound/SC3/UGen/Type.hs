@@ -19,6 +19,10 @@ import Sound.SC3.UGen.Rate
 data UGenId = NoId | UId Int
               deriving (Eq,Show)
 
+-- | Alias of 'NoId', the 'UGenId' used for deterministic UGens.
+no_id :: UGenId
+no_id = NoId
+
 -- | SC3 samples are 32-bit 'Float'.  hsc3 represents data as 64-bit
 -- 'Double'.  If 'UGen' values are used more generally (ie. see
 -- hsc3-forth) 'Float' may be too imprecise, ie. for representing time

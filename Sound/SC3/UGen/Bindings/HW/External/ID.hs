@@ -1,6 +1,7 @@
 -- | Non-deterministic external 'UGen's.
-module Sound.SC3.UGen.External.ID where
+module Sound.SC3.UGen.Bindings.HW.External.ID where
 
+import Sound.SC3.UGen.Bindings.HW.Construct
 import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type

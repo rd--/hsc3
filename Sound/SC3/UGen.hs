@@ -3,13 +3,13 @@ module Sound.SC3.UGen (module U) where
 
 import Sound.SC3.UGen.Bindings as U
 import Sound.SC3.UGen.Composite as U
+
 import Sound.SC3.UGen.Envelope as U
 import Sound.SC3.UGen.Envelope.Construct as U
 import Sound.SC3.UGen.Enum as U
 import Sound.SC3.UGen.Help as U
 import Sound.SC3.UGen.Identifier as U
 import Sound.SC3.UGen.Math as U
-import Sound.SC3.UGen.Monad as U
 import Sound.SC3.UGen.Name as U
 import Sound.SC3.UGen.Operator as U
 import Sound.SC3.UGen.Optimise as U

@@ -1,19 +1,20 @@
 -- | Common unit generator graphs.
 module Sound.SC3.UGen.Composite where
 
-import Control.Monad
-import Data.List
-import Data.List.Split
+import Control.Monad {- base -}
+import Data.List {- base -}
+import Data.List.Split {- split -}
+import Data.Maybe {- base -}
 
-import Sound.SC3.UGen.Bindings
+import Sound.SC3.UGen.Bindings.DB
+import Sound.SC3.UGen.Bindings.HW
+import Sound.SC3.UGen.Bindings.Monad
 import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.Math
-import Sound.SC3.UGen.Monad
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.UGen.Construct
 import Sound.SC3.UGen.UId
 
 -- | Generate a localBuf and use setBuf to initialise it.
@@ -75,18 +76,6 @@ dconsM x xs = do
   a <- dseqM 1 (mce2 x xs)
   dswitchM i a
 
--- | Demand rate weighted random sequence generator.
-dwrand :: ID i => i -> UGen -> UGen -> UGen -> UGen
-dwrand z repeats weights list_ =
-    let n = mceDegree list_
-        weights' = mceExtend n weights
-        inp = repeats : constant n : weights'
-    in mkUGen Nothing [DR] (Left DR) "Dwrand" inp (Just list_) 1 (Special 0) (toUId z)
-
--- | Demand rate weighted random sequence generator.
-dwrandM :: (UId m) => UGen -> UGen -> UGen -> m UGen
-dwrandM = liftUId3 dwrand
-
 -- | Dynamic klang, dynamic sine oscillator bank
 dynKlang :: Rate -> UGen -> UGen -> UGen -> UGen
 dynKlang r fs fo s =
@@ -114,10 +103,6 @@ ffta :: ID i => i -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 ffta z nf i h wt a ws =
     let b = localBuf z nf 1
     in fft b i h wt a ws
-
--- | Outputs signal for @FFT@ chains, without performing FFT.
-fftTrigger :: UGen -> UGen -> UGen -> UGen
-fftTrigger b h p = mkOsc KR "FFTTrigger" [b,h,p] 1
 
 -- | Sum of 'numInputBuses' and 'numOutputBuses'.
 firstPrivateBus :: UGen
@@ -183,6 +168,14 @@ lchoose e a = select (iRand e 0 (fromIntegral (length a))) (mce a)
 lchooseM :: UId m => [UGen] -> m UGen
 lchooseM = liftUId lchoose
 
+-- | 'linExp' of (-1,1).
+linExp_b :: UGen -> UGen -> UGen -> UGen
+linExp_b i = linExp i (-1) 1
+
+-- | 'linExp' of (0,1).
+linExp_u :: UGen -> UGen -> UGen -> UGen
+linExp_u i = linExp i 0 1
+
 -- | Map from one linear range to another linear range.
 linLin :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 linLin i sl sr dl dr =
@@ -204,46 +197,6 @@ localIn' nc r = localIn nc r (mce (replicate nc 0))
 -- | Count 'mce' channels.
 mceN :: UGen -> UGen
 mceN = constant . length . mceChannels
-
--- | Pack demand-rate FFT bin streams into an FFT chain.
-packFFT :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-packFFT b sz from to z mp =
-    let n = constant (mceDegree mp)
-    in mkOscMCE KR "PackFFT" [b, sz, from, to, z, n] mp 1
-
--- | Format magnitude and phase data data as required for packFFT.
-packFFTSpec :: [UGen] -> [UGen] -> UGen
-packFFTSpec m p = mce (interleave m p)
-    where interleave x = concat . zipWith (\a b -> [a,b]) x
-
--- | Calculate size of accumulation buffer given FFT and IR sizes.
-pc_calcAccumSize :: Int -> Int -> Int
-pc_calcAccumSize fft_size ir_length =
-    let partition_size = fft_size `div` 2
-        num_partitions = (ir_length `div` partition_size) + 1
-    in fft_size * num_partitions
-
--- | Poll value of input UGen when triggered.
-poll :: UGen -> UGen -> UGen -> UGen -> UGen
-poll t i l tr = mkFilter "Poll" ([t,i,tr] ++ unpackLabel l) 0
-
--- | Apply function /f/ to each bin of an @FFT@ chain, /f/ receives
--- magnitude, phase and index and returns a (magnitude,phase).
-pvcollect :: UGen -> UGen -> (UGen -> UGen -> UGen -> (UGen, UGen)) -> UGen -> UGen -> UGen -> UGen
-pvcollect c nf f from to z = packFFT c nf from to z mp
-  where m = unpackFFT c nf from to 0
-        p = unpackFFT c nf from to 1
-        i = [from .. to]
-        e = zipWith3 f m p i
-        mp = uncurry packFFTSpec (unzip e)
-
--- | Optimised sum function.
-sum_opt :: [UGen] -> UGen
-sum_opt l =
-    case l of
-      p:q:r:s:l' -> sum_opt (sum4 p q r s : l')
-      p:q:r:l' -> sum_opt (sum3 p q r : l')
-      _ -> sum l
 
 -- | Collapse possible mce by summing.
 mix :: UGen -> UGen
@@ -286,6 +239,29 @@ mouseX' = mouseR 'x'
 mouseY' :: Rate -> UGen -> UGen -> Warp -> UGen -> UGen
 mouseY' = mouseR 'y'
 
+-- | Translate onset type string to constant UGen value.
+onsetType :: Num a => String -> a
+onsetType s =
+    let t = ["power", "magsum", "complex", "rcomplex", "phase", "wphase", "mkl"]
+    in fromIntegral (fromMaybe 3 (elemIndex s t))
+
+-- | Onset detector with default values for minor parameters.
+onsets' :: UGen -> UGen -> UGen -> UGen
+onsets' c t o = onsets c t o 1 0.1 10 11 1 0
+
+-- | Format magnitude and phase data data as required for packFFT.
+packFFTSpec :: [UGen] -> [UGen] -> UGen
+packFFTSpec m p =
+    let interleave x = concat . zipWith (\a b -> [a,b]) x
+    in mce (interleave m p)
+
+-- | Calculate size of accumulation buffer given FFT and IR sizes.
+pc_calcAccumSize :: Int -> Int -> Int
+pc_calcAccumSize fft_size ir_length =
+    let partition_size = fft_size `div` 2
+        num_partitions = (ir_length `div` partition_size) + 1
+    in fft_size * num_partitions
+
 -- | PM oscillator.
 pmOsc :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
 pmOsc r cf mf pm mp = sinOsc r cf (sinOsc r mf mp * pm)
@@ -306,6 +282,16 @@ privateIn nc rt k = in' nc rt (k + firstPrivateBus)
 privateOut :: UGen -> UGen -> UGen
 privateOut k = out (k + firstPrivateBus)
 
+-- | Apply function /f/ to each bin of an @FFT@ chain, /f/ receives
+-- magnitude, phase and index and returns a (magnitude,phase).
+pvcollect :: UGen -> UGen -> (UGen -> UGen -> UGen -> (UGen, UGen)) -> UGen -> UGen -> UGen -> UGen
+pvcollect c nf f from to z = packFFT c nf from to z mp
+  where m = unpackFFT c nf from to 0
+        p = unpackFFT c nf from to 1
+        i = [from .. to]
+        e = zipWith3 f m p i
+        mp = uncurry packFFTSpec (unzip e)
+
 -- | RMS variant of 'runningSum'.
 runningSumRMS :: UGen -> UGen -> UGen
 runningSumRMS z n = sqrt (runningSum (z * z) n * (recip n))
@@ -316,19 +302,6 @@ selectX ix xs =
     let s0 = select (roundTo ix 2) xs
         s1 = select (trunc ix 2 + 1) xs
     in xFade2 s0 s1 (fold2 (ix * 2 - 1) 1) 1
-
--- | Send a reply message from the server back to the all registered clients.
-sendReply :: UGen -> UGen -> String -> [UGen] -> UGen
-sendReply i k n v =
-    let n' = map (fromIntegral . fromEnum) n
-        s = fromIntegral (length n')
-    in mkFilter "SendReply" ([i,k,s] ++ n' ++ v) 0
-
--- | Set local buffer values.
-setBuf :: UGen -> [UGen] -> UGen -> UGen
-setBuf b xs o =
-    let i = [b, o, fromIntegral (length xs)] ++ xs
-    in mkUGen Nothing [IR] (Left IR) "SetBuf" i Nothing 1 (Special 0) NoId
 
 -- | Silence.
 silent :: Int -> UGen
@@ -355,6 +328,14 @@ splay i s l c lc =
         a = if lc then sqrt (1 / n) else 1
     in mix (pan2 i (mce p * s + c) 1) * l * a
 
+-- | Optimised sum function.
+sum_opt :: [UGen] -> UGen
+sum_opt l =
+    case l of
+      p:q:r:s:l' -> sum_opt (sum4 p q r s : l')
+      p:q:r:l' -> sum_opt (sum3 p q r : l')
+      _ -> sum l
+
 -- | Randomly select one of several inputs on trigger.
 tChoose :: ID m => m -> UGen -> UGen -> UGen
 tChoose z t a = select (tIRand z 0 (mceN a) t) a
@@ -376,10 +357,6 @@ tWChooseM :: (UId m) => UGen -> UGen -> UGen -> UGen -> m UGen
 tWChooseM t a w n = do
   i <- tWindexM t n w
   return (select i a)
-
--- | Unpack a single value (magnitude or phase) from an FFT chain
-unpack1FFT :: UGen -> UGen -> UGen -> UGen -> UGen
-unpack1FFT buf size index' which = mkOsc DR "Unpack1FFT" [buf, size, index', which] 1
 
 -- | Unpack an FFT chain into separate demand-rate FFT bin streams.
 unpackFFT :: UGen -> UGen -> UGen -> UGen -> UGen -> [UGen]

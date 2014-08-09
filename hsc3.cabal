@@ -84,6 +84,32 @@ Library
                    Sound.SC3.Server.Transport.Monad
                    Sound.SC3.UGen
                    Sound.SC3.UGen.Bindings
+                   Sound.SC3.UGen.Bindings.DB
+                   Sound.SC3.UGen.Bindings.HW
+                   Sound.SC3.UGen.Bindings.Monad
+                   --Sound.SC3.UGen.Bindings.HW.Analysis
+                   --Sound.SC3.UGen.Bindings.HW.Buffer
+                   --Sound.SC3.UGen.Bindings.HW.Chaos
+                   Sound.SC3.UGen.Bindings.HW.Construct
+                   --Sound.SC3.UGen.Bindings.HW.Demand
+                   --Sound.SC3.UGen.Bindings.HW.DiskIO
+                   Sound.SC3.UGen.Bindings.HW.External
+                   Sound.SC3.UGen.Bindings.HW.External.ATS
+                   Sound.SC3.UGen.Bindings.HW.External.F0
+                   Sound.SC3.UGen.Bindings.HW.External.ID
+                   Sound.SC3.UGen.Bindings.HW.External.LPC
+                   Sound.SC3.UGen.Bindings.HW.External.SC3_Plugins
+                   Sound.SC3.UGen.Bindings.HW.External.Wavelets
+                   Sound.SC3.UGen.Bindings.HW.External.Zita
+                   --Sound.SC3.UGen.Bindings.HW.FFT
+                   --Sound.SC3.UGen.Bindings.HW.Filter
+                   --Sound.SC3.UGen.Bindings.HW.Granular
+                   --Sound.SC3.UGen.Bindings.HW.IO
+                   --Sound.SC3.UGen.Bindings.HW.Information
+                   --Sound.SC3.UGen.Bindings.HW.MachineListening
+                   --Sound.SC3.UGen.Bindings.HW.Noise
+                   --Sound.SC3.UGen.Bindings.HW.Oscillator
+                   --Sound.SC3.UGen.Bindings.HW.Panner
                    Sound.SC3.UGen.Composite
                    Sound.SC3.UGen.Enum
                    Sound.SC3.UGen.Envelope
@@ -97,7 +123,6 @@ Library
                    Sound.SC3.UGen.Identifier
                    Sound.SC3.UGen.Math
                    Sound.SC3.UGen.MCE
-                   Sound.SC3.UGen.Monad
                    Sound.SC3.UGen.Name
                    Sound.SC3.UGen.Operator
                    Sound.SC3.UGen.Optimise
@@ -108,7 +133,6 @@ Library
                    Sound.SC3.UGen.Transform
                    Sound.SC3.UGen.Type
                    Sound.SC3.UGen.UGen
-                   Sound.SC3.UGen.UGen.Construct
                    Sound.SC3.UGen.UId
   Other-modules:   Sound.SC3.Internal
 

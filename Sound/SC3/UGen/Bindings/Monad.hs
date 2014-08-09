@@ -1,7 +1,8 @@
 -- | Monad constructors for 'UGen's.
-module Sound.SC3.UGen.Monad where
+module Sound.SC3.UGen.Bindings.Monad where
 
-import Sound.SC3.UGen.Bindings
+import Sound.SC3.UGen.Bindings.DB
+import Sound.SC3.UGen.Bindings.HW
 import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
@@ -36,6 +37,10 @@ dibrownM = liftUId4 dibrown
 -- | Demand rate random selection.
 drandM :: (UId m) => UGen -> UGen -> m UGen
 drandM = liftUId2 drand
+
+-- | Demand rate weighted random sequence generator.
+dwrandM :: (UId m) => UGen -> UGen -> UGen -> m UGen
+dwrandM = liftUId3 dwrand
 
 -- | Demand rate random selection with no immediate repetition.
 dxrandM :: (UId m) => UGen -> UGen -> m UGen

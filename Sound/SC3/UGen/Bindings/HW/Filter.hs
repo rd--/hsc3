@@ -174,22 +174,6 @@ k2A i = mkOscR [AR] AR "K2A" [i] 1
 klank :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 klank i fs fp d s = mkFilterMCER [AR] "Klank" [i,fs,fp,d] s 1
 
--- | Format frequency, amplitude and decay time data as required for klank.
-klankSpec :: [UGen] -> [UGen] -> [UGen] -> UGen
-klankSpec f a dt = mce ((concat . transpose) [f,a,dt])
-
--- | Variant for non-UGen inputs.
-klankSpec' :: Real n => [n] -> [n] -> [n] -> UGen
-klankSpec' f a dt =
-    let u = map constant
-    in klankSpec (u f) (u a) (u dt)
-
--- | Variant of 'klankSpec' for 'MCE' inputs.
-klankSpec_mce :: UGen -> UGen -> UGen -> UGen
-klankSpec_mce f a dt =
-    let m = mceChannels
-    in klankSpec (m f) (m a) (m dt)
-
 -- | Simple averaging filter.
 lag :: UGen -> UGen -> UGen
 lag i t = mkFilter "Lag" [i,t] 1
@@ -233,14 +217,6 @@ limiter i l d = mkFilter "Limiter" [i,l,d] 1
 -- | Map from a linear range to an exponential range.
 linExp :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 linExp i sl sh dl dh = mkFilter "LinExp" [i,sl,sh,dl,dh] 1
-
--- | 'linExp' of (-1,1).
-linExp_b :: UGen -> UGen -> UGen -> UGen
-linExp_b i = linExp i (-1) 1
-
--- | 'linExp' of (0,1).
-linExp_u :: UGen -> UGen -> UGen -> UGen
-linExp_u i = linExp i 0 1
 
 -- | Two channel linear crossfade.
 linXFade2 :: UGen -> UGen -> UGen -> UGen
@@ -353,13 +329,6 @@ select i a = mkFilterMCE "Select" [i] a 1
 -- | Send a trigger message from the server back to the all registered clients.
 sendTrig :: UGen -> UGen -> UGen -> UGen
 sendTrig i k v = mkFilter "SendTrig" [i,k,v] 0
-
--- | Send a reply message from the server back to the all registered clients.
-sendReply :: UGen -> UGen -> String -> [UGen] -> UGen
-sendReply i k n v =
-    let n' = map (fromIntegral . fromEnum) n
-        s = fromIntegral (length n')
-    in mkFilter "SendReply" ([i,k,s] ++ n' ++ v) 0
 
 -- | Set-reset flip flop.
 setResetFF :: UGen -> UGen -> UGen
@@ -482,17 +451,3 @@ bLowShelf i f rs db = mkFilter "BLowShelf" [i,f,rs,db] 1
 -- | Bi-quad high shelf filter.
 bHiShelf :: UGen -> UGen -> UGen -> UGen -> UGen
 bHiShelf i f rs db = mkFilter "BHiShelf" [i,f,rs,db] 1
-
--- | Calculate coefficients for bi-quad low pass filter.
-bLowPassCoef :: Floating a => a -> a -> a -> (a,a,a,a,a)
-bLowPassCoef sr freq rq =
-    let w0 = pi * 2 * freq * (1 / sr)
-        cos_w0 = cos w0
-        i = 1 - cos_w0
-        alpha = sin w0 * 0.5 * rq
-        b0rz = recip (1 + alpha)
-        a0 = i * 0.5 * b0rz
-        a1 = i * b0rz
-        b1 = cos_w0 * 2 * b0rz
-        b2 = (1 - alpha) * negate b0rz
-    in (a0,a1,a0,b1,b2)

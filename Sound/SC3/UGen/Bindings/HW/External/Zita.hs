@@ -3,11 +3,11 @@
 -- To build the SC3 plugin run @faust2supercollider -d@ on
 -- @zita_rev1.dsp@, which is in the @examples@ directory of Faust, see
 -- <http://faust.grame.fr/>.
-module Sound.SC3.UGen.External.Zita where
+module Sound.SC3.UGen.Bindings.HW.External.Zita where
 
+import Sound.SC3.UGen.Bindings.HW.Construct
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
-import Sound.SC3.UGen.UGen
 
 data ZitaRev1 a =
     ZitaRev1 {zr1_in1 :: a

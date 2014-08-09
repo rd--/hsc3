@@ -1,15 +1,16 @@
 -- | Reader for LPC analysis data files.
-module Sound.SC3.UGen.External.LPC ( LPC(..)
-                                   , LPCHeader(..)
-                                   , LPCFrame
-                                   , lpcRead
-                                   , lpcSC3 ) where
+module Sound.SC3.UGen.Bindings.HW.External.LPC ( LPC(..)
+                                               , LPCHeader(..)
+                                               , LPCFrame
+                                               , lpcRead
+                                               , lpcSC3 ) where
 
-import Control.Monad
-import qualified Data.ByteString.Lazy as B
-import Data.List
-import Sound.OSC.Coding.Byte
-import System.IO
+import Control.Monad {- base -}
+import qualified Data.ByteString.Lazy as B {- bytestring -}
+import Data.List {- base -}
+import System.IO {- base -}
+
+import Sound.OSC.Coding.Byte {- hosc -}
 
 -- | LPC analysis data.
 data LPC = LPC { lpcHeader :: LPCHeader

@@ -1,9 +1,8 @@
 -- | For hand-writing UGens.
-module Sound.SC3.UGen.UGen.Construct where
+module Sound.SC3.UGen.Bindings.HW.Construct where
 
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
-import Sound.SC3.UGen.UGen
 
 -- | Oscillator constructor with constrained set of operating 'Rate's.
 mk_osc :: [Rate] -> UGenId -> Rate -> String -> [UGen] -> Int -> UGen
