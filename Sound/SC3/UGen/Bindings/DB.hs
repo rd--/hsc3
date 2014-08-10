@@ -1130,8 +1130,8 @@ pan4 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
 pan4 rate in_ xpos ypos level = mkUGen Nothing [AR,KR] (Left rate) "Pan4" [in_,xpos,ypos,level] Nothing 4 (Special 0) NoId
 
 -- | Azimuth panner
-panAz :: Int -> Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-panAz numChannels rate in_ pos level width orientation = mkUGen Nothing [AR,KR] (Left rate) "PanAz" [in_,pos,level,width,orientation] Nothing numChannels (Special 0) NoId
+panAz :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+panAz numChannels in_ pos level width orientation = mkUGen Nothing [AR,KR] (Right [0]) "PanAz" [in_,pos,level,width,orientation] Nothing numChannels (Special 0) NoId
 
 -- | Ambisonic B-format panner.
 panB :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -1448,8 +1448,8 @@ syncSaw :: Rate -> UGen -> UGen -> UGen
 syncSaw rate syncFreq sawFreq = mkUGen Nothing [AR,KR] (Left rate) "SyncSaw" [syncFreq,sawFreq] Nothing 1 (Special 0) NoId
 
 -- | Control rate trigger to audio rate trigger converter
-t2A :: Rate -> UGen -> UGen -> UGen
-t2A rate in_ offset = mkUGen Nothing [AR] (Left rate) "T2A" [in_,offset] Nothing 1 (Special 0) NoId
+t2A :: UGen -> UGen -> UGen
+t2A in_ offset = mkUGen Nothing [AR] (Left AR) "T2A" [in_,offset] Nothing 1 (Special 0) NoId
 
 -- | Audio rate trigger to control rate trigger converter
 t2K :: Rate -> UGen -> UGen

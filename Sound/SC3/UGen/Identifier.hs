@@ -11,6 +11,8 @@ class H.Hashable a => ID a where
 instance ID Int where
 instance ID Integer where
 instance ID Char where
+instance ID Float where
+instance ID Double where
 
 -- | Hash 'ID's /p/ and /q/ and sum to form an 'Int'.
 --
