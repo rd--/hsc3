@@ -1,4 +1,4 @@
-module Sound.SC3.UGen.Bindings where
+module Sound.SC3.UGen.Bindings.DB where
 
 import Sound.SC3.UGen.Envelope
 import Sound.SC3.UGen.Enum
@@ -606,8 +606,8 @@ iEnvGen :: Rate -> UGen -> Envelope UGen -> UGen
 iEnvGen rate index_ envelope_ = mkUGen Nothing [KR,AR] (Left rate) "IEnvGen" [index_] (Just (envelope_to_ugen envelope_)) 1 (Special 0) NoId
 
 -- | Inverse Fast Fourier Transform
-iFFT :: UGen -> UGen -> UGen -> UGen
-iFFT buffer wintype winsize = mkUGen Nothing [KR,AR] (Left AR) "IFFT" [buffer,wintype,winsize] Nothing 1 (Special 0) NoId
+ifft :: UGen -> UGen -> UGen -> UGen
+ifft buffer wintype winsize = mkUGen Nothing [KR,AR] (Left AR) "IFFT" [buffer,wintype,winsize] Nothing 1 (Special 0) NoId
 
 -- | Single integer random number generator.
 iRand :: ID a => a -> UGen -> UGen -> UGen

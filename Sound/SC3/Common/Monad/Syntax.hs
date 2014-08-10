@@ -1,6 +1,6 @@
 -- | Functions to make writing 'Applicative' and 'Monad' UGen graphs
 -- less clumsy.
-module Sound.SC3.Monad.Syntax where
+module Sound.SC3.Common.Monad.Syntax where
 
 import Control.Applicative {- base -}
 import Control.Monad {- base -}

@@ -60,8 +60,8 @@ Library
                    transformers
   GHC-Options:     -Wall -fwarn-tabs
   Exposed-modules: Sound.SC3
+                   Sound.SC3.Common.Monad.Syntax
                    Sound.SC3.FD
-                   Sound.SC3.Monad.Syntax
                    Sound.SC3.Server
                    Sound.SC3.Server.Command
                    Sound.SC3.Server.Command.Completion
@@ -84,6 +84,7 @@ Library
                    Sound.SC3.Server.Transport.Monad
                    Sound.SC3.UGen
                    Sound.SC3.UGen.Bindings
+                   Sound.SC3.UGen.Bindings.Composite
                    Sound.SC3.UGen.Bindings.DB
                    Sound.SC3.UGen.Bindings.HW
                    Sound.SC3.UGen.Bindings.Monad
@@ -110,7 +111,6 @@ Library
                    --Sound.SC3.UGen.Bindings.HW.Noise
                    --Sound.SC3.UGen.Bindings.HW.Oscillator
                    --Sound.SC3.UGen.Bindings.HW.Panner
-                   Sound.SC3.UGen.Composite
                    Sound.SC3.UGen.Enum
                    Sound.SC3.UGen.Envelope
                    Sound.SC3.UGen.Envelope.Construct
@@ -130,7 +130,6 @@ Library
                    Sound.SC3.UGen.PP
                    Sound.SC3.UGen.Protect
                    Sound.SC3.UGen.Rate
-                   Sound.SC3.UGen.Transform
                    Sound.SC3.UGen.Type
                    Sound.SC3.UGen.UGen
                    Sound.SC3.UGen.UId

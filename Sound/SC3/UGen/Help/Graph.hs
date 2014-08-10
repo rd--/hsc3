@@ -2,6 +2,7 @@
 module Sound.SC3.UGen.Help.Graph where
 
 import Sound.SC3.UGen
+import Sound.SC3.UGen.Bindings
 
 -- | The SC3 /default/ instrument 'UGen' graph.
 default_ugen_graph :: UGen

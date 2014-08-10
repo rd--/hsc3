@@ -9,6 +9,7 @@ import Sound.SC3.Server.Enum
 import Sound.SC3.Server.NRT
 import Sound.SC3.Server.Synthdef
 import Sound.SC3.UGen
+import Sound.SC3.UGen.Bindings
 
 -- | Parameters for recording @scsynth@.
 data SC3_Recorder =

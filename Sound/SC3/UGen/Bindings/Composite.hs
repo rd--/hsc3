@@ -1,5 +1,5 @@
 -- | Common unit generator graphs.
-module Sound.SC3.UGen.Composite where
+module Sound.SC3.UGen.Bindings.Composite where
 
 import Control.Monad {- base -}
 import Data.List {- base -}
@@ -10,6 +10,7 @@ import Sound.SC3.UGen.Bindings.DB
 import Sound.SC3.UGen.Bindings.HW
 import Sound.SC3.UGen.Bindings.Monad
 import Sound.SC3.UGen.Enum
+import Sound.SC3.UGen.Envelope
 import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.Math
 import Sound.SC3.UGen.Rate
@@ -194,6 +195,19 @@ linLin_b i = linLin i (-1) 1
 localIn' :: Int -> Rate -> UGen
 localIn' nc r = localIn nc r (mce (replicate nc 0))
 
+-- | Generate an 'envGen' UGen with @fadeTime@ and @gate@ controls.
+--
+-- > import Sound.SC3
+-- > audition (out 0 (makeFadeEnv 1 * sinOsc AR 440 0 * 0.1))
+-- > withSC3 (send (n_set1 (-1) "gate" 0))
+makeFadeEnv :: Real n => n -> UGen
+makeFadeEnv fadeTime =
+    let dt = control KR "fadeTime" (realToFrac fadeTime)
+        gate_ = control KR "gate" 1
+        startVal = dt <=* 0
+        env = Envelope [startVal,1,0] [1,1] [EnvLin,EnvLin] (Just 1) Nothing
+    in envGen KR gate_ 1 0 dt RemoveSynth env
+
 -- | Count 'mce' channels.
 mceN :: UGen -> UGen
 mceN = constant . length . mceChannels
@@ -362,6 +376,18 @@ tWChooseM t a w n = do
 unpackFFT :: UGen -> UGen -> UGen -> UGen -> UGen -> [UGen]
 unpackFFT c nf from to w = map (\i -> unpack1FFT c nf i w) [from .. to]
 
+-- | If @z@ isn't a sink node, multiply by 'makeFadeEnv' and route to
+-- an @out@ node writing to @bus@.
+--
+-- > import Sound.SC3
+-- > audition (wrapOut (sinOsc AR 440 0 * 0.1) 1)
+-- > withSC3 (send (n_set1 (-1) "gate" 0))
+wrapOut :: Real n => n -> UGen -> UGen
+wrapOut fadeTime z =
+    let bus = control KR "out" 0
+    in if isSink z
+       then z
+       else out bus (z * makeFadeEnv fadeTime)
 -- * wslib
 
 playBufCF :: Int -> UGen -> UGen -> UGen -> UGen -> Loop -> UGen -> Int -> UGen
