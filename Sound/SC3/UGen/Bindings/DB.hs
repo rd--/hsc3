@@ -304,12 +304,12 @@ degreeToKey :: UGen -> UGen -> UGen -> UGen
 degreeToKey bufnum in_ octave = mkUGen Nothing [KR,AR] (Right [1]) "DegreeToKey" [bufnum,in_,octave] Nothing 1 (Special 0) NoId
 
 -- | Tap a delay line from a DelTapWr UGen
-delTapRd :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-delTapRd rate buffer phase delTime interp = mkUGen Nothing [KR,AR] (Left rate) "DelTapRd" [buffer,phase,delTime,interp] Nothing 1 (Special 0) NoId
+delTapRd :: UGen -> UGen -> UGen -> UGen -> UGen
+delTapRd buffer phase delTime interp = mkUGen Nothing [KR,AR] (Right [1]) "DelTapRd" [buffer,phase,delTime,interp] Nothing 1 (Special 0) NoId
 
 -- | Write to a buffer for a DelTapRd UGen
-delTapWr :: Rate -> UGen -> UGen -> UGen
-delTapWr rate buffer in_ = mkUGen Nothing [KR,AR] (Left rate) "DelTapWr" [buffer,in_] Nothing 1 (Special 0) NoId
+delTapWr :: UGen -> UGen -> UGen
+delTapWr buffer in_ = mkUGen Nothing [KR,AR] (Right [1]) "DelTapWr" [buffer,in_] Nothing 1 (Special 0) NoId
 
 -- | Single sample delay.
 delay1 :: UGen -> UGen
