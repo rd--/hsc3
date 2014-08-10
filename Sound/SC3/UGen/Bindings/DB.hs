@@ -88,8 +88,8 @@ brf :: UGen -> UGen -> UGen -> UGen
 brf in_ freq rq = mkUGen Nothing [KR,AR] (Right [0]) "BRF" [in_,freq,rq] Nothing 1 (Special 0) NoId
 
 -- | Two zero fixed midcut.
-bRZ2 :: UGen -> UGen
-bRZ2 in_ = mkUGen Nothing [KR,AR] (Right [0]) "BRZ2" [in_] Nothing 1 (Special 0) NoId
+brz2 :: UGen -> UGen
+brz2 in_ = mkUGen Nothing [KR,AR] (Right [0]) "BRZ2" [in_] Nothing 1 (Special 0) NoId
 
 -- | Stereo signal balancer
 balance2 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -574,8 +574,8 @@ hpz1 :: UGen -> UGen
 hpz1 in_ = mkUGen Nothing [KR,AR] (Right [0]) "HPZ1" [in_] Nothing 1 (Special 0) NoId
 
 -- | Two zero fixed midcut.
-hPZ2 :: UGen -> UGen
-hPZ2 in_ = mkUGen Nothing [KR,AR] (Right [0]) "HPZ2" [in_] Nothing 1 (Special 0) NoId
+hpz2 :: UGen -> UGen
+hpz2 in_ = mkUGen Nothing [KR,AR] (Right [0]) "HPZ2" [in_] Nothing 1 (Special 0) NoId
 
 -- | Randomized value.
 hasher :: UGen -> UGen
@@ -738,12 +738,12 @@ lpf :: UGen -> UGen -> UGen
 lpf in_ freq = mkUGen Nothing [KR,AR] (Right [0]) "LPF" [in_,freq] Nothing 1 (Special 0) NoId
 
 -- | Two point average filter
-lPZ1 :: UGen -> UGen
-lPZ1 in_ = mkUGen Nothing [KR,AR] (Right [0]) "LPZ1" [in_] Nothing 1 (Special 0) NoId
+lpz1 :: UGen -> UGen
+lpz1 in_ = mkUGen Nothing [KR,AR] (Right [0]) "LPZ1" [in_] Nothing 1 (Special 0) NoId
 
 -- | Two zero fixed lowpass
-lPZ2 :: UGen -> UGen
-lPZ2 in_ = mkUGen Nothing [KR,AR] (Right [0]) "LPZ2" [in_] Nothing 1 (Special 0) NoId
+lpz2 :: UGen -> UGen
+lpz2 in_ = mkUGen Nothing [KR,AR] (Right [0]) "LPZ2" [in_] Nothing 1 (Special 0) NoId
 
 -- | Exponential lag
 lag :: UGen -> UGen -> UGen

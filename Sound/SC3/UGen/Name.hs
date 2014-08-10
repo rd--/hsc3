@@ -14,15 +14,23 @@ import Sound.SC3.UGen.Rate {- hsc3 -}
 -- > toSC3Name "sinOsc" == "SinOsc"
 -- > toSC3Name "lfSaw" == "LFSaw"
 -- > toSC3Name "pv_Copy" == "PV_Copy"
--- > map toSC3Name ["bpf","fft","tpv","out"]
+-- > map toSC3Name ["bpf","fft","tpv","out","in'"]
 toSC3Name :: String -> String
 toSC3Name nm =
     case nm of
+      "in'" -> "In"
+      "bpz2" -> "BPZ2"
+      "brz2" -> "BRZ2"
+      "hpz1" -> "HPZ1"
+      "ifft" -> "IFFT"
+      "lpz1" -> "LPZ1"
+      "out" -> "Out"
+      "rhpf" -> "RHPF"
+      "rlpf" -> "RLPF"
       'l':'f':'d':nm' -> "LFD" ++ nm'
       'l':'p':'z':nm' -> "LPZ" ++ nm'
       'l':'f':nm' -> "LF" ++ nm'
       'p':'v':'_':nm' -> "PV_" ++ nm'
-      "out" -> "Out"
       p:q -> if all isLower nm && length nm <= 3
              then map toUpper nm
              else toUpper p : q
@@ -39,6 +47,14 @@ toSC3Name nm =
 fromSC3Name :: String -> String
 fromSC3Name nm =
     case nm of
+      "In" -> "in'"
+      "BPZ2" -> "bpz2"
+      "BRZ2" -> "brz2"
+      "HPZ1" -> "hpz1"
+      "IFFT" -> "ifft"
+      "LPZ1" -> "lpz1"
+      "RHPF" -> "rhpf"
+      "RLPF" -> "rlpf"
       'L':'F':'D':nm' -> "lfd" ++ nm'
       'l':'p':'z':nm' -> "lpz" ++ nm'
       'L':'F':nm' -> "lf" ++ nm'
