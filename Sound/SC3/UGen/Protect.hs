@@ -25,7 +25,7 @@ atUGenId f z =
 -- | Add 'idHash' of /e/ to all 'Primitive_U' at /u/.
 uprotect :: ID a => a -> UGen -> UGen
 uprotect e =
-    let e' = idHash e
+    let e' = resolveID e
         f u = case u of
                 Primitive_U p -> Primitive_U (p {ugenId = atUGenId (+ e') (ugenId p)})
                 _ -> u
@@ -35,7 +35,7 @@ uprotect e =
 -- incrementing initial identifier.
 uprotect' :: ID a => a -> [UGen] -> [UGen]
 uprotect' e =
-    let n = map (+ idHash e) [1..]
+    let n = map (+ resolveID e) [1..]
     in zipWith uprotect n
 
 -- | Make /n/ parallel instances of 'UGen' with protected identifiers.
@@ -51,7 +51,7 @@ ucompose :: ID a => a -> [UGen -> UGen] -> UGen -> UGen
 ucompose e xs =
     let go [] u = u
         go ((f,k):f') u = go f' (uprotect k (f u))
-    in go (zip xs [idHash e ..])
+    in go (zip xs [resolveID e ..])
 
 -- | Make /n/ sequential instances of `f' with protected Ids.
 useq :: ID a => a -> Int -> (UGen -> UGen) -> UGen -> UGen

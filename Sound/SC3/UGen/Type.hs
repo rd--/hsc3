@@ -8,7 +8,6 @@ import Safe {- safe -}
 import System.Random {- random -}
 import qualified Text.Read as R {- base -}
 
-import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.MCE
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Rate
@@ -458,6 +457,9 @@ instance Bits UGen where
     bitSizeMaybe = error "UGen.bitSizeMaybe"
     isSigned _ = True
 
+{-
+import Sound.SC3.UGen.Identifier
+
 -- * UGen ID Instance
 
 -- | Hash function for unit generators.
@@ -466,3 +468,4 @@ hashUGen = hash . show
 
 instance ID UGen where
     resolveID = hashUGen
+-}
