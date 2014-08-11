@@ -82,14 +82,15 @@ sc3_name_edges =
                 (Nothing,_,_) -> False
                 (Just p,q,Just r) ->
                     (isLower p && isUpper q) ||
-                    (isUpper p && isUpper q && isLower r && (p /= 'U' && q /= 'G'))
+                    (isUpper p && isUpper q && isLower r &&
+                     (not (p == 'U' && q == 'G' && r == 'e')))
                 (Just p,q,Nothing) -> isLower p && isUpper q
     in map f . pcn_triples
 
 -- | Convert from SC3 name to Lisp style name.
 --
--- > let {s = words "SinOsc LFSaw FFT PV_Add AllpassN BHiPass BinaryOpUGen HPZ1 RLPF"
--- >     ;l = ["sin-osc","lf-saw","fft","pv-add","allpass-n","b-hi-pass","binary-op-ugen","hpz1","rlpf"]}
+-- > let {s = words "SinOsc LFSaw FFT PV_Add AllpassN BHiPass BinaryOpUGen HPZ1 RLPF TGrains"
+-- >     ;l = words "sin-osc lf-saw fft pv-add allpass-n b-hi-pass binary-op-ugen hpz1 rlpf t-grains"}
 -- > in map sc3_name_to_lisp_name s == l
 sc3_name_to_lisp_name :: String -> String
 sc3_name_to_lisp_name s =
