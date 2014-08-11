@@ -22,7 +22,7 @@ import Sound.SC3.UGen.UId
 asLocalBuf :: ID i => i -> [UGen] -> UGen
 asLocalBuf i xs =
     let b = localBuf i (fromIntegral (length xs)) 1
-        s = setBuf b xs 0
+        s = setBuf' b xs 0
     in mrg2 b s
 
 -- | Calculate coefficients for bi-quad low pass filter.
@@ -316,6 +316,10 @@ selectX ix xs =
     let s0 = select (roundTo ix 2) xs
         s1 = select (trunc ix 2 + 1) xs
     in xFade2 s0 s1 (fold2 (ix * 2 - 1) 1) 1
+
+-- | Set local buffer values.
+setBuf' :: UGen -> [UGen] -> UGen -> UGen
+setBuf' b xs o = setBuf b o (fromIntegral (length xs)) (mce xs)
 
 -- | Silence.
 silent :: Int -> UGen

@@ -1371,6 +1371,10 @@ select which array = mkUGen Nothing [KR,AR] (Right [0,1]) "Select" [which] (Just
 sendTrig :: UGen -> UGen -> UGen -> UGen
 sendTrig in_ id_ value = mkUGen Nothing [KR,AR] (Right [0]) "SendTrig" [in_,id_,value] Nothing 1 (Special 0) NoId
 
+-- | Set local buffer values.
+setBuf :: UGen -> UGen -> UGen -> UGen -> UGen
+setBuf buf off len arr = mkUGen Nothing [IR] (Left IR) "SetBuf" [buf,off,len] (Just arr) 1 (Special 0) NoId
+
 -- | Set-reset flip flop.
 setResetFF :: UGen -> UGen -> UGen
 setResetFF trig_ reset = mkUGen Nothing [KR,AR] (Right [0]) "SetResetFF" [trig_,reset] Nothing 1 (Special 0) NoId

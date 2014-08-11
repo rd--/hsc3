@@ -36,12 +36,6 @@ sendReply i k n v =
         s = fromIntegral (length n')
     in mkFilter "SendReply" ([i,k,s] ++ n' ++ v) 0
 
--- | Set local buffer values.
-setBuf :: UGen -> [UGen] -> UGen -> UGen
-setBuf b xs o =
-    let i = [b, o, fromIntegral (length xs)] ++ xs
-    in mkUGen Nothing [IR] (Left IR) "SetBuf" i Nothing 1 (Special 0) NoId
-
 -- | Unpack a single value (magnitude or phase) from an FFT chain
 unpack1FFT :: UGen -> UGen -> UGen -> UGen -> UGen
 unpack1FFT buf size index' which = mkOsc DR "Unpack1FFT" [buf, size, index', which] 1
