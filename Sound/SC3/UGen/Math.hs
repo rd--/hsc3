@@ -61,12 +61,16 @@ sc3_gte = sc3_comparison (>=)
 sc3_round :: (RealFrac n, Ord n) => n -> n -> n
 sc3_round a b = if b == 0 then a else sc3_floor ((a / b) + 0.5) * b
 
+sc3_idiv :: RealFrac n => n -> n -> n
+sc3_idiv a b = fromInteger (floor a `div` floor b)
+
 -- | Association table for 'Binary' to haskell function implementing operator.
 binop_hs_tbl :: (Real n,Floating n,RealFrac n,Ord n) => [(Binary,n -> n -> n)]
 binop_hs_tbl =
     [(Add,(+))
     ,(Sub,(-))
     ,(FDiv,(/))
+    ,(IDiv,sc3_idiv)
     ,(Mod,F.mod')
     ,(EQ_,sc3_eq)
     ,(NE,sc3_neq)
@@ -280,7 +284,7 @@ instance UnaryOp UGen where
     squared = mkUnaryOperator Squared squared
 
 -- | Binary operator class.
-class (Floating a, Ord a) => BinaryOp a where
+class (Floating a,RealFrac a, Ord a) => BinaryOp a where
     absDif :: a -> a -> a
     absDif a b = abs (a - b)
     amClip :: a -> a -> a
@@ -308,7 +312,7 @@ class (Floating a, Ord a) => BinaryOp a where
     hypotx :: a -> a -> a
     hypotx x y = abs x + abs y - ((sqrt 2 - 1) * min (abs x) (abs y))
     iDiv :: a -> a -> a
-    iDiv = error "iDiv"
+    iDiv = sc3_idiv
     lcmE :: a -> a -> a
     lcmE = error "lcmE"
     modE :: a -> a -> a
