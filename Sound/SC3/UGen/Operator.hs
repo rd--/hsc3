@@ -3,7 +3,8 @@
 module Sound.SC3.UGen.Operator where
 
 import Data.Maybe {- base -}
-import Data.List {- base -}
+
+import Sound.SC3.Common
 
 -- * Unary
 
@@ -64,9 +65,9 @@ data Unary  = Neg
             | SCurve
               deriving (Eq,Show,Enum,Bounded,Read)
 
--- | Type-specialised 'reads_exact'.
-parse_unary :: String -> Maybe Unary
-parse_unary = reads_exact
+-- | Type-specialised 'parse_enum'.
+parse_unary :: Case_Rule -> String -> Maybe Unary
+parse_unary cr = parse_enum cr
 
 -- | Table of symbolic names for standard unary operators.
 unaryTable :: [(Unary,String)]
@@ -80,20 +81,20 @@ unaryName n =
 
 -- | Given name of unary operator derive index.
 --
--- > mapMaybe unaryIndex ["Neg","Cubed"] == [0,13]
--- > unaryIndex "SinOsc" == Nothing
-unaryIndex :: String -> Maybe Int
-unaryIndex nm =
-    let ix = rlookup nm unaryTable
-        ix' = parse_unary nm
+-- > mapMaybe (unaryIndex True) (words "NEG CUBED") == [0,13]
+-- > unaryIndex True "SinOsc" == Nothing
+unaryIndex :: Case_Rule -> String -> Maybe Int
+unaryIndex cr nm =
+    let ix = rlookup_str cr nm unaryTable
+        ix' = parse_unary cr nm
     in fmap fromEnum (maybe ix' Just ix)
 
 -- | 'isJust' of 'unaryIndex'.
 --
--- > map is_uop (words "Abs MIDICPS Neg")
--- > map is_uop (words "- Rand")
-is_unary :: String -> Bool
-is_unary = isJust . unaryIndex
+-- > map (is_unary True) (words "ABS MIDICPS NEG")
+-- > map (is_unary True) (words "- RAND")
+is_unary :: Case_Rule -> String -> Bool
+is_unary cr = isJust . unaryIndex cr
 
 -- * Binary
 
@@ -110,7 +111,7 @@ data Binary = Add -- 0
             | GT_ -- 9
             | LE -- 10
             | GE -- 11
-            | Min
+            | Min -- 12
             | Max
             | BitAnd
             | BitOr
@@ -149,9 +150,9 @@ data Binary = Add -- 0
             | ExpRandRange
               deriving (Eq,Show,Enum,Bounded,Read)
 
--- | Type-specialised 'reads_exact'.
-parse_binary :: String -> Maybe Binary
-parse_binary = reads_exact
+-- | Type-specialised 'parse_enum'.
+parse_binary :: Case_Rule -> String -> Maybe Binary
+parse_binary cr = parse_enum cr
 
 -- | Table of symbolic names for standard binary operators.
 binaryTable :: [(Binary,String)]
@@ -171,7 +172,7 @@ binaryTable =
 
 -- | Lookup possibly symbolic name for standard binary operators.
 --
--- > map binaryName [1,2,8] == ["-","*","<"]
+-- > map binaryName [1,2,8,12] == ["-","*","<","Min"]
 binaryName :: Int -> String
 binaryName n =
     let e = toEnum n
@@ -179,42 +180,29 @@ binaryName n =
 
 -- | Given name of binary operator derive index.
 --
--- > mapMaybe binaryIndex ["*","Mul","Ring1"] == [2,2,30]
--- > binaryIndex "SinOsc" == Nothing
-binaryIndex :: String -> Maybe Int
-binaryIndex nm =
-    let ix = rlookup nm binaryTable
-        ix' = parse_binary nm
+-- > mapMaybe (binaryIndex True) (words "* MUL RING1") == [2,2,30]
+-- > binaryIndex True "SINOSC" == Nothing
+binaryIndex :: Case_Rule -> String -> Maybe Int
+binaryIndex cr nm =
+    let ix = rlookup_str cr nm binaryTable
+        ix' = parse_binary cr nm
     in fmap fromEnum (maybe ix' Just ix)
 
 -- | 'isJust' of 'binaryIndex'.
 --
--- > map is_binary (words "== > % Trunc Max")
-is_binary :: String -> Bool
-is_binary = isJust . binaryIndex
+-- > map (is_binary True) (words "== > % TRUNC MAX")
+is_binary :: Case_Rule -> String -> Bool
+is_binary cr = isJust . binaryIndex cr
 
 -- * Operator
 
 -- | Order of lookup: binary then unary.
 --
--- > map resolve_operator (words "+ - Add Sub Neg")
-resolve_operator :: String -> (String,Maybe Int)
-resolve_operator nm =
-    case binaryIndex nm of
+-- > map (resolve_operator True) (words "+ - ADD SUB NEG")
+resolve_operator :: Case_Rule -> String -> (String,Maybe Int)
+resolve_operator cr nm =
+    case binaryIndex cr nm of
       Just sp -> ("BinaryOpUGen",Just sp)
-      Nothing -> case unaryIndex nm of
+      Nothing -> case unaryIndex cr nm of
                    Just sp -> ("UnaryOpUGen",Just sp)
                    _ -> (nm,Nothing)
-
--- * UTIL
-
--- | Variant of 'reads' requiring exact match.
-reads_exact :: Read a => String -> Maybe a
-reads_exact s =
-    case reads s of
-      [(r,"")] -> Just r
-      _ -> Nothing
-
--- | Reverse 'lookup'.
-rlookup :: Eq b => b -> [(a,b)] -> Maybe a
-rlookup x = fmap fst . find ((== x) . snd)

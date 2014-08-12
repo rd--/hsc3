@@ -8,6 +8,7 @@
 -- > audition (out 0 (sinOsc AR 440 0 * 0.1))
 module Sound.SC3.UGen.Plain where
 
+import Sound.SC3.Common
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
@@ -18,21 +19,20 @@ mk_plain r nm inp = mkUGen Nothing all_rates (Left r) nm inp Nothing
 
 -- | Construct unary operator, the name can textual or symbolic.
 --
--- > uop "-" AR 1 == uop "Neg" AR 1
-uop :: String -> Rate -> UGen -> UGen
-uop nm r p =
-    case unaryIndex nm of
+-- > uop True "NEG" AR 1
+uop :: Case_Rule -> String -> Rate -> UGen -> UGen
+uop cr nm r p =
+    case unaryIndex cr nm of
       Just s -> mk_plain r "UnaryOpUGen" [p] 1 (Special s) NoId
       Nothing -> error "uop"
 
 -- | Construct binary operator, the name can textual or symbolic.
 --
--- > binop "*" AR 1 2 == binop "Mul" AR 1 2
--- > binop "*" AR (ugen "SinOsc" AR [440,0] 1) 0.1 == sinOsc AR 440 0 * 0.1
--- > ugenName (binop "*" AR 1 2) == "BinaryOpUGen"
-binop :: String -> Rate -> UGen -> UGen -> UGen
-binop nm r p q =
-    case binaryIndex nm of
+-- > binop True "*" AR 1 2 == binop True "MUL" AR 1 2
+-- > binop False "*" AR (ugen "SinOsc" AR [440,0] 1) 0.1 == sinOsc AR 440 0 * 0.1
+binop :: Case_Rule -> String -> Rate -> UGen -> UGen -> UGen
+binop cr nm r p q =
+    case binaryIndex cr nm of
       Just s -> mk_plain r "BinaryOpUGen" [p,q] 1 (Special s) NoId
       Nothing -> error "binop"
 

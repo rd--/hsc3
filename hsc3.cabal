@@ -60,6 +60,7 @@ Library
                    transformers
   GHC-Options:     -Wall -fwarn-tabs
   Exposed-modules: Sound.SC3
+                   Sound.SC3.Common
                    Sound.SC3.Common.Monad.Syntax
                    Sound.SC3.FD
                    Sound.SC3.Server
@@ -133,7 +134,6 @@ Library
                    Sound.SC3.UGen.Type
                    Sound.SC3.UGen.UGen
                    Sound.SC3.UGen.UId
-  Other-modules:   Sound.SC3.Internal
 
 Source-Repository  head
   Type:            darcs

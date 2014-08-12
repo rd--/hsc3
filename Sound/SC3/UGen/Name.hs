@@ -7,6 +7,7 @@ module Sound.SC3.UGen.Name where
 import Data.Char {- base -}
 import Data.List.Split {- split -}
 
+import Sound.SC3.Common
 import Sound.SC3.UGen.Rate {- hsc3 -}
 
 -- | Convert from @hsc3@ name to @SC3@ name.
@@ -63,17 +64,6 @@ fromSC3Name nm =
              then map toLower nm
              else toLower p : q
       [] -> []
-
--- | (prev,cur,next) triples.
---
--- > pcn_triples [1..3] == [(Nothing,1,Just 2),(Just 1,2,Just 3),(Just 2,3,Nothing)]
-pcn_triples :: [a] -> [(Maybe a,a,Maybe a)]
-pcn_triples =
-    let f e l = case l of
-                  e1 : e2 : l' -> (e,e1,Just e2) : f (Just e1) (e2 : l')
-                  [e'] -> [(e,e',Nothing)]
-                  [] -> undefined
-    in f Nothing
 
 -- | Find SC3 name edges.
 sc3_name_edges :: String -> [Bool]
