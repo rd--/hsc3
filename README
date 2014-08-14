@@ -36,7 +36,7 @@ see the [darcs][darcs] [history](?t=hsc3&q=history) for details
 [hsc3]: http://rd.slavepianos.org/?t=hsc3
 [hs]: http://haskell.org/
 [sc3]: http://audiosynth.com/
-[tutorial]: http://rd.slavepianos.org/?t=hsc3-texts&l=lhs/hsc3-tutorial.lhs
+[tutorial]: http://rd.slavepianos.org/?t=hsc3-texts&e=lhs/hsc3-tutorial.lhs
 [hsc3-texts]: http://rd.slavepianos.org/?t=hsc3-texts
 [gnu]: http://gnu.org/
 [emacs]: http://gnu.org/software/emacs/
