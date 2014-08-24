@@ -1365,7 +1365,7 @@ scopeOut2 rate inputArray scopeNum maxFrames scopeFrames = mkUGen Nothing [KR,AR
 
 -- | Select output from an array of inputs.
 select :: UGen -> UGen -> UGen
-select which array = mkUGen Nothing [KR,AR] (Right [0,1]) "Select" [which] (Just array) 1 (Special 0) NoId
+select which array = mkUGen Nothing [IR,KR,AR] (Right [0,1]) "Select" [which] (Just array) 1 (Special 0) NoId
 
 -- | Send a trigger message from the server back to the client.
 sendTrig :: UGen -> UGen -> UGen -> UGen

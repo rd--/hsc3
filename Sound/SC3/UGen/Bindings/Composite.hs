@@ -392,6 +392,7 @@ wrapOut fadeTime z =
     in if isSink z
        then z
        else out bus (z * makeFadeEnv fadeTime)
+
 -- * wslib
 
 playBufCF :: Int -> UGen -> UGen -> UGen -> UGen -> Loop -> UGen -> Int -> UGen
