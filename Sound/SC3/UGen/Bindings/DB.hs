@@ -120,8 +120,8 @@ blip :: Rate -> UGen -> UGen -> UGen
 blip rate freq numharm = mkUGen Nothing [KR,AR] (Left rate) "Blip" [freq,numharm] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
-blockSize :: Rate -> UGen
-blockSize rate = mkUGen Nothing [IR] (Left rate) "BlockSize" [] Nothing 1 (Special 0) NoId
+blockSize :: UGen
+blockSize = mkUGen Nothing [IR] (Left IR) "BlockSize" [] Nothing 1 (Special 0) NoId
 
 -- | Brown Noise.
 brownNoise :: ID a => a -> Rate -> UGen
