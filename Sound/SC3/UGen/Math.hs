@@ -4,6 +4,7 @@ module Sound.SC3.UGen.Math where
 import qualified Data.Fixed as F {- base -}
 import Data.Int
 
+import Sound.SC3.UGen.Bindings.DB (mulAdd)
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Type
 
@@ -411,6 +412,15 @@ instance BinaryOp UGen where
     randRange = mkBinaryOperator RandRange randRange
     exprandRange = mkBinaryOperator ExpRandRange exprandRange
 
+-- | Ternary operator class.
+class Num a => TernaryOp a where
+    mul_add :: a -> a -> a -> a
+    mul_add i m a = i * m + a
+
+instance TernaryOp UGen where mul_add = mulAdd
+instance TernaryOp Float where
+instance TernaryOp Double where
+
 -- | Wrap /k/ to within range /(i,j)/, ie. @AbstractFunction.wrap@.
 --
 -- > > [5,6].wrap(0,5) == [5,0]
@@ -480,6 +490,7 @@ hypot_ x y = sqrt (x * x + y * y)
 -- > range_muladd 3 4 == (0.5,3.5)
 -- > linLin_muladd (-1) 1 3 4 == (0.5,3.5)
 -- > linLin_muladd 0 1 3 4 == (1,3)
+-- > linLin_muladd (-1) 1 0 1 == (0.5,0.5)
 linLin_muladd :: Fractional t => t -> t -> t -> t -> (t, t)
 linLin_muladd sl sr dl dr =
     let m = (dr - dl) / (sr - sl)
@@ -487,18 +498,16 @@ linLin_muladd sl sr dl dr =
     in (m,a)
 
 -- | Map from one linear range to another linear range.
-linlin :: Fractional a => a -> a -> a -> a -> a -> a
+linlin :: (Fractional a,TernaryOp a) => a -> a -> a -> a -> a -> a
 linlin i sl sr dl dr =
     let (m,a) = linLin_muladd sl sr dl dr
-    in i * m + a
+    in mul_add i m a
 
 -- | Scale uni-polar (0,1) input to linear (l,r) range
 --
 -- > map (urange 3 4) [0,0.5,1] == [3,3.5,4]
-urange :: Fractional c => c -> c -> c -> c
-urange l r =
-    let m = r - l
-    in (+ l) . (* m)
+urange :: (Fractional a,TernaryOp a) => a -> a -> a -> a
+urange l r i = let m = r - l in mul_add i m l
 
 -- | Calculate multiplier and add values for 'range' transform.
 --
@@ -511,7 +520,7 @@ range_muladd = linLin_muladd (-1) 1
 --
 -- > map (range 3 4) [-1,0,1] == [3,3.5,4]
 -- > map (\x -> let (m,a) = linLin_muladd (-1) 1 3 4 in x * m + a) [-1,0,1]
-range :: Fractional c => c -> c -> c -> c
-range l r =
+range :: (Fractional a,TernaryOp a) => a -> a -> a -> a
+range l r i =
     let (m,a) = range_muladd l r
-    in (+ a) . (* m)
+    in mul_add i m a

@@ -72,7 +72,7 @@
   "Lookup up the UGen at point in hsc3-db"
   (interactive)
   (hsc3-send-string
-   (format "Sound.SC3.UGen.DB.ugenSummary CI \"%s\""
+   (format "Sound.SC3.UGen.DB.ugenSummary \"%s\""
            (thing-at-point 'symbol))))
 
 (defun hsc3-request-type ()
