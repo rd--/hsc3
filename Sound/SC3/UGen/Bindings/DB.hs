@@ -1491,10 +1491,6 @@ tRand z lo hi trig_ = mkUGen Nothing [KR,AR] (Right [2]) "TRand" [lo,hi,trig_] N
 tWindex :: ID a => a -> UGen -> UGen -> UGen -> UGen
 tWindex z in_ normalize array = mkUGen Nothing [KR,AR] (Right [0]) "TWindex" [in_,normalize] (Just array) 1 (Special 0) (toUId z)
 
--- | Single tap into a delayline
-tap :: Int -> Rate -> UGen -> UGen -> UGen
-tap numChannels rate bufnum delaytime = mkUGen Nothing [AR] (Left rate) "Tap" [bufnum,delaytime] Nothing numChannels (Special 0) NoId
-
 -- | Returns time since last triggered.
 timer :: UGen -> UGen
 timer trig_ = mkUGen Nothing [KR,AR] (Right [0]) "Timer" [trig_] Nothing 1 (Special 0) NoId

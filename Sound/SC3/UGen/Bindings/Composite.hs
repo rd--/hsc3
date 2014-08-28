@@ -21,7 +21,7 @@ import Sound.SC3.UGen.UId
 -- | Generate a localBuf and use setBuf to initialise it.
 asLocalBuf :: ID i => i -> [UGen] -> UGen
 asLocalBuf i xs =
-    let b = localBuf i (fromIntegral (length xs)) 1
+    let b = localBuf i 1 (fromIntegral (length xs))
         s = setBuf' b xs 0
     in mrg2 b s
 
@@ -353,6 +353,12 @@ sum_opt l =
       p:q:r:s:l' -> sum_opt (sum4 p q r s : l')
       p:q:r:l' -> sum_opt (sum3 p q r : l')
       _ -> sum l
+
+-- | Single tap into a delayline
+tap :: Int -> UGen -> UGen -> UGen
+tap numChannels bufnum delaytime =
+    let n = delaytime * negate sampleRate
+    in playBuf numChannels AR bufnum 1 0 n Loop DoNothing
 
 -- | Randomly select one of several inputs on trigger.
 tChoose :: ID m => m -> UGen -> UGen -> UGen
