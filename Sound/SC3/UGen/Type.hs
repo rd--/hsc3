@@ -163,6 +163,18 @@ checkInput u =
 constant :: Real n => n -> UGen
 constant = Constant_U . Constant . realToFrac
 
+-- | Type specialised 'constant'.
+int_to_ugen :: Int -> UGen
+int_to_ugen = constant
+
+-- | Type specialised 'constant'.
+float_to_ugen :: Float -> UGen
+float_to_ugen = constant
+
+-- | Type specialised 'constant'.
+double_to_ugen :: Double -> UGen
+double_to_ugen = constant
+
 -- | Multiple channel expansion node constructor.
 mce :: [UGen] -> UGen
 mce xs =
@@ -400,10 +412,10 @@ instance Integral UGen where
     toInteger _ = error "UGen.toInteger: non-constant"
 
 instance RealFrac UGen where
-  properFraction = error "UGen.properFraction"
-  round = error "UGen.round"
-  ceiling = error "UGen.ceiling"
-  floor = error "UGen.floor"
+  properFraction = error "UGen.properFraction, see properFractionE"
+  round = error "UGen.round, see roundE"
+  ceiling = error "UGen.ceiling, see ceilingE"
+  floor = error "UGen.floor, see floorE"
 
 -- | Unit generators are orderable (when 'Constants').
 --
