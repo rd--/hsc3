@@ -59,8 +59,15 @@ sc3_gt = sc3_comparison (>)
 sc3_gte :: (Num n, Ord n) => n -> n -> n
 sc3_gte = sc3_comparison (>=)
 
-sc3_round :: (RealFrac n, Ord n) => n -> n -> n
-sc3_round a b = if b == 0 then a else sc3_floor ((a / b) + 0.5) * b
+-- | Variant of @SC3@ @roundTo@ function.
+--
+-- > let r = [0,0,0.25,0.25,0.5,0.5,0.5,0.75,0.75,1,1]
+-- > in map (`roundTo_` 0.25) [0,0.1 .. 1] == r
+roundTo_ :: (RealFrac n, Ord n) => n -> n -> n
+roundTo_ = sc3_round_to
+
+sc3_round_to :: (RealFrac n, Ord n) => n -> n -> n
+sc3_round_to a b = if b == 0 then a else sc3_floor ((a / b) + 0.5) * b
 
 sc3_idiv :: RealFrac n => n -> n -> n
 sc3_idiv a b = fromInteger (floor a `div` floor b)
@@ -85,17 +92,11 @@ binop_hs_tbl =
     ,(Pow,(**))
     ,(Min,min)
     ,(Max,max)
-    ,(Round,sc3_round)]
+    ,(Round,sc3_round_to)]
 
 -- | 'lookup' 'binop_hs_tbl' via 'toEnum'.
 binop_special_hs :: (Real n,RealFrac n,Floating n, Ord n) => Int -> Maybe (n -> n -> n)
 binop_special_hs z = lookup (toEnum z) binop_hs_tbl
-
-sc3_ceil :: RealFrac n => n -> n
-sc3_ceil = fromInteger . ceiling
-
-sc3_floor :: RealFrac n => n -> n
-sc3_floor = fromInteger . floor
 
 -- | Association table for 'Unary' to haskell function implementing operator.
 uop_hs_tbl :: (RealFrac n,Floating n,Ord n) => [(Unary,n -> n)]
@@ -103,7 +104,7 @@ uop_hs_tbl =
     [(Neg,negate)
     ,(Not,\z -> if z > 0 then 0 else 1)
     ,(Abs,abs)
-    ,(Ceil,sc3_ceil)
+    ,(Ceil,sc3_ceiling)
     ,(Floor,sc3_floor)
     ,(Squared,squared')
     ,(Cubed,cubed')
@@ -164,29 +165,38 @@ instance OrdE UGen where
     (>*) = mkBinaryOperator GT_ sc3_gt
     (>=*) = mkBinaryOperator GE sc3_gte
 
+sc3_properFraction :: (RealFrac t, Num t) => t -> (t,t)
+sc3_properFraction a =
+    let (p,q) = properFraction a
+    in (fromInteger p,q)
+
+sc3_truncate :: (RealFrac a, Num a) => a -> a
+sc3_truncate a = fromInteger (truncate a)
+
+sc3_round :: (RealFrac a, Num a) => a -> a
+sc3_round a = fromInteger (round a)
+
+sc3_ceiling :: (RealFrac a, Num a) => a -> a
+sc3_ceiling a = fromInteger (ceiling a)
+
+sc3_floor :: (RealFrac a, Num a) => a -> a
+sc3_floor a = fromInteger (floor a)
+
 -- | Variant of 'RealFrac' with non 'Integral' results.
 class RealFrac a => RealFracE a where
   properFractionE :: a -> (a,a)
-  properFractionE a = let (p,q) = properFraction a
-                      in (fromInteger p,q)
+  properFractionE = sc3_properFraction
   truncateE :: a -> a
-  truncateE a = fromInteger (truncate a)
+  truncateE = sc3_truncate
   roundE :: a -> a
-  roundE a = fromInteger (round a)
+  roundE = sc3_round
   ceilingE :: a -> a
-  ceilingE a = fromInteger (ceiling a)
+  ceilingE = sc3_ceiling
   floorE :: a -> a
-  floorE a = fromInteger (floor a)
+  floorE = sc3_floor
 
 instance RealFracE Float
 instance RealFracE Double
-
--- | Variant of @SC3@ @roundTo@ function.
---
--- > let r = [0,0,0.25,0.25,0.5,0.5,0.5,0.75,0.75,1,1]
--- > in map (`roundTo_` 0.25) [0,0.1 .. 1] == r
-roundTo_ :: RealFracE a => a -> a -> a
-roundTo_ a b = if b == 0 then a else floorE (a/b + 0.5) * b
 
 -- | 'UGen' form or 'roundTo_'.
 roundTo :: UGen -> UGen -> UGen
@@ -308,6 +318,7 @@ instance UnaryOp UGen where
     softClip = mkUnaryOperator SoftClip softClip
     squared = mkUnaryOperator Squared squared
 
+difSqr' :: Num a => a -> a -> a
 difSqr' a b = (a * a) - (b * b)
 
 hypotx' :: (Ord a, Floating a) => a -> a -> a
