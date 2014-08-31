@@ -105,8 +105,8 @@ uop_hs_tbl =
     ,(Abs,abs)
     ,(Ceil,sc3_ceil)
     ,(Floor,sc3_floor)
-    ,(Squared,\z -> z * z)
-    ,(Cubed,\z -> z * z * z)
+    ,(Squared,squared')
+    ,(Cubed,cubed')
     ,(Sqrt,sqrt)
     ,(Recip,recip)
     ,(MIDICPS,midiCPS')
@@ -211,12 +211,36 @@ midiCPS' i = 440.0 * (2.0 ** ((i - 69.0) * (1.0 / 12.0)))
 cpsMIDI' :: Floating a => a -> a
 cpsMIDI' a = (logBase 2 (a * (1.0 / 440.0)) * 12.0) + 69.0
 
+cpsOct' :: Floating a => a -> a
+cpsOct' a = logBase 2 (a * (1.0 / 440.0)) + 4.75
+
+ampDb' :: Floating a => a -> a
+ampDb' a = logBase 10 a * 20
+
+dbAmp' :: Floating a => a -> a
+dbAmp' a = 10 ** (a * 0.05)
+
+cubed' :: Num a => a -> a
+cubed' a = a * a * a
+
+midiRatio' :: Floating a => a -> a
+midiRatio' a = 2.0 ** (a * (1.0 / 12.0))
+
+octCPS' :: Floating a => a -> a
+octCPS' a = 440.0 * (2.0 ** (a - 4.75))
+
+ratioMIDI' :: Floating a => a -> a
+ratioMIDI' a = 12.0 * logBase 2 a
+
+squared' :: Num a => a -> a
+squared' a = a * a
+
 -- | Unary operator class.
 --
 -- > map (floor . (* 1e4) . dbAmp) [-90,-60,-30,0] == [0,10,316,10000]
 class (Floating a, Ord a) => UnaryOp a where
     ampDb :: a -> a
-    ampDb a = log10 a * 20
+    ampDb = ampDb'
     asFloat :: a -> a
     asFloat = error "asFloat"
     asInt :: a -> a
@@ -224,11 +248,11 @@ class (Floating a, Ord a) => UnaryOp a where
     cpsMIDI :: a -> a
     cpsMIDI = cpsMIDI'
     cpsOct :: a -> a
-    cpsOct a = log2 (a * (1.0 / 440.0)) + 4.75
+    cpsOct = cpsOct'
     cubed :: a -> a
-    cubed   a = a * a * a
+    cubed = cubed'
     dbAmp :: a -> a
-    dbAmp a = 10 ** (a * 0.05)
+    dbAmp = dbAmp'
     distort :: a -> a
     distort = error "distort"
     frac :: a -> a
@@ -242,21 +266,21 @@ class (Floating a, Ord a) => UnaryOp a where
     midiCPS :: a -> a
     midiCPS = midiCPS'
     midiRatio :: a -> a
-    midiRatio a = 2.0 ** (a * (1.0 / 12.0))
+    midiRatio = midiRatio'
     notE :: a -> a
     notE a = if a > 0.0 then 0.0 else 1.0
     notNil :: a -> a
     notNil a = if a /= 0.0 then 0.0 else 1.0
     octCPS :: a -> a
-    octCPS a = 440.0 * (2.0 ** (a - 4.75))
+    octCPS = octCPS'
     ramp_ :: a -> a
     ramp_ _ = error "ramp_"
     ratioMIDI :: a -> a
-    ratioMIDI a = 12.0 * log2 a
+    ratioMIDI = ratioMIDI'
     softClip :: a -> a
     softClip = error "softClip"
     squared :: a -> a
-    squared a = a * a
+    squared = squared'
 
 instance UnaryOp Float where
 instance UnaryOp Double where
@@ -284,6 +308,11 @@ instance UnaryOp UGen where
     softClip = mkUnaryOperator SoftClip softClip
     squared = mkUnaryOperator Squared squared
 
+difSqr' a b = (a * a) - (b * b)
+
+hypotx' :: (Ord a, Floating a) => a -> a -> a
+hypotx' x y = abs x + abs y - ((sqrt 2 - 1) * min (abs x) (abs y))
+
 -- | Binary operator class.
 class (Floating a,RealFrac a, Ord a) => BinaryOp a where
     absDif :: a -> a -> a
@@ -295,7 +324,7 @@ class (Floating a,RealFrac a, Ord a) => BinaryOp a where
     clip2 :: a -> a -> a
     clip2 a b = clip_ a (-b) b
     difSqr :: a -> a -> a
-    difSqr a b = (a*a) - (b*b)
+    difSqr = difSqr'
     excess :: a -> a -> a
     excess a b = a - clip_ a (-b) b
     exprandRange :: a -> a -> a
@@ -311,7 +340,7 @@ class (Floating a,RealFrac a, Ord a) => BinaryOp a where
     hypot :: a -> a -> a
     hypot x y = sqrt (x * x + y * y)
     hypotx :: a -> a -> a
-    hypotx x y = abs x + abs y - ((sqrt 2 - 1) * min (abs x) (abs y))
+    hypotx = hypotx'
     iDiv :: a -> a -> a
     iDiv = sc3_idiv
     lcmE :: a -> a -> a

@@ -155,8 +155,9 @@ data ASR a = ASR {asr_attackTime :: a
 
 -- | Attack, sustain, release envelope parameter constructor.
 --
--- > let r = Just [0,2,1,-99,5,1,3,0,0,3,3,0]
--- > in envelope_sc3_array (envASR 1 5 3 EnvSin) == r
+-- > let {c = 3
+-- >     ;r = Just [0,2,1,-99,0.1,3,c,0,0,2,c,0]}
+-- > in envelope_sc3_array (envASR 3 0.1 2 EnvSin) == r
 envASR :: Num a => a -> a -> a -> Envelope_Curve a -> Envelope a
 envASR aT sL rT c = envASR_r (ASR aT sL rT (c,c))
 
