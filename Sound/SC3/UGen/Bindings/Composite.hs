@@ -102,7 +102,7 @@ fft' buf i = fft buf i 0.5 0 1 0
 -- > in audition (out 0 (ifft c 0 0))
 ffta :: ID i => i -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 ffta z nf i h wt a ws =
-    let b = localBuf z nf 1
+    let b = localBuf z 1 nf
     in fft b i h wt a ws
 
 -- | Sum of 'numInputBuses' and 'numOutputBuses'.

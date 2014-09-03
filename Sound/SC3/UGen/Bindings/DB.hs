@@ -514,8 +514,8 @@ freeVerb2 :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 freeVerb2 in_ in2 mix room damp = mkUGen Nothing [AR] (Right [0]) "FreeVerb2" [in_,in2,mix,room,damp] Nothing 2 (Special 0) NoId
 
 -- | Frequency Shifter.
-freqShift :: Rate -> UGen -> UGen -> UGen -> UGen
-freqShift rate in_ freq phase = mkUGen Nothing [AR] (Left rate) "FreqShift" [in_,freq,phase] Nothing 1 (Special 0) NoId
+freqShift :: UGen -> UGen -> UGen -> UGen
+freqShift in_ freq phase = mkUGen Nothing [AR] (Left AR) "FreqShift" [in_,freq,phase] Nothing 1 (Special 0) NoId
 
 -- | A two-channel reverb
 gVerb :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
