@@ -2,7 +2,7 @@
 > :t pvcollect
 
 > import Data.List {- base -}
-> import Sound.SC3.ID {- hsc3 -}
+> import Sound.SC3 {- hsc3 -}
 
 > let fileName = "/home/rohan/data/audio/pf-c5.snd"
 > in withSC3 (do {_ <- async (b_alloc 10 1024 1)
@@ -29,7 +29,7 @@
 > let pv_au nf cf =
 >   let {no_op m p _ = (m,p)
 >       ;combf m p i = ((modE i 7.0 ==* 0) * m,p)
->       ;c1 = fft' 10 (soundIn 4)
+>       ;c1 = fft' 10 (soundIn 0)
 >       ;c2 = pvcollect c1 nf cf 0 250 0}
 >   in out 0 (0.1 * ifft' c2)
 

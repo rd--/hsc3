@@ -770,8 +770,8 @@ lagControl :: Rate -> UGen -> UGen -> UGen
 lagControl rate values lags = mkUGen Nothing [IR,KR] (Left rate) "LagControl" [values,lags] Nothing 1 (Special 0) NoId
 
 -- | Read a control signal from a bus with a lag
-lagIn :: Int -> Rate -> UGen -> UGen -> UGen
-lagIn numChannels rate bus lag_ = mkUGen Nothing [KR] (Left rate) "LagIn" [bus,lag_] Nothing numChannels (Special 0) NoId
+lagIn :: Int -> UGen -> UGen -> UGen
+lagIn numChannels bus lag_ = mkUGen Nothing [KR] (Left KR) "LagIn" [bus,lag_] Nothing numChannels (Special 0) NoId
 
 -- | Exponential lag
 lagUD :: UGen -> UGen -> UGen -> UGen
