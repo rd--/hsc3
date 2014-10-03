@@ -765,10 +765,6 @@ lag3 in_ lagTime = mkUGen Nothing [KR,AR] (Right [0]) "Lag3" [in_,lagTime] Nothi
 lag3UD :: UGen -> UGen -> UGen -> UGen
 lag3UD in_ lagTimeU lagTimeD = mkUGen Nothing [KR,AR] (Right [0]) "Lag3UD" [in_,lagTimeU,lagTimeD] Nothing 1 (Special 0) NoId
 
--- | Lagged control input
-lagControl :: Rate -> UGen -> UGen -> UGen
-lagControl rate values lags = mkUGen Nothing [IR,KR] (Left rate) "LagControl" [values,lags] Nothing 1 (Special 0) NoId
-
 -- | Read a control signal from a bus with a lag
 lagIn :: Int -> UGen -> UGen -> UGen
 lagIn numChannels bus lag_ = mkUGen Nothing [KR] (Left KR) "LagIn" [bus,lag_] Nothing numChannels (Special 0) NoId

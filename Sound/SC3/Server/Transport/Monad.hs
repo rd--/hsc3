@@ -66,7 +66,7 @@ playUGen :: DuplexOSC m => (Int,AddAction,Int) -> UGen -> m ()
 playUGen loc =
     playSynthdef loc .
     synthdef "Anonymous" .
-    wrapOut (0.1::Double)
+    wrapOut Nothing
 
 -- * NRT
 

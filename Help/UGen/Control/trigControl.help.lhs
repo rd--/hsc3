@@ -1,4 +1,4 @@
-> import Sound.SC3.ID {- hsc3 -}
+> import Sound.SC3 {- hsc3 -}
 
 Graph with the three types of non-audio controls.
 
@@ -6,7 +6,7 @@ Graph with the three types of non-audio controls.
 >             ;phase = control IR "phase" 0
 >             ;gate = tr_control "gate" 1
 >             ;amp = control KR "amp" 0.1
->             ;e = envGen KR gate amp 0 1 DoNothing (envPerc 0.01 1)}
+>             ;e = envGen KR gate amp 0 1 DoNothing (envASR 0.01 0.1 1 EnvLin)}
 >         in sinOsc AR freq phase * e
 
 Make a drawing

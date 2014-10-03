@@ -200,7 +200,7 @@ localIn' nc r = localIn nc r (mce (replicate nc 0))
 -- > import Sound.SC3
 -- > audition (out 0 (makeFadeEnv 1 * sinOsc AR 440 0 * 0.1))
 -- > withSC3 (send (n_set1 (-1) "gate" 0))
-makeFadeEnv :: Real n => n -> UGen
+makeFadeEnv :: Double -> UGen
 makeFadeEnv fadeTime =
     let dt = control KR "fadeTime" (realToFrac fadeTime)
         gate_ = control KR "gate" 1
@@ -386,18 +386,18 @@ tWChooseM t a w n = do
 unpackFFT :: UGen -> UGen -> UGen -> UGen -> UGen -> [UGen]
 unpackFFT c nf from to w = map (\i -> unpack1FFT c nf i w) [from .. to]
 
--- | If @z@ isn't a sink node, multiply by 'makeFadeEnv' and route to
--- an @out@ node writing to @bus@.
+-- | If @z@ isn't a sink node route to an @out@ node writing to @bus@.
+-- If @fadeTime@ is given multiply by 'makeFadeEnv'.
 --
 -- > import Sound.SC3
 -- > audition (wrapOut (sinOsc AR 440 0 * 0.1) 1)
 -- > withSC3 (send (n_set1 (-1) "gate" 0))
-wrapOut :: Real n => n -> UGen -> UGen
+wrapOut :: Maybe Double -> UGen -> UGen
 wrapOut fadeTime z =
     let bus = control KR "out" 0
     in if isSink z
        then z
-       else out bus (z * makeFadeEnv fadeTime)
+       else out bus (z * maybe 1 makeFadeEnv fadeTime)
 
 -- * wslib
 
