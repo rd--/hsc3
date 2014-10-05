@@ -539,15 +539,21 @@ linLin_muladd sl sr dl dr =
 
 -- | Map from one linear range to another linear range.
 linlin :: (Fractional a,TernaryOp a) => a -> a -> a -> a -> a -> a
-linlin i sl sr dl dr =
-    let (m,a) = linLin_muladd sl sr dl dr
-    in mul_add i m a
+linlin i sl sr dl dr = let (m,a) = linLin_muladd sl sr dl dr in mul_add i m a
+
+-- | Variant without 'TernaryOp' constraint.
+linlin' :: Fractional a => a -> a -> a -> a -> a -> a
+linlin' i sl sr dl dr = let (m,a) = linLin_muladd sl sr dl dr in i * m + a
 
 -- | Scale uni-polar (0,1) input to linear (l,r) range
 --
 -- > map (urange 3 4) [0,0.5,1] == [3,3.5,4]
 urange :: (Fractional a,TernaryOp a) => a -> a -> a -> a
 urange l r i = let m = r - l in mul_add i m l
+
+-- | Variant without 'TernaryOp' constraint.
+urange' :: (Fractional a,TernaryOp a) => a -> a -> a -> a
+urange' l r i = let m = r - l in i * m + l
 
 -- | Calculate multiplier and add values for 'range' transform.
 --
@@ -561,6 +567,8 @@ range_muladd = linLin_muladd (-1) 1
 -- > map (range 3 4) [-1,0,1] == [3,3.5,4]
 -- > map (\x -> let (m,a) = linLin_muladd (-1) 1 3 4 in x * m + a) [-1,0,1]
 range :: (Fractional a,TernaryOp a) => a -> a -> a -> a
-range l r i =
-    let (m,a) = range_muladd l r
-    in mul_add i m a
+range l r i = let (m,a) = range_muladd l r in mul_add i m a
+
+-- | Variant without 'TernaryOp' constraint.
+range' :: Fractional a => a -> a -> a -> a
+range' l r i = let (m,a) = range_muladd l r in i * m + a
