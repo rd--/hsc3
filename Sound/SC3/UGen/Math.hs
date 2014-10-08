@@ -552,7 +552,7 @@ urange :: (Fractional a,TernaryOp a) => a -> a -> a -> a
 urange l r i = let m = r - l in mul_add i m l
 
 -- | Variant without 'TernaryOp' constraint.
-urange' :: (Fractional a,TernaryOp a) => a -> a -> a -> a
+urange' :: Fractional a => a -> a -> a -> a
 urange' l r i = let m = r - l in i * m + l
 
 -- | Calculate multiplier and add values for 'range' transform.

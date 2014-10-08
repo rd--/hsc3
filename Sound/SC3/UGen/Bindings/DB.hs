@@ -41,7 +41,7 @@ amplitude rate in_ attackTime releaseTime = mkUGen Nothing [KR,AR] (Left rate) "
 
 -- | (Undocumented class)
 audioControl :: Rate -> UGen -> UGen
-audioControl rate values = mkUGen Nothing [AR] (Left rate) "AudioControl" [values] Nothing 1 (Special 0) NoId
+audioControl rate values = mkUGen Nothing [AR] (Left rate) "AudioControl" [values] Nothing 0 (Special 0) NoId
 
 -- | All Pass Filter
 bAllPass :: UGen -> UGen -> UGen -> UGen
@@ -439,11 +439,9 @@ duty rate dur reset doneAction level = mkUGen Nothing [KR,AR] (Left rate) "Duty"
 dwhite :: ID a => a -> UGen -> UGen -> UGen -> UGen
 dwhite z length_ lo hi = mkUGen Nothing [DR] (Left DR) "Dwhite" [length_,lo,hi] Nothing 1 (Special 0) (toUId z)
 
-{-
-- | Demand rate weighted random sequence generator
-dwrand :: ID a => a -> UGen -> UGen -> UGen -> UGen
-dwrand z repeats weights list_ = mkUGen Nothing [DR] (Left DR) "Dwrand" [repeats,weights] (Just list_) 1 (Special 0) (toUId z)
--}
+-- | Demand rate weighted random sequence generator
+-- dwrand :: ID a => a -> UGen -> UGen -> UGen -> UGen
+-- dwrand z repeats weights list_ = mkUGen Nothing [DR] (Left DR) "Dwrand" [repeats,weights] (Just list_) 1 (Special 0) (toUId z)
 
 -- | Demand rate random sequence generator.
 dxrand :: ID a => a -> UGen -> UGen -> UGen
@@ -574,8 +572,8 @@ hpz1 :: UGen -> UGen
 hpz1 in_ = mkUGen Nothing [KR,AR] (Right [0]) "HPZ1" [in_] Nothing 1 (Special 0) NoId
 
 -- | Two zero fixed midcut.
-hpz2 :: UGen -> UGen
-hpz2 in_ = mkUGen Nothing [KR,AR] (Right [0]) "HPZ2" [in_] Nothing 1 (Special 0) NoId
+hPZ2 :: UGen -> UGen
+hPZ2 in_ = mkUGen Nothing [KR,AR] (Right [0]) "HPZ2" [in_] Nothing 1 (Special 0) NoId
 
 -- | Randomized value.
 hasher :: UGen -> UGen
@@ -742,8 +740,8 @@ lpz1 :: UGen -> UGen
 lpz1 in_ = mkUGen Nothing [KR,AR] (Right [0]) "LPZ1" [in_] Nothing 1 (Special 0) NoId
 
 -- | Two zero fixed lowpass
-lpz2 :: UGen -> UGen
-lpz2 in_ = mkUGen Nothing [KR,AR] (Right [0]) "LPZ2" [in_] Nothing 1 (Special 0) NoId
+lPZ2 :: UGen -> UGen
+lPZ2 in_ = mkUGen Nothing [KR,AR] (Right [0]) "LPZ2" [in_] Nothing 1 (Special 0) NoId
 
 -- | Exponential lag
 lag :: UGen -> UGen -> UGen
@@ -851,7 +849,7 @@ localIn numChannels rate default_ = mkUGen Nothing [KR,AR] (Left rate) "LocalIn"
 
 -- | Write to buses local to a synth.
 localOut :: UGen -> UGen
-localOut input = mkUGen Nothing [KR,AR] (Right [0]) "LocalOut" [] (Just input) 1 (Special 0) NoId
+localOut input = mkUGen Nothing [KR,AR] (Right [0]) "LocalOut" [] (Just input) 0 (Special 0) NoId
 
 -- | Chaotic noise function
 logistic :: Rate -> UGen -> UGen -> UGen -> UGen
@@ -872,10 +870,6 @@ mFCC rate chain numcoeff = mkUGen Nothing [KR] (Left rate) "MFCC" [chain,numcoef
 -- | Reduce precision.
 mantissaMask :: UGen -> UGen -> UGen
 mantissaMask in_ bits = mkUGen Nothing [KR,AR] (Right [0]) "MantissaMask" [in_,bits] Nothing 1 (Special 0) NoId
-
--- | Set the maximum number of local buffers in a synth
-maxLocalBufs :: Rate -> UGen
-maxLocalBufs rate = mkUGen Nothing [IR,KR,AR,DR] (Left rate) "MaxLocalBufs" [] Nothing 1 (Special 0) NoId
 
 -- | Median filter.
 median :: UGen -> UGen -> UGen
@@ -943,7 +937,7 @@ numRunningSynths = mkUGen Nothing [IR,KR] (Left IR) "NumRunningSynths" [] Nothin
 
 -- | Write a signal to a bus with sample accurate timing.
 offsetOut :: UGen -> UGen -> UGen
-offsetOut bus input = mkUGen Nothing [KR,AR] (Right [1]) "OffsetOut" [bus] (Just input) 1 (Special 0) NoId
+offsetOut bus input = mkUGen Nothing [KR,AR] (Right [1]) "OffsetOut" [bus] (Just input) 0 (Special 0) NoId
 
 -- | One pole filter.
 onePole :: UGen -> UGen -> UGen
@@ -967,7 +961,7 @@ oscN rate bufnum freq phase = mkUGen Nothing [KR,AR] (Left rate) "OscN" [bufnum,
 
 -- | Write a signal to a bus.
 out :: UGen -> UGen -> UGen
-out bus input = mkUGen Nothing [KR,AR] (Right [1]) "Out" [bus] (Just input) 1 (Special 0) NoId
+out bus input = mkUGen Nothing [KR,AR] (Right [1]) "Out" [bus] (Just input) 0 (Special 0) NoId
 
 -- | Very fast sine grain with a parabolic envelope
 pSinGrain :: Rate -> UGen -> UGen -> UGen -> UGen
@@ -1185,11 +1179,9 @@ playBuf numChannels rate bufnum rate_ trigger startPos loop doneAction = mkUGen 
 pluck :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 pluck in_ trig_ maxdelaytime delaytime decaytime coef = mkUGen Nothing [AR] (Right [0]) "Pluck" [in_,trig_,maxdelaytime,delaytime,decaytime,coef] Nothing 1 (Special 0) NoId
 
-{-
 -- | Print the current output value of a UGen
-poll :: UGen -> UGen -> UGen -> UGen -> UGen
-poll trig_ in_ label_ trigid = mkUGen Nothing [KR,AR] (Right [1]) "Poll" [trig_,in_,label_,trigid] Nothing 1 (Special 0) NoId
--}
+-- poll :: UGen -> UGen -> UGen -> UGen -> UGen
+-- poll trig_ in_ label_ trigid = mkUGen Nothing [KR,AR] (Right [1]) "Poll" [trig_,in_,label_,trigid] Nothing 1 (Special 0) NoId
 
 -- | Band limited pulse wave.
 pulse :: Rate -> UGen -> UGen -> UGen
@@ -1202,14 +1194,6 @@ pulseCount trig_ reset = mkUGen Nothing [KR,AR] (Right [0]) "PulseCount" [trig_,
 -- | Pulse divider.
 pulseDivider :: UGen -> UGen -> UGen -> UGen
 pulseDivider trig_ div_ start = mkUGen Nothing [KR,AR] (Right [0]) "PulseDivider" [trig_,div_,start] Nothing 1 (Special 0) NoId
-
--- | (Undocumented class)
-pureMultiOutUGen :: Rate -> UGen -> UGen
-pureMultiOutUGen rate maxSize = mkUGen Nothing [IR,KR,AR,DR] (Left rate) "PureMultiOutUGen" [maxSize] Nothing 1 (Special 0) NoId
-
--- | Pure UGen
-pureUGen :: Rate -> UGen -> UGen
-pureUGen rate maxSize = mkUGen Nothing [IR,KR,AR,DR] (Left rate) "PureUGen" [maxSize] Nothing 1 (Special 0) NoId
 
 -- | General quadratic map chaotic generator
 quadC :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -1225,19 +1209,19 @@ quadN rate freq a b c xi = mkUGen Nothing [AR] (Left rate) "QuadN" [freq,a,b,c,x
 
 -- | (Undocumented class)
 rDelayMap :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-rDelayMap rate bufnum in_ dynamic spec = mkUGen Nothing [KR,AR] (Left rate) "RDelayMap" [bufnum,in_,dynamic,spec] Nothing 1 (Special 0) NoId
+rDelayMap rate bufnum in_ dynamic spec = mkUGen Nothing [AR] (Left rate) "RDelayMap" [bufnum,in_,dynamic,spec] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 rDelaySet :: Rate -> UGen -> UGen -> UGen
-rDelaySet rate in_ spec = mkUGen Nothing [KR,AR] (Left rate) "RDelaySet" [in_,spec] Nothing 1 (Special 0) NoId
+rDelaySet rate in_ spec = mkUGen Nothing [AR] (Left rate) "RDelaySet" [in_,spec] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 rDelaySetB :: Rate -> UGen -> UGen -> UGen -> UGen
-rDelaySetB rate bufnum in_ spec = mkUGen Nothing [KR,AR] (Left rate) "RDelaySetB" [bufnum,in_,spec] Nothing 1 (Special 0) NoId
+rDelaySetB rate bufnum in_ spec = mkUGen Nothing [AR] (Left rate) "RDelaySetB" [bufnum,in_,spec] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 rFreezer :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-rFreezer rate bufnum left right gain increment incrementOffset incrementRandom rightRandom syncPhaseTrigger randomizePhaseTrigger numberOfLoops = mkUGen Nothing [KR,AR] (Left rate) "RFreezer" [bufnum,left,right,gain,increment,incrementOffset,incrementRandom,rightRandom,syncPhaseTrigger,randomizePhaseTrigger,numberOfLoops] Nothing 1 (Special 0) NoId
+rFreezer rate bufnum left right gain increment incrementOffset incrementRandom rightRandom syncPhaseTrigger randomizePhaseTrigger numberOfLoops = mkUGen Nothing [AR] (Left rate) "RFreezer" [bufnum,left,right,gain,increment,incrementOffset,incrementRandom,rightRandom,syncPhaseTrigger,randomizePhaseTrigger,numberOfLoops] Nothing 1 (Special 0) NoId
 
 -- | A resonant high pass filter.
 rhpf :: UGen -> UGen -> UGen -> UGen
@@ -1249,7 +1233,7 @@ rlpf in_ freq rq = mkUGen Nothing [KR,AR] (Right [0]) "RLPF" [in_,freq,rq] Nothi
 
 -- | (Undocumented class)
 rLoopSet :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-rLoopSet rate bufnum left right gain increment spec = mkUGen Nothing [KR,AR] (Left rate) "RLoopSet" [bufnum,left,right,gain,increment,spec] Nothing 1 (Special 0) NoId
+rLoopSet rate bufnum left right gain increment spec = mkUGen Nothing [AR] (Left rate) "RLoopSet" [bufnum,left,right,gain,increment,spec] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 rPlayTrace :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -1257,11 +1241,11 @@ rPlayTrace rate bufnum degree rate_ axis = mkUGen Nothing [KR,AR] (Left rate) "R
 
 -- | (Undocumented class)
 rShufflerB :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-rShufflerB bufnum readLocationMinima readLocationMaxima readIncrementMinima readIncrementMaxima durationMinima durationMaxima envelopeAmplitudeMinima envelopeAmplitudeMaxima envelopeShapeMinima envelopeShapeMaxima envelopeSkewMinima envelopeSkewMaxima stereoLocationMinima stereoLocationMaxima interOffsetTimeMinima interOffsetTimeMaxima ftableReadLocationIncrement readIncrementQuanta interOffsetTimeQuanta = mkUGen Nothing [KR,AR] (Left AR) "RShufflerB" [bufnum,readLocationMinima,readLocationMaxima,readIncrementMinima,readIncrementMaxima,durationMinima,durationMaxima,envelopeAmplitudeMinima,envelopeAmplitudeMaxima,envelopeShapeMinima,envelopeShapeMaxima,envelopeSkewMinima,envelopeSkewMaxima,stereoLocationMinima,stereoLocationMaxima,interOffsetTimeMinima,interOffsetTimeMaxima,ftableReadLocationIncrement,readIncrementQuanta,interOffsetTimeQuanta] Nothing 2 (Special 0) NoId
+rShufflerB bufnum readLocationMinima readLocationMaxima readIncrementMinima readIncrementMaxima durationMinima durationMaxima envelopeAmplitudeMinima envelopeAmplitudeMaxima envelopeShapeMinima envelopeShapeMaxima envelopeSkewMinima envelopeSkewMaxima stereoLocationMinima stereoLocationMaxima interOffsetTimeMinima interOffsetTimeMaxima ftableReadLocationIncrement readIncrementQuanta interOffsetTimeQuanta = mkUGen Nothing [AR] (Left AR) "RShufflerB" [bufnum,readLocationMinima,readLocationMaxima,readIncrementMinima,readIncrementMaxima,durationMinima,durationMaxima,envelopeAmplitudeMinima,envelopeAmplitudeMaxima,envelopeShapeMinima,envelopeShapeMaxima,envelopeSkewMinima,envelopeSkewMaxima,stereoLocationMinima,stereoLocationMaxima,interOffsetTimeMinima,interOffsetTimeMaxima,ftableReadLocationIncrement,readIncrementQuanta,interOffsetTimeQuanta] Nothing 2 (Special 0) NoId
 
 -- | (Undocumented class)
 rShufflerL :: Rate -> UGen -> UGen -> UGen -> UGen
-rShufflerL rate in_ fragmentSize maxDelay = mkUGen Nothing [KR,AR] (Left rate) "RShufflerL" [in_,fragmentSize,maxDelay] Nothing 1 (Special 0) NoId
+rShufflerL rate in_ fragmentSize maxDelay = mkUGen Nothing [AR] (Left rate) "RShufflerL" [in_,fragmentSize,maxDelay] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 rTraceRd :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -1293,11 +1277,11 @@ rand z lo hi = mkUGen Nothing [IR] (Left IR) "Rand" [lo,hi] Nothing 1 (Special 0
 
 -- | Set the synth's random generator ID.
 randID :: Rate -> UGen -> UGen
-randID rate id_ = mkUGen Nothing [IR,KR] (Left rate) "RandID" [id_] Nothing 1 (Special 0) NoId
+randID rate id_ = mkUGen Nothing [IR,KR] (Left rate) "RandID" [id_] Nothing 0 (Special 0) NoId
 
 -- | Sets the synth's random generator seed.
 randSeed :: Rate -> UGen -> UGen -> UGen
-randSeed rate trig_ seed = mkUGen Nothing [IR,KR,AR] (Left rate) "RandSeed" [trig_,seed] Nothing 1 (Special 0) NoId
+randSeed rate trig_ seed = mkUGen Nothing [IR,KR,AR] (Left rate) "RandSeed" [trig_,seed] Nothing 0 (Special 0) NoId
 
 -- | Record or overdub into a Buffer.
 recordBuf :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> Loop -> UGen -> DoneAction -> UGen -> UGen
@@ -1305,7 +1289,7 @@ recordBuf rate bufnum offset recLevel preLevel run loop trigger doneAction input
 
 -- | Send signal to a bus, overwriting previous contents.
 replaceOut :: UGen -> UGen -> UGen
-replaceOut bus input = mkUGen Nothing [KR,AR] (Right [1]) "ReplaceOut" [bus] (Just input) 1 (Special 0) NoId
+replaceOut bus input = mkUGen Nothing [KR,AR] (Right [1]) "ReplaceOut" [bus] (Just input) 0 (Special 0) NoId
 
 -- | Resonant filter.
 resonz :: UGen -> UGen -> UGen -> UGen
@@ -1353,11 +1337,11 @@ schmidt rate in_ lo hi = mkUGen Nothing [IR,KR,AR] (Left rate) "Schmidt" [in_,lo
 
 -- | FIXME: ScopeOut purpose.
 scopeOut :: Rate -> UGen -> UGen -> UGen
-scopeOut rate inputArray bufnum = mkUGen Nothing [KR,AR] (Left rate) "ScopeOut" [inputArray,bufnum] Nothing 1 (Special 0) NoId
+scopeOut rate inputArray bufnum = mkUGen Nothing [KR,AR] (Left rate) "ScopeOut" [inputArray,bufnum] Nothing 0 (Special 0) NoId
 
 -- | (Undocumented class)
 scopeOut2 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-scopeOut2 rate inputArray scopeNum maxFrames scopeFrames = mkUGen Nothing [KR,AR] (Left rate) "ScopeOut2" [inputArray,scopeNum,maxFrames,scopeFrames] Nothing 1 (Special 0) NoId
+scopeOut2 rate inputArray scopeNum maxFrames scopeFrames = mkUGen Nothing [KR,AR] (Left rate) "ScopeOut2" [inputArray,scopeNum,maxFrames,scopeFrames] Nothing 0 (Special 0) NoId
 
 -- | Select output from an array of inputs.
 select :: UGen -> UGen -> UGen
@@ -1365,11 +1349,7 @@ select which array = mkUGen Nothing [IR,KR,AR] (Right [0,1]) "Select" [which] (J
 
 -- | Send a trigger message from the server back to the client.
 sendTrig :: UGen -> UGen -> UGen -> UGen
-sendTrig in_ id_ value = mkUGen Nothing [KR,AR] (Right [0]) "SendTrig" [in_,id_,value] Nothing 1 (Special 0) NoId
-
--- | Set local buffer values.
-setBuf :: UGen -> UGen -> UGen -> UGen -> UGen
-setBuf buf off len arr = mkUGen Nothing [IR] (Left IR) "SetBuf" [buf,off,len] (Just arr) 1 (Special 0) NoId
+sendTrig in_ id_ value = mkUGen Nothing [KR,AR] (Right [0]) "SendTrig" [in_,id_,value] Nothing 0 (Special 0) NoId
 
 -- | Set-reset flip flop.
 setResetFF :: UGen -> UGen -> UGen
@@ -1505,7 +1485,7 @@ trig1 in_ dur = mkUGen Nothing [KR,AR] (Right [0]) "Trig1" [in_,dur] Nothing 1 (
 
 -- | FIXME: TrigControl purpose.
 trigControl :: Rate -> UGen -> UGen
-trigControl rate values = mkUGen Nothing [IR,KR] (Left rate) "TrigControl" [values] Nothing 1 (Special 0) NoId
+trigControl rate values = mkUGen Nothing [IR,KR] (Left rate) "TrigControl" [values] Nothing 0 (Special 0) NoId
 
 -- | Two pole filter.
 twoPole :: UGen -> UGen -> UGen -> UGen
@@ -1533,7 +1513,7 @@ vOsc3 rate bufpos freq1 freq2 freq3 = mkUGen Nothing [KR,AR] (Left rate) "VOsc3"
 
 -- | Variable shaped lag
 varLag :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-varLag rate in_ time curvature warp start = mkUGen Nothing [KR,AR] (Left rate) "VarLag" [in_,time,curvature,warp,start] Nothing 1 (Special 0) NoId
+varLag rate in_ time curvature warp start = mkUGen Nothing [KR,AR] (Left rate) "VarLag" [in_,time,curvature,warp,start] Nothing 0 (Special 0) NoId
 
 -- | Variable duty saw
 varSaw :: Rate -> UGen -> UGen -> UGen -> UGen
@@ -1573,12 +1553,20 @@ xLine rate start end dur doneAction = mkUGen Nothing [KR,AR] (Left rate) "XLine"
 
 -- | Send signal to a bus, crossfading with previous contents.
 xOut :: UGen -> UGen -> UGen -> UGen
-xOut bus xfade input = mkUGen Nothing [KR,AR] (Right [2]) "XOut" [bus,xfade] (Just input) 1 (Special 0) NoId
+xOut bus xfade input = mkUGen Nothing [KR,AR] (Right [2]) "XOut" [bus,xfade] (Just input) 0 (Special 0) NoId
 
 -- | Zero crossing frequency follower
 zeroCrossing :: UGen -> UGen
 zeroCrossing in_ = mkUGen Nothing [KR,AR] (Right [0]) "ZeroCrossing" [in_] Nothing 1 (Special 0) NoId
 
+-- | LocalBuf count
+maxLocalBufs :: Rate -> UGen -> UGen
+maxLocalBufs rate count = mkUGen Nothing [IR] (Left rate) "MaxLocalBufs" [count] Nothing 1 (Special 0) NoId
+
 -- | Multiply add
 mulAdd :: UGen -> UGen -> UGen -> UGen
 mulAdd in_ mul add = mkUGen Nothing [IR,KR,AR] (Right [0]) "MulAdd" [in_,mul,add] Nothing 1 (Special 0) NoId
+
+-- | Set local buffer
+setBuf :: UGen -> UGen -> UGen -> UGen -> UGen
+setBuf buf offset length_ array = mkUGen Nothing [IR] (Left IR) "SetBuf" [buf,offset,length_] (Just array) 1 (Special 0) NoId
