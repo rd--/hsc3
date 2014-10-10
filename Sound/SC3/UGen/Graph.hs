@@ -259,8 +259,11 @@ mk_node u g =
           let (n,g') = mk_node_u (proxySource p) g
           in mk_node_p n (proxyIndex p) g'
       MRG_U m ->
-          let (_,g') = mk_node (mrgRight m) g
-          in mk_node (mrgLeft m) g'
+          -- allow RHS of MRG node to be MCE (splice all nodes into graph)
+          let f g' l = case l of
+                         [] -> g'
+                         n:l' -> let (_,g'') = mk_node n g' in f g'' l'
+          in mk_node (mrgLeft m) (f g (mceChannels (mrgRight m)))
       MCE_U _ -> error (show ("mk_node: mce",u))
 
 -- | Transform /mce/ nodes to /mrg/ nodes
