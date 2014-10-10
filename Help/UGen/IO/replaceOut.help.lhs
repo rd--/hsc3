@@ -3,6 +3,8 @@
 
 > import Sound.SC3.ID
 
+> audition (replaceOut 0 (sinOsc AR 440 0 * 0.1))
+
 Send signal to a bus, overwrite existing signal.
 
 > let {a = out 0 (sinOsc AR (mce [330, 331]) 0 * 0.1)

@@ -7,6 +7,10 @@ import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
+-- | ClearBuf does not copy the buffer number through.
+clearBuf :: UGen -> UGen
+clearBuf b = mrg2 b (mkOsc IR "ClearBuf" [b] 1)
+
 -- | Demand rate weighted random sequence generator.
 dwrand :: ID i => i -> UGen -> UGen -> UGen -> UGen
 dwrand z repeats weights list_ =
