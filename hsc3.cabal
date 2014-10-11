@@ -1,11 +1,11 @@
 Name:              hsc3
-Version:           0.15
+Version:           0.16
 Synopsis:          Haskell SuperCollider
 Description:       Haskell client for the SuperCollider synthesis server,
                    <http://audiosynth.com/>.
                    .
                    For installation and configuration see the Tutorial at
-                   <http://rd.slavepianos.org/?t=hsc3-texts>.
+                   <http://rd.slavepianos.org/t/hsc3-texts>.
 License:           GPL
 Category:          Sound
 Copyright:         (c) Rohan Drape and others, 2005-2014
@@ -51,7 +51,7 @@ Library
                    directory,
                    filepath,
                    hashable,
-                   hosc == 0.15.*,
+                   hosc == 0.16.*,
                    network,
                    process,
                    random,

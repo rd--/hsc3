@@ -1,9 +1,9 @@
 > Sound.SC3.UGen.Help.viewSC3Help "TGrains"
 > Sound.SC3.UGen.DB.ugenSummary "TGrains"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
-Load audio data
+Load audio (#10) data
 
 > let fn = "/home/rohan/data/audio/pf-c5.aif"
 > in withSC3 (async (b_allocRead 10 fn 0 0))
@@ -13,7 +13,7 @@ Mouse control
 > let {tRate = mouseY KR 2 200 Exponential 0.1
 >     ;ctr = mouseX KR 0 (bufDur KR 10) Linear 0.1
 >     ;tr = impulse AR tRate 0}
-> in audition (out 0 (tGrains 2 tr 10 1 ctr (4 / tRate) 0 0.1 2))
+> in audition (out 0 (tGrains 2 tr 10 1 ctr (4 / tRate) 0 0.25 2))
 
 > let {b = 10
 >     ;rt = mouseY KR 8 120 Exponential 0.1
@@ -23,7 +23,7 @@ Mouse control
 >     ;pan = whiteNoise 'γ' KR * 0.6
 >     ;x = mouseX KR 0 (bufDur KR b) Linear 0.1
 >     ;pos = x + r}
-> in audition (out 0 (tGrains 2 clk b 1 pos dur pan 0.1 2))
+> in audition (out 0 (tGrains 2 clk b 1 pos dur pan 0.25 2))
 
 > let {b = 10
 >     ;rt = mouseY KR 2 120 Exponential 0.1
