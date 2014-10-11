@@ -63,6 +63,10 @@ choose e = lchoose e . mceChannels
 chooseM :: UId m => UGen -> m UGen
 chooseM = liftUId choose
 
+-- | 'clearBuf' of 'localBuf'.
+clearLocalBuf :: ID a => a -> UGen -> UGen -> UGen
+clearLocalBuf z nc nf = clearBuf (localBuf z nc nf)
+
 -- | Demand rate (:) function.
 dcons :: ID m => (m,m,m) -> UGen -> UGen -> UGen
 dcons (z0,z1,z2) x xs =

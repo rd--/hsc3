@@ -427,10 +427,6 @@ dust z rate density = mkUGen Nothing [KR,AR] (Left rate) "Dust" [density] Nothin
 dust2 :: ID a => a -> Rate -> UGen -> UGen
 dust2 z rate density = mkUGen Nothing [KR,AR] (Left rate) "Dust2" [density] Nothing 1 (Special 0) (toUId z)
 
--- | (Undocumented class)
-dustR :: Rate -> UGen -> UGen -> UGen
-dustR rate iot_min iot_max = mkUGen Nothing [AR] (Left rate) "DustR" [iot_min,iot_max] Nothing 1 (Special 0) NoId
-
 -- | Demand results from demand rate UGens.
 duty :: Rate -> UGen -> UGen -> DoneAction -> UGen -> UGen
 duty rate dur reset doneAction level = mkUGen Nothing [KR,AR] (Left rate) "Duty" [dur,reset,(from_done_action doneAction),level] Nothing 1 (Special 0) NoId
@@ -1107,10 +1103,6 @@ pv_RectComb buffer numTeeth phase width = mkUGen Nothing [KR] (Left KR) "PV_Rect
 pv_RectComb2 :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 pv_RectComb2 bufferA bufferB numTeeth phase width = mkUGen Nothing [KR] (Left KR) "PV_RectComb2" [bufferA,bufferB,numTeeth,phase,width] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
-pv_Split :: UGen -> UGen -> UGen
-pv_Split bufferA bufferB = mkUGen Nothing [KR] (Left KR) "PV_Split" [bufferA,bufferB] Nothing 2 (Special 0) NoId
-
 -- | Two channel equal power pan.
 pan2 :: UGen -> UGen -> UGen -> UGen
 pan2 in_ pos level = mkUGen Nothing [KR,AR] (Right [0]) "Pan2" [in_,pos,level] Nothing 2 (Special 0) NoId
@@ -1207,22 +1199,6 @@ quadL rate freq a b c xi = mkUGen Nothing [AR] (Left rate) "QuadL" [freq,a,b,c,x
 quadN :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 quadN rate freq a b c xi = mkUGen Nothing [AR] (Left rate) "QuadN" [freq,a,b,c,xi] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
-rDelayMap :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-rDelayMap rate bufnum in_ dynamic spec = mkUGen Nothing [AR] (Left rate) "RDelayMap" [bufnum,in_,dynamic,spec] Nothing 1 (Special 0) NoId
-
--- | (Undocumented class)
-rDelaySet :: Rate -> UGen -> UGen -> UGen
-rDelaySet rate in_ spec = mkUGen Nothing [AR] (Left rate) "RDelaySet" [in_,spec] Nothing 1 (Special 0) NoId
-
--- | (Undocumented class)
-rDelaySetB :: Rate -> UGen -> UGen -> UGen -> UGen
-rDelaySetB rate bufnum in_ spec = mkUGen Nothing [AR] (Left rate) "RDelaySetB" [bufnum,in_,spec] Nothing 1 (Special 0) NoId
-
--- | (Undocumented class)
-rFreezer :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-rFreezer rate bufnum left right gain increment incrementOffset incrementRandom rightRandom syncPhaseTrigger randomizePhaseTrigger numberOfLoops = mkUGen Nothing [AR] (Left rate) "RFreezer" [bufnum,left,right,gain,increment,incrementOffset,incrementRandom,rightRandom,syncPhaseTrigger,randomizePhaseTrigger,numberOfLoops] Nothing 1 (Special 0) NoId
-
 -- | A resonant high pass filter.
 rhpf :: UGen -> UGen -> UGen -> UGen
 rhpf in_ freq rq = mkUGen Nothing [KR,AR] (Right [0]) "RHPF" [in_,freq,rq] Nothing 1 (Special 0) NoId
@@ -1230,38 +1206,6 @@ rhpf in_ freq rq = mkUGen Nothing [KR,AR] (Right [0]) "RHPF" [in_,freq,rq] Nothi
 -- | A resonant low pass filter.
 rlpf :: UGen -> UGen -> UGen -> UGen
 rlpf in_ freq rq = mkUGen Nothing [KR,AR] (Right [0]) "RLPF" [in_,freq,rq] Nothing 1 (Special 0) NoId
-
--- | (Undocumented class)
-rLoopSet :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-rLoopSet rate bufnum left right gain increment spec = mkUGen Nothing [AR] (Left rate) "RLoopSet" [bufnum,left,right,gain,increment,spec] Nothing 1 (Special 0) NoId
-
--- | (Undocumented class)
-rPlayTrace :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-rPlayTrace rate bufnum degree rate_ axis = mkUGen Nothing [KR,AR] (Left rate) "RPlayTrace" [bufnum,degree,rate_,axis] Nothing 1 (Special 0) NoId
-
--- | (Undocumented class)
-rShufflerB :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-rShufflerB bufnum readLocationMinima readLocationMaxima readIncrementMinima readIncrementMaxima durationMinima durationMaxima envelopeAmplitudeMinima envelopeAmplitudeMaxima envelopeShapeMinima envelopeShapeMaxima envelopeSkewMinima envelopeSkewMaxima stereoLocationMinima stereoLocationMaxima interOffsetTimeMinima interOffsetTimeMaxima ftableReadLocationIncrement readIncrementQuanta interOffsetTimeQuanta = mkUGen Nothing [AR] (Left AR) "RShufflerB" [bufnum,readLocationMinima,readLocationMaxima,readIncrementMinima,readIncrementMaxima,durationMinima,durationMaxima,envelopeAmplitudeMinima,envelopeAmplitudeMaxima,envelopeShapeMinima,envelopeShapeMaxima,envelopeSkewMinima,envelopeSkewMaxima,stereoLocationMinima,stereoLocationMaxima,interOffsetTimeMinima,interOffsetTimeMaxima,ftableReadLocationIncrement,readIncrementQuanta,interOffsetTimeQuanta] Nothing 2 (Special 0) NoId
-
--- | (Undocumented class)
-rShufflerL :: Rate -> UGen -> UGen -> UGen -> UGen
-rShufflerL rate in_ fragmentSize maxDelay = mkUGen Nothing [AR] (Left rate) "RShufflerL" [in_,fragmentSize,maxDelay] Nothing 1 (Special 0) NoId
-
--- | (Undocumented class)
-rTraceRd :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-rTraceRd rate bufnum degree index_ axis = mkUGen Nothing [KR,AR] (Left rate) "RTraceRd" [bufnum,degree,index_,axis] Nothing 1 (Special 0) NoId
-
--- | (Undocumented class)
-rTraceRdX :: Rate -> UGen -> UGen -> UGen -> UGen
-rTraceRdX rate bufnum degree index_ = mkUGen Nothing [KR] (Left rate) "RTraceRdX" [bufnum,degree,index_] Nothing 1 (Special 0) NoId
-
--- | (Undocumented class)
-rTraceRdY :: Rate -> UGen -> UGen -> UGen -> UGen
-rTraceRdY rate bufnum degree index_ = mkUGen Nothing [KR] (Left rate) "RTraceRdY" [bufnum,degree,index_] Nothing 1 (Special 0) NoId
-
--- | (Undocumented class)
-rTraceRdZ :: Rate -> UGen -> UGen -> UGen -> UGen
-rTraceRdZ rate bufnum degree index_ = mkUGen Nothing [KR] (Left rate) "RTraceRdZ" [bufnum,degree,index_] Nothing 1 (Special 0) NoId
 
 -- | Number of radians per sample.
 radiansPerSample :: UGen
