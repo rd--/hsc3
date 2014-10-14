@@ -51,18 +51,20 @@ reset =
             ,g_new [(1,AddToHead,0),(2,AddToTail,0)]]
     in sendBundle (bundle immediately m)
 
--- | Send 'd_recv' and 's_new' messages to scsynth.
-playGraphdef :: DuplexOSC m => (Int,AddAction,Int) -> G.Graphdef -> m ()
-playGraphdef (nid,act,gid) g = do
-  _ <- async (d_recv' g)
-  send (s_new0 (ascii_to_string (G.graphdef_name g)) nid act gid)
+type Play_Opt = (Int,AddAction,Int,[(String,Double)])
 
 -- | Send 'd_recv' and 's_new' messages to scsynth.
-playSynthdef :: DuplexOSC m => (Int,AddAction,Int) -> Synthdef -> m ()
+playGraphdef :: DuplexOSC m => Play_Opt -> G.Graphdef -> m ()
+playGraphdef (nid,act,gid,param) g = do
+  _ <- async (d_recv' g)
+  send (s_new (ascii_to_string (G.graphdef_name g)) nid act gid param)
+
+-- | Send 'd_recv' and 's_new' messages to scsynth.
+playSynthdef :: DuplexOSC m => Play_Opt -> Synthdef -> m ()
 playSynthdef opt = playGraphdef opt . synthdef_to_graphdef
 
 -- | Send an /anonymous/ instrument definition using 'playSynthdef'.
-playUGen :: DuplexOSC m => (Int,AddAction,Int) -> UGen -> m ()
+playUGen :: DuplexOSC m => Play_Opt -> UGen -> m ()
 playUGen loc =
     playSynthdef loc .
     synthdef "Anonymous" .
@@ -105,10 +107,10 @@ performNRT s = do
 -- | Class for values that can be encoded and send to @scsynth@ for
 -- audition.
 class Audible e where
-    play_at :: Transport m => (Int,AddAction,Int) -> e -> m ()
+    play_at :: Transport m => Play_Opt -> e -> m ()
     -- | Variant where /id/ is @-1@.
     play :: Transport m => e -> m ()
-    play = play_at (-1,AddToHead,1)
+    play = play_at (-1,AddToHead,1,[])
 
 instance Audible G.Graphdef where
     play_at k = playGraphdef k
@@ -123,12 +125,12 @@ instance Audible NRT where
     play_at _ = performNRT
 
 -- | 'withSC3' of 'play_at'.
-audition_at :: Audible e => (Int,AddAction,Int) -> e -> IO ()
+audition_at :: Audible e => Play_Opt -> e -> IO ()
 audition_at k = withSC3 . play_at k
 
 -- | Variant where /id/ is @-1@.
 audition :: Audible e => e -> IO ()
-audition = audition_at (-1,AddToHead,1)
+audition = audition_at (-1,AddToHead,1,[])
 
 -- * Notifications
 
