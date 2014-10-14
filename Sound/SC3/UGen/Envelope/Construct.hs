@@ -108,13 +108,15 @@ data ADSR a = ADSR {adsr_attackTime :: a
                    ,adsr_bias :: a}
 
 adsrDefault :: Fractional n => ADSR n
-adsrDefault =
-    let c = EnvNum (-4)
-    in ADSR 0.01 0.3 0.5 1 1 (c,c,c) 0
+adsrDefault = let c = EnvNum (-4) in ADSR 0.01 0.3 0.5 1 1 (c,c,c) 0
 
 -- | Attack, decay, sustain, release envelope parameter constructor.
 envADSR :: Num a => a -> a -> a -> a -> a -> Envelope_Curve a -> a -> Envelope a
 envADSR aT dT sL rT pL c b = envADSR_r (ADSR aT dT sL rT pL (c,c,c) b)
+
+-- | Vairant with defaults for pL, c and b.
+envADSR' :: Num a => a -> a -> a -> a -> Envelope a
+envADSR' aT dT sL rT = envADSR aT dT sL rT 1 (EnvNum (-4)) 0
 
 -- | Record ('ADSR') variant of 'envADSR'.
 envADSR_r :: Num a => ADSR a -> Envelope a
