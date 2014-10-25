@@ -20,8 +20,8 @@ There are a number of related projects:
 - [hsc3-forth](?t=hsc3-forth): FORTH SuperCollider
 - [hsc3-lisp](?t=hsc3-lisp): LISP SuperCollider
 
-The hsc3 interaction environment is written for [GNU][gnu]
-[Emacs][emacs].
+The hsc3 interaction environment ([hsc3.el](?t=hsc3&e=emacs/hsc3.el))
+is written for [GNU][gnu] [Emacs][emacs].
 
 © [rohan drape][rd] and others, 2005-2014, [gpl][gpl].
 with contributions by:

@@ -165,7 +165,7 @@ klankSpec_mce f a dt =
     let m = mceChannels
     in klankSpec (m f) (m a) (m dt)
 
--- | Randomly select one of a list of UGens (initialiastion rate).
+-- | Randomly select one of a list of UGens (initialisation rate).
 lchoose :: ID m => m -> [UGen] -> UGen
 lchoose e a = select (iRand e 0 (fromIntegral (length a))) (mce a)
 
