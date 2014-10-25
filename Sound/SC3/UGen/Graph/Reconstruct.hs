@@ -98,7 +98,7 @@ reconstruct_k_ugen u =
 ugen_qname :: String -> Special -> (String,String)
 ugen_qname nm (Special n) =
     case nm of
-      "UnaryOpUGen" -> ("uop",unaryName n)
+      "UnaryOpUGen" -> ("uop CS",unaryName n)
       "BinaryOpUGen" -> ("binop CS",binaryName n)
       _ -> ("ugen",nm)
 
