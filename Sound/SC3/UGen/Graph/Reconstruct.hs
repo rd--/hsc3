@@ -43,17 +43,29 @@ reconstruct_graph g =
                     ,concatMap reconstruct_u_str u]
     in (filter (not . null) ls,reconstruct_mrg_str u)
 
--- | Generate a reconstruction of a 'Graph'.
---
--- > import Sound.SC3.ID
---
--- > let {k = control KR "bus" 0
--- >     ;o = sinOsc AR 440 0 + whiteNoise 'a' AR
--- >     ;u = out k (pan2 (o * 0.1) 0 1)
--- >     ;m = mrg [u,out 1 (impulse AR 1 0 * 0.1)]}
--- > in putStrLn (reconstruct_graph_str (synth m))
-reconstruct_graph_str :: Graph -> String
-reconstruct_graph_str = let f (l,s) = unlines (l ++ [s]) in f . reconstruct_graph
+reconstruct_graph_module :: String -> Graph -> [String]
+reconstruct_graph_module nm gr =
+  let imp = ["import Sound.SC3"
+            ,"import Sound.SC3.Common"
+            ,"import Sound.SC3.UGen.Plain"]
+      (b0:bnd,res) = reconstruct_graph gr
+      hs = ("  let " ++ b0) : map ("      " ++ ) bnd ++ ["  in " ++ res]
+      pre = [nm ++ " :: UGen",nm ++ " ="]
+  in (imp ++ pre ++ hs)
+
+{- | Generate a reconstruction of a 'Graph'.
+
+> import Sound.SC3
+
+> let {k = control KR "bus" 0
+>     ;o = sinOsc AR 440 0 + whiteNoise 'a' AR
+>     ;u = out k (pan2 (o * 0.1) 0 1)
+>     ;m = mrg [u,out 1 (impulse AR 1 0 * 0.1)]}
+> in putStrLn (reconstruct_graph_str "anon" (ugen_to_graph m))
+
+-}
+reconstruct_graph_str :: String -> Graph -> String
+reconstruct_graph_str nm = unlines . reconstruct_graph_module nm
 
 reconstruct_c_str :: Node -> String
 reconstruct_c_str u =
