@@ -35,6 +35,15 @@ parenthesise_operator nm =
     then printf "(%s)" nm
     else nm
 
+reconstruct_graph :: Graph -> [String]
+reconstruct_graph g =
+    let (Graph _ c k u) = g
+        ls = concat [map reconstruct_c_str (node_sort c)
+                    ,map reconstruct_k_str (node_sort k)
+                    ,concatMap reconstruct_u_str u
+                    ,[reconstruct_mrg_str u]]
+    in filter (not . null) ls
+
 -- | Generate a reconstruction of a 'Graph'.
 --
 -- > import Sound.SC3.ID
@@ -45,13 +54,7 @@ parenthesise_operator nm =
 -- >     ;m = mrg [u,out 1 (impulse AR 1 0 * 0.1)]}
 -- > in putStrLn (reconstruct_graph_str (synth m))
 reconstruct_graph_str :: Graph -> String
-reconstruct_graph_str g =
-    let (Graph _ c k u) = g
-        ls = concat [map reconstruct_c_str (node_sort c)
-                    ,map reconstruct_k_str (node_sort k)
-                    ,concatMap reconstruct_u_str u
-                    ,[reconstruct_mrg_str u]]
-    in unlines (filter (not . null) ls)
+reconstruct_graph_str = unlines . reconstruct_graph
 
 reconstruct_c_str :: Node -> String
 reconstruct_c_str u =
