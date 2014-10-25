@@ -1,4 +1,4 @@
-
+-- | Plain notation for SuperCollider UGen graphs.
 --
 -- > let {s = ugen "SinOsc" AR [440,0] 1
 -- >     ;m = binop "*" AR s 0.1
