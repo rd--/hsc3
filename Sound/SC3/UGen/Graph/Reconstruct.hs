@@ -88,7 +88,7 @@ ugen_qname :: String -> Special -> (String,String)
 ugen_qname nm (Special n) =
     case nm of
       "UnaryOpUGen" -> ("uop",unaryName n)
-      "BinaryOpUGen" -> ("binop",binaryName n)
+      "BinaryOpUGen" -> ("binop CS",binaryName n)
       _ -> ("ugen",nm)
 
 reconstruct_mce_str :: Node -> String
