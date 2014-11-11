@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "LocalBuf"
 > Sound.SC3.UGen.DB.ugenSummary "LocalBuf"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 Allocate a buffer local to the synthesis graph.
 
@@ -10,8 +10,6 @@ Allocate a buffer local to the synthesis graph.
 >     ;f = fft' b n
 >     ;c = pv_BrickWall f (sinOsc KR 0.1 0 * 0.75)}
 > in audition (out 0 (ifft' c * 0.1))
-
-> import Sound.SC3.UGen.Protect
 
 Variant with two local buffers
 

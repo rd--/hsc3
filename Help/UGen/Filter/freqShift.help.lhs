@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "FreqShift"
 > Sound.SC3.UGen.DB.ugenSummary "FreqShift"
 
-> import Sound.SC3.ID {- hcs3 -}
+> import Sound.SC3 {- hcs3 -}
 
 Shifting a 100Hz tone by 1 Hz rising to 500Hz
 
@@ -39,7 +39,7 @@ Shifting bandpassed noise
 
 > let {e = lfGauss AR 4 (1/8) 0 Loop DoNothing
 >     ;o = blip AR 60 4 * e
->     ;a = o / 4 + localIn 2 AR
+>     ;a = o / 4 + localIn 2 AR 0
 >     ;s = freqShift a (lfNoise0 'α' KR (1/4) * 90) 0
 >     ;z = delayC s 1 0.1 * 0.9}
 > in audition (mrg2 (out 0 s) (localOut z))
