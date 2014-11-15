@@ -346,7 +346,7 @@ soundIn u =
 -- > input, spread:1, level:1, center:0, levelComp:true
 splay :: UGen -> UGen -> UGen -> UGen -> Bool -> UGen
 splay i s l c lc =
-    let n = fromIntegral (fromMaybe 1 (mceDegree i))
+    let n = max 2 (fromIntegral (fromMaybe 1 (mceDegree i)))
         m = n - 1
         p = map ( (+ (-1.0)) . (* (2 / m)) ) [0 .. m]
         a = if lc then sqrt (1 / n) else 1

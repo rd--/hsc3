@@ -8,8 +8,8 @@ splay is a composite UGen.
 mouse control
 
 > let {i = 6
->     ;r = map (\e -> rand e 10 20) (take i ['a'..])
->     ;n = lfNoise2 'a' KR (mce r)
+>     ;r = map (\e -> rand e 10 20) (take i ['α'..])
+>     ;n = lfNoise2 'β' KR (mce r)
 >     ;x = mouseX KR (-1) 1 Linear 0.1
 >     ;y = mouseY KR 1 0 Linear 0.1
 >     ;ci = constant . fromIntegral
@@ -23,10 +23,10 @@ n_set control
 >     ;s = control KR "spread" 1
 >     ;l = control KR "level" 0.2
 >     ;c = control KR "center" 0
->     ;r = map (\e -> rand e 10 20) (take i ['a'..])
+>     ;r = map (\e -> rand e 10 20) (take i ['α'..])
 >     ;ci = constant . fromIntegral
 >     ;f = mce [1 .. ci i] + 3 * 100
->     ;n = lfNoise2 'a' KR (mce r) * 200 + f}
+>     ;n = lfNoise2 'β' KR (mce r) * 200 + f}
 > in audition (out 0 (splay (sinOsc AR n 0) s l c True))
 
 full stereo
@@ -48,3 +48,10 @@ from center to right
 all left
 
 > withSC3 (send (n_set (-1) [("spread",0),("center",-1)]))
+
+single channel input
+
+> let {x = mouseX KR (-1) 1 Linear 0.1
+>     ;y = mouseY KR 1 0 Linear 0.1
+>     ;o = sinOsc AR (lfNoise2 'α' KR 6 * 9 + 440) 0 * 0.1}
+> in audition (out 0 (splay o y 0.2 x True))
