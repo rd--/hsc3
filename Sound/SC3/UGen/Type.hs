@@ -129,13 +129,21 @@ u_constant = fmap constantValue . un_constant
 isConstant :: UGen -> Bool
 isConstant = isJust . un_constant
 
--- | True if input is a sink 'UGen', ie. has no outputs.
+-- | See into 'MRG_U', follows leftmost rule until arriving at non-MRG
+-- node.
+mrg_leftmost :: UGen -> UGen
+mrg_leftmost u =
+    case u of
+      MRG_U m -> mrg_leftmost (mrgLeft m)
+      _ -> u
+
+-- | True if input is a sink 'UGen', ie. has no outputs.  Sees into
+-- MRG.
 isSink :: UGen -> Bool
 isSink u =
-    case u of
+    case mrg_leftmost u of
       Primitive_U p -> null (ugenOutputs p)
       MCE_U m -> all isSink (mceProxies m)
-      MRG_U m -> isSink (mrgLeft m)
       _ -> False
 
 -- | See into 'Proxy_U'.
@@ -204,15 +212,16 @@ proxy u n =
 mceProxies :: MCE UGen -> [UGen]
 mceProxies = mce_elem
 
--- | Multiple channel expansion node ('MCE_U') predicate.
+-- | Multiple channel expansion node ('MCE_U') predicate.  Sees into
+-- MRG.
 isMCE :: UGen -> Bool
 isMCE u =
-    case u of
+    case mrg_leftmost u of
       MCE_U _ -> True
-      MRG_U (MRG u' _) -> isMCE u'
       _ -> False
 
--- | Output channels of UGen as a list.
+-- | Output channels of UGen as a list.  If required, preserves the
+-- RHS of and MRG node in channel 0.
 mceChannels :: UGen -> [UGen]
 mceChannels u =
     case u of
@@ -220,15 +229,19 @@ mceChannels u =
       MRG_U (MRG x y) -> let r:rs = mceChannels x in MRG_U (MRG r y) : rs
       _ -> [u]
 
--- | Number of channels to expand to.
-mceDegree :: UGen -> Int
+-- | Number of channels to expand to.  This function sees into MRG,
+-- and is defined only for MCE nodes.
+mceDegree :: UGen -> Maybe Int
 mceDegree u =
-    case u of
-      MCE_U m -> length (mceProxies m)
-      MRG_U (MRG x _) -> mceDegree x
-      _ -> error "mceDegree: not mce"
+    case mrg_leftmost u of
+      MCE_U m -> Just (length (mceProxies m))
+      _ -> Nothing
 
--- | Extend UGen to specified degree.
+-- | Erroring variant.
+mceDegree_err :: UGen -> Int
+mceDegree_err = fromMaybe (error "mceDegree: not mce") . mceDegree
+
+-- | Extend UGen to specified degree.  Follows "leftmost" rule for MRG nodes.
 mceExtend :: Int -> UGen -> [UGen]
 mceExtend n u =
     case u of
@@ -241,7 +254,7 @@ mceExtend n u =
 mceInputTransform :: [UGen] -> Maybe [[UGen]]
 mceInputTransform i =
     if any isMCE i
-    then let n = maximum (map mceDegree (filter isMCE i))
+    then let n = maximum (map mceDegree_err (filter isMCE i))
          in Just (transpose (map (mceExtend n) i))
     else Nothing
 

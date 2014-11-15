@@ -16,7 +16,7 @@ clearBuf b = mrg2 b (mkOsc IR "ClearBuf" [b] 1)
 -- | Demand rate weighted random sequence generator.
 dwrand :: ID i => i -> UGen -> UGen -> UGen -> UGen
 dwrand z repeats weights list_ =
-    let n = mceDegree list_
+    let n = mceDegree_err list_
         weights' = mceExtend n weights
         inp = repeats : constant n : weights'
     in mkUGen Nothing [DR] (Left DR) "Dwrand" inp (Just list_) 1 (Special 0) (toUId z)
@@ -28,7 +28,7 @@ fftTrigger b h p = mkOsc KR "FFTTrigger" [b,h,p] 1
 -- | Pack demand-rate FFT bin streams into an FFT chain.
 packFFT :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 packFFT b sz from to z mp =
-    let n = constant (mceDegree mp)
+    let n = constant (mceDegree_err mp)
     in mkOscMCE KR "PackFFT" [b, sz, from, to, z, n] mp 1
 
 -- | Poll value of input UGen when triggered.
