@@ -181,6 +181,9 @@ b_fetch n b = do
   sendMessage (b_query1 b)
   waitDatum "/b_info" >>= f
 
+b_fetch1 :: DuplexOSC m => Int -> Int -> m [Double]
+b_fetch1 n b = b_fetch n b >>= return . head
+
 c_getn1_data :: DuplexOSC m => (Int,Int) -> m [Double]
 c_getn1_data s = do
   let f d = case d of

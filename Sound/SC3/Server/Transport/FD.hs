@@ -151,6 +151,9 @@ b_fetch fd n b = do
   sendMessage fd (b_query1 b)
   waitDatum fd "/b_info" >>= f
 
+b_fetch1 :: Transport t => t -> Int -> Int -> IO [Double]
+b_fetch1 fd n b = b_fetch fd n b >>= return . head
+
 -- * Status
 
 -- | Collect server status information.
