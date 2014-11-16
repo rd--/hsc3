@@ -4,6 +4,8 @@
 -- at some point at least part of the duplication will be removed.
 module Sound.SC3.Server.Transport.FD where
 
+import Data.List {- base -}
+import Data.List.Split {- split -}
 import Data.Maybe {- base -}
 import Control.Monad {- base -}
 import Sound.OSC.FD {- hosc -}
@@ -138,12 +140,13 @@ b_getn1_data_segment fd n b (i,j) = do
   return (concat d)
 
 -- | Variant of 'b_getn1_data_segment' that gets the entire buffer.
-b_fetch :: Transport t => t -> Int -> Int -> IO [Double]
+b_fetch :: Transport t => t -> Int -> Int -> IO [[Double]]
 b_fetch fd n b = do
   let f d = case d of
               [Int32 _,Int32 nf,Int32 nc,Float _] ->
                   let ix = (0,fromIntegral (nf * nc))
-                  in b_getn1_data_segment fd n b ix
+                      deinterleave = transpose . chunksOf (fromIntegral nc)
+                  in b_getn1_data_segment fd n b ix >>= return . deinterleave
               _ -> error "b_fetch"
   sendMessage fd (b_query1 b)
   waitDatum fd "/b_info" >>= f
