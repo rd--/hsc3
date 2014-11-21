@@ -531,6 +531,7 @@ hypot_ x y = sqrt (x * x + y * y)
 -- > linLin_muladd (-1) 1 3 4 == (0.5,3.5)
 -- > linLin_muladd 0 1 3 4 == (1,3)
 -- > linLin_muladd (-1) 1 0 1 == (0.5,0.5)
+-- > linLin_muladd (-0.3) 1 (-1) 1
 linLin_muladd :: Fractional t => t -> t -> t -> t -> (t, t)
 linLin_muladd sl sr dl dr =
     let m = (dr - dl) / (sr - sl)

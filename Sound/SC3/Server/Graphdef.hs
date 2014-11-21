@@ -90,29 +90,29 @@ read_pstr h = do
   n <- fmap decode_u8 (L.hGet h 1)
   fmap decode_str (L.hGet h n)
 
-read_control :: Handle -> IO Control
-read_control h = do
+read_control :: (Handle -> IO Int) -> Handle -> IO Control
+read_control read_i h = do
   nm <- read_pstr h
-  ix <- read_i16 h
+  ix <- read_i h
   return (nm,ix)
 
-read_input :: Handle -> IO Input
-read_input h = do
-  u <- read_i16 h
-  p <- read_i16 h
+read_input :: (Handle -> IO Int) -> Handle -> IO Input
+read_input read_i h = do
+  u <- read_i h
+  p <- read_i h
   return (Input u p)
 
 read_output :: Handle -> IO Int
 read_output = read_i8
 
-read_ugen :: Handle -> IO UGen
-read_ugen h = do
+read_ugen :: (Handle -> IO Int) -> Handle -> IO UGen
+read_ugen read_i h = do
   name <- read_pstr h
   rate <- read_i8 h
-  number_of_inputs <- read_i16 h
-  number_of_outputs <- read_i16 h
+  number_of_inputs <- read_i h
+  number_of_outputs <- read_i h
   special <- read_i16 h
-  inputs <- replicateM number_of_inputs (read_input h)
+  inputs <- replicateM number_of_inputs (read_input read_i h)
   outputs <- replicateM number_of_outputs (read_output h)
   return (name
          ,rate
@@ -124,22 +124,26 @@ read_graphdef :: Handle -> IO Graphdef
 read_graphdef h = do
   magic <- L.hGet h 4
   version <- read_i32 h
+  let read_i =
+          case version of
+            0 -> read_i16
+            2 -> read_i32
+            _ -> error ("read_graphdef: version not at {zero | two}: " ++ show version)
   number_of_definitions <- read_i16 h
   when (magic /= L.pack (map (fromIntegral . fromEnum) "SCgf"))
        (error "read_graphdef: illegal magic string")
-  when (version /= 0)
-       (error "read_graphdef: version not at zero")
   when (number_of_definitions /= 1)
        (error "read_graphdef: non unary graphdef file")
   name <- read_pstr h
-  number_of_constants <- read_i16 h
+  number_of_constants <- read_i h
   constants <- replicateM number_of_constants (read_sample h)
-  number_of_control_defaults <- read_i16 h
+  number_of_control_defaults <- read_i h
   control_defaults <- replicateM number_of_control_defaults (read_sample h)
-  number_of_controls <- read_i16 h
-  controls <- replicateM number_of_controls (read_control h)
-  number_of_ugens <- read_i16 h
-  ugens <- replicateM number_of_ugens (read_ugen h)
+  number_of_controls <- read_i h
+  controls <- replicateM number_of_controls (read_control read_i h)
+  number_of_ugens <- read_i h
+  ugens <- replicateM number_of_ugens (read_ugen read_i h)
+  -- ignore variants...
   return (Graphdef name
                    constants
                    (zip controls control_defaults)
@@ -149,6 +153,8 @@ read_graphdef h = do
 -- > g <- read_graphdef_file "/home/rohan/sw/rsc3-disassembler/scsyndef/with-ctl.scsyndef"
 -- > g <- read_graphdef_file "/home/rohan/sw/rsc3-disassembler/scsyndef/mce.scsyndef"
 -- > g <- read_graphdef_file "/home/rohan/sw/rsc3-disassembler/scsyndef/mrg.scsyndef"
+-- > g <- read_graphdef_file "/tmp/1071318657.scsyndef"
+-- > putStrLn$ graphdef_stat g
 read_graphdef_file :: FilePath -> IO Graphdef
 read_graphdef_file nm = do
   h <- openFile nm ReadMode
@@ -156,7 +162,7 @@ read_graphdef_file nm = do
   hClose h
   return g
 
--- * Encode
+-- * Encode, we write version zero files
 
 -- | Pascal (length prefixed) encoding of string.
 encode_pstr :: ASCII -> L.ByteString
