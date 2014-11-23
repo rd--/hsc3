@@ -153,7 +153,6 @@ read_graphdef h = do
 -- > g <- read_graphdef_file "/home/rohan/sw/rsc3-disassembler/scsyndef/with-ctl.scsyndef"
 -- > g <- read_graphdef_file "/home/rohan/sw/rsc3-disassembler/scsyndef/mce.scsyndef"
 -- > g <- read_graphdef_file "/home/rohan/sw/rsc3-disassembler/scsyndef/mrg.scsyndef"
--- > g <- read_graphdef_file "/tmp/1071318657.scsyndef"
 -- > putStrLn$ graphdef_stat g
 read_graphdef_file :: FilePath -> IO Graphdef
 read_graphdef_file nm = do
