@@ -46,3 +46,16 @@ Routine(
 ;s.sync
 ;s.sendBundle(latency,m)
 ;s.sendBundle(latency + (c/2),m)}).play
+
+To see/hear scheduler clock and sample clock drift:
+
+Routine(
+{var g = {OffsetOut.ar(0,Saw.ar(400) * EnvGen.kr(Env.perc, doneAction: 2) * 0.2)}
+;var h = {OffsetOut.ar(1,Saw.ar(800) * Decay2.ar(Impulse.ar(1)) * 0.2)}
+;var t_delay = 0.25
+;SynthDef("g",g).send(s)
+;SynthDef("h",h).send(s)
+;s.sync
+;s.sendBundle(t_delay,["/s_new", "h", -1, 0, 1])
+;inf.do({s.sendBundle(t_delay,["/s_new", "g", -1, 0, 1]); 1.0.wait})}).play
+
