@@ -30,3 +30,10 @@ for partial n, amplitude is (1 / square n) and phase is pi at every other odd pa
 >     ;o1 = sum (map (\(fr,ph,am) -> sinOsc AR fr ph * am) (mk_param x 25)) * (1 - e)
 >     ;o2 = lfTri AR x 0 * e}
 > in audition (out 0 (mce2 o1 o2 * 0.1))
+
+drawings
+
+> import Sound.SC3.Plot {- hsc3-plot -}
+
+> plot_ugen1 0.1 (lfTri AR 40 0)
+> plot_ugen1 0.1 (lfTri AR (xLine KR 1 800 0.1 DoNothing) 0)
