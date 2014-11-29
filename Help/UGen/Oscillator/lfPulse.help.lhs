@@ -24,3 +24,9 @@ phase is always 0.
 >     ;o1 = sum (map (\(fr,am) -> sinOsc AR fr 0 * am) (mk_param x 50)) * (1 - e)
 >     ;o2 = lfPulse AR x 0 0.5 * e}
 > in audition (out 0 (mce2 o1 o2 * y))
+
+drawings
+
+> import Sound.SC3.Plot {- hsc3-plot -}
+
+> plot_ugen1 0.1 (lfPulse AR (line KR 100 800 0.1 DoNothing) 0 0.5)
