@@ -636,8 +636,8 @@ index :: UGen -> UGen -> UGen
 index bufnum in_ = mkUGen Nothing [KR,AR] (Right [1]) "Index" [bufnum,in_] Nothing 1 (Special 0) NoId
 
 -- | Finds the (lowest) point in the Buffer at which the input signal lies in-between the two values
-indexInBetween :: Rate -> UGen -> UGen -> UGen
-indexInBetween rate bufnum in_ = mkUGen Nothing [KR,AR] (Left rate) "IndexInBetween" [bufnum,in_] Nothing 1 (Special 0) NoId
+indexInBetween :: UGen -> UGen -> UGen
+indexInBetween bufnum in_ = mkUGen Nothing [KR,AR] (Right [1]) "IndexInBetween" [bufnum,in_] Nothing 1 (Special 0) NoId
 
 -- | Index into a table with a signal, linear interpolated
 indexL :: Rate -> UGen -> UGen -> UGen

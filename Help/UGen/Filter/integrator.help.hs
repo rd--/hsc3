@@ -1,7 +1,7 @@
 -- Sound.SC3.UGen.Help.viewSC3Help "Integrator"
 -- Sound.SC3.UGen.DB.ugenSummary "Integrator"
 
-import Sound.SC3.ID
+import Sound.SC3
 
 -- > audition (out 0 h1)
 h1 =
