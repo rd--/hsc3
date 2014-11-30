@@ -181,6 +181,7 @@ b_fetch n b = do
   sendMessage (b_query1 b)
   waitDatum "/b_info" >>= f
 
+-- | First channel of 'b_fetch'.
 b_fetch1 :: DuplexOSC m => Int -> Int -> m [Double]
 b_fetch1 n b = b_fetch n b >>= return . head
 

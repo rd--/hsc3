@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "GrainFM"
 > Sound.SC3.UGen.DB.ugenSummary "GrainFM"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {d = 15
 >     ;lin a b = line KR a b d RemoveSynth

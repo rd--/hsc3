@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "GrainBuf"
 > Sound.SC3.UGen.DB.ugenSummary "GrainBuf"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let fn = "/home/rohan/data/audio/pf-c5.snd"
 > in withSC3 (send (b_allocRead 10 fn 0 0))

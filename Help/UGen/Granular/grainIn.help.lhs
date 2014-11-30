@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "GrainIn"
 > Sound.SC3.UGen.DB.ugenSummary "GrainIn"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {n = pinkNoise 'α' AR
 >     ;x = mouseX KR (-0.5) 0.5 Linear 0.1
