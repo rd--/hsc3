@@ -7,8 +7,7 @@ Allocate and fill buffer.
 
 > let {f = [Normalise,Wavetable,Clear]
 >     ;d = [1,1/2,1/3,1/4,1/5,1/6,1/7,1/8,1/9,1/10]}
-> in withSC3 ( do {_ <- async (b_alloc 10 512 1)
->                 ;async (b_gen_sine1 10 f d)})
+> in withSC3 (async (b_alloc 10 512 1) >> async (b_gen_sine1 10 f d))
 
 Fixed beat frequency
 
@@ -21,3 +20,12 @@ Modulate beat frequency with mouseX
 Compare with plain osc
 
 > audition (out 0 (osc AR 10 200 0.0 * 0.1))
+
+Summing behaviour (http://article.gmane.org/gmane.comp.audio.supercollider.devel/62575)
+
+> import Sound.SC3.Plot {- hsc3-plot -}
+
+> withSC3 (async (b_alloc 11 512 1) >>
+>          async (b_gen_sine1 11 [Normalise,Wavetable,Clear] [1]))
+
+> plot_ugen1 0.1 (cOsc AR 11 100 5)
