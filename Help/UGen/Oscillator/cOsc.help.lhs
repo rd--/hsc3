@@ -5,9 +5,8 @@
 
 Allocate and fill buffer.
 
-> let {f = [Normalise,Wavetable,Clear]
->     ;d = [1,1/2,1/3,1/4,1/5,1/6,1/7,1/8,1/9,1/10]}
-> in withSC3 (async (b_alloc 10 512 1) >> async (b_gen_sine1 10 f d))
+> let {b = 10;f = [Normalise,Wavetable,Clear];p = [1,1/2,1/3,1/4,1/5,1/6,1/7,1/8,1/9,1/10]}
+> in withSC3 (async (b_alloc b 512 1) >> async (b_gen_sine1 b f p))
 
 Fixed beat frequency
 
@@ -25,7 +24,7 @@ Summing behaviour (http://article.gmane.org/gmane.comp.audio.supercollider.devel
 
 > import Sound.SC3.Plot {- hsc3-plot -}
 
-> withSC3 (async (b_alloc 11 512 1) >>
->          async (b_gen_sine1 11 [Normalise,Wavetable,Clear] [1]))
+> let {b = 11; f = [Normalise,Wavetable,Clear]; p = [1]}
+> in withSC3 (async (b_alloc b 512 1) >> async (b_gen_sine1 b f p))
 
 > plot_ugen1 0.1 (cOsc AR 11 100 5)
