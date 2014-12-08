@@ -1,12 +1,13 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Concat"
 > Sound.SC3.UGen.DB.ugenSummary "Concat"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let fileName = "/home/rohan/data/audio/pf-c5.snd"
 > in withSC3 (async (b_allocRead 12 fileName 0 0))
 
 Granulator
+
 > let {y0 = mouseY KR 0.01 1 Linear 0.2
 >     ;y1 = mouseY KR 12 100 Linear 0.2
 >     ;n = lfNoise0 'α' KR y0 * 3 + 4.5

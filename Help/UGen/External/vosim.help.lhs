@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "VOSIM"
 > Sound.SC3.UGen.DB.ugenSummary "VOSIM"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {p = tRand 'α' 0 1 (impulse AR 6 0)
 >     ;t = impulse AR (9 * ( 1 + ( p >* 0.95))) 0

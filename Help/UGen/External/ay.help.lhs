@@ -1,8 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "AY"
 > Sound.SC3.UGen.DB.ugenSummary "AY"
 
-> import Sound.SC3.ID
-> import qualified Sound.SC3.Monad as M
+> import Sound.SC3
 
 > audition (out 0 (ay 1777 1666 1555 1 7 15 15 15 4 1 0))
 
@@ -17,8 +16,8 @@
 
 > let {rate = mouseX KR 0.1 10 Linear 0.2
 >     ;rng l r i = return (linLin i (-1) 1 l r)
->     ;mk_ctl l r = M.lfdNoise3 KR rate >>= rng l r
->     ;mk_ctl_0 l r = M.lfdNoise0 KR rate >>= rng l r}
+>     ;mk_ctl l r = lfdNoise3M KR rate >>= rng l r
+>     ;mk_ctl_0 l r = lfdNoise0M KR rate >>= rng l r}
 > in do {tonea <- mk_ctl 10 3900
 >       ;toneb <- mk_ctl 10 3900
 >       ;tonec <- mk_ctl 10 3900

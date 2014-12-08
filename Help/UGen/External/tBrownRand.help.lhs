@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "TBrownRand"
 > Sound.SC3.UGen.DB.ugenSummary "TBrownRand"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {t = dust 'α' KR 10
 >     ;dist = mouseX KR 0 5 Linear 0.2

@@ -19,6 +19,7 @@
 > in audition (out 0 (mce2 l r * 0.1))
 
 An algorithmically generated graph courtesy f0.
+
 > let { x = [[[0.0,-1/3,-1.0,0.0]
 >            ,[0.75,0.75,0.0,-0.5]
 >            ,[-0.5,-0.25,0.25,-0.75]

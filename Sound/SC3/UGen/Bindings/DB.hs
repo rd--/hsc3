@@ -144,16 +144,16 @@ bufChannels :: Rate -> UGen -> UGen
 bufChannels rate bufnum = mkUGen Nothing [IR,KR] (Left rate) "BufChannels" [bufnum] Nothing 1 (Special 0) NoId
 
 -- | Buffer based comb delay line with cubic interpolation.
-bufCombC :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-bufCombC rate buf in_ delaytime decaytime = mkUGen Nothing [AR] (Left rate) "BufCombC" [buf,in_,delaytime,decaytime] Nothing 1 (Special 0) NoId
+bufCombC :: UGen -> UGen -> UGen -> UGen -> UGen
+bufCombC buf in_ delaytime decaytime = mkUGen Nothing [AR] (Right [1]) "BufCombC" [buf,in_,delaytime,decaytime] Nothing 1 (Special 0) NoId
 
 -- | Buffer based comb delay line with linear interpolation.
-bufCombL :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-bufCombL rate buf in_ delaytime decaytime = mkUGen Nothing [AR] (Left rate) "BufCombL" [buf,in_,delaytime,decaytime] Nothing 1 (Special 0) NoId
+bufCombL :: UGen -> UGen -> UGen -> UGen -> UGen
+bufCombL buf in_ delaytime decaytime = mkUGen Nothing [AR] (Right [1]) "BufCombL" [buf,in_,delaytime,decaytime] Nothing 1 (Special 0) NoId
 
 -- | Buffer based comb delay line with no interpolation.
-bufCombN :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-bufCombN rate buf in_ delaytime decaytime = mkUGen Nothing [AR] (Left rate) "BufCombN" [buf,in_,delaytime,decaytime] Nothing 1 (Special 0) NoId
+bufCombN :: UGen -> UGen -> UGen -> UGen -> UGen
+bufCombN buf in_ delaytime decaytime = mkUGen Nothing [AR] (Right [1]) "BufCombN" [buf,in_,delaytime,decaytime] Nothing 1 (Special 0) NoId
 
 -- | Buffer based simple delay line with cubic interpolation.
 bufDelayC :: Rate -> UGen -> UGen -> UGen -> UGen

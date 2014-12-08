@@ -16,19 +16,23 @@ level, lin,  -9.0,     9.0,   -20.0
 > import Sound.SC3
 
 default settings
+
 > let {i = soundIn 4
 >     ;o = zitaRev1 i i 0.04 200 3 2 6000 160 0 2500 0 0.5 (-6)}
 > in audition (out 0 o)
 
 longer
+
 > let {i = soundIn 4
 >     ;o = zitaRev1 i i 0.08 200 6 4 6000 190 (-6) 3500 6 0.5 0}
 > in audition (out 0 o)
 
 longer still
+
 > let {i = soundIn 4
 >     ;o = zitaRev1 i i 0.1 200 6 8 6000 190 (-6) 3500 6 0.5 0}
 > in audition (out 0 o)
 
 hsc3-db
+
 > Sound.SC3.UGen.DB.u_summary zitaRev1_dsc

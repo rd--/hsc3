@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "DFM1"
 > Sound.SC3.UGen.DB.ugenSummary "DFM1"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 Play it with the mouse
 

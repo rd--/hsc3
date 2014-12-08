@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "TGaussRand"
 > Sound.SC3.UGen.DB.ugenSummary "TGaussRand"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {t = dust 'α' KR 10
 >     ;f = tGaussRand 'β' 300 3000 t
@@ -11,6 +11,7 @@
 > in audition (out 0 p)
 
 compare to tRand
+
 > let {t = dust 'α' KR 10
 >     ;f = tRand 'β' 300 3000 t
 >     ;o = sinOsc AR f 0

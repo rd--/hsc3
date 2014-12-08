@@ -2,7 +2,6 @@
 > Sound.SC3.UGen.DB.ugenSummary "WaveTerrain"
 
 > import Sound.SC3 {- hsc3 -}
-> import Sound.SC3.Plot {- hsc3-plot -}
 
 Terrain function
 
@@ -23,6 +22,7 @@ Create terrain given function.
 
 Confirm terrain
 
+> import Sound.SC3.Plot {- hsc3-plot -}
 > plot_p3_pt [t z]
 
 Create table.
