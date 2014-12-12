@@ -17,7 +17,7 @@ Drawing
 
 Illustrate monadic constructor
 
-> audition . (out 0) . (* 0.25) =<< dustN AR 200
+> audition . (out 0) . (* 0.25) =<< dustM AR 200
 
 > let d = xLine KR 20000 2 10 RemoveSynth
 > in audition . (out 0) . (* 0.15) =<< dustM AR d

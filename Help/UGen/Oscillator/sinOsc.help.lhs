@@ -21,6 +21,12 @@ Modulate phase
 > let p = sinOsc AR (xLine KR 20 8000 10 RemoveSynth) 0 * 2 * pi
 > in audition (out 0 (sinOsc AR 800 p * 0.1))
 
+Mouse control
+
+> let {x = mouseX KR 40 10000 Exponential 0.2
+>     ;y = mouseY KR 0.01 0.25 Exponential 0.2}
+> in audition (out 0 (sinOsc AR x 0 * y))
+
 Simple bell-like tone.
 
 > let {f = mce [0.5,1,1.19,1.56,2,2.51,2.66,3.01,4.1]
