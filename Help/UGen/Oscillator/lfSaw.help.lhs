@@ -20,6 +20,7 @@ Output range is bi-polar.
 saw-tooth wave as sum of sines.
 for all partials n, amplitude is (1 / n).
 phase is always 0.
+cross-fade from sum to lfSaw.
 
 > let {mk_freq f0 n = f0 * fromInteger n
 >     ;mk_amp n = 1 / fromInteger n
@@ -30,3 +31,9 @@ phase is always 0.
 >     ;o1 = sum (map (\(fr,am) -> sinOsc AR fr 0 * am) (mk_param x 25)) * (1 - e)
 >     ;o2 = lfSaw AR x 0 * e}
 > in audition (out 0 (mce2 o1 o2 * y))
+
+> import Sound.SC3.Plot {- hsc3-plot -}
+
+> plot_ugen1 0.1 (lfSaw AR 50 0) -- ascending
+> plot_ugen1 0.002 (lfSaw AR 5000 0)
+
