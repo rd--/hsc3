@@ -10,10 +10,16 @@ import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
--- | Co-ordinate based static envelope generator.
---
--- > let e = envCoord [(0,0),(1/4,1),(1,0)] 1 1 EnvLin
--- > in envelope_sc3_array e == Just [0,2,-99,-99,1,1/4,1,0,0,3/4,1,0]
+{- | Co-ordinate based static envelope generator.  Points are (time,value) pairs.
+
+> let e = envCoord [(0,0),(1/4,1),(1,0)] 1 1 EnvLin
+> in envelope_sc3_array e == Just [0,2,-99,-99,1,1/4,1,0,0,3/4,1,0]
+
+> import Sound.SC3.Plot {- hsc3-plot -}
+
+> plotEnvelope [envCoord [(0,0),(1/4,1),(1,0)] 1 1 EnvLin]
+
+-}
 envCoord :: Num a => [(a,a)] -> a -> a -> Envelope_Curve a -> Envelope a
 envCoord bp dur amp c =
     let l = map ((* amp) . snd) bp

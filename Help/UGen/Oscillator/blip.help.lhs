@@ -20,3 +20,10 @@ Self-modulation at control rate.
 > let {fr = blip KR 0.25 3 * 300 + 500
 >     ;nh = blip KR 0.15 2 * 20 + 21}
 > in audition (out 0 (blip AR fr nh * 0.2))
+
+Plot
+
+> import Sound.SC3.Plot {- hsc3-plot -}
+
+> plot_ugen1 0.1 (blip AR 1000 20)
+> plot_ugen_fft1 0.1 (blip AR 1000 20)
