@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "TDuty"
 > Sound.SC3.UGen.DB.ugenSummary "TDuty"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 Play a little rhythm
 

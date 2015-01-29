@@ -2,7 +2,7 @@
 > Sound.SC3.UGen.DB.ugenSummary "FFT"
 > :t fft'
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 Non-local buffer
 

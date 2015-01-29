@@ -1,15 +1,15 @@
 > Sound.SC3.UGen.Help.viewSC3Help "IDWT"
 > Sound.SC3.UGen.DB.ugenSummary "IDWT"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {i = whiteNoise 'α' AR * 0.05
 >     ;b = localBuf 'β' 1024 1
 >     ;c = dwt b i 0.5 0 1 0 0}
 > in audition (out 0 (mce2 (idwt c 0 0 0) i))
 
-direct synthesis via writing values to buffer (try changing wavelet
-type...)
+direct synthesis via writing values to buffer (try changing wavelet type...)
+
 > withSC3 (async (b_alloc 10 1024 1) >> send (b_zero 10))
 
 > let {c = fftTrigger 10 0.5 0
@@ -22,6 +22,7 @@ type...)
 > withSC3 (send (b_zero 10))
 
 run this to change sound: WARNING, NOISY!
+
 > do {a <- evalRandIO (nrrand 1024 (-1) 1)
 >    ;withSC3 (send (b_setn 10 [(0,a)]))}
 

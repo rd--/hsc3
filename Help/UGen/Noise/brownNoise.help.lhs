@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "BrownNoise"
 > Sound.SC3.UGen.DB.ugenSummary "BrownNoise"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let n = brownNoise 'α' AR
 > in audition (out 0 (n * 0.1))

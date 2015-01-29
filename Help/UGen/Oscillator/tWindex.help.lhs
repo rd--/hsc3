@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "TWindex"
 > Sound.SC3.UGen.DB.ugenSummary "TWindex"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {p = mce [1/5, 2/5, 2/5]
 >     ;a = mce [400, 500, 600]

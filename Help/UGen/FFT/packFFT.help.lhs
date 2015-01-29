@@ -1,8 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "PackFFT"
 > Sound.SC3.UGen.DB.ugenSummary "PackFFT"
 
-> import Sound.SC3.ID
-> import Sound.SC3.UGen.Protect
+> import Sound.SC3
 
 > withSC3 (async (b_alloc 10 512 1))
 

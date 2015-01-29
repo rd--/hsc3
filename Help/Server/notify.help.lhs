@@ -1,7 +1,7 @@
 > Sound.SC3.Server.Help.viewServerHelp "/notify"
 
-> import Sound.OSC
-> import Sound.SC3.ID
+> import Sound.OSC {- hosc -}
+> import Sound.SC3 {- hsc3 -}
 
 > let g = synthdef "g" (out 0 (sinOsc AR (rand 'a' 440 880) 0 * 0.1))
 > in withSC3 (async (d_recv g))

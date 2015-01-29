@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "DynKlang"
 > Sound.SC3.UGen.DB.ugenSummary "DynKlang"
 
-> import Sound.SC3.ID {- hsc3 -}
+> import Sound.SC3 {- hsc3 -}
 
 fixed
 

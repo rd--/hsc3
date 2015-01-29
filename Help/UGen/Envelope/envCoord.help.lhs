@@ -22,8 +22,6 @@ line segments, set target value & transition time and trigger
 > withSC3 (send (n_set (-1) [("en",990),("tm",1),("tr",1)]))
 > withSC3 (send (n_set (-1) [("en",110),("tm",2),("tr",1)]))
 
-> import Sound.SC3.ID
-
 likewise, but internal graph triggers and randomises line end points
 
 > let {tr = dust 'α' KR 2

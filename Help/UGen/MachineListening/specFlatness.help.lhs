@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "SpecFlatness"
 > Sound.SC3.UGen.DB.ugenSummary "SpecFlatness"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {z = soundIn 4
 >     ;g = 1 {- gain, set as required -}

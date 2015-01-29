@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Dbrown"
 > Sound.SC3.UGen.DB.ugenSummary "Dbrown"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {n = dbrown 'α' dinf 0 15 1
 >     ;x = mouseX KR 1 40 Exponential 0.1

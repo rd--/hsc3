@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Dswitch1"
 > Sound.SC3.UGen.DB.ugenSummary "Dswitch1"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {x = mouseX KR 0 4 Linear 0.1
 >     ;y = mouseY KR 1 15 Linear 0.1

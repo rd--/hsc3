@@ -1,9 +1,8 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Onsets"
 > Sound.SC3.UGen.DB.ugenSummary "Onsets"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
-allocate buffer 10
 > withSC3 (async (b_alloc 10 512 1))
 
 > let { x = mouseX KR 0 1 Linear 0.2
@@ -17,6 +16,7 @@ allocate buffer 10
 > audition (out 0 (soundIn 0 * 0.1))
 
 a generative signal with distinct onsets!
+
 > let z = let {e = linLin (saw AR 2) (-1) 1 0 1
 >             ;p = let f = midiCPS (tIRand 'a' 63 75 (impulse KR 2 0))
 >                  in pulse AR f 0.5
@@ -26,6 +26,7 @@ a generative signal with distinct onsets!
 > audition (out 0 z)
 
 x varies threshold, whitenoise bursts indicate detected onsets
+
 > let {c = fft' 10 z
 >     ;x = mouseX KR 0 1 Linear 0.2
 >     ;o = onsets' c x (onsetType "rcomplex")

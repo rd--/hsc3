@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Dstutter"
 > Sound.SC3.UGen.DB.ugenSummary "Dstutter"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {inp = dseq 'α' dinf (mce [1,2,3])
 >     ;nse = diwhite 'β' dinf 2 8

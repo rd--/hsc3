@@ -1,10 +1,14 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Dxrand"
 > Sound.SC3.UGen.DB.ugenSummary "Dxrand"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
-Select to draw graphs, or not...
+Select to draw graphs,
+
 > let drw = Sound.SC3.UGen.Dot.draw :: UGen -> IO ()
+
+or not...
+
 > let drw = const (return ()) :: UGen -> IO ()
 
 > let {i = mce [0.2,0.4,dseq 'α' 2 (mce [0.1,0.1])]

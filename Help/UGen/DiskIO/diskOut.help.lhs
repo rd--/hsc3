@@ -2,7 +2,7 @@
 > Sound.SC3.UGen.DB.ugenSummary "DiskOut"
 
 > import Sound.OSC {- hosc -}
-> import Sound.SC3.ID {- hsc3 -}
+> import Sound.SC3 {- hsc3 -}
 
 Example graph
 

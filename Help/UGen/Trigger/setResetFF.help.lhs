@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "SetResetFF"
 > Sound.SC3.UGen.DB.ugenSummary "SetResetFF"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 d0 is the set trigger, d1 the reset trigger
 

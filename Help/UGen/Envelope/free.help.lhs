@@ -1,11 +1,11 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Free"
 > Sound.SC3.UGen.DB.ugenSummary "Free"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {a = out 0 (sinOsc AR 880 0 * 0.1)
->     ;n0 = pinkNoise 'a' AR
->     ;n1 = dust 'b' AR 20
+>     ;n0 = pinkNoise 'α' AR
+>     ;n1 = dust 'β' KR 20
 >     ;b = mrg [out 1 (n0 * 0.1), free n1 1001]}
 > in withSC3 (do {_ <- async (d_recv (synthdef "a" a))
 >                ;_ <- async (d_recv (synthdef "b" b))

@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Dseq"
 > Sound.SC3.UGen.DB.ugenSummary "Dseq"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {n = dseq 'α' 3 (mce [1, 3, 2, 7, 8])
 >     ;x = mouseX KR 1 40 Exponential 0.1

@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "IEnvGen"
 > Sound.SC3.UGen.DB.ugenSummary "IEnvGen"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {l = [0,0.6,0.3,1.0,0]
 >     ;t = [0.1,0.02,0.4,1.1]

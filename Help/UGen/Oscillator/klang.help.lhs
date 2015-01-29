@@ -3,7 +3,7 @@
 
 # SC2 had mul/add inputs.
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {f = [440,550..1100]
 >     ;a = take 7 (cycle [0.05, 0.02])
@@ -25,4 +25,3 @@ play({Klang.ar(`[Array.rand(12,600.0,1000.0),nil,nil],1,0)*0.05})
 > let {f = map (\z -> rand z 600 1000) ['a'..'l']
 >     ;s = klangSpec f (replicate 12 1) (replicate 12 0)}
 > in audition (out 0 (klang AR 1 0 s * 0.05))
-
