@@ -2,7 +2,6 @@
 > Sound.SC3.UGen.DB.ugenSummary "ClipNoise"
 
 > import Sound.SC3
-> import qualified Sound.SC3.Monadic as M
 
-> audition . (out 0) . (* 0.1) =<< M.clipNoise AR
-> audition . (out 0) . (* 0.1) =<< M.whiteNoise AR
+> audition . (out 0) . (* 0.1) =<< clipNoiseM AR
+> audition . (out 0) . (* 0.1) =<< whiteNoiseM AR
