@@ -1,7 +1,7 @@
 -- Sound.SC3.UGen.Help.viewSC3Help "BlitB3Square"
 -- Sound.SC3.UGen.DB.ugenSummary "BlitB3Square"
 
-import Sound.SC3.ID
+import Sound.SC3
 
 -- > audition (out 0 (sq1 * 0.1))
 sq1 =

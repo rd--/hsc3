@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Metro"
 > Sound.SC3.UGen.DB.ugenSummary "Metro"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > audition (out 0 (metro AR 60 1))
 

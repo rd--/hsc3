@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "PV_MagFreeze"
 > Sound.SC3.UGen.DB.ugenSummary "PV_MagFreeze"
 
-> import Sound.SC3.ID {- hsc3 -}
+> import Sound.SC3 {- hsc3 -}
 
 Load audio file.
 

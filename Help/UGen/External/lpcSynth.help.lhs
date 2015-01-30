@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "LPCSynth"
 > Sound.SC3.UGen.DB.ugenSummary "LPCSynth"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let load_data b i d =
 >         if length d < 512
@@ -23,7 +23,7 @@
 >         in s * 1e-5 * rms
 
 > do {lpc <- lpcRead "/home/rohan/cvs/tn/tn-56/lpc/fate.lpc"
->    ;let {n = pinkNoise 'a' AR
+>    ;let {n = pinkNoise 'α' AR
 >         ;d = map realToFrac (lpcSC3 lpc)
 >         ;s = lpc_instr 10 n lpc}
 >     in withSC3 (do {_ <- async (b_alloc 10 (length d) 1)

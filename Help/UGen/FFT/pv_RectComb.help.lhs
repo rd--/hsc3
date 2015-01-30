@@ -1,14 +1,16 @@
 > Sound.SC3.UGen.Help.viewSC3Help "PV_RectComb"
 > Sound.SC3.UGen.DB.ugenSummary "PV_RectComb"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > withSC3 (async (b_alloc 10 2048 1))
 
 noise source
-> let z = whiteNoise 'a' AR * 0.3
+
+> let z = whiteNoise 'α' AR * 0.3
 
 outside world
+
 > let z = soundIn 4
 
 > let {x = mouseX KR 0 0.5 Linear 0.1

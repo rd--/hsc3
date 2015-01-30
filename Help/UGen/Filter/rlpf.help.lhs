@@ -1,9 +1,9 @@
 > Sound.SC3.UGen.Help.viewSC3Help "RLPF"
 > Sound.SC3.UGen.DB.ugenSummary "RLPF"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
-> let {n = whiteNoise 'a' AR
+> let {n = whiteNoise 'α' AR
 >     ;f = sinOsc AR 0.5 0 * 40 + 220
 >     ;r = rlpf n f 0.1}
 > in audition (out 0 r)

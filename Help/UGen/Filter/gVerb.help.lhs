@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "GVerb"
 > Sound.SC3.UGen.DB.ugenSummary "GVerb"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {i = impulse AR 1 0
 >     ;c = lfCub AR 1200 0

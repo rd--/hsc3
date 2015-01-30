@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "PV_RandWipe"
 > Sound.SC3.UGen.DB.ugenSummary "PV_RandWipe"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 > import qualified System.Random as R
 
 > withSC3 (do {_ <- async (b_alloc 10 2048 1)

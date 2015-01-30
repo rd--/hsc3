@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "EnvDetect"
 > Sound.SC3.UGen.DB.ugenSummary "EnvDetect"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {i = soundIn 4
 >     ;c = envDetect AR i 0.01 0.1

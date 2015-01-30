@@ -1,9 +1,10 @@
 > Sound.SC3.UGen.Help.viewSC3Help "DWGPlucked2"
 > Sound.SC3.UGen.DB.ugenSummary "DWGPlucked2"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 self deleting
+
 > let {amp = 0.5
 >     ;gate = 1
 >     ;freq = 440
@@ -18,6 +19,7 @@ self deleting
 > in audition (out 0 (mrg2 (pan2 s pan 0.1) z))
 
 re-sounding
+
 > let {sequ e s tr = demand tr 0 (dseq e dinf (mce s))
 >     ;d = dseq 'α' dinf (mce [1,1,2,1,1,1,2,3,1,1,1,1,2,3,4] * 0.175)
 >     ;t = tDuty AR d 0 DoNothing 1 0

@@ -1,6 +1,6 @@
 wslib: external/composite
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 Load sound file to buffer zero (single channel file required for examples)
 

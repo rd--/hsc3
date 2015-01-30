@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "PartConv"
 > Sound.SC3.UGen.DB.ugenSummary "PartConv"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let { fft_size = 2048
 >     ; ir_file = "/home/rohan/data/audio/reverbs/chapel.wav"

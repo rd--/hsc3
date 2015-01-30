@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "BLowShelf"
 > Sound.SC3.UGen.DB.ugenSummary "BLowShelf"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let { i = soundIn (mce2 0 1)
 >     ; f = mouseX KR 40 6000 Exponential 0.2

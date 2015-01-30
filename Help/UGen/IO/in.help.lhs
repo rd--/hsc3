@@ -3,7 +3,7 @@
 
 # hsc3 renames UGen to in' since in is a reserved keyword
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 Patching input to output (see also soundIn).
 

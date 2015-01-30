@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "XFade2"
 > Sound.SC3.UGen.DB.ugenSummary "XFade2"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let o = xFade2 (saw AR 440) (sinOsc AR 440 0) (lfTri KR 0.1 0) 0.1
 > in audition (out 0 o)

@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Pluck"
 > Sound.SC3.UGen.DB.ugenSummary "Pluck"
 
-> import Sound.SC3.ID {- hsc3 -}
+> import Sound.SC3 {- hsc3 -}
 
 Excitation signal is white noise, triggered twice a second with
 varying OnePole coef.
@@ -12,8 +12,6 @@ varying OnePole coef.
 >     ;y = mouseY KR 0.1 1 Linear 0.1
 >     ;dl = 1 / 440}
 > in audition (out 0 (pluck (n * 0.25) t dl (dl * y) 10 x))
-
-> import Sound.SC3.UGen.Protect {- hsc3 -}
 
 > let {n = 50
 >     ;udup = uclone 'α'

@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "DynKlank"
 > Sound.SC3.UGen.DB.ugenSummary "DynKlank"
 
-> import Sound.SC3.ID {- hsc3 -}
+> import Sound.SC3 {- hsc3 -}
 
 {s=`[[800,1071,1153,1723],nil,[1,1,1,1]]
 ;DynKlank.ar(,Impulse.ar(2,0,0.1))}.play

@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "LFNoise1"
 > Sound.SC3.UGen.DB.ugenSummary "LFNoise1"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > audition (out 0 (lfNoise1 'α' AR 1000 * 0.05))
 

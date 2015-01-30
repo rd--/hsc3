@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "PV_Invert"
 > Sound.SC3.UGen.DB.ugenSummary "PV_Invert"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {s = sinOsc AR 440 0 * 0.4
 >     ;n = pinkNoise 'α' AR * 0.1

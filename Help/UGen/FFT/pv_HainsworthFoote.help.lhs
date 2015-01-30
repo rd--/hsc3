@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "PV_HainsworthFoote"
 > Sound.SC3.UGen.DB.ugenSummary "PV_HainsworthFoote"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {i = soundIn 4
 >     ;b = localBuf 'α' 2048 1

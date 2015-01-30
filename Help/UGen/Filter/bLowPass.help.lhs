@@ -2,7 +2,7 @@
 > Sound.SC3.UGen.DB.ugenSummary "BLowPass"
 > :t bLowPassCoef
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let { i = soundIn (mce2 0 1)
 >     ; f = mouseX KR 10 20000 Exponential 0.2
@@ -15,6 +15,7 @@
 > in audition (out 0 (bLowPass i f rq))
 
 Calculate coefficients and use sos.
+
 > let { i = mix (saw AR (mce [0.99, 1, 1.01] * 440) * 0.3)
 >     ; f = mouseX KR 100 20000 Exponential 0.2
 >     ; rq = mouseY KR 0.1 1 Linear 0.2

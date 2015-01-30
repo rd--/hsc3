@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "WT_TimeWipe"
 > Sound.SC3.UGen.DB.ugenSummary "WT_TimeWipe"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {i = whiteNoise 'α' AR * 0.2
 >     ;b = localBuf 'β' 2048 1

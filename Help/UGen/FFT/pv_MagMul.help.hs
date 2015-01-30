@@ -1,7 +1,7 @@
 -- Sound.SC3.UGen.Help.viewSC3Help "PV_MagMul"
 -- Sound.SC3.UGen.DB.ugenSummary "PV_MagMul"
 
-import Sound.SC3.ID
+import Sound.SC3
 
 -- > withSC3 (do {_ <- async (b_alloc 0 2048 1)
 -- >             ;async (b_alloc 1 2048 1)})

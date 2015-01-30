@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Resonz"
 > Sound.SC3.UGen.DB.ugenSummary "Resonz"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let n = whiteNoise 'α' AR
 > in audition (out 0 (resonz (n * 0.5) 2000 0.1))

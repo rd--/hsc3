@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "Peak"
 > Sound.SC3.UGen.DB.ugenSummary "Peak"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {t = dust 'α' AR 20
 >     ;r = impulse AR 0.4 0

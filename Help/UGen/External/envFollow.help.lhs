@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "EnvFollow"
 > Sound.SC3.UGen.DB.ugenSummary "EnvFollow"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let {z = soundIn 4
 >     ;d = mouseX KR 0.990 0.999 Linear 0.2

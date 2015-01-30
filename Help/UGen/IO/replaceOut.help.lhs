@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "ReplaceOut"
 > Sound.SC3.UGen.DB.ugenSummary "ReplaceOut"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > audition (replaceOut 0 (sinOsc AR 440 0 * 0.1))
 
@@ -23,7 +23,7 @@ a writes noise to 24
 b reads 24 and replaces with filtered variant
 c reads 24 and writes to 0
 
-> let {a = out 24 (pinkNoise 'a' AR * 0.1)
+> let {a = out 24 (pinkNoise 'α' AR * 0.1)
 >     ;b = replaceOut 24 (bpf (in' 1 AR 24) 440 1)
 >     ;c = out 0 (in' 1 AR 24)}
 > in mapM_ audition [a,b,c]

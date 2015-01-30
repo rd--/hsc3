@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "CombN"
 > Sound.SC3.UGen.DB.ugenSummary "CombN"
 
-> import Sound.SC3.ID {- hsc3 -}
+> import Sound.SC3 {- hsc3 -}
 
 Comb filter as resonator. The resonant fundamental is equal to
 reciprocal of the delay time.

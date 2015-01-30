@@ -1,7 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "PV_Diffuser"
 > Sound.SC3.UGen.DB.ugenSummary "PV_Diffuser"
 
-> import Sound.SC3.ID
+> import Sound.SC3
 
 > let fileName = "/home/rohan/data/audio/pf-c5.snd"
 > in withSC3 (do {_ <- async (b_alloc 10 2048 1)
