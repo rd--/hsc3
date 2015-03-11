@@ -42,7 +42,7 @@ Data-files:        README
                    Help/UGen/Wavelets/*.help.lhs
 
 Library
-  Build-Depends:   base == 4.*,
+  Build-Depends:   base >= 4.7,
                    binary,
                    bytestring,
                    containers,

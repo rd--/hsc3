@@ -79,3 +79,7 @@ nrt_close (NRT l) =
                                 else m ++ [nrt_end]
                       in bundle_map id f
     in NRT (at_last rem_end_msg req_end_msg l)
+
+-- | Append /q/ to /p/, assumes last timestamp at /p/ precedes first at /q/.
+nrt_append :: NRT -> NRT -> NRT
+nrt_append (NRT p) (NRT q) = NRT (p ++ q)
