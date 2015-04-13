@@ -1,12 +1,18 @@
 -- | Envelope generators.
 module Sound.SC3.UGen.Envelope where
 
-import Data.List
-import Data.Maybe
-import Sound.SC3.UGen.Enum
-import Sound.SC3.UGen.Type
+import Data.List {- base -}
+import Data.Maybe {- base -}
+import Sound.SC3.UGen.Enum {- hsc3 -}
+import Sound.SC3.UGen.Type {- hsc3 -}
 
 -- * Envelope
+
+-- | Apply /f/ to all /a/ at 'Envelope'.
+envelope_coerce :: (a -> b) -> Envelope a -> Envelope b
+envelope_coerce f e =
+    let Envelope l t c rn ln = e
+    in Envelope (map f l) (map f t) (map (env_curve_coerce f) c) rn ln
 
 -- | SC3 envelope segment model
 data Envelope a =

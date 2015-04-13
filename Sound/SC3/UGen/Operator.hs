@@ -198,7 +198,7 @@ is_binary cr = isJust . binaryIndex cr
 
 -- | Order of lookup: binary then unary.
 --
--- > map (resolve_operator True) (words "+ - ADD SUB NEG")
+-- > map (resolve_operator CI) (words "+ - ADD SUB NEG")
 resolve_operator :: Case_Rule -> String -> (String,Maybe Int)
 resolve_operator cr nm =
     case binaryIndex cr nm of

@@ -131,6 +131,20 @@ env_curve_interpolation_f c =
       EnvCub -> I.cubed
       EnvHold -> undefined
 
+-- | Apply /f/ to 'EnvNum' value.
+env_curve_coerce :: (a -> b) -> Envelope_Curve a -> Envelope_Curve b
+env_curve_coerce f e =
+    case e of
+      EnvStep -> EnvStep
+      EnvLin -> EnvLin
+      EnvExp -> EnvExp
+      EnvSin -> EnvSin
+      EnvWelch -> EnvWelch
+      EnvNum x -> EnvNum (f x)
+      EnvSqr -> EnvSqr
+      EnvCub -> EnvCub
+      EnvHold -> EnvHold
+
 -- | Unification of integer and 'UGen' buffer identifiers.
 data Buffer = Buffer_Id Int
             | Buffer UGen
