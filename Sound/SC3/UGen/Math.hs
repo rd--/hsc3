@@ -66,6 +66,7 @@ sc3_gte = sc3_comparison (>=)
 roundTo_ :: (RealFrac n, Ord n) => n -> n -> n
 roundTo_ = sc3_round_to
 
+-- > map (flip sc3_round_to 0.25) [0,0.1 .. 1]
 sc3_round_to :: (RealFrac n, Ord n) => n -> n -> n
 sc3_round_to a b = if b == 0 then a else sc3_floor ((a / b) + 0.5) * b
 
