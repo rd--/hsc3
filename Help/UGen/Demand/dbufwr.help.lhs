@@ -34,3 +34,17 @@ variant written using a local buffer and uid ugen forms
 >     ;o = sinOsc AR (f * mce2 1 1.01) 0 * 0.1
 >     ;g = mrg2 d (out 0 o)}
 > in audition g
+
+demand rate single memory recurrence relation.
+
+> let rec1 z k t f =
+>   let {b = asLocalBuf z [k]
+>       ;r = dbufrd z b 0 Loop {- reader -}
+>       ;w = dbufwr z b 0 (f r) Loop} {- writer -}
+>   in mrg2 (demand t 0 r) (demand t 0 w)
+
+simple counter, written in terms of rec1.
+
+> let {f = rec1 'α' 0 (impulse KR 6 0) (\r -> (r + 1) `modE` 24)
+>     ;o = sinOsc AR (midiCPS (60 + f)) 0 * 0.1}
+> in audition (out 0 o)
