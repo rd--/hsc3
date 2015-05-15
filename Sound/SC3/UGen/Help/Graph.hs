@@ -1,8 +1,12 @@
 -- | Standard SC3 graphs, referenced in documentation.
 module Sound.SC3.UGen.Help.Graph where
 
-import Sound.SC3.UGen
 import Sound.SC3.UGen.Bindings
+import Sound.SC3.UGen.Envelope.Construct
+import Sound.SC3.UGen.Enum
+import Sound.SC3.UGen.Rate
+import Sound.SC3.UGen.Type
+import Sound.SC3.UGen.UGen
 
 -- | The SC3 /default/ instrument 'UGen' graph.
 default_ugen_graph :: UGen

@@ -2,7 +2,6 @@
 -- non-sharable (demand) unit generators.
 module Sound.SC3.UGen.UId where
 
-import Control.Applicative {- base -}
 import Control.Monad {- base -}
 import Control.Monad.IO.Class as M {- transformers -}
 import Control.Monad.Trans.Reader {- transformers -}
