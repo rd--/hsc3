@@ -26,12 +26,17 @@ envCoord bp dur amp c =
         t = map (* dur) (tail (d_dx (map fst bp)))
     in Envelope l t [c] Nothing Nothing
 
--- | Trapezoidal envelope generator.  The arguments are: 1. @shape@
--- determines the sustain time as a proportion of @dur@, zero is a
--- triangular envelope, one a rectangular envelope; 2. @skew@
--- determines the attack\/decay ratio, zero is an immediate attack and
--- a slow decay, one a slow attack and an immediate decay;
--- 3. @duration@ in seconds; 4. @amplitude@ as linear gain.
+{- | Trapezoidal envelope generator.
+
+The arguments are: 1. @shape@ determines the sustain time as a
+proportion of @dur@, zero is a triangular envelope, one a rectangular
+envelope; 2. @skew@ determines the attack\/decay ratio, zero is an
+immediate attack and a slow decay, one a slow attack and an immediate
+decay; 3. @duration@ in seconds; 4. @amplitude@ as linear gain.
+
+> plotEnvelope [envTrapezoid 0.99 0.5 1 1]
+
+-}
 envTrapezoid :: (Num a,OrdE a) => a -> a -> a -> a -> Envelope a
 envTrapezoid shape skew dur amp =
     let x1 = skew * (1 - shape)

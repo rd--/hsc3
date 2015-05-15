@@ -40,7 +40,7 @@ sine_grain_ugen_graph =
         l = control IR "pan" 1
         a = control IR "amp" 0.1
         w = control IR "width" 0.25
-        e = envGen AR 1 1 0 1 DoNothing (envSine (d * w) 1)
+        e = envGen AR 1 1 0 1 RemoveSynth (envSine (d * w) 1)
         s = fSinOsc AR f (0.5 * pi) * e
     in offsetOut o (pan2 s l a)
 

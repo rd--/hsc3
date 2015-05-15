@@ -5,6 +5,7 @@ import Sound.SC3.UGen.Envelope as U
 import Sound.SC3.UGen.Envelope.Construct as U
 import Sound.SC3.UGen.Enum as U
 import Sound.SC3.UGen.Help as U
+import Sound.SC3.UGen.Help.Graph as U
 import Sound.SC3.UGen.Identifier as U
 import Sound.SC3.UGen.Math as U
 import Sound.SC3.UGen.Name as U
