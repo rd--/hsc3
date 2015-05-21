@@ -172,16 +172,16 @@ sc3_properFraction a =
     in (fromInteger p,q)
 
 sc3_truncate :: (RealFrac a, Num a) => a -> a
-sc3_truncate a = fromInteger (truncate a)
+sc3_truncate = fromInteger . truncate
 
 sc3_round :: (RealFrac a, Num a) => a -> a
-sc3_round a = fromInteger (round a)
+sc3_round = fromInteger . round
 
 sc3_ceiling :: (RealFrac a, Num a) => a -> a
-sc3_ceiling a = fromInteger (ceiling a)
+sc3_ceiling = fromInteger . ceiling
 
 sc3_floor :: (RealFrac a, Num a) => a -> a
-sc3_floor a = fromInteger (floor a)
+sc3_floor = fromInteger . floor
 
 -- | Variant of 'RealFrac' with non 'Integral' results.
 class RealFrac a => RealFracE a where
