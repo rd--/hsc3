@@ -16,7 +16,7 @@ import Sound.SC3.UGen.Rate
 
 -- | Data type for internalised identifier at 'UGen'.
 data UGenId = NoId | UId Int
-              deriving (Eq,Show)
+              deriving (Eq,Read,Show)
 
 -- | Alias of 'NoId', the 'UGenId' used for deterministic UGens.
 no_id :: UGenId
@@ -33,7 +33,7 @@ type Sample = Double
 -- > Constant 3 == Constant 3
 -- > (Constant 3 > Constant 1) == True
 data Constant = Constant {constantValue :: Sample}
-                deriving (Eq,Ord,Show)
+                deriving (Eq,Ord,Read,Show)
 
 -- | Control meta-data.
 data C_Meta n =
@@ -43,7 +43,7 @@ data C_Meta n =
            ,ctl_step :: n -- ^ The step to increment & decrement by.
            ,ctl_units :: String -- ^ Unit of measure (ie hz, ms etc.).
            }
-    deriving (Eq,Show)
+    deriving (Eq,Read,Show)
 
 -- | 5-tuple form of 'C_Meta' data.
 type C_Meta' n = (n,n,String,n,String)
@@ -60,18 +60,18 @@ data Control = Control {controlOperatingRate :: Rate
                        ,controlDefault :: Sample
                        ,controlTriggered :: Bool
                        ,controlMeta :: Maybe (C_Meta Sample)}
-               deriving (Eq,Show)
+               deriving (Eq,Read,Show)
 
 -- | Labels.
 data Label = Label {ugenLabel :: String}
-             deriving (Eq,Show)
+             deriving (Eq,Read,Show)
 
 -- | Unit generator output descriptor.
 type Output = Rate
 
 -- | Operating mode of unary and binary operators.
 newtype Special = Special Int
-    deriving (Eq, Show)
+    deriving (Eq,Read,Show)
 
 -- | UGen primitives.
 data Primitive = Primitive {ugenRate :: Rate
@@ -80,17 +80,17 @@ data Primitive = Primitive {ugenRate :: Rate
                            ,ugenOutputs :: [Output]
                            ,ugenSpecial :: Special
                            ,ugenId :: UGenId}
-                 deriving (Eq,Show)
+                 deriving (Eq,Read,Show)
 
 -- | Proxy to multiple channel input.
 data Proxy = Proxy {proxySource :: Primitive
                    ,proxyIndex :: Int}
-            deriving (Eq,Show)
+            deriving (Eq,Read,Show)
 
 -- | Multiple root graph.
 data MRG = MRG {mrgLeft :: UGen
                ,mrgRight :: UGen}
-           deriving (Eq,Show)
+           deriving (Eq,Read,Show)
 
 -- | Union type of Unit Generator forms.
 data UGen = Constant_U Constant
@@ -100,7 +100,7 @@ data UGen = Constant_U Constant
           | Proxy_U Proxy
           | MCE_U (MCE UGen)
           | MRG_U MRG
-            deriving (Eq,Show)
+            deriving (Eq,Read,Show)
 
 -- * Parser
 

@@ -3,7 +3,7 @@ module Sound.SC3.UGen.MCE where
 
 -- | Multiple channel expansion.
 data MCE n = MCE_Unit n | MCE_Vector [n]
-             deriving (Eq,Show)
+             deriving (Eq,Read,Show)
 
 mce_elem :: MCE t -> [t]
 mce_elem m =
