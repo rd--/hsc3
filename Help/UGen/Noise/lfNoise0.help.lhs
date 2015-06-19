@@ -15,3 +15,12 @@ Use as frequency control.
 
 > let f = lfNoise0 'α' KR 4
 > in audition (out 0 (sinOsc AR (f * 400 + 450) 0 * 0.1))
+
+
+Drawing
+
+> import Sound.SC3.Plot {- hsc3-plot -}
+
+> plot_ugen1 0.1 (lfNoise0 'γ' AR 1000)
+> plot_ugen1 0.1 (lfNoise1 'γ' AR 1000)
+> plot_ugen1 0.1 (lfNoise2 'γ' AR 1000)

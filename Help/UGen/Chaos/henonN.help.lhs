@@ -27,3 +27,9 @@ As a frequency control.
 >     ;f0 = 40
 >     ;f = henonN AR f0 x y 0 0 * 800 + 900}
 > in audition (out 0 (sinOsc AR f 0 * 0.4))
+
+Drawing
+
+> import Sound.SC3.Plot {- hsc3-plot -}
+
+> plot_ugen1 0.1 (henonN AR 2500 1.4 0.3 0 0 * 0.1)

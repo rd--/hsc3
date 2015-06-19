@@ -34,3 +34,10 @@ The same graph again, without using do notation.
 > let {e = decay2 t 0.01 0.2
 >     ;r = resonz (n * e) f bw}
 > in audition (out 0 r)
+
+Drawing
+
+> import Sound.SC3.Plot {- hsc3-plot -}
+
+> plot_ugen1 0.01 (whiteNoise 'γ' AR)
+> plot_ugen1 0.05 (lpf (whiteNoise 'γ' AR) 500)

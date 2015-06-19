@@ -14,3 +14,9 @@ Use as frequency control
 
 > let n = lfClipNoise 'α' KR 4
 > in audition (out 0 (sinOsc AR (n * 200 + 600) 0 * 0.1))
+
+Drawings
+
+> import Sound.SC3.Plot {- hsc3-plot -}
+
+> plot_ugen1 0.1 (lfClipNoise 'α' AR 1000)

@@ -25,3 +25,10 @@ Compare w/ lfTri
 > audition (out 0 (lfTri AR (lfTri KR 0.2 0 * 400 + 800) 0 * 0.1))
 > audition (out 0 (lfTri AR 800 0 * 0.1))
 > audition (out 0 (lfTri AR (xLine KR 100 8000 30 DoNothing) 0 * 0.1))
+
+Drawing
+
+> import Sound.SC3.Plot {- hsc3-plot -}
+
+> plot_ugen 0.1 (mce2 (sinOsc AR 20 0) (lfCub AR 20 0))
+> plot_ugen 0.1 (mce2 (sinOsc AR 20 0) (lfPar AR 20 pi))
