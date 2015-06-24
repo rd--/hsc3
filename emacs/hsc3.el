@@ -72,8 +72,18 @@
   "Lookup up the UGen at point in hsc3-db"
   (interactive)
   (hsc3-send-string
-   (format "Sound.SC3.UGen.DB.ugenSummary \"%s\""
-           (thing-at-point 'symbol))))
+      (format "Sound.SC3.UGen.DB.ugenSummary \"%s\""
+              (thing-at-point 'symbol))))
+
+(defun hsc3-remove-trailing-newline (s)
+  (replace-regexp-in-string "\n\\'" "" s))
+
+(defun hsc3-ugen-default-param ()
+  "Insert the default UGen parameters for the UGen before <point>."
+  (interactive)
+  (let ((p (format "hsc3-default-param %s" (thing-at-point 'symbol))))
+    (insert " ")
+    (insert (hsc3-remove-trailing-newline (shell-command-to-string p)))))
 
 (defun hsc3-request-type ()
   "Ask ghci for the type of the name at point."
@@ -317,7 +327,8 @@
   (define-key map [?\C-c ?\C-q] 'hsc3-quit-haskell)
   (define-key map [?\C-c ?\C-0] 'hsc3-quit-scsynth)
   (define-key map [?\C-c ?\C-s] 'hsc3-stop)
-  (define-key map [?\C-c ?\C-u] 'hsc3-ugen-summary))
+  (define-key map [?\C-c ?\C-u] 'hsc3-ugen-summary)
+  (define-key map [?\C-c ?\C-,] 'hsc3-ugen-default-param))
 
 (defun hsc3-mode-menu (map)
   "Haskell SuperCollider menu."
@@ -351,6 +362,8 @@
     '("Run multiple lines" . hsc3-run-multiple-lines))
   (define-key map [menu-bar hsc3 expression run-line]
     '("Run line" . hsc3-run-line))
+  (define-key map [menu-bar hsc3 expression gen-default-param]
+    '("Insert default parameters" . hsc3-ugen-default-param))
   (define-key map [menu-bar hsc3 scsynth]
     (cons "SCSynth" (make-sparse-keymap "SCSynth")))
   (define-key map [menu-bar hsc3 scsynth quit]
