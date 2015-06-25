@@ -2,6 +2,7 @@
 -- that conflict with existing names have a @_@ suffix.
 module Sound.SC3.UGen.Operator where
 
+import Control.Monad {- base -}
 import Data.Maybe {- base -}
 
 import Sound.SC3.Common
@@ -67,7 +68,7 @@ data Unary  = Neg
 
 -- | Type-specialised 'parse_enum'.
 parse_unary :: Case_Rule -> String -> Maybe Unary
-parse_unary cr = parse_enum cr
+parse_unary = parse_enum
 
 -- | Table of symbolic names for standard unary operators.
 unaryTable :: [(Unary,String)]
@@ -81,18 +82,18 @@ unaryName n =
 
 -- | Given name of unary operator derive index.
 --
--- > mapMaybe (unaryIndex True) (words "NEG CUBED") == [0,13]
--- > unaryIndex True "SinOsc" == Nothing
+-- > mapMaybe (unaryIndex CI) (words "NEG CUBED") == [0,13]
+-- > unaryIndex CS "SinOsc" == Nothing
 unaryIndex :: Case_Rule -> String -> Maybe Int
 unaryIndex cr nm =
     let ix = rlookup_str cr nm unaryTable
         ix' = parse_unary cr nm
-    in fmap fromEnum (maybe ix' Just ix)
+    in fmap fromEnum (mplus ix' ix)
 
 -- | 'isJust' of 'unaryIndex'.
 --
--- > map (is_unary True) (words "ABS MIDICPS NEG")
--- > map (is_unary True) (words "- RAND")
+-- > map (is_unary CI) (words "ABS MIDICPS NEG")
+-- > map (is_unary CI) (words "- RAND")
 is_unary :: Case_Rule -> String -> Bool
 is_unary cr = isJust . unaryIndex cr
 
@@ -152,7 +153,7 @@ data Binary = Add -- 0
 
 -- | Type-specialised 'parse_enum'.
 parse_binary :: Case_Rule -> String -> Maybe Binary
-parse_binary cr = parse_enum cr
+parse_binary = parse_enum
 
 -- | Table of symbolic names for standard binary operators.
 binaryTable :: [(Binary,String)]
@@ -180,17 +181,17 @@ binaryName n =
 
 -- | Given name of binary operator derive index.
 --
--- > mapMaybe (binaryIndex True) (words "* MUL RING1") == [2,2,30]
--- > binaryIndex True "SINOSC" == Nothing
+-- > mapMaybe (binaryIndex CI) (words "* MUL RING1") == [2,2,30]
+-- > binaryIndex CI "SINOSC" == Nothing
 binaryIndex :: Case_Rule -> String -> Maybe Int
 binaryIndex cr nm =
     let ix = rlookup_str cr nm binaryTable
         ix' = parse_binary cr nm
-    in fmap fromEnum (maybe ix' Just ix)
+    in fmap fromEnum (mplus ix' ix)
 
 -- | 'isJust' of 'binaryIndex'.
 --
--- > map (is_binary True) (words "== > % TRUNC MAX")
+-- > map (is_binary CI) (words "== > % TRUNC MAX")
 is_binary :: Case_Rule -> String -> Bool
 is_binary cr = isJust . binaryIndex cr
 

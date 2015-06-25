@@ -312,7 +312,7 @@ pvcollect c nf f from to z = packFFT c nf from to z mp
 
 -- | RMS variant of 'runningSum'.
 runningSumRMS :: UGen -> UGen -> UGen
-runningSumRMS z n = sqrt (runningSum (z * z) n * (recip n))
+runningSumRMS z n = sqrt (runningSum (z * z) n * recip n)
 
 -- | Mix one output from many sources
 selectX :: UGen -> UGen -> UGen
@@ -418,8 +418,8 @@ playBufCF nc bufnum rate trigger startPos loop lag' n =
              [0 .. constant n - 1]
         rate' = case rateOf rate of
                   DR -> map (\on' -> demand on' 0 rate) on
-                  KR -> map (\on' -> gate rate on') on
-                  AR -> map (\on' -> gate rate on') on
+                  KR -> map (gate rate) on
+                  AR -> map (gate rate) on
                   IR -> map (const rate) on
         startPos' = if rateOf startPos == DR
                     then demand trigger' 0 startPos

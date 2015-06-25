@@ -56,12 +56,12 @@ c_lift_ugen g z n =
 
 c_lift_ugens :: Graph -> NodeId -> [Node] -> (NodeId,[Node],[Node])
 c_lift_ugens g  =
-    let rec (k,r) z u =
+    let recur (k,r) z u =
             case u of
               [] -> (z,k,reverse r)
               n:u' -> let (z',n',k') = c_lift_ugen g z n
-                      in rec (k++k',n':r) z' u'
-    in rec ([],[])
+                      in recur (k++k',n':r) z' u'
+    in recur ([],[])
 
 -- > import Sound.SC3
 -- > import Sound.SC3.UGen.Dot

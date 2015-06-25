@@ -93,11 +93,12 @@ queryTree_synth rc k nm d =
 
 queryTree_group :: Bool -> Int -> Int -> [Datum] -> (Query_Node,[Datum])
 queryTree_group rc gid nc =
-    let rec n r d = if n == 0
-                    then (Query_Group gid (reverse r),d)
-                    else let (c,d') = queryTree_child rc d
-                         in rec (n - 1) (c : r) d'
-    in rec nc []
+    let recur n r d =
+            if n == 0
+            then (Query_Group gid (reverse r),d)
+            else let (c,d') = queryTree_child rc d
+                 in recur (n - 1) (c : r) d'
+    in recur nc []
 
 queryTree_child :: Bool -> [Datum] -> (Query_Node,[Datum])
 queryTree_child rc d =
@@ -120,7 +121,7 @@ queryTree :: [Datum] -> Query_Node
 queryTree d =
     case d of
       Int32 rc : Int32 gid : Int32 nc : d' ->
-          let rc' = not (rc == 0)
+          let rc' = rc /= 0
               gid' = fromIntegral gid
               nc' = fromIntegral nc
           in case queryTree_group rc' gid' nc' d' of

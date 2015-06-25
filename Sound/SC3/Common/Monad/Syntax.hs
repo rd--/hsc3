@@ -97,7 +97,7 @@ m /. n = fmap (m /) n
 -- > fmap (== 7) (composeM [return . (+ 1),return . (/ 2)] 3)
 -- > fmap (== 8) (composeM [return . (* 2),return . (+ 1)] 3)
 composeM :: Monad m => [a -> m a] -> a -> m a
-composeM f = foldr (<=<) return f
+composeM = foldr (<=<) return
 
 -- | Feed forward composition of /n/ applications of /f/.
 --

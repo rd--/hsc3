@@ -277,7 +277,7 @@ prepare_root u =
 -- | If controls have been given indices they must be coherent.
 sort_controls :: [Node] -> [Node]
 sort_controls c =
-    let node_k_ix n = maybe maxBound id (node_k_index n)
+    let node_k_ix n = fromMaybe maxBound (node_k_index n)
         cmp = compare `on` node_k_ix
         c' = sortBy cmp c
         coheres z = maybe True (== z) . node_k_index
@@ -338,15 +338,15 @@ fetch = M.findWithDefault (error "fetch")
 -- index but the index in relation to controls of the same type.
 fetch_k :: NodeId -> KType -> [Node] -> Int
 fetch_k z t =
-    let rec i ns =
+    let recur i ns =
             case ns of
               [] -> error "fetch_k"
               n:ns' -> if z == node_id n
                        then i
                        else if t == node_k_type n
-                            then rec (i + 1) ns'
-                            else rec i ns'
-    in rec 0
+                            then recur (i + 1) ns'
+                            else recur i ns'
+    in recur 0
 
 -- * Implicit (Control, MaxLocalBuf)
 
@@ -356,7 +356,7 @@ type KS_COUNT = (Int,Int,Int,Int)
 -- | Count the number of /controls/ of each 'KType'.
 ks_count :: [Node] -> KS_COUNT
 ks_count =
-    let rec r ns =
+    let recur r ns =
             let (i,k,t,a) = r
             in case ns of
                  [] -> r
@@ -365,8 +365,8 @@ ks_count =
                                      K_KR -> (i,k+1,t,a)
                                      K_TR -> (i,k,t+1,a)
                                      K_AR -> (i,k,t,a+1)
-                          in rec r' ns'
-    in rec (0,0,0,0)
+                          in recur r' ns'
+    in recur (0,0,0,0)
 
 -- | Construct implicit /control/ unit generator 'Nodes'.  Unit
 -- generators are only constructed for instances of control types that
@@ -459,7 +459,7 @@ node_descendents g n =
     let e = edges (ugens g)
         c = filter ((== node_id n) . port_nid . fst) e
         f (ToPort k _) = k
-    in mapMaybe (find_node g) (map (f . snd) c)
+    in mapMaybe (find_node g . f . snd) c
 
 -- * PV edge accounting
 
@@ -468,7 +468,7 @@ pv_multiple_out_edges :: Graph -> [Node]
 pv_multiple_out_edges g =
     let e = edges (ugens g)
         p = multiple_u_out_edges e
-        n = mapMaybe (find_node g) (map port_nid p)
+        n = mapMaybe (find_node g . port_nid) p
     in filter (primitive_is_pv_rate . node_u_name) n
 
 -- | Error if graph has invalid @PV@ subgraph, ie. multiple out edges

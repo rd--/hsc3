@@ -66,14 +66,15 @@ fromSC3Name nm =
       [] -> []
 
 -- | Find SC3 name edges.
+--
+-- > sc3_name_edges "SinOsc" == [False,False,False,True,False,False]
 sc3_name_edges :: String -> [Bool]
 sc3_name_edges =
     let f t = case t of
                 (Nothing,_,_) -> False
                 (Just p,q,Just r) ->
                     (isLower p && isUpper q) ||
-                    (isUpper p && isUpper q && isLower r &&
-                     (not (p == 'U' && q == 'G' && r == 'e')))
+                    (isUpper p && isUpper q && isLower r && [p,q,r] /= "UGe")
                 (Just p,q,Nothing) -> isLower p && isUpper q
     in map f . pcn_triples
 

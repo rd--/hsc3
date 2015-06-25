@@ -186,7 +186,7 @@ envASR_r (ASR aT sL rT (c0,c1)) =
 envStep :: [a] -> [a] -> Maybe Int -> Maybe Int -> Envelope a
 envStep levels times releaseNode loopNode =
     if length levels /= length times
-    then error ("envStep: levels and times must have same size")
+    then error "envStep: levels and times must have same size"
     else let levels' = head levels : levels
          in Envelope levels' times [EnvStep] releaseNode loopNode
 

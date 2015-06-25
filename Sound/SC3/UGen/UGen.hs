@@ -28,32 +28,32 @@ ugen_user_name nm (Special n) =
 -- | Depth first traversal of graph at `u' applying `f' to each node.
 ugenTraverse :: (UGen -> UGen) -> UGen -> UGen
 ugenTraverse f u =
-    let rec = ugenTraverse f
+    let recur = ugenTraverse f
     in case u of
          Primitive_U p ->
              let i = ugenInputs p
-             in f (Primitive_U (p {ugenInputs = map rec i}))
+             in f (Primitive_U (p {ugenInputs = map recur i}))
          Proxy_U p ->
              let s = Primitive_U (proxySource p)
-             in case rec s of
+             in case recur s of
                   Primitive_U p' -> f (Proxy_U (p {proxySource = p'}))
                   _ -> error "ugenTraverse"
-         MCE_U m -> f (mce (map rec (mceProxies m)))
-         MRG_U (MRG l r) -> f (MRG_U (MRG (rec l) (rec r)))
+         MCE_U m -> f (mce (map recur (mceProxies m)))
+         MRG_U (MRG l r) -> f (MRG_U (MRG (recur l) (recur r)))
          _ -> f u
 
 -- | Right fold of UGen graph.
 ugenFoldr :: (UGen -> a -> a) -> a -> UGen -> a
 ugenFoldr f st u =
-    let rec = flip (ugenFoldr f)
+    let recur = flip (ugenFoldr f)
     in case u of
          Primitive_U p ->
              let i = ugenInputs p
-             in f u (foldr rec st i)
+             in f u (foldr recur st i)
          Proxy_U p ->
              let s = proxySource p
              in f u (f (Primitive_U s) st)
-         MCE_U m -> f u (foldr rec st (mceProxies m))
+         MCE_U m -> f u (foldr recur st (mceProxies m))
          MRG_U (MRG l r) -> f u (f l (f r st))
          _ -> f u st
 
@@ -68,7 +68,7 @@ control_f64 r ix nm d = Control_U (Control r ix nm d False Nothing)
 -- Note that if the name begins with a t_ prefix the control is /not/
 -- converted to a triggered control.  Please see 'tr_control'.
 control :: Rate -> String -> Double -> UGen
-control r nm = control_f64 r Nothing nm -- . realToFrac
+control r = control_f64 r Nothing
 
 -- | Variant of 'control' with meta data.
 meta_control :: Rate -> String -> Double -> C_Meta' Double -> UGen
@@ -82,7 +82,7 @@ tr_control_f64 ix nm d = Control_U (Control KR ix nm d True Nothing)
 
 -- | Triggered (kr) control input node constructor.
 tr_control :: String -> Double -> UGen
-tr_control nm = tr_control_f64 Nothing nm -- . realToFrac
+tr_control = tr_control_f64 Nothing
 
 -- | Set indices at a list of controls.
 control_set :: [UGen] -> [UGen]
@@ -109,7 +109,7 @@ mce2c u =
     case u of
       MCE_U m -> case mceProxies m of
                      [] -> error "mce2c: nil mce"
-                     p:[] -> (p,p)
+                     [p] -> (p,p)
                      p:q:_ -> (p,q)
       _ -> (u,u)
 

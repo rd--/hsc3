@@ -28,8 +28,8 @@ mce_binop :: (a -> b -> c) -> MCE a -> MCE b -> MCE c
 mce_binop f m1 m2 =
     case (m1,m2) of
       (MCE_Unit e1,MCE_Unit e2) -> MCE_Unit (f e1 e2)
-      (MCE_Unit e1,MCE_Vector e2) -> MCE_Vector (zipWith f (repeat e1) e2)
-      (MCE_Vector e1,MCE_Unit e2) -> MCE_Vector (zipWith f e1 (repeat e2))
+      (MCE_Unit e1,MCE_Vector e2) -> MCE_Vector (map (f e1) e2)
+      (MCE_Vector e1,MCE_Unit e2) -> MCE_Vector (map (`f` e2) e1)
       (MCE_Vector e1,MCE_Vector e2) ->
           let n = max (length e1) (length e2)
               ext = take n . cycle

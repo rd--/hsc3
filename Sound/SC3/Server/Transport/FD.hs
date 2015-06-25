@@ -68,7 +68,7 @@ run_bundle fd st b = do
   let t = bundleTime b
       latency = 0.1
       wr m = if isAsync m
-             then async fd m >> return ()
+             then void (async fd m)
              else sendBundle fd (bundle (st + t) [m])
   pauseThreadUntil (st + t - latency)
   mapM_ wr (bundleMessages b)
@@ -88,7 +88,7 @@ class Audible e where
     play = play_id (-1)
 
 instance Audible G.Graphdef where
-    play_id k fd = playGraphdef k fd
+    play_id = playGraphdef
 
 instance Audible Synthdef where
     play_id = playSynthdef
@@ -146,13 +146,13 @@ b_fetch fd n b = do
               [Int32 _,Int32 nf,Int32 nc,Float _] ->
                   let ix = (0,fromIntegral (nf * nc))
                       deinterleave = transpose . chunksOf (fromIntegral nc)
-                  in b_getn1_data_segment fd n b ix >>= return . deinterleave
+                  in liftM deinterleave (b_getn1_data_segment fd n b ix)
               _ -> error "b_fetch"
   sendMessage fd (b_query1 b)
   waitDatum fd "/b_info" >>= f
 
 b_fetch1 :: Transport t => t -> Int -> Int -> IO [Double]
-b_fetch1 fd n b = b_fetch fd n b >>= return . head
+b_fetch1 fd n b = liftM head (b_fetch fd n b)
 
 -- * Status
 

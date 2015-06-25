@@ -77,7 +77,7 @@ pack_envelope_segments s =
 
 -- | An envelope is /normal/ if it has no segments with zero duration.
 envelope_is_normal :: (Eq n,Num n) => Envelope n -> Bool
-envelope_is_normal = null . filter (== 0) . env_times
+envelope_is_normal = not . any (== 0) . env_times
 
 -- | Normalise envelope by deleting segments of zero duration.
 envelope_normalise :: (Num a, Ord a) => Envelope a -> Envelope a
