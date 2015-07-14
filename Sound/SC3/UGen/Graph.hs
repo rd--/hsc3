@@ -71,6 +71,15 @@ node_k_eq p q =
           k == k' && rt == rt' && ix == ix' && nm == nm' && df == df' && tr == tr' && me == me'
       _ -> error "node_k_eq? not Node_K"
 
+-- | 'Rate' of 'Node', ie. 'IR' for constants, & see through 'NodeP'.
+node_rate :: Node -> Rate
+node_rate n =
+    case n of
+      NodeC {} -> IR
+      NodeK {} -> node_k_rate n
+      NodeU {} -> node_u_rate n
+      NodeP _ n' _ -> node_rate n'
+
 -- * Building
 
 -- | Find 'Node' with indicated 'NodeId'.

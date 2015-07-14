@@ -9,10 +9,13 @@ allocate a buffer (id = 0) for writing into
 
 write into the buffer (id = 0) with a bufWr
 
-> let {rt = control KR "wr-rate" 1
->     ;o = sinOsc AR (lfNoise1 'a' KR 2 * 300 + 400) 0 * 0.1
->     ;w = bufWr 0 (phasor AR 0 (bufRateScale KR 0 * rt) 0 (bufFrames KR 0) 0) Loop o}
-> in audition (out 0 (mce2 (silent 2) w))
+> let wr_g =
+>     let {rt = control KR "wr-rate" 1
+>         ;o = sinOsc AR (lfNoise1 'a' KR 2 * 300 + 400) 0 * 0.1
+>         ;w = bufWr 0 (phasor AR 0 (bufRateScale KR 0 * rt) 0 (bufFrames KR 0) 0) Loop o}
+>     in out 0 (mrg2 (silent 1) w)
+
+> audition wr_g
 
 read it with a BufRd
 
@@ -22,5 +25,5 @@ read it with a BufRd
 
 set read & write rates independently
 
-> withSC3 (send (n_set1 0 "wr-rate" 2))
-> withSC3 (send (n_set1 0 "rd-rate" 1))
+> withSC3 (send (n_set1 0 "wr-rate" 0.5))
+> withSC3 (send (n_set1 0 "rd-rate" 1.5))
