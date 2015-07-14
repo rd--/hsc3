@@ -3,4 +3,5 @@
 
 > import Sound.SC3
 
-> audition (out 0 (silent 1))
+> let g = out 0 (silent 2)
+> in audition g
