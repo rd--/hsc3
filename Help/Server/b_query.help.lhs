@@ -15,6 +15,12 @@ Query buffer
 >             ;r <- waitReply "/b_info"
 >             ;liftIO (print r)})
 
+Variant that unpacks the result.
+
+Query is of (buffer-id/int,#-frames/int,#-channels/int,sample-rate/float).
+
+> withSC3 (b_query1_unpack 0)
+
 Play buffer
 
 > audition (out 0 (osc AR 0 220 0 * 0.1))

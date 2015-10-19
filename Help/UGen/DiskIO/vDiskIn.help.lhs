@@ -5,7 +5,7 @@
 
 > let {fn = "/home/rohan/data/audio/pf-c5.snd"
 >     ;nc = 1
->     ;gr = out 0 (vDiskIn nc 0 (sinOsc KR 0.25 0 * 0.25 + 1) Loop)}
+>     ;gr = out 0 (vDiskIn nc 0 (sinOsc KR 0.25 0 * 0.25 + 1) Loop 0)}
 > in withSC3 (do {_ <- async (b_alloc 0 8192 nc)
 >                ;_ <- async (b_read 0 fn 0 (-1) 0 True)
 >                ;play gr})

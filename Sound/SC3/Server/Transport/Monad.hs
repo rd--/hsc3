@@ -185,6 +185,32 @@ b_fetch n b = do
 b_fetch1 :: DuplexOSC m => Int -> Int -> m [Double]
 b_fetch1 n b = liftM head (b_fetch n b)
 
+-- | Unpack @b_info@ message, fields are (id,frames,channels,sample-rate).
+b_info_unpack :: (Num n,Fractional r) => Message -> Maybe (n,n,n,r)
+b_info_unpack q =
+  case q of
+    Message "/b_info" [Int32 b_id,Int32 b_sz,Int32 b_ch,Float b_rt] ->
+        Just (fromIntegral b_id,fromIntegral b_sz,fromIntegral b_ch,realToFrac b_rt)
+    _ -> Nothing
+
+-- | Variant generating 'error'.
+b_info_unpack_err :: (Num n,Fractional r) => Message -> (n,n,n,r)
+b_info_unpack_err = fromMaybe (error "b_info_unpack") . b_info_unpack
+
+-- | 'b_info_unpack_err' of 'b_query1'.
+b_query1_unpack_generic :: (DuplexOSC m,Num n,Fractional r) => Int -> m (n,n,n,r)
+b_query1_unpack_generic n = do
+  send (b_query1 n)
+  q <- waitReply "/b_info"
+  return (b_info_unpack_err q)
+
+-- | Type specialised 'b_query1_unpack_generic'.
+--
+-- > withSC3 (b_query1_unpack 0)
+b_query1_unpack :: DuplexOSC m => Int -> m (Int,Int,Int,Double)
+b_query1_unpack = b_query1_unpack_generic
+
+-- | Variant of 'c_getn1' that waits for the reply and unpacks the data.
 c_getn1_data :: DuplexOSC m => (Int,Int) -> m [Double]
 c_getn1_data s = do
   let f d = case d of

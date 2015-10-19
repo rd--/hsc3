@@ -41,3 +41,12 @@ Drawing
 
 > plot_ugen1 0.01 (whiteNoise 'γ' AR)
 > plot_ugen1 0.05 (lpf (whiteNoise 'γ' AR) 500)
+
+Speaker balance
+
+> let n = whiteNoise 'α' AR * 0.05 in audition (out 0 (mce2 n n))
+
+> let {x = mouseX KR 0.1 2 Linear 0.2
+>     ;l = sinOsc KR x 0
+>     ;n = whiteNoise 'α' AR}
+> in audition (out 0 (pan2 n l 0.05))
