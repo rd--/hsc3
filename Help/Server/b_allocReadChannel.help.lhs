@@ -14,7 +14,7 @@ Query buffer
 
 Read only specified channels
 
-> withSC3 (async (b_allocReadChannel 0 fn 0 0 [0..3]))
+> withSC3 (async (b_allocReadChannel 0 fn 0 0 [0..1023]))
 
 Query buffer
 
@@ -24,6 +24,6 @@ Examine buffer
 
 > import Data.List {- base -}
 > import Data.List.Split {- split -}
-> let (nf,nc) = (12,4)
-> d <- withSC3 (b_getn1_data 0 (0,nf * nc))
-> transpose (chunksOf nc d)
+> let (nf,nc) = (12,1024)
+> d <- withSC3 (b_getn1_data_segment 128 0 (0,nf * nc))
+> (putStrLn . unlines . transpose . chunksOf nc . map (\n -> if n > 0 then '1' else '0')) d
