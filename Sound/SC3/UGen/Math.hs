@@ -543,7 +543,7 @@ linLin_muladd sl sr dl dr =
 linlin :: (Fractional a,TernaryOp a) => a -> a -> a -> a -> a -> a
 linlin i sl sr dl dr = let (m,a) = linLin_muladd sl sr dl dr in mul_add i m a
 
--- | Variant without 'TernaryOp' constraint.
+-- | Variant without 'TernaryOp' constraint, and hence without 'mul_add' operator.
 linlin' :: Fractional a => a -> a -> a -> a -> a -> a
 linlin' i sl sr dl dr = let (m,a) = linLin_muladd sl sr dl dr in i * m + a
 

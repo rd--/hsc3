@@ -1,18 +1,25 @@
 prefix = ~/.cabal
-cmd_i = $(addprefix hsc3-, $(cmd))
+cmd_prefix ?= hsc3
+cmd_i = $(addprefix $(cmd_prefix)-, $(cmd))
 
 % : %.hs
 	ghc -Wall -fwarn-tabs -O2 --make $<
 
-hsc3-% : %
-	cp $< hsc3-$<
+$(cmd_prefix)-% : %
+	cp $< $(cmd_prefix)-$<
 
 all: $(cmd)
 
 install: $(cmd_i)
-	cp hsc3-* $(prefix)/bin
+	cp $(cmd_prefix)-* $(prefix)/bin
 
 clean:
 	rm -f *.hi *.o
 	rm -f $(cmd)
 	rm -f $(cmd_i)
+
+query:
+	echo prefix = $(prefix)
+	echo cmd-prefix = $(cmd_prefix)
+	echo cmd = $(cmd)
+	echo cmd-i = $(cmd_i)
