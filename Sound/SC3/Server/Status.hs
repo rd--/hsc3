@@ -31,8 +31,7 @@ statusFields =
 statusFormat :: [Datum] -> [String]
 statusFormat d =
     let s = "***** SuperCollider Server Status *****"
-    in s : zipWith (++) (tail statusFields) (map show (tail d))
-
+    in s : zipWith (++) (tail statusFields) (map (datum_pp_typed (Just 5)) (tail d))
 
 -- * Query Group
 
