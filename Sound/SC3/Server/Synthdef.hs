@@ -89,13 +89,14 @@ graph_stat s =
         f g = let h (x:xs) = (x,length (x:xs))
                   h [] = error "graph_stat"
               in show . map h . group . sort . map g
-        sq = intercalate "," (map u_nm us)
+        sq pp_f = intercalate "," (pp_f (map u_nm us))
     in ["number of constants       : " ++ show (length cs)
        ,"number of controls        : " ++ show (length ks)
        ,"control rates             : " ++ f node_k_rate ks
        ,"number of unit generators : " ++ show (length us)
        ,"unit generator rates      : " ++ f node_u_rate us
-       ,"unit generator sequence   : " ++ sq]
+       ,"unit generator set        : " ++ sq (sort . nub)
+       ,"unit generator sequence   : " ++ sq id]
 
 synthstat' :: UGen -> [String]
 synthstat' = graph_stat . ugen_to_graph

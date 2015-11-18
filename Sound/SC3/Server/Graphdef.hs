@@ -3,12 +3,11 @@ module Sound.SC3.Server.Graphdef where
 
 import Control.Monad {- base -}
 import qualified Data.ByteString.Lazy as L {- bytestring -}
-import qualified Data.ByteString.Char8 as C {- bytestring -}
 import Data.List
 import System.IO {- base -}
 
-import Sound.OSC.Coding.Byte {- hosc -}
-import Sound.OSC.Coding.Cast {- hosc -}
+import qualified Sound.OSC.Coding.Byte as B {- hosc -}
+import qualified Sound.OSC.Coding.Cast as C {- hosc -}
 import Sound.OSC.Type {- hosc -}
 
 -- * Type
@@ -74,21 +73,21 @@ graphdef_ugen_nid g n = graphdef_control_nid g 0 + length (graphdef_controls g) 
 -- * Read
 
 read_i8 :: Handle -> IO Int
-read_i8 h = fmap decode_i8 (L.hGet h 1)
+read_i8 h = fmap B.decode_i8 (L.hGet h 1)
 
 read_i16 :: Handle -> IO Int
-read_i16 h = fmap decode_i16 (L.hGet h 2)
+read_i16 h = fmap B.decode_i16 (L.hGet h 2)
 
 read_i32 :: Handle -> IO Int
-read_i32 h = fmap decode_i32 (L.hGet h 4)
+read_i32 h = fmap B.decode_i32 (L.hGet h 4)
 
 read_sample :: Handle -> IO Sample
-read_sample h = fmap (realToFrac . decode_f32) (L.hGet h 4)
+read_sample h = fmap (realToFrac . B.decode_f32) (L.hGet h 4)
 
 read_pstr :: Handle -> IO ASCII
 read_pstr h = do
-  n <- fmap decode_u8 (L.hGet h 1)
-  fmap decode_str (L.hGet h n)
+  n <- fmap B.decode_u8 (L.hGet h 1)
+  fmap B.decode_str (L.hGet h n)
 
 read_control :: (Handle -> IO Int) -> Handle -> IO Control
 read_control read_i h = do
@@ -122,7 +121,7 @@ read_ugen read_i h = do
 
 read_graphdef :: Handle -> IO Graphdef
 read_graphdef h = do
-  magic <- L.hGet h 4
+  magic <- fmap B.decode_str (L.hGet h 4)
   version <- read_i32 h
   let read_i =
           case version of
@@ -130,7 +129,7 @@ read_graphdef h = do
             2 -> read_i32
             _ -> error ("read_graphdef: version not at {zero | two}: " ++ show version)
   number_of_definitions <- read_i16 h
-  when (magic /= L.pack (map (fromIntegral . fromEnum) "SCgf"))
+  when (magic /= ascii "SCgf")
        (error "read_graphdef: illegal magic string")
   when (number_of_definitions /= 1)
        (error "read_graphdef: non unary graphdef file")
@@ -165,56 +164,58 @@ read_graphdef_file nm = do
 
 -- | Pascal (length prefixed) encoding of string.
 encode_pstr :: ASCII -> L.ByteString
-encode_pstr = L.pack . str_pstr . ascii_to_string
+encode_pstr = L.pack . C.str_pstr . ascii_to_string
 
 -- | Byte-encode 'Input' value.
 encode_input :: Input -> L.ByteString
-encode_input (Input u p) = L.append (encode_i16 u) (encode_i16 p)
+encode_input (Input u p) = L.append (B.encode_i16 u) (B.encode_i16 p)
 
 encode_control :: Control -> L.ByteString
-encode_control (nm,k) = L.concat [encode_pstr nm,encode_i16 k]
+encode_control (nm,k) = L.concat [encode_pstr nm,B.encode_i16 k]
 
 -- | Byte-encode 'UGen'.
 encode_ugen :: UGen -> L.ByteString
 encode_ugen (nm,r,i,o,s) =
     L.concat [encode_pstr nm
-             ,encode_i8 r
-             ,encode_i16 (length i)
-             ,encode_i16 (length o)
-             ,encode_i16 s
+             ,B.encode_i8 r
+             ,B.encode_i16 (length i)
+             ,B.encode_i16 (length o)
+             ,B.encode_i16 s
              ,L.concat (map encode_input i)
-             ,L.concat (map encode_i8 o)]
+             ,L.concat (map B.encode_i8 o)]
 
 encode_sample :: Sample -> L.ByteString
-encode_sample = encode_f32 . realToFrac
+encode_sample = B.encode_f32 . realToFrac
 
 encode_graphdef :: Graphdef -> L.ByteString
 encode_graphdef (Graphdef nm cs ks us) =
     let (ks_ctl,ks_def) = unzip ks
-    in L.concat [encode_str (C.pack "SCgf")
-                ,encode_i32 0 -- version
-                ,encode_i16 1 -- number of graphs
+    in L.concat [B.encode_str (ascii "SCgf")
+                ,B.encode_i32 0 -- version
+                ,B.encode_i16 1 -- number of graphs
                 ,encode_pstr nm
-                ,encode_i16 (length cs)
+                ,B.encode_i16 (length cs)
                 ,L.concat (map encode_sample cs)
-                ,encode_i16 (length ks_def)
+                ,B.encode_i16 (length ks_def)
                 ,L.concat (map encode_sample ks_def)
-                ,encode_i16 (length ks_ctl)
+                ,B.encode_i16 (length ks_ctl)
                 ,L.concat (map encode_control ks_ctl)
-                ,encode_i16 (length us)
+                ,B.encode_i16 (length us)
                 ,L.concat (map encode_ugen us)]
 
 -- * Stat
 
 graphdef_stat :: Graphdef -> String
-graphdef_stat (Graphdef _ cs ks us) =
+graphdef_stat (Graphdef nm cs ks us) =
     let u_nm (sc3_nm,_,_,_,_) = ascii_to_string sc3_nm
         f g = let h (x:xs) = (x,length (x:xs))
                   h [] = error "graphdef_stat"
               in show . map h . group . sort . map g
-        sq = intercalate "," (map u_nm us)
-    in unlines ["number of constants       : " ++ show (length cs)
+        sq pp_f = intercalate "," (pp_f (map u_nm us))
+    in unlines ["name                      : " ++ show nm
+               ,"number of constants       : " ++ show (length cs)
                ,"number of controls        : " ++ show (length ks)
                ,"number of unit generators : " ++ show (length us)
                ,"unit generator rates      : " ++ f ugen_rate us
-               ,"unit generator sequence   : " ++ sq]
+               ,"unit generator set        : " ++ sq (nub . sort)
+               ,"unit generator sequence   : " ++ sq id]
