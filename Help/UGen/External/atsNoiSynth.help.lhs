@@ -1,27 +1,33 @@
 > Sound.SC3.UGen.Help.viewSC3Help "AtsNoiSynth"
 > Sound.SC3.UGen.DB.ugenSummary "AtsNoiSynth"
 
-> import Sound.SC3
+> import Sound.SC3 {- hsc3 -}
+> import Sound.SC3.Data.ATS {- hsc3-data -}
 
-segmented file loader
-> let load_data b i d =
->         if length d < 512
->         then send (b_setn1 b i d)
->         else do {send (b_setn1 b i (take 512 d))
->                 ;load_data b (i + 512) (drop 512 d)}
+> let ats_fn = "/home/rohan/data/audio/pf-c5.4.ats"
+> let ats_fn = "/home/rohan/cvs/tn/tn-56/ats/metal.ats"
 
-read file
-> ats <- atsRead "/home/rohan/cvs/tn/tn-56/ats/metal.ats"
+load ATS file at scsynth
+
+> ats_load_sc3 0 ats_fn
+
+> withSC3 (b_query1_unpack 0)
+
+read ATS header
+
+> hdr <- fmap ats_header (ats_read ats_fn)
+
+> putStrLn $ ats_header_pp hdr
 
 run re-synthesis
-> let {d = atsData ats
->     ;h = atsHeader ats
->     ;x = mouseX KR 0.05 1.5 Linear 0.2
->     ;y = mouseY KR 0 1 Linear 0.2
->     ;np = constant (atsNPartials h)
->     ;f = x / constant (atsAnalysisDuration h)
->     ;ptr = clip (lfSaw AR f 1 * 0.5 + 0.5) 0 1
->     ;rs = atsNoiSynth 10 np 0 1 ptr (1 - y) y 1 0 25 0 1}
-> in withSC3 (do {_ <- async (b_alloc 10 (length d) 1)
->                ;load_data 10 0 d
->                ;play (out 0 rs)})
+
+> let {np = constant (ats_n_partials hdr)
+>     ;ptr = lfSaw KR (constant (1 / ats_analysis_duration hdr)) 1 * 0.5 + 0.5
+>     ;rs = atsNoiSynth 0 np 0 1 ptr 1 0.1 1 0 25 0 1}
+> in audition (out 0 rs)
+
+> let {x = mouseX KR 0.0 1.0 Linear 0.2
+>     ;y = mouseY KR 0.0 1.0 Linear 0.2
+>     ;np = constant (ats_n_partials hdr)
+>     ;rs = atsNoiSynth 0 np 0 1 x (1 - y) y 1 0 25 0 1}
+> in audition (out 0 rs)

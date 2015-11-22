@@ -96,7 +96,6 @@ Library
                    --Sound.SC3.UGen.Bindings.HW.Demand
                    --Sound.SC3.UGen.Bindings.HW.DiskIO
                    Sound.SC3.UGen.Bindings.HW.External
-                   Sound.SC3.UGen.Bindings.HW.External.ATS
                    Sound.SC3.UGen.Bindings.HW.External.F0
                    Sound.SC3.UGen.Bindings.HW.External.ID
                    Sound.SC3.UGen.Bindings.HW.External.LPC
