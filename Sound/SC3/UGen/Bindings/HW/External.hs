@@ -2,7 +2,6 @@
 --   proper.
 module Sound.SC3.UGen.Bindings.HW.External (module U) where
 
-import Sound.SC3.UGen.Bindings.HW.External.ATS as U
 import Sound.SC3.UGen.Bindings.HW.External.F0 as U
 import Sound.SC3.UGen.Bindings.HW.External.ID as U
 import Sound.SC3.UGen.Bindings.HW.External.LPC as U
