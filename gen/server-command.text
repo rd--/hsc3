@@ -1,0 +1,62 @@
+b_alloc iii async=/done
+b_allocRead isii async=/done
+b_allocReadChannel isii[i] async=/done
+b_close i async=/done
+b_fill i[iif]
+b_free i async=/done
+b_gen is[.]
+b_get i[i] async=/b_set
+b_getn i [ii] async=/b_setn
+b_query [i] async=/b_info
+b_read isiiip async
+b_readChannel isiiip[i]
+b_segment ii[i]
+b_set i[if]
+b_setn i[i[f]]
+b_write iseeiip e:SoundFileFormat,e:SampleFormat async
+b_zero i
+c_fill [iif]
+c_get [i]
+c_getn [ii]
+c_set [if]
+c_setn [i[f]]
+clearSched
+cmd s[.]
+d_free [s]
+d_load s
+d_loadDir s
+d_recv b
+dumpOSC e e:PrintLevel
+errorMode ee e:ErrorScope,e:ErrorMode
+g_deepFree [i]
+g_dumpTree [ip]
+g_freeAll [i]
+g_head [ii]
+g_new [iei] e:AddAction
+g_queryTree [ip]
+g_tail [ii]
+n_after [ii]
+n_before [ii]
+n_fill i [sif]
+n_free [i]
+n_map i[si]
+n_mapa i[si]
+n_mapan i[sii]
+n_mapn i [sii]
+n_order ei[i] e:AddAction
+n_query [i]
+n_run [ip]
+n_set i[sf]
+n_setn i[s[f]]
+n_trace [i]
+notify p
+nrt_end
+p_new [iei] e:AddAction
+quit
+s_get i[s]
+s_getn i[si]
+s_new siei[sf] e:AddAction
+s_noid [i]
+status
+sync i
+u_cmd iis[.]
