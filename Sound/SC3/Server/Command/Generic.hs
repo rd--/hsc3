@@ -71,6 +71,18 @@ b_get nid i = message "/b_get" (int32 nid : map int32 i)
 b_getn :: (Integral i) => i -> [(i,i)] -> Message
 b_getn nid l = message "/b_getn" (int32 nid : mk_duples int32 int32 l)
 
+-- | Unpack @b_info@ message, fields are (id,frames,channels,sample-rate).
+b_info_unpack :: (Num n,Fractional r) => Message -> Maybe (n,n,n,r)
+b_info_unpack q =
+  case q of
+    Message "/b_info" [Int32 b_id,Int32 b_sz,Int32 b_ch,Float b_rt] ->
+        Just (fromIntegral b_id,fromIntegral b_sz,fromIntegral b_ch,realToFrac b_rt)
+    _ -> Nothing
+
+-- | Variant generating 'error'.
+b_info_unpack_err :: (Num n,Fractional r) => Message -> (n,n,n,r)
+b_info_unpack_err = fromMaybe (error "b_info_unpack") . b_info_unpack
+
 -- | Request \/b_info messages.
 b_query :: (Integral i) => [i] -> Message
 b_query = message "/b_query" . map int32
@@ -218,6 +230,13 @@ n_fill nid l = message "/n_fill" (int32 nid : mk_triples string int32 float l)
 -- | Delete a node.
 n_free :: (Integral i) => [i] -> Message
 n_free = message "/n_free" . map int32
+
+-- | Unpack @n_info@ message.
+n_info_unpack :: Integral n => Message -> Maybe [n]
+n_info_unpack q =
+    case q of
+      Message "/n_info" r -> Just (mapMaybe datum_integral r)
+      _ -> Nothing
 
 n_map :: (Integral i) => i -> [(String,i)] -> Message
 n_map nid l = message "/n_map" (int32 nid : mk_duples string int32 l)

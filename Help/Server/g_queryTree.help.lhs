@@ -18,7 +18,7 @@
 
 > withSC3 (send (g_dumpTree [(0,True)]))
 
-There is support for extracting the node tree into standard haskell
+There is support for extracting the node tree into the standard haskell
 tree data type.
 
 > import qualified Data.Tree as T {- containers -}

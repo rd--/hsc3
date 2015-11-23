@@ -135,3 +135,23 @@ isAsync (Message a _) = a `elem` async_cmds
 -- > partition_async [b_close 0,n_set1 0 "0" 0]
 partition_async :: [Message] -> ([Message],[Message])
 partition_async = partition isAsync
+
+-- | Types & names for @b_info@ message fields.
+b_info_fields :: [(String,String)]
+b_info_fields =
+    [("int","buffer-id")
+    ,("int","frame-count")
+    ,("int","channels-count")
+    ,("float","sample-rate")]
+
+-- | Type, name and value descriptors for fields of @n_info@ message.
+n_info_fields :: [(String,String,String)]
+n_info_fields =
+    [("int","node-id","")
+    ,("int","parent group-id","-1 = nil")
+    ,("int","previous node-id","-1 = nil")
+    ,("int","next node-id","-1 = nil")
+    ,("int","node-type","0 = synth,1 = group")
+    ,("int","head node-id","-1 = nil")
+    ,("int","tail node-id","-1 = nil")]
+

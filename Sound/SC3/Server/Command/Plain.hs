@@ -46,6 +46,9 @@ b_get = G.b_get
 b_getn :: Int -> [(Int,Int)] -> Message
 b_getn = G.b_getn
 
+b_info_unpack :: Message -> Maybe (Int,Int,Int,Double)
+b_info_unpack = G.b_info_unpack
+
 -- | Request \/b_info messages.
 b_query :: [Int] -> Message
 b_query = G.b_query
@@ -157,6 +160,9 @@ n_fill = G.n_fill
 -- | Delete a node.
 n_free :: [Int] -> Message
 n_free = G.n_free
+
+n_info_unpack :: Message -> Maybe [Int]
+n_info_unpack = G.n_info_unpack
 
 n_map :: Int -> [(String,Int)] -> Message
 n_map = G.n_map

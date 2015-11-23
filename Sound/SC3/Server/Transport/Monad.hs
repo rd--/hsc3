@@ -5,9 +5,11 @@ import Control.Monad {- base -}
 import Data.List {- base -}
 import Data.List.Split {- split -}
 import Data.Maybe {- base -}
+
 import Sound.OSC {- hosc -}
 
 import Sound.SC3.Server.Command
+import qualified Sound.SC3.Server.Command.Generic as Generic
 import Sound.SC3.Server.Enum
 import qualified Sound.SC3.Server.Graphdef as G
 import Sound.SC3.Server.NRT
@@ -145,7 +147,7 @@ withNotifications f = do
   _ <- async (notify False)
   return r
 
--- * Buffer
+-- * Buffer & control & node variants.
 
 -- | Variant of 'b_getn1' that waits for return message and unpacks it.
 --
@@ -185,24 +187,12 @@ b_fetch n b = do
 b_fetch1 :: DuplexOSC m => Int -> Int -> m [Double]
 b_fetch1 n b = liftM head (b_fetch n b)
 
--- | Unpack @b_info@ message, fields are (id,frames,channels,sample-rate).
-b_info_unpack :: (Num n,Fractional r) => Message -> Maybe (n,n,n,r)
-b_info_unpack q =
-  case q of
-    Message "/b_info" [Int32 b_id,Int32 b_sz,Int32 b_ch,Float b_rt] ->
-        Just (fromIntegral b_id,fromIntegral b_sz,fromIntegral b_ch,realToFrac b_rt)
-    _ -> Nothing
-
--- | Variant generating 'error'.
-b_info_unpack_err :: (Num n,Fractional r) => Message -> (n,n,n,r)
-b_info_unpack_err = fromMaybe (error "b_info_unpack") . b_info_unpack
-
 -- | 'b_info_unpack_err' of 'b_query1'.
 b_query1_unpack_generic :: (DuplexOSC m,Num n,Fractional r) => Int -> m (n,n,n,r)
 b_query1_unpack_generic n = do
   send (b_query1 n)
   q <- waitReply "/b_info"
-  return (b_info_unpack_err q)
+  return (Generic.b_info_unpack_err q)
 
 -- | Type specialised 'b_query1_unpack_generic'.
 --
@@ -218,6 +208,13 @@ c_getn1_data s = do
               _ -> error "c_getn1_data"
   sendMessage (c_getn1 s)
   liftM f (waitDatum "/c_setn")
+
+-- | Variant of 'n_query' that waits for and unpacks the reply.
+n_query1_unpack :: Transport m => Int -> m (Maybe [Int])
+n_query1_unpack n = do
+  send (n_query [n])
+  r <- waitReply "/n_info"
+  return (n_info_unpack r)
 
 -- * Status
 
