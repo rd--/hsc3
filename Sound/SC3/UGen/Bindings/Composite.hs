@@ -303,12 +303,13 @@ privateOut k = out (k + firstPrivateBus)
 -- | Apply function /f/ to each bin of an @FFT@ chain, /f/ receives
 -- magnitude, phase and index and returns a (magnitude,phase).
 pvcollect :: UGen -> UGen -> (UGen -> UGen -> UGen -> (UGen, UGen)) -> UGen -> UGen -> UGen -> UGen
-pvcollect c nf f from to z = packFFT c nf from to z mp
-  where m = unpackFFT c nf from to 0
+pvcollect c nf f from to z =
+    let m = unpackFFT c nf from to 0
         p = unpackFFT c nf from to 1
         i = [from .. to]
         e = zipWith3 f m p i
         mp = uncurry packFFTSpec (unzip e)
+    in packFFT c nf from to z mp
 
 -- | RMS variant of 'runningSum'.
 runningSumRMS :: UGen -> UGen -> UGen

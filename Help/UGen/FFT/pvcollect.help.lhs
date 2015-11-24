@@ -1,6 +1,7 @@
 > Sound.SC3.UGen.Help.viewSC3Help "PV_ChainUGen.pvcollect"
 > :t pvcollect
 
+> import Prelude hiding ((<*))
 > import Data.List {- base -}
 > import Sound.SC3 {- hsc3 -}
 

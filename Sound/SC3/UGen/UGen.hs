@@ -121,6 +121,14 @@ mce3 x y z = mce [x,y,z]
 mceMap :: (UGen -> UGen) -> UGen -> UGen
 mceMap f u = mce (map f (mceChannels u))
 
+-- | Map with element index.
+map_ix :: ((Int,a) -> b) -> [a] -> [b]
+map_ix f = map f . zip [0..]
+
+-- | Variant of 'mceMap' with element index.
+mce_map_ix :: ((Int,UGen) -> UGen) -> UGen -> UGen
+mce_map_ix f u = mce (map_ix f (mceChannels u))
+
 -- | Apply UGen list operation on MCE contents.
 mceEdit :: ([UGen] -> [UGen]) -> UGen -> UGen
 mceEdit f u =
