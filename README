@@ -23,7 +23,14 @@ There are a number of related projects:
 The hsc3 interaction environment ([hsc3.el](?t=hsc3&e=emacs/hsc3.el))
 is written for [GNU][gnu] [Emacs][emacs].
 
-© [rohan drape][rd] and others, 2005-2014, [gpl][gpl].
+## cli
+
+[scsyndef-stat](?t=hsc3&e=md/scsyndef-stat.md),
+[scsyndef-to-hs](?t=hsc3&e=md/scsyndef-to-hs.md)
+[scsynth](?t=hsc3&e=md/scsynth.md),
+[setup](?t=hsc3&e=md/setup.md)
+
+© [rohan drape][rd] and others, 2005-2015, [gpl][gpl].
 with contributions by:
 
 - henning thielemann
