@@ -547,6 +547,10 @@ linlin i sl sr dl dr = let (m,a) = linLin_muladd sl sr dl dr in mul_add i m a
 linlin' :: Fractional a => a -> a -> a -> a -> a -> a
 linlin' i sl sr dl dr = let (m,a) = linLin_muladd sl sr dl dr in i * m + a
 
+-- | Variant with a more typical argument structure, ranges as pairs and input last.
+linlin_hs :: Fractional a => (a, a) -> (a, a) -> a -> a
+linlin_hs (sl,sr) (dl,dr) i = linlin' i sl sr dl dr
+
 -- | Scale uni-polar (0,1) input to linear (l,r) range
 --
 -- > map (urange 3 4) [0,0.5,1] == [3,3.5,4]

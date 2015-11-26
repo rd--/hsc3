@@ -5,6 +5,7 @@ import Control.Monad {- base -}
 import Data.List {- base -}
 import Data.List.Split {- split -}
 import Data.Maybe {- base -}
+import Safe {- safe -}
 
 import Sound.OSC {- hosc -}
 
@@ -172,6 +173,7 @@ b_getn1_data_segment n b (i,j) = do
   return (concat d)
 
 -- | Variant of 'b_getn1_data_segment' that gets the entire buffer.
+--
 b_fetch :: DuplexOSC m => Int -> Int -> m [[Double]]
 b_fetch n b = do
   let f d = case d of
@@ -183,9 +185,18 @@ b_fetch n b = do
   sendMessage (b_query1 b)
   waitDatum "/b_info" >>= f
 
--- | First channel of 'b_fetch'.
+-- | First channel of 'b_fetch', errors if there is no data.
+--
+-- > withSC3 (b_fetch1 512 123456789)
 b_fetch1 :: DuplexOSC m => Int -> Int -> m [Double]
-b_fetch1 n b = liftM head (b_fetch n b)
+b_fetch1 n b = liftM (headNote "b_fetch1: no data") (b_fetch n b)
+
+-- | Combination of 'b_query1_unpack' and 'b_fetch'.
+b_fetch_hdr :: Transport m => Int -> Int -> m ((Int,Int,Int,Double),[[Double]])
+b_fetch_hdr k b = do
+  q <- b_query1_unpack b
+  d <- b_fetch k b
+  return (q,d)
 
 -- | 'b_info_unpack_err' of 'b_query1'.
 b_query1_unpack_generic :: (DuplexOSC m,Num n,Fractional r) => Int -> m (n,n,n,r)
