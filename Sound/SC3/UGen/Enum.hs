@@ -11,9 +11,10 @@ data Loop' t = Loop
              | WithLoop t
                deriving (Eq, Show)
 
+-- | Type-specialised 'Loop''.
 type Loop = Loop' UGen
 
--- | Resolve 'Loop'.
+-- | Resolve 'Loop''.
 from_loop :: Num t => Loop' t -> t
 from_loop e =
     case e of
