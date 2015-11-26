@@ -16,6 +16,20 @@ sample-rate    : 48000.0
 $
 ~~~~
 
+`buffer store` writes the buffer contents to a `NeXT/AU` file.
+
+`buffer store-seq` writes a sequence of time-stamped files to the indicated directory.
+
+~~~~
+$ hsc3-scsynth buffer store-seq 12 0.1 iso /tmp
+^C
+$ for i in /tmp/*.au ; do hsc3-sf-draw table pbm 0 12 128 0 $i $i.pbm ; done
+$ convert /tmp/*.pbm -delay 1 -loop 0 ~/sw/hsc3-data/data/gif/monopole.gif
+$
+~~~~
+
+![](sw/hsc3-data/data/gif/monopole.gif)
+
 ## node
 
 `group query-tree` sends a `/g_queryTree` message and prints the

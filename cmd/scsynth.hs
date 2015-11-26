@@ -1,8 +1,11 @@
+import Control.Monad {- base -}
 import qualified Data.Tree as T {- containers -}
 import System.Environment {- base -}
+import System.FilePath {- filepath -}
 
 import Sound.OSC {- hosc -}
 import Sound.SC3 {- hsc3 -}
+import qualified Sound.File.NeXT as SF {- hsc3-sf -}
 
 kv_table_pp :: [(String,String)] -> [String]
 kv_table_pp tbl =
@@ -17,6 +20,21 @@ buffer_query n = do
   let k = map snd b_info_fields
       v = [show n',show nf,show nc,show sr]
   putStrLn (unlines (kv_table_pp (zip k v)))
+
+buffer_store :: Int -> FilePath -> IO ()
+buffer_store n fn = do
+  ((_,nf,nc,sr),d) <- withSC3 (b_fetch_hdr 512 n)
+  let hdr = SF.Header nf SF.Float (round sr) nc
+  SF.au_write fn hdr d
+
+buffer_store_seq :: Int -> Double -> Bool -> FilePath -> IO ()
+buffer_store_seq n dt iso dir = do
+  let run = do t <- time
+               let t' = if iso then time_pp t else show (ntpr_to_ntpi t)
+                   fn = dir </> t' <.> "au"
+               buffer_store n fn
+               pauseThread dt
+  forever run
 
 -- > group_query_tree 0
 group_query_tree :: Int -> IO ()
@@ -37,6 +55,8 @@ node_query n = do
 help :: [String]
 help =
     ["buffer query id:int"
+    ,"buffer store id:int au-file:string"
+    ,"buffer store-seq id:int dt:float iso|ntpi dir:string"
     ,"group query-tree id:int"
     ,"node query id:int"
     ,"reset"
@@ -47,6 +67,8 @@ main = do
   a <- getArgs
   case a of
     ["buffer","query",n] -> buffer_query (read n)
+    ["buffer","store",n,fn] -> buffer_store (read n) fn
+    ["buffer","store-seq",n,dt,ts,dir] -> buffer_store_seq (read n) (read dt) (ts == "iso") dir
     ["group","query-tree",n] -> group_query_tree (read n)
     ["node","query",n] -> node_query (read n)
     ["reset"] -> withSC3 reset
