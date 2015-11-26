@@ -123,6 +123,10 @@ un_constant u =
 u_constant :: UGen -> Maybe Sample
 u_constant = fmap constantValue . un_constant
 
+-- | Erroring variant.
+u_constant_err :: UGen -> Sample
+u_constant_err = fromMaybe (error "u_constant") . u_constant
+
 -- * Predicates
 
 -- | Constant node predicate.
