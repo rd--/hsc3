@@ -6,13 +6,15 @@ import qualified Sound.SC3.UGen.Envelope.Interpolate as I
 import Sound.SC3.UGen.Type
 
 -- | Loop indicator input.
-data Loop = Loop
-          | NoLoop
-          | WithLoop UGen
-            deriving (Eq, Show)
+data Loop' t = Loop
+             | NoLoop
+             | WithLoop t
+               deriving (Eq, Show)
+
+type Loop = Loop' UGen
 
 -- | Resolve 'Loop'.
-from_loop :: Loop -> UGen
+from_loop :: Num t => Loop' t -> t
 from_loop e =
     case e of
       NoLoop -> 0

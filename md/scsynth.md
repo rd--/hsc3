@@ -18,7 +18,8 @@ $
 
 `buffer store` writes the buffer contents to a `NeXT/AU` file.
 
-`buffer store-seq` writes a sequence of time-stamped files to the indicated directory.
+`buffer store-seq` writes a sequence of time-stamped `NeXT/AU` files to the indicated directory.
+Timestamps are either `ISO 8601` format or `NTP` integer format.
 
 ~~~~
 $ hsc3-scsynth buffer store-seq 12 0.1 iso /tmp
