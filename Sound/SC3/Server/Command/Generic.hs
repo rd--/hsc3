@@ -391,6 +391,13 @@ b_set1 nid i x = b_set nid [(i,x)]
 b_setn1 :: (Integral i,Real n) => i -> i -> [n] -> Message
 b_setn1 nid i xs = b_setn nid [(i,xs)]
 
+-- | Segmented variant of 'b_setn1'.
+b_setn1_segmented :: (Integral i,Real n) => i -> i -> i -> [n] -> [Message]
+b_setn1_segmented k b i d =
+    if genericLength d < k
+    then [b_setn1 b i d]
+    else b_setn1 b i (genericTake k d) : b_setn1_segmented k b (i + k) (genericDrop k d)
+
 -- | Get ranges of sample values.
 c_getn1 :: (Integral i) => (i,i) -> Message
 c_getn1 = c_getn . return

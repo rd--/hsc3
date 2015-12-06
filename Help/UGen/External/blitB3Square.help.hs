@@ -1,20 +1,20 @@
 -- Sound.SC3.UGen.Help.viewSC3Help "BlitB3Square"
 -- Sound.SC3.UGen.DB.ugenSummary "BlitB3Square"
 
-import Sound.SC3
+import Sound.SC3 {- hsc3 -}
 
--- > audition (out 0 (sq1 * 0.1))
+-- > audition (out 0 sq1)
 sq1 =
     let f = xLine KR 1000 20 10 DoNothing
-    in blitB3Square AR f 0.99
+    in blitB3Square AR f 0.99 * 0.1
 
 -- aliasing suddenly appears for very high frequencies
 --
--- > audition (out 0 (sq2 * 0.1))
+-- > audition (out 0 sq2)
 sq2 =
     let f = mouseX KR 20 10000 Exponential 0.2
         c = mouseY KR 0.001 0.999 Linear 0.2
-    in blitB3Square AR f c
+    in blitB3Square AR f c * 0.1
 
 -- difference in CPU usage (excessive wire use,-w 1024)
 --

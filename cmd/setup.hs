@@ -23,7 +23,8 @@ ext =
     ,"hmeap","hmeap-utils"
     ,"hosc-json","hosc-utils"
     ,"hsc3-auditor","hsc3-cairo","hsc3-data","hsc3-rec","hsc3-rw","hsc3-unsafe","hsc3-utils"
-    ,"hsdif","hsharc","hspear"]
+    ,"hsdif","hsharc","hspear"
+    ,"midi-osc"]
 
 put_w :: [String] -> IO ()
 put_w = putStrLn . unwords

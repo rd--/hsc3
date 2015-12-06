@@ -3,6 +3,8 @@
 Buffer indices are not restricted by the number of available buffers
 at the server.  Below allocates a buffer at index 8192.
 
+> import Sound.SC3 {- hsc3 -}
+
 > withSC3 (async (b_alloc_setn1 8192 0 [0,3,7,10]))
 
 > let {x = mouseX KR 0 9 Linear 0.1

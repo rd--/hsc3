@@ -357,6 +357,10 @@ b_set1 = G.b_set1
 b_setn1 :: Int -> Int -> [Double] -> Message
 b_setn1 = G.b_setn1
 
+-- | Segmented variant of 'b_setn1'.
+b_setn1_segmented :: Int -> Int -> Int -> [Double] -> [Message]
+b_setn1_segmented = G.b_setn1_segmented
+
 -- * UGen commands.
 
 -- | Generate accumulation buffer given time-domain IR buffer and FFT size.
