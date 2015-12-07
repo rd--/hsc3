@@ -73,6 +73,31 @@ sc3_round_to a b = if b == 0 then a else sc3_floor ((a / b) + 0.5) * b
 sc3_idiv :: RealFrac n => n -> n -> n
 sc3_idiv a b = fromInteger (floor a `div` floor b)
 
+-- | The SC3 @%@ operator is the 'F.mod'' function.
+--
+-- > > 1.5 % 1.2 // ~= 0.3
+-- > > -1.5 % 1.2 // ~= 0.9
+-- > > 1.5 % -1.2 // ~= -0.9
+-- > > -1.5 % -1.2 // ~= -0.3
+--
+-- > let (%) = sc3_mod
+-- > 1.5 % 1.2 -- ~= 0.3
+-- > (-1.5) % 1.2 -- ~= 0.9
+-- > 1.5 % (-1.2) -- ~= -0.9
+-- > (-1.5) % (-1.2) -- ~= -0.3
+--
+-- > > 1.2 % 1.5 // ~= 1.2
+-- > > -1.2 % 1.5 // ~= 0.3
+-- > > 1.2 % -1.5 // ~= -0.3
+-- > > -1.2 % -1.5 // ~= -1.2
+--
+-- > 1.2 % 1.5 -- ~= 1.2
+-- > (-1.2) % 1.5 -- ~= 0.3
+-- > 1.2 % (-1.5) -- ~= -0.3
+-- > (-1.2) % (-1.5) -- ~= -1.2
+sc3_mod :: RealFrac n => n -> n -> n
+sc3_mod = F.mod'
+
 -- | Association table for 'Binary' to haskell function implementing operator.
 binop_hs_tbl :: (Real n,Floating n,RealFrac n,Ord n) => [(Binary,n -> n -> n)]
 binop_hs_tbl =
@@ -80,7 +105,7 @@ binop_hs_tbl =
     ,(Sub,(-))
     ,(FDiv,(/))
     ,(IDiv,sc3_idiv)
-    ,(Mod,F.mod')
+    ,(Mod,sc3_mod)
     ,(EQ_,sc3_eq)
     ,(NE,sc3_neq)
     ,(LT_,sc3_lt)
@@ -386,29 +411,11 @@ class (Floating a,RealFrac a, Ord a) => BinaryOp a where
     wrap2 :: a -> a -> a
     wrap2 = error "wrap2"
 
--- | The SC3 @%@ operator is the 'F.mod'' function.
---
--- > > 1.5 % 1.2 // ~= 0.3
--- > > -1.5 % 1.2 // ~= 0.9
--- > > 1.5 % -1.2 // ~= -0.9
--- > > -1.5 % -1.2 // ~= -0.3
---
--- > 1.5 `fmod_f32` 1.2 -- ~= 0.3
--- > (-1.5) `fmod_f32` 1.2 -- ~= 0.9
--- > 1.5 `fmod_f32` (-1.2) -- ~= -0.9
--- > (-1.5) `fmod_f32` (-1.2) -- ~= -0.3
---
--- > > 1.2 % 1.5 // ~= 1.2
--- > > -1.2 % 1.5 // ~= 0.3
--- > 1.2 % -1.5 // ~= -0.3
--- > -1.2 % -1.5 // ~= -1.2
---
--- > 1.2 `fmod_f32` 1.5 -- ~= 1.2
--- > (-1.2) `fmod_f32` 1.5 -- ~= 0.3
--- > 1.2 `fmod_f32` (-1.5) -- ~= -0.3
--- > (-1.2) `fmod_f32` (-1.5) -- ~= -1.2
 fmod_f32 :: Float -> Float -> Float
-fmod_f32 = F.mod'
+fmod_f32 = sc3_mod
+
+fmod_f64 :: Double -> Double -> Double
+fmod_f64 = sc3_mod
 
 instance BinaryOp Float where
     fold2 a b = fold_ a (-b) b
