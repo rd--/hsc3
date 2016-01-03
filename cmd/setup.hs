@@ -6,19 +6,21 @@ import System.Exit {- base -}
 import System.FilePath {- filepath -}
 import System.Process {- process -}
 
-core :: [String]
-core = ["hosc","hsc3"]
+import qualified L
 
-plain :: [String]
-plain =
+pkg_core :: [String]
+pkg_core = ["hosc","hsc3"]
+
+pkg_plain :: [String]
+pkg_plain =
     ["hsc3-db","hsc3-dot"
     ,"hsc3-lang"
     ,"hsc3-plot"
     ,"hsc3-sf","hsc3-sf-hsndfile"
     ,"sc3-rdu"]
 
-ext :: [String]
-ext =
+pkg_ext :: [String]
+pkg_ext =
     ["after-pim"
     ,"hmeap","hmeap-utils"
     ,"hosc-json","hosc-utils"
@@ -26,18 +28,30 @@ ext =
     ,"hsdif","hsharc","hspear"
     ,"midi-osc"]
 
+pkg_all :: [String]
+pkg_all = concat [pkg_core,pkg_plain,pkg_ext]
+
+pkg_non_hsc3 :: [String]
+pkg_non_hsc3 = ["hmt","hls","hly","hps","hts"]
+
 put_w :: [String] -> IO ()
 put_w = putStrLn . unwords
 
 pkg_set :: String -> [String]
 pkg_set nm =
     case nm of
-      "core" -> core
-      "plain" -> plain
-      "core+plain" -> core ++ plain
-      "ext" -> ext
-      "all" -> concat [core,plain,ext]
+      "core" -> pkg_core
+      "plain" -> pkg_plain
+      "core+plain" -> pkg_core ++ pkg_plain
+      "ext" -> pkg_ext
+      "all" -> pkg_all
       _ -> error "hsc3-setup: unknown pkg_set"
+
+is_local_pkg :: String -> Bool
+is_local_pkg = flip elem (pkg_all ++ pkg_non_hsc3)
+
+hs_file_set_pkg_dep_non_local :: [FilePath] -> IO [String]
+hs_file_set_pkg_dep_non_local nm = fmap (filter (not . is_local_pkg)) (L.hs_file_set_pkg_dep nm)
 
 s_echo :: String -> IO ()
 s_echo nm = put_w (sort (pkg_set nm))
@@ -81,10 +95,11 @@ s_with_all nm dir gen =
 
 help :: [String]
 help =
-    ["setup {clone|echo|local|rebuild|unregister|update}"
+    ["setup {clone|echo|local|pkg-dep|rebuild|unregister|update}"
     ,"  clone name src dst"
     ,"  echo name"
     ,"  local name directory command arg..."
+    ,"  pkg-dep hs-file..."
     ,"  rebuild name directory"
     ,"  unregister name"
     ,"  update name src dst"
@@ -98,6 +113,8 @@ main = do
     ["clone",nm,src,dst] -> s_clone nm src dst
     ["echo",nm] -> s_echo nm
     "local":nm:dir:cmd:arg -> s_at_each' nm (Just dir) cmd arg
+    "pkg-dep":"-all":nm -> L.hs_file_set_pkg_dep nm >>= putStrLn . unwords
+    "pkg-dep":"-non-local":nm -> hs_file_set_pkg_dep_non_local nm >>= putStrLn . unwords
     ["rebuild",nm,dir] -> s_with_all nm dir (\pkg -> ("cabal","install" : pkg))
     ["unregister",nm] -> s_at_each nm Nothing (\pkg -> ("ghc-pkg",["unregister","--force",pkg]))
     ["update",nm,src,dst] -> s_update nm src dst

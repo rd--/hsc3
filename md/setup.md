@@ -37,6 +37,30 @@ hsc3-setup local all ~/sw darcs wh -ls
 hsc3-setup local all ~/sw make push-sp
 ~~~~
 
+# pkg-dep
+
+Print package dependencies written as comments following import statements.
+
+~~~~
+$ for i in $(hsc3-setup pkg-dep -non-local ~/sw/hsc3-graphs/gr/*.hs) ; do echo $i ; done
+MonadRandom
+array
+base
+binary
+bytestring
+cairo
+containers
+directory
+filepath
+hashable
+primes
+process
+random
+random-shuffle
+split
+$
+~~~~
+
 # unregsiter & rebuild
 
 ~~~~

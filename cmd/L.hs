@@ -1,9 +1,12 @@
+module L where
+
 import Data.List {- base -}
 import Data.List.Ordered {- data-ordlist -}
-import System.Environment {- base -}
 import Text.Regex {- regex-compat -}
 
 import qualified Music.Theory.Function as T {- hmt -}
+
+-- * pkg-dep
 
 is_import :: String -> Bool
 is_import = isPrefixOf "import"
@@ -20,7 +23,7 @@ import_pkg s =
       Just [r] -> r
       _ -> error ("import_pkg: " ++ s)
 
--- > hs <- readFile "HS.hs"
+-- > hs <- readFile "code.hs"
 -- > hs_pkg_dep hs
 hs_pkg_dep :: String -> [String]
 hs_pkg_dep s =
@@ -34,11 +37,4 @@ hs_file_set_pkg_dep :: [FilePath] -> IO [String]
 hs_file_set_pkg_dep sq = do
   r <- mapM hs_file_pkg_dep sq
   return (nubSort (concat r))
-
-main :: IO ()
-main = do
-  a <- getArgs
-  case a of
-    "pkg-dep":nm -> hs_file_set_pkg_dep nm >>= putStrLn . unwords
-    _ -> putStrLn "code pkg-dep hs-file..."
 
