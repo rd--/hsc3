@@ -53,6 +53,13 @@ is_local_pkg = flip elem (pkg_all ++ pkg_non_hsc3)
 hs_file_set_pkg_dep_non_local :: [FilePath] -> IO [String]
 hs_file_set_pkg_dep_non_local nm = fmap (filter (not . is_local_pkg)) (L.hs_file_set_pkg_dep nm)
 
+s_cabal_print_exec :: String -> FilePath -> IO ()
+s_cabal_print_exec prefix fn = do
+  pkg <- L.hs_file_set_pkg_dep [fn]
+  putStrLn (unlines [concat ["Executable         ",prefix,takeBaseName fn]
+                    ,concat [" Main-Is:          ",fn]
+                    ,concat [" Build-Depends:    ",intercalate "," pkg]])
+
 s_echo :: String -> IO ()
 s_echo nm = put_w (sort (pkg_set nm))
 
@@ -95,7 +102,8 @@ s_with_all nm dir gen =
 
 help :: [String]
 help =
-    ["setup {clone|echo|local|pkg-dep|rebuild|unregister|update}"
+    ["setup {cabal|clone|echo|local|pkg-dep|rebuild|unregister|update}"
+    ,"  cabal print-exec prefix hs-file"
     ,"  clone name src dst"
     ,"  echo name"
     ,"  local name directory command arg..."
@@ -110,6 +118,7 @@ main :: IO ()
 main = do
   a <- getArgs
   case a of
+    "cabal":"print-exec":prefix:fn -> mapM_ (s_cabal_print_exec prefix) fn
     ["clone",nm,src,dst] -> s_clone nm src dst
     ["echo",nm] -> s_echo nm
     "local":nm:dir:cmd:arg -> s_at_each' nm (Just dir) cmd arg
