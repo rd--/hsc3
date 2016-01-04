@@ -1,4 +1,4 @@
-# hsc3-setup
+# hsc3-setup (May, 2015)
 
 Co-ordination of [hsc3](http://rd.slavepianos.org/t/hsc3) related packages.
 

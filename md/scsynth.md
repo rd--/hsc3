@@ -1,4 +1,4 @@
-# scsynth
+# scsynth (November, 2015)
 
 Send control messages to `scsynth` and print replies.
 

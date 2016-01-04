@@ -1,4 +1,4 @@
-# scsyndef-to-hs
+# scsyndef-to-hs (July, 2012)
 
 A _disassembler_ for UGen graphs, it reads the binary representation
 of a [SuperCollider](http://audiosynth.com) _instrument_ and prints a

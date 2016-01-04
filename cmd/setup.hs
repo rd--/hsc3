@@ -1,12 +1,47 @@
 import Control.Monad {- base -}
 import Data.List {- base -}
+import Data.List.Ordered {- data-ordlist -}
 import System.Directory {- directory -}
 import System.Environment {- base -}
 import System.Exit {- base -}
 import System.FilePath {- filepath -}
 import System.Process {- process -}
+import Text.Regex {- regex-compat -}
 
-import qualified L
+import qualified Music.Theory.Function as T {- hmt -}
+
+-- * pkg-dep
+
+is_import :: String -> Bool
+is_import = isPrefixOf "import"
+
+has_comment :: String -> Bool
+has_comment = T.predicate_all (map isInfixOf ["{- "," -}"])
+
+import_pkg_regex :: Regex
+import_pkg_regex = mkRegex "\\{- ([-a-zA-Z0-9]*) -\\}"
+
+import_pkg :: String -> String
+import_pkg s =
+    case matchRegex import_pkg_regex s of
+      Just [r] -> r
+      _ -> error ("import_pkg: " ++ s)
+
+-- > fmap hs_pkg_dep $ readFile "setup.hs"
+hs_pkg_dep :: String -> [String]
+hs_pkg_dep s =
+    let c = filter (T.predicate_and is_import has_comment) (lines s)
+    in nubSort (map import_pkg c)
+
+hs_file_pkg_dep :: FilePath -> IO [String]
+hs_file_pkg_dep = fmap hs_pkg_dep . readFile
+
+hs_file_set_pkg_dep :: [FilePath] -> IO [String]
+hs_file_set_pkg_dep sq = do
+  r <- mapM hs_file_pkg_dep sq
+  return (nubSort (concat r))
+
+-- * Name
 
 pkg_core :: [String]
 pkg_core = ["hosc","hsc3"]
@@ -51,11 +86,11 @@ is_local_pkg :: String -> Bool
 is_local_pkg = flip elem (pkg_all ++ pkg_non_hsc3)
 
 hs_file_set_pkg_dep_non_local :: [FilePath] -> IO [String]
-hs_file_set_pkg_dep_non_local nm = fmap (filter (not . is_local_pkg)) (L.hs_file_set_pkg_dep nm)
+hs_file_set_pkg_dep_non_local nm = fmap (filter (not . is_local_pkg)) (hs_file_set_pkg_dep nm)
 
 s_cabal_print_exec :: String -> FilePath -> IO ()
 s_cabal_print_exec prefix fn = do
-  pkg <- L.hs_file_set_pkg_dep [fn]
+  pkg <- hs_file_set_pkg_dep [fn]
   putStrLn (unlines [concat ["Executable         ",prefix,takeBaseName fn]
                     ,concat [" Main-Is:          ",fn]
                     ,concat [" Build-Depends:    ",intercalate "," pkg]])
@@ -122,7 +157,7 @@ main = do
     ["clone",nm,src,dst] -> s_clone nm src dst
     ["echo",nm] -> s_echo nm
     "local":nm:dir:cmd:arg -> s_at_each' nm (Just dir) cmd arg
-    "pkg-dep":"-all":nm -> L.hs_file_set_pkg_dep nm >>= putStrLn . unwords
+    "pkg-dep":"-all":nm -> hs_file_set_pkg_dep nm >>= putStrLn . unwords
     "pkg-dep":"-non-local":nm -> hs_file_set_pkg_dep_non_local nm >>= putStrLn . unwords
     ["rebuild",nm,dir] -> s_with_all nm dir (\pkg -> ("cabal","install" : pkg))
     ["unregister",nm] -> s_at_each nm Nothing (\pkg -> ("ghc-pkg",["unregister","--force",pkg]))

@@ -1,4 +1,4 @@
-# scsyndef-stat
+# scsyndef-stat (October, 2014)
 
 Read the binary representation of a
 [SuperCollider](http://audiosynth.com) graph and print the output of
