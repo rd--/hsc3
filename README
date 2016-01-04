@@ -26,11 +26,11 @@ is written for [GNU][gnu] [Emacs][emacs].
 ## cli
 
 [scsyndef-stat](?t=hsc3&e=md/scsyndef-stat.md),
-[scsyndef-to-hs](?t=hsc3&e=md/scsyndef-to-hs.md)
+[scsyndef-to-hs](?t=hsc3&e=md/scsyndef-to-hs.md),
 [scsynth](?t=hsc3&e=md/scsynth.md),
 [setup](?t=hsc3&e=md/setup.md)
 
-© [rohan drape][rd] and others, 2005-2015, [gpl][gpl].
+© [rohan drape][rd] and others, 2005-2016, [gpl][gpl].
 with contributions by:
 
 - henning thielemann
