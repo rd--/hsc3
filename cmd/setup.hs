@@ -67,7 +67,10 @@ pkg_all :: [String]
 pkg_all = concat [pkg_core,pkg_plain,pkg_ext]
 
 pkg_non_hsc3 :: [String]
-pkg_non_hsc3 = ["hmt","hls","hly","hps","hts"]
+pkg_non_hsc3 =
+    ["hmt","hly","hts"
+    ,"hls","hps"
+    ,"html-minus","pandoc-minus","www-minus"]
 
 put_w :: [String] -> IO ()
 put_w = putStrLn . unwords
@@ -142,7 +145,7 @@ help =
     ,"  clone name src dst"
     ,"  echo name"
     ,"  local name directory command arg..."
-    ,"  pkg-dep hs-file..."
+    ,"  pkg-dep {-all | -non-local} hs-file..."
     ,"  rebuild name directory"
     ,"  unregister name"
     ,"  update name src dst"
