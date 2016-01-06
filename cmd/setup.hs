@@ -31,7 +31,7 @@ import_pkg s =
 hs_pkg_dep :: String -> [String]
 hs_pkg_dep s =
     let c = filter (T.predicate_and is_import has_comment) (lines s)
-    in nubSort (map import_pkg c)
+    in nubSort ("base" : map import_pkg c)
 
 hs_file_pkg_dep :: FilePath -> IO [String]
 hs_file_pkg_dep = fmap hs_pkg_dep . readFile
