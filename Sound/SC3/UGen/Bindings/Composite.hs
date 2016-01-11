@@ -377,6 +377,17 @@ tChooseM t a = do
   r <- tIRandM 0 (constant (length (mceChannels a))) t
   return (select r a)
 
+-- | Triangle wave as sum of /n/ sines.
+-- For partial n, amplitude is (1 / square n) and phase is pi at every other odd partial.
+triAS :: Int -> UGen -> UGen
+triAS n f0 =
+    let mk_freq i = f0 * fromIntegral i
+        mk_amp i = if even i then 0 else 1 / fromIntegral (i * i)
+        mk_ph i = if i + 1 `mod` 4 == 0 then pi else 0
+        m = [1,3 .. n]
+        param = zip3 (map mk_freq m) (map mk_ph m) (map mk_amp m)
+    in sum (map (\(fr,ph,am) -> sinOsc AR fr ph * am) param)
+
 -- | Randomly select one of several inputs on trigger (weighted).
 tWChoose :: ID m => m -> UGen -> UGen -> UGen -> UGen -> UGen
 tWChoose z t a w n =
