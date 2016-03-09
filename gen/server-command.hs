@@ -85,6 +85,7 @@ mk_generic s =
               sig'' = sig_liftc_generic sig'
           in nm ++ " :: " ++ gen_classes cls ++ sig_words id sig'' ++ " -> Message"
 
+-- | tag -> (class,OSC-type,HS-type)
 typec :: Char -> (String,String,String)
 typec c =
     case c of
