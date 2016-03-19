@@ -1,7 +1,7 @@
 -- | Interpolation functions for envelope segments.
 module Sound.SC3.UGen.Envelope.Interpolate where
 
--- | An interpolation function take three arguments. /x0/ is the left
+-- | An interpolation function takes three arguments. /x0/ is the left
 -- or begin value, /x1/ is the right or end value, and /t/ is a (0,1)
 -- index.
 type Interpolation_F t = t -> t -> t -> t
@@ -17,7 +17,7 @@ linear x0 x1 t = t * (x1 - x0) + x0
 -- | Exponential interpolation, /x0/ must not be @0@, (/x0/,/x1/) must
 -- not span @0@.
 --
--- > import Sound.SC3.Plot
+-- > import Sound.SC3.Plot {- hsc3-plot -}
 -- > plotTable1 (map (exponential 0.001 1) [0,0.01 .. 1])
 exponential :: Floating t => Interpolation_F t
 exponential x0 x1 t = x0 * ((x1 / x0) ** t)
@@ -64,8 +64,7 @@ welch x0 x1 t =
 -- | Curvature controlled by single parameter /c/.  @0@ is 'linear',
 -- increasing /c/ approaches 'exponential'.
 --
--- > plotTable1 (map (curve 0 (-1) 1) [0,0.01 .. 1])
--- > plotTable1 (map (curve 9 (-1) 1) [0,0.01 .. 1])
+-- > plotTable (map (\c-> map (curve c (-1) 1) [0,0.01 .. 1]) [0 .. 25])
 curve :: (Ord t, Floating t) => t -> Interpolation_F t
 curve c x0 x1 t =
     if abs c < 0.0001
@@ -74,7 +73,7 @@ curve c x0 x1 t =
              n = 1 - exp (t * c)
          in x0 + (x1 - x0) * (n/d)
 
--- | Square of 'linear' of 'sqrt' of /x0/ and /x1/, threfore neither
+-- | Square of 'linear' of 'sqrt' of /x0/ and /x1/, therefore neither
 -- may be negative.
 --
 -- > plotTable1 (map (squared 0 1) [0,0.01 .. 1])

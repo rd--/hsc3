@@ -3,8 +3,9 @@ module Sound.SC3.UGen.Envelope where
 
 import Data.List {- base -}
 import Data.Maybe {- base -}
-import Sound.SC3.UGen.Enum {- hsc3 -}
-import Sound.SC3.UGen.Type {- hsc3 -}
+
+import qualified Sound.SC3.UGen.Enum as E {- hsc3 -}
+import qualified Sound.SC3.UGen.Type as U {- hsc3 -}
 
 -- * Envelope
 
@@ -12,20 +13,20 @@ import Sound.SC3.UGen.Type {- hsc3 -}
 envelope_coerce :: (a -> b) -> Envelope a -> Envelope b
 envelope_coerce f e =
     let Envelope l t c rn ln = e
-    in Envelope (map f l) (map f t) (map (env_curve_coerce f) c) rn ln
+    in Envelope (map f l) (map f t) (map (E.env_curve_coerce f) c) rn ln
 
 -- | SC3 envelope segment model
 data Envelope a =
     Envelope {env_levels :: [a] -- ^ Set of /n/ levels, n is >= 1
              ,env_times :: [a] -- ^ Set of /n-1/ time intervals
-             ,env_curves :: [Envelope_Curve a] -- ^ Possibly empty curve set
+             ,env_curves :: [E.Envelope_Curve a] -- ^ Possibly empty curve set
              ,env_release_node :: Maybe Int -- ^ Maybe index to release node
              ,env_loop_node :: Maybe Int -- ^ Maybe index to loop node
              }
     deriving (Eq,Show)
 
 -- | Variant without release and loop node inputs (defaulting to nil).
-envelope :: [a] -> [a] -> [Envelope_Curve a] -> Envelope a
+envelope :: [a] -> [a] -> [E.Envelope_Curve a] -> Envelope a
 envelope l t c = Envelope l t c Nothing Nothing
 
 -- | Duration of 'Envelope', ie. 'sum' '.' 'env_times'.
@@ -43,7 +44,7 @@ envelope_segment_ix e t =
     in findIndex (>= t) d
 
 -- | A set of start time, start level, end time, end level and curve.
-type Envelope_Segment t = (t,t,t,t,Envelope_Curve t)
+type Envelope_Segment t = (t,t,t,t,E.Envelope_Curve t)
 
 -- | Extract envelope segment given at index /i/.
 envelope_segment :: Num t => Envelope t -> Int -> Envelope_Segment t
@@ -64,7 +65,7 @@ envelope_segments e =
     in map (envelope_segment e) [0 .. n - 1]
 
 -- | Transform list of 'Envelope_Segment's into lists ('env_levels','env_times','env_curves').
-pack_envelope_segments :: Num t => [Envelope_Segment t] -> ([t],[t],[Envelope_Curve t])
+pack_envelope_segments :: Num t => [Envelope_Segment t] -> ([t],[t],[E.Envelope_Curve t])
 pack_envelope_segments s =
     case s of
       [] -> error ""
@@ -99,7 +100,7 @@ envelope_at e t =
       Just n -> let (t0,x0,t1,x1,c) = envelope_segment e n
                     d = t1 - t0
                     t' = (t - t0) / d
-                    f = env_curve_interpolation_f c
+                    f = E.env_curve_interpolation_f c
                 in if d <= 0
                    then x1
                    else f x0 x1 t'
@@ -119,12 +120,12 @@ envelope_table n = map snd . envelope_render n
 
 -- | Variant on 'env_curves' that expands the, possibly empty, user
 -- list by cycling (if not empty) or by filling with 'EnvLin'.
-envelope_curves :: Num a => Envelope a -> [Envelope_Curve a]
+envelope_curves :: Num a => Envelope a -> [E.Envelope_Curve a]
 envelope_curves e =
     let c = env_curves e
         n = envelope_n_segments e
     in if null c
-       then replicate n EnvLin
+       then replicate n E.EnvLin
        else take n (cycle c)
 
 -- | Linear SC3 form of 'Envelope' data.
@@ -145,7 +146,7 @@ envelope_sc3_array e =
         rn' = fromIntegral (fromMaybe (-99) rn)
         ln' = fromIntegral (fromMaybe (-99) ln)
         c = envelope_curves e
-        f i j k = [i,j,env_curve_shape k,env_curve_value k]
+        f i j k = [i,j,E.env_curve_shape k,E.env_curve_value k]
     in case l of
          l0:l' -> Just (l0 : n' : rn' : ln' : concat (zipWith3 f l' t c))
          _ -> Nothing
@@ -164,7 +165,7 @@ envelope_sc3_ienvgen_array e =
         n = length t
         n' = fromIntegral n
         c = envelope_curves e
-        f i j k = [j,env_curve_shape k,env_curve_value k,i]
+        f i j k = [j,E.env_curve_shape k,E.env_curve_value k,i]
     in case l of
          l0:l' -> Just (0 : l0 : n' : sum t : concat (zipWith3 f l' t c))
          _ -> Nothing
@@ -179,20 +180,20 @@ env_delay (Envelope l t c rn ln) d =
     let (l0:_) = l
         l' = l0 : l
         t' = d : t
-        c' = EnvLin : c
+        c' = E.EnvLin : c
         rn' = fmap (+ 1) rn
         ln' = fmap (+ 1) ln
     in Envelope l' t' c' rn' ln'
 
 -- | Connect releaseNode (or end) to first node of envelope.
-env_circle :: (Num a,Fractional a) => Envelope a -> a -> Envelope_Curve a -> Envelope a
+env_circle :: (Num a,Fractional a) => Envelope a -> a -> E.Envelope_Curve a -> Envelope a
 env_circle (Envelope l t c rn _) tc cc =
     let z = 1 {- 1 - impulse KR 0 0 -}
         n = length t
     in case rn of
          Nothing -> let l' = 0 : l ++ [0]
                         t' = z * tc : t ++ [9e8]
-                        c' = cc : take n (cycle c) ++ [EnvLin]
+                        c' = cc : take n (cycle c) ++ [E.EnvLin]
                         rn' = Just (n + 1)
                     in Envelope l' t' c' rn' (Just 0)
          Just i -> let l' = 0 : l
@@ -203,10 +204,10 @@ env_circle (Envelope l t c rn _) tc cc =
 
 -- * UGen
 
-envelope_to_ugen :: Envelope UGen -> UGen
+envelope_to_ugen :: Envelope U.UGen -> U.UGen
 envelope_to_ugen =
     let err = error "envGen: bad Envelope"
-    in mce . fromMaybe err . envelope_sc3_array
+    in U.mce . fromMaybe err . envelope_sc3_array
 
 -- * List
 
