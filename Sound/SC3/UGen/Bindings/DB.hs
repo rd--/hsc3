@@ -1900,8 +1900,8 @@ saw rate freq = mkUGen Nothing [KR,AR] (Left rate) "Saw" [freq] Nothing 1 (Speci
 -- | Schmidt trigger.
 --
 --  Schmidt [IR,KR,AR] in=0.0 lo=0.0 hi=1.0
-schmidt :: Rate -> UGen -> UGen -> UGen -> UGen
-schmidt rate in_ lo hi = mkUGen Nothing [IR,KR,AR] (Left rate) "Schmidt" [in_,lo,hi] Nothing 1 (Special 0) NoId
+schmidt :: UGen -> UGen -> UGen -> UGen
+schmidt in_ lo hi = mkUGen Nothing [IR,KR,AR] (Right [0]) "Schmidt" [in_,lo,hi] Nothing 1 (Special 0) NoId
 
 -- | FIXME: ScopeOut purpose.
 --
