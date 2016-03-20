@@ -58,8 +58,8 @@ pkg_ext :: [String]
 pkg_ext =
     ["after-pim"
     ,"hmeap","hmeap-utils"
-    ,"hosc-json","hosc-utils"
-    ,"hsc3-auditor","hsc3-cairo","hsc3-data","hsc3-rec","hsc3-rw","hsc3-unsafe","hsc3-utils"
+    ,"hosc-json"
+    ,"hsc3-auditor","hsc3-cairo","hsc3-data","hsc3-rec","hsc3-rw","hsc3-unsafe"
     ,"hsdif","hsharc","hspear"
     ,"midi-osc"]
 
