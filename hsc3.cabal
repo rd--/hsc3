@@ -61,6 +61,7 @@ Library
   GHC-Options:     -Wall -fwarn-tabs
   Exposed-modules: Sound.SC3
                    Sound.SC3.Common
+                   Sound.SC3.Common.Math
                    Sound.SC3.Common.Monad.Syntax
                    Sound.SC3.FD
                    Sound.SC3.Server

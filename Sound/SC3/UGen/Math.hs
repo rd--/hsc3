@@ -2,8 +2,9 @@
 module Sound.SC3.UGen.Math where
 
 import qualified Data.Fixed as F {- base -}
-import Data.Int
+import Data.Int {- base -}
 
+import Sound.SC3.Common.Math
 import Sound.SC3.UGen.Bindings.DB (mulAdd)
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Type
@@ -132,12 +133,12 @@ uop_hs_tbl =
     ,(Abs,abs)
     ,(Ceil,sc3_ceiling)
     ,(Floor,sc3_floor)
-    ,(Squared,squared')
-    ,(Cubed,cubed')
+    ,(Squared,\z -> z * z)
+    ,(Cubed,\z -> z * z * z)
     ,(Sqrt,sqrt)
     ,(Recip,recip)
-    ,(MIDICPS,midiCPS')
-    ,(CPSMIDI,cpsMIDI')
+    ,(MIDICPS,midi_to_cps)
+    ,(CPSMIDI,cps_to_midi)
     ,(Sin,sin)
     ,(Cos,cos)
     ,(Tan,tan)]
@@ -239,56 +240,24 @@ instance RealFracE UGen where
 ceil :: UGen -> UGen
 ceil = ceilingE
 
--- | 'Floating' form of 'midiCPS'.
-midiCPS' :: Floating a => a -> a
-midiCPS' i = 440.0 * (2.0 ** ((i - 69.0) * (1.0 / 12.0)))
-
--- | 'Floating' form of 'cpsMIDI'.
-cpsMIDI' :: Floating a => a -> a
-cpsMIDI' a = (logBase 2 (a * (1.0 / 440.0)) * 12.0) + 69.0
-
-cpsOct' :: Floating a => a -> a
-cpsOct' a = logBase 2 (a * (1.0 / 440.0)) + 4.75
-
-ampDb' :: Floating a => a -> a
-ampDb' a = logBase 10 a * 20
-
-dbAmp' :: Floating a => a -> a
-dbAmp' a = 10 ** (a * 0.05)
-
-cubed' :: Num a => a -> a
-cubed' a = a * a * a
-
-midiRatio' :: Floating a => a -> a
-midiRatio' a = 2.0 ** (a * (1.0 / 12.0))
-
-octCPS' :: Floating a => a -> a
-octCPS' a = 440.0 * (2.0 ** (a - 4.75))
-
-ratioMIDI' :: Floating a => a -> a
-ratioMIDI' a = 12.0 * logBase 2 a
-
-squared' :: Num a => a -> a
-squared' a = a * a
-
 -- | Unary operator class.
 --
 -- > map (floor . (* 1e4) . dbAmp) [-90,-60,-30,0] == [0,10,316,10000]
 class (Floating a, Ord a) => UnaryOp a where
     ampDb :: a -> a
-    ampDb = ampDb'
+    ampDb = amp_to_db
     asFloat :: a -> a
     asFloat = error "asFloat"
     asInt :: a -> a
     asInt = error "asInt"
     cpsMIDI :: a -> a
-    cpsMIDI = cpsMIDI'
+    cpsMIDI = cps_to_midi
     cpsOct :: a -> a
-    cpsOct = cpsOct'
+    cpsOct = cps_to_oct
     cubed :: a -> a
-    cubed = cubed'
+    cubed n = n * n * n
     dbAmp :: a -> a
-    dbAmp = dbAmp'
+    dbAmp = db_to_amp
     distort :: a -> a
     distort = error "distort"
     frac :: a -> a
@@ -300,23 +269,23 @@ class (Floating a, Ord a) => UnaryOp a where
     log2 :: a -> a
     log2 = logBase 2
     midiCPS :: a -> a
-    midiCPS = midiCPS'
+    midiCPS = midi_to_cps
     midiRatio :: a -> a
-    midiRatio = midiRatio'
+    midiRatio = midi_to_ratio
     notE :: a -> a
     notE a = if a > 0.0 then 0.0 else 1.0
     notNil :: a -> a
     notNil a = if a /= 0.0 then 0.0 else 1.0
     octCPS :: a -> a
-    octCPS = octCPS'
+    octCPS = oct_to_cps
     ramp_ :: a -> a
     ramp_ _ = error "ramp_"
     ratioMIDI :: a -> a
-    ratioMIDI = ratioMIDI'
+    ratioMIDI = ratio_to_midi
     softClip :: a -> a
     softClip = error "softClip"
     squared :: a -> a
-    squared = squared'
+    squared = \z -> z * z
 
 instance UnaryOp Float where
 instance UnaryOp Double where
@@ -460,14 +429,14 @@ instance BinaryOp UGen where
     randRange = mkBinaryOperator RandRange randRange
     exprandRange = mkBinaryOperator ExpRandRange exprandRange
 
--- | Ternary operator class.
-class Num a => TernaryOp a where
+-- | MulAdd operator class.
+class Num a => MulAdd a where
     mul_add :: a -> a -> a -> a
     mul_add i m a = i * m + a
 
-instance TernaryOp UGen where mul_add = mulAdd
-instance TernaryOp Float where
-instance TernaryOp Double where
+instance MulAdd UGen where mul_add = mulAdd
+instance MulAdd Float where
+instance MulAdd Double where
 
 -- | Wrap /k/ to within range /(i,j)/, ie. @AbstractFunction.wrap@.
 --
@@ -533,55 +502,15 @@ clip_ n i j = clip' i j n
 hypot_ :: (Floating a) => a -> a -> a
 hypot_ x y = sqrt (x * x + y * y)
 
--- | Calculate multiplier and add values for 'linLin' transform.
---
--- > range_muladd 3 4 == (0.5,3.5)
--- > linLin_muladd (-1) 1 3 4 == (0.5,3.5)
--- > linLin_muladd 0 1 3 4 == (1,3)
--- > linLin_muladd (-1) 1 0 1 == (0.5,0.5)
--- > linLin_muladd (-0.3) 1 (-1) 1
-linLin_muladd :: Fractional t => t -> t -> t -> t -> (t, t)
-linLin_muladd sl sr dl dr =
-    let m = (dr - dl) / (sr - sl)
-        a = dl - (m * sl)
-    in (m,a)
-
 -- | Map from one linear range to another linear range.
-linlin :: (Fractional a,TernaryOp a) => a -> a -> a -> a -> a -> a
-linlin i sl sr dl dr = let (m,a) = linLin_muladd sl sr dl dr in mul_add i m a
-
--- | Variant without 'TernaryOp' constraint, and hence without 'mul_add' operator.
-linlin' :: Fractional a => a -> a -> a -> a -> a -> a
-linlin' i sl sr dl dr = let (m,a) = linLin_muladd sl sr dl dr in i * m + a
-
--- | Variant with a more typical argument structure, ranges as pairs and input last.
-linlin_hs :: Fractional a => (a, a) -> (a, a) -> a -> a
-linlin_hs (sl,sr) (dl,dr) i = linlin' i sl sr dl dr
+linlin_ma :: (Fractional a,MulAdd a) => a -> a -> a -> a -> a -> a
+linlin_ma i sl sr dl dr = let (m,a) = linlin_muladd sl sr dl dr in mul_add i m a
 
 -- | Scale uni-polar (0,1) input to linear (l,r) range
---
--- > map (urange 3 4) [0,0.5,1] == [3,3.5,4]
-urange :: (Fractional a,TernaryOp a) => a -> a -> a -> a
-urange l r i = let m = r - l in mul_add i m l
-
--- | Variant without 'TernaryOp' constraint.
-urange' :: Fractional a => a -> a -> a -> a
-urange' l r i = let m = r - l in i * m + l
-
--- | Calculate multiplier and add values for 'range' transform.
---
--- > range_muladd 3 4 == (0.5,3.5)
-range_muladd :: Fractional t => t -> t -> (t, t)
-range_muladd = linLin_muladd (-1) 1
+urange_ma :: (Fractional a,MulAdd a) => a -> a -> a -> a
+urange_ma l r i = let m = r - l in mul_add i m l
 
 -- | Scale bi-polar (-1,1) input to linear (l,r) range.  Note that the
 -- argument order is not the same as 'linLin'.
---
--- > map (range 3 4) [-1,0,1] == [3,3.5,4]
--- > map (\x -> let (m,a) = linLin_muladd (-1) 1 3 4 in x * m + a) [-1,0,1]
-range :: (Fractional a,TernaryOp a) => a -> a -> a -> a
-range l r i = let (m,a) = range_muladd l r in mul_add i m a
-
--- | Variant without 'TernaryOp' constraint.
-range' :: Fractional a => a -> a -> a -> a
-range' l r i = let (m,a) = range_muladd l r in i * m + a
+range_ma :: (Fractional a,MulAdd a) => a -> a -> a -> a
+range_ma l r i = let (m,a) = range_muladd l r in mul_add i m a

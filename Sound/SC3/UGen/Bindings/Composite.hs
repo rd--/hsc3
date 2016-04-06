@@ -183,9 +183,7 @@ linExp_u i = linExp i 0 1
 
 -- | Map from one linear range to another linear range.
 linLin :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-linLin i sl sr dl dr =
-    let (m,a) = linLin_muladd sl sr dl dr
-    in mulAdd i m a
+linLin = linlin_ma
 
 -- | 'linLin' where source is (0,1).
 linLin_u :: UGen -> UGen -> UGen -> UGen
