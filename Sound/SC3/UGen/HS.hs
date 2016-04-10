@@ -134,9 +134,9 @@ resonz_ir :: Floating n => T3 n -> F_ST (T2 n) n n
 resonz_ir p = iir2_ff_fb (resonz_f p)
 
 -- | rlp = resonant low pass
-rlpf_f :: (Floating n, Ord n) => T3 n -> F_U3 n
-rlpf_f (radians_per_sample,f,rq) x y1 y2 =
-    let qr = max 0.001 rq
+rlpf_f :: Floating n => (n -> n -> n) -> T3 n -> F_U3 n
+rlpf_f max_f (radians_per_sample,f,rq) x y1 y2 =
+    let qr = max_f 0.001 rq
         pf = f * radians_per_sample
         d = tan (pf * qr * 0.5)
         c = (1.0 - d) / (1.0 + d)
@@ -146,7 +146,7 @@ rlpf_f (radians_per_sample,f,rq) x y1 y2 =
     in a0 * x + b1 * y1 + b2 * y2
 
 rlpf_ir :: (Floating n, Ord n) => T3 n -> F_ST (T2 n) n n
-rlpf_ir p = iir2 (rlpf_f p)
+rlpf_ir p = iir2 (rlpf_f max p)
 
 bw_lpf_or_hpf_coef :: Floating n => Bool -> n -> n -> T5 n
 bw_lpf_or_hpf_coef is_hpf sample_rate f =
