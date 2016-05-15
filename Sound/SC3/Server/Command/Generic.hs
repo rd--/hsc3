@@ -5,7 +5,7 @@ import Data.List {- base -}
 import Data.Maybe {- base -}
 import Sound.OSC.Core {- hosc -}
 
-import Sound.SC3.Common
+import Sound.SC3.Common.Prelude
 import Sound.SC3.Server.Command.Enum
 import Sound.SC3.Server.Enum
 import qualified Sound.SC3.Server.Graphdef as G

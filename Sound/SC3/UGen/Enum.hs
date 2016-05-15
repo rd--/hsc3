@@ -1,7 +1,7 @@
 -- | Data types for enumerated and non signal unit generator inputs.
 module Sound.SC3.UGen.Enum where
 
-import Sound.SC3.Common
+import Sound.SC3.Common.Prelude
 import qualified Sound.SC3.UGen.Envelope.Interpolate as I
 import Sound.SC3.UGen.Type
 

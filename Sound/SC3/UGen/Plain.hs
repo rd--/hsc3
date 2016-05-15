@@ -8,7 +8,7 @@
 -- > audition (out 0 (sinOsc AR 440 0 * 0.1))
 module Sound.SC3.UGen.Plain where
 
-import Sound.SC3.Common
+import Sound.SC3.Common.Prelude
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type

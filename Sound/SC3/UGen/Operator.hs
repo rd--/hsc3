@@ -5,7 +5,7 @@ module Sound.SC3.UGen.Operator where
 import Control.Monad {- base -}
 import Data.Maybe {- base -}
 
-import Sound.SC3.Common
+import Sound.SC3.Common.Prelude {- hsc3 -}
 
 -- * Unary
 
