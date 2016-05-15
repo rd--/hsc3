@@ -42,7 +42,8 @@ Data-files:        README
                    Help/UGen/Wavelets/*.help.lhs
 
 Library
-  Build-Depends:   base >= 4.7,
+  Build-Depends:   array,
+                   base >= 4.7,
                    binary,
                    bytestring,
                    containers,
@@ -63,6 +64,7 @@ Library
   Exposed-modules: Sound.SC3
                    Sound.SC3.Common
                    Sound.SC3.Common.Buffer
+                   Sound.SC3.Common.Buffer.Array
                    Sound.SC3.Common.Buffer.Vector
                    Sound.SC3.Common.Math
                    Sound.SC3.Common.Math.Window
