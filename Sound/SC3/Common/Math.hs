@@ -5,6 +5,10 @@ import Data.Maybe {- base -}
 two_pi :: Floating n => n
 two_pi = 2 * pi
 
+-- > bin_to_freq 44100 2048 32 == 689.0625
+bin_to_freq :: (Fractional n, Integral i) => n -> i -> i -> n
+bin_to_freq sr n i = fromIntegral i * sr / fromIntegral n
+
 midi_to_cps :: Floating a => a -> a
 midi_to_cps i = 440.0 * (2.0 ** ((i - 69.0) * (1.0 / 12.0)))
 

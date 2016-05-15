@@ -248,10 +248,10 @@ l_mavg9 = l_apply_f_st1 mavg9 (0,0,0,0,0,0,0,0)
 import Sound.SC3.Plot {- hsc3-plot -}
 import Sound.SC3.Plot.FFT {- hsc3-plot -}
 
-let n = take 4096 (l_white_noise 'a')
+let n = take 4096 (l_white_noise 'α')
 
 plotTable1 n
-plotTable1 (take 4096 (l_brown_noise 'a'))
+plotTable1 (take 4096 (l_brown_noise 'α'))
 
 plotTable1 (l_lpz1 n)
 plotTable1 (l_lpz2 n)
@@ -271,7 +271,6 @@ plotTable1 (rfft_pure (l_resonz_ir (sr_to_rps 44100,440,0.1) n))
 plotTable1 (rfft_pure (l_rlpf_ir (sr_to_rps 44100,1200,0.1) n))
 
 import Sound.SC3.Common.Math {- hsc3 -}
-let bin_to_freq sr n i = fromIntegral i * sr / fromIntegral n
 let plot_fft_mnn sr r = plot_p2_ln [zip (map (max 0 . cps_to_midi . bin_to_freq sr 2048) [0..]) r]
 
 plot_fft_mnn 44100 (rfft_pure (l_bw_lpf (44100,midi_to_cps 60) n))
