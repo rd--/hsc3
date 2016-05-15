@@ -2,6 +2,9 @@ module Sound.SC3.Common.Math where
 
 import Data.Maybe {- base -}
 
+two_pi :: Floating n => n
+two_pi = 2 * pi
+
 midi_to_cps :: Floating a => a -> a
 midi_to_cps i = 440.0 * (2.0 ** ((i - 69.0) * (1.0 / 12.0)))
 
