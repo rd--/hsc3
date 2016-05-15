@@ -1,7 +1,10 @@
 -- | Haskell implementations of SC3 UGens.
 module Sound.SC3.UGen.HS where
 
+import Data.List {- base -}
 import qualified System.Random as R {- random -}
+
+import Sound.SC3.Common.Math
 
 -- | F = function, ST = state
 type F_ST0 st o = st -> (o,st)
@@ -105,9 +108,6 @@ mavg5 = fir4 avg5
 mavg9 :: Fractional n => F_ST1 (T8 n) n n
 mavg9 = fir8 avg9
 
-two_pi :: Floating n => n
-two_pi = 2.0 * pi
-
 -- | Sample rate (SR) to radians per sample (RPS).
 --
 -- > sr_to_rps 44100 == 0.00014247585730565955
@@ -190,6 +190,11 @@ latch ((n,b),y1) = let r = if b then n else y1 in (r,r)
 as_trig :: (Fractional t,Ord t) => F_ST1 t t Bool
 as_trig (n,y1) = (y1 <= 0.0 && n > 0.0,n)
 
+phasor :: RealFrac t => F_ST1 t (Bool,t,t,t,t) t
+phasor ((trig,rate,start,end,resetPos),ph) =
+    let r = if trig then resetPos else sc_wrap start end (ph + rate)
+    in (ph,r)
+
 -- | * LIST PROCESSING
 
 l_apply_f_st0 :: F_ST0 st o -> st -> [o]
@@ -206,6 +211,13 @@ l_apply_f_st1 f st xs =
     case xs of
       [] -> []
       x:xs' -> let (r,st') = f (x,st) in r : l_apply_f_st1 f st' xs'
+
+-- > let rp = repeat
+-- > take 10 (l_phasor (rp False) (rp 1) (rp 0) (rp 4) (rp 0)) == [0,1,2,3,0,1,2,3,0,1]
+l_phasor :: RealFrac n => [Bool] -> [n] -> [n] -> [n] -> [n] -> [n]
+l_phasor trig rate start end resetPos =
+    let i = zip5 trig rate start end resetPos
+    in l_apply_f_st1 phasor (head start) i
 
 l_hpz1 :: Fractional n => [n] -> [n]
 l_hpz1 = l_apply_f_st1 hpz1 0
@@ -269,6 +281,8 @@ plotTable1 (rfft_pure (l_bw_lpf (44100,9000) n))
 plotTable1 (rfft_pure (l_bw_hpf (44100,9000) n))
 plotTable1 (rfft_pure (l_resonz_ir (sr_to_rps 44100,440,0.1) n))
 plotTable1 (rfft_pure (l_rlpf_ir (sr_to_rps 44100,1200,0.1) n))
+
+import Sound.SC3.Common.Math
 
 plot_fft1_mnn 44100 (rfft_pure (l_bw_lpf (44100,midi_to_cps 60) n))
 plot_fft1_mnn 44100 (rfft_pure (l_resonz_ir (sr_to_rps 44100,midi_to_cps 69,0.1) n))

@@ -69,33 +69,34 @@ roundTo_ = sc3_round_to
 
 -- > map (flip sc3_round_to 0.25) [0,0.1 .. 1]
 sc3_round_to :: (RealFrac n, Ord n) => n -> n -> n
-sc3_round_to a b = if b == 0 then a else sc3_floor ((a / b) + 0.5) * b
+sc3_round_to a b = if b == 0 then a else sc_floor ((a / b) + 0.5) * b
 
 sc3_idiv :: RealFrac n => n -> n -> n
 sc3_idiv a b = fromInteger (floor a `div` floor b)
 
--- | The SC3 @%@ operator is the 'F.mod'' function.
---
--- > > 1.5 % 1.2 // ~= 0.3
--- > > -1.5 % 1.2 // ~= 0.9
--- > > 1.5 % -1.2 // ~= -0.9
--- > > -1.5 % -1.2 // ~= -0.3
---
--- > let (%) = sc3_mod
--- > 1.5 % 1.2 -- ~= 0.3
--- > (-1.5) % 1.2 -- ~= 0.9
--- > 1.5 % (-1.2) -- ~= -0.9
--- > (-1.5) % (-1.2) -- ~= -0.3
---
--- > > 1.2 % 1.5 // ~= 1.2
--- > > -1.2 % 1.5 // ~= 0.3
--- > > 1.2 % -1.5 // ~= -0.3
--- > > -1.2 % -1.5 // ~= -1.2
---
--- > 1.2 % 1.5 -- ~= 1.2
--- > (-1.2) % 1.5 -- ~= 0.3
--- > 1.2 % (-1.5) -- ~= -0.3
--- > (-1.2) % (-1.5) -- ~= -1.2
+{- | The SC3 @%@ UGen operator is the 'F.mod'' function.
+
+> > 1.5 % 1.2 // ~= 0.3
+> > -1.5 % 1.2 // ~= 0.9
+> > 1.5 % -1.2 // ~= -0.9
+> > -1.5 % -1.2 // ~= -0.3
+
+> let (%) = sc3_mod
+> 1.5 % 1.2 ~= 0.3
+> (-1.5) % 1.2 ~= 0.9
+> 1.5 % (-1.2) ~= -0.9
+> (-1.5) % (-1.2) ~= -0.3
+
+> > 1.2 % 1.5 // ~= 1.2
+> > -1.2 % 1.5 // ~= 0.3
+> > 1.2 % -1.5 // ~= -0.3
+> > -1.2 % -1.5 // ~= -1.2
+
+> 1.2 % 1.5 ~= 1.2
+> (-1.2) % 1.5 ~= 0.3
+> 1.2 % (-1.5) ~= -0.3
+> (-1.2) % (-1.5) ~= -1.2
+-}
 sc3_mod :: RealFrac n => n -> n -> n
 sc3_mod = F.mod'
 
@@ -131,8 +132,8 @@ uop_hs_tbl =
     [(Neg,negate)
     ,(Not,\z -> if z > 0 then 0 else 1)
     ,(Abs,abs)
-    ,(Ceil,sc3_ceiling)
-    ,(Floor,sc3_floor)
+    ,(Ceil,sc_ceiling)
+    ,(Floor,sc_floor)
     ,(Squared,\z -> z * z)
     ,(Cubed,\z -> z * z * z)
     ,(Sqrt,sqrt)
@@ -197,30 +198,18 @@ sc3_properFraction a =
     let (p,q) = properFraction a
     in (fromInteger p,q)
 
-sc3_truncate :: (RealFrac a, Num a) => a -> a
-sc3_truncate = fromInteger . truncate
-
-sc3_round :: (RealFrac a, Num a) => a -> a
-sc3_round = fromInteger . round
-
-sc3_ceiling :: (RealFrac a, Num a) => a -> a
-sc3_ceiling = fromInteger . ceiling
-
-sc3_floor :: (RealFrac a, Num a) => a -> a
-sc3_floor = fromInteger . floor
-
 -- | Variant of 'RealFrac' with non 'Integral' results.
 class RealFrac a => RealFracE a where
   properFractionE :: a -> (a,a)
   properFractionE = sc3_properFraction
   truncateE :: a -> a
-  truncateE = sc3_truncate
+  truncateE = sc_truncate
   roundE :: a -> a
-  roundE = sc3_round
+  roundE = sc_round
   ceilingE :: a -> a
-  ceilingE = sc3_ceiling
+  ceilingE = sc_ceiling
   floorE :: a -> a
-  floorE = sc3_floor
+  floorE = sc_floor
 
 instance RealFracE Float
 instance RealFracE Double
@@ -438,35 +427,6 @@ instance MulAdd UGen where mul_add = mulAdd
 instance MulAdd Float where
 instance MulAdd Double where
 
--- | Wrap /k/ to within range /(i,j)/, ie. @AbstractFunction.wrap@.
---
--- > > [5,6].wrap(0,5) == [5,0]
--- > map (wrap' 0 5) [5,6] == [5,0]
---
--- > > [9,10,5,6,7,8,9,10,5,6].wrap(5,10) == [9,10,5,6,7,8,9,10,5,6]
--- > map (wrap' 5 10) [3..12] == [9,10,5,6,7,8,9,10,5,6]
-wrap' :: RealFracE n => n -> n -> n -> n
-wrap' i j k =
-    let r = j - i + 1
-    in if k >= i && k <= j
-       then k
-       else k - r * floorE ((k-i) / r)
-
--- | Generic variant of 'wrap''.
---
--- > > [5,6].wrap(0,5) == [5,0]
--- > map (genericWrap 0 5) [5,6] == [5,0]
---
--- > > [9,10,5,6,7,8,9,10,5,6].wrap(5,10) == [9,10,5,6,7,8,9,10,5,6]
--- > map (genericWrap (5::Integer) 10) [3..12] == [9,10,5,6,7,8,9,10,5,6]
-genericWrap :: (Ord a, Num a) => a -> a -> a -> a
-genericWrap l r n =
-    let d = r - l + 1
-        f = genericWrap l r
-    in if n < l
-       then f (n + d)
-       else if n > r then f (n - d) else n
-
 -- | Variant of 'wrap'' with @SC3@ argument ordering.
 --
 -- > map (\n -> wrap_ n 5 10) [3..12] == map (wrap' 5 10) [3..12]
@@ -488,12 +448,6 @@ foldToRange i j =
 -- | Variant of 'foldToRange' with @SC3@ argument ordering.
 fold_ :: (Ord a,Num a) => a -> a -> a -> a
 fold_ n i j = foldToRange i j n
-
--- | Clip /k/ to within range /(i,j)/,
---
--- > map (clip' 5 10) [3..12] == [5,5,5,6,7,8,9,10,10,10]
-clip' :: (Ord a) => a -> a -> a -> a
-clip' i j n = if n < i then i else if n > j then j else n
 
 -- | Variant of 'clip'' with @SC3@ argument ordering.
 clip_ :: (Ord a) => a -> a -> a -> a

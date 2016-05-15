@@ -8,6 +8,79 @@ half_pi = pi / 2
 two_pi :: Floating n => n
 two_pi = 2 * pi
 
+sc_truncate :: (RealFrac a, Num a) => a -> a
+sc_truncate = fromInteger . truncate
+
+sc_round :: (RealFrac a, Num a) => a -> a
+sc_round = fromInteger . round
+
+sc_ceiling :: (RealFrac a, Num a) => a -> a
+sc_ceiling = fromInteger . ceiling
+
+sc_floor :: (RealFrac a, Num a) => a -> a
+sc_floor = fromInteger . floor
+
+-- | Clip /n/ to within range /(i,j)/.  'clip' is a 'UGen', hence prime.
+--
+-- > map (clip 5 10) [3..12] == [5,5,5,6,7,8,9,10,10,10]
+clip' :: (Ord a) => a -> a -> a -> a
+clip' i j n = if n < i then i else if n > j then j else n
+
+-- | Fractional modulo.
+--
+-- > map (\n -> sc_mod n 12.0) [-1.0,12.25,15.0] == [11.0,0.25,3.0]
+sc_mod :: RealFrac a => a -> a -> a
+sc_mod n hi =
+    let lo = 0.0
+    in if n >= lo && n < hi
+       then n
+       else if hi == lo
+            then lo
+            else n - hi * sc_floor (n / hi)
+
+{- | Wrap function that is /non-inclusive/ at right edge.
+
+> map (sc_wrap 0 5) [4,5,6] == [4.0,0.0,1.0]
+> map (sc_wrap 5 10) [3..12] == [8.0,9.0,5.0,6.0,7.0,8.0,9.0,5.0,6.0,7.0]
+-}
+sc_wrap :: RealFrac a => a -> a -> a -> a
+sc_wrap lo hi n = sc_mod (n - lo) (hi - lo) + lo
+
+wrap_rh :: RealFrac n => (n -> n -> Bool) -> n -> n -> n -> n
+wrap_rh f i j n =
+    let r = j - i + 1
+    in if n >= i && n `f` j
+       then n
+       else n - r * sc_floor ((n - i) / r)
+
+{- | Wrap /n/ to within range /(i,j)/, ie. @AbstractFunction.wrap@,
+ie. /inclusive/ at right edge.  'wrap' is a 'UGen', hence prime.
+
+> > [5,6].wrap(0,5) == [5,0]
+> map (wrap' 0 5) [5,6] == [5,0]
+
+> > [9,10,5,6,7,8,9,10,5,6].wrap(5,10) == [9,10,5,6,7,8,9,10,5,6]
+> map (wrap' 5 10) [3..12] == [9,10,5,6,7,8,9,10,5,6]
+-}
+wrap' :: RealFrac n => n -> n -> n -> n
+wrap' = wrap_rh (<=)
+
+{- | Generic variant of 'wrap''.
+
+> > [5,6].wrap(0,5) == [5,0]
+> map (generic_wrap 0 5) [5,6] == [5,0]
+
+> > [9,10,5,6,7,8,9,10,5,6].wrap(5,10) == [9,10,5,6,7,8,9,10,5,6]
+> map (generic_wrap (5::Integer) 10) [3..12] == [9,10,5,6,7,8,9,10,5,6]
+-}
+generic_wrap :: (Ord a, Num a) => a -> a -> a -> a
+generic_wrap l r n =
+    let d = r - l + 1
+        f = generic_wrap l r
+    in if n < l
+       then f (n + d)
+       else if n > r then f (n - d) else n
+
 -- > bin_to_freq 44100 2048 32 == 689.0625
 bin_to_freq :: (Fractional n, Integral i) => n -> i -> i -> n
 bin_to_freq sr n i = fromIntegral i * sr / fromIntegral n
