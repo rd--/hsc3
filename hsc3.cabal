@@ -68,6 +68,7 @@ Library
                    Sound.SC3.Common.Buffer.Gen
                    Sound.SC3.Common.Buffer.Vector
                    Sound.SC3.Common.Math
+                   Sound.SC3.Common.Math.Interpolate
                    Sound.SC3.Common.Math.Window
                    Sound.SC3.Common.Monad.Syntax
                    Sound.SC3.Common.Prelude
@@ -122,7 +123,6 @@ Library
                    Sound.SC3.UGen.Enum
                    Sound.SC3.UGen.Envelope
                    Sound.SC3.UGen.Envelope.Construct
-                   Sound.SC3.UGen.Envelope.Interpolate
                    Sound.SC3.UGen.Graph
                    Sound.SC3.UGen.Graph.Reconstruct
                    Sound.SC3.UGen.Graph.Transform

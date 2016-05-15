@@ -2,7 +2,7 @@
 module Sound.SC3.UGen.Enum where
 
 import Sound.SC3.Common.Prelude
-import qualified Sound.SC3.UGen.Envelope.Interpolate as I
+import qualified Sound.SC3.Common.Math.Interpolate as I
 import Sound.SC3.UGen.Type
 
 -- | Loop indicator input.
@@ -120,8 +120,7 @@ env_curve_value e =
       _ -> 0
 
 -- | 'Interpolation_F' of 'Envelope_Curve'.
-env_curve_interpolation_f :: (Ord t, Floating t) =>
-                             Envelope_Curve t -> I.Interpolation_F t
+env_curve_interpolation_f :: (Ord t, Floating t) => Envelope_Curve t -> I.Interpolation_F t
 env_curve_interpolation_f c =
     case c of
       EnvStep -> I.step

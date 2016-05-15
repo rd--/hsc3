@@ -1,5 +1,7 @@
 -- | Interpolation functions for envelope segments.
-module Sound.SC3.UGen.Envelope.Interpolate where
+module Sound.SC3.Common.Math.Interpolate where
+
+import Sound.SC3.Common.Math
 
 -- | An interpolation function takes three arguments. /x0/ is the left
 -- or begin value, /x1/ is the right or end value, and /t/ is a (0,1)
@@ -46,9 +48,6 @@ sine :: Floating t => Interpolation_F t
 sine x0 x1 t =
     let t' = - cos (pi * t) * 0.5 + 0.5
     in linear x0 x1 t'
-
-half_pi :: Floating a => a
-half_pi = pi / 2
 
 -- | If /x0/ '<' /x1/ rising sine segment (0,pi/2), else falling
 -- segment (pi/2,pi).

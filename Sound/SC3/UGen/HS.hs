@@ -270,12 +270,9 @@ plotTable1 (rfft_pure (l_bw_hpf (44100,9000) n))
 plotTable1 (rfft_pure (l_resonz_ir (sr_to_rps 44100,440,0.1) n))
 plotTable1 (rfft_pure (l_rlpf_ir (sr_to_rps 44100,1200,0.1) n))
 
-import Sound.SC3.Common.Math {- hsc3 -}
-let plot_fft_mnn sr r = plot_p2_ln [zip (map (max 0 . cps_to_midi . bin_to_freq sr 2048) [0..]) r]
-
-plot_fft_mnn 44100 (rfft_pure (l_bw_lpf (44100,midi_to_cps 60) n))
-plot_fft_mnn 44100 (rfft_pure (l_resonz_ir (sr_to_rps 44100,midi_to_cps 69,0.1) n))
-plot_fft_mnn 44100 (rfft_pure (l_rlpf_ir (sr_to_rps 44100,midi_to_cps 86,0.1) n))
+plot_fft1_mnn 44100 (rfft_pure (l_bw_lpf (44100,midi_to_cps 60) n))
+plot_fft1_mnn 44100 (rfft_pure (l_resonz_ir (sr_to_rps 44100,midi_to_cps 69,0.1) n))
+plot_fft1_mnn 44100 (rfft_pure (l_rlpf_ir (sr_to_rps 44100,midi_to_cps 86,0.1) n))
 
 plotTable1 (l_mavg9 (rfft_pure n))
 plotTable1 (l_mavg9 (rfft_pure (l_lpz2 n)))

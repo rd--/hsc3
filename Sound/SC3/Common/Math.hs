@@ -2,6 +2,9 @@ module Sound.SC3.Common.Math where
 
 import Data.Maybe {- base -}
 
+half_pi :: Floating a => a
+half_pi = pi / 2
+
 two_pi :: Floating n => n
 two_pi = 2 * pi
 
