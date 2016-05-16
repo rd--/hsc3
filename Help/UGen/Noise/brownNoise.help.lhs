@@ -12,7 +12,10 @@
 Drawing
 
     import Sound.SC3.Plot {- hsc3-plot -}
-    plot_ugen1 0.1 (brownNoise 'α' AR)
+    plot_ugen1 0.1 (brownNoise 'γ' AR)
+
+    import Sound.SC3.Plot.FFT {- hsc3-plot -}
+    plot_ugen_fft1 0.1 (brownNoise 'γ' AR)
 
 ![](sw/hsc3/Help/SVG/brownNoise.0.svg)
-
+![](sw/hsc3/Help/SVG/brownNoise.1.svg)

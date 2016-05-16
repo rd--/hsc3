@@ -20,10 +20,13 @@ Self-modulation at control rate.
 >         nh = blip KR 0.15 2 * 20 + 21
 >     in blip AR fr nh * 0.2
 
-Plot
+Drawings
 
     import Sound.SC3.Plot {- hsc3-plot -}
     plot_ugen1 0.1 (blip AR 1000 20)
 
     import Sound.SC3.Plot.FFT {- hsc3-plot -}
     plot_ugen_fft1 0.1 (blip AR 1000 20)
+
+![](sw/hsc3/Help/SVG/blip.0.svg)
+![](sw/hsc3/Help/SVG/blip.1.svg)

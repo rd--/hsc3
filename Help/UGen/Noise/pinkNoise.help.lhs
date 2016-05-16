@@ -16,3 +16,14 @@ speaker balance
 >         x' = 1 - x
 >         n = pinkNoise 'α' AR * 0.05
 >     in mce2 (n * x') (n * x)
+
+Drawing
+
+    import Sound.SC3.Plot {- hsc3-plot -}
+    plot_ugen1 0.1 (pinkNoise 'α' AR)
+
+    import Sound.SC3.Plot.FFT {- hsc3-plot -}
+    plot_ugen_fft1 0.1 (pinkNoise 'α' AR)
+
+![](sw/hsc3/Help/SVG/pinkNoise.0.svg)
+![](sw/hsc3/Help/SVG/pinkNoise.1.svg)

@@ -43,6 +43,13 @@ Drawing
     plot_ugen1 0.01 (whiteNoise 'γ' AR)
     plot_ugen1 0.05 (lpf (whiteNoise 'γ' AR) 500)
 
+    import Sound.SC3.Plot.FFT {- hsc3-plot -}
+    plot_ugen_fft1 0.1 (whiteNoise 'α' AR)
+
+![](sw/hsc3/Help/SVG/whiteNoise.0.svg)
+![](sw/hsc3/Help/SVG/whiteNoise.1.svg)
+![](sw/hsc3/Help/SVG/whiteNoise.2.svg)
+
 Speaker balance
 
 > g_05 = let n = whiteNoise 'α' AR * 0.05 in mce2 n n
