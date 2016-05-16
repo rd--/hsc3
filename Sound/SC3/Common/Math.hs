@@ -5,8 +5,18 @@ import Data.Maybe {- base -}
 half_pi :: Floating a => a
 half_pi = pi / 2
 
+-- | Two pi.
+--
+-- > two_pi == 6.283185307179586
 two_pi :: Floating n => n
 two_pi = 2 * pi
+
+-- | Multiply and add, ordinary haskell argument order ('mul_add' is a
+-- method of the 'MulAdd' class).
+--
+-- > map (mul_add_hs 2 3) [1,2] == [5,7] && map (mul_add_hs 3 4) [1,2] == [7,10]
+mul_add_hs :: Num a => a -> a -> a -> a
+mul_add_hs m a = (+ a) . (* m)
 
 sc_truncate :: (RealFrac a, Num a) => a -> a
 sc_truncate = fromInteger . truncate
@@ -85,6 +95,9 @@ generic_wrap l r n =
 bin_to_freq :: (Fractional n, Integral i) => n -> i -> i -> n
 bin_to_freq sr n i = fromIntegral i * sr / fromIntegral n
 
+-- | Midi note number to cycles per second.
+--
+-- > midi_to_cps 69 == 440
 midi_to_cps :: Floating a => a -> a
 midi_to_cps i = 440.0 * (2.0 ** ((i - 69.0) * (1.0 / 12.0)))
 
@@ -143,6 +156,8 @@ linlin_muladd sl sr dl dr =
     in (m,a)
 
 -- | Map from one linear range to another linear range.
+--
+-- > map (\i -> linlin i (-1) 1 0 1) [-1,-0.9 .. 1.0]
 linlin :: Fractional a => a -> a -> a -> a -> a -> a
 linlin i sl sr dl dr = let (m,a) = linlin_muladd sl sr dl dr in i * m + a
 
@@ -189,3 +204,34 @@ linlin_eq (l,r) (l',r') n =
 -- | Erroring variant.
 linlin_eq_err :: (Eq a,Num a) => (a,a) -> (a,a) -> a -> a
 linlin_eq_err src dst = fromMaybe (error "linlin_eq") . linlin_eq src dst
+
+-- | Exponential range conversion.
+--
+-- > map (\i -> lin_exp i 1 2 1 3) [1,1.1 .. 2]
+lin_exp :: Floating a => a -> a -> a -> a -> a -> a
+lin_exp i in_l in_r out_l out_r =
+    let rt = out_r / out_l
+        rn = 1.0 / (in_r - in_l)
+        rr = rn * negate in_l
+    in out_l * (rt ** (i * rn + rr))
+
+-- | /sr/ = sample rate, /r/ = cycle (two-pi), /hz/ = frequency
+--
+-- > hz_to_incr 48000 128 375 == 1
+-- > hz_to_incr 48000 two_pi 458.3662361046586 == 6e-2
+hz_to_incr :: Fractional a => a -> a -> a -> a
+hz_to_incr sr r hz = (r / sr) * hz
+
+-- | Inverse of 'hz_to_incr'.
+--
+-- > incr_to_hz 48000 128 1 == 375
+incr_to_hz :: Fractional a => a -> a -> a -> a
+incr_to_hz sr r ic = ic / (r / sr)
+
+-- | Linear pan.
+--
+-- > map (lin_pan2 1) [-1,0,1] == [(1,0),(0.5,0.5),(0,1)]
+lin_pan2 :: Fractional t => t -> t -> (t, t)
+lin_pan2 p q =
+    let q' = (q / 2) + 0.5
+    in (p * (1 - q'),p * q')

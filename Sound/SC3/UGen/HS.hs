@@ -184,6 +184,19 @@ brown_noise (g,y1) =
         r = brown_noise_f (n / 8.0) y1
     in (r,(g',r))
 
+decay_f :: Floating a => a -> a -> a -> a -> a
+decay_f sr dt x y1 =
+    let b1 = exp (log 0.001 / (dt * sr))
+    in x + b1 * y1
+
+lag_f :: Floating a => a -> a -> a -> a -> a
+lag_f sr t x y1 =
+    let b1 = exp (log (0.001 / (t * sr)))
+    in x + b1 * (y1 - x)
+
+lag :: Floating t => t -> F_ST1 t (t,t) t
+lag sr ((i,t),st) = let r = lag_f sr t i st in (r,r)
+
 latch :: F_ST1 t (t,Bool) t
 latch ((n,b),y1) = let r = if b then n else y1 in (r,r)
 
@@ -211,6 +224,9 @@ l_apply_f_st1 f st xs =
     case xs of
       [] -> []
       x:xs' -> let (r,st') = f (x,st) in r : l_apply_f_st1 f st' xs'
+
+l_lag :: Floating t => t -> [t] -> [t] -> [t]
+l_lag sr i t = l_apply_f_st1 (lag sr) 0 (zip i t)
 
 -- > let rp = repeat
 -- > take 10 (l_phasor (rp False) (rp 1) (rp 0) (rp 4) (rp 0)) == [0,1,2,3,0,1,2,3,0,1]

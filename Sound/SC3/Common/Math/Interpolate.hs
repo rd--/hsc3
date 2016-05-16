@@ -1,4 +1,4 @@
--- | Interpolation functions for envelope segments.
+-- | Interpolation functions, ie. for envelope segments.
 module Sound.SC3.Common.Math.Interpolate where
 
 import Sound.SC3.Common.Math
@@ -13,13 +13,15 @@ step :: Interpolation_F t
 step _ x1 _ = x1
 
 -- | Linear interpolation.
+--
+-- > import Sound.SC3.Plot {- hsc3-plot -}
+-- > plotTable1 (map (linear (-1) 1) [0,0.01 .. 1])
 linear :: Num t => Interpolation_F t
 linear x0 x1 t = t * (x1 - x0) + x0
 
 -- | Exponential interpolation, /x0/ must not be @0@, (/x0/,/x1/) must
 -- not span @0@.
 --
--- > import Sound.SC3.Plot {- hsc3-plot -}
 -- > plotTable1 (map (exponential 0.001 1) [0,0.01 .. 1])
 exponential :: Floating t => Interpolation_F t
 exponential x0 x1 t = x0 * ((x1 / x0) ** t)
@@ -94,5 +96,7 @@ cubed x0 x1 t =
     in l * l * l
 
 -- | x0 until end, then immediately x1.
-hold :: (Num t,Eq t) => Interpolation_F t
-hold x0 x1 t = if t == 1 then x1 else x0
+--
+-- > plotTable1 (map (hold 0 1) [0,0.01 .. 1])
+hold :: (Num t,Eq t,Ord t) => Interpolation_F t
+hold x0 x1 t = if t >= 1 then x1 else x0
