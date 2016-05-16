@@ -235,6 +235,17 @@ l_phasor trig rate start end resetPos =
     let i = zip5 trig rate start end resetPos
     in l_apply_f_st1 phasor (head start) i
 
+l_phasor_osc :: RealFrac n => n -> n -> [n] -> [n]
+l_phasor_osc sr k f =
+    let rp = repeat
+    in l_phasor (rp False) (map (cps_to_incr sr k) f) (rp 0) (rp k) (rp 0)
+
+l_sin_osc :: (Floating n, RealFrac n) => n -> [n] -> [n]
+l_sin_osc sr f = map sin (l_phasor_osc sr two_pi f)
+
+l_cos_osc :: (Floating n, RealFrac n) => n -> [n] -> [n]
+l_cos_osc sr f = map cos (l_phasor_osc sr two_pi f)
+
 l_hpz1 :: Fractional n => [n] -> [n]
 l_hpz1 = l_apply_f_st1 hpz1 0
 
@@ -310,4 +321,6 @@ plotTable1 (l_mavg9 (rfft_pure (l_hpz2 n)))
 plotTable1 (l_mavg9 (rfft_pure (l_bpz2 n)))
 plotTable1 (l_mavg9 (l_mavg9 (l_mavg9 (l_mavg9 (rfft_pure (l_brz2 n))))))
 
+plotTable1 (take 512 (l_sin_osc 48000 (repeat 440)))
+plotTable1 (take 512 (l_cos_osc 48000 (repeat 440)))
 -}
