@@ -2,6 +2,9 @@ module Sound.SC3.Common.Math where
 
 import Data.Maybe {- base -}
 
+-- | Half pi.
+--
+-- > half_pi == 1.5707963267948966
 half_pi :: Floating a => a
 half_pi = pi / 2
 
@@ -11,8 +14,8 @@ half_pi = pi / 2
 two_pi :: Floating n => n
 two_pi = 2 * pi
 
--- | Multiply and add, ordinary haskell argument order ('mul_add' is a
--- method of the 'MulAdd' class).
+-- | Multiply and add, ordinary haskell argument order.
+-- 'mul_add' is a method of the 'MulAdd' class.
 --
 -- > map (mul_add_hs 2 3) [1,2] == [5,7] && map (mul_add_hs 3 4) [1,2] == [7,10]
 mul_add_hs :: Num a => a -> a -> a -> a
@@ -215,18 +218,18 @@ lin_exp i in_l in_r out_l out_r =
         rr = rn * negate in_l
     in out_l * (rt ** (i * rn + rr))
 
--- | /sr/ = sample rate, /r/ = cycle (two-pi), /hz/ = frequency
+-- | /sr/ = sample rate, /r/ = cycle (two-pi), /cps/ = frequency
 --
--- > hz_to_incr 48000 128 375 == 1
--- > hz_to_incr 48000 two_pi 458.3662361046586 == 6e-2
-hz_to_incr :: Fractional a => a -> a -> a -> a
-hz_to_incr sr r hz = (r / sr) * hz
+-- > cps_to_incr 48000 128 375 == 1
+-- > cps_to_incr 48000 two_pi 458.3662361046586 == 6e-2
+cps_to_incr :: Fractional a => a -> a -> a -> a
+cps_to_incr sr r cps = (r / sr) * cps
 
--- | Inverse of 'hz_to_incr'.
+-- | Inverse of 'cps_to_incr'.
 --
--- > incr_to_hz 48000 128 1 == 375
-incr_to_hz :: Fractional a => a -> a -> a -> a
-incr_to_hz sr r ic = ic / (r / sr)
+-- > incr_to_cps 48000 128 1 == 375
+incr_to_cps :: Fractional a => a -> a -> a -> a
+incr_to_cps sr r ic = ic / (r / sr)
 
 -- | Linear pan.
 --
