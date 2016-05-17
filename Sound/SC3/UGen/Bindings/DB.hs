@@ -149,7 +149,7 @@ ball rate in_ g damp friction = mkUGen Nothing [KR,AR] (Left rate) "Ball" [in_,g
 --
 --  BeatTrack [KR] chain=0.0 lock=0.0
 beatTrack :: Rate -> UGen -> UGen -> UGen
-beatTrack rate chain lock = mkUGen Nothing [KR] (Left rate) "BeatTrack" [chain,lock] Nothing 1 (Special 0) NoId
+beatTrack rate chain lock = mkUGen Nothing [KR] (Left rate) "BeatTrack" [chain,lock] Nothing 4 (Special 0) NoId
 
 -- | Template matching beat tracker
 --

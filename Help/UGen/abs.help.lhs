@@ -1,6 +1,6 @@
-> Sound.SC3.UGen.Help.viewSC3Help "Operator.abs"
-> :t abs
+    Sound.SC3.UGen.Help.viewSC3Help "Operator.abs"
+    :t abs
 
-> import Sound.SC3
+> import Sound.SC3 {- hsc3 -}
 
-> audition (out 0 (abs (syncSaw AR 100 440 * 0.1)))
+> g_01 = abs (syncSaw AR 100 440 * 0.1)
