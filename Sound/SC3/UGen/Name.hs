@@ -22,12 +22,11 @@ toSC3Name nm =
       "in'" -> "In"
       "bpz2" -> "BPZ2"
       "brz2" -> "BRZ2"
-      "hpz1" -> "HPZ1"
       "ifft" -> "IFFT"
-      "lpz1" -> "LPZ1"
       "out" -> "Out"
       "rhpf" -> "RHPF"
       "rlpf" -> "RLPF"
+      'h':'p':'z':nm' -> "HPZ" ++ nm'
       'l':'f':'d':nm' -> "LFD" ++ nm'
       'l':'p':'z':nm' -> "LPZ" ++ nm'
       'l':'f':nm' -> "LF" ++ nm'
@@ -51,13 +50,12 @@ fromSC3Name nm =
       "In" -> "in'"
       "BPZ2" -> "bpz2"
       "BRZ2" -> "brz2"
-      "HPZ1" -> "hpz1"
       "IFFT" -> "ifft"
-      "LPZ1" -> "lpz1"
       "RHPF" -> "rhpf"
       "RLPF" -> "rlpf"
+      'H':'P':'Z':nm' -> "hpz" ++ nm'
       'L':'F':'D':nm' -> "lfd" ++ nm'
-      'l':'p':'z':nm' -> "lpz" ++ nm'
+      'L':'P':'Z':nm' -> "lpz" ++ nm'
       'L':'F':nm' -> "lf" ++ nm'
       'P':'V':'_':nm' -> "pv_" ++ nm'
       p:q -> if all isUpper nm && length nm <= 3
