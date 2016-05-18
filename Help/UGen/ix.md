@@ -1,10 +1,7 @@
 ## Algebraic
 
-[basicOpUGen](?t=hsc3&e=Help/UGen/basicOpUGen.help.lhs),
-[binaryOpUGen](?t=hsc3&e=Help/UGen/binaryOpUGen.help.lhs),
 [sum3](?t=hsc3&e=Help/UGen/sum3.help.lhs),
-[sum4](?t=hsc3&e=Help/UGen/sum4.help.lhs),
-[unaryOpUGen](?t=hsc3&e=Help/UGen/unaryOpUGen.help.lhs)
+[sum4](?t=hsc3&e=Help/UGen/sum4.help.lhs)
 
 
 ## Analysis
@@ -34,14 +31,6 @@
 [keyTrack](?t=hsc3&e=Help/UGen/keyTrack.help.lhs),
 [pitch](?t=hsc3&e=Help/UGen/pitch.help.lhs),
 [zeroCrossing](?t=hsc3&e=Help/UGen/zeroCrossing.help.lhs)
-
-
-## Base
-
-[bufInfoUGenBase](?t=hsc3&e=Help/UGen/bufInfoUGenBase.help.lhs),
-[infoUGenBase](?t=hsc3&e=Help/UGen/infoUGenBase.help.lhs),
-[multiOutUGen](?t=hsc3&e=Help/UGen/multiOutUGen.help.lhs),
-[outputProxy](?t=hsc3&e=Help/UGen/outputProxy.help.lhs)
 
 
 ## Buffer

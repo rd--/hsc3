@@ -1276,8 +1276,8 @@ lorenzL rate freq s r b h xi yi zi = mkUGen Nothing [AR] (Left rate) "LorenzL" [
 -- | Extraction of instantaneous loudness in sones
 --
 --  Loudness [KR] chain=0.0 smask=0.25 tmask=1.0
-loudness :: Rate -> UGen -> UGen -> UGen -> UGen
-loudness rate chain smask tmask = mkUGen Nothing [KR] (Left rate) "Loudness" [chain,smask,tmask] Nothing 1 (Special 0) NoId
+loudness :: UGen -> UGen -> UGen -> UGen
+loudness chain smask tmask = mkUGen Nothing [KR] (Left KR) "Loudness" [chain,smask,tmask] Nothing 1 (Special 0) NoId
 
 -- | Mel frequency cepstral coefficients
 --
