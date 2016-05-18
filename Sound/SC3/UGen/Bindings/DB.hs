@@ -2170,8 +2170,8 @@ vOsc3 rate bufpos freq1 freq2 freq3 = mkUGen Nothing [KR,AR] (Left rate) "VOsc3"
 -- | Variable shaped lag
 --
 --  VarLag [KR,AR] in=0.0 time=0.1 curvature=0.0 warp=5.0 start=0.0
-varLag :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-varLag rate in_ time curvature warp start = mkUGen Nothing [KR,AR] (Left rate) "VarLag" [in_,time,curvature,warp,start] Nothing 0 (Special 0) NoId
+varLag :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+varLag in_ time curvature warp start = mkUGen Nothing [KR,AR] (Right [0]) "VarLag" [in_,time,curvature,warp,start] Nothing 0 (Special 0) NoId
 
 -- | Variable duty saw
 --
