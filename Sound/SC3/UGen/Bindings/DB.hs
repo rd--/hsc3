@@ -190,20 +190,20 @@ brownNoise z rate = mkUGen Nothing [KR,AR] (Left rate) "BrownNoise" [] Nothing 1
 -- | Buffer based all pass delay line with cubic interpolation.
 --
 --  BufAllpassC [AR] buf=0.0 in=0.0 delaytime=0.2 decaytime=1.0
-bufAllpassC :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-bufAllpassC rate buf in_ delaytime decaytime = mkUGen Nothing [AR] (Left rate) "BufAllpassC" [buf,in_,delaytime,decaytime] Nothing 1 (Special 0) NoId
+bufAllpassC :: UGen -> UGen -> UGen -> UGen -> UGen
+bufAllpassC buf in_ delaytime decaytime = mkUGen Nothing [AR] (Right [1]) "BufAllpassC" [buf,in_,delaytime,decaytime] Nothing 1 (Special 0) NoId
 
 -- | Buffer based all pass delay line with linear interpolation.
 --
 --  BufAllpassL [AR] buf=0.0 in=0.0 delaytime=0.2 decaytime=1.0
-bufAllpassL :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-bufAllpassL rate buf in_ delaytime decaytime = mkUGen Nothing [AR] (Left rate) "BufAllpassL" [buf,in_,delaytime,decaytime] Nothing 1 (Special 0) NoId
+bufAllpassL :: UGen -> UGen -> UGen -> UGen -> UGen
+bufAllpassL buf in_ delaytime decaytime = mkUGen Nothing [AR] (Right [1]) "BufAllpassL" [buf,in_,delaytime,decaytime] Nothing 1 (Special 0) NoId
 
 -- | Buffer based all pass delay line with no interpolation.
 --
 --  BufAllpassN [AR] buf=0.0 in=0.0 delaytime=0.2 decaytime=1.0
-bufAllpassN :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-bufAllpassN rate buf in_ delaytime decaytime = mkUGen Nothing [AR] (Left rate) "BufAllpassN" [buf,in_,delaytime,decaytime] Nothing 1 (Special 0) NoId
+bufAllpassN :: UGen -> UGen -> UGen -> UGen -> UGen
+bufAllpassN buf in_ delaytime decaytime = mkUGen Nothing [AR] (Right [1]) "BufAllpassN" [buf,in_,delaytime,decaytime] Nothing 1 (Special 0) NoId
 
 -- | Current number of channels of soundfile in buffer.
 --
@@ -232,20 +232,20 @@ bufCombN buf in_ delaytime decaytime = mkUGen Nothing [AR] (Right [1]) "BufCombN
 -- | Buffer based simple delay line with cubic interpolation.
 --
 --  BufDelayC [KR,AR] buf=0.0 in=0.0 delaytime=0.2
-bufDelayC :: Rate -> UGen -> UGen -> UGen -> UGen
-bufDelayC rate buf in_ delaytime = mkUGen Nothing [KR,AR] (Left rate) "BufDelayC" [buf,in_,delaytime] Nothing 1 (Special 0) NoId
+bufDelayC :: UGen -> UGen -> UGen -> UGen
+bufDelayC buf in_ delaytime = mkUGen Nothing [KR,AR] (Right [1]) "BufDelayC" [buf,in_,delaytime] Nothing 1 (Special 0) NoId
 
 -- | Buffer based simple delay line with linear interpolation.
 --
 --  BufDelayL [KR,AR] buf=0.0 in=0.0 delaytime=0.2
-bufDelayL :: Rate -> UGen -> UGen -> UGen -> UGen
-bufDelayL rate buf in_ delaytime = mkUGen Nothing [KR,AR] (Left rate) "BufDelayL" [buf,in_,delaytime] Nothing 1 (Special 0) NoId
+bufDelayL :: UGen -> UGen -> UGen -> UGen
+bufDelayL buf in_ delaytime = mkUGen Nothing [KR,AR] (Right [1]) "BufDelayL" [buf,in_,delaytime] Nothing 1 (Special 0) NoId
 
 -- | Buffer based simple delay line with no interpolation.
 --
 --  BufDelayN [KR,AR] buf=0.0 in=0.0 delaytime=0.2
-bufDelayN :: Rate -> UGen -> UGen -> UGen -> UGen
-bufDelayN rate buf in_ delaytime = mkUGen Nothing [KR,AR] (Left rate) "BufDelayN" [buf,in_,delaytime] Nothing 1 (Special 0) NoId
+bufDelayN :: UGen -> UGen -> UGen -> UGen
+bufDelayN buf in_ delaytime = mkUGen Nothing [KR,AR] (Right [1]) "BufDelayN" [buf,in_,delaytime] Nothing 1 (Special 0) NoId
 
 -- | Current duration of soundfile in buffer.
 --
@@ -934,8 +934,8 @@ inRect rate x y rect = mkUGen Nothing [KR,AR] (Left rate) "InRect" [x,y,rect] No
 -- | Generate a trigger anytime a bus is set.
 --
 --  InTrig [KR] bus=0.0;    NC INPUT: True
-inTrig :: Int -> Rate -> UGen -> UGen
-inTrig numChannels rate bus = mkUGen Nothing [KR] (Left rate) "InTrig" [bus] Nothing numChannels (Special 0) NoId
+inTrig :: Int -> UGen -> UGen
+inTrig numChannels bus = mkUGen Nothing [KR] (Left KR) "InTrig" [bus] Nothing numChannels (Special 0) NoId
 
 -- | Index into a table with a signal
 --

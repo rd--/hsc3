@@ -1,8 +1,8 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Integrator"
-    Sound.SC3.UGen.DB.ugenSummary "Integrator"
+    > Sound.SC3.UGen.Help.viewSC3Help "Integrator"
+    > Sound.SC3.UGen.DB.ugenSummary "Integrator"
 
 > import Sound.SC3 {- hsc3 -}
-
+>
 > g_01 =
 >     let x = mouseX KR 0.001 0.999 Exponential 0.2
 >         o = lfPulse AR 300 0.2 0.1 * 0.1

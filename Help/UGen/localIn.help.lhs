@@ -1,14 +1,14 @@
-    Sound.SC3.UGen.Help.viewSC3Help "LocalIn"
-    Sound.SC3.UGen.DB.ugenSummary "LocalIn"
+    > Sound.SC3.UGen.Help.viewSC3Help "LocalIn"
+    > Sound.SC3.UGen.DB.ugenSummary "LocalIn"
 
-> import Sound.SC3
-
+> import Sound.SC3 {- hsc3 -}
+>
 > noise_signal =
 >     let e = decay (impulse AR 0.3 0) 0.1
 >     in whiteNoise 'α' AR * e * 0.2
 >
 > outside_world = soundIn 4
-
+>
 > ping_pong z =
 >     let a1 = localIn 2 AR 0 + mce [z,0]
 >         a2 = delayN a1 0.2 0.2
@@ -17,7 +17,7 @@
 >
 > g_01 = ping_pong noise_signal
 > g_02 = ping_pong outside_world
-
+>
 > rotate2_mce z p =
 >     case mceChannels z of
 >       [l,r] -> rotate2 l r p

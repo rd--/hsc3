@@ -229,7 +229,6 @@
 
 ## Filters
 
-[filter](?t=hsc3&e=Help/UGen/filter.help.lhs),
 [lag2UD](?t=hsc3&e=Help/UGen/lag2UD.help.lhs),
 [lag3UD](?t=hsc3&e=Help/UGen/lag3UD.help.lhs),
 [lagUD](?t=hsc3&e=Help/UGen/lagUD.help.lhs),
@@ -421,11 +420,9 @@
 
 ## InOut
 
-[abstractIn](?t=hsc3&e=Help/UGen/abstractIn.help.lhs),
-[abstractOut](?t=hsc3&e=Help/UGen/abstractOut.help.lhs),
 [diskIn](?t=hsc3&e=Help/UGen/diskIn.help.lhs),
 [diskOut](?t=hsc3&e=Help/UGen/diskOut.help.lhs),
-[in'](?t=hsc3&e=Help/UGen/in'.help.lhs),
+[in](?t=hsc3&e=Help/UGen/in.help.lhs),
 [inFeedback](?t=hsc3&e=Help/UGen/inFeedback.help.lhs),
 [inTrig](?t=hsc3&e=Help/UGen/inTrig.help.lhs),
 [lagIn](?t=hsc3&e=Help/UGen/lagIn.help.lhs),
@@ -435,8 +432,6 @@
 [offsetOut](?t=hsc3&e=Help/UGen/offsetOut.help.lhs),
 [out](?t=hsc3&e=Help/UGen/out.help.lhs),
 [replaceOut](?t=hsc3&e=Help/UGen/replaceOut.help.lhs),
-[sharedIn](?t=hsc3&e=Help/UGen/sharedIn.help.lhs),
-[sharedOut](?t=hsc3&e=Help/UGen/sharedOut.help.lhs),
 [vDiskIn](?t=hsc3&e=Help/UGen/vDiskIn.help.lhs),
 [xOut](?t=hsc3&e=Help/UGen/xOut.help.lhs)
 
@@ -458,11 +453,6 @@
 [sampleDur](?t=hsc3&e=Help/UGen/sampleDur.help.lhs),
 [sampleRate](?t=hsc3&e=Help/UGen/sampleRate.help.lhs),
 [subsampleOffset](?t=hsc3&e=Help/UGen/subsampleOffset.help.lhs)
-
-
-## Input
-
-[inBus](?t=hsc3&e=Help/UGen/inBus.help.lhs)
 
 
 ## Maths
