@@ -1,5 +1,5 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Slew"
-    Sound.SC3.UGen.DB.ugenSummary "Slew"
+    > Sound.SC3.UGen.Help.viewSC3Help "Slew"
+    > Sound.SC3.UGen.DB.ugenSummary "Slew"
 
 > import Sound.SC3 {- hsc3 -}
 >

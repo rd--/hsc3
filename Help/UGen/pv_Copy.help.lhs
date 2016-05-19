@@ -1,7 +1,7 @@
-    Sound.SC3.UGen.Help.viewSC3Help "PV_Copy"
-    Sound.SC3.UGen.DB.ugenSummary "PV_Copy"
+    > Sound.SC3.UGen.Help.viewSC3Help "PV_Copy"
+    > Sound.SC3.UGen.DB.ugenSummary "PV_Copy"
 
-> import Sound.SC3
+> import Sound.SC3 {- hsc3 -}
 
 Proof of concept, silence.  This graph is disallowed.  pv_Copy is
 required to run before the ifft of c0, which mutates c0, however that

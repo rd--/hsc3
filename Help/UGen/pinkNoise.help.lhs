@@ -1,5 +1,5 @@
-    Sound.SC3.UGen.Help.viewSC3Help "PinkNoise"
-    Sound.SC3.UGen.DB.ugenSummary "PinkNoise"
+    > Sound.SC3.UGen.Help.viewSC3Help "PinkNoise"
+    > Sound.SC3.UGen.DB.ugenSummary "PinkNoise"
 
 > import Sound.SC3 {- hsc3 -}
 

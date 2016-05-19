@@ -1,5 +1,5 @@
-    Sound.SC3.UGen.Help.viewSC3Help "WhiteNoise"
-    Sound.SC3.UGen.DB.ugenSummary "WhiteNoise"
+    > Sound.SC3.UGen.Help.viewSC3Help "WhiteNoise"
+    > Sound.SC3.UGen.DB.ugenSummary "WhiteNoise"
 
 > import Sound.SC3 {- hsc3 -}
 

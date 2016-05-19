@@ -1,5 +1,5 @@
-    Sound.SC3.UGen.Help.viewSC3Help "TExpRand"
-    Sound.SC3.UGen.DB.ugenSummary "TExpRand"
+    > Sound.SC3.UGen.Help.viewSC3Help "TExpRand"
+    > Sound.SC3.UGen.DB.ugenSummary "TExpRand"
 
 > import Sound.SC3 {- hsc3 -}
 

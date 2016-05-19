@@ -1,5 +1,5 @@
-    Sound.SC3.UGen.Help.viewSC3Help "EnvGen"
-    Sound.SC3.UGen.DB.ugenSummary "EnvGen"
+    > Sound.SC3.UGen.Help.viewSC3Help "EnvGen"
+    > Sound.SC3.UGen.DB.ugenSummary "EnvGen"
 
 At least the following envelope constructors are provided:
 envPerc, envSine, envCoord, envTrapezoid, and envLinen.

@@ -1,5 +1,5 @@
-    Sound.SC3.UGen.Help.viewSC3Help "HenonN"
-    Sound.SC3.UGen.DB.ugenSummary "HenonN"
+    > Sound.SC3.UGen.Help.viewSC3Help "HenonN"
+    > Sound.SC3.UGen.DB.ugenSummary "HenonN"
 
 > import Sound.SC3 {- hsc3 -}
 

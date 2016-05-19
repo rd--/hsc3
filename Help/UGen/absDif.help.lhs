@@ -1,5 +1,5 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Operator.absdif"
-    :t absDif
+    > Sound.SC3.UGen.Help.viewSC3Help "Operator.absdif"
+    > :t absDif
 
 > import Sound.SC3 {- hsc3 -}
 

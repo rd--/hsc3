@@ -1,7 +1,7 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Schmidt"
-    Sound.SC3.UGen.DB.ugenSummary "Schmidt"
+    > Sound.SC3.UGen.Help.viewSC3Help "Schmidt"
+    > Sound.SC3.UGen.DB.ugenSummary "Schmidt"
 
-> import Sound.SC3
+> import Sound.SC3 {- hsc3 -}
 
 threshold octave jumps
 

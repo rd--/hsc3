@@ -1,5 +1,5 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Operator.abs"
-    :t abs
+    > Sound.SC3.UGen.Help.viewSC3Help "Operator.abs"
+    > :t abs
 
 > import Sound.SC3 {- hsc3 -}
 

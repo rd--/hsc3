@@ -1,5 +1,5 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Changed"
-    Sound.SC3.UGen.DB.ugenSummary "Changed"
+    > Sound.SC3.UGen.Help.viewSC3Help "Changed"
+    > Sound.SC3.UGen.DB.ugenSummary "Changed"
 
 > import Sound.SC3 {- hsc3 -}
 

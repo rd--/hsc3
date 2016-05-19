@@ -1,5 +1,5 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Operator.atan2"
-    :t atan2
+    > Sound.SC3.UGen.Help.viewSC3Help "Operator.atan2"
+    > :t atan2
 
 > import Sound.SC3 {- hsc3 -}
 

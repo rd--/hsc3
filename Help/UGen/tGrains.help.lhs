@@ -1,5 +1,5 @@
-    Sound.SC3.UGen.Help.viewSC3Help "TGrains"
-    Sound.SC3.UGen.DB.ugenSummary "TGrains"
+    > Sound.SC3.UGen.Help.viewSC3Help "TGrains"
+    > Sound.SC3.UGen.DB.ugenSummary "TGrains"
 
 > import Sound.SC3 {- hsc3 -}
 

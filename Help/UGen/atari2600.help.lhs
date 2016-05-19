@@ -1,5 +1,5 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Atari2600"
-    Sound.SC3.UGen.DB.ugenSummary "Atari2600"
+    > Sound.SC3.UGen.Help.viewSC3Help "Atari2600"
+    > Sound.SC3.UGen.DB.ugenSummary "Atari2600"
 
 > import Sound.SC3 {- hsc3 -}
 > import Sound.SC3.Lang.Pattern {- hsc3-lang -}

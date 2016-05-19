@@ -1,7 +1,7 @@
-    Sound.SC3.UGen.Help.viewSC3Help "AllpassN"
-    Sound.SC3.UGen.DB.ugenSummary "AllpassN"
+    > Sound.SC3.UGen.Help.viewSC3Help "AllpassN"
+    > Sound.SC3.UGen.DB.ugenSummary "AllpassN"
 
-> import Sound.SC3
+> import Sound.SC3 {- hsc3 -}
 
 Since the allpass delay has no audible effect as a resonator on steady
 state sound ...
