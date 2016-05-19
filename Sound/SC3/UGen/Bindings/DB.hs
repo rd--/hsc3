@@ -556,8 +556,8 @@ donce z in_ = mkUGen Nothing [DR] (Left DR) "Donce" [in_] Nothing 1 (Special 0) 
 -- | Monitors another UGen to see when it is finished
 --
 --  Done [KR] src=0.0
-done :: Rate -> UGen -> UGen
-done rate src = mkUGen Nothing [KR] (Left rate) "Done" [src] Nothing 1 (Special 0) NoId
+done :: UGen -> UGen
+done src = mkUGen Nothing [KR] (Left KR) "Done" [src] Nothing 1 (Special 0) NoId
 
 -- | Print the current output value of a demand rate UGen
 --
@@ -736,8 +736,8 @@ freeSelf in_ = mkUGen Nothing [KR] (Left KR) "FreeSelf" [in_] Nothing 1 (Special
 -- | Free the enclosing synth when a UGen is finished
 --
 --  FreeSelfWhenDone [KR] src=0.0
-freeSelfWhenDone :: Rate -> UGen -> UGen
-freeSelfWhenDone rate src = mkUGen Nothing [KR] (Left rate) "FreeSelfWhenDone" [src] Nothing 1 (Special 0) NoId
+freeSelfWhenDone :: UGen -> UGen
+freeSelfWhenDone src = mkUGen Nothing [KR] (Left KR) "FreeSelfWhenDone" [src] Nothing 1 (Special 0) NoId
 
 -- | A reverb
 --
@@ -1684,20 +1684,20 @@ partConv in_ fftsize irbufnum = mkUGen Nothing [AR] (Left AR) "PartConv" [in_,ff
 -- | When triggered, pauses a node.
 --
 --  Pause [KR] gate=0.0 id=0.0
-pause :: Rate -> UGen -> UGen -> UGen
-pause rate gate_ id_ = mkUGen Nothing [KR] (Left rate) "Pause" [gate_,id_] Nothing 1 (Special 0) NoId
+pause :: UGen -> UGen -> UGen
+pause gate_ id_ = mkUGen Nothing [KR] (Left KR) "Pause" [gate_,id_] Nothing 1 (Special 0) NoId
 
 -- | When triggered, pause enclosing synth.
 --
 --  PauseSelf [KR] in=0.0
-pauseSelf :: Rate -> UGen -> UGen
-pauseSelf rate in_ = mkUGen Nothing [KR] (Left rate) "PauseSelf" [in_] Nothing 1 (Special 0) NoId
+pauseSelf :: UGen -> UGen
+pauseSelf in_ = mkUGen Nothing [KR] (Left KR) "PauseSelf" [in_] Nothing 1 (Special 0) NoId
 
 -- | FIXME: PauseSelfWhenDone purpose.
 --
 --  PauseSelfWhenDone [KR] src=0.0
-pauseSelfWhenDone :: Rate -> UGen -> UGen
-pauseSelfWhenDone rate src = mkUGen Nothing [KR] (Left rate) "PauseSelfWhenDone" [src] Nothing 1 (Special 0) NoId
+pauseSelfWhenDone :: UGen -> UGen
+pauseSelfWhenDone src = mkUGen Nothing [KR] (Left KR) "PauseSelfWhenDone" [src] Nothing 1 (Special 0) NoId
 
 -- | Track peak signal amplitude.
 --
