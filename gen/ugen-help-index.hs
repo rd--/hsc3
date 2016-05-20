@@ -2,6 +2,7 @@ import Data.List {- base -}
 import Text.Printf {- base -}
 
 import Sound.SC3.UGen.Name {- hsc3 -}
+import Sound.SC3.UGen.Operator {- hsc3 -}
 
 import Sound.SC3.UGen.DB {- hsc3-db -}
 
@@ -36,7 +37,17 @@ cat_blacklist = ["UGens>Base","UGens>Input"]
 cat_sub :: [(String, [String])]
 cat_sub = filter ((`notElem` cat_blacklist) . fst) ugen_categories_table
 
+drop_last :: [a] -> [a]
+drop_last = reverse . tail . reverse
+
+cat_op :: [(String, [String])]
+cat_op =
+    let rw s = if last s == '_' then drop_last s else s
+        nm = fromSC3Name . rw . show
+    in [("UGens>Operator>Binary",map nm [minBound :: Binary .. maxBound])
+       ,("UGens>Operator>Unary",map show [minBound :: Unary .. maxBound])]
+
 main :: IO ()
 main = do
-  let c = map gen_cat cat_sub
+  let c = map gen_cat (cat_sub ++ cat_op)
   writeFile "/home/rohan/sw/hsc3/Help/UGen/ix.md" (unlines c)

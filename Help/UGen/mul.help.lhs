@@ -1,8 +1,8 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Operator.*"
-    :t (*)
+    > Sound.SC3.UGen.Help.viewSC3Help "Operator.*"
+    > :t (*)
 
 > import Sound.SC3 {- hsc3 -}
-
+>
 > g_01 = sinOsc AR 440 0 * 0.15
 
 Creates a beating effect (subaudio rate).
