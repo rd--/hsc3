@@ -665,7 +665,7 @@ envGen rate gate_ levelScale levelBias timeScale doneAction envelope_ = mkUGen N
 --
 --  ExpRand [IR] lo=1.0e-2 hi=1.0;    FILTER: TRUE, NONDET
 expRand :: ID a => a -> UGen -> UGen -> UGen
-expRand z lo hi = mkUGen Nothing [IR] (Right [0,1]) "ExpRand" [lo,hi] Nothing 1 (Special 0) (toUId z)
+expRand z lo hi = mkUGen Nothing [IR] (Left IR) "ExpRand" [lo,hi] Nothing 1 (Special 0) (toUId z)
 
 -- | Feedback sine with chaotic phase indexing
 --
