@@ -15,7 +15,7 @@ import Sound.SC3.UGen.Rate {- hsc3 -}
 -- > toSC3Name "sinOsc" == "SinOsc"
 -- > toSC3Name "lfSaw" == "LFSaw"
 -- > toSC3Name "pv_Copy" == "PV_Copy"
--- > map toSC3Name ["bpf","fft","tpv","out","in'"]
+-- > map toSC3Name ["bpf","fft","tpv","out","in'","fbSineN"]
 toSC3Name :: String -> String
 toSC3Name nm =
     case nm of
@@ -26,6 +26,7 @@ toSC3Name nm =
       "out" -> "Out"
       "rhpf" -> "RHPF"
       "rlpf" -> "RLPF"
+      'f':'b':nm' -> "FB" ++ nm'
       'h':'p':'z':nm' -> "HPZ" ++ nm'
       'l':'f':'d':nm' -> "LFD" ++ nm'
       'l':'p':'z':nm' -> "LPZ" ++ nm'
@@ -38,8 +39,8 @@ toSC3Name nm =
 
 -- | Inverse of 'toSC3Name'.
 --
--- > let nm = ["SinOsc","LFSaw","PV_Copy"]
--- > in map fromSC3Name nm == ["sinOsc","lfSaw","pv_Copy"]
+-- > let nm = ["SinOsc","LFSaw","PV_Copy","FBSineN"]
+-- > in map fromSC3Name nm == ["sinOsc","lfSaw","pv_Copy","fbSineN"]
 --
 -- > map fromSC3Name ["BPF","FFT","TPV"] == ["bpf","fft","tpv"]
 --
@@ -53,6 +54,7 @@ fromSC3Name nm =
       "IFFT" -> "ifft"
       "RHPF" -> "rhpf"
       "RLPF" -> "rlpf"
+      'F':'B':nm' -> "fb" ++ nm'
       'H':'P':'Z':nm' -> "hpz" ++ nm'
       'L':'F':'D':nm' -> "lfd" ++ nm'
       'L':'P':'Z':nm' -> "lpz" ++ nm'

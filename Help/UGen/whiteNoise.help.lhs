@@ -52,10 +52,10 @@ Drawing
 
 Speaker balance
 
-> g_05 = let n = whiteNoise 'α' AR * 0.05 in mce2 n n
+> g_05 = let n = whiteNoise 'α' AR * 0.1 in mce2 n n
 
 > g_06 =
 >     let x = mouseX KR 0.1 2 Linear 0.2
 >         l = sinOsc KR x 0
 >         n = whiteNoise 'α' AR
->     in pan2 n l 0.05
+>     in pan2 n l 0.1

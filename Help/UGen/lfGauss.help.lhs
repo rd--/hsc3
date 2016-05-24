@@ -83,7 +83,7 @@ gabor grain (see also 'gabor_grain_ugen_graph')
 >     let b = control IR "out" 0
 >         f = control IR "freq" 440
 >         s = control IR "sustain" 1
->         p = control IR "pan" 1
+>         p = control IR "pan" 0
 >         a = control IR "amp" 0.1
 >         w = control IR "width" 0.25
 >         e = lfGauss AR s w 0 NoLoop RemoveSynth

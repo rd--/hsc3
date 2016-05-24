@@ -670,20 +670,20 @@ expRand z lo hi = mkUGen Nothing [IR] (Left IR) "ExpRand" [lo,hi] Nothing 1 (Spe
 -- | Feedback sine with chaotic phase indexing
 --
 --  FBSineC [AR] freq=22050.0 im=1.0 fb=0.1 a=1.1 c=0.5 xi=0.1 yi=0.1
-fBSineC :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-fBSineC rate freq im fb a c xi yi = mkUGen Nothing [AR] (Left rate) "FBSineC" [freq,im,fb,a,c,xi,yi] Nothing 1 (Special 0) NoId
+fbSineC :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+fbSineC rate freq im fb a c xi yi = mkUGen Nothing [AR] (Left rate) "FBSineC" [freq,im,fb,a,c,xi,yi] Nothing 1 (Special 0) NoId
 
 -- | Feedback sine with chaotic phase indexing
 --
 --  FBSineL [AR] freq=22050.0 im=1.0 fb=0.1 a=1.1 c=0.5 xi=0.1 yi=0.1
-fBSineL :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-fBSineL rate freq im fb a c xi yi = mkUGen Nothing [AR] (Left rate) "FBSineL" [freq,im,fb,a,c,xi,yi] Nothing 1 (Special 0) NoId
+fbSineL :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+fbSineL rate freq im fb a c xi yi = mkUGen Nothing [AR] (Left rate) "FBSineL" [freq,im,fb,a,c,xi,yi] Nothing 1 (Special 0) NoId
 
 -- | Feedback sine with chaotic phase indexing
 --
 --  FBSineN [AR] freq=22050.0 im=1.0 fb=0.1 a=1.1 c=0.5 xi=0.1 yi=0.1
-fBSineN :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-fBSineN rate freq im fb a c xi yi = mkUGen Nothing [AR] (Left rate) "FBSineN" [freq,im,fb,a,c,xi,yi] Nothing 1 (Special 0) NoId
+fbSineN :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+fbSineN rate freq im fb a c xi yi = mkUGen Nothing [AR] (Left rate) "FBSineN" [freq,im,fb,a,c,xi,yi] Nothing 1 (Special 0) NoId
 
 -- | Fast Fourier Transform
 --
