@@ -20,7 +20,7 @@ note the artefacts due to alisasing at high frequencies
 
 > g_03 =
 >     let d = mouseX KR (1/8000) 0.1 Exponential 0.2
->         w = mouseX KR 0.001 0.1 Exponential 0.2
+>         w = mouseY KR 0.001 0.1 Exponential 0.2
 >     in lfGauss AR d w 0 Loop DoNothing * 0.1
 
 LFGauss as amplitude modulator
