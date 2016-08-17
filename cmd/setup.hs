@@ -1,10 +1,13 @@
 import Control.Monad {- base -}
 import Data.List {- base -}
+import Data.List.Split {- base -}
 import Data.List.Ordered {- data-ordlist -}
+import Data.Maybe {- base -}
 import System.Directory {- directory -}
 import System.Environment {- base -}
 import System.Exit {- base -}
 import System.FilePath {- filepath -}
+import System.IO.Unsafe {- base -}
 import System.Process {- process -}
 import Text.Regex {- regex-compat -}
 
@@ -43,34 +46,51 @@ hs_file_set_pkg_dep sq = do
 
 -- * Name
 
+prj_dir :: FilePath
+prj_dir = "/home/rohan/sw/hsc3/"
+
+prj_file :: FilePath -> FilePath
+prj_file = (++) prj_dir
+
+setup_db :: FilePath
+setup_db = prj_file "db/setup.db"
+
+split_once :: Eq a => a -> [a] -> ([a], [a])
+split_once e l = let (p,_:q) = break ((==) e) l in (p,q)
+
+type PKG_TBL = [(String,[String])]
+
+-- > s <- readFile setup_db
+-- > db_parse s
+db_parse :: String -> PKG_TBL
+db_parse s =
+    let f l = let (nm,sq) = split_once '=' l
+              in (nm,splitOn "," sq)
+    in map f (lines s)
+
+pkg_tbl_io :: IO PKG_TBL
+pkg_tbl_io = fmap db_parse (readFile setup_db)
+
+pkg_tbl :: PKG_TBL
+pkg_tbl = unsafePerformIO pkg_tbl_io
+
+lookup_err :: (Eq k,Show k) => k -> [(k,v)] -> v
+lookup_err k = fromMaybe (error (show ("lookup_err",k))) . lookup k
+
 pkg_core :: [String]
-pkg_core = ["hosc","hsc3"]
+pkg_core = lookup_err "core" pkg_tbl
 
 pkg_plain :: [String]
-pkg_plain =
-    ["hsc3-db","hsc3-dot"
-    ,"hsc3-lang"
-    ,"hsc3-plot"
-    ,"hsc3-sf","hsc3-sf-hsndfile"
-    ,"sc3-rdu"]
+pkg_plain = lookup_err "plain" pkg_tbl
 
 pkg_ext :: [String]
-pkg_ext =
-    ["after-pim"
-    ,"hmeap","hmeap-utils"
-    ,"hosc-json"
-    ,"hsc3-auditor","hsc3-cairo","hsc3-data","hsc3-rec","hsc3-rw","hsc3-unsafe"
-    ,"hsdif","hsharc","hspear"
-    ,"midi-osc"]
+pkg_ext = lookup_err "ext" pkg_tbl
 
 pkg_all :: [String]
 pkg_all = concat [pkg_core,pkg_plain,pkg_ext]
 
 pkg_non_hsc3 :: [String]
-pkg_non_hsc3 =
-    ["hmt","hly","hts"
-    ,"hls","hps"
-    ,"html-minus","pandoc-minus","www-minus"]
+pkg_non_hsc3 = lookup_err "non_hsc3" pkg_tbl
 
 put_w :: [String] -> IO ()
 put_w = putStrLn . unwords

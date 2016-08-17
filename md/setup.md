@@ -4,7 +4,9 @@ Co-ordination of [hsc3](http://rd.slavepianos.org/t/hsc3) related packages.
 
 There is a _make_ rule _build-setup_ that builds and installs the
 _hsc3-setup_ executable, which depends only on standard haskell
-packages (base, directory, filepath, process).
+packages (base, directory, filepath, process, split).
+
+The package db is stored at `hsc3/db/setup.db`.
 
 # echo
 

@@ -1,0 +1,4 @@
+core=hosc,hsc3
+plain=hsc3-db,hsc3-dot,hsc3-lang,hsc3-plot,hsc3-sf,hsc3-sf-hsndfile,sc3-rdu
+ext=after-pim,hmeap,hmeap-utils,hosc-json,hsc3-auditor,hsc3-cairo,hsc3-data,hsc3-rec,hsc3-rw,hsc3-unsafe,hsdif,hsharc,hspear,midi-osc
+non_hsc3=hmt,hly,hts,hls,hps,html-minus,pandoc-minus,www-minus
