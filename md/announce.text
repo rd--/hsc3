@@ -1,0 +1,53 @@
+Date: Tue, 29 Nov 2005 17:44:03 -0800 (PST)
+Subject: [Haskell-cafe] Hacking Haskell in Nightclubs?
+From: rd@slavepianos.org
+To: haskell-cafe@haskell.org
+
+Real-time audio is much simpler these days due to SuperCollider, a
+truly excellent cross platform audio synthesis server by James
+McCartney.
+
+  http://www.audiosynth.com
+  http://supercollider.sf.net
+
+To communicate with the server one only needs to implement the most
+basic aspects of the Open Sound Control (OSC) byte protocol (in
+particular none of the pattern matching is required).
+
+  http://www.opensoundcontrol.org/
+
+To define 'instruments' there is a SuperCollider specific byte
+protocol for describing Unit Generator (UGen) graphs.
+
+I have an initial Haskell implementation of both these protocols at:
+
+  http://www.slavepianos.org/rd/f/207949/
+  darcs get http://www.slavepianos.org/rd/sw/sw-69/
+
+If SuperCollider is running on the local host at the usual port then:
+
+  Hsc*> play' sc ab
+  Hsc*> stop' sc
+
+should play (and then stop playing) the famous 'Analog Bubbles' test
+sound:
+
+ab = out AR 0 $ combn AR s 0.2 0.2 4
+    where s = sinosc AR (midicps f) 0 * 0.1
+          f = lfsaw KR 0.4 0 * 24 + o
+          o = lfsaw KR (MCE [8, 7.23]) 0 * 3 + 80
+
+The Hsc module can also write UGen graphs to the 'dot' language, so
+graphs can be drawn automatically, which can be useful for debugging.
+
+I have been working with scheme and SuperCollider for some time, but
+have been using haskell recently and generally like it very well.  I
+don't think static typing is an issue.
+
+OSC messages can be timestamped, and SuperCollider has a sample
+accurate scheduling queue, so language timing jitter can easily be
+worked around.  I think that the SuperCollider model is an excellent
+fit with languages like Haskell.
+
+Regards,
+Rohan
