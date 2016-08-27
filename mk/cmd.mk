@@ -1,4 +1,4 @@
-prefix = ~/.cabal
+prefix = ~/opt
 cmd_prefix ?= hsc3
 cmd_rw = $(addprefix $(cmd_prefix)-, $(cmd))
 
