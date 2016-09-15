@@ -63,3 +63,7 @@ Sample Rate (Nominal)       48000.0:Double
 Sample Rate (Actual)        47998.52114:Double
 $
 ~~~~
+
+## wait-for
+
+Wait until `scsynth` is responsive (ie. replies to a `c_get` message).

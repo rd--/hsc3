@@ -1,3 +1,4 @@
+import Control.Exception {- base -}
 import Control.Monad {- base -}
 import qualified Data.Tree as T {- containers -}
 import System.Environment {- base -}
@@ -52,6 +53,13 @@ node_query n = do
     Just r' -> let tbl = zip (map (\(_,nm,_) -> nm) n_info_fields) (map show r')
                in putStrLn (unlines (kv_table_pp tbl))
 
+wait_until_reponsive :: IO ()
+wait_until_reponsive = do
+  let f = withSC3 (send (c_get [0]) >> waitReply "/c_set") >> return ()
+      h :: IOError -> IO ()
+      h e = print ("wait_until_reponsive",e) >> pauseThread (0.25::Double) >> wait_until_reponsive
+  catch f h
+
 help :: [String]
 help =
     ["buffer query id:int"
@@ -60,7 +68,8 @@ help =
     ,"group query-tree id:int"
     ,"node query id:int"
     ,"reset"
-    ,"status"]
+    ,"status"
+    ,"wait-for"]
 
 main :: IO ()
 main = do
@@ -73,4 +82,5 @@ main = do
     ["node","query",n] -> node_query (read n)
     ["reset"] -> withSC3 reset
     ["status"] -> withSC3 serverStatus >>= mapM_ putStrLn
+    ["wait-for"] -> wait_until_reponsive
     _ -> putStrLn (unlines help)
