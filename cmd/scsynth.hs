@@ -37,6 +37,10 @@ buffer_store_seq n dt iso dir = do
                pauseThread dt
   forever run
 
+-- > buffer_free_range 0 100
+buffer_free_range :: Int -> Int -> IO ()
+buffer_free_range b0 bN = withSC3 (mapM_ (\n -> async (b_free n)) [b0 .. bN])
+
 -- > group_query_tree 0
 group_query_tree :: Int -> IO ()
 group_query_tree n = do
@@ -65,6 +69,7 @@ help =
     ["buffer query id:int"
     ,"buffer store id:int au-file:string"
     ,"buffer store-seq id:int dt:float iso|ntpi dir:string"
+    ,"buffer free-range b0:int bN:int"
     ,"group query-tree id:int"
     ,"node query id:int"
     ,"reset"
@@ -78,6 +83,7 @@ main = do
     ["buffer","query",n] -> buffer_query (read n)
     ["buffer","store",n,fn] -> buffer_store (read n) fn
     ["buffer","store-seq",n,dt,ts,dir] -> buffer_store_seq (read n) (read dt) (ts == "iso") dir
+    ["buffer","free-range",b0,bN] -> buffer_free_range (read b0) (read bN)
     ["group","query-tree",n] -> group_query_tree (read n)
     ["node","query",n] -> node_query (read n)
     ["reset"] -> withSC3 reset
