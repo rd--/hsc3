@@ -5,7 +5,7 @@
 
 Fixed frequency
 
-> g_01 = sinOsc AR 440 0 * 0.25
+> g_01 = sinOsc AR (midiCPS 69) 0 * 0.25
 
 Modulate freq
 
