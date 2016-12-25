@@ -237,12 +237,12 @@
 (defun hsc3-update-hsc3-tags ()
   "Update hsc3 TAGS file, must be run from hsc3 directory."
   (interactive)
-  (if (file-exists-p "hsc3.cabal")
+  (if (and (executable-find "hasktags") (file-exists-p "hsc3.cabal"))
       (call-process-shell-command
        "find Sound . -name '*.*hs' | xargs hasktags -e"
        nil
        nil)
-    (error "not at hsc3 directory?")))
+    (error "no hasktags binary or not at hsc3 directory?")))
 
 (defun hsc3-audition-graph ()
   "Audition the UGen graph at point."

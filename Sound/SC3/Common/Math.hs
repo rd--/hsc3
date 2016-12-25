@@ -116,12 +116,18 @@ amp_to_db a = logBase 10 a * 20
 db_to_amp :: Floating a => a -> a
 db_to_amp a = 10 ** (a * 0.05)
 
+-- | Fractional midi note interval to frequency multiplier.
+--
+-- > map midi_to_ratio [7,12] == [1.4983070768766815,2]
 midi_to_ratio :: Floating a => a -> a
 midi_to_ratio a = 2.0 ** (a * (1.0 / 12.0))
 
 oct_to_cps :: Floating a => a -> a
 oct_to_cps a = 440.0 * (2.0 ** (a - 4.75))
 
+-- | Inverse of 'midi_to_ratio'.
+--
+-- > map ratio_to_midi [3/2,2] == [7.019550008653875,12]
 ratio_to_midi :: Floating a => a -> a
 ratio_to_midi a = 12.0 * logBase 2 a
 
