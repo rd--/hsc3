@@ -171,6 +171,8 @@ linlin :: Fractional a => a -> a -> a -> a -> a -> a
 linlin i sl sr dl dr = let (m,a) = linlin_muladd sl sr dl dr in i * m + a
 
 -- | Variant with a more typical argument structure, ranges as pairs and input last.
+--
+-- > map (linlin_hs (0,127) (-0.5,0.5)) [0,63.5,127]
 linlin_hs :: Fractional a => (a, a) -> (a, a) -> a -> a
 linlin_hs (sl,sr) (dl,dr) i = linlin i sl sr dl dr
 
