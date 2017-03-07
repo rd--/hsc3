@@ -19,7 +19,7 @@ mk_plain r nm inp = mkUGen Nothing all_rates (Left r) nm inp Nothing
 
 -- | Construct unary operator, the name can textual or symbolic.
 --
--- > uop True "NEG" AR 1
+-- > uop CI "NEG" AR 1
 uop :: Case_Rule -> String -> Rate -> UGen -> UGen
 uop cr nm r p =
     case unaryIndex cr nm of
@@ -28,8 +28,8 @@ uop cr nm r p =
 
 -- | Construct binary operator, the name can textual or symbolic.
 --
--- > binop True "*" AR 1 2 == binop True "MUL" AR 1 2
--- > binop False "*" AR (ugen "SinOsc" AR [440,0] 1) 0.1 == sinOsc AR 440 0 * 0.1
+-- > binop CI "*" AR 1 2 == binop CI "MUL" AR 1 2
+-- > binop CS "*" AR (ugen "SinOsc" AR [440,0] 1) 0.1 == sinOsc AR 440 0 * 0.1
 binop :: Case_Rule -> String -> Rate -> UGen -> UGen -> UGen
 binop cr nm r p q =
     case binaryIndex cr nm of
