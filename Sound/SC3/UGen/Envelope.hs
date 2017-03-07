@@ -34,7 +34,7 @@ envelope_duration :: Num n => Envelope n -> n
 envelope_duration = sum . env_times
 
 -- | Number of segments at 'Envelope', ie. 'length' '.' 'env_times'.
-envelope_n_segments :: (Num n,Integral i) => Envelope n -> i
+envelope_n_segments :: Integral i => Envelope n -> i
 envelope_n_segments = genericLength . env_times
 
 -- | Determine which envelope segment a given time /t/ falls in.
@@ -120,7 +120,7 @@ envelope_table n = map snd . envelope_render n
 
 -- | Variant on 'env_curves' that expands the, possibly empty, user
 -- list by cycling (if not empty) or by filling with 'EnvLin'.
-envelope_curves :: Num a => Envelope a -> [E.Envelope_Curve a]
+envelope_curves :: Envelope a -> [E.Envelope_Curve a]
 envelope_curves e =
     let c = env_curves e
         n = envelope_n_segments e
@@ -186,7 +186,7 @@ env_delay (Envelope l t c rn ln) d =
     in Envelope l' t' c' rn' ln'
 
 -- | Connect releaseNode (or end) to first node of envelope.
-env_circle :: (Num a,Fractional a) => Envelope a -> a -> E.Envelope_Curve a -> Envelope a
+env_circle :: Fractional a => Envelope a -> a -> E.Envelope_Curve a -> Envelope a
 env_circle (Envelope l t c rn _) tc cc =
     let z = 1 {- 1 - impulse KR 0 0 -}
         n = length t

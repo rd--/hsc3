@@ -37,7 +37,7 @@ decay; 3. @duration@ in seconds; 4. @amplitude@ as linear gain.
 > plotEnvelope [envTrapezoid 0.99 0.5 1 1]
 
 -}
-envTrapezoid :: (Num a,OrdE a) => a -> a -> a -> a -> Envelope a
+envTrapezoid :: OrdE a => a -> a -> a -> a -> Envelope a
 envTrapezoid shape skew dur amp =
     let x1 = skew * (1 - shape)
         bp = [(0,skew <=* 0)
@@ -63,7 +63,7 @@ envPerc atk rls =
 --
 -- > let e = envTriangle 1 0.1
 -- > in envelope_sc3_array e = Just [0,2,-99,-99,0.1,0.5,1,0,0,0.5,1,0]
-envTriangle :: (Num a,Fractional a) => a -> a -> Envelope a
+envTriangle :: Fractional a => a -> a -> Envelope a
 envTriangle dur lvl =
     let c = replicate 2 EnvLin
         d = replicate 2 (dur / 2)
@@ -73,7 +73,7 @@ envTriangle dur lvl =
 --
 -- > let e = envSine 0 0.1
 -- > in envelope_sc3_array e == Just [0,2,-99,-99,0.1,0,3.0,0,0,0,3,0]
-envSine :: (Num a,Fractional a) => a -> a -> Envelope a
+envSine :: Fractional a => a -> a -> Envelope a
 envSine dur lvl =
     let c = replicate 2 EnvSin
         d = replicate 2 (dur / 2)

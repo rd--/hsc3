@@ -66,7 +66,7 @@ resamp1_gen n r f c =
 -- > resamp1 3 [1] == [1,1,1]
 -- > resamp1 12 [1,2,3,4]
 -- > resamp1 3 [1,2,3,4] == [1,2.5,4]
-resamp1 :: (Enum n,RealFrac n) => Int -> [n] -> [n]
+resamp1 :: RealFrac n => Int -> [n] -> [n]
 resamp1 n c =
     let gen = resamp1_gen n (length c) clipAt c
     in map gen [0 .. n - 1]

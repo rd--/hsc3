@@ -7,8 +7,6 @@ import Control.Monad.IO.Class as M {- transformers -}
 import Control.Monad.Trans.Reader {- transformers -}
 import Data.Unique {- base -}
 
-import Sound.OSC.Transport.FD as T {- hosc -}
-
 import Sound.SC3.UGen.Type
 
 -- | A class indicating a monad that will generate a sequence of
@@ -20,7 +18,7 @@ class (Functor m,Applicative m,M.MonadIO m) => UId m where
 instance UId IO where
     generateUId = liftM hashUnique newUnique
 
-instance (T.Transport t,Functor io,Applicative io,MonadIO io) =>
+instance (Functor io,Applicative io,MonadIO io) =>
     UId (ReaderT t io) where
    generateUId = ReaderT (M.liftIO . const generateUId)
 

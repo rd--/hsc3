@@ -21,16 +21,16 @@ two_pi = 2 * pi
 mul_add_hs :: Num a => a -> a -> a -> a
 mul_add_hs m a = (+ a) . (* m)
 
-sc_truncate :: (RealFrac a, Num a) => a -> a
+sc_truncate :: RealFrac a => a -> a
 sc_truncate = fromInteger . truncate
 
-sc_round :: (RealFrac a, Num a) => a -> a
+sc_round :: RealFrac a => a -> a
 sc_round = fromInteger . round
 
-sc_ceiling :: (RealFrac a, Num a) => a -> a
+sc_ceiling :: RealFrac a => a -> a
 sc_ceiling = fromInteger . ceiling
 
-sc_floor :: (RealFrac a, Num a) => a -> a
+sc_floor :: RealFrac a => a -> a
 sc_floor = fromInteger . floor
 
 -- | Clip /n/ to within range /(i,j)/.  'clip' is a 'UGen', hence prime.

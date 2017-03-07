@@ -64,11 +64,11 @@ sc3_gte = sc3_comparison (>=)
 --
 -- > let r = [0,0,0.25,0.25,0.5,0.5,0.5,0.75,0.75,1,1]
 -- > in map (`roundTo_` 0.25) [0,0.1 .. 1] == r
-roundTo_ :: (RealFrac n, Ord n) => n -> n -> n
+roundTo_ :: RealFrac n => n -> n -> n
 roundTo_ = sc3_round_to
 
 -- > map (flip sc3_round_to 0.25) [0,0.1 .. 1]
-sc3_round_to :: (RealFrac n, Ord n) => n -> n -> n
+sc3_round_to :: RealFrac n => n -> n -> n
 sc3_round_to a b = if b == 0 then a else sc_floor ((a / b) + 0.5) * b
 
 sc3_idiv :: RealFrac n => n -> n -> n
@@ -101,7 +101,7 @@ sc3_mod :: RealFrac n => n -> n -> n
 sc3_mod = F.mod'
 
 -- | Association table for 'Binary' to haskell function implementing operator.
-binop_hs_tbl :: (Real n,Floating n,RealFrac n,Ord n) => [(Binary,n -> n -> n)]
+binop_hs_tbl :: (Real n,Floating n,RealFrac n) => [(Binary,n -> n -> n)]
 binop_hs_tbl =
     [(Add,(+))
     ,(Sub,(-))
@@ -123,11 +123,11 @@ binop_hs_tbl =
     ,(Round,sc3_round_to)]
 
 -- | 'lookup' 'binop_hs_tbl' via 'toEnum'.
-binop_special_hs :: (Real n,RealFrac n,Floating n, Ord n) => Int -> Maybe (n -> n -> n)
+binop_special_hs :: (RealFrac n,Floating n) => Int -> Maybe (n -> n -> n)
 binop_special_hs z = lookup (toEnum z) binop_hs_tbl
 
 -- | Association table for 'Unary' to haskell function implementing operator.
-uop_hs_tbl :: (RealFrac n,Floating n,Ord n) => [(Unary,n -> n)]
+uop_hs_tbl :: (RealFrac n,Floating n) => [(Unary,n -> n)]
 uop_hs_tbl =
     [(Neg,negate)
     ,(Not,\z -> if z > 0 then 0 else 1)
@@ -145,7 +145,7 @@ uop_hs_tbl =
     ,(Tan,tan)]
 
 -- | 'lookup' 'uop_hs_tbl' via 'toEnum'.
-uop_special_hs :: (RealFrac n,Floating n, Ord n) => Int -> Maybe (n -> n)
+uop_special_hs :: (RealFrac n,Floating n) => Int -> Maybe (n -> n)
 uop_special_hs z = lookup (toEnum z) uop_hs_tbl
 
 -- The Eq and Ord classes in the Prelude require Bool, hence the name
@@ -193,7 +193,7 @@ instance OrdE UGen where
     (>*) = mkBinaryOperator GT_ sc3_gt
     (>=*) = mkBinaryOperator GE sc3_gte
 
-sc3_properFraction :: (RealFrac t, Num t) => t -> (t,t)
+sc3_properFraction :: RealFrac t => t -> (t,t)
 sc3_properFraction a =
     let (p,q) = properFraction a
     in (fromInteger p,q)

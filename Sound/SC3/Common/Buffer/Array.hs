@@ -23,7 +23,7 @@ blendAt = SC3.blendAtBy clipAt
 --
 -- > resamp1 12 (A.listArray (0,3) [1,2,3,4])
 -- > resamp1 3 (A.listArray (0,3) [1,2,3,4]) == A.listArray (0,2) [1,2.5,4]
-resamp1 :: (Enum n,RealFrac n) => Int -> A.Array Int n -> A.Array Int n
+resamp1 :: RealFrac n => Int -> A.Array Int n -> A.Array Int n
 resamp1 n c =
     let (_,r) = A.bounds c
         gen = SC3.resamp1_gen n (r + 1) clipAt c

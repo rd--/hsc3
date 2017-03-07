@@ -5,6 +5,7 @@ import qualified Data.Char as C {- base -}
 import Data.Maybe {- base -}
 import Data.List {- base -}
 
+import qualified Sound.SC3.Common.Prelude as P
 import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.MCE
 import Sound.SC3.UGen.Operator
@@ -157,27 +158,10 @@ mceSum = sum . mceChannels
 
 -- * Transform
 
--- | Separate first list element.
---
--- > sep_first "astring" == Just ('a',"string")
-sep_first :: [t] -> Maybe (t,[t])
-sep_first l =
-    case l of
-      e:l' -> Just (e,l')
-      _ -> Nothing
-
--- | Separate last list element.
---
--- > sep_last "stringb" == Just ("string",'b')
-sep_last :: [t] -> Maybe ([t], t)
-sep_last =
-    let f (e,l) = (reverse l,e)
-    in fmap f . sep_first . reverse
-
 -- | Given /unmce/ function make halt mce transform.
 halt_mce_transform' :: (a -> [a]) -> [a] -> [a]
 halt_mce_transform' f l =
-    let (l',e) = fromMaybe (error "halt_mce_transform: null?") (sep_last l)
+    let (l',e) = fromMaybe (error "halt_mce_transform: null?") (P.sep_last l)
     in l' ++ f e
 
 -- | The halt MCE transform, ie. lift channels of last input into list.
@@ -194,13 +178,6 @@ halt_mce_transform = halt_mce_transform' mceChannels
 label :: String -> UGen
 label = Label_U . Label
 
--- | Are lists of equal length?
---
--- > equal_length_p ["t1","t2"] == True
--- > equal_length_p ["t","t1","t2"] == False
-equal_length_p :: [[a]] -> Bool
-equal_length_p = (== 1) . length . nub . map length
-
 -- | Unpack a label to a length prefixed list of 'Constant's.  There
 -- is a special case for mce nodes, but it requires labels to be equal
 -- length.  Properly, 'poll' would not unpack the label, it would be
@@ -216,7 +193,7 @@ unpackLabel u =
           in n : s'
       MCE_U m ->
           let x = map unpackLabel (mceProxies m)
-          in if equal_length_p x
+          in if P.equal_length_p x
              then map mce (transpose x)
              else error (show ("unpackLabel: mce length /=",x))
       _ -> error (show ("unpackLabel: non-label",u))

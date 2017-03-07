@@ -24,7 +24,7 @@ blendAt = C.blendAtBy clipAt
 --
 -- > resamp1 12 (V.fromList [1,2,3,4])
 -- > resamp1 3 (V.fromList [1,2,3,4]) == V.fromList [1,2.5,4]
-resamp1 :: (Enum n,RealFrac n) => Int -> V.Vector n -> V.Vector n
+resamp1 :: RealFrac n => Int -> V.Vector n -> V.Vector n
 resamp1 n c =
     let gen = C.resamp1_gen n (V.length c) clipAt c
     in V.generate n gen

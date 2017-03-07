@@ -16,8 +16,11 @@ reads_exact s =
 data Case_Rule = CI | CS deriving (Eq)
 
 -- | Predicates for 'Case_Rule'.
-is_ci,is_cs :: Case_Rule -> Bool
+is_ci :: Case_Rule -> Bool
 is_ci = (==) CI
+
+-- | Predicates for 'Case_Rule'.
+is_cs :: Case_Rule -> Bool
 is_cs = (==) CS
 
 -- | String equality with 'Case_Rule'.
@@ -59,6 +62,30 @@ pcn_triples =
                   [e'] -> [(e,e',Nothing)]
                   [] -> undefined
     in f Nothing
+
+-- | Separate first list element.
+--
+-- > sep_first "astring" == Just ('a',"string")
+sep_first :: [t] -> Maybe (t,[t])
+sep_first l =
+    case l of
+      e:l' -> Just (e,l')
+      _ -> Nothing
+
+-- | Separate last list element.
+--
+-- > sep_last "stringb" == Just ("string",'b')
+sep_last :: [t] -> Maybe ([t], t)
+sep_last =
+    let f (e,l) = (reverse l,e)
+    in fmap f . sep_first . reverse
+
+-- | Are lists of equal length?
+--
+-- > equal_length_p ["t1","t2"] == True
+-- > equal_length_p ["t","t1","t2"] == False
+equal_length_p :: [[a]] -> Bool
+equal_length_p = (== 1) . length . nub . map length
 
 -- * TUPLES
 

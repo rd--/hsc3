@@ -98,5 +98,5 @@ cubed x0 x1 t =
 -- | x0 until end, then immediately x1.
 --
 -- > plotTable1 (map (hold 0 1) [0,0.01 .. 1])
-hold :: (Num t,Eq t,Ord t) => Interpolation_F t
+hold :: (Num t,Ord t) => Interpolation_F t
 hold x0 x1 t = if t >= 1 then x1 else x0
