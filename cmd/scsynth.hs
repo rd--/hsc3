@@ -57,12 +57,17 @@ node_query n = do
     Just r' -> let tbl = zip (map (\(_,nm,_) -> nm) n_info_fields) (map show r')
                in putStrLn (unlines (kv_table_pp tbl))
 
-wait_until_reponsive :: IO ()
-wait_until_reponsive = do
-  let f = withSC3 (send (c_get [0]) >> waitReply "/c_set") >> return ()
+wait_for :: IO ()
+wait_for = do
+  let f = withSC3 (send (c_get [0]) >> waitReply "/c_set") >>
+          return ()
       h :: IOError -> IO ()
-      h e = print ("wait_until_reponsive",e) >> pauseThread (0.25::Double) >> wait_until_reponsive
+      h e = print ("wait_for",e) >>
+            pauseThread (0.25::Double) >>
+            wait_for
+  putStrLn "wait_for: begin"
   catch f h
+  putStrLn "wait_for: end"
 
 help :: [String]
 help =
@@ -88,5 +93,5 @@ main = do
     ["node","query",n] -> node_query (read n)
     ["reset"] -> withSC3 reset
     ["status"] -> withSC3 serverStatus >>= mapM_ putStrLn
-    ["wait-for"] -> wait_until_reponsive
+    ["wait-for"] -> wait_for
     _ -> putStrLn (unlines help)
