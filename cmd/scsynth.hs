@@ -59,12 +59,11 @@ node_query n = do
 
 wait_for :: IO ()
 wait_for = do
-  let f = withSC3_ (send (c_get [0]) >> waitReply "/c_set")
-      h :: IOError -> IO ()
-      h e = print ("wait_for",e) >>
-            pauseThread (0.25::Double) >>
-            wait_for
-  putStrLn "wait_for: begin" >> catch f h >> putStrLn "wait_for: end"
+  let w = pauseThread (0.25::Double)
+      f = withSC3_ (send (c_get [0]) >> waitReply "/c_set")
+      g e = print ("wait_for: retry",e::IOError) >> w >> h
+      h = catch f g
+  putStrLn "wait_for: begin" >> h >> putStrLn "wait_for: end"
 
 help :: [String]
 help =
