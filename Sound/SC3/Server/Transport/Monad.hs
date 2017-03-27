@@ -30,6 +30,10 @@ send = sendMessage
 async :: DuplexOSC m => Message -> m Message
 async m = send m >> waitReply "/done"
 
+-- | Local host (ie. @127.0.0.1@) at port @57110@.
+sc3_default_udp :: IO UDP
+sc3_default_udp = openUDP "127.0.0.1" 57110
+
 -- | Bracket @SC3@ communication. 'withTransport' at standard SC3 UDP
 -- port.
 --
@@ -37,7 +41,11 @@ async m = send m >> waitReply "/done"
 --
 -- > withSC3 (send status >> waitReply "/status.reply")
 withSC3 :: Connection UDP a -> IO a
-withSC3 = withTransport (openUDP "127.0.0.1" 57110)
+withSC3 = withTransport sc3_default_udp
+
+-- | 'void' of 'withSC3'.
+withSC3_ :: Connection UDP a -> IO ()
+withSC3_ = void . withSC3
 
 -- * Server control
 
