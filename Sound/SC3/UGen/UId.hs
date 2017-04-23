@@ -3,24 +3,56 @@
 module Sound.SC3.UGen.UId where
 
 import Control.Monad {- base -}
-import Control.Monad.IO.Class as M {- transformers -}
-import Control.Monad.Trans.Reader {- transformers -}
-import Data.Unique {- base -}
+import qualified Control.Monad.IO.Class as M {- base -}
+import qualified Data.Unique as U {- base -}
+
+import qualified Control.Monad.Trans.Reader as R {- transformers -}
 
 import Sound.SC3.UGen.Type
+
+{-
+
+UId as written has MonadIO as a pre-condition on m, but it needn't...
+
+{-# LANGUAGE FlexibleInstances #-}
+
+import Data.Functor.Identity {- base -}
+import qualified Control.Monad.Trans.State as S {- transformers -}
+
+type UId_ST = S.State Int
+
+-- > S.runState (generateUId_st >> generateUId_st) 0
+generateUId_st :: UId_ST Int
+generateUId_st = do
+  n <- S.get
+  S.put (n + 1)
+  return n
+
+class (Functor m,Applicative m,Monad m) => UId' m where
+   generateUId' :: m Int
+
+instance UId' (S.StateT Int Identity) where
+   generateUId' = generateUId_st
+
+-}
+
+generateUId_mio :: M.MonadIO m => m Int
+generateUId_mio = fmap U.hashUnique (M.liftIO U.newUnique)
+
+generateUId_io :: IO Int
+generateUId_io = liftM U.hashUnique U.newUnique
 
 -- | A class indicating a monad that will generate a sequence of
 --   unique integer identifiers.
 class (Functor m,Applicative m,M.MonadIO m) => UId m where
    generateUId :: m Int
-   generateUId = fmap hashUnique (M.liftIO newUnique)
+   generateUId = generateUId_mio
 
 instance UId IO where
-    generateUId = liftM hashUnique newUnique
+    generateUId = generateUId_io
 
-instance (Functor io,Applicative io,MonadIO io) =>
-    UId (ReaderT t io) where
-   generateUId = ReaderT (M.liftIO . const generateUId)
+instance (Functor m,Applicative m,M.MonadIO m) => UId (R.ReaderT t m) where
+   generateUId = R.ReaderT (M.liftIO . const generateUId)
 
 -- * Lift
 
