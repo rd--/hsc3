@@ -1,24 +1,25 @@
+{-# LANGUAGE FlexibleInstances #-}
+
 -- | Unique identifier class for use by non-deterministic (noise) and
 -- non-sharable (demand) unit generators.
 module Sound.SC3.UGen.UId where
 
 import Control.Monad {- base -}
 import qualified Control.Monad.IO.Class as M {- base -}
+import Data.Functor.Identity {- base -}
 import qualified Data.Unique as U {- base -}
 
 import qualified Control.Monad.Trans.Reader as R {- transformers -}
-
-import Sound.SC3.UGen.Type
-
-{-
-
-UId as written has MonadIO as a pre-condition on m, but it needn't...
-
-{-# LANGUAGE FlexibleInstances #-}
-
-import Data.Functor.Identity {- base -}
 import qualified Control.Monad.Trans.State as S {- transformers -}
 
+import Sound.SC3.UGen.Type {- hsc3 -}
+
+-- | A class indicating a monad that will generate a sequence of
+--   unique integer identifiers.
+class (Functor m,Applicative m,Monad m) => UId m where
+   generateUId :: m Int
+
+-- | UId as written has MonadIO as a pre-condition on m, but it needn't...
 type UId_ST = S.State Int
 
 -- > S.runState (generateUId_st >> generateUId_st) 0
@@ -28,28 +29,14 @@ generateUId_st = do
   S.put (n + 1)
   return n
 
-class (Functor m,Applicative m,Monad m) => UId' m where
-   generateUId' :: m Int
+uid_st_run :: UId_ST t -> t
+uid_st_run x = S.evalState x 0
 
-instance UId' (S.StateT Int Identity) where
-   generateUId' = generateUId_st
-
--}
-
-generateUId_mio :: M.MonadIO m => m Int
-generateUId_mio = fmap U.hashUnique (M.liftIO U.newUnique)
-
-generateUId_io :: IO Int
-generateUId_io = liftM U.hashUnique U.newUnique
-
--- | A class indicating a monad that will generate a sequence of
---   unique integer identifiers.
-class (Functor m,Applicative m,M.MonadIO m) => UId m where
-   generateUId :: m Int
-   generateUId = generateUId_mio
+instance UId (S.StateT Int Identity) where
+   generateUId = generateUId_st
 
 instance UId IO where
-    generateUId = generateUId_io
+    generateUId = liftM U.hashUnique U.newUnique
 
 instance (Functor m,Applicative m,M.MonadIO m) => UId (R.ReaderT t m) where
    generateUId = R.ReaderT (M.liftIO . const generateUId)
