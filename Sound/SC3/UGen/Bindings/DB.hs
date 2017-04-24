@@ -1209,9 +1209,9 @@ linCongN rate freq a c m xi = mkUGen Nothing [AR] (Left rate) "LinCongN" [freq,a
 
 -- | Map a linear range to an exponential range
 --
---  LinExp [KR,AR] in=0.0 srclo=0.0 srchi=1.0 dstlo=1.0 dsthi=2.0;    FILTER: TRUE
+--  LinExp [IR,KR,AR] in=0.0 srclo=0.0 srchi=1.0 dstlo=1.0 dsthi=2.0;    FILTER: TRUE
 linExp :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-linExp in_ srclo srchi dstlo dsthi = mkUGen Nothing [KR,AR] (Right [0]) "LinExp" [in_,srclo,srchi,dstlo,dsthi] Nothing 1 (Special 0) NoId
+linExp in_ srclo srchi dstlo dsthi = mkUGen Nothing [IR,KR,AR] (Right [0]) "LinExp" [in_,srclo,srchi,dstlo,dsthi] Nothing 1 (Special 0) NoId
 
 -- | Two channel linear pan.
 --
