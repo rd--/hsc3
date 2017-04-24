@@ -5,8 +5,8 @@
 module Sound.SC3.UGen.UId where
 
 import Control.Monad {- base -}
-import qualified Control.Monad.IO.Class as M {- base -}
 import Data.Functor.Identity {- base -}
+import Data.List {- base -}
 import qualified Data.Unique as U {- base -}
 
 import qualified Control.Monad.Trans.Reader as R {- transformers -}
@@ -14,32 +14,41 @@ import qualified Control.Monad.Trans.State as S {- transformers -}
 
 import Sound.SC3.UGen.Type {- hsc3 -}
 
--- | A class indicating a monad that will generate a sequence of
---   unique integer identifiers.
+-- | A class indicating a monad (and functor and applicative) that will
+-- generate a sequence of unique integer identifiers.
 class (Functor m,Applicative m,Monad m) => UId m where
    generateUId :: m Int
 
--- | UId as written has MonadIO as a pre-condition on m, but it needn't...
+-- | 'S.State' UId.
 type UId_ST = S.State Int
 
--- > S.runState (generateUId_st >> generateUId_st) 0
-generateUId_st :: UId_ST Int
-generateUId_st = do
-  n <- S.get
-  S.put (n + 1)
-  return n
+-- | 'S.evalState' with initial state of zero.
+--
+-- > uid_st_eval (replicateM 3 generateUId) == [0,1,2]
+uid_st_eval :: UId_ST t -> t
+uid_st_eval x = S.evalState x 0
 
-uid_st_run :: UId_ST t -> t
-uid_st_run x = S.evalState x 0
+-- | Thread state through sequence of 'S.runState'.
+uid_st_seq :: [UId_ST t] -> ([t],Int)
+uid_st_seq =
+    let swap (p,q) = (q,p)
+        step_f n x = swap (S.runState x n)
+    in swap . mapAccumL step_f 0
+
+-- | 'fst' of 'uid_st_seq'.
+--
+-- > uid_st_seq_ (replicate 3 generateUId) == [0,1,2]
+uid_st_seq_ :: [UId_ST t] -> [t]
+uid_st_seq_ = fst . uid_st_seq
 
 instance UId (S.StateT Int Identity) where
-   generateUId = generateUId_st
+    generateUId = S.get >>= \n -> S.put (n + 1) >> return n
 
 instance UId IO where
     generateUId = liftM U.hashUnique U.newUnique
 
-instance (Functor m,Applicative m,M.MonadIO m) => UId (R.ReaderT t m) where
-   generateUId = R.ReaderT (M.liftIO . const generateUId)
+instance UId m => UId (R.ReaderT t m) where
+   generateUId = R.ReaderT (const generateUId)
 
 -- * Lift
 
