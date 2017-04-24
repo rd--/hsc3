@@ -1,9 +1,8 @@
 -- | Functions to make writing 'Applicative' and 'Monad' UGen graphs
 -- less clumsy.
-module Sound.SC3.Common.Monad.Syntax where
+module Sound.SC3.Common.Monad.Operators where
 
 import Control.Applicative {- base -}
-import Control.Monad {- base -}
 
 infixl 7  .*,*.,.*.
 infixl 6  .+,+.,.+.
@@ -91,16 +90,3 @@ m /. n = fmap (m /) n
 -- > [5,6] ./. [2,3] == [5/2,5/3,3,2]
 (./.) :: (Applicative m,Fractional a) => m a -> m a -> m a
 (./.) = liftA2 (/)
-
--- | Right to left compositon of 'Monad' functions.
---
--- > fmap (== 7) (composeM [return . (+ 1),return . (/ 2)] 3)
--- > fmap (== 8) (composeM [return . (* 2),return . (+ 1)] 3)
-composeM :: Monad m => [a -> m a] -> a -> m a
-composeM = foldr (<=<) return
-
--- | Feed forward composition of /n/ applications of /f/.
---
--- > fmap (== 3) (chainM 3 (return . (+ 1)) 0)
-chainM :: Monad m => Int -> (b -> m b) -> b -> m b
-chainM n f = foldr (<=<) return (replicate n f)

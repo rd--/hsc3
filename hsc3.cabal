@@ -52,7 +52,8 @@ Library
                    Sound.SC3.Common.Math
                    Sound.SC3.Common.Math.Interpolate
                    Sound.SC3.Common.Math.Window
-                   Sound.SC3.Common.Monad.Syntax
+                   Sound.SC3.Common.Monad
+                   Sound.SC3.Common.Monad.Operators
                    Sound.SC3.Common.Prelude
                    Sound.SC3.FD
                    Sound.SC3.Server
