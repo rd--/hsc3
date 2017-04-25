@@ -133,37 +133,36 @@ indexL b i =
     in linLin (frac i) 0 1 x y
 -}
 
--- | Format frequency, amplitude and phase data as required for klang.
+-- | Generalised Klan(k/g) specification rule.  /f/ unwraps inputs, /g/ wraps output.
+--
+-- > let r = [220,0.2,0,219,0.1,1,221,0.1,2]
+-- > in klanx_spec_f id id [220,219,221] [0.2,0.1,0.1] [0,1,2] == r
+klanx_spec_f :: (a -> [b]) -> ([b] -> c) -> a -> a -> a -> c
+klanx_spec_f f g fr am z = g ((concat . transpose) [f fr,f am,f z])
+
+-- | Format frequency, amplitude and decay time data as required for klank.
 klangSpec :: [UGen] -> [UGen] -> [UGen] -> UGen
-klangSpec f a p = mce ((concat . transpose) [f, a, p])
+klangSpec = klanx_spec_f id mce
 
 -- | Variant of 'klangSpec' for non-UGen inputs.
 klangSpec' :: Real n => [n] -> [n] -> [n] -> UGen
-klangSpec' f a p =
-    let u = map constant
-    in klangSpec (u f) (u a) (u p)
+klangSpec' = klanx_spec_f (map constant) mce
 
 -- | Variant of 'klangSpec' for 'MCE' inputs.
 klangSpec_mce :: UGen -> UGen -> UGen -> UGen
-klangSpec_mce f a p =
-    let m = mceChannels
-    in klangSpec (m f) (m a) (m p)
-
--- | Generalised Klank specification rule.  /f/ unwraps inputs, /g/ wraps output.
-klankSpec_f :: (a -> [b]) -> ([b] -> c) -> a -> a -> a -> c
-klankSpec_f f g fr am dt = g ((concat . transpose) [f fr,f am,f dt])
+klangSpec_mce = klanx_spec_f mceChannels mce
 
 -- | Format frequency, amplitude and decay time data as required for klank.
 klankSpec :: [UGen] -> [UGen] -> [UGen] -> UGen
-klankSpec = klankSpec_f id mce
+klankSpec = klanx_spec_f id mce
 
 -- | Variant for non-UGen inputs.
 klankSpec' :: Real n => [n] -> [n] -> [n] -> UGen
-klankSpec' = klankSpec_f (map constant) mce
+klankSpec' = klanx_spec_f (map constant) mce
 
 -- | Variant of 'klankSpec' for 'MCE' inputs.
 klankSpec_mce :: UGen -> UGen -> UGen -> UGen
-klankSpec_mce = klankSpec_f mceChannels mce
+klankSpec_mce = klanx_spec_f mceChannels mce
 
 -- | Randomly select one of a list of UGens (initialisation rate).
 lchoose :: ID m => m -> [UGen] -> UGen
