@@ -308,6 +308,22 @@ pvcollect c nf f from to z =
         mp = uncurry packFFTSpec (unzip e)
     in packFFT c nf from to z mp
 
+-- | 'rand' with left edge set to zero.
+rand0 :: ID a => a -> UGen -> UGen
+rand0 z = rand z 0
+
+-- | 'UId' form of 'rand0'.
+rand0M :: UId m => UGen -> m UGen
+rand0M = randM 0
+
+-- | 'rand' with left edge set to negative /n/.
+rand2 :: ID a => a -> UGen -> UGen
+rand2 z n = rand z (negate n) n
+
+-- | 'UId' form of 'rand2'.
+rand2M :: UId m => UGen -> m UGen
+rand2M n = randM (negate n) n
+
 -- | RMS variant of 'runningSum'.
 runningSumRMS :: UGen -> UGen -> UGen
 runningSumRMS z n = sqrt (runningSum (z * z) n * recip n)
