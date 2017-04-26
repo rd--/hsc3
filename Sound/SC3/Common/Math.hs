@@ -151,6 +151,9 @@ range_muladd = linlin_muladd (-1) 1
 range :: Fractional a => a -> a -> a -> a
 range l r i = let (m,a) = range_muladd l r in i * m + a
 
+range_hs :: Fractional a => (a,a) -> a -> a
+range_hs (l,r) = range l r
+
 -- | Calculate multiplier and add values for 'linlin' transform.
 --
 -- > range_muladd 3 4 == (0.5,3.5)
