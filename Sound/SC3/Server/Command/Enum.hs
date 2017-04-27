@@ -104,7 +104,7 @@ sc3_cmd_number = flip lookup sc3_cmd_enumeration
 known_sc3_cmd :: SC3_Command -> Bool
 known_sc3_cmd = isJust . sc3_cmd_number
 
--- | List of asynchronous server commands.
+-- | List of asynchronous server commands, ie. commands that reply with @/done@.
 async_cmds :: [SC3_Command]
 async_cmds =
     ["/b_alloc"
@@ -125,7 +125,8 @@ async_cmds =
 
 -- | 'True' if 'Message' is an asynchronous 'Message'.
 --
--- > map isAsync [b_close 0,n_set1 0 "0" 0] == [True,False]
+-- > import Sound.SC3
+-- > map isAsync [b_close 0,n_set1 0 "0" 0,status] == [True,False,False]
 isAsync :: Message -> Bool
 isAsync (Message a _) = a `elem` async_cmds
 

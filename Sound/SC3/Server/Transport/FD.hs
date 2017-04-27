@@ -20,13 +20,20 @@ import Sound.SC3.UGen.Type
 
 -- * hosc variants
 
--- | Synonym for 'sendMessage'.
-send :: (Transport t) => t -> Message -> IO ()
-send = sendMessage
-
 -- | Send a 'Message' and 'waitReply' for a @\/done@ reply.
 async :: Transport t => t -> Message -> IO Message
 async fd m = sendMessage fd m >> waitReply fd "/done"
+
+-- | If 'isAsync' then 'void' 'async' else 'sendMessage'.
+maybe_async :: (Transport t) => t -> Message -> IO ()
+maybe_async fd m = if isAsync m then void (async fd m) else sendMessage fd m
+
+-- | Variant that timestamps synchronous messages.
+maybe_async_at :: (Transport t) => t -> Time -> Message -> IO ()
+maybe_async_at fd t m =
+    if isAsync m
+    then void (async fd m)
+    else sendBundle fd (bundle t [m])
 
 -- | Bracket @SC3@ communication.
 withSC3 :: (UDP -> IO a) -> IO a
@@ -64,19 +71,16 @@ playUGen k fd = playSynthdef k fd . synthdef "Anonymous"
 -- to initial 'Time', then send each message, asynchronously if
 -- required.
 run_bundle :: Transport t => t -> Time -> Bundle -> IO ()
-run_bundle fd st b = do
-  let t = bundleTime b
+run_bundle fd t0 b = do
+  let t = t0 + bundleTime b
       latency = 0.1
-      wr m = if isAsync m
-             then void (async fd m)
-             else sendBundle fd (bundle (st + t) [m])
-  pauseThreadUntil (st + t - latency)
-  mapM_ wr (bundleMessages b)
+  pauseThreadUntil (t - latency)
+  mapM_ (maybe_async_at fd t) (bundleMessages b)
 
 -- | Perform an 'NRT' score (as would be rendered by 'writeNRT').  In
 -- particular note that all timestamps /must/ be in 'NTPr' form.
 performNRT :: Transport t => t -> NRT -> IO ()
-performNRT fd s = time >>= \i -> mapM_ (run_bundle fd i) (nrt_bundles s)
+performNRT fd sc = time >>= \t0 -> mapM_ (run_bundle fd t0) (nrt_bundles sc)
 
 -- * Audible
 
@@ -96,8 +100,8 @@ instance Audible Synthdef where
 instance Audible UGen where
     play_id = playUGen
 
-instance Audible NRT where
-    play_id _ = performNRT
+--instance Audible NRT where
+--    play_id _ = performNRT
 
 audition_id :: Audible e => Int -> e -> IO ()
 audition_id k e = withSC3 (\fd -> play_id k fd e)

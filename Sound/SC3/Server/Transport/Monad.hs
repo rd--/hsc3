@@ -22,24 +22,30 @@ import Sound.SC3.UGen.Type
 
 -- * hosc variants
 
--- | Synonym for 'sendMessage'.
-send :: SendOSC m => Message -> m ()
-send = sendMessage
-
--- | Send a 'Message' and 'waitReply' for a @\/done@ reply.
+-- | 'sendMessage' and 'waitReply' for a @\/done@ reply.
 async :: DuplexOSC m => Message -> m Message
-async m = send m >> waitReply "/done"
+async m = sendMessage m >> waitReply "/done"
+
+-- | If 'isAsync' then 'void' 'async' else 'sendMessage'.
+maybe_async :: DuplexOSC m => Message -> m ()
+maybe_async m = if isAsync m then void (async m) else sendMessage m
+
+-- | Variant that timestamps synchronous messages.
+maybe_async_at :: DuplexOSC m => Time -> Message -> m ()
+maybe_async_at t m =
+    if isAsync m
+    then void (async m)
+    else sendBundle (bundle t [m])
 
 -- | Local host (ie. @127.0.0.1@) at port @57110@.
 sc3_default_udp :: IO UDP
 sc3_default_udp = openUDP "127.0.0.1" 57110
 
--- | Bracket @SC3@ communication. 'withTransport' at standard SC3 UDP
--- port.
+-- | Bracket @SC3@ communication, ie. 'withTransport' 'sc3_default_udp'.
 --
 -- > import Sound.SC3.Server.Command
 --
--- > withSC3 (send status >> waitReply "/status.reply")
+-- > withSC3 (sendMessage status >> waitReply "/status.reply")
 withSC3 :: Connection UDP a -> IO a
 withSC3 = withTransport sc3_default_udp
 
@@ -51,7 +57,7 @@ withSC3_ = void . withSC3
 
 -- | Free all nodes ('g_freeAll') at group @1@.
 stop :: SendOSC m => m ()
-stop = send (g_freeAll [1])
+stop = sendMessage (g_freeAll [1])
 
 -- * Composite
 
@@ -70,7 +76,7 @@ type Play_Opt = (Int,AddAction,Int,[(String,Double)])
 playGraphdef :: DuplexOSC m => Play_Opt -> G.Graphdef -> m ()
 playGraphdef (nid,act,gid,param) g = do
   _ <- async (d_recv' g)
-  send (s_new (ascii_to_string (G.graphdef_name g)) nid act gid param)
+  sendMessage (s_new (ascii_to_string (G.graphdef_name g)) nid act gid param)
 
 -- | Send 'd_recv' and 's_new' messages to scsynth.
 playSynthdef :: DuplexOSC m => Play_Opt -> Synthdef -> m ()
@@ -89,25 +95,30 @@ playUGen loc =
 -- to the initial 'Time', then send each message, asynchronously if
 -- required.
 run_bundle :: Transport m => Time -> Bundle -> m ()
-run_bundle st b = do
-  let t = bundleTime b
+run_bundle t0 b = do
+  let t = t0 + bundleTime b
       latency = 0.1
-      wr m = if isAsync m
-             then void (async m)
-             else sendBundle (bundle (st + t) [m])
-  liftIO (pauseThreadUntil (st + t - latency))
-  mapM_ wr (bundleMessages b)
+  liftIO (pauseThreadUntil (t - latency))
+  mapM_ (maybe_async_at t) (bundleMessages b)
+
+{- | Perform an 'NRT' score (as would be rendered by 'writeNRT').
+
+> let sc = NRT [bundle 1 [s_new0 "default" (-1) AddToHead 1]
+>              ,bundle 2 [n_set1 (-1) "gate" 0]]
+> in withSC3 (performNRT sc)
+
+-}
+performNRT :: Transport m => NRT -> m ()
+performNRT sc = do
+  t0 <- liftIO time
+  mapM_ (run_bundle t0) (nrt_bundles sc)
 
 -- | Perform an 'NRT' score (as would be rendered by 'writeNRT').
 -- Asynchronous commands at time @0@ are separated out and run before
 -- the initial time-stamp is taken.  This re-orders synchronous
 -- commands in relation to asynchronous at time @0@.
---
--- > let sc = NRT [bundle 1 [s_new0 "default" (-1) AddToHead 1]
--- >              ,bundle 2 [n_set1 (-1) "gate" 0]]
--- > in withSC3 (performNRT sc)
-performNRT :: Transport m => NRT -> m ()
-performNRT s = do
+performNRT_reorder :: Transport m => NRT -> m ()
+performNRT_reorder s = do
   let (i,r) = nrt_span (<= 0) s
       i' = concatMap bundleMessages i
       (a,b) = partition_async i'
@@ -134,8 +145,8 @@ instance Audible Synthdef where
 instance Audible UGen where
     play_at = playUGen
 
-instance Audible NRT where
-    play_at _ = performNRT
+--instance Audible NRT where
+--    play_at _ = performNRT
 
 -- | 'withSC3' of 'play_at'.
 audition_at :: Audible e => Play_Opt -> e -> IO ()
@@ -209,7 +220,7 @@ b_fetch_hdr k b = do
 -- | 'b_info_unpack_err' of 'b_query1'.
 b_query1_unpack_generic :: (DuplexOSC m,Num n,Fractional r) => Int -> m (n,n,n,r)
 b_query1_unpack_generic n = do
-  send (b_query1 n)
+  sendMessage (b_query1 n)
   q <- waitReply "/b_info"
   return (Generic.b_info_unpack_err q)
 
@@ -231,7 +242,7 @@ c_getn1_data s = do
 -- | Variant of 'n_query' that waits for and unpacks the reply.
 n_query1_unpack :: Transport m => Int -> m (Maybe [Int])
 n_query1_unpack n = do
-  send (n_query [n])
+  sendMessage (n_query [n])
   r <- waitReply "/n_info"
   return (n_info_unpack r)
 
