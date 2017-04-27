@@ -113,8 +113,7 @@ performNRT sc = do
   t0 <- liftIO time
   mapM_ (run_bundle t0) (nrt_bundles sc)
 
--- | Perform an 'NRT' score (as would be rendered by 'writeNRT').
--- Asynchronous commands at time @0@ are separated out and run before
+-- | Variant where asynchronous commands at time @0@ are separated out and run before
 -- the initial time-stamp is taken.  This re-orders synchronous
 -- commands in relation to asynchronous at time @0@.
 performNRT_reorder :: Transport m => NRT -> m ()
@@ -125,6 +124,9 @@ performNRT_reorder s = do
   mapM_ async a
   t <- liftIO time
   mapM_ (run_bundle t) (Bundle 0 b : r)
+
+nrt_audition :: NRT -> IO ()
+nrt_audition = withSC3 . performNRT
 
 -- * Audible
 
@@ -144,9 +146,6 @@ instance Audible Synthdef where
 
 instance Audible UGen where
     play_at = playUGen
-
---instance Audible NRT where
---    play_at _ = performNRT
 
 -- | 'withSC3' of 'play_at'.
 audition_at :: Audible e => Play_Opt -> e -> IO ()

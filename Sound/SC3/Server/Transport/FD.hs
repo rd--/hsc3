@@ -82,6 +82,9 @@ run_bundle fd t0 b = do
 performNRT :: Transport t => t -> NRT -> IO ()
 performNRT fd sc = time >>= \t0 -> mapM_ (run_bundle fd t0) (nrt_bundles sc)
 
+nrt_audition :: NRT -> IO ()
+nrt_audition sc = withSC3 (\fd -> performNRT fd sc)
+
 -- * Audible
 
 -- | Class for values that can be encoded and sent to @scsynth@ for
@@ -99,9 +102,6 @@ instance Audible Synthdef where
 
 instance Audible UGen where
     play_id = playUGen
-
---instance Audible NRT where
---    play_id _ = performNRT
 
 audition_id :: Audible e => Int -> e -> IO ()
 audition_id k e = withSC3 (\fd -> play_id k fd e)
