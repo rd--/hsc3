@@ -89,11 +89,10 @@ rec_end_m r =
 {- | 'NRT' score for recorder, if 'rec_dur' is given schedule 'rec_end_m'.
 
 > import Sound.SC3
-> withSC3 (send (dumpOSC TextPrinter))
+> withSC3 (Sound.OSC.sendMessage (dumpOSC TextPrinter))
 > audition (out 0 (sinOsc AR (mce2 440 441) 0 * 0.1))
-> let rc = default_SC3_Recorder {rec_nc = 2,rec_dur = Just 2.0,rec_buf_frames = 65536}
-> let sc = sc3_recorder rc
-> withSC3 (performNRT sc)
+> let rc = default_SC3_Recorder {rec_dur = Just 5.0}
+> nrt_audition (sc3_recorder rc)
 
 -}
 sc3_recorder :: SC3_Recorder -> NRT
