@@ -1,8 +1,9 @@
-> Sound.SC3.UGen.Help.viewSC3Help "ToggleFF"
-> Sound.SC3.UGen.DB.ugenSummary "ToggleFF"
+    > Sound.SC3.UGen.Help.viewSC3Help "ToggleFF"
+    > Sound.SC3.UGen.DB.ugenSummary "ToggleFF"
 
-> import Sound.SC3
+> import Sound.SC3 {- hsc3 -}
 
-> let {t = dust 'α' AR (xLine KR 1 1000 60 DoNothing)
->     ;t' = toggleFF t * 400 + 800}
-> in audition (out 0 (sinOsc AR t' 0 * 0.1))
+> g_01 =
+>     let tr = dust 'α' AR (xLine KR 1 1000 60 DoNothing)
+>         fr = toggleFF tr * 400 + 800
+>     in sinOsc AR fr 0 * 0.1
