@@ -61,12 +61,11 @@ stop = sendMessage (g_freeAll [1])
 
 -- * Composite
 
--- | 'clearSched', free all nodes ('g_freeAll') at, and then
--- re-create, groups @1@ and @2@.
+-- | Runs 'clearSched' and then frees and re-creates groups @1@ and @2@.
 reset :: SendOSC m => m ()
 reset =
     let m = [clearSched
-            ,g_freeAll [1,2]
+            ,n_free [1,2]
             ,g_new [(1,AddToHead,0),(2,AddToTail,0)]]
     in sendBundle (bundle immediately m)
 
@@ -226,7 +225,7 @@ b_query1_unpack_generic n = do
 -- | Type specialised 'b_query1_unpack_generic'.
 --
 -- > withSC3 (b_query1_unpack 0)
-b_query1_unpack :: DuplexOSC m => Int -> m (Int,Int,Int,Double)
+b_query1_unpack :: DuplexOSC m => Buffer_Id -> m (Int,Int,Int,Double)
 b_query1_unpack = b_query1_unpack_generic
 
 -- | Variant of 'c_getn1' that waits for the reply and unpacks the data.
@@ -239,11 +238,18 @@ c_getn1_data s = do
   liftM f (waitDatum "/c_setn")
 
 -- | Variant of 'n_query' that waits for and unpacks the reply.
-n_query1_unpack :: Transport m => Int -> m (Maybe [Int])
+n_query1_unpack :: Transport m => Node_Id -> m (Maybe [Int])
 n_query1_unpack n = do
   sendMessage (n_query [n])
   r <- waitReply "/n_info"
   return (n_info_unpack r)
+
+-- | Variant of 'g_queryTree' that waits for and unpacks the reply.
+g_queryTree1_unpack :: Transport m => Group_Id -> m Query_Node
+g_queryTree1_unpack n = do
+  sendMessage (g_queryTree [(n,True)])
+  r <- waitReply "/g_queryTree.reply"
+  return (queryTree (messageDatum r))
 
 -- * Status
 

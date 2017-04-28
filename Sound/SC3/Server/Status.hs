@@ -74,8 +74,13 @@ queryTree_ctl (p,q) =
                 _ -> err "float/string" d
     in (f p,g q)
 
--- > let d = [int32 1,string "freq",float 440]
--- > in queryTree_synth True 1000 "saw" d
+{- | If /rc/ is 'True' then 'Query_Ctl' data is expected (ie. flag was set at @/g_queryTree@).
+/k/ is the synth-id, and /nm/ the name.
+
+> let d = [int32 1,string "freq",float 440]
+> in queryTree_synth True 1000 "saw" d
+
+-}
 queryTree_synth :: Bool -> Int -> String -> [Datum] -> (Query_Node,[Datum])
 queryTree_synth rc k nm d =
     let pairs l = case l of
@@ -127,6 +132,13 @@ queryTree d =
                (r,[]) -> r
                _ -> error "queryTree"
       _ -> error "queryTree"
+
+-- | Extact sequence of group-ids from 'Query_Node'.
+queryNode_to_group_seq :: Query_Node -> [Int]
+queryNode_to_group_seq nd =
+    case nd of
+      Query_Group k ch -> k : concatMap queryNode_to_group_seq ch
+      Query_Synth _ _ _ -> []
 
 -- | Transform 'Query_Node' to 'T.Tree'.
 --
