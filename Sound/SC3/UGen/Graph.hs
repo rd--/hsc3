@@ -6,6 +6,7 @@ import Data.Function {- base -}
 import Data.List{- base -}
 import Data.Maybe{- base -}
 
+import qualified Sound.SC3.UGen.Analysis as A
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
@@ -478,7 +479,7 @@ pv_multiple_out_edges g =
     let e = edges (ugens g)
         p = multiple_u_out_edges e
         n = mapMaybe (find_node g . port_nid) p
-    in filter (primitive_is_pv_rate . node_u_name) n
+    in filter (A.primitive_is_pv_rate . node_u_name) n
 
 -- | Error if graph has invalid @PV@ subgraph, ie. multiple out edges
 -- at @PV@ node not connecting to @Unpack1FFT@ & @PackFFT@.
@@ -487,7 +488,7 @@ pv_validate g =
     case pv_multiple_out_edges g of
       [] -> g
       n -> let d = concatMap (map node_u_name . node_descendents g) n
-           in if any primitive_is_pv_rate d || any (`elem` ["IFFT"]) d
+           in if any A.primitive_is_pv_rate d || any (`elem` ["IFFT"]) d
               then error (show
                           ("pv_validate: multiple out edges, see pv_split"
                           ,map node_u_name n
@@ -500,4 +501,3 @@ pv_validate g =
 -- > ugen_to_graph (out 0 (pan2 (sinOsc AR 440 0) 0.5 0.1))
 ugen_to_graph :: UGen -> Graph
 ugen_to_graph = pv_validate . mk_graph
-

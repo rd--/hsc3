@@ -46,11 +46,11 @@ data C_Meta n =
     deriving (Eq,Read,Show)
 
 -- | 5-tuple form of 'C_Meta' data.
-type C_Meta' n = (n,n,String,n,String)
+type C_Meta_T5 n = (n,n,String,n,String)
 
--- | Lift 'C_Meta'' to 'C_Meta' allowing type coercion.
-c_meta' :: (n -> m) -> C_Meta' n -> C_Meta m
-c_meta' f (l,r,w,stp,u) = C_Meta (f l) (f r) w (f stp) u
+-- | Lift 'C_Meta_5' to 'C_Meta' allowing type coercion.
+c_meta_t5 :: (n -> m) -> C_Meta_T5 n -> C_Meta m
+c_meta_t5 f (l,r,w,stp,u) = C_Meta (f l) (f r) w (f stp) u
 
 -- | Control inputs.  It is an invariant that controls with equal
 -- names within a UGen graph must be equal in all other respects.
@@ -216,8 +216,7 @@ proxy u n =
 mceProxies :: MCE UGen -> [UGen]
 mceProxies = mce_elem
 
--- | Multiple channel expansion node ('MCE_U') predicate.  Sees into
--- MRG.
+-- | Multiple channel expansion node ('MCE_U') predicate.  Sees into MRG.
 isMCE :: UGen -> Bool
 isMCE u =
     case mrg_leftmost u of
@@ -232,6 +231,15 @@ mceChannels u =
       MCE_U m -> mceProxies m
       MRG_U (MRG x y) -> let r:rs = mceChannels x in MRG_U (MRG r y) : rs
       _ -> [u]
+
+-- | Extract two channels from possible MCE, if there is only one
+-- channel it is duplicated.
+mce2c :: UGen -> (UGen,UGen)
+mce2c u =
+    case mceChannels u of
+      [] -> error "mce2c"
+      [p] -> (p,p)
+      p:q:_ -> (p,q)
 
 -- | Number of channels to expand to.  This function sees into MRG,
 -- and is defined only for MCE nodes.

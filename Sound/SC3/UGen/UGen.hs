@@ -6,22 +6,21 @@ import Data.Maybe {- base -}
 import Data.List {- base -}
 
 import qualified Sound.SC3.Common.Prelude as P
-import Sound.SC3.UGen.Identifier
-import Sound.SC3.UGen.MCE
-import Sound.SC3.UGen.Operator
-import Sound.SC3.UGen.Rate
+import qualified Sound.SC3.UGen.Identifier as ID
+import qualified Sound.SC3.UGen.Operator as O
+import qualified Sound.SC3.UGen.Rate as R
 import Sound.SC3.UGen.Type
 
 -- | 'UId' of 'resolveID'.
-toUId :: (ID a) => a -> UGenId
-toUId = UId . resolveID
+toUId :: ID.ID a => a -> UGenId
+toUId = UId . ID.resolveID
 
 -- | Lookup operator name for operator UGens, else UGen name.
 ugen_user_name :: String -> Special -> String
 ugen_user_name nm (Special n) =
     case nm of
-      "UnaryOpUGen" -> unaryName n
-      "BinaryOpUGen" -> binaryName n
+      "UnaryOpUGen" -> O.unaryName n
+      "BinaryOpUGen" -> O.binaryName n
       _ -> nm
 
 -- * UGen graph functions
@@ -61,25 +60,25 @@ ugenFoldr f st u =
 -- * Unit generator node constructors
 
 -- | Control input node constructor.
-control_f64 :: Rate -> Maybe Int -> String -> Sample -> UGen
+control_f64 :: R.Rate -> Maybe Int -> String -> Sample -> UGen
 control_f64 r ix nm d = Control_U (Control r ix nm d False Nothing)
 
 -- | Control input node constructor.
 --
 -- Note that if the name begins with a t_ prefix the control is /not/
 -- converted to a triggered control.  Please see 'tr_control'.
-control :: Rate -> String -> Double -> UGen
+control :: R.Rate -> String -> Double -> UGen
 control r = control_f64 r Nothing
 
 -- | Variant of 'control' with meta data.
-meta_control :: Rate -> String -> Double -> C_Meta' Double -> UGen
+meta_control :: R.Rate -> String -> Double -> C_Meta_T5 Double -> UGen
 meta_control rt nm df meta =
-    let m = c_meta' id meta
+    let m = c_meta_t5 id meta
     in Control_U (Control rt Nothing nm df False (Just m))
 
 -- | Triggered (kr) control input node constructor.
 tr_control_f64 :: Maybe Int -> String -> Sample -> UGen
-tr_control_f64 ix nm d = Control_U (Control KR ix nm d True Nothing)
+tr_control_f64 ix nm d = Control_U (Control R.KR ix nm d True Nothing)
 
 -- | Triggered (kr) control input node constructor.
 tr_control :: String -> Double -> UGen
@@ -102,17 +101,6 @@ mrg2 u = MRG_U . MRG u
 -- | Multiple channel expansion for two inputs.
 mce2 :: UGen -> UGen -> UGen
 mce2 x y = mce [x,y]
-
--- | Extract two channels from possible MCE, if there is only one
--- channel it is duplicated.
-mce2c :: UGen -> (UGen,UGen)
-mce2c u =
-    case u of
-      MCE_U m -> case mceProxies m of
-                     [] -> error "mce2c: nil mce"
-                     [p] -> (p,p)
-                     p:q:_ -> (p,q)
-      _ -> (u,u)
 
 -- | Multiple channel expansion for two inputs.
 mce3 :: UGen -> UGen -> UGen -> UGen
@@ -201,91 +189,28 @@ unpackLabel u =
 -- * Bitwise
 
 bitAnd :: UGen -> UGen -> UGen
-bitAnd = mkBinaryOperator BitAnd undefined
+bitAnd = mkBinaryOperator O.BitAnd undefined
 
 bitOr :: UGen -> UGen -> UGen
-bitOr = mkBinaryOperator BitOr undefined
+bitOr = mkBinaryOperator O.BitOr undefined
 
 bitXOr :: UGen -> UGen -> UGen
-bitXOr = mkBinaryOperator BitXor undefined
+bitXOr = mkBinaryOperator O.BitXor undefined
 
 bitNot :: UGen -> UGen
-bitNot = mkUnaryOperator BitNot undefined
+bitNot = mkUnaryOperator O.BitNot undefined
 
 shiftLeft :: UGen -> UGen -> UGen
-shiftLeft = mkBinaryOperator ShiftLeft undefined
+shiftLeft = mkBinaryOperator O.ShiftLeft undefined
 
 shiftRight :: UGen -> UGen -> UGen
-shiftRight = mkBinaryOperator ShiftRight undefined
+shiftRight = mkBinaryOperator O.ShiftRight undefined
 
 unsignedShift :: UGen -> UGen -> UGen
-unsignedShift = mkBinaryOperator UnsignedShift undefined
+unsignedShift = mkBinaryOperator O.UnsignedShift undefined
 
 (.<<.) :: UGen -> UGen -> UGen
 (.<<.) = shiftLeft
 
 (.>>.) :: UGen -> UGen -> UGen
 (.>>.) = shiftRight
-
--- * Analysis
-
--- | UGen primitive.  Sees through Proxy and MRG, possible multiple
--- primitives for MCE.
-ugen_primitive :: UGen -> [Primitive]
-ugen_primitive u =
-    case u of
-      Constant_U _ -> []
-      Control_U _ -> []
-      Label_U _ -> []
-      Primitive_U p -> [p]
-      Proxy_U p -> [proxySource p]
-      MCE_U m -> concatMap ugen_primitive (mce_elem m)
-      MRG_U m -> ugen_primitive (mrgLeft m)
-
--- | Heuristic based on primitive name (@FFT@, @PV_@).  Note that
--- @IFFT@ is at /control/ rate, not @PV@ rate.
-primitive_is_pv_rate :: String -> Bool
-primitive_is_pv_rate nm = nm == "FFT" || "PV_" `isPrefixOf` nm
-
--- | Variant on primitive_is_pv_rate.
-ugen_is_pv_rate :: UGen -> Bool
-ugen_is_pv_rate = any (primitive_is_pv_rate . ugenName)
-                  . ugen_primitive
-
--- | Traverse input graph until an @FFT@ or @PV_Split@ node is
--- encountered, and then locate the buffer input.  Biases left at MCE
--- nodes.
---
--- > import Sound.SC3
--- > let z = soundIn 4
--- > let f1 = fft 10 z 0.5 0 1 0
--- > let f2 = ffta 'a' 1024 z 0.5 0 1 0
--- > pv_track_buffer (pv_BrickWall f1 0.5) == Right 10
--- > pv_track_buffer (pv_BrickWall f2 0.5) == Right (localBuf 'a' 1024 1)
-pv_track_buffer :: UGen -> Either String UGen
-pv_track_buffer u =
-    case ugen_primitive u of
-      [] -> Left "pv_track_buffer: not located"
-      p:_ -> case ugenName p of
-               "FFT" -> Right (ugenInputs p !! 0)
-               "PV_Split" -> Right (ugenInputs p !! 1)
-               _ -> pv_track_buffer (ugenInputs p !! 0)
-
--- | Buffer node number of frames. Biases left at MCE nodes.  Sees
--- through @LocalBuf@, otherwise uses 'bufFrames'.
---
--- > buffer_nframes 10 == bufFrames IR 10
--- > buffer_nframes (control KR "b" 0) == bufFrames KR (control KR "b" 0)
--- > buffer_nframes (localBuf 'α' 2048 1) == 2048
-buffer_nframes :: UGen -> UGen
-buffer_nframes u =
-    let b = mkUGen Nothing [IR,KR] (Left (rateOf u)) "BufFrames" [u] Nothing 1 (Special 0) NoId
-    in case ugen_primitive u of
-         [] -> b
-         p:_ -> case ugenName p of
-                  "LocalBuf" -> ugenInputs p !! 1
-                  _ -> b
-
--- | 'pv_track_buffer' then 'buffer_nframes'.
-pv_track_nframes :: UGen -> Either String UGen
-pv_track_nframes u = pv_track_buffer u >>= Right . buffer_nframes
