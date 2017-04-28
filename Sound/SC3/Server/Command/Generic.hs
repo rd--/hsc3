@@ -59,9 +59,9 @@ b_gen_cheby z f n = b_gen z "cheby" (int32 (b_gen_flag f) : map float n)
 
 -- | Call @copy@ 'b_gen' command.
 b_gen_copy :: (Integral i) => i -> i -> i -> i -> Maybe i -> Message
-b_gen_copy z dst_ix src_b src_ix nf =
+b_gen_copy dst_b dst_ix src_b src_ix nf =
     let nf' = fromMaybe (-1) nf
-    in b_gen z "copy" (map int32 [dst_ix,src_b,src_ix,nf'])
+    in b_gen dst_b "copy" (map int32 [dst_ix,src_b,src_ix,nf'])
 
 -- | Get sample values.
 b_get :: (Integral i) => i -> [i] -> Message

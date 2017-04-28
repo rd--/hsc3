@@ -44,7 +44,7 @@ buffer_free_range b0 bN = withSC3 (mapM_ (\n -> async (b_free n)) [b0 .. bN])
 -- > group_query_tree 0
 group_query_tree :: Int -> IO ()
 group_query_tree n = do
-  r <- withSC3 (send (g_queryTree [(n,True)]) >> waitReply "/g_queryTree.reply")
+  r <- withSC3 (sendMessage (g_queryTree [(n,True)]) >> waitReply "/g_queryTree.reply")
   let tr = queryTree_rt (queryTree (messageDatum r))
   putStrLn (unlines ["::GROUP QUERY TREE::",T.drawTree (fmap query_node_pp tr)])
 
@@ -60,10 +60,13 @@ node_query n = do
 wait_for :: IO ()
 wait_for = do
   let w = pauseThread (0.25::Double)
-      f = withSC3_ (send (c_get [0]) >> waitReply "/c_set")
+      f = withSC3_ (sendMessage (c_get [0]) >> waitReply "/c_set")
       g e = print ("wait_for: retry",e::IOError) >> w >> h
       h = catch f g
   putStrLn "wait_for: begin" >> h >> putStrLn "wait_for: end"
+
+clear_all :: IO ()
+clear_all = withSC3 (sendBundle (bundle immediately [g_freeAll [0],clearSched]))
 
 help :: [String]
 help =
@@ -71,6 +74,7 @@ help =
     ,"buffer store id:int au-file:string"
     ,"buffer store-seq id:int dt:float iso|ntpi dir:string"
     ,"buffer free-range b0:int bN:int"
+    ,"clear-all"
     ,"group query-tree id:int"
     ,"node query id:int"
     ,"reset"
@@ -85,6 +89,7 @@ main = do
     ["buffer","store",n,fn] -> buffer_store (read n) fn
     ["buffer","store-seq",n,dt,ts,dir] -> buffer_store_seq (read n) (read dt) (ts == "iso") dir
     ["buffer","free-range",b0,bN] -> buffer_free_range (read b0) (read bN)
+    ["clear-all"] -> clear_all
     ["group","query-tree",n] -> group_query_tree (read n)
     ["node","query",n] -> node_query (read n)
     ["reset"] -> withSC3 reset
