@@ -44,8 +44,8 @@ buffer_free_range b0 bN = withSC3 (mapM_ (\n -> async (b_free n)) [b0 .. bN])
 -- > group_query_tree 0
 group_query_tree :: Int -> IO ()
 group_query_tree n = do
-  r <- withSC3 (sendMessage (g_queryTree [(n,True)]) >> waitReply "/g_queryTree.reply")
-  let tr = queryTree_rt (queryTree (messageDatum r))
+  qt <- withSC3 (g_queryTree1_unpack n)
+  let tr = queryTree_rt qt
   putStrLn (unlines ["::GROUP QUERY TREE::",T.drawTree (fmap query_node_pp tr)])
 
 -- > node_query 1
