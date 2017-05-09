@@ -31,15 +31,20 @@ $
 
 ![](sw/hsc3-data/data/gif/monopole.gif)
 
-## node
+## group
 
 `group query-tree` sends a `/g_queryTree` message and prints the
 `/g_queryTree.reply`.
 
+## message
+
+`message print address` prints messages that arrive _from_ scsynth
+(after requesting notification) that have `address`, ie. `/tr` for
+the messages sent by `sendTrig`.
+
 ## node
 
-`hsc3-scsynth node query` sends an `/n_query` message and prints the
-`/n_info` reply.
+`node query` sends an `/n_query` message and prints the `/n_info` reply.
 
 ## reset
 
