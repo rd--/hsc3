@@ -104,11 +104,12 @@ data UGen = Constant_U Constant
 
 -- * Parser
 
+-- | Type-specialised 'R.readMaybe'.
+parse_double :: String -> Maybe Double
+parse_double = R.readMaybe
+
 parse_constant :: String -> Maybe UGen
-parse_constant s =
-    let d :: Maybe Double
-        d = R.readMaybe s
-    in fmap constant d
+parse_constant = fmap constant . parse_double
 
 -- * Accessors
 
@@ -127,27 +128,35 @@ u_constant = fmap constantValue . un_constant
 u_constant_err :: UGen -> Sample
 u_constant_err = fromMaybe (error "u_constant") . u_constant
 
--- * Predicates
+-- * MRG
 
--- | Constant node predicate.
-isConstant :: UGen -> Bool
-isConstant = isJust . un_constant
+-- | Multiple root graph constructor.
+mrg :: [UGen] -> UGen
+mrg u =
+    case u of
+      [] -> error "mrg: []"
+      [x] -> x
+      (x:xs) -> MRG_U (MRG x (mrg xs))
 
--- | See into 'MRG_U', follows leftmost rule until arriving at non-MRG
--- node.
+-- | See into 'MRG_U', follows leftmost rule until arriving at non-MRG node.
 mrg_leftmost :: UGen -> UGen
 mrg_leftmost u =
     case u of
       MRG_U m -> mrg_leftmost (mrgLeft m)
       _ -> u
 
--- | True if input is a sink 'UGen', ie. has no outputs.  Sees into
--- MRG.
+-- * Predicates
+
+-- | Constant node predicate.
+isConstant :: UGen -> Bool
+isConstant = isJust . un_constant
+
+-- | True if input is a sink 'UGen', ie. has no outputs.  Sees into MRG.
 isSink :: UGen -> Bool
 isSink u =
     case mrg_leftmost u of
       Primitive_U p -> null (ugenOutputs p)
-      MCE_U m -> all isSink (mceProxies m)
+      MCE_U m -> all isSink (mce_elem m)
       _ -> False
 
 -- | See into 'Proxy_U'.
@@ -160,32 +169,7 @@ un_proxy u =
 isProxy :: UGen -> Bool
 isProxy = isJust . un_proxy
 
--- * Validators
-
--- | Ensure input 'UGen' is valid, ie. not a sink.
-checkInput :: UGen -> UGen
-checkInput u =
-    if isSink u
-    then error ("checkInput: " ++ show u)
-    else u
-
--- * Constructors
-
--- | Constant value node constructor.
-constant :: Real n => n -> UGen
-constant = Constant_U . Constant . realToFrac
-
--- | Type specialised 'constant'.
-int_to_ugen :: Int -> UGen
-int_to_ugen = constant
-
--- | Type specialised 'constant'.
-float_to_ugen :: Float -> UGen
-float_to_ugen = constant
-
--- | Type specialised 'constant'.
-double_to_ugen :: Double -> UGen
-double_to_ugen = constant
+-- * MCE
 
 -- | Multiple channel expansion node constructor.
 mce :: [UGen] -> UGen
@@ -194,23 +178,6 @@ mce xs =
       [] -> error "mce: []"
       [x] -> x
       _ -> MCE_U (MCE_Vector xs)
-
--- | Multiple root graph constructor.
-mrg :: [UGen] -> UGen
-mrg u =
-    case u of
-      [] -> error "mrg: []"
-      [x] -> x
-      (x:xs) -> MRG_U (MRG x (mrg xs))
-
--- | Unit generator proxy node constructor.
-proxy :: UGen -> Int -> UGen
-proxy u n =
-    case u of
-      Primitive_U p -> Proxy_U (Proxy p n)
-      _ -> error "proxy: not primitive"
-
--- * MCE
 
 -- | Type specified 'mce_elem'.
 mceProxies :: MCE UGen -> [UGen]
@@ -228,7 +195,7 @@ isMCE u =
 mceChannels :: UGen -> [UGen]
 mceChannels u =
     case u of
-      MCE_U m -> mceProxies m
+      MCE_U m -> mce_elem m
       MRG_U (MRG x y) -> let r:rs = mceChannels x in MRG_U (MRG r y) : rs
       _ -> [u]
 
@@ -289,6 +256,40 @@ mce_is_direct_proxy m =
              length (nub (map proxySource p')) == 1 &&
              map proxyIndex p' `isPrefixOf` [0..]
 
+-- * Validators
+
+-- | Ensure input 'UGen' is valid, ie. not a sink.
+checkInput :: UGen -> UGen
+checkInput u =
+    if isSink u
+    then error ("checkInput: " ++ show u)
+    else u
+
+-- * Constructors
+
+-- | Constant value node constructor.
+constant :: Real n => n -> UGen
+constant = Constant_U . Constant . realToFrac
+
+-- | Type specialised 'constant'.
+int_to_ugen :: Int -> UGen
+int_to_ugen = constant
+
+-- | Type specialised 'constant'.
+float_to_ugen :: Float -> UGen
+float_to_ugen = constant
+
+-- | Type specialised 'constant'.
+double_to_ugen :: Double -> UGen
+double_to_ugen = constant
+
+-- | Unit generator proxy node constructor.
+proxy :: UGen -> Int -> UGen
+proxy u n =
+    case u of
+      Primitive_U p -> Proxy_U (Proxy p n)
+      _ -> error "proxy: not primitive"
+
 -- | Determine the rate of a UGen.
 rateOf :: UGen -> Rate
 rateOf u =
@@ -305,7 +306,7 @@ rateOf u =
 proxify :: UGen -> UGen
 proxify u =
     case u of
-      MCE_U m -> mce (map proxify (mceProxies m))
+      MCE_U m -> mce (map proxify (mce_elem m))
       MRG_U m -> mrg [proxify (mrgLeft m), mrgRight m]
       Primitive_U p ->
           let o = ugenOutputs p
@@ -375,8 +376,7 @@ mkBinaryOperator_optimize i f o a b =
    in fromMaybe (mkOperator g "BinaryOpUGen" [a, b] (fromEnum i)) r
 
 -- | Binary math constructor with constant optimization.
-mkBinaryOperator :: Binary -> (Sample -> Sample -> Sample) ->
-                    UGen -> UGen -> UGen
+mkBinaryOperator :: Binary -> (Sample -> Sample -> Sample) -> UGen -> UGen -> UGen
 mkBinaryOperator i f a b =
    let g [x,y] = f x y
        g _ = error "mkBinaryOperator: non binary input"

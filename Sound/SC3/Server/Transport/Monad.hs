@@ -26,15 +26,19 @@ import Sound.SC3.UGen.Type
 async :: DuplexOSC m => Message -> m Message
 async m = sendMessage m >> waitReply "/done"
 
--- | If 'isAsync' then 'void' 'async' else 'sendMessage'.
+-- | 'void' of 'async'.
+async_ :: DuplexOSC m => Message -> m ()
+async_ = void . async
+
+-- | If 'isAsync' then 'async_' else 'sendMessage'.
 maybe_async :: DuplexOSC m => Message -> m ()
-maybe_async m = if isAsync m then void (async m) else sendMessage m
+maybe_async m = if isAsync m then async_ m else sendMessage m
 
 -- | Variant that timestamps synchronous messages.
 maybe_async_at :: DuplexOSC m => Time -> Message -> m ()
 maybe_async_at t m =
     if isAsync m
-    then void (async m)
+    then async_ m
     else sendBundle (bundle t [m])
 
 -- | Local host (ie. @127.0.0.1@) at port @57110@.
@@ -74,7 +78,7 @@ type Play_Opt = (Int,AddAction,Int,[(String,Double)])
 -- | Send 'd_recv' and 's_new' messages to scsynth.
 playGraphdef :: DuplexOSC m => Play_Opt -> G.Graphdef -> m ()
 playGraphdef (nid,act,gid,param) g = do
-  _ <- async (d_recv' g)
+  async_ (d_recv' g)
   sendMessage (s_new (ascii_to_string (G.graphdef_name g)) nid act gid param)
 
 -- | Send 'd_recv' and 's_new' messages to scsynth.
@@ -156,13 +160,12 @@ audition = audition_at (-1,AddToHead,1,[])
 
 -- * Notifications
 
--- | Turn on notifications, run /f/, turn off notifications, return
--- result.
+-- | Turn on notifications, run /f/, turn off notifications, return result.
 withNotifications :: DuplexOSC m => m a -> m a
 withNotifications f = do
-  _ <- async (notify True)
+  async_ (notify True)
   r <- f
-  _ <- async (notify False)
+  async_ (notify False)
   return r
 
 -- * Buffer & control & node variants.

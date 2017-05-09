@@ -1,11 +1,16 @@
-> Sound.SC3.UGen.Help.viewSC3Help "SendReply"
-> Sound.SC3.UGen.DB.ugenSummary "SendReply"
+    Sound.SC3.UGen.Help.viewSC3Help "SendReply"
+    Sound.SC3.UGen.DB.ugenSummary "SendReply"
 
-> import Sound.SC3
+> import Sound.OSC {- hosc3 -}
+> import Sound.SC3 {- hsc3 -}
 
-> let {s0 = lfNoise0 'α' KR 5
->     ;s1 = lfNoise0 'β' KR 5
->     ;o = sinOsc AR (s0 * 200 + 500) 0 * s1 * 0.1}
-> in audition (mrg [sendReply s0 0 "/send-reply" [s0,s1],out 0 o])
+> g_01 =
+>   let s0 = lfNoise0 'α' KR 5
+>       s1 = lfNoise0 'β' KR 5
+>       o = sinOsc AR (s0 * 200 + 500) 0 * s1 * 0.1
+>   in mrg [o,sendReply s0 0 "/send-reply" [s0,s1]]
 
-> withSC3 (withNotifications (waitReply "/send-reply"))
+> f_01 :: (DuplexOSC m) => m Message
+> f_01 = withNotifications (waitReply "/send-reply")
+
+    withSC3 f_01

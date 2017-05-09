@@ -68,6 +68,11 @@ wait_for = do
 clear_all :: IO ()
 clear_all = withSC3 (sendBundle (bundle immediately [g_freeAll [0],clearSched]))
 
+message_print :: String -> IO ()
+message_print addr =
+    let pr = waitReply addr >>= \r -> liftIO (putStrLn (messagePP (Just 4) r))
+    in withSC3 (async_ (notify True) >> forever pr)
+
 help :: [String]
 help =
     ["buffer query id:int"
@@ -79,6 +84,7 @@ help =
     ,"node query id:int"
     ,"reset"
     ,"status"
+    ,"message print address"
     ,"wait-for"]
 
 main :: IO ()
@@ -94,5 +100,6 @@ main = do
     ["node","query",n] -> node_query (read n)
     ["reset"] -> withSC3 reset
     ["status"] -> withSC3 serverStatus >>= mapM_ putStrLn
+    ["message","print",addr] -> message_print addr
     ["wait-for"] -> wait_for
     _ -> putStrLn (unlines help)
