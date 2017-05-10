@@ -111,6 +111,13 @@ mce2c u =
       [p] -> (p,p)
       p:q:_ -> (p,q)
 
+t2_from_list :: [t] -> (t,t)
+t2_from_list l = case l of {[p,q] -> (p,q);_ -> error "t2_from_list"}
+
+-- | Variant of 'mce2c' that requires input to have two channels.
+unmce2 :: UGen -> (UGen, UGen)
+unmce2 = t2_from_list . mceChannels
+
 -- | Multiple channel expansion for two inputs.
 mce3 :: UGen -> UGen -> UGen -> UGen
 mce3 x y z = mce [x,y,z]
