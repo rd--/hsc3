@@ -102,6 +102,15 @@ mrg2 u = MRG_U . MRG u
 mce2 :: UGen -> UGen -> UGen
 mce2 x y = mce [x,y]
 
+-- | Extract two channels from possible MCE, if there is only one
+-- channel it is duplicated.
+mce2c :: UGen -> (UGen,UGen)
+mce2c u =
+    case mceChannels u of
+      [] -> error "mce2c"
+      [p] -> (p,p)
+      p:q:_ -> (p,q)
+
 -- | Multiple channel expansion for two inputs.
 mce3 :: UGen -> UGen -> UGen -> UGen
 mce3 x y z = mce [x,y,z]

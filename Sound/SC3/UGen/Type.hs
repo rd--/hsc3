@@ -199,15 +199,6 @@ mceChannels u =
       MRG_U (MRG x y) -> let r:rs = mceChannels x in MRG_U (MRG r y) : rs
       _ -> [u]
 
--- | Extract two channels from possible MCE, if there is only one
--- channel it is duplicated.
-mce2c :: UGen -> (UGen,UGen)
-mce2c u =
-    case mceChannels u of
-      [] -> error "mce2c"
-      [p] -> (p,p)
-      p:q:_ -> (p,q)
-
 -- | Number of channels to expand to.  This function sees into MRG,
 -- and is defined only for MCE nodes.
 mceDegree :: UGen -> Maybe Int
@@ -244,6 +235,7 @@ mceBuild f i =
       Nothing -> f i
       Just i' -> MCE_U (MCE_Vector (map (mceBuild f) i'))
 
+{-
 -- | True if MCE is an immediate proxy for a multiple-out Primitive.
 mce_is_direct_proxy :: MCE UGen -> Bool
 mce_is_direct_proxy m =
@@ -255,6 +247,7 @@ mce_is_direct_proxy m =
           in all isJust p &&
              length (nub (map proxySource p')) == 1 &&
              map proxyIndex p' `isPrefixOf` [0..]
+-}
 
 -- * Validators
 

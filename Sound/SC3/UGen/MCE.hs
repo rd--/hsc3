@@ -1,4 +1,4 @@
--- | Multiple channel expansion.
+-- | The SC3 multiple channel expansion rules over an abstract type.
 module Sound.SC3.UGen.MCE where
 
 -- | Multiple channel expansion.
