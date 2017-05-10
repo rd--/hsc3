@@ -69,9 +69,6 @@ b_get = G.b_get
 b_getn :: Buffer_Id -> [(Buffer_Ix,Int)] -> Message
 b_getn = G.b_getn
 
-b_info_unpack :: Message -> Maybe (Int,Int,Int,Double)
-b_info_unpack = G.b_info_unpack
-
 -- | Request \/b_info messages.
 b_query :: [Buffer_Id] -> Message
 b_query = G.b_query
@@ -191,9 +188,6 @@ n_fill = G.n_fill
 -- | Delete a node.
 n_free :: [Node_Id] -> Message
 n_free = G.n_free
-
-n_info_unpack :: Message -> Maybe [Int]
-n_info_unpack = G.n_info_unpack
 
 n_map :: Node_Id -> [(String,Bus_Id)] -> Message
 n_map = G.n_map
@@ -389,6 +383,32 @@ b_setn1_segmented = G.b_setn1_segmented
 -- | Generate accumulation buffer given time-domain IR buffer and FFT size.
 pc_preparePartConv :: Int -> Int -> Int -> Message
 pc_preparePartConv = G.pc_preparePartConv
+
+-- * Unpack
+
+unpack_n_info :: Message -> Maybe (Int,Int,Int,Int,Int,Maybe (Int,Int))
+unpack_n_info = G.unpack_n_info
+
+unpack_n_info_err :: Message -> (Int,Int,Int,Int,Int,Maybe (Int,Int))
+unpack_n_info_err = G.unpack_n_info_err
+
+unpack_tr :: Message -> Maybe (Int,Int,Double)
+unpack_tr = G.unpack_tr
+
+unpack_tr_err :: Message -> (Int,Int,Double)
+unpack_tr_err = G.unpack_tr_err
+
+unpack_b_setn :: Message -> Maybe (Int,Int,Int,[Double])
+unpack_b_setn = G.unpack_b_setn
+
+unpack_b_setn_err :: Message -> (Int,Int,Int,[Double])
+unpack_b_setn_err = G.unpack_b_setn_err
+
+unpack_b_info :: Message -> Maybe (Int,Int,Int,Double)
+unpack_b_info = G.unpack_b_info
+
+unpack_b_info_err :: Message -> (Int,Int,Int,Double)
+unpack_b_info_err = G.unpack_b_info_err
 
 -- Local Variables:
 -- truncate-lines:t

@@ -2,6 +2,14 @@ module Sound.SC3.Common.Monad where
 
 import Control.Monad {- base -}
 
+-- | 'sequence' of 'repeat'
+repeatM :: Monad m => m t -> m [t]
+repeatM = sequence . repeat
+
+-- | 'void' of 'repeatM'.
+repeatM_ :: Monad m => m t -> m ()
+repeatM_ = void . repeatM
+
 -- | Right to left compositon of 'Monad' functions.
 --
 -- > fmap (== 7) (composeM [return . (+ 1),return . (/ 2)] 3)

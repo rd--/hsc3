@@ -175,11 +175,9 @@ withNotifications f = do
 -- > withSC3 (b_getn1_data 0 (0,5))
 b_getn1_data :: DuplexOSC m => Int -> (Int,Int) -> m [Double]
 b_getn1_data b s = do
-  let f d = case d of
-              Int32 _:Int32 _:Int32 _:x -> mapMaybe datum_floating x
-              _ -> error "b_getn1_data"
+  let f m = let (_,_,_,r) = unpack_b_setn_err m in r
   sendMessage (b_getn1 b s)
-  liftM f (waitDatum "/b_setn")
+  liftM f (waitReply "/b_setn")
 
 -- | Variant of 'b_getn1_data' that segments individual 'b_getn'
 -- messages to /n/ elements.
@@ -196,14 +194,12 @@ b_getn1_data_segment n b (i,j) = do
 --
 b_fetch :: DuplexOSC m => Int -> Int -> m [[Double]]
 b_fetch n b = do
-  let f d = case d of
-              [Int32 _,Int32 nf,Int32 nc,Float _] ->
-                  let ix = (0,fromIntegral (nf * nc))
-                      deinterleave = transpose . chunksOf (fromIntegral nc)
-                  in liftM deinterleave (b_getn1_data_segment n b ix)
-              _ -> error "b_fetch"
+  let f m = let (_,nf,nc,_) = unpack_b_info_err m
+                ix = (0,nf * nc)
+                deinterleave = transpose . chunksOf nc
+            in liftM deinterleave (b_getn1_data_segment n b ix)
   sendMessage (b_query1 b)
-  waitDatum "/b_info" >>= f
+  waitReply "/b_info" >>= f
 
 -- | First channel of 'b_fetch', errors if there is no data.
 --
@@ -223,7 +219,7 @@ b_query1_unpack_generic :: (DuplexOSC m,Num n,Fractional r) => Int -> m (n,n,n,r
 b_query1_unpack_generic n = do
   sendMessage (b_query1 n)
   q <- waitReply "/b_info"
-  return (Generic.b_info_unpack_err q)
+  return (Generic.unpack_b_info_err q)
 
 -- | Type specialised 'b_query1_unpack_generic'.
 --
@@ -241,11 +237,11 @@ c_getn1_data s = do
   liftM f (waitDatum "/c_setn")
 
 -- | Variant of 'n_query' that waits for and unpacks the reply.
-n_query1_unpack :: Transport m => Node_Id -> m (Maybe [Int])
+n_query1_unpack :: Transport m => Node_Id -> m (Maybe (Int,Int,Int,Int,Int,Maybe (Int,Int)))
 n_query1_unpack n = do
   sendMessage (n_query [n])
   r <- waitReply "/n_info"
-  return (n_info_unpack r)
+  return (unpack_n_info r)
 
 -- | Variant of 'g_queryTree' that waits for and unpacks the reply.
 g_queryTree1_unpack :: Transport m => Group_Id -> m Query_Node

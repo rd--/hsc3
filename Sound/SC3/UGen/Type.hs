@@ -235,8 +235,8 @@ mceBuild f i =
       Nothing -> f i
       Just i' -> MCE_U (MCE_Vector (map (mceBuild f) i'))
 
-{-
 -- | True if MCE is an immediate proxy for a multiple-out Primitive.
+--   This is useful when disassembling graphs, ie. ugen_graph_forth_pp at hsc3-db.
 mce_is_direct_proxy :: MCE UGen -> Bool
 mce_is_direct_proxy m =
     case m of
@@ -247,7 +247,6 @@ mce_is_direct_proxy m =
           in all isJust p &&
              length (nub (map proxySource p')) == 1 &&
              map proxyIndex p' `isPrefixOf` [0..]
--}
 
 -- * Validators
 

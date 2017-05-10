@@ -71,18 +71,6 @@ b_get nid i = message "/b_get" (int32 nid : map int32 i)
 b_getn :: (Integral i) => i -> [(i,i)] -> Message
 b_getn nid l = message "/b_getn" (int32 nid : mk_duples int32 int32 l)
 
--- | Unpack @b_info@ message, fields are (id,frames,channels,sample-rate).
-b_info_unpack :: (Num n,Fractional r) => Message -> Maybe (n,n,n,r)
-b_info_unpack q =
-  case q of
-    Message "/b_info" [Int32 b_id,Int32 b_sz,Int32 b_ch,Float b_rt] ->
-        Just (fromIntegral b_id,fromIntegral b_sz,fromIntegral b_ch,realToFrac b_rt)
-    _ -> Nothing
-
--- | Variant generating 'error'.
-b_info_unpack_err :: (Num n,Fractional r) => Message -> (n,n,n,r)
-b_info_unpack_err = fromMaybe (error "b_info_unpack") . b_info_unpack
-
 -- | Request \/b_info messages.
 b_query :: (Integral i) => [i] -> Message
 b_query = message "/b_query" . map int32
@@ -230,13 +218,6 @@ n_fill nid l = message "/n_fill" (int32 nid : mk_triples string int32 float l)
 -- | Delete a node.
 n_free :: (Integral i) => [i] -> Message
 n_free = message "/n_free" . map int32
-
--- | Unpack @n_info@ message.
-n_info_unpack :: Integral n => Message -> Maybe [n]
-n_info_unpack q =
-    case q of
-      Message "/n_info" r -> Just (mapMaybe datum_integral r)
-      _ -> Nothing
 
 n_map :: (Integral i) => i -> [(String,i)] -> Message
 n_map nid l = message "/n_map" (int32 nid : mk_duples string int32 l)
@@ -445,9 +426,61 @@ b_indices n m k =
 -- * UGen commands.
 
 -- | Generate accumulation buffer given time-domain IR buffer and FFT size.
-pc_preparePartConv :: (Integral i) => i -> i -> i -> Message
+pc_preparePartConv :: Integral i => i -> i -> i -> Message
 pc_preparePartConv b irb fft_size =
     b_gen b "PreparePartConv" (map int32 [irb, fft_size])
+
+-- * Unpack
+
+-- | Unpack @n_info@ message.
+unpack_n_info :: Num i => Message -> Maybe (i,i,i,i,i,Maybe (i,i))
+unpack_n_info m =
+    let to_i = fromIntegral
+    in case m of
+         Message "/n_info" [Int32 i1,Int32 i2,Int32 i3,Int32 i4,Int32 i5] -> Just (to_i i1,to_i i2,to_i i3,to_i i4,to_i i5,Nothing)
+         Message "/n_info" [Int32 i1,Int32 i2,Int32 i3,Int32 i4,Int32 i5,Int32 i6,Int32 i7] -> Just (to_i i1,to_i i2,to_i i3,to_i i4,to_i i5,Just (to_i i6,to_i i7))
+         _ -> Nothing
+
+unpack_n_info_err :: Num i => Message -> (i,i,i,i,i,Maybe (i,i))
+unpack_n_info_err = fromMaybe (error "unpack_n_info") . unpack_n_info
+
+-- | Unpack the '/tr' messages sent by 'sendTrig'.
+unpack_tr :: (Num i,Fractional f) => Message -> Maybe (i,i,f)
+unpack_tr m =
+    let to_i = fromIntegral
+        to_f = realToFrac
+    in case m of
+         Message "/tr" [Int32 p,Int32 q,Float r] -> Just (to_i p,to_i q,to_f r)
+         _ -> Nothing
+
+unpack_tr_err :: (Num i,Fractional f) => Message -> (i,i,f)
+unpack_tr_err = fromMaybe (error "unpack_tr") . unpack_tr
+
+unpack_b_setn :: (Num i,Fractional f) => Message -> Maybe (i,i,i,[f])
+unpack_b_setn m =
+    let to_i = fromIntegral
+        to_f d = case d of
+                    Float n -> realToFrac n
+                    _ -> error "unpack_b_setn: non-float data"
+    in case m of
+         Message "/b_setn" (Int32 p:Int32 q:Int32 r:z) -> Just (to_i p,to_i q,to_i r,map to_f z)
+         _ -> Nothing
+
+unpack_b_setn_err :: (Num i,Fractional f) => Message -> (i,i,i,[f])
+unpack_b_setn_err = fromMaybe (error "unpack_b_setn") . unpack_b_setn
+
+-- | Unpack @b_info@ message, fields are (id,frames,channels,sample-rate).
+unpack_b_info :: (Num i,Fractional f) => Message -> Maybe (i,i,i,f)
+unpack_b_info m =
+    let to_i = fromIntegral
+        to_f = realToFrac
+    in case m of
+         Message "/b_info" [Int32 p,Int32 q,Int32 r,Float s] -> Just (to_i p,to_i q,to_i r,to_f s)
+         _ -> Nothing
+
+-- | Variant generating 'error'.
+unpack_b_info_err :: (Num i,Fractional f) => Message -> (i,i,i,f)
+unpack_b_info_err = fromMaybe (error "unpack_b_info") . unpack_b_info
 
 -- Local Variables:
 -- truncate-lines:t
