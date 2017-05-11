@@ -79,11 +79,11 @@ run_bundle fd t0 b = do
 
 -- | Perform an 'NRT' score (as would be rendered by 'writeNRT').  In
 -- particular note that all timestamps /must/ be in 'NTPr' form.
-performNRT :: Transport t => t -> NRT -> IO ()
-performNRT fd sc = time >>= \t0 -> mapM_ (run_bundle fd t0) (nrt_bundles sc)
+nrt_play :: Transport t => t -> NRT -> IO ()
+nrt_play fd sc = time >>= \t0 -> mapM_ (run_bundle fd t0) (nrt_bundles sc)
 
 nrt_audition :: NRT -> IO ()
-nrt_audition sc = withSC3 (\fd -> performNRT fd sc)
+nrt_audition sc = withSC3 (\fd -> nrt_play fd sc)
 
 -- * Audible
 

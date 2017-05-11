@@ -104,23 +104,23 @@ run_bundle t0 b = do
   liftIO (pauseThreadUntil (t - latency))
   mapM_ (maybe_async_at t) (bundleMessages b)
 
-{- | Perform an 'NRT' score (as would be rendered by 'writeNRT').
+{- | Play an 'NRT' score (as would be rendered by 'writeNRT').
 
 > let sc = NRT [bundle 1 [s_new0 "default" (-1) AddToHead 1]
 >              ,bundle 2 [n_set1 (-1) "gate" 0]]
-> in withSC3 (performNRT sc)
+> in withSC3 (nrt_play sc)
 
 -}
-performNRT :: Transport m => NRT -> m ()
-performNRT sc = do
+nrt_play :: Transport m => NRT -> m ()
+nrt_play sc = do
   t0 <- liftIO time
   mapM_ (run_bundle t0) (nrt_bundles sc)
 
 -- | Variant where asynchronous commands at time @0@ are separated out and run before
 -- the initial time-stamp is taken.  This re-orders synchronous
 -- commands in relation to asynchronous at time @0@.
-performNRT_reorder :: Transport m => NRT -> m ()
-performNRT_reorder s = do
+nrt_play_reorder :: Transport m => NRT -> m ()
+nrt_play_reorder s = do
   let (i,r) = nrt_span (<= 0) s
       i' = concatMap bundleMessages i
       (a,b) = partition_async i'
@@ -129,7 +129,7 @@ performNRT_reorder s = do
   mapM_ (run_bundle t) (Bundle 0 b : r)
 
 nrt_audition :: NRT -> IO ()
-nrt_audition = withSC3 . performNRT
+nrt_audition = withSC3 . nrt_play
 
 -- * Audible
 
