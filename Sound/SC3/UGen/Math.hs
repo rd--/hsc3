@@ -60,46 +60,6 @@ sc3_gt = sc3_comparison (>)
 sc3_gte :: (Num n, Ord n) => n -> n -> n
 sc3_gte = sc3_comparison (>=)
 
--- | Variant of @SC3@ @roundTo@ function.
---
--- > let r = [0,0,0.25,0.25,0.5,0.5,0.5,0.75,0.75,1,1]
--- > in map (`roundTo_` 0.25) [0,0.1 .. 1] == r
-roundTo_ :: RealFrac n => n -> n -> n
-roundTo_ = sc3_round_to
-
--- > map (flip sc3_round_to 0.25) [0,0.1 .. 1]
-sc3_round_to :: RealFrac n => n -> n -> n
-sc3_round_to a b = if b == 0 then a else sc_floor ((a / b) + 0.5) * b
-
-sc3_idiv :: RealFrac n => n -> n -> n
-sc3_idiv a b = fromInteger (floor a `div` floor b)
-
-{- | The SC3 @%@ UGen operator is the 'F.mod'' function.
-
-> > 1.5 % 1.2 // ~= 0.3
-> > -1.5 % 1.2 // ~= 0.9
-> > 1.5 % -1.2 // ~= -0.9
-> > -1.5 % -1.2 // ~= -0.3
-
-> let (%) = sc3_mod
-> 1.5 % 1.2 ~= 0.3
-> (-1.5) % 1.2 ~= 0.9
-> 1.5 % (-1.2) ~= -0.9
-> (-1.5) % (-1.2) ~= -0.3
-
-> > 1.2 % 1.5 // ~= 1.2
-> > -1.2 % 1.5 // ~= 0.3
-> > 1.2 % -1.5 // ~= -0.3
-> > -1.2 % -1.5 // ~= -1.2
-
-> 1.2 % 1.5 ~= 1.2
-> (-1.2) % 1.5 ~= 0.3
-> 1.2 % (-1.5) ~= -0.3
-> (-1.2) % (-1.5) ~= -1.2
--}
-sc3_mod :: RealFrac n => n -> n -> n
-sc3_mod = F.mod'
-
 -- | Association table for 'Binary' to haskell function implementing operator.
 binop_hs_tbl :: (Real n,Floating n,RealFrac n) => [(Binary,n -> n -> n)]
 binop_hs_tbl =
@@ -193,11 +153,6 @@ instance OrdE UGen where
     (>*) = mkBinaryOperator GT_ sc3_gt
     (>=*) = mkBinaryOperator GE sc3_gte
 
-sc3_properFraction :: RealFrac t => t -> (t,t)
-sc3_properFraction a =
-    let (p,q) = properFraction a
-    in (fromInteger p,q)
-
 -- | Variant of 'RealFrac' with non 'Integral' results.
 class RealFrac a => RealFracE a where
   properFractionE :: a -> (a,a)
@@ -214,9 +169,9 @@ class RealFrac a => RealFracE a where
 instance RealFracE Float
 instance RealFracE Double
 
--- | 'UGen' form or 'roundTo_'.
+-- | 'UGen' form or 'sc3_round_to'.
 roundTo :: UGen -> UGen -> UGen
-roundTo = mkBinaryOperator Round roundTo_
+roundTo = mkBinaryOperator Round sc3_round_to
 
 instance RealFracE UGen where
     properFractionE = error "UGen.properFractionE"
@@ -302,12 +257,6 @@ instance UnaryOp UGen where
     softClip = mkUnaryOperator SoftClip softClip
     squared = mkUnaryOperator Squared squared
 
-difSqr' :: Num a => a -> a -> a
-difSqr' a b = (a * a) - (b * b)
-
-hypotx' :: (Ord a, Floating a) => a -> a -> a
-hypotx' x y = abs x + abs y - ((sqrt 2 - 1) * min (abs x) (abs y))
-
 -- | Binary operator class.
 class (Floating a,RealFrac a, Ord a) => BinaryOp a where
     absDif :: a -> a -> a
@@ -319,7 +268,7 @@ class (Floating a,RealFrac a, Ord a) => BinaryOp a where
     clip2 :: a -> a -> a
     clip2 a b = clip_ a (-b) b
     difSqr :: a -> a -> a
-    difSqr = difSqr'
+    difSqr = sc_dif_sqr
     excess :: a -> a -> a
     excess a b = a - clip_ a (-b) b
     exprandRange :: a -> a -> a
@@ -333,9 +282,9 @@ class (Floating a,RealFrac a, Ord a) => BinaryOp a where
     gcdE :: a -> a -> a
     gcdE = error "gcdE"
     hypot :: a -> a -> a
-    hypot x y = sqrt (x * x + y * y)
+    hypot = sc_hypot
     hypotx :: a -> a -> a
-    hypotx = hypotx'
+    hypotx = sc_hypotx
     iDiv :: a -> a -> a
     iDiv = sc3_idiv
     lcmE :: a -> a -> a
@@ -368,12 +317,6 @@ class (Floating a,RealFrac a, Ord a) => BinaryOp a where
     trunc = error "trunc"
     wrap2 :: a -> a -> a
     wrap2 = error "wrap2"
-
-fmod_f32 :: Float -> Float -> Float
-fmod_f32 = sc3_mod
-
-fmod_f64 :: Double -> Double -> Double
-fmod_f64 = sc3_mod
 
 instance BinaryOp Float where
     fold2 a b = fold_ a (-b) b
@@ -426,35 +369,6 @@ class Num a => MulAdd a where
 instance MulAdd UGen where mul_add = mulAdd
 instance MulAdd Float where
 instance MulAdd Double where
-
--- | Variant of 'wrap'' with @SC3@ argument ordering.
---
--- > map (\n -> wrap_ n 5 10) [3..12] == map (wrap' 5 10) [3..12]
-wrap_ :: RealFracE n => n -> n -> n -> n
-wrap_ a b c = wrap' b c a
-
--- | Fold /k/ to within range /(i,j)/, ie. @AbstractFunction.fold@
---
--- > map (foldToRange 5 10) [3..12] == [7,6,5,6,7,8,9,10,9,8]
-foldToRange :: (Ord a,Num a) => a -> a -> a -> a
-foldToRange i j =
-    let f n = if n > j
-              then f (j - (n - j))
-              else if n < i
-                   then f (i - (n - i))
-                   else n
-    in f
-
--- | Variant of 'foldToRange' with @SC3@ argument ordering.
-fold_ :: (Ord a,Num a) => a -> a -> a -> a
-fold_ n i j = foldToRange i j n
-
--- | Variant of 'clip'' with @SC3@ argument ordering.
-clip_ :: (Ord a) => a -> a -> a -> a
-clip_ n i j = clip' i j n
-
-hypot_ :: (Floating a) => a -> a -> a
-hypot_ x y = sqrt (x * x + y * y)
 
 -- | Map from one linear range to another linear range.
 linlin_ma :: (Fractional a,MulAdd a) => a -> a -> a -> a -> a -> a

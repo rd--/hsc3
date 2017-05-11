@@ -1,5 +1,6 @@
 module Sound.SC3.Common.Math where
 
+import qualified Data.Fixed as F {- base -}
 import Data.Maybe {- base -}
 
 -- | Half pi.
@@ -33,11 +34,61 @@ sc_ceiling = fromInteger . ceiling
 sc_floor :: RealFrac a => a -> a
 sc_floor = fromInteger . floor
 
+-- | Variant of @SC3@ @roundTo@ function.
+--
+-- > let r = [0,0,0.25,0.25,0.5,0.5,0.5,0.75,0.75,1,1]
+-- > in map (`sc3_round_to` 0.25) [0,0.1 .. 1] == r
+sc3_round_to :: RealFrac n => n -> n -> n
+sc3_round_to a b = if b == 0 then a else sc_floor ((a / b) + 0.5) * b
+
+sc3_idiv :: RealFrac n => n -> n -> n
+sc3_idiv a b = fromInteger (floor a `div` floor b)
+
+{- | The SC3 @%@ UGen operator is the 'F.mod'' function.
+
+> > 1.5 % 1.2 // ~= 0.3
+> > -1.5 % 1.2 // ~= 0.9
+> > 1.5 % -1.2 // ~= -0.9
+> > -1.5 % -1.2 // ~= -0.3
+
+> let (%) = sc3_mod
+> 1.5 % 1.2 ~= 0.3
+> (-1.5) % 1.2 ~= 0.9
+> 1.5 % (-1.2) ~= -0.9
+> (-1.5) % (-1.2) ~= -0.3
+
+> > 1.2 % 1.5 // ~= 1.2
+> > -1.2 % 1.5 // ~= 0.3
+> > 1.2 % -1.5 // ~= -0.3
+> > -1.2 % -1.5 // ~= -1.2
+
+> 1.2 % 1.5 ~= 1.2
+> (-1.2) % 1.5 ~= 0.3
+> 1.2 % (-1.5) ~= -0.3
+> (-1.2) % (-1.5) ~= -1.2
+
+> map (\n -> sc3_mod n 12.0) [-1.0,12.25,15.0] == [11.0,0.25,3.0]
+-}
+sc3_mod :: RealFrac n => n -> n -> n
+sc3_mod = F.mod'
+
+-- | Type specialised 'sc3_mod'.
+fmod_f32 :: Float -> Float -> Float
+fmod_f32 = sc3_mod
+
+-- | Type specialised 'sc3_mod'.
+fmod_f64 :: Double -> Double -> Double
+fmod_f64 = sc3_mod
+
 -- | Clip /n/ to within range /(i,j)/.  'clip' is a 'UGen', hence prime.
 --
 -- > map (clip 5 10) [3..12] == [5,5,5,6,7,8,9,10,10,10]
 clip' :: (Ord a) => a -> a -> a -> a
 clip' i j n = if n < i then i else if n > j then j else n
+
+-- | Variant of 'clip'' with @SC3@ argument ordering.
+clip_ :: Ord a => a -> a -> a -> a
+clip_ n i j = clip' i j n
 
 -- | Fractional modulo.
 --
@@ -77,6 +128,12 @@ ie. /inclusive/ at right edge.  'wrap' is a 'UGen', hence prime.
 -}
 wrap' :: RealFrac n => n -> n -> n -> n
 wrap' = wrap_rh (<=)
+
+-- | Variant of 'wrap'' with @SC3@ argument ordering.
+--
+-- > map (\n -> wrap_ n 5 10) [3..12] == map (wrap' 5 10) [3..12]
+wrap_ :: RealFrac n => n -> n -> n -> n
+wrap_ a b c = wrap' b c a
 
 {- | Generic variant of 'wrap''.
 
@@ -249,3 +306,34 @@ lin_pan2 :: Fractional t => t -> t -> (t, t)
 lin_pan2 p q =
     let q' = (q / 2) + 0.5
     in (p * (1 - q'),p * q')
+
+sc3_properFraction :: RealFrac t => t -> (t,t)
+sc3_properFraction a =
+    let (p,q) = properFraction a
+    in (fromInteger p,q)
+
+sc_dif_sqr :: Num a => a -> a -> a
+sc_dif_sqr a b = (a * a) - (b * b)
+
+sc_hypot :: Floating a => a -> a -> a
+sc_hypot x y = sqrt (x * x + y * y)
+
+sc_hypotx :: (Ord a, Floating a) => a -> a -> a
+sc_hypotx x y = abs x + abs y - ((sqrt 2 - 1) * min (abs x) (abs y))
+
+-- | Fold /k/ to within range /(i,j)/, ie. @AbstractFunction.fold@
+--
+-- > map (foldToRange 5 10) [3..12] == [7,6,5,6,7,8,9,10,9,8]
+foldToRange :: (Ord a,Num a) => a -> a -> a -> a
+foldToRange i j =
+    let f n = if n > j
+              then f (j - (n - j))
+              else if n < i
+                   then f (i - (n - i))
+                   else n
+    in f
+
+-- | Variant of 'foldToRange' with @SC3@ argument ordering.
+fold_ :: (Ord a,Num a) => a -> a -> a -> a
+fold_ n i j = foldToRange i j n
+
