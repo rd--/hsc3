@@ -1,6 +1,7 @@
     > Sound.SC3.UGen.Help.viewSC3Help "VOsc"
     > Sound.SC3.UGen.DB.ugenSummary "VOsc"
 
+> import Sound.OSC {- hosc -}
 > import Sound.SC3 {- hsc3 -}
 
 Allocate and fill tables 0 to 7.
@@ -14,7 +15,7 @@ Allocate and fill tables 0 to 7.
 > gen_setup i =
 >     let i' = fromIntegral i
 >     in (b_alloc i 1024 1,b_gen_sine1 i bf (gen_harm i'))
-> run_setup (p,q) = (async p >> send q)
+> run_setup (p,q) = (async p >> sendMessage q)
 
     > withSC3 (mapM_ (run_setup . gen_setup) [0 .. 7])
 
@@ -30,5 +31,5 @@ Reallocate buffers while oscillator is running.
     > import Sound.SC3.Lang.Random.IO {- hsc3-lang -}
     >
     > let resetTable i = do {h <- nrrand 12 0 1
-    >                        ;send (b_gen_sine1 i bf h)}
+    >                        ;sendMessage (b_gen_sine1 i bf h)}
     > in withSC3 (mapM_ resetTable [0 .. 7])

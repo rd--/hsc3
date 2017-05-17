@@ -1,6 +1,8 @@
 -- | Standard SC3 graphs, referenced in documentation.
 module Sound.SC3.UGen.Help.Graph where
 
+import Sound.SC3.Common.Envelope
+
 import Sound.SC3.UGen.Bindings
 import Sound.SC3.UGen.Envelope.Construct
 import Sound.SC3.UGen.Enum

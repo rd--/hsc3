@@ -418,8 +418,7 @@ b_segment n m =
 -- > b_indices 1024 2056 16 == [(16,8),(24,1024),(1048,1024)]
 b_indices :: (Integral i) => i -> i -> i -> [(i,i)]
 b_indices n m k =
-    let dx_d = scanl1 (+)
-        s = b_segment n m
+    let s = b_segment n m
         i = 0 : dx_d s
     in zip (map (+ k) i) s
 

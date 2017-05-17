@@ -1,7 +1,7 @@
     > Sound.SC3.UGen.Help.viewSC3Help "VOsc3"
     > Sound.SC3.UGen.DB.ugenSummary "VOsc3"
 
-> import Sound.SC3
+> import Sound.SC3 {- hsc3 -}
 
 see vOsc help for code to allocate and fill tables 0 to 7...
 

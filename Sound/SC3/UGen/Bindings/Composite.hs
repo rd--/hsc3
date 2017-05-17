@@ -6,11 +6,12 @@ import Data.List {- base -}
 import Data.List.Split {- split -}
 import Data.Maybe {- base -}
 
+import Sound.SC3.Common.Envelope
+
 import Sound.SC3.UGen.Bindings.DB
 import Sound.SC3.UGen.Bindings.HW
 import Sound.SC3.UGen.Bindings.Monad
 import Sound.SC3.UGen.Enum
-import Sound.SC3.UGen.Envelope
 import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.Math
 import Sound.SC3.UGen.Rate

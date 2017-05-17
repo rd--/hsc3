@@ -49,6 +49,7 @@ Library
                    Sound.SC3.Common.Buffer.Array
                    Sound.SC3.Common.Buffer.Gen
                    Sound.SC3.Common.Buffer.Vector
+                   Sound.SC3.Common.Envelope
                    Sound.SC3.Common.Math
                    Sound.SC3.Common.Math.Interpolate
                    Sound.SC3.Common.Math.Window
