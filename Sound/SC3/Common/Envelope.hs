@@ -280,6 +280,26 @@ env_circle (Envelope l t c rn _) tc cc =
 
 -- * Construct
 
+{- | Trapezoidal envelope generator.
+
+Requires (<=) and (>=) functions returning @1@ for true and @0@ for false.
+
+The arguments are: 1. @shape@ determines the sustain time as a
+proportion of @dur@, zero is a triangular envelope, one a rectangular
+envelope; 2. @skew@ determines the attack\/decay ratio, zero is an
+immediate attack and a slow decay, one a slow attack and an immediate
+decay; 3. @duration@ in seconds; 4. @amplitude@ as linear gain.
+
+-}
+envTrapezoid' :: Num t => (t -> t -> t,t -> t -> t) -> t -> t -> t -> t -> Envelope t
+envTrapezoid' (lte_f,gte_f) shape skew dur amp =
+    let x1 = skew * (1 - shape)
+        bp = [(0,lte_f skew 0)
+             ,(x1,1)
+             ,(shape + x1,1)
+             ,(1,gte_f skew 1)]
+    in envCoord bp dur amp EnvLin
+
 {- | Co-ordinate based static envelope generator.  Points are (time,value) pairs.
 
 > let e = envCoord [(0,0),(1/4,1),(1,0)] 1 1 EnvLin

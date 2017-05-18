@@ -21,7 +21,7 @@ line segments, set target value & transition time and trigger
 >         e = envGen KR tr 1 0 1 DoNothing p
 >     in sinOsc AR e 0 * 0.2
 
-    import Sound.OSC
+    import Sound.OSC {- hosc3 -}
     withSC3 (sendMessage (n_set (-1) [("en",550),("tm",4),("tr",1)]))
     withSC3 (sendMessage (n_set (-1) [("en",990),("tm",1),("tr",1)]))
     withSC3 (sendMessage (n_set (-1) [("en",110),("tm",2),("tr",1)]))
@@ -49,5 +49,5 @@ plotting
 >        ,envCoord c2 5 0.1 EnvCub
 >        ,envCoord c3 7 0.1 EnvStep]
 
-    import Sound.SC3.Plot
+    import Sound.SC3.Plot {- hsc3-plot -}
     plotEnvelope e_01

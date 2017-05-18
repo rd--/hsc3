@@ -2,7 +2,6 @@ module Sound.SC3.UGen.Bindings.DB where
 
 import Sound.SC3.Common.Envelope
 
-import Sound.SC3.UGen.Envelope
 import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.Rate

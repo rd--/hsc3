@@ -2,7 +2,8 @@
     > Sound.SC3.UGen.DB.ugenSummary "EnvFollow"
 
 > import Sound.SC3 {- hsc3 -}
->
+> import Sound.SC3.UGen.Bindings.HW.External.SC3_Plugins {- hsc3 -}
+
 > g_01 =
 >     let z = soundIn 4
 >         d = mouseX KR 0.990 0.999 Linear 0.2

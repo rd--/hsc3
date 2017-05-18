@@ -5,6 +5,7 @@ import qualified Data.Char as C {- base -}
 import Data.Maybe {- base -}
 import Data.List {- base -}
 
+import qualified Sound.SC3.Common.Envelope as E
 import qualified Sound.SC3.Common.Prelude as P
 import qualified Sound.SC3.UGen.Identifier as ID
 import qualified Sound.SC3.UGen.Operator as O
@@ -201,6 +202,13 @@ unpackLabel u =
              then map mce (transpose x)
              else error (show ("unpackLabel: mce length /=",x))
       _ -> error (show ("unpackLabel: non-label",u))
+
+-- * Envelope
+
+envelope_to_ugen :: E.Envelope UGen -> UGen
+envelope_to_ugen =
+    let err = error "envGen: bad Envelope"
+    in mce . fromMaybe err . E.envelope_sc3_array
 
 -- * Bitwise
 
