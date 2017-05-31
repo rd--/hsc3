@@ -3,6 +3,10 @@
 
 > import Sound.SC3
 
+> e_01 = map from_warp [Linear,Exponential]
+
+    e_01 == [0,1]
+
 Frequency control
 
 > g_01 =

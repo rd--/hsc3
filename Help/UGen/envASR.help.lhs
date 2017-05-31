@@ -19,3 +19,10 @@
 
     import Sound.SC3.Plot {- hsc3-plot -}
     plotEnvelope e_01
+
+An envelope with a long release time that mostly sustains and then decays quickly
+
+> e_02 = envASR 0.01 1 0.75 (EnvNum 64)
+
+    plotEnvelope [e_02]
+

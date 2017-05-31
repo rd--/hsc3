@@ -29,7 +29,9 @@ synthdef = Synthdef
 -- | The SC3 /default/ instrument 'Synthdef', see
 -- 'default_ugen_graph'.
 --
--- > withSC3 (send (d_recv defaultSynthdef))
+-- > import Sound.OSC {- hosc -}
+-- > import Sound.SC3 {- hsc3 -}
+-- > withSC3 (sendMessage (d_recv defaultSynthdef))
 -- > audition defaultSynthdef
 defaultSynthdef :: Synthdef
 defaultSynthdef = synthdef "default" default_ugen_graph
@@ -37,7 +39,7 @@ defaultSynthdef = synthdef "default" default_ugen_graph
 -- | The SC3 /default/ sample (buffer) playback instrument 'Synthdef',
 -- see 'default_sampler_ugen_graph'.
 --
--- > withSC3 (send (d_recv (defaultSampler False)))
+-- > withSC3 (sendMessage (d_recv (defaultSampler False)))
 -- > audition (defaultSampler False)
 defaultSampler :: Bool -> Synthdef
 defaultSampler use_gate =
@@ -50,7 +52,7 @@ synthdefGraph = ugen_to_graph . synthdefUGen
 
 -- | Parameter names at 'Synthdef'.
 --
--- > synthdefParam def == ["amp","pan","gate","freq"]
+-- > synthdefParam defaultSynthdef == ["amp","pan","gate","freq","out"]
 synthdefParam :: Synthdef -> [String]
 synthdefParam = map node_k_name . controls . synthdefGraph
 
