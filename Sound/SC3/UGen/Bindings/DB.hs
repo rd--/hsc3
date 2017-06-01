@@ -178,7 +178,7 @@ blip rate freq numharm = mkUGen Nothing [KR,AR] (Left rate) "Blip" [freq,numharm
 
 -- | (Undocumented class)
 --
---  BlockSize [IR] 
+--  BlockSize [IR]
 blockSize :: UGen
 blockSize = mkUGen Nothing [IR] (Left IR) "BlockSize" [] Nothing 1 (Special 0) NoId
 
@@ -352,13 +352,13 @@ companderD rate in_ thresh slopeBelow slopeAbove clampTime relaxTime = mkUGen No
 
 -- | Duration of one block
 --
---  ControlDur [IR] 
+--  ControlDur [IR]
 controlDur :: UGen
 controlDur = mkUGen Nothing [IR] (Left IR) "ControlDur" [] Nothing 1 (Special 0) NoId
 
 -- | Server control rate.
 --
---  ControlRate [IR] 
+--  ControlRate [IR]
 controlRate :: UGen
 controlRate = mkUGen Nothing [IR] (Left IR) "ControlRate" [] Nothing 1 (Special 0) NoId
 
@@ -958,7 +958,7 @@ indexL rate bufnum in_ = mkUGen Nothing [KR,AR] (Left rate) "IndexL" [bufnum,in_
 
 -- | Base class for info ugens
 --
---  InfoUGenBase [IR] 
+--  InfoUGenBase [IR]
 infoUGenBase :: Rate -> UGen
 infoUGenBase rate = mkUGen Nothing [IR] (Left rate) "InfoUGenBase" [] Nothing 1 (Special 0) NoId
 
@@ -1354,37 +1354,37 @@ normalizer in_ level dur = mkUGen Nothing [AR] (Right [0]) "Normalizer" [in_,lev
 
 -- | Number of audio busses.
 --
---  NumAudioBuses [IR] 
+--  NumAudioBuses [IR]
 numAudioBuses :: UGen
 numAudioBuses = mkUGen Nothing [IR] (Left IR) "NumAudioBuses" [] Nothing 1 (Special 0) NoId
 
 -- | Number of open buffers.
 --
---  NumBuffers [IR] 
+--  NumBuffers [IR]
 numBuffers :: UGen
 numBuffers = mkUGen Nothing [IR] (Left IR) "NumBuffers" [] Nothing 1 (Special 0) NoId
 
 -- | Number of control busses.
 --
---  NumControlBuses [IR] 
+--  NumControlBuses [IR]
 numControlBuses :: UGen
 numControlBuses = mkUGen Nothing [IR] (Left IR) "NumControlBuses" [] Nothing 1 (Special 0) NoId
 
 -- | Number of input busses.
 --
---  NumInputBuses [IR] 
+--  NumInputBuses [IR]
 numInputBuses :: UGen
 numInputBuses = mkUGen Nothing [IR] (Left IR) "NumInputBuses" [] Nothing 1 (Special 0) NoId
 
 -- | Number of output busses.
 --
---  NumOutputBuses [IR] 
+--  NumOutputBuses [IR]
 numOutputBuses :: UGen
 numOutputBuses = mkUGen Nothing [IR] (Left IR) "NumOutputBuses" [] Nothing 1 (Special 0) NoId
 
 -- | Number of currently running synths.
 --
---  NumRunningSynths [IR,KR] 
+--  NumRunningSynths [IR,KR]
 numRunningSynths :: UGen
 numRunningSynths = mkUGen Nothing [IR,KR] (Left IR) "NumRunningSynths" [] Nothing 1 (Special 0) NoId
 
@@ -1798,7 +1798,7 @@ rlpf in_ freq rq = mkUGen Nothing [KR,AR] (Right [0]) "RLPF" [in_,freq,rq] Nothi
 
 -- | Number of radians per sample.
 --
---  RadiansPerSample [IR] 
+--  RadiansPerSample [IR]
 radiansPerSample :: UGen
 radiansPerSample = mkUGen Nothing [IR] (Left IR) "RadiansPerSample" [] Nothing 1 (Special 0) NoId
 
@@ -1882,13 +1882,13 @@ sos in_ a0 a1 a2 b1 b2 = mkUGen Nothing [KR,AR] (Right [0]) "SOS" [in_,a0,a1,a2,
 
 -- | Duration of one sample.
 --
---  SampleDur [IR] 
+--  SampleDur [IR]
 sampleDur :: UGen
 sampleDur = mkUGen Nothing [IR] (Left IR) "SampleDur" [] Nothing 1 (Special 0) NoId
 
 -- | Server sample rate.
 --
---  SampleRate [IR] 
+--  SampleRate [IR]
 sampleRate :: UGen
 sampleRate = mkUGen Nothing [IR] (Left IR) "SampleRate" [] Nothing 1 (Special 0) NoId
 
@@ -2014,7 +2014,7 @@ stereoConvolution2L rate in_ kernelL kernelR trigger framesize crossfade = mkUGe
 
 -- | Offset from synth start within one sample.
 --
---  SubsampleOffset [IR] 
+--  SubsampleOffset [IR]
 subsampleOffset :: UGen
 subsampleOffset = mkUGen Nothing [IR] (Left IR) "SubsampleOffset" [] Nothing 1 (Special 0) NoId
 

@@ -113,6 +113,15 @@ type T2 a = (a,a)
 type T3 a = (a,a,a)
 type T4 a = (a,a,a,a)
 
+dup2 :: t -> T2 t
+dup2 t = (t,t)
+
+dup3 :: t -> T3 t
+dup3 t = (t,t,t)
+
+dup4 :: t -> T4 t
+dup4 t = (t,t,t,t)
+
 -- | 'concatMap' of /f/ at /x/ and /g/ at /y/.
 mk_duples :: (a -> c) -> (b -> c) -> [(a, b)] -> [c]
 mk_duples a b = concatMap (\(x,y) -> [a x, b y])

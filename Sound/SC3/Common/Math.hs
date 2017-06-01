@@ -175,7 +175,7 @@ db_to_amp a = 10 ** (a * 0.05)
 
 -- | Fractional midi note interval to frequency multiplier.
 --
--- > map midi_to_ratio [7,12] == [1.4983070768766815,2]
+-- > map midi_to_ratio [0,7,12] == [1,1.4983070768766815,2]
 midi_to_ratio :: Floating a => a -> a
 midi_to_ratio a = 2.0 ** (a * (1.0 / 12.0))
 
