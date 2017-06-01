@@ -437,13 +437,17 @@ data ASR a = ASR {asr_attackTime :: a
                  ,asr_releaseTime :: a
                  ,asr_curve :: Envelope_Curve2 a}
 
+-- | SC3 .asr has singular curve argument, hence _c suffix.
+envASR_c :: Num a => a -> a -> a -> Envelope_Curve2 a -> Envelope a
+envASR_c aT sL rT c = envASR_r (ASR aT sL rT c)
+
 -- | Attack, sustain, release envelope parameter constructor.
 --
 -- > let {c = 3
 -- >     ;r = Just [0,2,1,-99,0.1,3,c,0,0,2,c,0]}
--- > in envelope_sc3_array (envASR 3 0.1 2 (EnvSin,EnvSin)) == r
-envASR :: Num a => a -> a -> a -> Envelope_Curve2 a -> Envelope a
-envASR aT sL rT c = envASR_r (ASR aT sL rT c)
+-- > in envelope_sc3_array (envASR 3 0.1 2 EnvSin) == r
+envASR :: Num a => a -> a -> a -> Envelope_Curve a -> Envelope a
+envASR aT sL rT c = envASR_c aT sL rT (c,c)
 
 -- | Record ('ASR') variant of 'envASR'.
 envASR_r :: Num a => ASR a -> Envelope a

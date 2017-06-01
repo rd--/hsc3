@@ -2,7 +2,6 @@
 module Sound.SC3.UGen.Help.Graph where
 
 import Sound.SC3.Common.Envelope
-import Sound.SC3.Common.Prelude
 
 import Sound.SC3.UGen.Bindings
 import Sound.SC3.UGen.Enum
@@ -76,7 +75,7 @@ default_sampler_ugen_graph use_gate =
         p = playBuf 1 AR b r' 1 0 NoLoop RemoveSynth
         e = if use_gate
             then let g = control KR "gate" 1
-                 in envGen KR g 1 0 1 RemoveSynth (envASR w 1 y (dup2 EnvSin))
+                 in envGen KR g 1 0 1 RemoveSynth (envASR w 1 y EnvSin)
             else let s = control KR "sustain" 1
                  in envGen KR 1 1 0 1 RemoveSynth (envLinen w s y 1)
         d = delayC (p * e) m (rand 'α' 0 m)
