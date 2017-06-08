@@ -79,14 +79,15 @@ readNRT = fmap decodeNRT . B.readFile
 -- | Minimal NRT rendering options.  The sound file type is inferred
 -- from the file name extension.  Structure is: OSC file name, output
 -- audio file name, output number of channels, sample rate, sample
--- format.
-type NRT_Render_Plain = (FilePath,FilePath,Int,Int,SampleFormat)
+-- format, further parameters (ie. ["-m","32768"]) to be inserted before
+-- the NRT -N option.
+type NRT_Render_Plain = (FilePath,FilePath,Int,Int,SampleFormat,[String])
 
 -- | Minimal NRT rendering, for more control see Stefan Kersten's
 -- /hsc3-process/ package at:
 -- <https://github.com/kaoskorobase/hsc3-process>.
 nrt_render_plain :: NRT_Render_Plain -> NRT -> IO ()
-nrt_render_plain (osc_nm,sf_nm,nc,sr,sf) sc = do
+nrt_render_plain (osc_nm,sf_nm,nc,sr,sf,param) sc = do
   let sf_ty = case takeExtension sf_nm of
                 '.':ext -> let fmt = soundFileFormat_from_extension ext
                            in fromMaybe (error "nrt_render_plain: unknown sf extension") fmt
@@ -94,6 +95,7 @@ nrt_render_plain (osc_nm,sf_nm,nc,sr,sf) sc = do
       sys = unwords ["scsynth"
                     ,"-i","0"
                     ,"-o",show nc
+                    ,unwords param
                     ,"-N"
                     ,osc_nm,"_"
                     ,sf_nm,show sr,soundFileFormatString sf_ty,sampleFormatString sf]
