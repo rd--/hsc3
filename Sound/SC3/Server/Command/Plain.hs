@@ -386,6 +386,9 @@ pc_preparePartConv = G.pc_preparePartConv
 
 -- * Unpack
 
+unpack_n_info_plain :: Message -> [Int]
+unpack_n_info_plain = G.unpack_n_info_plain
+
 unpack_n_info :: Message -> Maybe (Int,Int,Int,Int,Int,Maybe (Int,Int))
 unpack_n_info = G.unpack_n_info
 

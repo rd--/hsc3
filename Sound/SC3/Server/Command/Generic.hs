@@ -435,14 +435,28 @@ pc_preparePartConv b irb fft_size =
 
 -- * Unpack
 
+-- | Result is null for non-conforming data, or has five or sevel elements.
+unpack_n_info_datum_plain :: Num i => [Datum] -> [i]
+unpack_n_info_datum_plain m =
+    let to_i = fromIntegral
+    in case m of
+         [Int32 i1,Int32 i2,Int32 i3,Int32 i4,Int32 i5] -> [to_i i1,to_i i2,to_i i3,to_i i4,to_i i5]
+         [Int32 i1,Int32 i2,Int32 i3,Int32 i4,Int32 i5,Int32 i6,Int32 i7] -> [to_i i1,to_i i2,to_i i3,to_i i4,to_i i5,to_i i6,to_i i7]
+         _ -> []
+
+unpack_n_info_plain :: Num i => Message -> [i]
+unpack_n_info_plain m =
+    case m of
+      Message "/n_info" dat -> unpack_n_info_datum_plain dat
+      _ -> []
+
 -- | Unpack @n_info@ message.
 unpack_n_info :: Num i => Message -> Maybe (i,i,i,i,i,Maybe (i,i))
 unpack_n_info m =
-    let to_i = fromIntegral
-    in case m of
-         Message "/n_info" [Int32 i1,Int32 i2,Int32 i3,Int32 i4,Int32 i5] -> Just (to_i i1,to_i i2,to_i i3,to_i i4,to_i i5,Nothing)
-         Message "/n_info" [Int32 i1,Int32 i2,Int32 i3,Int32 i4,Int32 i5,Int32 i6,Int32 i7] -> Just (to_i i1,to_i i2,to_i i3,to_i i4,to_i i5,Just (to_i i6,to_i i7))
-         _ -> Nothing
+    case unpack_n_info_plain m of
+      [i1,i2,i3,i4,i5] -> Just (i1,i2,i3,i4,i5,Nothing)
+      [i1,i2,i3,i4,i5,i6,i7] -> Just (i1,i2,i3,i4,i5,Just (i6,i7))
+      _ -> Nothing
 
 unpack_n_info_err :: Num i => Message -> (i,i,i,i,i,Maybe (i,i))
 unpack_n_info_err = fromMaybe (error "unpack_n_info") . unpack_n_info

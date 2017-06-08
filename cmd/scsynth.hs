@@ -51,11 +51,11 @@ group_query_tree n = do
 -- > node_query 1
 node_query :: Int -> IO ()
 node_query n = do
-  r <- withSC3 (withNotifications (n_query1_unpack n))
+  r <- withSC3 (withNotifications (n_query1_unpack_plain n))
   case r of
-    Nothing -> error "node_query"
-    Just r' -> let tbl = zip (map (\(_,nm,_) -> nm) n_info_fields) (map show r')
-               in putStrLn (unlines (kv_table_pp tbl))
+    [] -> error "node_query"
+    _ -> let tbl = zip (map (\(_,nm,_) -> nm) n_info_fields) (map show r)
+         in putStrLn (unlines (kv_table_pp tbl))
 
 wait_for :: IO ()
 wait_for = do
@@ -85,6 +85,8 @@ help =
     ,"reset"
     ,"status"
     ,"message print address"
+    ,"nrt audition file-name:string"
+    ,"nrt stat file-name:string"
     ,"wait-for"]
 
 main :: IO ()
@@ -101,5 +103,7 @@ main = do
     ["reset"] -> withSC3 reset
     ["status"] -> withSC3 serverStatus >>= mapM_ putStrLn
     ["message","print",addr] -> message_print addr
+    ["nrt","audition",fn] -> readNRT fn >>= nrt_audition
+    ["nrt","stat",fn] -> readNRT fn >>= print . nrt_stat
     ["wait-for"] -> wait_for
     _ -> putStrLn (unlines help)

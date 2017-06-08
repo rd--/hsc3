@@ -44,8 +44,6 @@ parse_enum cr nm =
 
 -- * LIST
 
--- * List
-
 -- > d_dx [0,1,3,6] == [0,1,2,3]
 d_dx :: (Num a) => [a] -> [a]
 d_dx l = zipWith (-) l (0:l)
@@ -106,6 +104,12 @@ sep_last =
 -- > equal_length_p ["t","t1","t2"] == False
 equal_length_p :: [[a]] -> Bool
 equal_length_p = (== 1) . length . nub . map length
+
+-- | Histogram
+histogram :: Ord a => [a] -> [(a,Int)]
+histogram x =
+    let g = group (sort x)
+    in zip (map head g) (map length g)
 
 -- * TUPLES
 

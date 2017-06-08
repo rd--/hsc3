@@ -236,12 +236,18 @@ c_getn1_data s = do
   sendMessage (c_getn1 s)
   liftM f (waitDatum "/c_setn")
 
--- | Variant of 'n_query' that waits for and unpacks the reply.
-n_query1_unpack :: Transport m => Node_Id -> m (Maybe (Int,Int,Int,Int,Int,Maybe (Int,Int)))
-n_query1_unpack n = do
+n_query1_unpack_f :: Transport m => (Message -> t) -> Node_Id -> m t
+n_query1_unpack_f f n = do
   sendMessage (n_query [n])
   r <- waitReply "/n_info"
-  return (unpack_n_info r)
+  return (f r)
+
+-- | Variant of 'n_query' that waits for and unpacks the reply.
+n_query1_unpack :: Transport m => Node_Id -> m (Maybe (Int,Int,Int,Int,Int,Maybe (Int,Int)))
+n_query1_unpack = n_query1_unpack_f unpack_n_info
+
+n_query1_unpack_plain :: Transport m => Node_Id -> m [Int]
+n_query1_unpack_plain = n_query1_unpack_f unpack_n_info_plain
 
 -- | Variant of 'g_queryTree' that waits for and unpacks the reply.
 g_queryTree1_unpack :: Transport m => Group_Id -> m Query_Node

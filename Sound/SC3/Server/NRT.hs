@@ -10,6 +10,7 @@ import System.Process {- process -}
 import Sound.OSC.Core {- hosc -}
 import Sound.OSC.Coding.Byte {- hosc -}
 
+import Sound.SC3.Common.Prelude
 import Sound.SC3.Server.Enum
 
 -- | Encode and prefix with encoded length.
@@ -21,6 +22,21 @@ oscWithSize o =
 
 -- | An 'NRT' score is a sequence of 'Bundle's.
 data NRT = NRT {nrt_bundles :: [Bundle]} deriving (Show)
+
+type NRT_STAT =
+    ((String, Time)
+    ,(String, Int)
+    ,(String, Int)
+    ,(String, [(String,Int)]))
+
+-- | Trivial NRT statistics.
+nrt_stat :: NRT -> NRT_STAT
+nrt_stat (NRT b_seq) =
+    let b_msg = map bundleMessages b_seq
+    in (("duration",bundleTime (last b_seq))
+       ,("# bundles",length b_seq)
+       ,("# messages",sum (map length b_msg))
+       ,("command set",histogram (concatMap (map messageAddress) b_msg)))
 
 -- | 'span' of 'f' of 'bundleTime'.  Can be used to separate the
 -- /initialisation/ and /remainder/ parts of a score.

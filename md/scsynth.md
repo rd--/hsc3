@@ -46,6 +46,12 @@ the messages sent by `sendTrig`.
 
 `node query` sends an `/n_query` message and prints the `/n_info` reply.
 
+## nrt
+
+`nrt audition` loads and runs an NRT file.
+
+`nrt stat` prints information about an NRT file.
+
 ## reset
 
 `reset`, runs `/clearSched` and `/g_freeAll` and `/g_new`, `C-cC-k` in emacs.
