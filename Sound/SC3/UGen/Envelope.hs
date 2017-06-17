@@ -17,7 +17,7 @@ import Sound.SC3.UGen.UGen
 
 -}
 envTrapezoid :: OrdE t => t -> t -> t -> t -> Envelope t
-envTrapezoid = envTrapezoid' ((<=*),(>=*))
+envTrapezoid = envTrapezoid_f ((<=*),(>=*))
 
 -- | Singleton fade envelope.
 envGate :: UGen -> UGen -> UGen -> DoneAction -> Envelope_Curve UGen -> UGen

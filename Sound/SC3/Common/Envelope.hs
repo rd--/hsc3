@@ -291,8 +291,8 @@ immediate attack and a slow decay, one a slow attack and an immediate
 decay; 3. @duration@ in seconds; 4. @amplitude@ as linear gain.
 
 -}
-envTrapezoid' :: Num t => (t -> t -> t,t -> t -> t) -> t -> t -> t -> t -> Envelope t
-envTrapezoid' (lte_f,gte_f) shape skew dur amp =
+envTrapezoid_f :: Num t => (t -> t -> t,t -> t -> t) -> t -> t -> t -> t -> Envelope t
+envTrapezoid_f (lte_f,gte_f) shape skew dur amp =
     let x1 = skew * (1 - shape)
         bp = [(0,lte_f skew 0)
              ,(x1,1)

@@ -73,17 +73,24 @@ reset =
             ,g_new [(1,AddToHead,0),(2,AddToTail,0)]]
     in sendBundle (bundle immediately m)
 
-type Play_Opt = (Int,AddAction,Int,[(String,Double)])
+-- | (node-id,add-action,group-id,parameters)
+type Play_Opt = (Node_Id,AddAction,Group_Id,[(String,Double)])
+
+play_graphdef_msg :: Play_Opt -> G.Graphdef -> Message
+play_graphdef_msg (nid,act,gid,param) g =
+    let nm = ascii_to_string (G.graphdef_name g)
+    in s_new nm nid act gid param
 
 -- | Send 'd_recv' and 's_new' messages to scsynth.
 playGraphdef :: DuplexOSC m => Play_Opt -> G.Graphdef -> m ()
-playGraphdef (nid,act,gid,param) g = do
-  async_ (d_recv' g)
-  sendMessage (s_new (ascii_to_string (G.graphdef_name g)) nid act gid param)
+playGraphdef opt g = async_ (d_recv' g) >> sendMessage (play_graphdef_msg opt g)
+
+play_synthdef_msg :: Play_Opt -> Synthdef -> Message
+play_synthdef_msg (nid,act,gid,param) syn = s_new (synthdefName syn) nid act gid param
 
 -- | Send 'd_recv' and 's_new' messages to scsynth.
 playSynthdef :: DuplexOSC m => Play_Opt -> Synthdef -> m ()
-playSynthdef opt = playGraphdef opt . synthdef_to_graphdef
+playSynthdef opt syn = async_ (d_recv syn) >> sendMessage (play_synthdef_msg opt syn)
 
 -- | Send an /anonymous/ instrument definition using 'playSynthdef'.
 playUGen :: DuplexOSC m => Play_Opt -> UGen -> m ()
