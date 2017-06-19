@@ -395,6 +395,10 @@ c_set1 i x = c_set [(i,x)]
 c_setn1 :: (Integral i,Real n) => (i,[n]) -> Message
 c_setn1 = c_setn . return
 
+-- | Turn a single node on or off.
+n_run1 :: Integral i => i -> Bool -> Message
+n_run1 nid k = n_run [(nid,k)]
+
 -- | Set a single node control value.
 n_set1 :: (Integral i,Real n) => i -> String -> n -> Message
 n_set1 nid k n = n_set nid [(k,n)]

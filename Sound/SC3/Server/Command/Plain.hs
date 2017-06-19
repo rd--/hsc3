@@ -318,6 +318,10 @@ c_set1 = G.c_set1
 c_setn1 :: (Bus_Id,[Double]) -> Message
 c_setn1 = G.c_setn1
 
+-- | Turn a single node on or off.
+n_run1 :: Node_Id -> Bool -> Message
+n_run1 = G.n_run1
+
 -- | Set a single node control value.
 n_set1 :: Node_Id -> String -> Double -> Message
 n_set1 = G.n_set1
