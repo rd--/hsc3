@@ -1508,6 +1508,15 @@ pv_Diffuser buffer trig_ = mkUGen Nothing [KR] (Left KR) "PV_Diffuser" [buffer,t
 pv_Div :: UGen -> UGen -> UGen
 pv_Div bufferA bufferB = mkUGen Nothing [KR] (Left KR) "PV_Div" [bufferA,bufferB] Nothing 1 (Special 0) NoId
 
+pv_HainsworthFoote :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+pv_HainsworthFoote buf h f thr wt = mkUGen Nothing [KR] (Left KR) "PV_HainsworthFoote" [buf,h,f,thr,wt] Nothing 1 (Special 0) NoId
+
+pv_JensenAndersen :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+pv_JensenAndersen buf sc hfe hfc sf thr wt = mkUGen Nothing [KR] (Left KR) "PV_JensenAndersen" [buf,sc,hfe,hfc,sf,thr,wt] Nothing 1 (Special 0) NoId
+
+{- hsc3-db
+
+
 -- | FFT onset detector.
 --
 --  PV_HainsworthFoote [KR,AR] maxSize=0.0
@@ -1519,6 +1528,7 @@ pv_HainsworthFoote maxSize = mkUGen Nothing [KR,AR] (Left KR) "PV_HainsworthFoot
 --  PV_JensenAndersen [KR,AR] maxSize=0.0
 pv_JensenAndersen :: UGen -> UGen
 pv_JensenAndersen maxSize = mkUGen Nothing [KR,AR] (Left KR) "PV_JensenAndersen" [maxSize] Nothing 1 (Special 0) NoId
+-}
 
 -- | Pass bins which are a local maximum.
 --
