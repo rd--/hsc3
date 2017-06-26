@@ -1,10 +1,10 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "VarLag"
-    > Sound.SC3.UGen.DB.ugenSummary "VarLag"
+    Sound.SC3.UGen.Help.viewSC3Help "VarLag"
+    Sound.SC3.UGen.DB.ugenSummary "VarLag"
 
 Note: VarLag at sclang is a composite UGen, at hsc3 it's a direct
 binding to the underlying UGen.
 
-> import Sound.SC3
+> import Sound.SC3 {- hsc3 -}
 
 used to lag pitch
 

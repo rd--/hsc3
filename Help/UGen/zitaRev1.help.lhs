@@ -13,26 +13,23 @@ eq2gn, lin, -15.0,    15.0,     0.0
 opmix, lin,   0.0,     1.0,     0.5
 level, lin,  -9.0,     9.0,   -20.0
 
-> import Sound.SC3
+> import Sound.SC3 {- hsc3 -}
+> import Sound.SC3.UGen.Bindings.HW.External.Zita {- hsc3 -}
 
 default settings
 
-> let {i = soundIn 4
->     ;o = zitaRev1 i i 0.04 200 3 2 6000 160 0 2500 0 0.5 (-6)}
-> in audition (out 0 o)
+> g_01 =
+>     let i = soundIn 0
+>     in zitaRev1 i i 0.04 200 3 2 6000 160 0 2500 0 0.5 (-6)
 
 longer
 
-> let {i = soundIn 4
->     ;o = zitaRev1 i i 0.08 200 6 4 6000 190 (-6) 3500 6 0.5 0}
-> in audition (out 0 o)
+> g_02 =
+>     let i = soundIn 0
+>     in zitaRev1 i i 0.08 200 6 4 6000 190 (-6) 3500 6 0.5 0
 
 longer still
 
-> let {i = soundIn 4
->     ;o = zitaRev1 i i 0.1 200 6 8 6000 190 (-6) 3500 6 0.5 0}
-> in audition (out 0 o)
-
-hsc3-db
-
-> Sound.SC3.UGen.DB.u_summary zitaRev1_dsc
+> g_03 =
+>     let i = soundIn 0
+>     in zitaRev1 i i 0.1 200 6 8 6000 190 (-6) 3500 6 0.5 0
