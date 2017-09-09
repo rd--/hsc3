@@ -80,15 +80,17 @@ fmod_f32 = sc3_mod
 fmod_f64 :: Double -> Double -> Double
 fmod_f64 = sc3_mod
 
--- | Clip /n/ to within range /(i,j)/.  'clip' is a 'UGen', hence prime.
+-- | @SC3@ clip function.  Clip /n/ to within range /(i,j)/.  'clip' is a 'UGen'.
 --
--- > map (clip 5 10) [3..12] == [5,5,5,6,7,8,9,10,10,10]
-clip' :: (Ord a) => a -> a -> a -> a
-clip' i j n = if n < i then i else if n > j then j else n
+-- > map (\n -> sc_clip n 5 10) [3..12] == [5,5,5,6,7,8,9,10,10,10]
+sc_clip :: Ord a => a -> a -> a -> a
+sc_clip n i j = if n < i then i else if n > j then j else n
 
--- | Variant of 'clip'' with @SC3@ argument ordering.
-clip_ :: Ord a => a -> a -> a -> a
-clip_ n i j = clip' i j n
+-- | Variant of 'sc_clip' with haskell argument structure.
+--
+-- > map (clip_hs (5,10)) [3..12] == [5,5,5,6,7,8,9,10,10,10]
+clip_hs :: (Ord a) => (a,a) -> a -> a
+clip_hs (i,j) n = sc_clip n i j
 
 -- | Fractional modulo.
 --
@@ -102,51 +104,49 @@ sc_mod n hi =
             then lo
             else n - hi * sc_floor (n / hi)
 
-{- | Wrap function that is /non-inclusive/ at right edge.
+{- | Wrap function that is /non-inclusive/ at right edge, ie. the Wrap UGen rule.
 
-> map (sc_wrap 0 5) [4,5,6] == [4.0,0.0,1.0]
-> map (sc_wrap 5 10) [3..12] == [8.0,9.0,5.0,6.0,7.0,8.0,9.0,5.0,6.0,7.0]
+> map (sc_wrap_ni 0 5) [4,5,6] == [4,0,1]
+> map (sc_wrap_ni 5 10) [3..12] == [8,9,5,6,7,8,9,5,6,7]
 -}
-sc_wrap :: RealFrac a => a -> a -> a -> a
-sc_wrap lo hi n = sc_mod (n - lo) (hi - lo) + lo
-
-wrap_rh :: RealFrac n => (n -> n -> Bool) -> n -> n -> n -> n
-wrap_rh f i j n =
-    let r = j - i + 1
-    in if n >= i && n `f` j
-       then n
-       else n - r * sc_floor ((n - i) / r)
+sc_wrap_ni :: RealFrac a => a -> a -> a -> a
+sc_wrap_ni lo hi n = sc_mod (n - lo) (hi - lo) + lo
 
 {- | Wrap /n/ to within range /(i,j)/, ie. @AbstractFunction.wrap@,
 ie. /inclusive/ at right edge.  'wrap' is a 'UGen', hence prime.
 
 > > [5,6].wrap(0,5) == [5,0]
-> map (wrap' 0 5) [5,6] == [5,0]
+> map (wrap_hs (0,5)) [5,6] == [5,0]
 
 > > [9,10,5,6,7,8,9,10,5,6].wrap(5,10) == [9,10,5,6,7,8,9,10,5,6]
-> map (wrap' 5 10) [3..12] == [9,10,5,6,7,8,9,10,5,6]
+> map (wrap_hs (5,10)) [3..12] == [9,10,5,6,7,8,9,10,5,6]
+
 -}
-wrap' :: RealFrac n => n -> n -> n -> n
-wrap' = wrap_rh (<=)
+wrap_hs :: RealFrac n => (n,n) -> n -> n
+wrap_hs (i,j) n =
+    let r = j - i + 1
+    in if n >= i && n <= j
+       then n
+       else n - r * sc_floor ((n - i) / r)
 
 -- | Variant of 'wrap'' with @SC3@ argument ordering.
 --
--- > map (\n -> wrap_ n 5 10) [3..12] == map (wrap' 5 10) [3..12]
-wrap_ :: RealFrac n => n -> n -> n -> n
-wrap_ a b c = wrap' b c a
+-- > map (\n -> sc_wrap n 5 10) [3..12] == map (wrap_hs (5,10)) [3..12]
+sc_wrap :: RealFrac n => n -> n -> n -> n
+sc_wrap a b c = wrap_hs (b,c) a
 
 {- | Generic variant of 'wrap''.
 
 > > [5,6].wrap(0,5) == [5,0]
-> map (generic_wrap 0 5) [5,6] == [5,0]
+> map (generic_wrap (0,5)) [5,6] == [5,0]
 
 > > [9,10,5,6,7,8,9,10,5,6].wrap(5,10) == [9,10,5,6,7,8,9,10,5,6]
-> map (generic_wrap (5::Integer) 10) [3..12] == [9,10,5,6,7,8,9,10,5,6]
+> map (generic_wrap (5::Integer,10)) [3..12] == [9,10,5,6,7,8,9,10,5,6]
 -}
-generic_wrap :: (Ord a, Num a) => a -> a -> a -> a
-generic_wrap l r n =
+generic_wrap :: (Ord a, Num a) => (a,a) -> a -> a
+generic_wrap (l,r) n =
     let d = r - l + 1
-        f = generic_wrap l r
+        f = generic_wrap (l,r)
     in if n < l
        then f (n + d)
        else if n > r then f (n - d) else n
@@ -335,6 +335,9 @@ zero.
 
 > let f = round . sc_lincurve (-3) 0 10 (-4.3) 100
 > in map f [0 .. 10] == [-4,24,45,61,72,81,87,92,96,98,100]
+
+> import Sound.SC3.Plot {- hsc3-plot -}
+> plotTable (map (\c-> map (sc_lincurve c 0 1 (-1) 1) [0,0.01 .. 1]) [-6,-4 .. 6])
 
 -}
 sc_lincurve :: (Ord a, Floating a) => a -> a -> a -> a -> a -> a -> a

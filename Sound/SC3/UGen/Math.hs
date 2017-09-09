@@ -266,11 +266,11 @@ class (Floating a,RealFrac a, Ord a) => BinaryOp a where
     atan2E :: a -> a -> a
     atan2E a b = atan (b/a)
     clip2 :: a -> a -> a
-    clip2 a b = clip_ a (-b) b
+    clip2 a b = sc_clip a (-b) b
     difSqr :: a -> a -> a
     difSqr = sc_dif_sqr
     excess :: a -> a -> a
-    excess a b = a - clip_ a (-b) b
+    excess a b = a - sc_clip a (-b) b
     exprandRange :: a -> a -> a
     exprandRange = error "exprandRange"
     fill :: a -> a -> a
@@ -322,13 +322,13 @@ instance BinaryOp Float where
     fold2 a b = fold_ a (-b) b
     modE = F.mod'
     roundUp a b = if b == 0 then a else ceilingE (a/b + 0.5) * b
-    wrap2 a b = wrap_ a (-b) b
+    wrap2 a b = sc_wrap_ni a (-b) b
 
 instance BinaryOp Double where
     fold2 a b = fold_ a (-b) b
     modE = F.mod'
     roundUp a b = if b == 0 then a else ceilingE (a/b + 0.5) * b
-    wrap2 a b = wrap_ a (-b) b
+    wrap2 a b = sc_wrap_ni a (-b) b
 
 instance BinaryOp UGen where
     iDiv = mkBinaryOperator IDiv iDiv

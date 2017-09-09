@@ -65,7 +65,7 @@ welch x0 x1 t =
 -- | Curvature controlled by single parameter /c/.  @0@ is 'linear',
 -- increasing /c/ approaches 'exponential'.
 --
--- > plotTable (map (\c-> map (curve c (-1) 1) [0,0.01 .. 1]) [0 .. 25])
+-- > plotTable (map (\c-> map (curve c (-1) 1) [0,0.01 .. 1]) [-6,-4 .. 6])
 curve :: (Ord t, Floating t) => t -> Interpolation_F t
 curve c x0 x1 t =
     if abs c < 0.0001
