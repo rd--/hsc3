@@ -326,6 +326,46 @@ sc_expexp src_l src_r dst_l dst_r x =
       Just r -> r
       Nothing -> ((dst_r / dst_l) ** (log (x / src_l) / log (src_r / src_l))) * dst_l
 
+{- | Map /x/ from an assumed linear input range (src_l,src_r) to an
+exponential curve output range (dst_l,dst_r). 'curve' is like the
+parameter in Env.  Unlike with linexp, the output range may include
+zero.
+
+> > (0..10).lincurve(0,10,-4.3,100,-3).round == [-4,24,45,61,72,81,87,92,96,98,100]
+
+> let f = round . sc_lincurve (-3) 0 10 (-4.3) 100
+> in map f [0 .. 10] == [-4,24,45,61,72,81,87,92,96,98,100]
+
+-}
+sc_lincurve :: (Ord a, Floating a) => a -> a -> a -> a -> a -> a -> a
+sc_lincurve curve src_l src_r dst_l dst_r x =
+    case apply_clip_rule Clip_Both src_l src_r dst_l dst_r x of
+      Just r -> r
+      Nothing ->
+          if abs curve < 0.001
+          then linlin_hs (src_l,src_r) (dst_l,dst_r) x
+          else let grow = exp curve
+                   a = (dst_r - dst_l) / (1.0 - grow)
+                   b = dst_l + a
+                   scaled = (x - src_l) / (src_r - src_l)
+               in b - (a * (grow ** scaled))
+
+-- | Inverse of 'sc_lincurve'.
+--
+-- > let f = round . sc_curvelin (-3) (-4.3) 100 0 10
+-- > in map f [-4,24,45,61,72,81,87,92,96,98,100] == [0..10]
+sc_curvelin :: (Ord a, Floating a) => a -> a -> a -> a -> a -> a -> a
+sc_curvelin curve src_l src_r dst_l dst_r x =
+    case apply_clip_rule Clip_Both src_l src_r dst_l dst_r x of
+      Just r -> r
+      Nothing ->
+          if abs curve < 0.001
+          then linlin_hs (src_l,src_r) (dst_l,dst_r) x
+          else let grow = exp curve
+                   a = (src_r - src_l) / (1.0 - grow)
+                   b = src_l + a
+               in log ((b - x) / a) * (dst_r - dst_l) / curve + dst_l
+
 -- > map (floor . linexp_hs (1,2) (10,100)) [0,1,1.5,2,3] == [1,10,31,100,1000]
 linexp_hs :: Floating a => (a,a) -> (a,a) -> a -> a
 linexp_hs (in_l,in_r) (out_l,out_r) x =
@@ -390,4 +430,3 @@ foldToRange i j =
 -- | Variant of 'foldToRange' with @SC3@ argument ordering.
 fold_ :: (Ord a,Num a) => a -> a -> a -> a
 fold_ n i j = foldToRange i j n
-
