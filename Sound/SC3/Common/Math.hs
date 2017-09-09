@@ -157,19 +157,33 @@ bin_to_freq sr n i = fromIntegral i * sr / fromIntegral n
 
 -- | Midi note number to cycles per second.
 --
--- > midi_to_cps 69 == 440
+-- > map (floor . midi_to_cps) [0,24,69,120,127] == [8,32,440,8372,12543]
+-- > map (floor . midi_to_cps) [-36,138] == [1,23679]
 midi_to_cps :: Floating a => a -> a
 midi_to_cps i = 440.0 * (2.0 ** ((i - 69.0) * (1.0 / 12.0)))
 
+-- | Cycles per second to midi note number.
+--
+-- > map (round . cps_to_midi) [8,32,440,8372,12543] == [0,24,69,120,127]
+-- > map (round . cps_to_midi) [1,24000] == [-36,138]
 cps_to_midi :: Floating a => a -> a
 cps_to_midi a = (logBase 2 (a * (1.0 / 440.0)) * 12.0) + 69.0
 
 cps_to_oct :: Floating a => a -> a
 cps_to_oct a = logBase 2 (a * (1.0 / 440.0)) + 4.75
 
+oct_to_cps :: Floating a => a -> a
+oct_to_cps a = 440.0 * (2.0 ** (a - 4.75))
+
+-- | Linear amplitude to decibels.
+--
+-- > map (round . amp_to_db) [0.01,0.05,0.0625,0.125,0.25,0.5] == [-40,-26,-24,-18,-12,-6]
 amp_to_db :: Floating a => a -> a
 amp_to_db a = logBase 10 a * 20
 
+-- | Decibels to linear amplitude.
+--
+-- > map (floor . (* 100). db_to_amp) [-40,-26,-24,-18,-12,-6] == [01,05,06,12,25,50]
 db_to_amp :: Floating a => a -> a
 db_to_amp a = 10 ** (a * 0.05)
 
@@ -178,9 +192,6 @@ db_to_amp a = 10 ** (a * 0.05)
 -- > map midi_to_ratio [0,7,12] == [1,1.4983070768766815,2]
 midi_to_ratio :: Floating a => a -> a
 midi_to_ratio a = 2.0 ** (a * (1.0 / 12.0))
-
-oct_to_cps :: Floating a => a -> a
-oct_to_cps a = 440.0 * (2.0 ** (a - 4.75))
 
 -- | Inverse of 'midi_to_ratio'.
 --
@@ -210,6 +221,19 @@ range l r i = let (m,a) = range_muladd l r in i * m + a
 
 range_hs :: Fractional a => (a,a) -> a -> a
 range_hs (l,r) = range l r
+
+data Clip_Rule = Clip_None | Clip_Left | Clip_Right | Clip_Both
+                 deriving (Enum,Bounded)
+
+-- > let f r = map (\x -> apply_clip_rule r 0 1 (-1) 1 x) [-1,0,0.5,1,2]
+-- > in map f [minBound .. maxBound]
+apply_clip_rule :: Ord n => Clip_Rule -> n -> n -> n -> n -> n -> Maybe n
+apply_clip_rule clip_rule sl sr dl dr x =
+    case clip_rule of
+      Clip_None -> Nothing
+      Clip_Left -> if x <= sl then Just dl else Nothing
+      Clip_Right -> if x >= sr then Just dr else Nothing
+      Clip_Both -> if x <= sl then Just dl else if x >= sr then Just dr else Nothing
 
 -- | Calculate multiplier and add values for 'linlin' transform.
 --
@@ -276,15 +300,45 @@ linlin_eq (l,r) (l',r') n =
 linlin_eq_err :: (Eq a,Num a) => (a,a) -> (a,a) -> a -> a
 linlin_eq_err src dst = fromMaybe (error "linlin_eq") . linlin_eq src dst
 
+-- | @SimpleNumber.linexp@ shifts from linear to exponential ranges.
+--
+-- > > [1,1.5,2].collect({|i| i.linexp(1,2,10,100).floor}) == [10,31,100]
+-- > map (floor . sc_linexp 1 2 10 100) [0,1,1.5,2,3] == [10,10,31,100,100]
+sc_linexp :: (Ord a, Floating a) => a -> a -> a -> a -> a -> a
+sc_linexp src_l src_r dst_l dst_r x =
+    case apply_clip_rule Clip_Both src_l src_r dst_l dst_r x of
+      Just r -> r
+      Nothing -> ((dst_r / dst_l) ** ((x - src_l) / (src_r - src_l))) * dst_l
+
+-- | @SimpleNumber.explin@ is the inverse of linexp.
+--
+-- > map (sc_explin 10 100 1 2) [10,10,31,100,100]
+sc_explin :: (Ord a, Floating a) => a -> a -> a -> a -> a -> a
+sc_explin src_l src_r dst_l dst_r x =
+    case apply_clip_rule Clip_Both src_l src_r dst_l dst_r x of
+      Just r -> r
+      Nothing -> (log (x / src_l)) / (log (src_r / src_l)) * (dst_r - dst_l) + dst_l
+
+-- > map (sc_expexp 0.1 10 4.3 100) [1.. 10]
+sc_expexp :: (Ord a, Floating a) => a -> a -> a -> a -> a -> a
+sc_expexp src_l src_r dst_l dst_r x =
+    case apply_clip_rule Clip_Both src_l src_r dst_l dst_r x of
+      Just r -> r
+      Nothing -> ((dst_r / dst_l) ** (log (x / src_l) / log (src_r / src_l))) * dst_l
+
+-- > map (floor . linexp_hs (1,2) (10,100)) [0,1,1.5,2,3] == [1,10,31,100,1000]
+linexp_hs :: Floating a => (a,a) -> (a,a) -> a -> a
+linexp_hs (in_l,in_r) (out_l,out_r) x =
+    let rt = out_r / out_l
+        rn = 1.0 / (in_r - in_l)
+        rr = rn * negate in_l
+    in out_l * (rt ** (x * rn + rr))
+
 -- | Exponential range conversion.
 --
 -- > map (\i -> lin_exp i 1 2 1 3) [1,1.1 .. 2]
 lin_exp :: Floating a => a -> a -> a -> a -> a -> a
-lin_exp i in_l in_r out_l out_r =
-    let rt = out_r / out_l
-        rn = 1.0 / (in_r - in_l)
-        rr = rn * negate in_l
-    in out_l * (rt ** (i * rn + rr))
+lin_exp x in_l in_r out_l out_r = linexp_hs (in_l,in_r) (out_l,out_r) x
 
 -- | /sr/ = sample rate, /r/ = cycle (two-pi), /cps/ = frequency
 --
