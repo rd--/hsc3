@@ -5,7 +5,8 @@ import qualified Data.ByteString.Char8 as C {- bytestring -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
 import qualified Data.Tree as T {- containers -}
-import Sound.OSC.Type {- hosc -}
+
+import Sound.OSC.Datum {- hosc -}
 
 -- | Get /n/th field of status as 'Floating'.
 extractStatusField :: Floating n => Int -> [Datum] -> n

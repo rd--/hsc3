@@ -8,7 +8,7 @@ import System.IO {- base -}
 
 import qualified Sound.OSC.Coding.Byte as B {- hosc -}
 import qualified Sound.OSC.Coding.Cast as C {- hosc -}
-import Sound.OSC.Type {- hosc -}
+import Sound.OSC.Datum {- hosc -}
 
 -- * Type
 

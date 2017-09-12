@@ -1,7 +1,8 @@
 -- | Transform (read) a 'Graphdef' into a 'Graph'.
 module Sound.SC3.Server.Graphdef.Read where
 
-import Sound.OSC.Type
+import Sound.OSC.Datum {- hosc -}
+
 import Sound.SC3.Server.Graphdef
 import qualified Sound.SC3.UGen.Graph as G
 import qualified Sound.SC3.UGen.Rate as R

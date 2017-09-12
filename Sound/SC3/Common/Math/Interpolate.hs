@@ -1,12 +1,18 @@
 -- | Interpolation functions, ie. for envelope segments.
 module Sound.SC3.Common.Math.Interpolate where
 
-import Sound.SC3.Common.Math
+import Sound.SC3.Common.Math {- hsc3 -}
 
 -- | An interpolation function takes three arguments. /x0/ is the left
 -- or begin value, /x1/ is the right or end value, and /t/ is a (0,1)
 -- index.
 type Interpolation_F t = t -> t -> t -> t
+
+-- | Clip /x/ to (0,1) and run /f/.
+--
+-- > interpolate linear (-1,1) 0.5 == 0
+interpolate :: (Num t,Ord t) => Interpolation_F t -> (t,t) -> t -> t
+interpolate f (l,r) x = if x < 0 then l else if x > 1 then r else f l r x
 
 -- | Step function, ignores /t/ and returns /x1/.
 step :: Interpolation_F t

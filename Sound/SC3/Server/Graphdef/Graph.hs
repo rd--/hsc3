@@ -3,7 +3,7 @@ module Sound.SC3.Server.Graphdef.Graph where
 
 import Data.Maybe{- base -}
 
-import Sound.OSC.Type {- hosc -}
+import Sound.OSC.Datum {- hosc -}
 
 import qualified Sound.SC3.Server.Graphdef as G
 import Sound.SC3.UGen.Graph
