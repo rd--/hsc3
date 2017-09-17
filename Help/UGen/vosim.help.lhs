@@ -2,13 +2,14 @@
     > Sound.SC3.UGen.DB.ugenSummary "VOSIM"
 
 > import Sound.SC3 {- hsc3 -}
+> import qualified Sound.SC3.UGen.Bindings.HW.External.SC3_Plugins as E {- hsc3 -}
 
 > gr_00 =
 >     let trg = impulse AR 100 0
 >         frq = mouseX KR 440 880 Exponential 0.2
 >         n_cycles = 3
 >         dcy = 0.1
->     in vosim trg frq n_cycles dcy * 0.25
+>     in E.vosim trg frq n_cycles dcy * 0.25
 
 > gr_01 =
 >     let p = tRand 'α' 0 1 (impulse AR 6 0)
@@ -26,5 +27,5 @@
 >         l = tR 'ζ' [-1] [1] t
 >         xn = mk_n 'η'
 >         yn = mk_n 'θ'
->         v = vosim t (f * x * xn) n (d * y * yn) * a
+>         v = E.vosim t (f * x * xn) n (d * y * yn) * a
 >     in pan2 (mix v) l 1

@@ -73,6 +73,18 @@ wAmp rate in_ winSize = mkOscR [KR] rate "WAmp" [in_,winSize] 1
 gaussTrig :: Rate -> UGen -> UGen -> UGen
 gaussTrig rate freq dev = mkOscR [AR,KR] rate "GaussTrig" [freq,dev] 1
 
+-- | random walk step
+lfBrownNoise0 :: ID a => a -> Rate -> UGen -> UGen -> UGen -> UGen
+lfBrownNoise0 z r freq dev dist = mkOscIdR [AR,KR] (toUId z) r "LFBrownNoise0" [freq,dev,dist] 1
+
+-- | random walk linear interp
+lfBrownNoise1 :: ID a => a -> Rate -> UGen -> UGen -> UGen -> UGen
+lfBrownNoise1 z r freq dev dist = mkOscIdR [AR,KR] (toUId z) r "LFBrownNoise1" [freq,dev,dist] 1
+
+-- | random walk cubic interp
+lfBrownNoise2 :: ID a => a -> Rate -> UGen -> UGen -> UGen -> UGen
+lfBrownNoise2 z r freq dev dist = mkOscIdR [AR,KR] (toUId z) r "LFBrownNoise2" [freq,dev,dist] 1
+
 -- | String resonance filter
 streson :: UGen -> UGen -> UGen -> UGen
 streson input delayTime res = mkFilter "Streson" [input,delayTime,res] 1

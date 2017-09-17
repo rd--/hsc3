@@ -2,7 +2,7 @@
     > Sound.SC3.UGen.DB.ugenSummary "LFBrownNoise2"
 
 > import Sound.SC3 {- hsc3 -}
-> import qualified Sound.SC3.UGen.Bindings.HW.External as E {- hsc3 -}
+> import qualified Sound.SC3.UGen.Bindings.HW.External.SC3_Plugins as E {- hsc3 -}
 
 Modulate frequency.
 

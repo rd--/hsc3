@@ -92,7 +92,6 @@ Library
                    --Sound.SC3.UGen.Bindings.HW.DiskIO
                    Sound.SC3.UGen.Bindings.HW.External
                    Sound.SC3.UGen.Bindings.HW.External.F0
-                   Sound.SC3.UGen.Bindings.HW.External.ID
                    Sound.SC3.UGen.Bindings.HW.External.SC3_Plugins
                    Sound.SC3.UGen.Bindings.HW.External.Wavelets
                    Sound.SC3.UGen.Bindings.HW.External.Zita
