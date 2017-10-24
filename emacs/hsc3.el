@@ -319,7 +319,7 @@
   (define-key map [?\C-c ?\C-j] 'hsc3-sc3-ugen-help)
   (define-key map [?\C-c ?\C-/] 'hsc3-sc3-server-help)
   (define-key map [?\C-c ?\M-f] 'hsc3-sc3-forth-pp)
-  (define-key map [?\C-c ?\C-i] 'hsc3-interrupt-haskell)
+  (define-key map [?\C-c ?i] 'hsc3-interrupt-haskell)
   (define-key map [?\C-c ?\C-k] 'hsc3-reset-scsynth)
   (define-key map [?\C-c ?\C-m] 'hsc3-run-main)
   (define-key map [?\C-c ?\M-m] 'hsc3-load-main)
