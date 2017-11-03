@@ -4,9 +4,9 @@ soundIn is a composite of the UGens in' and numOutputBuses
 
 > import Sound.SC3 {- hsc3 -}
 
-copy fifth input channel (index 4) to first output channel (index 0)
+copy fifth second channel (index 4) to first output channel (index 0)
 
-> gr_01 = out 0 (soundIn 4)
+> gr_01 = out 0 (soundIn 0)
 
 Copy input from 1 & 0 to outputs 0 & 1.
 

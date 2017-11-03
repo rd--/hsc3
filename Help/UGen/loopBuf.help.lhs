@@ -2,11 +2,12 @@
     Sound.SC3.UGen.DB.ugenSummary "LoopBuf"
 
 > import Sound.SC3 {- hsc3 -}
+> import qualified Sound.SC3.UGen.Bindings.HW.External.SC3_Plugins as E {- hsc3 -}
 
 Read audio file into memory
 
 > ld b = do
->   let fn = "/home/rohan/opt/share/SuperCollider/sounds/a11wlk01.wav"
+>   let fn = "/home/rohan/opt/src/supercollider/sounds/a11wlk01.wav"
 >   withSC3 (async (b_allocRead b fn 0 0))
 
 Simple sampler instrument
@@ -25,7 +26,7 @@ Simple sampler instrument
 >         rt' = lag rt gl * bufRateScale KR bf
 >         e = let d = envADSR 0.1 0.2 1 2 1 (EnvNum (-4)) 0
 >             in envGen AR gt 1 0 1 RemoveSynth d
->         s = loopBuf 1 AR bf rt' (gt + lr) sp sl el ip
+>         s = E.loopBuf 1 AR bf rt' (gt + lr) sp sl el ip
 >     in out ou (s * e)
 
 > lb0s :: Synthdef
@@ -33,6 +34,9 @@ Simple sampler instrument
 
     ld 0
     withSC3 (async (d_recv lb0s))
+
+    import Sound.OSC {- hosc -}
+    let send = sendMessage
     withSC3 (send (s_new "lb0" 3000 AddToTail 1 [("bufnum",0),("startLoop",5000),("endLoop",15000)]))
 
     withSC3 (send (n_set1 3000 "rate" (-1))) -- backwards

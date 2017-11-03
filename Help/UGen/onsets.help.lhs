@@ -5,16 +5,23 @@
 
     > withSC3 (async (b_alloc 10 512 1))
 
-> g_01 =
->     let x = mouseX KR 0 1 Linear 0.2
->         i = soundIn 4
->         c = fft' 10 i
->         o = onsets' c x (onsetType "rcomplex")
->         s = sinOsc AR 440 0 * 0.2
->         e = envGen KR o 1 0 1 DoNothing (envPerc 0.001 0.1)
+> f_01 t = t2A t 0
+
+> f_02 t =
+>     let s = sinOsc AR 440 0 * 0.2
+>         e = envGen KR t 1 0 1 DoNothing (envPerc 0.001 0.1)
 >     in s * e
 
-> g_02 = soundIn 0 * 0.1
+> f_03 f =
+>     let x = mouseX KR 0 1 Linear 0.2
+>         i = mix (soundIn (mce2 0 1))
+>         c = fft' 10 i
+>         o = onsets' c x (onsetType "rcomplex")
+>     in f o
+
+> g_01 = f_03 f_01
+
+> g_02 = mce2 (dc AR 0) (mix (soundIn (mce2 0 1) * 0.75))
 
 a generative signal with distinct onsets!
 
