@@ -9,7 +9,6 @@
 (require 'thingatpt)
 (require 'find-lisp)
 (require 'inf-haskell)
-;;(require 'sclang)
 
 (defvar hsc3-help-directory
   nil
@@ -21,6 +20,23 @@
 
 (make-variable-buffer-local 'hsc3-literate-p)
 
+(defun hsc3-chunk-string (n s)
+  "Split a string into chunks of 'n' characters."
+  (let* ((l (length s))
+         (m (min l n))
+         (c (substring s 0 m)))
+    (if (<= l n)
+        (list c)
+      (cons c (hsc3-chunk-string n (substring s n))))))
+
+(defun hsc3-send-string (s)
+  (if (comint-check-proc inferior-haskell-buffer)
+      (let ((cs (hsc3-chunk-string 64 (concat s "\n"))))
+        (mapcar
+         (lambda (c) (comint-send-string inferior-haskell-buffer c))
+         cs))
+    (error "no hsc3 process running?")))
+
 (defun hsc3-quit-haskell ()
   "Quit haskell."
   (interactive)
@@ -30,14 +46,9 @@
   "Remove bird literate marks and preceding comment marker"
    (replace-regexp-in-string "^[> ]* ?" "" s))
 
-;; (hsc3-uncomment "  no comment")
 (defun hsc3-uncomment (s)
   "Remove initial comment and Bird-literate markers if present."
    (replace-regexp-in-string "^[- ]*[> ]*" "" s))
-
-(defun hsc3-remove-non-literates (s)
-  "Remove non-bird literate lines"
-  (replace-regexp-in-string "^[^>]*$" "" s))
 
 (defun hsc3-help ()
   "Lookup up the name at point in the hsc3 help files."
@@ -64,10 +75,6 @@
    (format "Sound.SC3.Server.Help.viewServerHelp \"%s\""
            (thing-at-point 'symbol))))
 
-(defun hsc3-sc3-forth-pp () "Forth PP" (interactive)
-  (hsc3-send-string
-   (format "Sound.SC3.UGen.DB.PP.ugen_graph_forth_pp False %s" (thing-at-point 'symbol))))
-
 (defun hsc3-ugen-summary ()
   "Lookup up the UGen at point in hsc3-db"
   (interactive)
@@ -77,27 +84,6 @@
 
 (defun hsc3-remove-trailing-newline (s)
   (replace-regexp-in-string "\n\\'" "" s))
-
-(defun hsc3-ugen-default-param ()
-  "Insert the default UGen parameters for the UGen before <point>."
-  (interactive)
-  (let ((p (format "hsc3-default-param %s" (thing-at-point 'symbol))))
-    (insert " ")
-    (insert (hsc3-remove-trailing-newline (shell-command-to-string p)))))
-
-(defun hsc3-request-type ()
-  "Ask ghci for the type of the name at point."
-  (interactive)
-  (hsc3-send-string (concat ":t " (thing-at-point 'symbol))))
-
-(defun chunk-string (n s)
-  "Split a string into chunks of 'n' characters."
-  (let* ((l (length s))
-         (m (min l n))
-         (c (substring s 0 m)))
-    (if (<= l n)
-        (list c)
-      (cons c (chunk-string n (substring s n))))))
 
 (defun hsc3-cd ()
   "Change directory at ghci to current value of 'default-directory'."
@@ -111,14 +97,6 @@
   (hsc3-see-haskell)
   (hsc3-send-string (format ":load \"%s\"" buffer-file-name)))
 
-(defun hsc3-send-string (s)
-  (if (comint-check-proc inferior-haskell-buffer)
-      (let ((cs (chunk-string 64 (concat s "\n"))))
-        (mapcar
-         (lambda (c) (comint-send-string inferior-haskell-buffer c))
-         cs))
-    (error "no hsc3 process running?")))
-
 (defun hsc3-run-line ()
   "Send the current line to the interpreter."
   (interactive)
@@ -129,64 +107,10 @@
 	       (hsc3-uncomment s))))
     (hsc3-send-string s*)))
 
-(defun region-string ()
-  "Get region as string (no properties)"
-  (buffer-substring-no-properties
-   (region-beginning)
-   (region-end)))
-
-(defun hsc3-concat (l)
-  (apply #'concat l))
-
-(defun hsc3-region-string ()
-  "The current region (unlit, uncomment)."
-  (let* ((s (region-string)))
-    (if hsc3-literate-p
-        (hsc3-unlit (hsc3-remove-non-literates s))
-      (hsc3-concat (mapcar 'hsc3-uncomment (split-string s "\n"))))))
-
-(defun hsc3-region-string-one-line ()
-  "Replace newlines with spaces in `hsc3-region-string'."
-  (replace-regexp-in-string "\n" " " (hsc3-region-string)))
-
-(defun hsc3-run-multiple-lines ()
-  "Send the current region to the haskell interpreter as a single line."
-  (interactive)
-  (hsc3-send-string (hsc3-region-string-one-line)))
-
-(defun hsc3-run-multiple-lines-sclang ()
-  "Send the current region to the sclang interpreter as a single line."
-  (interactive)
-  (sclang-eval-string (hsc3-region-string-one-line) t))
-
-(defun hsc3-run-consecutive-lines ()
-  "Send the current region to the interpreter one line at a time."
-  (interactive)
-  (mapcar 'hsc3-send-string
-          (split-string (hsc3-region-string) "\n")))
-
-(defun hsc3-run-layout-block ()
-  "Variant of `hsc3-run-consecutive-lines' with ghci layout quoting."
-  (interactive)
-  (hsc3-send-string ":{")
-  (hsc3-send-string (hsc3-region-string))
-  (hsc3-send-string ":}"))
-
 (defun hsc3-run-main ()
   "Run current main."
   (interactive)
   (hsc3-send-string "main"))
-
-(defun hsc3-load-main ()
-  "Load current buffer and run main."
-  (interactive)
-  (hsc3-load-buffer)
-  (hsc3-run-main))
-
-(defun hsc3-wait ()
-  "Wait for prompt after sending command."
-  (interactive)
-  (inferior-haskell-wait-for-prompt (inferior-haskell-process)))
 
 (defun hsc3-id-rewrite-region ()
   (interactive)
@@ -268,18 +192,6 @@
   (hsc3-send-string
    (concat "Sound.SC3.UGen.Dot.draw =<<" (thing-at-point 'symbol))))
 
-(defun hsc3-local-dot ()
-  "Copy '/tmp/hsc3.dot' to 'buffer-name' .dot."
-  (interactive)
-  (let ((nm (concat (file-name-sans-extension (buffer-name)) ".dot")))
-    (copy-file "/tmp/hsc3.dot" nm t)))
-
-(defun hsc3-gen-param ()
-  "Rewrite an SC3 argument list as control definitions."
-  (interactive)
-  (hsc3-send-string
-   (concat "putStrLn $ Sound.SC3.RW.PSynth.rewrite_param_list \"" (region-string) "\"")))
-
 (defun hsc3-set-prompt ()
   "Set ghci prompt to hsc3."
   (interactive)
@@ -306,11 +218,7 @@
   "Haskell SuperCollider keybindings."
   (define-key map [?\C-c ?<] 'hsc3-load-buffer)
   (define-key map [?\C-c ?>] 'hsc3-see-haskell)
-  (define-key map [?\C-c ?\C-c] 'hsc3-run-line)
-  (define-key map [?\C-c ?\C-e] 'hsc3-run-multiple-lines)
-  (define-key map [?\C-c ?\M-e] 'hsc3-run-multiple-lines-sclang)
-  (define-key map [?\C-c ?\C-r] 'hsc3-run-consecutive-lines)
-  (define-key map [?\C-c ?\C-f] 'hsc3-run-layout-block)
+  (define-key map [?\C-c ?\C-e] 'hsc3-run-line)
   (define-key map [?\C-c ?\C-h] 'hsc3-help)
   (define-key map [?\C-c ?\C-a] 'hsc3-audition-graph)
   (define-key map [?\C-c ?\M-a] 'hsc3-audition-graph-m)
@@ -318,17 +226,14 @@
   (define-key map [?\C-c ?\M-g] 'hsc3-draw-graph-m)
   (define-key map [?\C-c ?\C-j] 'hsc3-sc3-ugen-help)
   (define-key map [?\C-c ?\C-/] 'hsc3-sc3-server-help)
-  (define-key map [?\C-c ?\M-f] 'hsc3-sc3-forth-pp)
   (define-key map [?\C-c ?i] 'hsc3-interrupt-haskell)
   (define-key map [?\C-c ?\C-k] 'hsc3-reset-scsynth)
   (define-key map [?\C-c ?\C-m] 'hsc3-run-main)
-  (define-key map [?\C-c ?\M-m] 'hsc3-load-main)
   (define-key map [?\C-c ?\C-p] 'hsc3-status-scsynth)
   (define-key map [?\C-c ?\C-q] 'hsc3-quit-haskell)
   (define-key map [?\C-c ?\C-0] 'hsc3-quit-scsynth)
-  (define-key map [?\C-c ?\C-s] 'hsc3-stop)
-  (define-key map [?\C-c ?\C-u] 'hsc3-ugen-summary)
-  (define-key map [?\C-c ?\C-,] 'hsc3-ugen-default-param))
+  (define-key map [?\C-c ?\C-.] 'hsc3-stop)
+  (define-key map [?\C-c ?\C-u] 'hsc3-ugen-summary))
 
 (defun hsc3-mode-menu (map)
   "Haskell SuperCollider menu."
@@ -354,16 +259,8 @@
     '("Load buffer" . hsc3-load-buffer))
   (define-key map [menu-bar hsc3 expression run-main]
     '("Run main" . hsc3-run-main))
-  (define-key map [menu-bar hsc3 expression run-layout-block]
-    '("Run layout block" . hsc3-run-layout-block))
-  (define-key map [menu-bar hsc3 expression run-consecutive-lines]
-    '("Run consecutive lines" . hsc3-run-consecutive-lines))
-  (define-key map [menu-bar hsc3 expression run-multiple-lines]
-    '("Run multiple lines" . hsc3-run-multiple-lines))
   (define-key map [menu-bar hsc3 expression run-line]
     '("Run line" . hsc3-run-line))
-  (define-key map [menu-bar hsc3 expression gen-default-param]
-    '("Insert default parameters" . hsc3-ugen-default-param))
   (define-key map [menu-bar hsc3 scsynth]
     (cons "SCSynth" (make-sparse-keymap "SCSynth")))
   (define-key map [menu-bar hsc3 scsynth quit]
@@ -410,3 +307,108 @@
 (add-to-list 'auto-mode-alist '("\\.hs$" . hsc3-mode))
 
 (provide 'hsc3)
+
+;; (require 'sclang)
+
+;; (define-key map [?\C-c ?\C-e] 'hsc3-run-multiple-lines)
+;; (define-key map [?\C-c ?\M-e] 'hsc3-run-multiple-lines-sclang)
+;; (define-key map [?\C-c ?\C-r] 'hsc3-run-consecutive-lines)
+;; (define-key map [?\C-c ?\C-f] 'hsc3-run-layout-block)
+;; (define-key map [?\C-c ?\M-f] 'hsc3-sc3-forth-pp)
+;; (define-key map [?\C-c ?\M-m] 'hsc3-load-main)
+;; (define-key map [?\C-c ?\C-,] 'hsc3-ugen-default-param)
+
+;; (define-key map [menu-bar hsc3 expression gen-default-param]
+;;   '("Insert default parameters" . hsc3-ugen-default-param))
+;; (define-key map [menu-bar hsc3 expression run-layout-block]
+;;   '("Run layout block" . hsc3-run-layout-block))
+;; (define-key map [menu-bar hsc3 expression run-consecutive-lines]
+;;   '("Run consecutive lines" . hsc3-run-consecutive-lines))
+;; (define-key map [menu-bar hsc3 expression run-multiple-lines]
+;;   '("Run multiple lines" . hsc3-run-multiple-lines))
+
+;; (defun hsc3-wait ()
+;;   "Wait for prompt after sending command."
+;;   (interactive)
+;;   (inferior-haskell-wait-for-prompt (inferior-haskell-process)))
+
+;; (defun hsc3-request-type ()
+;;   "Ask ghci for the type of the name at point."
+;;   (interactive)
+;;   (hsc3-send-string (concat ":t " (thing-at-point 'symbol))))
+
+;; (defun hsc3-load-main ()
+;;   "Load current buffer and run main."
+;;   (interactive)
+;;   (hsc3-load-buffer)
+;;   (hsc3-run-main))
+
+;; (defun hsc3-ugen-default-param ()
+;;   "Insert the default UGen parameters for the UGen before <point>."
+;;   (interactive)
+;;   (let ((p (format "hsc3-default-param %s" (thing-at-point 'symbol))))
+;;     (insert " ")
+;;     (insert (hsc3-remove-trailing-newline (shell-command-to-string p)))))
+
+;; (defun hsc3-sc3-forth-pp () "Forth PP" (interactive)
+;;   (hsc3-send-string
+;;    (format "Sound.SC3.UGen.DB.PP.ugen_graph_forth_pp False %s" (thing-at-point 'symbol))))
+
+;; (defun hsc3-region-string ()
+;;   "Get region as string (no properties)"
+;;   (buffer-substring-no-properties
+;;    (region-beginning)
+;;    (region-end)))
+
+;; (defun hsc3-gen-param ()
+;;   "Rewrite an SC3 argument list as control definitions."
+;;   (interactive)
+;;   (hsc3-send-string
+;;    (concat "putStrLn $ Sound.SC3.RW.PSynth.rewrite_param_list \"" (hsc3-region-string) "\"")))
+
+;; (defun hsc3-local-dot ()
+;;   "Copy '/tmp/hsc3.dot' to 'buffer-name' .dot."
+;;   (interactive)
+;;   (let ((nm (concat (file-name-sans-extension (buffer-name)) ".dot")))
+;;     (copy-file "/tmp/hsc3.dot" nm t)))
+
+;; (defun hsc3-concat (l)
+;;   (apply #'concat l))
+
+;; (defun hsc3-remove-non-literates (s)
+;;   "Remove non-bird literate lines"
+;;   (replace-regexp-in-string "^[^>]*$" "" s))
+
+;; (defun hsc3-region-string-unlit ()
+;;   "The current region (unlit, uncomment)."
+;;   (let* ((s (hsc3-region-string)))
+;;     (if hsc3-literate-p
+;;         (hsc3-unlit (hsc3-remove-non-literates s))
+;;       (hsc3-concat (mapcar 'hsc3-uncomment (split-string s "\n"))))))
+
+;; (defun hsc3-region-string-one-line ()
+;;   "Replace newlines with spaces in `hsc3-region-string'."
+;;   (replace-regexp-in-string "\n" " " (hsc3-region-string-unlit)))
+
+;; (defun hsc3-run-multiple-lines ()
+;;   "Send the current region to the haskell interpreter as a single line."
+;;   (interactive)
+;;   (hsc3-send-string (hsc3-region-string-one-line)))
+
+;; (defun hsc3-run-multiple-lines-sclang ()
+;;   "Send the current region to the sclang interpreter as a single line."
+;;   (interactive)
+;;   (sclang-eval-string (hsc3-region-string-one-line) t))
+
+;; (defun hsc3-run-consecutive-lines ()
+;;   "Send the current region to the interpreter one line at a time."
+;;   (interactive)
+;;   (mapcar 'hsc3-send-string
+;;           (split-string (hsc3-region-string) "\n")))
+
+;; (defun hsc3-run-layout-block ()
+;;   "Variant of `hsc3-run-consecutive-lines' with ghci layout quoting."
+;;   (interactive)
+;;   (hsc3-send-string ":{")
+;;   (hsc3-send-string (hsc3-region-string))
+;;   (hsc3-send-string ":}"))
