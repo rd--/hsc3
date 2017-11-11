@@ -1,8 +1,7 @@
-;; This mode is implemented as a derivation of `haskell' mode,
-;; indentation and font locking is courtesy that mode.  The
-;; inter-process communication is courtesy `comint'.  The symbol at
-;; point acquisition is courtesy `thingatpt'.  The directory search
-;; facilities are courtesy `find-lisp'.
+;; Indentation and font locking is courtesy `haskell' mode.
+;; Inter-process communication is courtesy `comint' and `inf-haskell'.
+;; Symbol at point acquisition is courtesy `thingatpt'.
+;; Directory search facilities are courtesy `find-lisp'.
 
 (require 'scheme)
 (require 'comint)
@@ -307,6 +306,23 @@
 (add-to-list 'auto-mode-alist '("\\.hs$" . hsc3-mode))
 
 (provide 'hsc3)
+
+;; (require 'haskell-interactive-mode)
+;; (require 'haskell-process)
+
+;; (defun hsc3-send-string (s)
+;;   (haskell-process-send-string (haskell-interactive-process) s))
+
+;; (defun hsc3-send-string-and-print (s)
+;;   (haskell-process-show-repl-response s))
+
+;; (defun hsc3-interrupt-haskell ()
+;;   (haskell-process-interrupt))
+
+;; (defun hsc3-see-haskell ()
+;;   "Show haskell output."
+;;   (interactive)
+;;   (haskell-interactive-bring))
 
 ;; (require 'sclang)
 
