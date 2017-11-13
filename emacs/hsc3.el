@@ -217,7 +217,7 @@
   "Haskell SuperCollider keybindings."
   (define-key map [?\C-c ?<] 'hsc3-load-buffer)
   (define-key map [?\C-c ?>] 'hsc3-see-haskell)
-  (define-key map [?\C-c ?\C-e] 'hsc3-run-line)
+  (define-key map [?\C-c ?\C-c] 'hsc3-run-line)
   (define-key map [?\C-c ?\C-h] 'hsc3-help)
   (define-key map [?\C-c ?\C-a] 'hsc3-audition-graph)
   (define-key map [?\C-c ?\M-a] 'hsc3-audition-graph-m)
