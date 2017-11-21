@@ -5,6 +5,7 @@ import Data.List {- base -}
 import Data.Maybe {- base -}
 
 import Sound.OSC.Core {- hosc -}
+import Sound.OSC.Packet.Class {- hosc -}
 
 import qualified Sound.SC3.Common.Prelude as P
 import qualified Sound.SC3.Server.Command.Enum as C

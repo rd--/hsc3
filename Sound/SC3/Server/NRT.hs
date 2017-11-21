@@ -8,7 +8,7 @@ import System.IO {- base -}
 import System.Process {- process -}
 
 import Sound.OSC.Core {- hosc -}
-import Sound.OSC.Coding.Byte {- hosc -}
+import qualified Sound.OSC.Coding.Byte as Byte {- hosc -}
 
 import Sound.SC3.Common.Prelude
 import Sound.SC3.Server.Enum
@@ -17,7 +17,7 @@ import Sound.SC3.Server.Enum
 oscWithSize :: Bundle -> B.ByteString
 oscWithSize o =
     let b = encodeBundle o
-        l = encode_i32 (fromIntegral (B.length b))
+        l = Byte.encode_i32 (fromIntegral (B.length b))
     in B.append l b
 
 -- | An 'NRT' score is a sequence of 'Bundle's.
@@ -59,7 +59,7 @@ putNRT h = B.hPut h . encodeNRT
 decode_nrt_bundles :: B.ByteString -> [Bundle]
 decode_nrt_bundles s =
     let (p,q) = B.splitAt 4 s
-        n = fromIntegral (decode_i32 p)
+        n = fromIntegral (Byte.decode_i32 p)
         (r,s') = B.splitAt n q
         r' = decodeBundle r
     in if B.null s'

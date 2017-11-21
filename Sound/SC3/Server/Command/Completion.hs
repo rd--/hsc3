@@ -25,6 +25,8 @@ module Sound.SC3.Server.Command.Completion
   ) where
 
 import Sound.OSC {- hosc -}
+import Sound.OSC.Packet.Class {- hosc -}
+
 import Sound.SC3.Server.Enum
 import Sound.SC3.Server.Synthdef
 
