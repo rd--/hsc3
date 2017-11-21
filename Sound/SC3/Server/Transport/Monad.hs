@@ -140,8 +140,7 @@ nrt_audition = withSC3 . nrt_play
 
 -- * Audible
 
--- | Class for values that can be encoded and send to @scsynth@ for
--- audition.
+-- | Class for values that can be encoded and send to @scsynth@ for audition.
 class Audible e where
     play_at :: Transport m => Play_Opt -> e -> m ()
     -- | Variant where /id/ is @-1@.

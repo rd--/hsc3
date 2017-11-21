@@ -5,7 +5,6 @@ import Data.List {- base -}
 import Data.Maybe {- base -}
 
 import Sound.OSC.Core {- hosc -}
-import Sound.OSC.Packet.Class {- hosc -}
 
 import qualified Sound.SC3.Common.Prelude as P
 import qualified Sound.SC3.Server.Command.Enum as C
@@ -339,18 +338,21 @@ sync sid = message "/sync" [int32 sid]
 
 -- * Modify existing message to include completion message
 
--- | Add a completion message (or bundle, the name is misleading) to
--- an existing asynchronous command.
---
--- > let {m = n_set1 0 "0" 0
--- >     ;m' = encodeMessage m}
--- > in withCM (b_close 0) m == Message "/b_close" [Int 0,Blob m']
-withCM :: OSC o => Message -> o -> Message
-withCM (Message c xs) cm =
+-- | Add a completion packet to an existing asynchronous command.
+with_completion_packet :: Message -> Packet -> Message
+with_completion_packet (Message c xs) cm =
     if c `elem` C.async_cmds
-    then let xs' = xs ++ [Blob (encodeOSC cm)]
+    then let xs' = xs ++ [Blob (encodePacket cm)]
          in Message c xs'
-    else error ("withCM: not async: " ++ c)
+    else error ("with_completion_packet: not async: " ++ c)
+
+-- | Add a completion message to an existing asynchronous command.
+--
+-- > let m = n_set1 0 "0" 0
+-- > let e = encodeMessage m
+-- > withCM (b_close 0) m == Message "/b_close" [Int32 0,Blob e]
+withCM :: Message -> Message -> Message
+withCM m cm = with_completion_packet m (Packet_Message cm)
 
 -- * Variants to simplify common cases
 
