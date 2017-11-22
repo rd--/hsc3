@@ -25,7 +25,7 @@ Data-files:        README
 
 Library
   Build-Depends:   array,
-                   base >= 4.7,
+                   base >= 4.7 && < 5,
                    binary,
                    bytestring,
                    containers,
