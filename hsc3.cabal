@@ -1,5 +1,5 @@
 Name:              hsc3
-Version:           0.16
+Version:           0.17
 Synopsis:          Haskell SuperCollider
 Description:       Haskell client for the SuperCollider synthesis server,
                    <http://audiosynth.com/>.
