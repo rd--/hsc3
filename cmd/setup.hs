@@ -77,36 +77,23 @@ pkg_tbl = unsafePerformIO pkg_tbl_io
 lookup_err :: (Eq k,Show k) => k -> [(k,v)] -> v
 lookup_err k = fromMaybe (error (show ("lookup_err",k))) . lookup k
 
-pkg_core :: [String]
-pkg_core = lookup_err "core" pkg_tbl
+pkg_set :: String -> [String]
+pkg_set nm =
+  case nm of
+    "all" -> concat (map snd (filter ((/= "remote") . fst) pkg_tbl))
+    _ -> lookup_err nm pkg_tbl
 
-pkg_plain :: [String]
-pkg_plain = lookup_err "plain" pkg_tbl
-
-pkg_ext :: [String]
-pkg_ext = lookup_err "ext" pkg_tbl
-
-pkg_all :: [String]
-pkg_all = concat [pkg_core,pkg_plain,pkg_ext]
-
-pkg_non_hsc3 :: [String]
-pkg_non_hsc3 = lookup_err "non_hsc3" pkg_tbl
+pkg_grp :: String -> String
+pkg_grp nm =
+  case find (\(_,set) -> nm `elem` set) pkg_tbl of
+    Nothing -> error "pkg_grp"
+    Just (grp,_) -> grp
 
 put_w :: [String] -> IO ()
 put_w = putStrLn . unwords
 
-pkg_set :: String -> [String]
-pkg_set nm =
-    case nm of
-      "core" -> pkg_core
-      "plain" -> pkg_plain
-      "core+plain" -> pkg_core ++ pkg_plain
-      "ext" -> pkg_ext
-      "all" -> pkg_all
-      _ -> error "hsc3-setup: unknown pkg_set"
-
 is_local_pkg :: String -> Bool
-is_local_pkg = flip elem (pkg_all ++ pkg_non_hsc3)
+is_local_pkg = (/= "remote") . pkg_grp
 
 hs_file_set_pkg_dep_non_local :: [FilePath] -> IO [String]
 hs_file_set_pkg_dep_non_local nm = fmap (filter (not . is_local_pkg)) (hs_file_set_pkg_dep nm)
@@ -170,7 +157,7 @@ help =
     ,"  unregister name"
     ,"  update name src dst"
     ,""
-    ,"    name = core | plain | core+plain | ext | all"]
+    ,"    name = all | " ++ intercalate " | " (map fst pkg_tbl)]
 
 main :: IO ()
 main = do
