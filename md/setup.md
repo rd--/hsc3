@@ -12,7 +12,7 @@ The package db is stored at `hsc3/db/setup.db`.
 
 Print all projects in named category.
 
-Categories are: _core_, _plain_, _ext_, _core+plain_, _all_.
+Categories are printed by `hsc3-setup -h`.
 
 ~~~~
 hsc3-setup echo all
@@ -80,8 +80,8 @@ LOCAL=...
 REMOTE=http://rd.slavepianos.org/sw
 mkdir -p $LOCAL
 cd $LOCAL
-darcs get $REMOTE/hsc3-utils/
-(cd hsc3-utils ; make build-setup)
+darcs get $REMOTE/hsc3/
+(cd hsc3 ; make build-setup)
 hsc3-setup clone all $REMOTE $LOCAL
 hsc3-setup unregister all
 hsc3-setup rebuild all $LOCAL

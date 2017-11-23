@@ -10,15 +10,21 @@ For installation and configuration information see the
 
 There are a number of related projects:
 
-- [hsc3-dot](?t=hsc3-dot): UGen Graph Drawing
-- [hsc3-graphs](?t=hsc3-graphs): UGen Graphs
-- [hsc3-lang](?t=hsc3-lang): SC3 Language
-- [hsc3-cairo](?t=hsc3-cairo) & [hsc3-plot](?t=hsc3-plot): Drawing & Plotting
-- [hsc3-rec](?t=hsc3-rec) & [hsc3-unsafe](?t=hsc3-rec): UGen Variants
-- [hsc3-db](?t=hsc3-db): UGen Database
-- [hsc3-rw](?t=hsc3-rw): UGen Graph Re-writing
-- [hsc3-forth](?t=hsc3-forth): FORTH SuperCollider
-- [hsc3-lisp](?t=hsc3-lisp): LISP SuperCollider
+- [hsc3-dot](?t=hsc3-dot): UGen graph drawing (2006)
+- [hsc3-graphs](?t=hsc3-graphs): UGen graph collection (2006)
+- [hsc3-db](?t=hsc3-db): UGen Database (2006)
+- [hsc3-sf](?t=hsc3-sf): Sound file IO (2006)
+- [hsc3-unsafe](?t=hsc3-unsafe): Unsafe UGen variants (2006)
+- [hsc3-lang](?t=hsc3-lang): SC3 language (2007)
+- [hsc3-rec](?t=hsc3-rec): Record UGens (2008)
+- [hsc3-sf-hsndfile](?t=hsc3-sf): Sound file IO (libsndfile) (2010)
+- [hsc3-auditor](?t=hsc3-auditor): Sound file IO (libsndfile) (2010)
+- [hsc3-cairo](?t=hsc3-cairo): Drawing (2012)
+- [hsc3-plot](?t=hsc3-plot): Plotting (2013)
+- [hsc3-data](?t=hsc3-data): Data formats &etc. (2013)
+- [hsc3-rw](?t=hsc3-rw): UGen Graph Re-writing (2013)
+- [hsc3-forth](?t=hsc3-forth): FORTH SuperCollider (2014)
+- [hsc3-lisp](?t=hsc3-lisp): LISP SuperCollider (2014)
 
 The hsc3 interaction environment ([hsc3.el](?t=hsc3&e=emacs/hsc3.el))
 is written for [GNU][gnu] [Emacs][emacs].

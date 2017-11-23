@@ -86,14 +86,14 @@ pkg_set nm =
 pkg_grp :: String -> String
 pkg_grp nm =
   case find (\(_,set) -> nm `elem` set) pkg_tbl of
-    Nothing -> error "pkg_grp"
+    Nothing -> "non-local"
     Just (grp,_) -> grp
 
 put_w :: [String] -> IO ()
 put_w = putStrLn . unwords
 
 is_local_pkg :: String -> Bool
-is_local_pkg = (/= "remote") . pkg_grp
+is_local_pkg = (`notElem` ["non-local","remote"]) . pkg_grp
 
 hs_file_set_pkg_dep_non_local :: [FilePath] -> IO [String]
 hs_file_set_pkg_dep_non_local nm = fmap (filter (not . is_local_pkg)) (hs_file_set_pkg_dep nm)
