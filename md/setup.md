@@ -48,8 +48,6 @@ $ for i in $(hsc3-setup pkg-dep -non-local ~/sw/hsc3-graphs/gr/*.hs) ; do echo $
 MonadRandom
 array
 base
-binary
-bytestring
 cairo
 containers
 directory
