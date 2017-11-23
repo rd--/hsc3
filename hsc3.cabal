@@ -34,7 +34,7 @@ Library
                    directory,
                    filepath,
                    hashable,
-                   hosc == 0.16.*,
+                   hosc == 0.17.*,
                    network,
                    process,
                    random,
