@@ -1,7 +1,5 @@
 import Control.Monad {- base -}
 import Data.List {- base -}
-import Data.List.Split {- base -}
-import Data.List.Ordered {- data-ordlist -}
 import Data.Maybe {- base -}
 import System.Directory {- directory -}
 import System.Environment {- base -}
@@ -9,9 +7,18 @@ import System.Exit {- base -}
 import System.FilePath {- filepath -}
 import System.IO.Unsafe {- base -}
 import System.Process {- process -}
-import Text.Regex {- regex-compat -}
 
-import qualified Music.Theory.Function as T {- hmt -}
+import qualified Data.List.Split as Split {- split -}
+import qualified Data.List.Ordered as Ordered {- data-ordlist -}
+import qualified Text.Regex as Regex {- regex-compat -}
+
+-- * UTIL
+
+predicate_all :: [t -> Bool] -> t -> Bool
+predicate_all p x = all id (map ($ x) p)
+
+predicate_and :: (t -> Bool) -> (t -> Bool) -> t -> Bool
+predicate_and f g x = f x && g x
 
 -- * pkg-dep
 
@@ -19,22 +26,22 @@ is_import :: String -> Bool
 is_import = isPrefixOf "import"
 
 has_comment :: String -> Bool
-has_comment = T.predicate_all (map isInfixOf ["{- "," -}"])
+has_comment = predicate_all (map isInfixOf ["{- "," -}"])
 
-import_pkg_regex :: Regex
-import_pkg_regex = mkRegex "\\{- ([-a-zA-Z0-9]*) -\\}"
+import_pkg_regex :: Regex.Regex
+import_pkg_regex = Regex.mkRegex "\\{- ([-a-zA-Z0-9]*) -\\}"
 
 import_pkg :: String -> String
 import_pkg s =
-    case matchRegex import_pkg_regex s of
+    case Regex.matchRegex import_pkg_regex s of
       Just [r] -> r
       _ -> error ("import_pkg: " ++ s)
 
 -- > fmap hs_pkg_dep $ readFile "setup.hs"
 hs_pkg_dep :: String -> [String]
 hs_pkg_dep s =
-    let c = filter (T.predicate_and is_import has_comment) (lines s)
-    in nubSort ("base" : map import_pkg c)
+    let c = filter (predicate_and is_import has_comment) (lines s)
+    in Ordered.nubSort ("base" : map import_pkg c)
 
 hs_file_pkg_dep :: FilePath -> IO [String]
 hs_file_pkg_dep = fmap hs_pkg_dep . readFile
@@ -42,7 +49,7 @@ hs_file_pkg_dep = fmap hs_pkg_dep . readFile
 hs_file_set_pkg_dep :: [FilePath] -> IO [String]
 hs_file_set_pkg_dep sq = do
   r <- mapM hs_file_pkg_dep sq
-  return (nubSort (concat r))
+  return (Ordered.nubSort (concat r))
 
 -- * Name
 
@@ -65,7 +72,7 @@ type PKG_TBL = [(String,[String])]
 db_parse :: String -> PKG_TBL
 db_parse s =
     let f l = let (nm,sq) = split_once '=' l
-              in (nm,splitOn "," sq)
+              in (nm,Split.splitOn "," sq)
     in map f (lines s)
 
 pkg_tbl_io :: IO PKG_TBL
