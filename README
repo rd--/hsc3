@@ -18,7 +18,7 @@ There are a number of related projects:
 - [hsc3-lang](?t=hsc3-lang): SC3 language (2007)
 - [hsc3-rec](?t=hsc3-rec): Record UGens (2008)
 - [hsc3-sf-hsndfile](?t=hsc3-sf): Sound file IO (libsndfile) (2010)
-- [hsc3-auditor](?t=hsc3-auditor): Sound file IO (libsndfile) (2010)
+- [hsc3-auditor](?t=hsc3-auditor): Simple-minded auditioner (2010)
 - [hsc3-cairo](?t=hsc3-cairo): Drawing (2012)
 - [hsc3-plot](?t=hsc3-plot): Plotting (2013)
 - [hsc3-data](?t=hsc3-data): Data formats &etc. (2013)
