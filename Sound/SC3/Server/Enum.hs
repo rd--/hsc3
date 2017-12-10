@@ -1,6 +1,8 @@
 -- | Server input enumerations.
 module Sound.SC3.Server.Enum where
 
+import Data.Maybe {- base -}
+
 -- | Enumeration of possible locations to add new nodes (s_new and g_new).
 data AddAction = AddToHead
                | AddToTail
@@ -75,6 +77,11 @@ soundFileFormat_from_extension =
               ,("raw",Raw)
               ,("wav",Wave)]
     in flip lookup tbl
+
+soundFileFormat_from_extension_err :: String -> SoundFileFormat
+soundFileFormat_from_extension_err =
+  fromMaybe (error "soundFileFormat_from_extension: unknown sf extension") .
+  soundFileFormat_from_extension
 
 sampleFormatString :: SampleFormat -> String
 sampleFormatString f =
