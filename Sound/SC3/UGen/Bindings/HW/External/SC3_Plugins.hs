@@ -85,6 +85,24 @@ lfBrownNoise1 z r freq dev dist = mkOscIdR [AR,KR] (toUId z) r "LFBrownNoise1" [
 lfBrownNoise2 :: ID a => a -> Rate -> UGen -> UGen -> UGen -> UGen
 lfBrownNoise2 z r freq dev dist = mkOscIdR [AR,KR] (toUId z) r "LFBrownNoise2" [freq,dev,dist] 1
 
+-- | standard map 2D chaotic generator
+--
+--  Standard2DC [KR,AR] minfreq=11025.0 maxfreq=22050.0 k=1.4 x0=4.9789799812499 y0=5.7473416156381
+standard2DC :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+standard2DC rate minfreq maxfreq k x0 y0 = mkUGen Nothing [KR,AR] (Left rate) "Standard2DC" [minfreq,maxfreq,k,x0,y0] Nothing 1 (Special 0) NoId
+
+-- | standard map 2D chaotic generator
+--
+--  Standard2DL [KR,AR] minfreq=11025.0 maxfreq=22050.0 k=1.4 x0=4.9789799812499 y0=5.7473416156381
+standard2DL :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+standard2DL rate minfreq maxfreq k x0 y0 = mkUGen Nothing [KR,AR] (Left rate) "Standard2DL" [minfreq,maxfreq,k,x0,y0] Nothing 1 (Special 0) NoId
+
+-- | standard map 2D chaotic generator
+--
+--  Standard2DN [KR,AR] minfreq=11025.0 maxfreq=22050.0 k=1.4 x0=4.9789799812499 y0=5.7473416156381
+standard2DN :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+standard2DN rate minfreq maxfreq k x0 y0 = mkUGen Nothing [KR,AR] (Left rate) "Standard2DN" [minfreq,maxfreq,k,x0,y0] Nothing 1 (Special 0) NoId
+
 -- | String resonance filter
 streson :: UGen -> UGen -> UGen -> UGen
 streson input delayTime res = mkFilter "Streson" [input,delayTime,res] 1
