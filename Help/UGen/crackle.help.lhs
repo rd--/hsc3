@@ -2,7 +2,7 @@
     Sound.SC3.UGen.DB.ugenSummary "Crackle"
 
 > import Sound.SC3 {- hsc3 -}
->
+
 > g_01 = crackle AR 1.95 * 0.2
 
 Modulate chaos parameter
