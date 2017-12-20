@@ -2163,6 +2163,24 @@ spruceBudworm rate reset rate_ k1 k2 alpha beta mu rho initx inity = mkUGen Noth
 squiz :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
 squiz rate in_ pitchratio zcperchunk memlen = mkUGen Nothing [KR,AR] (Left rate) "Squiz" [in_,pitchratio,zcperchunk,memlen] Nothing 1 (Special 0) NoId
 
+-- | standard map 2D chaotic generator
+--
+--  Standard2DC [KR,AR] minfreq=11025.0 maxfreq=22050.0 k=1.4 x0=4.9789799812499 y0=5.7473416156381
+standard2DC :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+standard2DC rate minfreq maxfreq k x0 y0 = mkUGen Nothing [KR,AR] (Left rate) "Standard2DC" [minfreq,maxfreq,k,x0,y0] Nothing 1 (Special 0) NoId
+
+-- | standard map 2D chaotic generator
+--
+--  Standard2DL [KR,AR] minfreq=11025.0 maxfreq=22050.0 k=1.4 x0=4.9789799812499 y0=5.7473416156381
+standard2DL :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+standard2DL rate minfreq maxfreq k x0 y0 = mkUGen Nothing [KR,AR] (Left rate) "Standard2DL" [minfreq,maxfreq,k,x0,y0] Nothing 1 (Special 0) NoId
+
+-- | standard map 2D chaotic generator
+--
+--  Standard2DN [KR,AR] minfreq=11025.0 maxfreq=22050.0 k=1.4 x0=4.9789799812499 y0=5.7473416156381
+standard2DN :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+standard2DN rate minfreq maxfreq k x0 y0 = mkUGen Nothing [KR,AR] (Left rate) "Standard2DN" [minfreq,maxfreq,k,x0,y0] Nothing 1 (Special 0) NoId
+
 -- | (Undocumented class)
 --
 --  StkBandedWG [KR,AR] freq=440.0 instr=0.0 bowpressure=0.0 bowmotion=0.0 integration=0.0 modalresonance=64.0 bowvelocity=0.0 setstriking=0.0 trig=1.0
