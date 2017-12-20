@@ -25,9 +25,9 @@ sc3_name_edges =
 
 -- | Convert from SC3 name to Lisp style name.
 --
--- > let {s = words "SinOsc LFSaw FFT PV_Add AllpassN BHiPass BinaryOpUGen HPZ1 RLPF TGrains"
--- >     ;l = words "sin-osc lf-saw fft pv-add allpass-n b-hi-pass binary-op-ugen hpz1 rlpf t-grains"}
--- > in map sc3_name_to_lisp_name s == l
+-- > s = words "SinOsc LFSaw FFT PV_Add AllpassN BHiPass BinaryOpUGen HPZ1 RLPF TGrains"
+-- > l = words "sin-osc lf-saw fft pv-add allpass-n b-hi-pass binary-op-ugen hpz1 rlpf t-grains"
+-- > map sc3_name_to_lisp_name s == l
 sc3_name_to_lisp_name :: String -> String
 sc3_name_to_lisp_name s =
     let f (c,e) = if e then ['-',c] else if c == '_' then "-" else [c]
