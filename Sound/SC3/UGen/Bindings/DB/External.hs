@@ -2161,9 +2161,9 @@ spruceBudworm rate reset rate_ k1 k2 alpha beta mu rho initx inity = mkUGen Noth
 
 -- | Wave squeezer. Maybe a kind of pitch shifter.
 --
---  Squiz [KR,AR] in=0.0 pitchratio=2.0 zcperchunk=1.0 memlen=0.1
-squiz :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-squiz rate in_ pitchratio zcperchunk memlen = mkUGen Nothing [KR,AR] (Left rate) "Squiz" [in_,pitchratio,zcperchunk,memlen] Nothing 1 (Special 0) NoId
+--  Squiz [KR,AR] in=0.0 pitchratio=2.0 zcperchunk=1.0 memlen=0.1;    FILTER: TRUE
+squiz :: UGen -> UGen -> UGen -> UGen -> UGen
+squiz in_ pitchratio zcperchunk memlen = mkUGen Nothing [KR,AR] (Right [0]) "Squiz" [in_,pitchratio,zcperchunk,memlen] Nothing 1 (Special 0) NoId
 
 -- | standard map 2D chaotic generator
 --
@@ -2293,15 +2293,15 @@ switchDelay rate in_ drylevel wetlevel delaytime delayfactor maxdelaytime = mkUG
 
 -- | triggered beta random distribution
 --
---  TBetaRand [KR,AR] lo=0.0 hi=1.0 prob1=0.0 prob2=0.0 trig=0.0
-tBetaRand :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-tBetaRand rate lo hi prob1 prob2 trig_ = mkUGen Nothing [KR,AR] (Left rate) "TBetaRand" [lo,hi,prob1,prob2,trig_] Nothing 1 (Special 0) NoId
+--  TBetaRand [KR,AR] lo=0.0 hi=1.0 prob1=0.0 prob2=0.0 trig=0.0;    FILTER: TRUE, NONDET
+tBetaRand :: ID a => a -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+tBetaRand z lo hi prob1 prob2 trig_ = mkUGen Nothing [KR,AR] (Right [4]) "TBetaRand" [lo,hi,prob1,prob2,trig_] Nothing 1 (Special 0) (toUId z)
 
 -- | triggered random walk generator
 --
---  TBrownRand [KR,AR] lo=0.0 hi=1.0 dev=1.0 dist=0.0 trig=0.0
-tBrownRand :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-tBrownRand rate lo hi dev dist trig_ = mkUGen Nothing [KR,AR] (Left rate) "TBrownRand" [lo,hi,dev,dist,trig_] Nothing 1 (Special 0) NoId
+--  TBrownRand [KR,AR] lo=0.0 hi=1.0 dev=1.0 dist=0.0 trig=0.0;    FILTER: TRUE, NONDET
+tBrownRand :: ID a => a -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+tBrownRand z lo hi dev dist trig_ = mkUGen Nothing [KR,AR] (Right [4]) "TBrownRand" [lo,hi,dev,dist,trig_] Nothing 1 (Special 0) (toUId z)
 
 -- | triggered gaussian random distribution
 --

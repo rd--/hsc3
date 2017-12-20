@@ -2,7 +2,7 @@
     Sound.SC3.UGen.DB.ugenSummary "Squiz"
 
 > import Sound.SC3 {- hsc3 -}
-> import Sound.SC3.UGen.Bindings.HW.External.SC3_Plugins {- hsc3 -}
+> import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
 
 Squiz of sin oscillator
 
@@ -15,7 +15,7 @@ Squiz of sin oscillator
 Load sound file to buffer zero
 
     > let fn = "/home/rohan/data/audio/pf-c5.aif"
-    > let fn = "/home/rohan/opt/share/SuperCollider/sounds/a11wlk01.wav"}
+    > let fn = "/home/rohan/opt/src/supercollider/sounds/a11wlk01.wav"
     > withSC3 (async (b_allocRead 0 fn 0 0))
 
 Squiz of audio file.

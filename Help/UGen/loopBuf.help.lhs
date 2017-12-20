@@ -2,7 +2,7 @@
     Sound.SC3.UGen.DB.ugenSummary "LoopBuf"
 
 > import Sound.SC3 {- hsc3 -}
-> import qualified Sound.SC3.UGen.Bindings.HW.External.SC3_Plugins as E {- hsc3 -}
+> import qualified Sound.SC3.UGen.Bindings.DB.External as E {- hsc3 -}
 
 Read audio file into memory
 
@@ -37,19 +37,21 @@ Simple sampler instrument
 
     import Sound.OSC {- hosc -}
     let send = sendMessage
-    withSC3 (send (s_new "lb0" 3000 AddToTail 1 [("bufnum",0),("startLoop",5000),("endLoop",15000)]))
+    let run = withSC3 . send
 
-    withSC3 (send (n_set1 3000 "rate" (-1))) -- backwards
-    withSC3 (send (n_set1 3000 "rate" 1)) -- forwards
-    withSC3 (send (n_set 3000 [("startLoop",11000),("endLoop",13000)])) -- change loop points
-    withSC3 (send (n_set1 3000 "glide" 5)) -- 5 second glide
-    withSC3 (send (n_set1 3000 "rate" 2)) -- up an octave
-    withSC3 (send (n_set1 3000 "rate" (-1))) -- backwards
-    withSC3 (send (n_set1 3000 "rate" 1)) -- back to normal
-    withSC3 (send (n_set1 3000 "ipol" 1)) -- no interpolation
-    withSC3 (send (n_set1 3000 "ipol" 2)) -- linear interpolation
-    withSC3 (send (n_set1 3000 "ipol" 4)) -- cubic interpolation
-    withSC3 (send (n_set1 3000 "gate" 0)) -- release gate to hear post-loop
+    run (s_new "lb0" 3000 AddToTail 1 [("bufnum",0),("startLoop",5000),("endLoop",15000)])
 
-    withSC3 (send (s_new "lb0" 3000 AddToTail 1 [("bufnum",0),("startLoop",5000),("endLoop",15000)]))
-    withSC3 (send (n_set 3000 [("loopRel",1),("gate",0)])) -- release instrument without post-loop
+    run (n_set1 3000 "rate" (-1)) -- backwards
+    run (n_set1 3000 "rate" 1) -- forwards
+    run (n_set 3000 [("startLoop",11000),("endLoop",13000)]) -- change loop points
+    run (n_set1 3000 "glide" 5) -- 5 second glide
+    run (n_set1 3000 "rate" 2) -- up an octave
+    run (n_set1 3000 "rate" (-1)) -- backwards
+    run (n_set1 3000 "rate" 1) -- back to normal
+    run (n_set1 3000 "ipol" 1) -- no interpolation
+    run (n_set1 3000 "ipol" 2) -- linear interpolation
+    run (n_set1 3000 "ipol" 4) -- cubic interpolation
+    run (n_set1 3000 "gate" 0) -- release gate to hear post-loop
+
+    run (s_new "lb0" 3000 AddToTail 1 [("bufnum",0),("startLoop",5000),("endLoop",15000)])
+    run (n_set 3000 [("loopRel",1),("gate",0)]) -- release instrument without post-loop

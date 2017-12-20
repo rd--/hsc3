@@ -2,7 +2,7 @@
     Sound.SC3.UGen.DB.ugenSummary "TBrownRand"
 
 > import Sound.SC3 {- hsc3 -}
-> import Sound.SC3.UGen.Bindings.HW.External.SC3_Plugins {- hsc3 -}
+> import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
 
 > g_01 =
 >     let t = dust 'α' KR 10
