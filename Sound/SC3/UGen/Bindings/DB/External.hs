@@ -529,21 +529,22 @@ dneuromodule rate dt numChannels theta x weights = mkUGen Nothing [KR,AR] (Left 
 
 -- | Nested Allpass filters as proposed by Vercoe and Pluckett
 --
---  DoubleNestedAllpassC [AR] in=0.0 maxdelay1=4.7e-3 delay1=4.7e-3 gain1=0.15 maxdelay2=2.2e-2 delay2=2.2e-2 gain2=0.25 maxdelay3=8.3e-3 delay3=8.3e-3 gain3=0.3
-doubleNestedAllpassC :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-doubleNestedAllpassC rate in_ maxdelay1 delay1_ gain1 maxdelay2 delay2_ gain2 maxdelay3 delay3 gain3 = mkUGen Nothing [AR] (Left rate) "DoubleNestedAllpassC" [in_,maxdelay1,delay1_,gain1,maxdelay2,delay2_,gain2,maxdelay3,delay3,gain3] Nothing 1 (Special 0) NoId
+--  DoubleNestedAllpassC [AR] in=0.0 maxdelay1=4.7e-3 delay1=4.7e-3 gain1=0.15 maxdelay2=2.2e-2 delay2=2.2e-2 gain2=0.25 maxdelay3=8.3e-3 delay3=8.3e-3 gain3=0.3;    FILTER: TRUE
+doubleNestedAllpassC :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+doubleNestedAllpassC in_ maxdelay1 delay1_ gain1 maxdelay2 delay2_ gain2 maxdelay3 delay3 gain3 = mkUGen Nothing [AR] (Right [0]) "DoubleNestedAllpassC" [in_,maxdelay1,delay1_,gain1,maxdelay2,delay2_,gain2,maxdelay3,delay3,gain3] Nothing 1 (Special 0) NoId
 
 -- | Nested Allpass filters as proposed by Vercoe and Pluckett
 --
---  DoubleNestedAllpassL [AR] in=0.0 maxdelay1=4.7e-3 delay1=4.7e-3 gain1=0.15 maxdelay2=2.2e-2 delay2=2.2e-2 gain2=0.25 maxdelay3=8.3e-3 delay3=8.3e-3 gain3=0.3
-doubleNestedAllpassL :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-doubleNestedAllpassL rate in_ maxdelay1 delay1_ gain1 maxdelay2 delay2_ gain2 maxdelay3 delay3 gain3 = mkUGen Nothing [AR] (Left rate) "DoubleNestedAllpassL" [in_,maxdelay1,delay1_,gain1,maxdelay2,delay2_,gain2,maxdelay3,delay3,gain3] Nothing 1 (Special 0) NoId
+--  DoubleNestedAllpassL [AR] in=0.0 maxdelay1=4.7e-3 delay1=4.7e-3 gain1=0.15 maxdelay2=2.2e-2 delay2=2.2e-2 gain2=0.25 maxdelay3=8.3e-3 delay3=8.3e-3 gain3=0.3;    FILTER: TRUE
+doubleNestedAllpassL :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+doubleNestedAllpassL in_ maxdelay1 delay1_ gain1 maxdelay2 delay2_ gain2 maxdelay3 delay3 gain3 = mkUGen Nothing [AR] (Right [0]) "DoubleNestedAllpassL" [in_,maxdelay1,delay1_,gain1,maxdelay2,delay2_,gain2,maxdelay3,delay3,gain3] Nothing 1 (Special 0) NoId
 
 -- | Nested Allpass filters as proposed by Vercoe and Pluckett
 --
---  DoubleNestedAllpassN [AR] in=0.0 maxdelay1=4.7e-3 delay1=4.7e-3 gain1=0.15 maxdelay2=2.2e-2 delay2=2.2e-2 gain2=0.25 maxdelay3=8.3e-3 delay3=8.3e-3 gain3=0.3
-doubleNestedAllpassN :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-doubleNestedAllpassN rate in_ maxdelay1 delay1_ gain1 maxdelay2 delay2_ gain2 maxdelay3 delay3 gain3 = mkUGen Nothing [AR] (Left rate) "DoubleNestedAllpassN" [in_,maxdelay1,delay1_,gain1,maxdelay2,delay2_,gain2,maxdelay3,delay3,gain3] Nothing 1 (Special 0) NoId
+--  DoubleNestedAllpassN [AR] in=0.0 maxdelay1=4.7e-3 delay1=4.7e-3 gain1=0.15 maxdelay2=2.2e-2 delay2=2.2e-2 gain2=0.25 maxdelay3=8.3e-3 delay3=8.3e-3 gain3=0.3;    FILTER: TRUE
+doubleNestedAllpassN :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+doubleNestedAllpassN in_ maxdelay1 delay1_ gain1 maxdelay2 delay2_ gain2 maxdelay3 delay3 gain3 = mkUGen Nothing [AR] (Right [0]) "DoubleNestedAllpassN" [in_,maxdelay1,delay1_,gain1,maxdelay2,delay2_,gain2,maxdelay3,delay3,gain3] Nothing 1 (Special 0) NoId
+
 
 -- | Forced DoubleWell Oscillator
 --
@@ -1543,21 +1544,21 @@ needleRect rate rate_ imgWidth imgHeight rectX rectY rectW rectH = mkUGen Nothin
 
 -- | Nested Allpass filters as proposed by Vercoe and Pluckett
 --
---  NestedAllpassC [AR] in=0.0 maxdelay1=3.6e-2 delay1=3.6e-2 gain1=8.0e-2 maxdelay2=3.0e-2 delay2=3.0e-2 gain2=0.3
-nestedAllpassC :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-nestedAllpassC rate in_ maxdelay1 delay1_ gain1 maxdelay2 delay2_ gain2 = mkUGen Nothing [AR] (Left rate) "NestedAllpassC" [in_,maxdelay1,delay1_,gain1,maxdelay2,delay2_,gain2] Nothing 1 (Special 0) NoId
+--  NestedAllpassC [AR] in=0.0 maxdelay1=3.6e-2 delay1=3.6e-2 gain1=8.0e-2 maxdelay2=3.0e-2 delay2=3.0e-2 gain2=0.3;    FILTER: TRUE
+nestedAllpassC :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+nestedAllpassC in_ maxdelay1 delay1_ gain1 maxdelay2 delay2_ gain2 = mkUGen Nothing [AR] (Right [0]) "NestedAllpassC" [in_,maxdelay1,delay1_,gain1,maxdelay2,delay2_,gain2] Nothing 1 (Special 0) NoId
 
 -- | Nested Allpass filters as proposed by Vercoe and Pluckett
 --
---  NestedAllpassL [AR] in=0.0 maxdelay1=3.6e-2 delay1=3.6e-2 gain1=8.0e-2 maxdelay2=3.0e-2 delay2=3.0e-2 gain2=0.3
-nestedAllpassL :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-nestedAllpassL rate in_ maxdelay1 delay1_ gain1 maxdelay2 delay2_ gain2 = mkUGen Nothing [AR] (Left rate) "NestedAllpassL" [in_,maxdelay1,delay1_,gain1,maxdelay2,delay2_,gain2] Nothing 1 (Special 0) NoId
+--  NestedAllpassL [AR] in=0.0 maxdelay1=3.6e-2 delay1=3.6e-2 gain1=8.0e-2 maxdelay2=3.0e-2 delay2=3.0e-2 gain2=0.3;    FILTER: TRUE
+nestedAllpassL :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+nestedAllpassL in_ maxdelay1 delay1_ gain1 maxdelay2 delay2_ gain2 = mkUGen Nothing [AR] (Right [0]) "NestedAllpassL" [in_,maxdelay1,delay1_,gain1,maxdelay2,delay2_,gain2] Nothing 1 (Special 0) NoId
 
 -- | Nested Allpass filters as proposed by Vercoe and Pluckett
 --
---  NestedAllpassN [AR] in=0.0 maxdelay1=3.6e-2 delay1=3.6e-2 gain1=8.0e-2 maxdelay2=3.0e-2 delay2=3.0e-2 gain2=0.3
-nestedAllpassN :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-nestedAllpassN rate in_ maxdelay1 delay1_ gain1 maxdelay2 delay2_ gain2 = mkUGen Nothing [AR] (Left rate) "NestedAllpassN" [in_,maxdelay1,delay1_,gain1,maxdelay2,delay2_,gain2] Nothing 1 (Special 0) NoId
+--  NestedAllpassN [AR] in=0.0 maxdelay1=3.6e-2 delay1=3.6e-2 gain1=8.0e-2 maxdelay2=3.0e-2 delay2=3.0e-2 gain2=0.3;    FILTER: TRUE
+nestedAllpassN :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+nestedAllpassN in_ maxdelay1 delay1_ gain1 maxdelay2 delay2_ gain2 = mkUGen Nothing [AR] (Right [0]) "NestedAllpassN" [in_,maxdelay1,delay1_,gain1,maxdelay2,delay2_,gain2] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
