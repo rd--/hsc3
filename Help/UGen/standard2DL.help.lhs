@@ -1,13 +1,11 @@
     > Sound.SC3.UGen.Help.viewSC3Help "Standard2DL"
 
 > import Sound.SC3 {- hsc3 -}
-> import Sound.SC3.UGen.Bindings.HW.External.SC3_Plugins {- hsc3 -}
+> import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
 
 > def_k = 1.4
 > def_x0 = 4.9789799812499
 > def_y0 = 5.7473416156381
-
-{ Standard2DL.ar(220, 11025, mul:0.3) }.play(s);
 
 mouse-controlled param
 

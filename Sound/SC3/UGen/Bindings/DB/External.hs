@@ -1,7 +1,9 @@
 module Sound.SC3.UGen.Bindings.DB.External where
 
+import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
+import Sound.SC3.UGen.UGen
 
 -- | (Undocumented class)
 --
@@ -2303,9 +2305,9 @@ tBrownRand rate lo hi dev dist trig_ = mkUGen Nothing [KR,AR] (Left rate) "TBrow
 
 -- | triggered gaussian random distribution
 --
---  TGaussRand [KR,AR] lo=0.0 hi=1.0 trig=0.0
-tGaussRand :: Rate -> UGen -> UGen -> UGen -> UGen
-tGaussRand rate lo hi trig_ = mkUGen Nothing [KR,AR] (Left rate) "TGaussRand" [lo,hi,trig_] Nothing 1 (Special 0) NoId
+--  TGaussRand [KR,AR] lo=0.0 hi=1.0 trig=0.0;    FILTER: TRUE, NONDET
+tGaussRand :: ID a => a -> UGen -> UGen -> UGen -> UGen
+tGaussRand z lo hi trig_ = mkUGen Nothing [KR,AR] (Right [2]) "TGaussRand" [lo,hi,trig_] Nothing 1 (Special 0) (toUId z)
 
 -- | buffer granulator with linear att/dec
 --
