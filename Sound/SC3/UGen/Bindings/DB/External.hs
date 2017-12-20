@@ -204,8 +204,8 @@ bLBufRd rate bufnum phase ratio = mkUGen Nothing [KR,AR] (Left rate) "BLBufRd" [
 -- | 24db/oct rolloff - 4nd order resonant Low/High/Band Pass Filter
 --
 --  BMoog [AR] in=0.0 freq=440.0 q=0.2 mode=0.0 saturation=0.95
-bMoog :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-bMoog rate in_ freq q mode saturation = mkUGen Nothing [AR] (Left rate) "BMoog" [in_,freq,q,mode,saturation] Nothing 1 (Special 0) NoId
+bMoog :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+bMoog in_ freq q mode saturation = mkUGen Nothing [AR] (Right [0]) "BMoog" [in_,freq,q,mode,saturation] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
@@ -678,8 +678,8 @@ fFTSubbandPower rate chain cutfreqs square scalemode = mkUGen Nothing [KR] (Left
 -- | Phase modulation oscillator matrix.
 --
 --  FM7 [AR] ctlMatrix=0.0 modMatrix=0.0
-fM7 :: Rate -> UGen -> UGen -> UGen
-fM7 rate ctlMatrix modMatrix = mkUGen Nothing [AR] (Left rate) "FM7" [ctlMatrix,modMatrix] Nothing 6 (Special 0) NoId
+fm7 :: Rate -> UGen -> UGen -> UGen
+fm7 rate ctlMatrix modMatrix = mkUGen Nothing [AR] (Left rate) "FM7" [ctlMatrix,modMatrix] Nothing 6 (Special 0) NoId
 
 -- | (Undocumented class)
 --
@@ -1476,8 +1476,8 @@ monoGrainBF rate in_ winsize grainrate winrandpct azimuth azrand elevation elran
 -- | Moog Filter Emulation
 --
 --  MoogLadder [KR,AR] in=0.0 ffreq=440.0 res=0.0
-moogLadder :: Rate -> UGen -> UGen -> UGen -> UGen
-moogLadder rate in_ ffreq res = mkUGen Nothing [KR,AR] (Left rate) "MoogLadder" [in_,ffreq,res] Nothing 1 (Special 0) NoId
+moogLadder :: UGen -> UGen -> UGen -> UGen
+moogLadder in_ ffreq res = mkUGen Nothing [KR,AR] (Right [0]) "MoogLadder" [in_,ffreq,res] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
@@ -2304,8 +2304,8 @@ tGrains3 numChannels rate trigger bufnum rate_ centerPos dur pan amp att dec win
 -- | Tracking Phase Vocoder
 --
 --  TPV [AR] chain=0.0 windowsize=1024.0 hopsize=512.0 maxpeaks=80.0 currentpeaks=0.0 freqmult=1.0 tolerance=4.0 noisefloor=0.2
-tpv :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-tpv rate chain windowsize hopsize maxpeaks currentpeaks freqmult tolerance noisefloor = mkUGen Nothing [AR] (Left rate) "TPV" [chain,windowsize,hopsize,maxpeaks,currentpeaks,freqmult,tolerance,noisefloor] Nothing 1 (Special 0) NoId
+tpv :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+tpv chain windowsize hopsize maxpeaks currentpeaks freqmult tolerance noisefloor = mkUGen Nothing [AR] (Left AR) "TPV" [chain,windowsize,hopsize,maxpeaks,currentpeaks,freqmult,tolerance,noisefloor] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
@@ -2376,8 +2376,8 @@ vMScan2D rate bufnum = mkUGen Nothing [AR] (Left rate) "VMScan2D" [bufnum] Nothi
 -- | vosim pulse generator
 --
 --  VOSIM [AR] trig=0.1 freq=400.0 nCycles=1.0 decay=0.9
-vOSIM :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-vOSIM rate trig_ freq nCycles decay_ = mkUGen Nothing [AR] (Left rate) "VOSIM" [trig_,freq,nCycles,decay_] Nothing 1 (Special 0) NoId
+vosim :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+vosim rate trig_ freq nCycles decay_ = mkUGen Nothing [AR] (Left rate) "VOSIM" [trig_,freq,nCycles,decay_] Nothing 1 (Special 0) NoId
 
 -- | windowed amplitude follower
 --

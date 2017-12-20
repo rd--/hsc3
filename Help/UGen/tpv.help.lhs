@@ -2,16 +2,16 @@
     Sound.SC3.UGen.DB.ugenSummary "TPV"
 
 > import Sound.SC3 {- hsc3 -}
-> import Sound.SC3.UGen.Bindings.HW.External.SC3_Plugins {- hsc3 -}
+> import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
 
 > fft_sz = 2048::Int
 > hop_sz = fft_sz `div` 2
 > fn_0 = "/home/rohan/data/audio/pf-c5.snd"
 > fn_1 = "/home/rohan/data/audio/material/tyndall/var/talking-fragments/0001.WAV"
 > tpv' b i = tpv (fft b i 0.5 1 1 0) (constant fft_sz) (constant hop_sz)
+> msg = [b_alloc 0 fft_sz 1,b_allocRead 1 fn_1 0 0]
 
-    > withSC3 (do {_ <- async (b_alloc 0 fft_sz 1)
-    >             ;async (b_allocRead 1 fn_1 0 0)})
+    > withSC3 (mapM_ async msg)
 
 > g_01 =
 >     let i = playBuf 1 AR 1 (bufRateScale KR 1) 1 0 Loop DoNothing

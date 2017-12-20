@@ -2,7 +2,7 @@
     > Sound.SC3.UGen.DB.ugenSummary "VOSIM"
 
 > import Sound.SC3 {- hsc3 -}
-> import qualified Sound.SC3.UGen.Bindings.HW.External.SC3_Plugins as E {- hsc3 -}
+> import qualified Sound.SC3.UGen.Bindings.DB.External as E {- hsc3 -}
 
 > gr_00 =
 >     let trg = impulse AR 100 0

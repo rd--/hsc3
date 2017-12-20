@@ -22,10 +22,12 @@ toSC3Name nm =
       "in'" -> "In"
       "bpz2" -> "BPZ2"
       "brz2" -> "BRZ2"
+      "fm7" -> "FM7"
       "ifft" -> "IFFT"
       "out" -> "Out"
       "rhpf" -> "RHPF"
       "rlpf" -> "RLPF"
+      "vosim" -> "VOSIM"
       'f':'b':nm' -> "FB" ++ nm'
       'h':'p':'z':nm' -> "HPZ" ++ nm'
       'l':'f':'d':nm' -> "LFD" ++ nm'
@@ -51,9 +53,11 @@ fromSC3Name nm =
       "In" -> "in'"
       "BPZ2" -> "bpz2"
       "BRZ2" -> "brz2"
+      "FM7" -> "fm7"
       "IFFT" -> "ifft"
       "RHPF" -> "rhpf"
       "RLPF" -> "rlpf"
+      "VOSIM" -> "vosim"
       'F':'B':nm' -> "fb" ++ nm'
       'H':'P':'Z':nm' -> "hpz" ++ nm'
       'L':'F':'D':nm' -> "lfd" ++ nm'

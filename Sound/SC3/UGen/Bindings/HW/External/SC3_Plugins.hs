@@ -85,6 +85,12 @@ lfBrownNoise1 z r freq dev dist = mkOscIdR [AR,KR] (toUId z) r "LFBrownNoise1" [
 lfBrownNoise2 :: ID a => a -> Rate -> UGen -> UGen -> UGen -> UGen
 lfBrownNoise2 z r freq dev dist = mkOscIdR [AR,KR] (toUId z) r "LFBrownNoise2" [freq,dev,dist] 1
 
+-- | Moog Filter Emulation
+--
+--  MoogLadder [KR,AR] in=0.0 ffreq=440.0 res=0.0
+moogLadder :: Rate -> UGen -> UGen -> UGen -> UGen
+moogLadder rate in_ ffreq res = mkUGen Nothing [KR,AR] (Left rate) "MoogLadder" [in_,ffreq,res] Nothing 1 (Special 0) NoId
+
 -- | standard map 2D chaotic generator
 --
 --  Standard2DC [KR,AR] minfreq=11025.0 maxfreq=22050.0 k=1.4 x0=4.9789799812499 y0=5.7473416156381
@@ -118,6 +124,14 @@ tBrownRand z lo hi dev dist trig_ = mkFilterIdR [AR,KR] (toUId z) "TBrownRand" [
 -- | Triggered gaussian random distribution
 tGaussRand :: ID a => a -> UGen -> UGen -> UGen -> UGen
 tGaussRand z lo hi trig_ = mkFilterIdR [AR,KR] (toUId z) "TGaussRand" [lo,hi,trig_] 1
+
+-- * BlackRain
+
+-- | 24db/oct rolloff - 4nd order resonant Low/High/Band Pass Filter
+--
+--  BMoog [AR] in=0.0 freq=440.0 q=0.2 mode=0.0 saturation=0.95
+bMoog :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+bMoog in_ freq q mode saturation = mkUGen Nothing [AR] (Right [0]) "BMoog" [in_,freq,q,mode,saturation] Nothing 1 (Special 0) NoId
 
 -- * Concat
 
