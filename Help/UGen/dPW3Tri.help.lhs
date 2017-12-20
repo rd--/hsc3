@@ -2,17 +2,17 @@
     Sound.SC3.UGen.DB.ugenSummary "DPW3Tri"
 
 > import Sound.SC3 {- hsc3 -}
-> import qualified Sound.SC3.UGen.Bindings.HW.External.SC3_Plugins as E {- hsc3 -}
+> import qualified Sound.SC3.UGen.Bindings.DB.External as E {- hsc3 -}
 
 > import qualified Sound.SC3.UGen.External.RDU as RDU {- sc3-rdu -}
 
 distortion creeps in under 200Hz
 
-> g_01 = E.dPW3Tri AR (xLine KR 2000 20 10 DoNothing) * 0.1
+> g_01 = E.dpw3Tri AR (xLine KR 2000 20 10 DoNothing) * 0.1
 
 very fast sweeps can have transient distortion effects
 
-> g_02 = E.dPW3Tri AR (mouseX KR 200 12000 Exponential 0.2) * 0.2
+> g_02 = E.dpw3Tri AR (mouseX KR 200 12000 Exponential 0.2) * 0.2
 
 compare
 
@@ -21,7 +21,7 @@ compare
 less efficient than LFTri
 
 > g_04 = let f = RDU.randN 50 'α' 50 5000
->        in splay (E.dPW3Tri AR f) 1 0.1 0 True
+>        in splay (E.dpw3Tri AR f) 1 0.1 0 True
 
 > g_05 = let f = RDU.randN 50 'α' 50 5000
 >        in splay (lfTri AR f 0) 1 0.1 0 True
@@ -35,7 +35,7 @@ triangle is integration of square wave
 differentiation of triangle is square
 
 > g_07 = let f = mouseX KR 440 8800 Exponential 0.2
->            o = E.dPW3Tri AR f
+>            o = E.dpw3Tri AR f
 >        in hpz1 (o * 2) * 0.25
 
 compare

@@ -422,14 +422,14 @@ dNoiseRing rate change chance shift numBits resetval = mkUGen Nothing [DR] (Left
 -- | Triangle via 3rd order differerentiated polynomial waveform
 --
 --  DPW3Tri [AR] freq=440.0
-dPW3Tri :: Rate -> UGen -> UGen
-dPW3Tri rate freq = mkUGen Nothing [AR] (Left rate) "DPW3Tri" [freq] Nothing 1 (Special 0) NoId
+dpw3Tri :: Rate -> UGen -> UGen
+dpw3Tri rate freq = mkUGen Nothing [AR] (Left rate) "DPW3Tri" [freq] Nothing 1 (Special 0) NoId
 
 -- | Sawtooth via 4th order differerentiated polynomial waveform
 --
 --  DPW4Saw [AR] freq=440.0
-dPW4Saw :: Rate -> UGen -> UGen
-dPW4Saw rate freq = mkUGen Nothing [AR] (Left rate) "DPW4Saw" [freq] Nothing 1 (Special 0) NoId
+dpw4Saw :: Rate -> UGen -> UGen
+dpw4Saw rate freq = mkUGen Nothing [AR] (Left rate) "DPW4Saw" [freq] Nothing 1 (Special 0) NoId
 
 -- | Plucked physical model.
 --
@@ -1249,21 +1249,21 @@ kmeansToBPSet1 rate freq numdatapoints maxnummeans nummeans tnewdata tnewmeans s
 
 -- | random walk step
 --
---  LFBrownNoise0 [KR,AR] freq=20.0 dev=1.0 dist=0.0
-lfBrownNoise0 :: Rate -> UGen -> UGen -> UGen -> UGen
-lfBrownNoise0 rate freq dev dist = mkUGen Nothing [KR,AR] (Left rate) "LFBrownNoise0" [freq,dev,dist] Nothing 1 (Special 0) NoId
+--  LFBrownNoise0 [KR,AR] freq=20.0 dev=1.0 dist=0.0;    NONDET
+lfBrownNoise0 :: ID a => a -> Rate -> UGen -> UGen -> UGen -> UGen
+lfBrownNoise0 z rate freq dev dist = mkUGen Nothing [KR,AR] (Left rate) "LFBrownNoise0" [freq,dev,dist] Nothing 1 (Special 0) (toUId z)
 
 -- | random walk linear interp
 --
---  LFBrownNoise1 [KR,AR] freq=20.0 dev=1.0 dist=0.0
-lfBrownNoise1 :: Rate -> UGen -> UGen -> UGen -> UGen
-lfBrownNoise1 rate freq dev dist = mkUGen Nothing [KR,AR] (Left rate) "LFBrownNoise1" [freq,dev,dist] Nothing 1 (Special 0) NoId
+--  LFBrownNoise1 [KR,AR] freq=20.0 dev=1.0 dist=0.0;    NONDET
+lfBrownNoise1 :: ID a => a -> Rate -> UGen -> UGen -> UGen -> UGen
+lfBrownNoise1 z rate freq dev dist = mkUGen Nothing [KR,AR] (Left rate) "LFBrownNoise1" [freq,dev,dist] Nothing 1 (Special 0) (toUId z)
 
 -- | random walk cubic interp
 --
---  LFBrownNoise2 [KR,AR] freq=20.0 dev=1.0 dist=0.0
-lfBrownNoise2 :: Rate -> UGen -> UGen -> UGen -> UGen
-lfBrownNoise2 rate freq dev dist = mkUGen Nothing [KR,AR] (Left rate) "LFBrownNoise2" [freq,dev,dist] Nothing 1 (Special 0) NoId
+--  LFBrownNoise2 [KR,AR] freq=20.0 dev=1.0 dist=0.0;    NONDET
+lfBrownNoise2 :: ID a => a -> Rate -> UGen -> UGen -> UGen -> UGen
+lfBrownNoise2 z rate freq dev dist = mkUGen Nothing [KR,AR] (Left rate) "LFBrownNoise2" [freq,dev,dist] Nothing 1 (Special 0) (toUId z)
 
 -- | Live Linear Predictive Coding Analysis and Resynthesis
 --
