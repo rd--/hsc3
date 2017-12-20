@@ -1,30 +1,36 @@
-> Sound.SC3.UGen.Help.viewSC3Help "PV_BinShift"
-> Sound.SC3.UGen.DB.ugenSummary "PV_BinShift"
+    Sound.SC3.UGen.Help.viewSC3Help "PV_BinShift"
+    Sound.SC3.UGen.DB.ugenSummary "PV_BinShift"
 
-> import Sound.SC3
+> import Sound.SC3 {- hsc3 -}
 
 allocate buffer
 
-> withSC3 (async (b_alloc 10 2048 1))
+   withSC3 (async (b_alloc 10 2048 1))
 
 source signal (oscillators)
 
-> let z = let {s0 = sinOsc KR 0.08 0 * 6 + 6.2
->             ;s1 = sinOsc KR (squared s0) 0 * 100 + 800}
->         in sinOsc AR s1 0 * 0.2
+> g_01 =
+>   let s0 = sinOsc KR 0.08 0 * 6 + 6.2
+>       s1 = sinOsc KR (squared s0) 0 * 100 + 800
+>   in sinOsc AR s1 0 * 0.2
 
 source signal (the world)
 
-> let z = soundIn 4
+> g_02 = soundIn 0
 
 default values
 
-> audition (out 0 (ifft' (pv_BinShift (fft' 10 z) 1 0 0)))
+> f_01 z = ifft' (pv_BinShift (fft' 10 z) 1 0 0)
+
+> g_03 = f_01 g_02
 
 mouse control
 
-> let {x = mouseX KR (-10) 100 Linear 0.1
->     ;y = mouseY KR 1 4 Linear 0.1
->     ;b = mouseButton KR 0 1 0.2
->     ;pv = pv_BinShift (fft' 10 z) y x b}
-> in audition (out 0 (ifft' pv))
+> f_02 z =
+>   let x = mouseX KR (-10) 100 Linear 0.1
+>       y = mouseY KR 1 4 Linear 0.1
+>       b = mouseButton KR 0 1 0.2
+>       pv = pv_BinShift (fft' 10 z) y x b
+>   in ifft' pv
+
+> g_04 = f_02 g_02

@@ -14,8 +14,8 @@ a2B rate a b c d = mkUGen Nothing [AR] (Left rate) "A2B" [a,b,c,d] Nothing 4 (Sp
 -- | Emulator of the AY (aka YM) soundchip, used in Spectrum/Atari
 --
 --  AY [AR] tonea=1777.0 toneb=1666.0 tonec=1555.0 noise=1.0 control=7.0 vola=15.0 volb=15.0 volc=15.0 envfreq=4.0 envstyle=1.0 chiptype=0.0
-ay :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-ay rate tonea toneb tonec noise control_ vola volb volc envfreq envstyle chiptype = mkUGen Nothing [AR] (Left rate) "AY" [tonea,toneb,tonec,noise,control_,vola,volb,volc,envfreq,envstyle,chiptype] Nothing 1 (Special 0) NoId
+ay :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+ay tonea toneb tonec noise control_ vola volb volc envfreq envstyle chiptype = mkUGen Nothing [AR] (Left AR) "AY" [tonea,toneb,tonec,noise,control_,vola,volb,volc,envfreq,envstyle,chiptype] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --

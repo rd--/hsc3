@@ -1,7 +1,9 @@
     > Sound.SC3.UGen.Help.viewSC3Help "PV_BinDelay"
     > Sound.SC3.UGen.DB.ugenSummary "PV_BinDelay"
 
+> import Sound.OSC {- hsc3 -}
 > import Sound.SC3 {- hsc3 -}
+> import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
 
 function to allocate buffers (fft,delay,feedback)
 
@@ -28,11 +30,11 @@ start filter
 
 set delay times (unary)
 
-    withSC3 (send (b_fill 11 [(0,128,0.25)]))
+    withSC3 (sendMessage (b_fill 11 [(0,128,0.25)]))
 
 set feedback gain
 
-    withSC3 (send (b_fill 12 [(0,128,0.75)]))
+    withSC3 (sendMessage (b_fill 12 [(0,128,0.75)]))
 
 function to generate sin table of n places in range (l,r)
 
@@ -42,11 +44,11 @@ function to generate sin table of n places in range (l,r)
 
 set delay times (sin)
 
-    withSC3 (send (b_setn1 11 0 (gen_sin 0 0.35 128 0)))
+    withSC3 (sendMessage (b_setn1 11 0 (gen_sin 0 0.35 128 0)))
 
 set feedback gain (sin)
 
-    withSC3 (send (b_setn1 12 0 (gen_sin 0.75 0.95 128 pi)))
+    withSC3 (sendMessage (b_setn1 12 0 (gen_sin 0.75 0.95 128 pi)))
 
 modulate delay times (lfo)
 

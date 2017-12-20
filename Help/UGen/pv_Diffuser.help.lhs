@@ -3,18 +3,22 @@
 
 > import Sound.SC3 {- hsc3 -}
 
-> diff_01 = do
->   let fn = "/home/rohan/data/audio/pf-c5.snd"
->   withSC3 (async (b_alloc 10 2048 1) >> async (b_allocRead 12 fn 0 0))
+> n_01 = "/home/rohan/data/audio/pf-c5.snd"
 
-> diff_02 = playBuf 1 AR 12 (bufRateScale KR 12) 0 0 Loop DoNothing
+> m_01 = [b_alloc 10 2048 1,b_allocRead 12 n_01 0 0]
 
-> diff_02' = soundIn 0
+    withSC3 (mapM_ async m_01)
+
+> g_01 = playBuf 1 AR 12 (bufRateScale KR 12) 0 0 Loop DoNothing
+
+> g_02 = soundIn 0
 
 Trigger revised phase shifts with MouseX crossing center of screen
 
-> diff_03 =
->     let f = fft' 10 diff_02
->         x = mouseX KR 0 1 Linear 0.1
->         h = pv_Diffuser f (x >* 0.5)
->     in ifft' h * 0.5
+> f_01 z =
+>   let f = fft' 10 z
+>       x = mouseX KR 0 1 Linear 0.1
+>       h = pv_Diffuser f (x >* 0.5)
+>   in ifft' h * 0.5
+
+> g_03 = f_01 g_02

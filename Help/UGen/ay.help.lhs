@@ -2,9 +2,10 @@
     Sound.SC3.UGen.DB.ugenSummary "AY"
 
 > import Sound.SC3 {- hsc3 -}
->
+> import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
+
 > g_01 = ay 1777 1666 1555 1 7 15 15 15 4 1 0
->
+
 > g_02 =
 >     let tonea = mouseY KR 10 3900 Exponential 0.2
 >         toneb = mouseX KR 10 3900 Exponential 0.2
@@ -14,7 +15,7 @@
 >         volc = 0
 >         s = ay tonea toneb 1555 1 ctl vola volb volc 4 1 0
 >     in pan2 s 0 0.25
->
+
 > g_03 =
 >     let rate = mouseX KR 0.1 10 Linear 0.2
 >         rng l r i = linLin i (-1) 1 l r

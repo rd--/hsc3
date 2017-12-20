@@ -1,8 +1,9 @@
-> Sound.SC3.UGen.Help.viewSC3Help "StkMandolin"
-> Sound.SC3.UGen.DB.ugenSummary "StkMandolin"
+    Sound.SC3.UGen.Help.viewSC3Help "StkMandolin"
+    Sound.SC3.UGen.DB.ugenSummary "StkMandolin"
 
 > import Control.Monad
-> import Sound.SC3
+> import Sound.SC3 {- hsc3 -}
+> import Sound.SC3.UGen.Bindings.HW.External.SC3_Plugins {- hsc3 -}
 
 requires "../../rawwaves/mand1.raw"
 

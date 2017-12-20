@@ -12,6 +12,4 @@
 >         [e,sd,no,rf] = mceChannels (tRandN 4 'β' 0 127 tr)
 >     in stkShakers AR i e sd no rf tr
 
-> gr_02 =
->     let tr = impulse KR 1 0 - 0.5
->     in stkShakers AR 4 64 64 64 64 tr
+> gr_02 = stkShakers AR 4 64 64 64 64 1
