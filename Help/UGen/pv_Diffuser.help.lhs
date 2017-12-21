@@ -5,9 +5,9 @@
 
 > n_01 = "/home/rohan/data/audio/pf-c5.snd"
 
-> m_01 = [b_alloc 10 2048 1,b_allocRead 12 n_01 0 0]
+> m_01 = b_allocRead 12 n_01 0 0
 
-    withSC3 (mapM_ async m_01)
+    withSC3 (async m_01)
 
 > g_01 = playBuf 1 AR 12 (bufRateScale KR 12) 0 0 Loop DoNothing
 
@@ -16,7 +16,7 @@
 Trigger revised phase shifts with MouseX crossing center of screen
 
 > f_01 z =
->   let f = fft' 10 z
+>   let f = fft' (localBuf 'α' 2048 1) z
 >       x = mouseX KR 0 1 Linear 0.1
 >       h = pv_Diffuser f (x >* 0.5)
 >   in ifft' h * 0.5

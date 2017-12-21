@@ -8,7 +8,7 @@ required to run before the ifft of c0, which mutates c0, however that
 is not apparent from the edge structure of the graph.  See instead
 PV_Split.
 
-> cpy0 =
+> g_01 =
 >     let z = lfClipNoise 'α' AR 100 * 0.1
 >         c0 = fft' (localBuf 'β' 2048 1) z
 >         c1 = pv_Copy c0 (localBuf 'γ' 2048 1)
