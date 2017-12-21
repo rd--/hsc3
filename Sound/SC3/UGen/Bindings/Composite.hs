@@ -7,6 +7,7 @@ import Data.List.Split {- split -}
 import Data.Maybe {- base -}
 
 import Sound.SC3.Common.Envelope
+import Sound.SC3.Common.Math.Filter.BEQ
 
 import Sound.SC3.UGen.Bindings.DB
 import Sound.SC3.UGen.Bindings.HW
@@ -26,39 +27,12 @@ asLocalBuf i xs =
         s = setBuf' b xs 0
     in mrg2 b s
 
--- | Calculate coefficients for bi-quad low pass filter.
-bLowPassCoef :: Floating a => a -> a -> a -> (a,a,a,a,a)
-bLowPassCoef sr freq rq =
-    let w0 = pi * 2 * freq * (1 / sr)
-        cos_w0 = cos w0
-        i = 1 - cos_w0
-        alpha = sin w0 * 0.5 * rq
-        b0rz = recip (1 + alpha)
-        a0 = i * 0.5 * b0rz
-        a1 = i * b0rz
-        b1 = cos_w0 * 2 * b0rz
-        b2 = (1 - alpha) * negate b0rz
-    in (a0,a1,a0,b1,b2)
-
 -- | 24db/oct rolloff - 4th order resonant Low Pass Filter
 bLowPass4 :: UGen -> UGen -> UGen -> UGen
 bLowPass4 i f rq =
   let (a0, a1, a2, b1, b2) = bLowPassCoef sampleRate f rq
       flt z = sos z a0 a1 a2 b1 b2
   in flt (flt i)
-
-bHiPassCoef :: Floating t => t -> t -> t -> (t, t, t, t, t)
-bHiPassCoef sr freq rq =
-  let w0 = pi * 2 * freq * (1 / sr)
-      cos_w0 = cos w0
-      i = 1 + cos_w0
-      alpha = sin w0 * 0.5 * rq
-      b0rz = recip (1 + alpha)
-      a0 = i * 0.5 * b0rz
-      a1 = negate i * b0rz
-      b1 = cos_w0 * 2 * b0rz
-      b2 = (1 - alpha) * negate b0rz
-  in (a0, a1, a0, b1, b2)
 
 -- | 24db/oct rolloff - 4th order resonant Hi Pass Filter
 bHiPass4 :: UGen -> UGen -> UGen -> UGen

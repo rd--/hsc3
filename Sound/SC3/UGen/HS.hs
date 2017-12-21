@@ -5,6 +5,7 @@ import Data.List {- base -}
 import qualified System.Random as R {- random -}
 
 import Sound.SC3.Common.Math
+import qualified Sound.SC3.Common.Math.Filter as Filter
 
 -- | F = function, ST = state
 type F_ST0 st o = st -> (o,st)
@@ -151,24 +152,11 @@ rlpf_f max_f (radians_per_sample,f,rq) x y1 y2 =
 rlpf_ir :: (Floating n, Ord n) => T3 n -> F_ST1 (T2 n) n n
 rlpf_ir p = iir2 (rlpf_f max p)
 
-bw_lpf_or_hpf_coef :: Floating n => Bool -> n -> n -> T5 n
-bw_lpf_or_hpf_coef is_hpf sample_rate f =
-    let f' = f * pi / sample_rate
-        c = if is_hpf then tan f' else 1.0 / tan f'
-        c2 = c * c
-        s2c = sqrt 2.0 * c
-        a0 = 1.0 / (1.0 + s2c + c2)
-        a1 = if is_hpf then -2.0 * a0 else 2.0 * a0
-        a2 = a0
-        b1 = if is_hpf then 2.0 * (c2 - 1.0) * a0 else 2.0 * (1.0 - c2) * a0
-        b2 = (1.0 - s2c + c2) * a0
-    in (a0,a1,a2,b1,b2)
-
 bw_hpf_ir :: Floating n => T2 n -> F_ST1 (T4 n) n n
-bw_hpf_ir (sample_rate,f) = sos (bw_lpf_or_hpf_coef True sample_rate f)
+bw_hpf_ir (sample_rate,f) = sos (Filter.bw_lpf_or_hpf_coef True sample_rate f)
 
 bw_lpf_ir :: Floating n => T2 n -> F_ST1 (T4 n) n n
-bw_lpf_ir (sample_rate,f) = sos (bw_lpf_or_hpf_coef False sample_rate f)
+bw_lpf_ir (sample_rate,f) = sos (Filter.bw_lpf_or_hpf_coef False sample_rate f)
 
 white_noise :: (R.RandomGen g, Fractional n, R.Random n) => F_ST0 g n
 white_noise = R.randomR (-1.0,1.0)
