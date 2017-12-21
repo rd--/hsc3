@@ -16,7 +16,7 @@
 >         rq = mouseY KR 0.1 1 Linear 0.2
 >     in bLowPass i f rq
 
-Calculate coefficients and use sos.
+calculate coefficients and use sos (see bLowPass4)
 
 > g_03 =
 >     let i = mix (saw AR (mce [0.99, 1, 1.01] * 440) * 0.3)

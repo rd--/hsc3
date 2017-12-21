@@ -35,8 +35,8 @@ sc3_name_edges =
 
 -- | Convert from SC3 name to HS style name.
 --
--- > s = words "SinOsc LFSaw FFT PV_Add AllpassN BHiPass BinaryOpUGen HPZ1 RLPF TGrains DFM1 FBSineC A2K Lag2UD"
--- > l = words "sinOsc lfSaw fft pv_Add allpassN bHiPass binaryOpUGen hpz1 rlpf tGrains dfm1 fbSineC a2k lag2UD"
+-- > s = words "SinOsc LFSaw FFT PV_Add AllpassN BHiPass BinaryOpUGen HPZ1 RLPF TGrains DFM1 FBSineC A2K Lag2UD IIRFilter"
+-- > l = words "sinOsc lfSaw fft pv_Add allpassN bHiPass binaryOpUGen hpz1 rlpf tGrains dfm1 fbSineC a2k lag2UD iirFilter"
 -- > map sc3_name_to_hs_name s == l
 sc3_name_to_hs_name :: String -> String
 sc3_name_to_hs_name s =

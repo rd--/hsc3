@@ -1149,8 +1149,8 @@ iCepstrum rate cepchain fftbuf = mkUGen Nothing [IR,KR,AR,DR] (Left rate) "ICeps
 -- | 24db/oct rolloff, 4nd order resonant Low Pass Filter
 --
 --  IIRFilter [AR] in=0.0 freq=440.0 rq=1.0
-iIRFilter :: Rate -> UGen -> UGen -> UGen -> UGen
-iIRFilter rate in_ freq rq = mkUGen Nothing [AR] (Left rate) "IIRFilter" [in_,freq,rq] Nothing 1 (Special 0) NoId
+iirFilter :: UGen -> UGen -> UGen -> UGen
+iirFilter in_ freq rq = mkUGen Nothing [AR] (Right [0]) "IIRFilter" [in_,freq,rq] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
@@ -2025,8 +2025,8 @@ sOMTrain rate bufnum inputdata netsize numdims traindur nhood gate_ initweight =
 -- | 12db/Oct State Variable Filter
 --
 --  SVF [KR,AR] signal=0.0 cutoff=2200.0 res=0.1 lowpass=1.0 bandpass=0.0 highpass=0.0 notch=0.0 peak=0.0
-svf :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-svf rate signal cutoff res lowpass bandpass highpass notch peak_ = mkUGen Nothing [KR,AR] (Left rate) "SVF" [signal,cutoff,res,lowpass,bandpass,highpass,notch,peak_] Nothing 1 (Special 0) NoId
+svf :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+svf signal cutoff res lowpass bandpass highpass notch peak_ = mkUGen Nothing [KR,AR] (Right [0]) "SVF" [signal,cutoff,res,lowpass,bandpass,highpass,notch,peak_] Nothing 1 (Special 0) NoId
 
 -- | super-efficient sawtooth oscillator with low aliasing
 --
@@ -2277,8 +2277,8 @@ stkVoicForm rate freq vuvmix vowelphon vibfreq vibgain loudness_ trig_ = mkUGen 
 -- | String resonance filter
 --
 --  Streson [KR,AR] input=0.0 delayTime=3.0e-3 res=0.9
-streson :: Rate -> UGen -> UGen -> UGen -> UGen
-streson rate input delayTime res = mkUGen Nothing [KR,AR] (Left rate) "Streson" [input,delayTime,res] Nothing 1 (Special 0) NoId
+streson :: UGen -> UGen -> UGen -> UGen
+streson input delayTime res = mkUGen Nothing [KR,AR] (Right [0]) "Streson" [input,delayTime,res] Nothing 1 (Special 0) NoId
 
 -- | Pulse counter with floating point steps
 --
