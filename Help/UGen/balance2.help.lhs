@@ -41,3 +41,10 @@
 >         s1 = sinOsc AR 550 0
 >         x = mouseX KR (-1) 1 Linear 0.2
 >     in balance2 s0 s1 x 0.2
+
+> g_06 =
+>     let s = soundIn 0
+>         l = lpf s 500
+>         h = s - l
+>         n = lfNoise0 'α' KR 4
+>     in balance2 l h n 0.3

@@ -1485,8 +1485,8 @@ moogLadder in_ ffreq res = mkUGen Nothing [KR,AR] (Right [0]) "MoogLadder" [in_,
 -- | (Undocumented class)
 --
 --  MoogVCF [AR] in=0.0 fco=0.0 res=0.0
-moogVCF :: Rate -> UGen -> UGen -> UGen -> UGen
-moogVCF rate in_ fco res = mkUGen Nothing [AR] (Left rate) "MoogVCF" [in_,fco,res] Nothing 1 (Special 0) NoId
+moogVCF :: UGen -> UGen -> UGen -> UGen
+moogVCF in_ fco res = mkUGen Nothing [AR] (Right [0]) "MoogVCF" [in_,fco,res] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
