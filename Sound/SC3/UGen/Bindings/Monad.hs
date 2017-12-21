@@ -179,8 +179,8 @@ tExpRandM :: (UId m) => UGen -> UGen -> UGen -> m UGen
 tExpRandM = liftUId3 tExpRand
 
 -- | Random integer in uniform distribution on trigger.
-tIRandM :: (UId m) => UGen -> UGen -> UGen -> m UGen
-tIRandM = liftUId3 tIRand
+tiRandM :: (UId m) => UGen -> UGen -> UGen -> m UGen
+tiRandM = liftUId3 tiRand
 
 -- | Random value in uniform distribution on trigger.
 tRandM :: (UId m) => UGen -> UGen -> UGen -> m UGen

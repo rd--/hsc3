@@ -394,12 +394,12 @@ tap numChannels bufnum delaytime =
 
 -- | Randomly select one of several inputs on trigger.
 tChoose :: ID m => m -> UGen -> UGen -> UGen
-tChoose z t a = select (tIRand z 0 (mceN a) t) a
+tChoose z t a = select (tiRand z 0 (mceN a) t) a
 
 -- | Randomly select one of several inputs.
 tChooseM :: (UId m) => UGen -> UGen -> m UGen
 tChooseM t a = do
-  r <- tIRandM 0 (constant (length (mceChannels a))) t
+  r <- tiRandM 0 (constant (length (mceChannels a))) t
   return (select r a)
 
 -- | Triangle wave as sum of /n/ sines.

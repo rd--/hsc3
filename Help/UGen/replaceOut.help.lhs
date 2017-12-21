@@ -1,5 +1,5 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "ReplaceOut"
-    > Sound.SC3.UGen.DB.ugenSummary "ReplaceOut"
+    Sound.SC3.UGen.Help.viewSC3Help "ReplaceOut"
+    Sound.SC3.UGen.DB.ugenSummary "ReplaceOut"
 
 > import Sound.OSC {- hosc -}
 > import Sound.SC3 {- hsc3 -}
@@ -67,6 +67,6 @@ Signal/effect model using separate groups operating at the same bus.
 > f_01 m =
 >     if isAsync m
 >     then async m >> return ()
->     else send m
+>     else sendMessage m
 
-   > withSC3 (mapM_ f_01 m_01)
+    withSC3 (mapM_ f_01 m_01)
