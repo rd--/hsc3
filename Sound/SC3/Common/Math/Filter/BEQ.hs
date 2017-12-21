@@ -38,8 +38,8 @@ bAllPassCoef sr freq rq =
       b1 = 2.0 * cos w0 * b0rz
   in (a0,negate b1, 1.0, b1,negate a0)
 
-bBandPass :: Floating t => t -> t -> t -> (t, t, t, t, t)
-bBandPass sr freq bw =
+bBandPassCoef :: Floating t => t -> t -> t -> (t, t, t, t, t)
+bBandPassCoef sr freq bw =
   let w0 = pi * 2 * freq * (1 / sr)
       sin_w0 = sin w0
       alpha = sin_w0 * sinh (0.34657359027997 * bw * w0 / sin_w0)
@@ -49,8 +49,8 @@ bBandPass sr freq bw =
       b2 = (1 - alpha) * negate b0rz
   in (a0, 0.0, negate a0, b1, b2)
 
-bBandStop :: Floating t => t -> t -> t -> (t, t, t, t, t)
-bBandStop sr freq bw =
+bBandStopCoef :: Floating t => t -> t -> t -> (t, t, t, t, t)
+bBandStopCoef sr freq bw =
   let w0 = pi * 2 * freq * (1 / sr)
       sin_w0 = sin w0
       alpha = sin_w0 * sinh (0.34657359027997 * bw * w0 / sin_w0)
@@ -59,8 +59,8 @@ bBandStop sr freq bw =
       b2 = (1 - alpha) * negate b0rz
   in (b0rz, negate b1, b0rz, b1, b2)
 
-bPeakEQ :: Floating t => t -> t -> t -> t -> (t, t, t, t, t)
-bPeakEQ sr freq rq db =
+bPeakEQCoef :: Floating t => t -> t -> t -> t -> (t, t, t, t, t)
+bPeakEQCoef sr freq rq db =
   let a = 10 ** (db / 40)
       w0 = pi * 2 * freq * (1 / sr)
       alpha = sin w0 * 0.5 * rq
@@ -71,8 +71,8 @@ bPeakEQ sr freq rq db =
       b2 = (1 - (alpha / a)) * negate b0rz
   in (a0, negate b1, a2, b1, b2)
 
-bLowShelf :: Floating t => t -> t -> t -> t -> (t, t, t, t, t)
-bLowShelf sr freq rs db =
+bLowShelfCoef :: Floating t => t -> t -> t -> t -> (t, t, t, t, t)
+bLowShelfCoef sr freq rs db =
   let a = 10 ** (db / 40)
       w0 = pi * 2 * freq * (1 / sr)
       cos_w0 = cos w0
@@ -89,8 +89,8 @@ bLowShelf sr freq rs db =
       b2 = ((a + 1) + j - k) * negate b0rz
   in (a0, a1, a2, b1, b2)
 
-bHiShelf :: Floating t => t -> t -> t -> t -> (t, t, t, t, t)
-bHiShelf sr freq rs db =
+bHiShelfCoef :: Floating t => t -> t -> t -> t -> (t, t, t, t, t)
+bHiShelfCoef sr freq rs db =
   let a = 10 ** (db / 40)
       w0 = pi * 2 * freq * (1 / sr)
       cos_w0 = cos w0
