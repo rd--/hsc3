@@ -121,6 +121,17 @@ freqShift_hilbert i f p =
         h = hilbert i
     in mix (h * o)
 
+-- | Variant of 'hilbert' using FFT (with a delay) for better results.
+-- Buffer should be 2048 or 1024.
+-- 2048 = better results, more delay.
+-- 1024 = less delay, little choppier results.
+hilbertFIR :: UGen -> UGen -> UGen
+hilbertFIR s b =
+  let c0 = fft' b s
+      c1 = pv_PhaseShift90 c0
+      delay = bufDur KR b
+  in mce2 (delayN s delay delay) (ifft' c1)
+
 -- | Variant ifft with default value for window type.
 ifft' :: UGen -> UGen
 ifft' buf = ifft buf 0 0

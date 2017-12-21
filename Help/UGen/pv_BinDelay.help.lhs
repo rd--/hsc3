@@ -6,6 +6,7 @@
 > import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
 
 function to allocate buffers (fft,delay,feedback)
+non-local so that they can be set using b_set &etc.
 
 > mk_buf sz = do
 >   _ <- async (b_alloc 10 (sz * 2) 1)

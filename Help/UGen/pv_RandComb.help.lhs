@@ -1,23 +1,22 @@
-> Sound.SC3.UGen.Help.viewSC3Help "PV_RandComb"
-> Sound.SC3.UGen.DB.ugenSummary "PV_RandComb"
+    Sound.SC3.UGen.Help.viewSC3Help "PV_RandComb"
+    Sound.SC3.UGen.DB.ugenSummary "PV_RandComb"
 
-> import Sound.SC3
-
-allocate buffer
-
-> withSC3 (async (b_alloc 10 2048 1))
+> import Sound.SC3 {- hsc3 -}
 
 noise signal
 
-> let z = whiteNoise 'α' AR * 0.5
+> g_01 = whiteNoise 'α' AR * 0.5
 
 outside world
 
-> let z = soundIn 4
+> g_02 = soundIn 0
 
 processor
 
-> let {t = impulse KR 0.1 0
->     ;x = mouseX KR 0.6 0.95 Linear 0.1
->     ;c = pv_RandComb 'α' (fft' 10 z) x t}
-> in audition (out 0 (pan2 (ifft' c) 0 1))
+> f_01 z =
+>   let t = impulse KR 0.1 0
+>       x = mouseX KR 0.6 0.95 Linear 0.1
+>       c = pv_RandComb 'α' (fft' (localBuf 'α' 2048 1) z) x t
+>   in pan2 (ifft' c) 0 1
+
+> g_03 = f_01 g_02

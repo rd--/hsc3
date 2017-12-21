@@ -10,8 +10,8 @@ import Sound.SC3.UGen.UGen
 -- | Audio to control rate converter.
 --
 --  A2K [KR] in=0.0
-a2K :: UGen -> UGen
-a2K in_ = mkUGen Nothing [KR] (Left KR) "A2K" [in_] Nothing 1 (Special 0) NoId
+a2k :: UGen -> UGen
+a2k in_ = mkUGen Nothing [KR] (Left KR) "A2K" [in_] Nothing 1 (Special 0) NoId
 
 -- | FIXME: APF purpose.
 --
@@ -885,12 +885,6 @@ henonN rate freq a b x0 x1 = mkUGen Nothing [AR] (Left rate) "HenonN" [freq,a,b,
 hilbert :: UGen -> UGen
 hilbert in_ = mkUGen Nothing [AR] (Right [0]) "Hilbert" [in_] Nothing 2 (Special 0) NoId
 
--- | Applies the Hilbert transform to an input signal.
---
---  HilbertFIR [AR] in=0.0 buffer=0.0
-hilbertFIR :: Rate -> UGen -> UGen -> UGen
-hilbertFIR rate in_ buffer = mkUGen Nothing [AR] (Left rate) "HilbertFIR" [in_,buffer] Nothing 2 (Special 0) NoId
-
 -- | Envelope generator for polling values from an Env
 --
 --  IEnvGen [KR,AR] index=0.0 *envelope=0.0;    MCE, REORDERS INPUTS: [1,0], ENUMERATION INPUTS: 1=Envelope UGen
@@ -978,8 +972,8 @@ integrator in_ coef = mkUGen Nothing [KR,AR] (Right [0]) "Integrator" [in_,coef]
 -- | Control to audio rate converter.
 --
 --  K2A [AR] in=0.0
-k2A :: UGen -> UGen
-k2A in_ = mkUGen Nothing [AR] (Left AR) "K2A" [in_] Nothing 1 (Special 0) NoId
+k2a :: UGen -> UGen
+k2a in_ = mkUGen Nothing [AR] (Left AR) "K2A" [in_] Nothing 1 (Special 0) NoId
 
 -- | Respond to the state of a key
 --
@@ -1290,8 +1284,8 @@ loudness chain smask tmask = mkUGen Nothing [KR] (Left KR) "Loudness" [chain,sma
 -- | Mel frequency cepstral coefficients
 --
 --  MFCC [KR] chain=0.0 numcoeff=13.0
-mFCC :: Rate -> UGen -> UGen -> UGen
-mFCC rate chain numcoeff = mkUGen Nothing [KR] (Left rate) "MFCC" [chain,numcoeff] Nothing 13 (Special 0) NoId
+mfcc :: Rate -> UGen -> UGen -> UGen
+mfcc rate chain numcoeff = mkUGen Nothing [KR] (Left rate) "MFCC" [chain,numcoeff] Nothing 13 (Special 0) NoId
 
 -- | Reduce precision.
 --
@@ -2060,14 +2054,14 @@ syncSaw rate syncFreq sawFreq = mkUGen Nothing [KR,AR] (Left rate) "SyncSaw" [sy
 -- | Control rate trigger to audio rate trigger converter
 --
 --  T2A [AR] in=0.0 offset=0.0
-t2A :: UGen -> UGen -> UGen
-t2A in_ offset = mkUGen Nothing [AR] (Left AR) "T2A" [in_,offset] Nothing 1 (Special 0) NoId
+t2a :: UGen -> UGen -> UGen
+t2a in_ offset = mkUGen Nothing [AR] (Left AR) "T2A" [in_,offset] Nothing 1 (Special 0) NoId
 
 -- | Audio rate trigger to control rate trigger converter
 --
 --  T2K [KR] in=0.0
-t2K :: Rate -> UGen -> UGen
-t2K rate in_ = mkUGen Nothing [KR] (Left rate) "T2K" [in_] Nothing 1 (Special 0) NoId
+t2k :: Rate -> UGen -> UGen
+t2k rate in_ = mkUGen Nothing [KR] (Left rate) "T2K" [in_] Nothing 1 (Special 0) NoId
 
 -- | physical model of bouncing object
 --
@@ -2102,8 +2096,8 @@ tGrains numChannels trigger bufnum rate_ centerPos dur pan amp interp = mkUGen N
 -- | Triggered integer random number generator.
 --
 --  TIRand [KR,AR] lo=0.0 hi=127.0 trig=0.0;    FILTER: TRUE, NONDET
-tIRand :: ID a => a -> UGen -> UGen -> UGen -> UGen
-tIRand z lo hi trig_ = mkUGen Nothing [KR,AR] (Right [2]) "TIRand" [lo,hi,trig_] Nothing 1 (Special 0) (toUId z)
+tiRand :: ID a => a -> UGen -> UGen -> UGen -> UGen
+tiRand z lo hi trig_ = mkUGen Nothing [KR,AR] (Right [2]) "TIRand" [lo,hi,trig_] Nothing 1 (Special 0) (toUId z)
 
 -- | Triggered random number generator.
 --

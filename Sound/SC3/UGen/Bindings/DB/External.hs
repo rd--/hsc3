@@ -410,8 +410,8 @@ crossoverDistortion rate in_ amp smooth = mkUGen Nothing [AR] (Left rate) "Cross
 -- | Digitally modelled analog filter
 --
 --  DFM1 [AR] in=0.0 freq=1000.0 res=0.1 inputgain=1.0 type=0.0 noiselevel=3.0e-4
-dFM1 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-dFM1 rate in_ freq res inputgain type_ noiselevel = mkUGen Nothing [AR] (Left rate) "DFM1" [in_,freq,res,inputgain,type_,noiselevel] Nothing 1 (Special 0) NoId
+dfm1 :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dfm1 in_ freq res inputgain type_ noiselevel = mkUGen Nothing [AR] (Right [0]) "DFM1" [in_,freq,res,inputgain,type_,noiselevel] Nothing 1 (Special 0) NoId
 
 -- | Demand rate implementation of a Wiard noise ring
 --
