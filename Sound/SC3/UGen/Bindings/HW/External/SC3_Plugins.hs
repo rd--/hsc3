@@ -2,32 +2,14 @@
 module Sound.SC3.UGen.Bindings.HW.External.SC3_Plugins where
 
 import Sound.SC3.UGen.Bindings.HW.Construct
-import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
-import Sound.SC3.UGen.UGen
 
 -- * AntiAliasingOscillators (Nick Collins)
 
 -- | Band limited impulse generation
 blitB3 :: Rate -> UGen -> UGen
 blitB3 rate freq = mkOscR [AR] rate "BlitB3" [freq] 1
-
--- | BLIT derived sawtooth
-blitB3Saw :: Rate -> UGen -> UGen -> UGen
-blitB3Saw rate freq leak = mkOscR [AR] rate "BlitB3Saw" [freq,leak] 1
-
--- | Bipolar BLIT derived square waveform
-blitB3Square :: Rate -> UGen -> UGen -> UGen
-blitB3Square rate freq leak = mkOscR [AR] rate "BlitB3Square" [freq,leak] 1
-
--- | Bipolar BLIT derived triangle
-blitB3Tri :: Rate -> UGen -> UGen -> UGen -> UGen
-blitB3Tri rate freq leak leak2 = mkOscR [AR] rate "BlitB3Tri" [freq,leak,leak2] 1
-
--- | Triangle via 3rd order differerentiated polynomial waveform
-dPW3Tri :: Rate -> UGen -> UGen
-dPW3Tri rate freq = mkOscR [AR] rate "DPW3Tri" [freq] 1
 
 -- | Sawtooth via 4th order differerentiated polynomial waveform
 dPW4Saw :: Rate -> UGen -> UGen
@@ -49,10 +31,6 @@ meddis input = mkFilterR [AR,KR] "Meddis" [input] 1
 
 -- * AY
 
--- | Emulation of AY (aka YM) soundchip, used in Spectrum\/Atari.
-ay :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-ay ta tb tc n c va vb vc ef es ct = mkOsc AR "AY" [ta, tb, tc, n, c, va, vb, vc, ef, es, ct] 1
-
 -- | Convert frequency value to value appropriate for AY tone inputs.
 ayFreqToTone :: Fractional a => a -> a
 ayFreqToTone f = 110300 / (f - 0.5)
@@ -73,65 +51,7 @@ wAmp rate in_ winSize = mkOscR [KR] rate "WAmp" [in_,winSize] 1
 gaussTrig :: Rate -> UGen -> UGen -> UGen
 gaussTrig rate freq dev = mkOscR [AR,KR] rate "GaussTrig" [freq,dev] 1
 
--- | random walk step
-lfBrownNoise0 :: ID a => a -> Rate -> UGen -> UGen -> UGen -> UGen
-lfBrownNoise0 z r freq dev dist = mkOscIdR [AR,KR] (toUId z) r "LFBrownNoise0" [freq,dev,dist] 1
-
--- | random walk linear interp
-lfBrownNoise1 :: ID a => a -> Rate -> UGen -> UGen -> UGen -> UGen
-lfBrownNoise1 z r freq dev dist = mkOscIdR [AR,KR] (toUId z) r "LFBrownNoise1" [freq,dev,dist] 1
-
--- | random walk cubic interp
-lfBrownNoise2 :: ID a => a -> Rate -> UGen -> UGen -> UGen -> UGen
-lfBrownNoise2 z r freq dev dist = mkOscIdR [AR,KR] (toUId z) r "LFBrownNoise2" [freq,dev,dist] 1
-
--- | Moog Filter Emulation
---
---  MoogLadder [KR,AR] in=0.0 ffreq=440.0 res=0.0
-moogLadder :: Rate -> UGen -> UGen -> UGen -> UGen
-moogLadder rate in_ ffreq res = mkUGen Nothing [KR,AR] (Left rate) "MoogLadder" [in_,ffreq,res] Nothing 1 (Special 0) NoId
-
--- | standard map 2D chaotic generator
---
---  Standard2DC [KR,AR] minfreq=11025.0 maxfreq=22050.0 k=1.4 x0=4.9789799812499 y0=5.7473416156381
-standard2DC :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-standard2DC rate minfreq maxfreq k x0 y0 = mkUGen Nothing [KR,AR] (Left rate) "Standard2DC" [minfreq,maxfreq,k,x0,y0] Nothing 1 (Special 0) NoId
-
--- | standard map 2D chaotic generator
---
---  Standard2DL [KR,AR] minfreq=11025.0 maxfreq=22050.0 k=1.4 x0=4.9789799812499 y0=5.7473416156381
-standard2DL :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-standard2DL rate minfreq maxfreq k x0 y0 = mkUGen Nothing [KR,AR] (Left rate) "Standard2DL" [minfreq,maxfreq,k,x0,y0] Nothing 1 (Special 0) NoId
-
--- | standard map 2D chaotic generator
---
---  Standard2DN [KR,AR] minfreq=11025.0 maxfreq=22050.0 k=1.4 x0=4.9789799812499 y0=5.7473416156381
-standard2DN :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-standard2DN rate minfreq maxfreq k x0 y0 = mkUGen Nothing [KR,AR] (Left rate) "Standard2DN" [minfreq,maxfreq,k,x0,y0] Nothing 1 (Special 0) NoId
-
--- | String resonance filter
-streson :: UGen -> UGen -> UGen -> UGen
-streson input delayTime res = mkFilter "Streson" [input,delayTime,res] 1
-
--- | Triggered beta random distribution
-tBetaRand :: ID a => a -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-tBetaRand z lo hi prob1 prob2 trig_ = mkFilterIdR [AR,KR] (toUId z) "TBetaRand" [lo,hi,prob1,prob2,trig_] 1
-
--- | Triggered random walk generator
-tBrownRand :: ID a => a -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-tBrownRand z lo hi dev dist trig_ = mkFilterIdR [AR,KR] (toUId z) "TBrownRand" [lo,hi,dev,dist,trig_] 1
-
--- | Triggered gaussian random distribution
-tGaussRand :: ID a => a -> UGen -> UGen -> UGen -> UGen
-tGaussRand z lo hi trig_ = mkFilterIdR [AR,KR] (toUId z) "TGaussRand" [lo,hi,trig_] 1
-
 -- * BlackRain
-
--- | 24db/oct rolloff - 4nd order resonant Low/High/Band Pass Filter
---
---  BMoog [AR] in=0.0 freq=440.0 q=0.2 mode=0.0 saturation=0.95
-bMoog :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-bMoog in_ freq q mode saturation = mkUGen Nothing [AR] (Right [0]) "BMoog" [in_,freq,q,mode,saturation] Nothing 1 (Special 0) NoId
 
 -- * Concat
 
@@ -145,21 +65,9 @@ concat2 ctl src sz sk sd ml fs zcr lms sc st rs th = mkOsc AR "Concat2" [ctl,src
 
 -- * DEIND UGens
 
--- | Raw version of the JPverb algorithmic reverberator, designed to produce long tails with chorusing
-jPverbRaw :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-jPverbRaw rate in1 in2 damp earlydiff highband highx lowband lowx mdepth mfreq midx size t60 = mkOscR [AR,KR] rate "JPverbRaw" [in1,in2,damp,earlydiff,highband,highx,lowband,lowx,mdepth,mfreq,midx,size,t60] 1
-
 -- * Distortion
 
--- | Brown noise.
-disintegrator :: ID a => a -> UGen -> UGen -> UGen -> UGen
-disintegrator z i p m = mkFilterId (toUId z) "Disintegrator" [i,p,m] 1
-
 -- * DWGUGens
-
--- | Plucked physical model.
-dWGPlucked2 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-dWGPlucked2 rate freq amp gate_ pos c1 c3 inp release mistune mp gc = mkOscR [AR] rate "DWGPlucked2" [freq,amp,gate_,pos,c1,c3,inp,release,mistune,mp,gc] 1
 
 -- * Josh
 
@@ -170,10 +78,6 @@ atsSynth b np ps pk fp m a = mkOsc AR "AtsSynth" [b, np, ps, pk, fp, m, a] 1
 -- | Resynthesize sinusoidal and critical noise ATS analysis data.
 atsNoiSynth :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 atsNoiSynth b np ps pk fp sr nr m a nb bs bk = mkOsc AR "AtsNoiSynth" [b, np, ps, pk, fp, sr, nr, m, a, nb, bs, bk] 1
-
--- | Granular synthesis with FM grains.
-fmGrain :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-fmGrain trigger dur carfreq modfreq ix = mkOsc AR "FMGrain" [trigger,dur,carfreq,modfreq,ix] 1
 
 -- | Granular synthesis with FM grains and user supplied envelope.
 fmGrainB :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -191,10 +95,6 @@ lpcVals r b ptr = mkOsc r "LPCVals" [b, ptr] 3
 metro :: Rate -> UGen -> UGen -> UGen
 metro rt bpm nb = mkOsc rt "Metro" [bpm,nb] 1
 
--- | Delay and Feedback on a bin by bin basis.
-pv_BinDelay :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-pv_BinDelay buffer maxdelay delaybuf fbbuf hop = mkOsc KR "PV_BinDelay" [buffer,maxdelay,delaybuf,fbbuf,hop] 1
-
 -- | Play FFT data from a memory buffer.
 pv_BufRd :: UGen -> UGen -> UGen -> UGen
 pv_BufRd buffer playbuf_ point = mkOsc KR "PV_BufRd" [buffer,playbuf_,point] 1
@@ -209,10 +109,6 @@ pv_calcPVRecSize dur frameSize hop sampleRate =
         rawsize = ceiling ((dur * sampleRate) / frameSize') * frameSize
     in ceiling (fromIntegral rawsize * recip hop + 3)
 
--- | Invert FFT amplitude data.
-pv_Invert :: UGen -> UGen
-pv_Invert b = mkOsc KR "PV_Invert" [b] 1
-
 -- | Plays FFT data from a memory buffer.
 pv_PlayBuf :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 pv_PlayBuf buffer playbuf_ rate_ offset loop = mkOsc KR "PV_PlayBuf" [buffer,playbuf_,rate_,offset,loop] 1
@@ -220,10 +116,6 @@ pv_PlayBuf buffer playbuf_ rate_ offset loop = mkOsc KR "PV_PlayBuf" [buffer,pla
 -- | Records FFT data to a memory buffer.
 pv_RecordBuf :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 pv_RecordBuf buffer recbuf offset run loop hop wintype = mkOsc KR "PV_RecordBuf" [buffer,recbuf,offset,run,loop,hop,wintype] 1
-
--- | Sample looping oscillator
-loopBuf :: Int -> Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-loopBuf numChannels rate bufnum rate_ gate_ startPos startLoop endLoop interpolation = mkOscR [AR] rate "LoopBuf" [bufnum,rate_,gate_,startPos,startLoop,endLoop,interpolation] numChannels
 
 -- * MCLD
 
@@ -246,10 +138,6 @@ bufMin rate bufnum gate_ = mkOscR [KR] rate "BufMin" [bufnum,gate_] 2
 -- | 3D Perlin Noise
 perlin3 :: Rate -> UGen -> UGen -> UGen -> UGen
 perlin3 rate x y z = mkOscR [AR,KR] rate "Perlin3" [x,y,z] 1
-
--- | Wave squeezer. Maybe a kind of pitch shifter.
-squiz :: UGen -> UGen -> UGen -> UGen -> UGen
-squiz in_ pitchratio zcperchunk memlen = mkFilterR [AR,KR] "Squiz" [in_,pitchratio,zcperchunk,memlen] 1
 
 -- * Membrane
 
@@ -298,10 +186,6 @@ chromagram :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UG
 chromagram rate fft_ fftsize n tuningbase octaves integrationflag coeff = mkOscR [KR] rate "Chromagram" [fft_,fftsize,n,tuningbase,octaves,integrationflag,coeff] 1
 
 -- * skUG
-
--- | Phase modulation oscillator matrix.
-fm7 :: [[UGen]] -> [[UGen]] -> UGen
-fm7 ctl m0d = mkOsc AR "FM7" (concat ctl ++ concat m0d) 6
 
 -- * SLU
 
@@ -357,16 +241,7 @@ stkShakers rt i e d o rf tr = mkOsc rt "StkShakers" [i, e, d, o, rf, tr] 1
 
 -- * TJUGens
 
--- | Digitally modelled analog filter
-dfm1 :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-dfm1 i f r g ty nl = mkFilter "DFM1" [i,f,r,g,ty,nl] 1
-
 -- * VOSIM
-
--- | Vocal simulation due to W. Kaegi.
-vosim :: UGen -> UGen -> UGen -> UGen -> UGen
-vosim t f nc d = mkOsc AR "VOSIM" [t, f, nc, d] 1
-
 
 -- Local Variables:
 -- truncate-lines:t

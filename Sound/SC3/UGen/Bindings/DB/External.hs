@@ -687,38 +687,38 @@ fm7 rate ctlMatrix modMatrix = mkUGen Nothing [AR] (Left rate) "FM7" [ctlMatrix,
 -- | (Undocumented class)
 --
 --  FMGrain [AR] trigger=0.0 dur=1.0 carfreq=440.0 modfreq=200.0 index=1.0
-fMGrain :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-fMGrain rate trigger dur carfreq modfreq index_ = mkUGen Nothing [AR] (Left rate) "FMGrain" [trigger,dur,carfreq,modfreq,index_] Nothing 1 (Special 0) NoId
+fmGrain :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+fmGrain rate trigger dur carfreq modfreq index_ = mkUGen Nothing [AR] (Left rate) "FMGrain" [trigger,dur,carfreq,modfreq,index_] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  FMGrainB [AR] trigger=0.0 dur=1.0 carfreq=440.0 modfreq=200.0 index=1.0 envbuf=0.0
-fMGrainB :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-fMGrainB rate trigger dur carfreq modfreq index_ envbuf = mkUGen Nothing [AR] (Left rate) "FMGrainB" [trigger,dur,carfreq,modfreq,index_,envbuf] Nothing 1 (Special 0) NoId
+fmGrainB :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+fmGrainB rate trigger dur carfreq modfreq index_ envbuf = mkUGen Nothing [AR] (Left rate) "FMGrainB" [trigger,dur,carfreq,modfreq,index_,envbuf] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  FMGrainBBF [AR] trigger=0.0 dur=1.0 carfreq=440.0 modfreq=200.0 index=1.0 envbuf=0.0 azimuth=0.0 elevation=0.0 rho=1.0 wComp=0.0
-fMGrainBBF :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-fMGrainBBF rate trigger dur carfreq modfreq index_ envbuf azimuth elevation rho wComp = mkUGen Nothing [AR] (Left rate) "FMGrainBBF" [trigger,dur,carfreq,modfreq,index_,envbuf,azimuth,elevation,rho,wComp] Nothing 4 (Special 0) NoId
+fmGrainBBF :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+fmGrainBBF rate trigger dur carfreq modfreq index_ envbuf azimuth elevation rho wComp = mkUGen Nothing [AR] (Left rate) "FMGrainBBF" [trigger,dur,carfreq,modfreq,index_,envbuf,azimuth,elevation,rho,wComp] Nothing 4 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  FMGrainBF [AR] trigger=0.0 dur=1.0 carfreq=440.0 modfreq=200.0 index=1.0 azimuth=0.0 elevation=0.0 rho=1.0 wComp=0.0
-fMGrainBF :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-fMGrainBF rate trigger dur carfreq modfreq index_ azimuth elevation rho wComp = mkUGen Nothing [AR] (Left rate) "FMGrainBF" [trigger,dur,carfreq,modfreq,index_,azimuth,elevation,rho,wComp] Nothing 4 (Special 0) NoId
+fmGrainBF :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+fmGrainBF rate trigger dur carfreq modfreq index_ azimuth elevation rho wComp = mkUGen Nothing [AR] (Left rate) "FMGrainBF" [trigger,dur,carfreq,modfreq,index_,azimuth,elevation,rho,wComp] Nothing 4 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  FMGrainI [AR] trigger=0.0 dur=1.0 carfreq=440.0 modfreq=200.0 index=1.0 envbuf1=0.0 envbuf2=0.0 ifac=0.5
-fMGrainI :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-fMGrainI rate trigger dur carfreq modfreq index_ envbuf1 envbuf2 ifac = mkUGen Nothing [AR] (Left rate) "FMGrainI" [trigger,dur,carfreq,modfreq,index_,envbuf1,envbuf2,ifac] Nothing 1 (Special 0) NoId
+fmGrainI :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+fmGrainI rate trigger dur carfreq modfreq index_ envbuf1 envbuf2 ifac = mkUGen Nothing [AR] (Left rate) "FMGrainI" [trigger,dur,carfreq,modfreq,index_,envbuf1,envbuf2,ifac] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  FMGrainIBF [AR] trigger=0.0 dur=1.0 carfreq=440.0 modfreq=200.0 index=1.0 envbuf1=0.0 envbuf2=0.0 ifac=0.5 azimuth=0.0 elevation=0.0 rho=1.0 wComp=0.0
-fMGrainIBF :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-fMGrainIBF rate trigger dur carfreq modfreq index_ envbuf1 envbuf2 ifac azimuth elevation rho wComp = mkUGen Nothing [AR] (Left rate) "FMGrainIBF" [trigger,dur,carfreq,modfreq,index_,envbuf1,envbuf2,ifac,azimuth,elevation,rho,wComp] Nothing 4 (Special 0) NoId
+fmGrainIBF :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+fmGrainIBF rate trigger dur carfreq modfreq index_ envbuf1 envbuf2 ifac azimuth elevation rho wComp = mkUGen Nothing [AR] (Left rate) "FMGrainIBF" [trigger,dur,carfreq,modfreq,index_,envbuf1,envbuf2,ifac,azimuth,elevation,rho,wComp] Nothing 4 (Special 0) NoId
 
 -- | (Undocumented class)
 --

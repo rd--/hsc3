@@ -22,7 +22,7 @@ is_lc_or_num c = isLower c || isDigit c
 -- > sc3_name_edges "DFM1" == [False,False,False,False]
 -- > sc3_name_edges "PV_Add" == [False,False,False,True,False,False]
 -- > sc3_name_edges "A2K" == [False,False,True]
--- > sc3_name_edges "lag2UD"
+-- > sc3_name_edges "lag2UD" == [False,False,False,False,True,True]
 sc3_name_edges :: String -> [Bool]
 sc3_name_edges =
     let f t =
@@ -35,7 +35,7 @@ sc3_name_edges =
 
 -- | Convert from SC3 name to HS style name.
 --
--- > s = words "SinOsc LFSaw FFT PV_Add AllpassN BHiPass BinaryOpUGen HPZ1 RLPF TGrains DFM1 FBSineC A2K Lag2UD IIRFilter"
+-- > s = words "SinOsc LFSaw FFT PV_Add AllpassN BHiPass BinaryOpUGen HPZ1 RLPF TGrains DFM1 FBSineC A2K Lag2UD IIRFilter FMGrainB"
 -- > l = words "sinOsc lfSaw fft pv_Add allpassN bHiPass binaryOpUGen hpz1 rlpf tGrains dfm1 fbSineC a2k lag2UD iirFilter"
 -- > map sc3_name_to_hs_name s == l
 sc3_name_to_hs_name :: String -> String
