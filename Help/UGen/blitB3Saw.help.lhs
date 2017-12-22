@@ -2,6 +2,7 @@
     Sound.SC3.UGen.DB.ugenSummary "BlitB3Saw"
 
 > import Sound.SC3 {- hsc3 -}
+> import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
 
 > g_01 =
 >     let f = xLine KR 1000 20 10 DoNothing

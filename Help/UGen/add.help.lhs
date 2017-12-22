@@ -2,7 +2,7 @@
     > :t (+)
 
 > import Sound.SC3 {- hsc3 -}
->
+
 > g_01 =
 >     let o = fSinOsc AR 800 0
 >         n = pinkNoise 'α' AR

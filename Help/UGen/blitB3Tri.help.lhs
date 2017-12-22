@@ -2,6 +2,7 @@
     Sound.SC3.UGen.DB.ugenSummary "BlitB3Tri"
 
 > import Sound.SC3 {- hsc3 -}
+> import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
 
 > g_01 = blitB3Tri AR (xLine KR 1000 20 10 DoNothing) 0.99 0.99 * 0.1
 

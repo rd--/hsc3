@@ -3,6 +3,7 @@
 
 > import Sound.SC3 {- hsc3 -}
 > import Sound.SC3.Lang.Pattern {- hsc3-lang -}
+> import Sound.SC3.UGen.Bindings.HW.External.F0 {- hsc3 -}
 
 > gr_00 = atari2600 1 2 3 4 5 5 1
 

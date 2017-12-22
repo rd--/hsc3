@@ -2,6 +2,7 @@
     Sound.SC3.UGen.DB.ugenSummary "Disintegrator"
 
 > import Sound.SC3 {- hsc3 -}
+> import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
 
 > gr_01 =
 >     let x = mouseX KR 0 1 Linear 0.2

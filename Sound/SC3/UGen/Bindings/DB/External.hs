@@ -416,8 +416,8 @@ dfm1 in_ freq res inputgain type_ noiselevel = mkUGen Nothing [AR] (Right [0]) "
 -- | Demand rate implementation of a Wiard noise ring
 --
 --  DNoiseRing [DR] change=0.5 chance=0.5 shift=1.0 numBits=8.0 resetval=0.0;    DEMAND/NONDET
-dNoiseRing :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-dNoiseRing rate change chance shift numBits resetval = mkUGen Nothing [DR] (Left rate) "DNoiseRing" [change,chance,shift,numBits,resetval] Nothing 1 (Special 0) NoId
+dNoiseRing :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dNoiseRing change chance shift numBits resetval = mkUGen Nothing [DR] (Left DR) "DNoiseRing" [change,chance,shift,numBits,resetval] Nothing 1 (Special 0) NoId
 
 -- | Triangle via 3rd order differerentiated polynomial waveform
 --
@@ -517,9 +517,9 @@ diodeRingMod car mod_ = mkUGen Nothing [AR] (Right [0]) "DiodeRingMod" [car,mod_
 
 -- | port of some ladspa plugins
 --
---  Disintegrator [AR] in=0.0 probability=0.5 multiplier=0.0
-disintegrator :: Rate -> UGen -> UGen -> UGen -> UGen
-disintegrator rate in_ probability multiplier = mkUGen Nothing [AR] (Left rate) "Disintegrator" [in_,probability,multiplier] Nothing 1 (Special 0) NoId
+--  Disintegrator [AR] in=0.0 probability=0.5 multiplier=0.0;    FILTER: TRUE, NONDET
+disintegrator :: ID a => a -> UGen -> UGen -> UGen -> UGen
+disintegrator z in_ probability multiplier = mkUGen Nothing [AR] (Right [0]) "Disintegrator" [in_,probability,multiplier] Nothing 1 (Special 0) (toUId z)
 
 -- | discrete time neurodynamics
 --
@@ -1107,8 +1107,8 @@ gravityGrid2 rate reset rate_ newx newy bufnum = mkUGen Nothing [AR] (Left rate)
 -- | algorithmic delay
 --
 --  GreyholeRaw [AR] in1=0.0 in2=0.0 damping=0.0 delaytime=2.0 diffusion=0.5 feedback=0.9 moddepth=0.1 modfreq=2.0 size=1.0
-greyholeRaw :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-greyholeRaw rate in1 in2 damping delaytime diffusion feedback moddepth modfreq size = mkUGen Nothing [AR] (Left rate) "GreyholeRaw" [in1,in2,damping,delaytime,diffusion,feedback,moddepth,modfreq,size] Nothing 2 (Special 0) NoId
+greyholeRaw :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+greyholeRaw in1 in2 damping delaytime diffusion feedback moddepth modfreq size = mkUGen Nothing [AR] (Right [0,1]) "GreyholeRaw" [in1,in2,damping,delaytime,diffusion,feedback,moddepth,modfreq,size] Nothing 2 (Special 0) NoId
 
 -- | Simple cochlear hair cell model
 --
