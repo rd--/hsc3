@@ -1,5 +1,5 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "VOsc"
-    > Sound.SC3.UGen.DB.ugenSummary "VOsc"
+    Sound.SC3.UGen.Help.viewSC3Help "VOsc"
+    Sound.SC3.UGen.DB.ugenSummary "VOsc"
 
 > import Sound.OSC {- hosc -}
 > import Sound.SC3 {- hsc3 -}
@@ -17,7 +17,7 @@ Allocate and fill tables 0 to 7.
 >     in (b_alloc i 1024 1,b_gen_sine1 i bf (gen_harm i'))
 > run_setup (p,q) = (async p >> sendMessage q)
 
-    > withSC3 (mapM_ (run_setup . gen_setup) [0 .. 7])
+    withSC3 (mapM_ (run_setup . gen_setup) [0 .. 7])
 
 Oscillator at buffers 0 through 7, mouse selects buffer.
 

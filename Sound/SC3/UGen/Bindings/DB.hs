@@ -2060,8 +2060,8 @@ t2a in_ offset = mkUGen Nothing [AR] (Left AR) "T2A" [in_,offset] Nothing 1 (Spe
 -- | Audio rate trigger to control rate trigger converter
 --
 --  T2K [KR] in=0.0
-t2k :: Rate -> UGen -> UGen
-t2k rate in_ = mkUGen Nothing [KR] (Left rate) "T2K" [in_] Nothing 1 (Special 0) NoId
+t2k :: UGen -> UGen
+t2k in_ = mkUGen Nothing [KR] (Left KR) "T2K" [in_] Nothing 1 (Special 0) NoId
 
 -- | physical model of bouncing object
 --

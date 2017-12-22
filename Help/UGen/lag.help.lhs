@@ -1,5 +1,5 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Lag"
-    > Sound.SC3.UGen.DB.ugenSummary "Lag"
+    Sound.SC3.UGen.Help.viewSC3Help "Lag"
+    Sound.SC3.UGen.DB.ugenSummary "Lag"
 
 > import Sound.SC3 {- hsc3 -}
 
