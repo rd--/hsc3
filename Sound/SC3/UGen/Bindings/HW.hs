@@ -33,7 +33,10 @@ packFFT b sz from to z mp =
 
 -- | Poll value of input UGen when triggered.
 poll :: UGen -> UGen -> UGen -> UGen -> UGen
-poll trig_ in_ label_ trigid = C.mkFilter "Poll" ([trig_,in_,label_] ++ U.unpackLabel trigid) 0
+poll trig_ in_ trigid label_ =
+  let q = U.unpackLabel label_
+      n = fromIntegral (length q)
+  in C.mkFilter "Poll" ([trig_,in_,trigid,n] ++ q) 0
 
 -- | Send a reply message from the server back to all registered clients.
 sendReply :: UGen -> UGen -> String -> [UGen] -> UGen
