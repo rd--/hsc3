@@ -3,10 +3,6 @@
 
 > import Sound.SC3 {- hsc3 -}
 
-allocate buffer
-
-   withSC3 (async (b_alloc 10 2048 1))
-
 source signal (oscillators)
 
 > g_01 =
@@ -20,7 +16,7 @@ source signal (the world)
 
 default values
 
-> f_01 z = ifft' (pv_BinShift (fft' 10 z) 1 0 0)
+> f_01 z = ifft' (pv_BinShift (ffta 'α' 2048 z 0.5 0 1 0) 1 0 0)
 
 > g_03 = f_01 g_02
 
@@ -30,7 +26,7 @@ mouse control
 >   let x = mouseX KR (-10) 100 Linear 0.1
 >       y = mouseY KR 1 4 Linear 0.1
 >       b = mouseButton KR 0 1 0.2
->       pv = pv_BinShift (fft' 10 z) y x b
+>       pv = pv_BinShift (ffta 'β' 2048 z 0.5 0 1 0) y x b
 >   in ifft' pv
 
 > g_04 = f_02 g_02

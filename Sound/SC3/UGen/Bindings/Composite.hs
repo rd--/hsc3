@@ -321,6 +321,16 @@ pvcollect c nf f from to z =
         mp = uncurry packFFTSpec (unzip e)
     in packFFT c nf from to z mp
 
+-- | /dur/ and /hop/ are in seconds, /frameSize/ and /sampleRate/ in
+-- frames, though the latter maybe fractional.
+--
+-- > pv_calcPVRecSize 4.2832879818594 1024 0.25 48000.0 == 823299
+pv_calcPVRecSize :: Double -> Int -> Double -> Double -> Int
+pv_calcPVRecSize dur frame_size hop sample_rate =
+    let frame_size' = fromIntegral frame_size
+        raw_size = ceiling ((dur * sample_rate) / frame_size') * frame_size
+    in ceiling (fromIntegral raw_size * recip hop + 3)
+
 -- | 'rand' with left edge set to zero.
 rand0 :: ID a => a -> UGen -> UGen
 rand0 z = rand z 0

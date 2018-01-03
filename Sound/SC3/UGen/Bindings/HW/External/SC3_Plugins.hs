@@ -99,16 +99,6 @@ metro rt bpm nb = mkOsc rt "Metro" [bpm,nb] 1
 pv_BufRd :: UGen -> UGen -> UGen -> UGen
 pv_BufRd buffer playbuf_ point = mkOsc KR "PV_BufRd" [buffer,playbuf_,point] 1
 
--- | /dur/ and /hop/ are in seconds, /frameSize/ and /sampleRate/ in
--- frames, though the latter maybe fractional.
---
--- > pv_calcPVRecSize 4.2832879818594 1024 0.25 48000.0 == 823299
-pv_calcPVRecSize :: Double -> Int -> Double -> Double -> Int
-pv_calcPVRecSize dur frameSize hop sampleRate =
-    let frameSize' = fromIntegral frameSize
-        rawsize = ceiling ((dur * sampleRate) / frameSize') * frameSize
-    in ceiling (fromIntegral rawsize * recip hop + 3)
-
 -- | Plays FFT data from a memory buffer.
 pv_PlayBuf :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 pv_PlayBuf buffer playbuf_ rate_ offset loop = mkOsc KR "PV_PlayBuf" [buffer,playbuf_,rate_,offset,loop] 1
