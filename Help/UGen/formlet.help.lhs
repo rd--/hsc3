@@ -24,11 +24,11 @@ Mouse control of frequency and decay time.
 >         y = mouseY KR 700 2000 Exponential 0.2
 >     in formlet s y 0.005 x
 
-and again...
+and again (control-rate)...
 
 > g_05 =
 >     let s = dust 'α' KR (mce2 10 11)
 >         x = mouseX KR 0.1 2 Exponential 0.2
 >         y = mouseY KR 7 200 Exponential 0.2
 >         f = formlet s y 0.005 x
->     in sinOsc AR (f * 200 + mce2 500 600 - 100) 0 * 0.2
+>     in k2a f + sinOsc AR (f * 200 + mce2 500 600 - 100) 0 * 0.2

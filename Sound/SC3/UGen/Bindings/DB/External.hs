@@ -1268,9 +1268,9 @@ lfBrownNoise2 z rate freq dev dist = mkUGen Nothing [KR,AR] (Left rate) "LFBrown
 
 -- | Live Linear Predictive Coding Analysis and Resynthesis
 --
---  LPCAnalyzer [AR] input=0.0 source=1.0e-2 n=256.0 p=10.0 testE=0.0 delta=0.999 windowtype=0.0
-lPCAnalyzer :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-lPCAnalyzer rate input source n p testE delta windowtype = mkUGen Nothing [AR] (Left rate) "LPCAnalyzer" [input,source,n,p,testE,delta,windowtype] Nothing 1 (Special 0) NoId
+--  LPCAnalyzer [AR] input=0.0 source=1.0e-2 n=256.0 p=10.0 testE=0.0 delta=0.999 windowtype=0.0;    FILTER: TRUE
+lpcAnalyzer :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+lpcAnalyzer input source n p testE delta windowtype = mkUGen Nothing [AR] (Right [0,1]) "LPCAnalyzer" [input,source,n,p,testE,delta,windowtype] Nothing 1 (Special 0) NoId
 
 -- | Linear Predictive Coding Gone Wrong
 --
@@ -2000,9 +2000,9 @@ sLOnset rate input memorysize1 before after threshold hysteresis = mkUGen Nothin
 
 -- | Spectral Modeling Synthesis
 --
---  SMS [AR] input=0.0 maxpeaks=80.0 currentpeaks=80.0 tolerance=4.0 noisefloor=0.2 freqmult=1.0 freqadd=0.0 formantpreserve=0.0 useifft=0.0 ampmult=1.0 graphicsbufnum=0.0
-sms :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-sms rate input maxpeaks currentpeaks tolerance noisefloor freqmult freqadd formantpreserve useifft ampmult graphicsbufnum = mkUGen Nothing [AR] (Left rate) "SMS" [input,maxpeaks,currentpeaks,tolerance,noisefloor,freqmult,freqadd,formantpreserve,useifft,ampmult,graphicsbufnum] Nothing 2 (Special 0) NoId
+--  SMS [AR] input=0.0 maxpeaks=80.0 currentpeaks=80.0 tolerance=4.0 noisefloor=0.2 freqmult=1.0 freqadd=0.0 formantpreserve=0.0 useifft=0.0 ampmult=1.0 graphicsbufnum=0.0;    FILTER: TRUE
+sms :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+sms input maxpeaks currentpeaks tolerance noisefloor freqmult freqadd formantpreserve useifft ampmult graphicsbufnum = mkUGen Nothing [AR] (Right [0]) "SMS" [input,maxpeaks,currentpeaks,tolerance,noisefloor,freqmult,freqadd,formantpreserve,useifft,ampmult,graphicsbufnum] Nothing 2 (Special 0) NoId
 
 -- | (Undocumented class)
 --
