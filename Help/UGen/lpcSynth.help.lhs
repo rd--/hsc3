@@ -3,6 +3,7 @@
 
 > import Sound.OSC {- hosc -}
 > import Sound.SC3 {- hsc3 -}
+> import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
 > import Sound.SC3.Data.LPC {- hsc3-data -}
 
 > lpc_instr b n lpc =
@@ -21,7 +22,7 @@
 > au_01 lpc = do
 >   let d = map realToFrac (lpcSC3 lpc)
 >   _ <- async (b_alloc 10 (length d) 1)
->   mapM_ send (b_setn1_segmented 512 10 0 d)
+>   mapM_ sendMessage (b_setn1_segmented 512 10 0 d)
 >   let s = lpc_instr 10 (pinkNoise 'α' AR) lpc
 >   play (out 0 s)
 

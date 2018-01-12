@@ -1275,20 +1275,20 @@ lpcAnalyzer input source n p testE delta windowtype = mkUGen Nothing [AR] (Right
 -- | Linear Predictive Coding Gone Wrong
 --
 --  LPCError [AR] input=0.0 p=10.0
-lPCError :: Rate -> UGen -> UGen -> UGen
-lPCError rate input p = mkUGen Nothing [AR] (Left rate) "LPCError" [input,p] Nothing 1 (Special 0) NoId
+lpcError :: Rate -> UGen -> UGen -> UGen
+lpcError rate input p = mkUGen Nothing [AR] (Left rate) "LPCError" [input,p] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  LPCSynth [AR] buffer=0.0 signal=0.0 pointer=0.0
-lPCSynth :: Rate -> UGen -> UGen -> UGen -> UGen
-lPCSynth rate buffer signal pointer = mkUGen Nothing [AR] (Left rate) "LPCSynth" [buffer,signal,pointer] Nothing 1 (Special 0) NoId
+lpcSynth :: UGen -> UGen -> UGen -> UGen
+lpcSynth buffer signal pointer = mkUGen Nothing [AR] (Left AR) "LPCSynth" [buffer,signal,pointer] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  LPCVals [KR,AR] buffer=0.0 pointer=0.0
-lPCVals :: Rate -> UGen -> UGen -> UGen
-lPCVals rate buffer pointer = mkUGen Nothing [KR,AR] (Left rate) "LPCVals" [buffer,pointer] Nothing 1 (Special 0) NoId
+lpcVals :: Rate -> UGen -> UGen -> UGen
+lpcVals rate buffer pointer = mkUGen Nothing [KR,AR] (Left rate) "LPCVals" [buffer,pointer] Nothing 3 (Special 0) NoId
 
 -- | (Undocumented class)
 --
