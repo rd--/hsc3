@@ -37,10 +37,6 @@ ayFreqToTone f = 110300 / (f - 0.5)
 
 -- * BatUGens
 
--- | An amplitude tracking based onset detector
-coyote :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-coyote rate in_ trackFall slowLag fastLag fastMul thresh minDur = mkOscR [KR] rate "Coyote" [in_,trackFall,slowLag,fastLag,fastMul,thresh,minDur] 1
-
 -- | Windowed amplitude follower
 wAmp :: Rate -> UGen -> UGen -> UGen
 wAmp rate in_ winSize = mkOscR [KR] rate "WAmp" [in_,winSize] 1
@@ -71,42 +67,6 @@ concat2 ctl src sz sk sd ml fs zcr lms sc st rs th = mkOsc AR "Concat2" [ctl,src
 
 -- * Josh
 
--- | Resynthesize sinusoidal ATS analysis data.
-atsSynth :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-atsSynth b np ps pk fp m a = mkOsc AR "AtsSynth" [b, np, ps, pk, fp, m, a] 1
-
--- | Resynthesize sinusoidal and critical noise ATS analysis data.
-atsNoiSynth :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-atsNoiSynth b np ps pk fp sr nr m a nb bs bk = mkOsc AR "AtsNoiSynth" [b, np, ps, pk, fp, sr, nr, m, a, nb, bs, bk] 1
-
--- | Granular synthesis with FM grains and user supplied envelope.
-fmGrainB :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-fmGrainB trigger dur carfreq modfreq ix e = mkOsc AR "FMGrain" [trigger,dur,carfreq,modfreq,ix,e] 1
-
--- | Resynthesize LPC analysis data.
-lpcSynth :: UGen -> UGen -> UGen -> UGen
-lpcSynth b s ptr = mkOsc AR "LPCSynth" [b, s, ptr] 1
-
--- | Extract cps, rmso and err signals from LPC data.
-lpcVals :: Rate -> UGen -> UGen -> UGen
-lpcVals r b ptr = mkOsc r "LPCVals" [b, ptr] 3
-
--- | Metronome
-metro :: Rate -> UGen -> UGen -> UGen
-metro rt bpm nb = mkOsc rt "Metro" [bpm,nb] 1
-
--- | Play FFT data from a memory buffer.
-pv_BufRd :: UGen -> UGen -> UGen -> UGen
-pv_BufRd buffer playbuf_ point = mkOsc KR "PV_BufRd" [buffer,playbuf_,point] 1
-
--- | Plays FFT data from a memory buffer.
-pv_PlayBuf :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-pv_PlayBuf buffer playbuf_ rate_ offset loop = mkOsc KR "PV_PlayBuf" [buffer,playbuf_,rate_,offset,loop] 1
-
--- | Records FFT data to a memory buffer.
-pv_RecordBuf :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-pv_RecordBuf buffer recbuf offset run loop hop wintype = mkOsc KR "PV_RecordBuf" [buffer,recbuf,offset,run,loop,hop,wintype] 1
-
 -- * MCLD
 
 -- | Detect the largest value (and its position) in an array of UGens
@@ -125,29 +85,9 @@ bufMax rate bufnum gate_ = mkOscR [KR] rate "BufMax" [bufnum,gate_] 2
 bufMin :: Rate -> UGen -> UGen -> UGen
 bufMin rate bufnum gate_ = mkOscR [KR] rate "BufMin" [bufnum,gate_] 2
 
--- | 3D Perlin Noise
-perlin3 :: Rate -> UGen -> UGen -> UGen -> UGen
-perlin3 rate x y z = mkOscR [AR,KR] rate "Perlin3" [x,y,z] 1
-
 -- * Membrane
 
--- | Triangular waveguide mesh of a drum-like membrane.
-membraneCircle :: UGen -> UGen -> UGen -> UGen
-membraneCircle i t l = mkOsc AR "MembraneCircle" [i, t, l] 1
-
--- | Triangular waveguide mesh of a drum-like membrane.
-membraneHexagon :: UGen -> UGen -> UGen -> UGen
-membraneHexagon i t l = mkOsc AR "MembraneHexagon" [i, t, l] 1
-
 -- * NCAnalysisUGens
-
--- | Spectral Modeling Synthesis
-sms :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-sms input maxpeaks currentpeaks tolerance noisefloor freqmult freqadd formantpreserve useifft ampmult graphicsbufnum = mkFilterR [AR] "SMS" [input,maxpeaks,currentpeaks,tolerance,noisefloor,freqmult,freqadd,formantpreserve,useifft,ampmult,graphicsbufnum] 2
-
--- | Tracking Phase Vocoder
-tpv :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-tpv chain windowsize hopsize maxpeaks currentpeaks freqmult tolerance noisefloor = mkOsc AR "TPV" [chain,windowsize,hopsize,maxpeaks,currentpeaks,freqmult,tolerance,noisefloor] 1
 
 -- * PitchDetection
 
@@ -165,10 +105,6 @@ qitch r input databufnum ampThreshold algoflag ampbufnum minfreq maxfreq = mkOsc
 averageOutput :: UGen -> UGen -> UGen
 averageOutput in_ trig_ = mkFilterR [KR,AR] "AverageOutput" [in_,trig_] 1
 
--- | Feedback delay line implementing switch-and-ramp buffer jumping.
-switchDelay :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-switchDelay in_ drylevel wetlevel delaytime delayfactor maxdelaytime = mkFilterR [AR] "SwitchDelay" [in_,drylevel,wetlevel,delaytime,delayfactor,maxdelaytime] 1
-
 -- * SCMIRUGens
 
 -- | Octave chroma band based representation of energy in a signal; Chromagram for nTET tuning systems with any base reference
@@ -183,29 +119,9 @@ chromagram rate fft_ fftsize n tuningbase octaves integrationflag coeff = mkOscR
 brusselator :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 brusselator rate reset rate_ mu gamma initx inity = mkOscR [AR] rate "Brusselator" [reset,rate_,mu,gamma,initx,inity] 2
 
--- | Forced DoubleWell Oscillator
-doubleWell3 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-doubleWell3 rate reset rate_ f delta initx inity = mkOscR [AR] rate "DoubleWell3" [reset,rate_,f,delta,initx,inity] 1
-
--- | Envelope Follower Filter
-envDetect :: Rate -> UGen -> UGen -> UGen -> UGen
-envDetect rate in_ attack release = mkOscR [AR] rate "EnvDetect" [in_,attack,release] 1
-
--- | Envelope Follower
-envFollow :: Rate -> UGen -> UGen -> UGen
-envFollow rate input decaycoeff = mkOscR [AR,KR] rate "EnvFollow" [input,decaycoeff] 1
-
--- | Linear Time Invariant General Filter Equation
-lti :: Rate -> UGen -> UGen -> UGen -> UGen
-lti rate input bufnuma bufnumb = mkOscR [AR] rate "LTI" [input,bufnuma,bufnumb] 1
-
 -- | Experimental time domain onset detector
 sLOnset :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 sLOnset rate input memorysize1 before after threshold hysteresis = mkOscR [KR] rate "SLOnset" [input,memorysize1,before,after,threshold,hysteresis] 1
-
--- | wave terrain synthesis
-waveTerrain :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-waveTerrain rate bufnum x y xsize ysize = mkOscR [AR] rate "WaveTerrain" [bufnum,x,y,xsize,ysize] 1
 
 -- * Stk
 

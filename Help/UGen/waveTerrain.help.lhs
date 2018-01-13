@@ -2,6 +2,7 @@
     > Sound.SC3.UGen.DB.ugenSummary "WaveTerrain"
 
 > import Sound.SC3 {- hsc3 -}
+> import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
 
 Terrain function
 

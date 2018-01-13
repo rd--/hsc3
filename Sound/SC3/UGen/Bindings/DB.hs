@@ -837,12 +837,6 @@ grainSin numChannels trigger dur freq pan envbufnum maxGrains = mkUGen Nothing [
 grayNoise :: ID a => a -> Rate -> UGen
 grayNoise z rate = mkUGen Nothing [KR,AR] (Left rate) "GrayNoise" [] Nothing 1 (Special 0) (toUId z)
 
--- | Applies the Hilbert transform to an input signal.
---
---  HilbertFIR [AR] in=0.0 buffer=0.0
-hilbertFIR :: UGen -> UGen -> UGen
-hilbertFIR in_ buffer = mkUGen Nothing [AR] (Right [0]) "HilbertFIR" [in_,buffer] Nothing 2 (Special 0) NoId
-
 -- | 2nd order Butterworth highpass filter.
 --
 --  HPF [KR,AR] in=0.0 freq=440.0;    FILTER: TRUE

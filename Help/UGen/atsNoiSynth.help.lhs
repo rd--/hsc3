@@ -3,8 +3,9 @@
 
 > import System.IO.Unsafe {- base -}
 > import Sound.SC3 {- hsc3 -}
+> import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
 > import Sound.SC3.Data.ATS {- hsc3-data -}
->
+
 > ats_fn_0 = "/home/rohan/data/audio/pf-c5.4.ats"
 > ats_fn_1 = "/home/rohan/cvs/tn/tn-56/ats/metal.ats"
 
@@ -26,11 +27,11 @@ run re-synthesis
 > g_01 =
 >     let np = constant (ats_n_partials ats_hdr_0)
 >         ptr = lfSaw KR (constant (1 / ats_analysis_duration ats_hdr_0)) 1 * 0.5 + 0.5
->     in atsNoiSynth 0 np 0 1 ptr 1 0.1 1 0 25 0 1
+>     in atsNoiSynth AR 0 np 0 1 ptr 1 0.1 1 0 25 0 1
 
 > g_02 =
 >     let x = mouseX KR 0.0 1.0 Linear 0.2
 >         y = mouseY KR 0.0 1.0 Linear 0.2
 >         np = constant (ats_n_partials ats_hdr_0)
->     in atsNoiSynth 0 np 0 1 x (1 - y) y 1 0 25 0 1
+>     in atsNoiSynth AR 0 np 0 1 x (1 - y) y 1 0 25 0 1
 

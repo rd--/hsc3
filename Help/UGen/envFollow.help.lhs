@@ -5,7 +5,7 @@
 > import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
 
 > g_01 =
->     let z = soundIn 4
+>     let z = soundIn 0
 >         d = mouseX KR 0.990 0.999 Linear 0.2
 >         c = envFollow KR z d
 >         o = pinkNoise 'α' AR * c

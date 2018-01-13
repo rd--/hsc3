@@ -9,4 +9,4 @@
 >         n = linLin (lfNoise1 'α' KR 1) (-1) 1 1 10
 >         s = envSine 9 0.1
 >         e = envGen KR 1 1 0 1 RemoveSynth s
->     in fmGrain AR t 0.2 440 220 n * e
+>     in fmGrain t 0.2 440 220 n * e

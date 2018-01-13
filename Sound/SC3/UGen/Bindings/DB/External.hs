@@ -687,14 +687,14 @@ fm7 rate ctlMatrix modMatrix = mkUGen Nothing [AR] (Left rate) "FM7" [ctlMatrix,
 -- | (Undocumented class)
 --
 --  FMGrain [AR] trigger=0.0 dur=1.0 carfreq=440.0 modfreq=200.0 index=1.0
-fmGrain :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-fmGrain rate trigger dur carfreq modfreq index_ = mkUGen Nothing [AR] (Left rate) "FMGrain" [trigger,dur,carfreq,modfreq,index_] Nothing 1 (Special 0) NoId
+fmGrain :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+fmGrain trigger dur carfreq modfreq index_ = mkUGen Nothing [AR] (Right [0]) "FMGrain" [trigger,dur,carfreq,modfreq,index_] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  FMGrainB [AR] trigger=0.0 dur=1.0 carfreq=440.0 modfreq=200.0 index=1.0 envbuf=0.0
-fmGrainB :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-fmGrainB rate trigger dur carfreq modfreq index_ envbuf = mkUGen Nothing [AR] (Left rate) "FMGrainB" [trigger,dur,carfreq,modfreq,index_,envbuf] Nothing 1 (Special 0) NoId
+fmGrainB :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+fmGrainB trigger dur carfreq modfreq index_ envbuf = mkUGen Nothing [AR] (Right [0]) "FMGrainB" [trigger,dur,carfreq,modfreq,index_,envbuf] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
@@ -2289,8 +2289,8 @@ summer rate trig_ step reset resetval = mkUGen Nothing [KR,AR] (Left rate) "Summ
 -- | feedback delay line implementing switch-and-ramp buffer jumping
 --
 --  SwitchDelay [AR] in=0.0 drylevel=1.0 wetlevel=1.0 delaytime=1.0 delayfactor=0.7 maxdelaytime=20.0
-switchDelay :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-switchDelay rate in_ drylevel wetlevel delaytime delayfactor maxdelaytime = mkUGen Nothing [AR] (Left rate) "SwitchDelay" [in_,drylevel,wetlevel,delaytime,delayfactor,maxdelaytime] Nothing 1 (Special 0) NoId
+switchDelay :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+switchDelay in_ drylevel wetlevel delaytime delayfactor maxdelaytime = mkUGen Nothing [AR] (Right [0]) "SwitchDelay" [in_,drylevel,wetlevel,delaytime,delayfactor,maxdelaytime] Nothing 1 (Special 0) NoId
 
 -- | triggered beta random distribution
 --

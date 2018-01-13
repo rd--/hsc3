@@ -3,6 +3,7 @@
 
 > import System.IO.Unsafe {- base -}
 > import Sound.SC3 {- hsc3 -}
+> import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
 > import Sound.SC3.Data.ATS {- hsc3-data -}
 
 > ats_fn_0 = "/home/rohan/data/audio/pf-c5.4.ats"
@@ -26,4 +27,4 @@ simple re-synthesiser, ATS data is at buffer 0
 >     let x = mouseX KR 0.0 1.0 Linear 0.2
 >         y = mouseY KR 0.75 1.25 Linear 0.2
 >         np = constant (ats_n_partials ats_hdr_0)
->     in atsSynth 0 np 0 1 x y 0
+>     in atsSynth AR 0 np 0 1 x y 0
