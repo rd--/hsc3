@@ -1,14 +1,14 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "OffsetOut"
-    > Sound.SC3.UGen.DB.ugenSummary "OffsetOut"
+    Sound.SC3.UGen.Help.viewSC3Help "OffsetOut"
+    Sound.SC3.UGen.DB.ugenSummary "OffsetOut"
 
 > import Sound.OSC {- hosc -}
 > import Sound.SC3 {- hsc3 -}
->
+
 > g_01 =
 >     let a = offsetOut 0 (impulse AR 5 0)
 >         b = out 0 (sinOsc AR 60 0 * 0.1)
 >     in mrg [a,b]
->
+
 > g_02 =
 >     let a = out 0 (impulse AR 5 0)
 >         b = out 0 (sinOsc AR 60 0 * 0.1)
@@ -21,7 +21,7 @@ bus 1 doesn't (or at least is exceedingly unlikely to).
 >     let f = sr / 100
 >         o = sinOsc AR (constant f) 0 * 0.2
 >     in synthdef "sy_01" (mrg [offsetOut 0 o,out 1 o])
->
+
 > bnd_01 sr t =
 >     let latency = 0.2
 >         c = 100 / sr {- recip f -}
@@ -29,7 +29,7 @@ bus 1 doesn't (or at least is exceedingly unlikely to).
 >         p = bundle (t + latency) [m]
 >         q = bundle (t + latency + c/2) [m]
 >     in [p,q]
->
+
 > proc_01 :: Transport m => m ()
 > proc_01 = do
 >   sr <- serverSampleRateActual

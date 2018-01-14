@@ -12,4 +12,4 @@ Run an oscillator with the trigger at bus 10.
 
 Set bus 10, each set will trigger a ping.
 
-    > withSC3 (send (c_set1 10 0.1))
+    > withSC3 (sendMessage (c_set1 10 0.1))

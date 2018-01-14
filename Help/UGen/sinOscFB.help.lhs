@@ -1,5 +1,5 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "SinOscFB"
-    > Sound.SC3.UGen.DB.ugenSummary "SinOscFB"
+    Sound.SC3.UGen.Help.viewSC3Help "SinOscFB"
+    Sound.SC3.UGen.DB.ugenSummary "SinOscFB"
 
 > import Sound.SC3 {- hsc3 -}
 

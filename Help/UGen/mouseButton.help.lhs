@@ -1,5 +1,5 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "MouseButton"
-    > Sound.SC3.UGen.DB.ugenSummary "MouseButton"
+    Sound.SC3.UGen.Help.viewSC3Help "MouseButton"
+    Sound.SC3.UGen.DB.ugenSummary "MouseButton"
 
 > import Sound.SC3 {- hsc3 -}
 

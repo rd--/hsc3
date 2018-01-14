@@ -1,5 +1,5 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "KeyState"
-    > Sound.SC3.UGen.DB.ugenSummary "KeyState"
+    Sound.SC3.UGen.Help.viewSC3Help "KeyState"
+    Sound.SC3.UGen.DB.ugenSummary "KeyState"
 
 > import Sound.SC3 {- hsc3 -}
 

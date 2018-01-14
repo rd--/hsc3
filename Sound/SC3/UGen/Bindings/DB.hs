@@ -1509,11 +1509,13 @@ pv_Diffuser buffer trig_ = mkUGen Nothing [KR] (Left KR) "PV_Diffuser" [buffer,t
 pv_Div :: UGen -> UGen -> UGen
 pv_Div bufferA bufferB = mkUGen Nothing [KR] (Left KR) "PV_Div" [bufferA,bufferB] Nothing 1 (Special 0) NoId
 
+{-
 -- | FFT onset detector.
 --
 --  PV_HainsworthFoote [KR,AR] maxSize=0.0
 pv_HainsworthFoote :: UGen -> UGen
 pv_HainsworthFoote maxSize = mkUGen Nothing [KR,AR] (Left KR) "PV_HainsworthFoote" [maxSize] Nothing 1 (Special 0) NoId
+-}
 
 -- | FFT feature detector for onset detection.
 --

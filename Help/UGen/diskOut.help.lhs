@@ -1,5 +1,5 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "DiskOut"
-    > Sound.SC3.UGen.DB.ugenSummary "DiskOut"
+    Sound.SC3.UGen.Help.viewSC3Help "DiskOut"
+    Sound.SC3.UGen.DB.ugenSummary "DiskOut"
 
 > import Sound.OSC {- hosc -}
 > import Sound.SC3 {- hsc3 -}
@@ -14,7 +14,7 @@ Example graph
 
 Check incoming signal (either graph above or the outside world, or `C-cC-a`)
 
-    > audition (out 0 g_01)
+    audition (out 0 g_01)
 
 Record incoming signal (or above...), print some informational traces...
 
@@ -25,24 +25,28 @@ Record incoming signal (or above...), print some informational traces...
 > msg_01 = [b_alloc 0 65536 nc_01,b_write 0 fn_01 Aiff PcmInt16 (-1) 0 True]
 > msg_02 = [b_close 0,b_free 0]
 
-    > withSC3 (do {trace "b_alloc & b_write"
-    >             ;mapM_ async msg_01
-    >             ;trace "record for 10 seconds"
-    >             ;playSynthdef (2001,AddToTail,1,[]) sy_01
-    >             ;pauseThread 10
-    >             ;trace "stop recording and tidy up"
-    >             ;send (n_free [2001])
-    >             ;mapM_ async msg_02
-    >             ;return ()})
+> act_01 :: Transport m => m ()
+> act_01 = do
+>   trace "b_alloc & b_write"
+>   mapM_ async msg_01
+>   trace "record for 10 seconds"
+>   playSynthdef (2001,AddToTail,1,[]) sy_01
+>   pauseThread 10
+>   trace "stop recording and tidy up"
+>   sendMessage (n_free [2001])
+>   mapM_ async msg_02
+>   return ()
+
+    withSC3 act_01
 
 Listen to recording (on loop...)
 
 > msg_03 = [b_alloc 0 65536 nc_01,b_read 0 fn_01 0 (-1) 0 True]
 
-    > withSC3 (mapM_ async msg_03)
+    withSC3 (mapM_ async msg_03)
 
 > g_03 = diskIn nc_01 0 Loop
 
 Tidy up...
 
-    > withSC3 (mapM_ async msg_02)
+    withSC3 (mapM_ async msg_02)

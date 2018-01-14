@@ -4,7 +4,7 @@
 see <http://thread.gmane.org/gmane.comp.audio.supercollider.user/84719>
 
 > import Sound.SC3 {- hsc3 -}
->
+
 > g_01 = lfTri AR 500 1 * 0.1
 
 Used as both Oscillator and LFO.

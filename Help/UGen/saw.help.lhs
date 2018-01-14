@@ -1,8 +1,8 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Saw"
-    > Sound.SC3.UGen.DB.ugenSummary "Saw"
+    Sound.SC3.UGen.Help.viewSC3Help "Saw"
+    Sound.SC3.UGen.DB.ugenSummary "Saw"
 
 > import Sound.SC3 {- hsc3 -}
->
+
 > g_01 = saw AR (xLine KR 40 4000 6 RemoveSynth) * 0.1
 
 compare to the non-bandlimited lfSaw

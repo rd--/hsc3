@@ -1,5 +1,5 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "LFSaw"
-    > Sound.SC3.UGen.DB.ugenSummary "LFSaw"
+    Sound.SC3.UGen.Help.viewSC3Help "LFSaw"
+    Sound.SC3.UGen.DB.ugenSummary "LFSaw"
 
 Note: SC2 did not have the initial phase argument.
 

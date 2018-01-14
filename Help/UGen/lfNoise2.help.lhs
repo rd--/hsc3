@@ -2,7 +2,7 @@
     Sound.SC3.UGen.DB.ugenSummary "LFNoise2"
 
 > import Sound.SC3 {- hsc3 -}
->
+
 > g_01 = lfNoise2 'α' AR 1000 * 0.05
 
 Modulate frequency.

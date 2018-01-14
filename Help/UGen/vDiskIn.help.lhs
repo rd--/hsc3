@@ -1,8 +1,8 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "VDiskIn"
-    > Sound.SC3.UGen.DB.ugenSummary "VDiskIn"
+    Sound.SC3.UGen.Help.viewSC3Help "VDiskIn"
+    Sound.SC3.UGen.DB.ugenSummary "VDiskIn"
 
 > import Sound.SC3 {- hsc3 -}
->
+
 > fn_01 = "/home/rohan/data/audio/pf-c5.snd"
 > nc_01 = 1
 > msg_01 = [b_alloc 0 8192 nc_01,b_read 0 fn_01 0 (-1) 0 True]

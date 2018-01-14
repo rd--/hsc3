@@ -21,8 +21,9 @@ Listen
 
 Set frequency and the trigger gate.
 
-    > withSC3 (send (n_set1 10 "freq" 2200))
-    > withSC3 (send (n_set1 10 "gate" 1))
+    > import Sound.OSC {- hosc -}
+    > withSC3 (sendMessage (n_set1 10 "freq" 2200))
+    > withSC3 (sendMessage (n_set1 10 "gate" 1))
 
 Make a control rate graph to write freq and gate values.
 
@@ -34,4 +35,4 @@ Add it _before_ the node it will map to, the trigger is only on the bus for the 
 
 Map the control values at the audio graph.
 
-    > withSC3 (send (n_map 10 [("freq",0),("gate",1)]))
+    > withSC3 (sendMessage (n_map 10 [("freq",0),("gate",1)]))

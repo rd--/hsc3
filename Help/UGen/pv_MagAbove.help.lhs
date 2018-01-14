@@ -27,4 +27,4 @@ Synthesised input.
 
 > g_04 = f_01 g_03 1024
 
-> g_05 = f_01 (soundIn 0) 1024
+> g_05 = f_01 (soundIn 0) 32

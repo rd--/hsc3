@@ -1,5 +1,5 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "InFeedback"
-    > Sound.SC3.UGen.DB.ugenSummary "InFeedback"
+    Sound.SC3.UGen.Help.viewSC3Help "InFeedback"
+    Sound.SC3.UGen.DB.ugenSummary "InFeedback"
 
 > import Sound.SC3 {- hsc3 -}
 
@@ -12,7 +12,7 @@ Audio feedback modulation
 Audition these in either order and hear both tones.
 
 > g_02 = inFeedback 1 firstPrivateBus
->
+
 > g_03 =
 >     let b  = firstPrivateBus
 >         s0 = out b (sinOsc AR 220 0 * 0.1)

@@ -4,9 +4,9 @@
 Note: SC2 had no initial phase argument.
 
 > import Sound.SC3
->
+
 > g_01 = let f = lfPulse KR 3 0 0.3 * 200 + 200 in lfPulse AR f 0 0.2 * 0.1
->
+
 > g_02 = let x = mouseX KR 0 1 Linear 0.2 in lfPulse AR 220 0 x * 0.1
 
 square wave as sum of sines.

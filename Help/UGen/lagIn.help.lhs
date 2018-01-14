@@ -1,11 +1,12 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "LagIn"
-    > Sound.SC3.UGen.DB.ugenSummary "LagIn"
+    Sound.SC3.UGen.Help.viewSC3Help "LagIn"
+    Sound.SC3.UGen.DB.ugenSummary "LagIn"
 
 > import Sound.SC3 {- hsc3 -}
 
 Set frequency at control bus
 
-    > withSC3 (send (c_set1 10 200))
+    import Sound.OSC {- hosc -}
+    withSC3 (sendMessage (c_set1 10 200))
 
 Oscillator reading frequency at control bus
 
@@ -13,4 +14,4 @@ Oscillator reading frequency at control bus
 
 Re-set frequency at control bus
 
-    > withSC3 (send (c_set1 10 2000))
+    withSC3 (sendMessage (c_set1 10 2000))

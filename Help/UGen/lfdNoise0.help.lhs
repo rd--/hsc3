@@ -6,19 +6,19 @@
 for fast x LFNoise frequently seems stuck, LFDNoise changes smoothly
 
 > g_01 = lfdNoise0 'a' AR (mouseX KR 0.1 1000 Exponential 0.2) * 0.1
->
+
 > g_02 = lfNoise0 'a' AR (mouseX KR 0.1 1000 Exponential 0.2) * 0.1
 
 silent for 2 secs before going up in freq
 
 > g_03 = lfdNoise0 'a' AR (xLine KR 0.5 10000 3 RemoveSynth)
->
+
 > g_04 = lfNoise0 'a' AR (xLine KR 0.5 10000 3 RemoveSynth)
 
 LFNoise quantizes time steps at high freqs, LFDNoise does not:
 
 > g_05 = lfdNoise0 'a' AR (xLine KR 1000 20000 10 RemoveSynth)
->
+
 > g_06 = lfNoise0 'a' AR (xLine KR 1000 20000 10 RemoveSynth)
 
 Drawings

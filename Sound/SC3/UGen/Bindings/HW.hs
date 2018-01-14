@@ -38,6 +38,10 @@ poll trig_ in_ trigid label_ =
       n = fromIntegral (length q)
   in C.mkFilter "Poll" ([trig_,in_,trigid,n] ++ q) 0
 
+-- | FFT onset detector.
+pv_HainsworthFoote :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+pv_HainsworthFoote buf h f thr wt = C.mkOsc AR "PV_HainsworthFoote" [buf,h,f,thr,wt] 1
+
 -- | ASCII string to length prefixed list of constant UGens.
 --
 -- > string_to_ugens "/label" == map fromIntegral [6,47,108,97,98,101,108]
