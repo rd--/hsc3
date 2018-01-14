@@ -3,8 +3,11 @@
 
 > import Sound.SC3 {- hsc3 -}
 
-    let fn = "/home/rohan/data/audio/pf-c5.aif"
-    withSC3 (async (b_allocRead 10 fn 0 0))
+> fn_01 = "/home/rohan/data/audio/pf-c5.aif"
+
+> m_01 = b_allocRead 10 fn_01 0 0
+
+    withSC3 (async m_01)
 
 > g_01 =
 >     let p = linLin (lfSaw KR 0.05 0) (-1) 1 0 1
@@ -13,7 +16,9 @@
 
 real-time (delayed) input
 
-    withSC3 (async (b_alloc 10 8192 1))
+> m_02 = b_alloc 10 8192 1
+
+    withSC3 (async m_02)
 
 > g_02 =
 >     let i = soundIn 0

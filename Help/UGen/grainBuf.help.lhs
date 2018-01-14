@@ -5,7 +5,9 @@
 
 > fn_01 = "/home/rohan/data/audio/pf-c5.snd"
 
-    > withSC3 (async (b_allocRead 10 fn_01 0 0))
+> m_01 = b_allocRead 10 fn_01 0 0
+
+    > withSC3 (async m_01)
 
 > g_01 =
 >     let buf = 10

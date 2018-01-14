@@ -7,7 +7,9 @@ Load sound file to buffer zero (required for examples)
 
 > fn_01 = "/home/rohan/data/audio/pf-c5.aif"
 
-    > withSC3 (async (b_allocRead 0 fn_01 0 0))
+> m_01 = b_allocRead 0 fn_01 0 0
+
+    > withSC3 (async m_01)
 
 Read without loop, trigger reset based on buffer duration
 

@@ -5,9 +5,11 @@
 
 Load sound file to buffer zero (single channel file required for examples)
 
-> fn = "/home/rohan/data/audio/pf-c5.aif"
+> f_01 = "/home/rohan/data/audio/pf-c5.aif"
 
-    withSC3 (async (b_allocRead 0 fn 0 0))
+> m_01 = (b_allocRead 0 f_01 0 0)
+
+    withSC3 (async m_01)
 
 Play once only.
 
@@ -54,9 +56,11 @@ is single channel playback and channel mismatch message in server log.
 Graph will play both channels after loading a two channel signal to
 buffer.
 
-> fn' = "/home/rohan/data/audio/sp/tinguely.aif"
+> f_02 = "/home/rohan/data/audio/sp/tinguely.aif"
 
-    withSC3 (async (b_allocRead 0 fn' 0 0))
+> m_02 = b_allocRead 0 f_02 0 0
+
+    withSC3 (async m_02)
 
 Release buffer.
 

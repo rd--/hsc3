@@ -5,7 +5,7 @@
 
     > withSC3 (async (b_alloc 10 512 1))
 
-> f_01 t = t2A t 0
+> f_01 t = t2a t 0
 
 > f_02 t =
 >     let s = sinOsc AR 440 0 * 0.2
@@ -27,7 +27,7 @@ a generative signal with distinct onsets!
 
 > g_03 =
 >     let e = linLin (saw AR 2) (-1) 1 0 1
->         p = let f = midiCPS (tIRand 'α' 63 75 (impulse KR 2 0))
+>         p = let f = midiCPS (tiRand 'α' 63 75 (impulse KR 2 0))
 >             in pulse AR f 0.5
 >         f = linExp (lfNoise2 'β' KR 0.5) (-1) 1 100 10000
 >     in lpf p f * e

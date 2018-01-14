@@ -1,11 +1,14 @@
     Sound.SC3.UGen.Help.viewSC3Help "GrainIn"
     Sound.SC3.UGen.DB.ugenSummary "GrainIn"
 
-> import Sound.SC3
+> import Sound.SC3 {- hsc3 -}
 
-> g_01 =
->     let n = pinkNoise 'α' AR
->         x = mouseX KR (-0.5) 0.5 Linear 0.1
+> f_01 s =
+>     let x = mouseX KR (-0.5) 0.5 Linear 0.1
 >         y = mouseY KR 5 25 Linear 0.1
 >         t = impulse KR y 0
->     in grainIn 2 t 0.1 n x (-1) 512 * 0.1
+>     in grainIn 2 t 0.1 s x (-1) 512 * 0.1
+
+> g_01 = f_01 (pinkNoise 'α' AR)
+
+> g_02 = let s = soundIn 0 in s * 0.05 + f_01 s

@@ -38,12 +38,15 @@ poll trig_ in_ trigid label_ =
       n = fromIntegral (length q)
   in C.mkFilter "Poll" ([trig_,in_,trigid,n] ++ q) 0
 
+-- | ASCII string to length prefixed list of constant UGens.
+--
+-- > string_to_ugens "/label" == map fromIntegral [6,47,108,97,98,101,108]
+string_to_ugens :: String -> [UGen]
+string_to_ugens nm = fromIntegral (length nm) : map (fromIntegral . fromEnum) nm
+
 -- | Send a reply message from the server back to all registered clients.
 sendReply :: UGen -> UGen -> String -> [UGen] -> UGen
-sendReply i k n v =
-    let n' = map (fromIntegral . fromEnum) n
-        s = fromIntegral (length n')
-    in C.mkFilter "SendReply" ([i,k,s] ++ n' ++ v) 0
+sendReply i k n v = C.mkFilter "SendReply" ([i,k] ++ string_to_ugens n ++ v) 0
 
 -- | Unpack a single value (magnitude or phase) from an FFT chain
 unpack1FFT :: UGen -> UGen -> UGen -> UGen -> UGen

@@ -3,16 +3,14 @@
 
 > import Sound.SC3 {- hsc3 -}
 
-Allocate and set values at buffer ten
-
-    > withSC3 (async (b_alloc_setn1 10 0 [50,100,200,400,800,1600]))
-
 Index buffer for frequency values
 
 > g_01 =
->     let f = index 10 (lfSaw KR 2 3 * 4)
->     in sinOsc AR (mce [f,f * 9]) 0 * 0.1
+>   let b = asLocalBuf 'α' [50,100,200,400,800,1600]
+>       f = index b (lfSaw KR 2 3 * 4)
+>   in sinOsc AR (mce [f,f * 9]) 0 * 0.1
 
-Free buffer
-
-    > withSC3 (send (b_free 10))
+> g_02 =
+>   let b = asLocalBuf 'α' [200, 300, 400, 500, 600, 800]
+>       f = index b (mouseX KR 0 7 Linear 0.2)
+>   in sinOsc AR f 0 * 0.1

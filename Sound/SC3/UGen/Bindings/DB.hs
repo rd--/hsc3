@@ -954,8 +954,8 @@ indexInBetween bufnum in_ = mkUGen Nothing [KR,AR] (Right [1]) "IndexInBetween" 
 -- | Index into a table with a signal, linear interpolated
 --
 --  IndexL [KR,AR] bufnum=0.0 in=0.0
-indexL :: Rate -> UGen -> UGen -> UGen
-indexL rate bufnum in_ = mkUGen Nothing [KR,AR] (Left rate) "IndexL" [bufnum,in_] Nothing 1 (Special 0) NoId
+indexL :: UGen -> UGen -> UGen
+indexL bufnum in_ = mkUGen Nothing [KR,AR] (Right [1]) "IndexL" [bufnum,in_] Nothing 1 (Special 0) NoId
 
 -- | Base class for info ugens
 --
@@ -2252,8 +2252,8 @@ zeroCrossing in_ = mkUGen Nothing [KR,AR] (Right [0]) "ZeroCrossing" [in_] Nothi
 -- | LocalBuf count
 --
 --  MaxLocalBufs [IR] count=0.0
-maxLocalBufs :: Rate -> UGen -> UGen
-maxLocalBufs rate count = mkUGen Nothing [IR] (Left rate) "MaxLocalBufs" [count] Nothing 1 (Special 0) NoId
+maxLocalBufs :: UGen -> UGen
+maxLocalBufs count = mkUGen Nothing [IR] (Left IR) "MaxLocalBufs" [count] Nothing 1 (Special 0) NoId
 
 -- | Multiply add
 --

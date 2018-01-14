@@ -5,8 +5,11 @@
 
 Load audio (#10) data
 
-    > let fn = "/home/rohan/data/audio/pf-c5.aif"
-    > withSC3 (async (b_allocRead 10 fn 0 0))
+> f_01 = "/home/rohan/data/audio/pf-c5.aif"
+
+> m_01 = b_allocRead 10 f_01 0 0
+
+    > withSC3 (async m_01)
 
 Mouse control
 

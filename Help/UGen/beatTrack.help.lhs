@@ -12,6 +12,6 @@
 >         f = mce [440, 660, 880]
 >         a = mce [0.4, 0.2, 0.1]
 >         s = mix (sinOsc AR f 0 * a * decay (mce [b, h, q]) 0.05)
->     in i + 2
+>     in i + s
 
 

@@ -12,10 +12,10 @@
 >     in mce [s, sinOsc AR (mceChannel 0 f / 2) 0 * a]
 
 > g_02 =
->     let s = soundIn 4
+>     let s = soundIn 0
 >         a = amplitude KR s 0.1 0.1
 >         f = pitch s 440 60 4000 100 16 7 0.02 0.5 1 0
->     in mce [s, sinOsc AR (mceChannel 0 f) 0 * a]
+>     in mce [s * 0.1, sinOsc AR (mceChannel 0 f) 0 * a]
 
 Comparison of input frequency (x) and tracked oscillator frequency (f).
 Output is printed to the console by scsynth.
@@ -26,6 +26,6 @@ Output is printed to the console by scsynth.
 >         [f,_] = mceChannels (pitch o 440 60 4000 100 16 7 0.02 0.5 1 0)
 >         r = sinOsc AR f 0 * 0.1
 >         t = impulse KR 4 0
->         pf = poll t f (label "f") 0
->         px = poll t x (label "x") 0
+>         pf = poll t f 0 (label "f")
+>         px = poll t x 0 (label "x")
 >     in mce [out 0 (mce2 o r),pf,px]
