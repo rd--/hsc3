@@ -162,7 +162,7 @@
   (interactive)
   (if (and (executable-find "hasktags") (file-exists-p "hsc3.cabal"))
       (call-process-shell-command
-       "find Sound . -name '*.*hs' | xargs hasktags -e"
+       "find Sound . -name '*.hs' | xargs hasktags -e"
        nil
        nil)
     (error "no hasktags binary or not at hsc3 directory?")))

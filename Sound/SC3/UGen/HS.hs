@@ -193,7 +193,7 @@ as_trig (n,y1) = (y1 <= 0.0 && n > 0.0,n)
 
 phasor :: RealFrac t => F_ST1 t (Bool,t,t,t,t) t
 phasor ((trig,rate,start,end,resetPos),ph) =
-    let r = if trig then resetPos else sc_wrap start end (ph + rate)
+    let r = if trig then resetPos else sc3_wrap start end (ph + rate)
     in (ph,r)
 
 -- | * LIST PROCESSING

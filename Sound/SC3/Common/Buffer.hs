@@ -82,7 +82,7 @@ normalizeSum l =
 
 -- | Variant that specifies range of input sequence separately.
 normalise_rng :: Fractional n => (n,n) -> (n,n) -> [n] -> [n]
-normalise_rng (il,ir) (l,r) = map (\e -> S.linlin e il ir l r)
+normalise_rng (il,ir) (l,r) = map (\e -> S.sc3_linlin e il ir l r)
 
 -- | @ArrayedCollection.normalize@ returns a new Array with the receiver
 -- items normalized between min and max.

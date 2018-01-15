@@ -92,8 +92,8 @@ uop_hs_tbl =
     [(Neg,negate)
     ,(Not,\z -> if z > 0 then 0 else 1)
     ,(Abs,abs)
-    ,(Ceil,sc_ceiling)
-    ,(Floor,sc_floor)
+    ,(Ceil,sc3_ceiling)
+    ,(Floor,sc3_floor)
     ,(Squared,\z -> z * z)
     ,(Cubed,\z -> z * z * z)
     ,(Sqrt,sqrt)
@@ -158,13 +158,13 @@ class RealFrac a => RealFracE a where
   properFractionE :: a -> (a,a)
   properFractionE = sc3_properFraction
   truncateE :: a -> a
-  truncateE = sc_truncate
+  truncateE = sc3_truncate
   roundE :: a -> a
-  roundE = sc_round
+  roundE = sc3_round
   ceilingE :: a -> a
-  ceilingE = sc_ceiling
+  ceilingE = sc3_ceiling
   floorE :: a -> a
-  floorE = sc_floor
+  floorE = sc3_floor
 
 instance RealFracE Float
 instance RealFracE Double
@@ -266,11 +266,11 @@ class (Floating a,RealFrac a, Ord a) => BinaryOp a where
     atan2E :: a -> a -> a
     atan2E a b = atan (b/a)
     clip2 :: a -> a -> a
-    clip2 a b = sc_clip a (-b) b
+    clip2 a b = sc3_clip a (-b) b
     difSqr :: a -> a -> a
-    difSqr = sc_dif_sqr
+    difSqr = sc3_dif_sqr
     excess :: a -> a -> a
-    excess a b = a - sc_clip a (-b) b
+    excess a b = a - sc3_clip a (-b) b
     exprandRange :: a -> a -> a
     exprandRange = error "exprandRange"
     fill :: a -> a -> a
@@ -282,9 +282,9 @@ class (Floating a,RealFrac a, Ord a) => BinaryOp a where
     gcdE :: a -> a -> a
     gcdE = error "gcdE"
     hypot :: a -> a -> a
-    hypot = sc_hypot
+    hypot = sc3_hypot
     hypotx :: a -> a -> a
-    hypotx = sc_hypotx
+    hypotx = sc3_hypotx
     iDiv :: a -> a -> a
     iDiv = sc3_idiv
     lcmE :: a -> a -> a
@@ -322,13 +322,13 @@ instance BinaryOp Float where
     fold2 a b = fold_ a (-b) b
     modE = F.mod'
     roundUp a b = if b == 0 then a else ceilingE (a/b + 0.5) * b
-    wrap2 a b = sc_wrap_ni a (-b) b
+    wrap2 a b = sc3_wrap_ni a (-b) b
 
 instance BinaryOp Double where
     fold2 a b = fold_ a (-b) b
     modE = F.mod'
     roundUp a b = if b == 0 then a else ceilingE (a/b + 0.5) * b
-    wrap2 a b = sc_wrap_ni a (-b) b
+    wrap2 a b = sc3_wrap_ni a (-b) b
 
 instance BinaryOp UGen where
     iDiv = mkBinaryOperator IDiv iDiv

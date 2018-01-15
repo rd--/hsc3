@@ -3,7 +3,7 @@ module Sound.SC3.UGen.Bindings.Composite where
 
 import Control.Monad {- base -}
 import Data.List {- base -}
-import Data.List.Split {- split -}
+import qualified Data.List.Split as Split {- split -}
 import Data.Maybe {- base -}
 
 import Sound.SC3.Common.Envelope
@@ -233,7 +233,7 @@ mix = sum_opt . mceChannels
 -- | Mix variant, sum to n channels.
 mixN :: Int -> UGen -> UGen
 mixN n u =
-    let xs = transpose (chunksOf n (mceChannels u))
+    let xs = transpose (Split.chunksOf n (mceChannels u))
     in mce (map sum xs)
 
 -- | Construct and sum a set of UGens.

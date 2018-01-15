@@ -71,6 +71,10 @@ CAPS = http://quitte.de/dsp/caps.html, http://packages.debian.org/stretch/caps
 
 > caps_1771_01 =
 >   let s = soundIn 0
+>   in ladspa 1 AR 1771 [1,0,0,s]
+
+> caps_1771_02 =
+>   let s = soundIn 0
 >       x = roundE (mouseX KR 0 11 Linear 0.2)
 >       y = mouseY KR (-24) 72 Linear 0.2
 >   in ladspa 1 AR 1771 [x,y,0.0,s]
@@ -106,7 +110,7 @@ CAPS = http://quitte.de/dsp/caps.html, http://packages.debian.org/stretch/caps
 >   let s = soundIn 0
 >       x = mouseX KR 0 1 Linear 0.2
 >       y = mouseY KR 0 1 Linear 0.2
->   in ladspa 1 AR 1779 [x,y,0.5,0.5,s]
+>   in ladspa 2 AR 1779 [x,y,0.5,0.5,s]
 
     # 1788 C* Wider - Stereo image synthesis
     > k: pan (-1 to 1)
@@ -114,8 +118,6 @@ CAPS = http://quitte.de/dsp/caps.html, http://packages.debian.org/stretch/caps
     > a: in (0 to 0)
     < a: out.l
     < a: out.r
-
-ftp://ftp.orban.com/245/245F_Manual.pdf
 
 > caps_1788_01 =
 >   let s = soundIn 0
