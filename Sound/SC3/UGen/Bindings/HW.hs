@@ -25,6 +25,10 @@ dwrand z repeats weights list_ =
 fftTrigger :: UGen -> UGen -> UGen -> UGen
 fftTrigger b h p = C.mkOsc KR "FFTTrigger" [b,h,p] 1
 
+-- | LADSPA plugins inside SuperCollider.
+ladspa :: Int -> Rate -> UGen -> [UGen] -> UGen
+ladspa nc rt k z = C.mkOsc rt "LADSPA" (constant nc : k : z) nc
+
 -- | Pack demand-rate FFT bin streams into an FFT chain.
 packFFT :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 packFFT b sz from to z mp =

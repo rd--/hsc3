@@ -404,8 +404,8 @@ crest rate in_ numsamps gate_ = mkUGen Nothing [KR] (Left rate) "Crest" [in_,num
 -- | port of some ladspa plugins
 --
 --  CrossoverDistortion [AR] in=0.0 amp=0.5 smooth=0.5
-crossoverDistortion :: Rate -> UGen -> UGen -> UGen -> UGen
-crossoverDistortion rate in_ amp smooth = mkUGen Nothing [AR] (Left rate) "CrossoverDistortion" [in_,amp,smooth] Nothing 1 (Special 0) NoId
+crossoverDistortion :: UGen -> UGen -> UGen -> UGen
+crossoverDistortion in_ amp smooth = mkUGen Nothing [AR] (Right [0]) "CrossoverDistortion" [in_,amp,smooth] Nothing 1 (Special 0) NoId
 
 -- | Digitally modelled analog filter
 --
@@ -2091,8 +2091,8 @@ sinTone rate freq phase = mkUGen Nothing [AR] (Left rate) "SinTone" [freq,phase]
 -- | port of some ladspa plugins
 --
 --  SineShaper [AR] in=0.0 limit=1.0
-sineShaper :: Rate -> UGen -> UGen -> UGen
-sineShaper rate in_ limit = mkUGen Nothing [AR] (Left rate) "SineShaper" [in_,limit] Nothing 1 (Special 0) NoId
+sineShaper :: UGen -> UGen -> UGen
+sineShaper in_ limit = mkUGen Nothing [AR] (Right [0]) "SineShaper" [in_,limit] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
