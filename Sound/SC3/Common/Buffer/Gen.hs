@@ -6,8 +6,8 @@ module Sound.SC3.Common.Buffer.Gen where
 
 import Data.List {- base -}
 
-import Sound.SC3.Common.Buffer {- hsc3 -}
-import Sound.SC3.Common.Math {- hsc3 -}
+import qualified Sound.SC3.Common.Buffer as Buffer {- hsc3 -}
+import qualified Sound.SC3.Common.Math as Math {- hsc3 -}
 
 -- | Sum (mix) multiple tables into one.
 sum_l :: Num n => [[n]] -> [n]
@@ -15,7 +15,7 @@ sum_l = map sum . transpose
 
 -- | Unit normalisation.
 nrm_u :: (Fractional n,Ord n) => [n] -> [n]
-nrm_u = normalize (-1) 1
+nrm_u = Buffer.normalize (-1) 1
 
 -- * sine1
 
@@ -51,7 +51,7 @@ sine2_nrm n = nrm_u . sine1 n
 
 sine3_p :: (Enum n,Floating n) => Int -> (n,n,n) -> [n]
 sine3_p n (pfreq,ampl,phase) =
-    let incr = (two_pi / (fromIntegral n - 1)) * pfreq
+    let incr = (Math.two_pi / (fromIntegral n - 1)) * pfreq
     in map ((*) ampl . sin) (take n [phase,phase + incr ..])
 
 sine3_l :: (Enum n,Floating n) => Int -> [(n,n,n)] -> [[n]]

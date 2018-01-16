@@ -147,9 +147,15 @@ only of power of two element signals.
 > to_wavetable [0,0.5,1,0.5] == [-0.5,0.5,0,0.5,1.5,-0.5,1,-0.5]
 -}
 to_wavetable :: Num a => [a] -> [a]
-to_wavetable =
+to_wavetable  = to_wavetable_nowrap . (++ [0])
+
+-- | Shaper requires wavetables without wrap.
+--
+-- > to_wavetable_nowrap [0,0.5,1,0.5] == [-0.5,0.5,0,0.5,1.5,-0.5]
+to_wavetable_nowrap :: Num a => [a] -> [a]
+to_wavetable_nowrap =
     let f (e0,e1) = (2 * e0 - e1,e1 - e0)
-    in t2_concat . map f . t2_overlap . (++ [0])
+    in t2_concat . map f . t2_overlap
 
 {- | Variant of 'sineFill' that gives each component table.
 
