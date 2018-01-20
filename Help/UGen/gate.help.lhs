@@ -1,7 +1,8 @@
-> Sound.SC3.UGen.Help.viewSC3Help "Gate"
-> Sound.SC3.UGen.DB.ugenSummary "Gate"
+    Sound.SC3.UGen.Help.viewSC3Help "Gate"
+    Sound.SC3.UGen.DB.ugenSummary "Gate"
 
-> import Sound.SC3
+> import Sound.SC3 {- hsc3 -}
 
-> let t = lfPulse AR 1 0 0.1
-> in audition (out 0 (gate (fSinOsc AR 500 0 * 0.25) t))
+> g_01 =
+>   let t = lfPulse AR 1 0 0.1
+>   in gate (fSinOsc AR 500 0 * 0.25) t
