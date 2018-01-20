@@ -103,7 +103,7 @@ Texture
 >                      g = gendy1 'α' AR r0 r1 ad dd f f as ds 12 12
 >                      o = sinOsc AR (g * 200 + 400) 0
 >                  in pan2 o l 0.1
->     in mix (mce (map node ['β'..'γ']))
+>     in mix (mce (map node (take 10 (enumFrom 'β'))))
 
 Try durscale 10.0 and 0.0 too.
 
