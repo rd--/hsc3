@@ -6,13 +6,22 @@
 
 phasor controls sine frequency, end frequency matches second sine.
 
-> g_01 =
+> g_00 =
 >     let rate = mouseX KR 0.2 2 Exponential 0.1
 >         tr = impulse AR rate 0
 >         sr = sampleRate
 >         x = phasor AR tr (rate / sr) 0 1 0
 >         f = mce [linLin x 0 1 600 1000, 1000]
 >     in sinOsc AR f 0 * 0.2
+
+two phasors control two sine frequencies: mouse y controls resetPos of the second
+
+> g_01 =
+>     let rate = mouseX KR 1 200 Linear 0.1
+>         tr = impulse AR rate 0
+>         sr = sampleRate
+>         x = phasor AR tr (rate / sr) 0 1 (mce2 0 (mouseY KR 0 1 Linear 0.2))
+>     in sinOsc AR (x * 500 + 500) 0 * 0.2
 
 Load sound file to buffer zero
 
@@ -28,7 +37,7 @@ Phasor as phase input to bufRd
 Allocate and generate (non-wavetable) buffer at index one
 (see osc for wavetable oscillator)
 
-    withSC3 (async (b_alloc 1 256 1) >> send (b_gen_sine1 1 [Normalise,Clear] [1]))
+    withSC3 (mapM_ maybe_async [b_alloc 1 256 1,b_gen_sine1 1 [Normalise,Clear] [1]])
 
 Audio rate phasor oscillator as phase input to bufRd
 
@@ -52,3 +61,14 @@ Phasor as impulse with reset
 >         x' = sinOsc AR 440 0 * x * 0.05
 >         im' = sinOsc AR 220 0 * decay2 (ck + im) 0.01 0.5 * 0.1
 >     in mce2 x' im'
+
+If one wants Phasor to output a signal with frequency freq oscilating
+between start and end, then the rate should be (end - start) * freq /
+sr where sr is the sampling rate.
+
+> g_05 =
+>     let f = mouseX KR 220 440 Exponential 0.1
+>         tr = impulse AR f 0
+>         sr = sampleRate
+>         x = phasor AR tr (two_pi * f / sr) 0 two_pi 0
+>     in sin x * 0.1
