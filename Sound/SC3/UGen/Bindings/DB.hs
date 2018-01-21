@@ -1153,7 +1153,7 @@ lastValue in_ diff = mkUGen Nothing [KR,AR] (Right [0]) "LastValue" [in_,diff] N
 --
 --  Latch [KR,AR] in=0.0 trig=0.0;    FILTER: TRUE
 latch :: UGen -> UGen -> UGen
-latch in_ trig_ = mkUGen Nothing [KR,AR] (Right [0]) "Latch" [in_,trig_] Nothing 1 (Special 0) NoId
+latch in_ trig_ = mkUGen Nothing [KR,AR] (Right [0,1]) "Latch" [in_,trig_] Nothing 1 (Special 0) NoId
 
 -- | Latoocarfian chaotic generator
 --

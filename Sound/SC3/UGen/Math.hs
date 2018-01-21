@@ -17,7 +17,7 @@ dinf = constant (9e8::Float)
 sc3_true :: Num n => n
 sc3_true = 1
 
--- | False is conventionally 0.
+-- | False is conventionally 0.  The test to determine true is @<= 0@.
 sc3_false :: Num n => n
 sc3_false = 0
 
@@ -142,8 +142,8 @@ class (Ord a,Num a) => OrdE a where
 
 instance OrdE Int
 instance OrdE Integer
-instance OrdE Int32 where
-instance OrdE Int64 where
+instance OrdE Int32
+instance OrdE Int64
 instance OrdE Float
 instance OrdE Double
 

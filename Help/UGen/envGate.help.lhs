@@ -2,7 +2,7 @@
 
 > import Sound.SC3 {- hsc3 -}
 
-Make envGate, giving the /default/ arguments, as used by envGate'.
+Make envGate, giving the /default/ arguments, as used by envGate_def.
 
 > g_01 =
 >     let k = control KR
@@ -18,14 +18,14 @@ Set fade time, then release gate.
 The same, but built in defaults.
 
 > g_02 =
->     let e = envGate'
+>     let e = envGate_def
 >     in lpf (saw AR 200) 600 * 0.1 * e
 
 Several envGate nodes can coexist in one synth, but if they are the
 same they're shared (as ever).
 
 > g_03 =
->     let e = envGate'
+>     let e = envGate_def
 >         s1 = lpf (saw AR 80) 600 * e
 >         s2 = rlpf (saw AR 200 * 0.5) (6000 * e + 60) 0.1 * e
 >     in mce2 s1 s2 * 0.1

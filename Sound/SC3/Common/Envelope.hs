@@ -263,13 +263,14 @@ env_delay (Envelope l t c rn ln os) d =
     in Envelope l' t' c' rn' ln' os
 
 -- | Connect releaseNode (or end) to first node of envelope.
-env_circle :: Fractional a => Envelope a -> a -> Envelope_Curve a -> Envelope a
-env_circle (Envelope l t c rn _ os) tc cc =
-    let z = 1 {- 1 - impulse KR 0 0 -}
-        n = length t
+-- z is a value that is first zero and thereafter one.
+-- tc & cc are time and curve from first to last.
+env_circle_z :: Fractional a => a -> a -> Envelope_Curve a -> Envelope a -> Envelope a
+env_circle_z z tc cc (Envelope l t c rn _ os) =
+    let n = length t
     in case rn of
          Nothing -> let l' = 0 : l ++ [0]
-                        t' = z * tc : t ++ [9e8]
+                        t' = z * tc : t ++ [1] -- inf (but drawings are poor)
                         c' = cc : take n (cycle c) ++ [EnvLin]
                         rn' = Just (n + 1)
                     in Envelope l' t' c' rn' (Just 0) os
@@ -278,6 +279,10 @@ env_circle (Envelope l t c rn _ os) tc cc =
                        c' = cc : take n (cycle c)
                        rn' = Just (i + 1)
                    in  Envelope l' t' c' rn' (Just 0) os
+
+-- | env_circle_z with cycle time of zero.
+env_circle_0 :: Fractional a => Envelope a -> Envelope a
+env_circle_0 = env_circle_z 1 0 EnvLin
 
 -- * Construct
 
@@ -477,3 +482,15 @@ envXYC xyc =
       (times,levels,curves) = unzip3 xyc_asc
       offset = times !! 0
   in Envelope levels (P.d_dx' times) (take (n - 1) curves) Nothing Nothing offset
+
+-- | Segments given as pairs of (time,level).
+--   The input is sorted by time before processing.
+--
+-- > envPairs [(0, 1), (3, 1.4), (2.1, 0.5)] EnvSin
+envPairs :: (Num n,Ord n) => [(n,n)] -> Envelope_Curve n -> Envelope n
+envPairs xy c =
+  let n = length xy
+      xy_asc = sortOn fst xy
+      (times,levels) = unzip xy_asc
+      offset = times !! 0
+  in Envelope levels (P.d_dx' times) (replicate (n - 1) c) Nothing Nothing offset

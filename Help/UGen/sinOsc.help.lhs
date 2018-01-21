@@ -47,7 +47,8 @@ the two frequencies."
 >     let f0 = 220
 >         f1 = 221.25
 >         d = abs (f1 - f0)
->     in sinOsc AR (mce2 f0 f1) 0 * 0.1 + impulse AR d 0 * 0.25
+>         i = impulse AR d 0 * max (sinOsc KR 0.05 0 * 0.1) 0
+>     in sinOsc AR (mce2 f0 f1) 0 * 0.1 + i
 
 "When two tones are sounded together, a tone of lower frequency is
 frequently heard. Such a tone is called a combination tone.  The most
@@ -55,7 +56,18 @@ commonly heard combination tone occurs at a frequency f2 - f1."
 
 > g_08 =
 >     let f1 = 300
->         f2 = 300 * (3/2)
+>         f2 = 300 * 3/2 {- 450 -}
 >         f = mce2 (mce2 f1 f2) (abs (f2 - f1))
 >         a = mce2 0.1 (max (sinOsc KR 0.05 0 * 0.1) 0)
 >     in sinOsc AR f 0 * a
+
+With frequency of zero, operates as table lookup variant of sin.
+
+> mk_phasor (l,r) f = phasor AR 0 ((r - l) * f / sampleRate) l r l
+
+> g_09 =
+>   let ph = mk_phasor (0,two_pi) 440
+>       o1 = sinOsc AR 440 0
+>       o2 = sinOsc AR 0 ph
+>       o3 = sin ph
+>   in mce2 o1 (xFade2 o2 o3 (lfTri KR 0.1 0) 1) * 0.1
