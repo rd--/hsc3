@@ -92,18 +92,19 @@ data Envelope a =
              ,env_curves :: [Envelope_Curve a] -- ^ Possibly empty curve set
              ,env_release_node :: Maybe Int -- ^ Maybe index to release node
              ,env_loop_node :: Maybe Int -- ^ Maybe index to loop node
+             ,env_offset :: a -- ^ An offset for all time values (IEnvGen only)
              }
     deriving (Eq,Show)
 
 -- | Apply /f/ to all /a/ at 'Envelope'.
 envelope_coerce :: (a -> b) -> Envelope a -> Envelope b
 envelope_coerce f e =
-    let Envelope l t c rn ln = e
-    in Envelope (map f l) (map f t) (map (env_curve_coerce f) c) rn ln
+    let Envelope l t c rn ln os = e
+    in Envelope (map f l) (map f t) (map (env_curve_coerce f) c) rn ln (f os)
 
 -- | Variant without release and loop node inputs (defaulting to nil).
-envelope :: [a] -> [a] -> [Envelope_Curve a] -> Envelope a
-envelope l t c = Envelope l t c Nothing Nothing
+envelope :: Num a => [a] -> [a] -> [Envelope_Curve a] -> Envelope a
+envelope l t c = Envelope l t c Nothing Nothing 0
 
 -- | Duration of 'Envelope', ie. 'sum' '.' 'env_times'.
 envelope_duration :: Num n => Envelope n -> n
@@ -164,7 +165,7 @@ envelope_normalise e =
         s' = filter (not . f) s
         (l,t,c) = pack_envelope_segments s'
     in case e of
-         Envelope _ _ _ Nothing Nothing -> Envelope l t c Nothing Nothing
+         Envelope _ _ _ Nothing Nothing  os -> Envelope l t c Nothing Nothing os
          _ -> error "envelope_normalise: has release or loop node..."
 
 -- | Get value for 'Envelope' at time /t/, or zero if /t/ is out of
@@ -216,7 +217,7 @@ envelope_curves e =
 -- > in envelope_sc3_array e == Just r
 envelope_sc3_array :: Num a => Envelope a -> Maybe [a]
 envelope_sc3_array e =
-    let Envelope l t _ rn ln = e
+    let Envelope l t _ rn ln _ = e
         n = length t
         n' = fromIntegral n
         rn' = fromIntegral (fromMaybe (-99) rn)
@@ -227,7 +228,7 @@ envelope_sc3_array e =
          l0:l' -> Just (l0 : n' : rn' : ln' : concat (zipWith3 f l' t c))
          _ -> Nothing
 
--- | @IEnvGen@ SC3 form of 'Envelope' data.  Offset not supported (zero).
+-- | @IEnvGen@ SC3 form of 'Envelope' data.
 --
 -- > let {l = [0,0.6,0.3,1.0,0]
 -- >     ;t = [0.1,0.02,0.4,1.1]
@@ -237,33 +238,33 @@ envelope_sc3_array e =
 -- > in envelope_sc3_ienvgen_array e == Just r
 envelope_sc3_ienvgen_array :: Num a => Envelope a -> Maybe [a]
 envelope_sc3_ienvgen_array e =
-    let Envelope l t _ _ _ = e
+    let Envelope l t _ _ _ os = e
         n = length t
         n' = fromIntegral n
         c = envelope_curves e
         f i j k = [j,env_curve_shape k,env_curve_value k,i]
     in case l of
-         l0:l' -> Just (0 : l0 : n' : sum t : concat (zipWith3 f l' t c))
+         l0:l' -> Just (os : l0 : n' : sum t : concat (zipWith3 f l' t c))
          _ -> Nothing
 
 -- | 'True' if 'env_release_node' is not 'Nothing'.
 env_is_sustained :: Envelope a -> Bool
 env_is_sustained = isJust . env_release_node
 
--- | Delay the onset of the envelope.
+-- | Delay the onset of the envelope (add initial segment).
 env_delay :: Envelope a -> a -> Envelope a
-env_delay (Envelope l t c rn ln) d =
+env_delay (Envelope l t c rn ln os) d =
     let (l0:_) = l
         l' = l0 : l
         t' = d : t
         c' = EnvLin : c
         rn' = fmap (+ 1) rn
         ln' = fmap (+ 1) ln
-    in Envelope l' t' c' rn' ln'
+    in Envelope l' t' c' rn' ln' os
 
 -- | Connect releaseNode (or end) to first node of envelope.
 env_circle :: Fractional a => Envelope a -> a -> Envelope_Curve a -> Envelope a
-env_circle (Envelope l t c rn _) tc cc =
+env_circle (Envelope l t c rn _ os) tc cc =
     let z = 1 {- 1 - impulse KR 0 0 -}
         n = length t
     in case rn of
@@ -271,12 +272,12 @@ env_circle (Envelope l t c rn _) tc cc =
                         t' = z * tc : t ++ [9e8]
                         c' = cc : take n (cycle c) ++ [EnvLin]
                         rn' = Just (n + 1)
-                    in Envelope l' t' c' rn' (Just 0)
+                    in Envelope l' t' c' rn' (Just 0) os
          Just i -> let l' = 0 : l
                        t' = z * tc : t
                        c' = cc : take n (cycle c)
                        rn' = Just (i + 1)
-                   in  Envelope l' t' c' rn' (Just 0)
+                   in  Envelope l' t' c' rn' (Just 0) os
 
 -- * Construct
 
@@ -314,13 +315,13 @@ envCoord :: Num a => [(a,a)] -> a -> a -> Envelope_Curve a -> Envelope a
 envCoord bp dur amp c =
     let l = map ((* amp) . snd) bp
         t = map (* dur) (tail (P.d_dx (map fst bp)))
-    in Envelope l t [c] Nothing Nothing
+    in Envelope l t [c] Nothing Nothing 0
 
 -- | Variant 'envPerc' with user specified 'Envelope_Curve a'.
 envPerc' :: Num a => a -> a -> a -> Envelope_Curve2 a -> Envelope a
 envPerc' atk rls lvl (c0,c1) =
     let c = [c0,c1]
-    in Envelope [0,lvl,0] [atk,rls] c Nothing Nothing
+    in Envelope [0,lvl,0] [atk,rls] c Nothing Nothing 0
 
 -- | Percussive envelope, with attack, release, level and curve
 --   inputs.
@@ -337,7 +338,7 @@ envTriangle :: Fractional a => a -> a -> Envelope a
 envTriangle dur lvl =
     let c = replicate 2 EnvLin
         d = replicate 2 (dur / 2)
-    in Envelope [0,lvl,0] d c Nothing Nothing
+    in Envelope [0,lvl,0] d c Nothing Nothing 0
 
 -- | Sine envelope, with duration and level inputs.
 --
@@ -347,7 +348,7 @@ envSine :: Fractional a => a -> a -> Envelope a
 envSine dur lvl =
     let c = replicate 2 EnvSin
         d = replicate 2 (dur / 2)
-    in Envelope [0,lvl,0] d c Nothing Nothing
+    in Envelope [0,lvl,0] d c Nothing Nothing 0
 
 -- | Parameters for LINEN envelopes.
 data LINEN a = LINEN {linen_attackTime :: a
@@ -362,7 +363,7 @@ envLinen_r (LINEN aT sT rT lv (c0,c1,c2)) =
     let l = [0,lv,lv,0]
         t = [aT,sT,rT]
         c = [c0,c1,c2]
-    in Envelope l t c Nothing Nothing
+    in Envelope l t c Nothing Nothing 0
 
 -- | Variant of 'envLinen' with user specified 'Envelope_Curve a'.
 envLinen' :: Num a => a -> a -> a -> a -> Envelope_Curve3 a -> Envelope a
@@ -406,7 +407,7 @@ envADSR_r (ADSR aT dT sL rT pL (c0,c1,c2) b) =
     let l = map (+ b) [0,pL,pL*sL,0]
         t = [aT,dT,rT]
         c = [c0,c1,c2]
-    in Envelope l t c (Just 2) Nothing
+    in Envelope l t c (Just 2) Nothing 0
 
 -- | Parameters for Roland type ADSSR envelopes.
 data ADSSR a = ADSSR {adssr_attackTime :: a
@@ -429,7 +430,7 @@ envADSSR_r (ADSSR t1 l1 t2 l2 t3 l3 t4 (c1,c2,c3,c4) b) =
     let l = map (+ b) [0,l1,l2,l3,0]
         t = [t1,t2,t3,t4]
         c = [c1,c2,c3,c4]
-    in Envelope l t c (Just 3) Nothing
+    in Envelope l t c (Just 3) Nothing 0
 
 -- | Parameters for ASR envelopes.
 data ASR a = ASR {asr_attackTime :: a
@@ -455,12 +456,24 @@ envASR_r (ASR aT sL rT (c0,c1)) =
     let l = [0,sL,0]
         t = [aT,rT]
         c' = [c0,c1]
-    in Envelope l t c' (Just 1) Nothing
+    in Envelope l t c' (Just 1) Nothing 0
 
 -- | All segments are horizontal lines.
-envStep :: [a] -> [a] -> Maybe Int -> Maybe Int -> Envelope a
+envStep :: Num a => [a] -> [a] -> Maybe Int -> Maybe Int -> Envelope a
 envStep levels times releaseNode loopNode =
     if length levels /= length times
     then error "envStep: levels and times must have same size"
     else let levels' = head levels : levels
-         in Envelope levels' times [EnvStep] releaseNode loopNode
+         in Envelope levels' times [EnvStep] releaseNode loopNode 0
+
+-- | Segments given as triples of (time,level,curve).  The final curve
+-- is ignored. The input is sorted by time before processing.
+--
+-- > envXYC [(0, 1, EnvSin), (3, 1.4, EnvLin), (2.1, 0.5, EnvLin)]
+envXYC :: (Num n,Ord n) => [(n,n,Envelope_Curve n)] -> Envelope n
+envXYC xyc =
+  let n = length xyc
+      xyc_asc = sortOn (\(x,_,_) -> x) xyc
+      (times,levels,curves) = unzip3 xyc_asc
+      offset = times !! 0
+  in Envelope levels (P.d_dx' times) (take (n - 1) curves) Nothing Nothing offset

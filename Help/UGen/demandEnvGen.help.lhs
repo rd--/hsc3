@@ -93,3 +93,19 @@ the behavior is odd if the curve is zero (ie. flat segments).
 >         dur = dbufrd 'δ' b (dseries 'ε' 5 1 2) Loop
 >         e = demandEnvGen KR lvl dur 1 0 1 1 1 0 1 RemoveSynth
 >     in sinOsc AR (midiCPS e) 0 * 0.1
+
+lfNoise1
+
+> g_09 =
+>     let y = mouseY KR 0.5 20 Linear 0.2
+>         lvl = dwhite 'β' dinf (-0.1) 0.1
+>         dur = sampleDur * y
+>     in demandEnvGen AR lvl dur 5 (-4) 1 1 1 0 1 RemoveSynth
+
+lfBrownNoise
+
+> g_10 =
+>     let y = mouseY KR 1 100 Exponential 0.2
+>         lvl = dbrown 'β' dinf (-0.1) 0.1 0.1
+>         dur = sampleDur * y
+>     in demandEnvGen AR lvl dur 1 0 1 1 1 0 1 RemoveSynth

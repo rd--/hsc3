@@ -18,6 +18,8 @@
     import Sound.SC3.Plot {- hsc3-plot -}
     plotEnvelope e_01
 
+Language access
+
 > e_02 =
 >     let e = envLinen 0 1 0 1
 >     in (envelope_duration e
@@ -28,3 +30,5 @@
 >        ,envelope_at e 0
 >        ,envelope_at e 1
 >        ,envelope_render 10 e)
+
+    print e_02

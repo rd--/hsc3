@@ -219,7 +219,7 @@ makeFadeEnv fadeTime =
     let dt = control KR "fadeTime" (realToFrac fadeTime)
         gate_ = control KR "gate" 1
         startVal = dt <=* 0
-        env = Envelope [startVal,1,0] [1,1] [EnvLin,EnvLin] (Just 1) Nothing
+        env = Envelope [startVal,1,0] [1,1] [EnvLin,EnvLin] (Just 1) Nothing 0
     in envGen KR gate_ 1 0 dt RemoveSynth env
 
 -- | Count 'mce' channels.

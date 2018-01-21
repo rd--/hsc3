@@ -210,6 +210,11 @@ envelope_to_ugen =
     let err = error "envGen: bad Envelope"
     in mce . fromMaybe err . E.envelope_sc3_array
 
+envelope_to_ienvgen_ugen :: E.Envelope UGen -> UGen
+envelope_to_ienvgen_ugen =
+    let err = error "envGen: bad Envelope"
+    in mce . fromMaybe err . E.envelope_sc3_ienvgen_array
+
 -- * Bitwise
 
 bitAnd :: UGen -> UGen -> UGen

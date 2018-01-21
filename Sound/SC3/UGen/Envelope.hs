@@ -23,7 +23,7 @@ envTrapezoid = envTrapezoid_f ((<=*),(>=*))
 envGate :: UGen -> UGen -> UGen -> DoneAction -> Envelope_Curve UGen -> UGen
 envGate level gate_ fadeTime doneAction curve =
     let startVal = fadeTime <=* 0
-        e = Envelope [startVal,1,0] [1,1] [curve] (Just 1) Nothing
+        e = Envelope [startVal,1,0] [1,1] [curve] (Just 1) Nothing 0
     in envGen KR gate_ level 0 fadeTime doneAction e
 
 -- | Variant with default values for all inputs.  @gate@ and

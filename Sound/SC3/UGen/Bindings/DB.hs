@@ -889,7 +889,7 @@ hilbert in_ = mkUGen Nothing [AR] (Right [0]) "Hilbert" [in_] Nothing 2 (Special
 --
 --  IEnvGen [KR,AR] index=0.0 *envelope=0.0;    MCE, REORDERS INPUTS: [1,0], ENUMERATION INPUTS: 1=Envelope UGen
 iEnvGen :: Rate -> UGen -> Envelope UGen -> UGen
-iEnvGen rate index_ envelope_ = mkUGen Nothing [KR,AR] (Left rate) "IEnvGen" [index_] (Just (envelope_to_ugen envelope_)) 1 (Special 0) NoId
+iEnvGen rate index_ envelope_ = mkUGen Nothing [KR,AR] (Left rate) "IEnvGen" [index_] (Just (envelope_to_ienvgen_ugen envelope_)) 1 (Special 0) NoId
 
 -- | Inverse Fast Fourier Transform
 --
