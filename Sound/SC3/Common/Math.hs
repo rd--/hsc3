@@ -130,7 +130,7 @@ wrap_hs (i,j) n =
        then n
        else n - r * sc3_floor ((n - i) / r)
 
--- | Variant of 'wrap'' with @SC3@ argument ordering.
+-- | Variant of 'wrap_hs' with @SC3@ argument ordering.
 --
 -- > map (\n -> sc3_wrap n 5 10) [3..12] == map (wrap_hs (5,10)) [3..12]
 sc3_wrap :: RealFrac n => n -> n -> n -> n

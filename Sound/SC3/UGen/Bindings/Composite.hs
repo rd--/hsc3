@@ -7,9 +7,11 @@ import qualified Data.List.Split as Split {- split -}
 import Data.Maybe {- base -}
 
 import Sound.SC3.Common.Envelope
+import Sound.SC3.Common.Math
 import Sound.SC3.Common.Math.Filter.BEQ
 
 import Sound.SC3.UGen.Bindings.DB
+import qualified Sound.SC3.UGen.Bindings.DB.External as E
 import Sound.SC3.UGen.Bindings.HW
 import Sound.SC3.UGen.Bindings.Monad
 import Sound.SC3.UGen.Enum
@@ -486,3 +488,11 @@ osc1 :: Rate -> UGen -> UGen -> DoneAction -> UGen
 osc1 rt buf dur doneAction =
     let ph = line rt 0 (bufFrames IR buf - 1) dur doneAction
     in bufRd 1 rt buf ph NoLoop LinearInterpolation
+
+-- * External
+
+pulseDPW :: Rate -> UGen -> UGen -> UGen
+pulseDPW rt freq width =
+  let o1 = E.sawDPW rt freq 0
+      o2 = E.sawDPW rt freq (wrap_hs (-1,1) (width+width))
+  in o1 - o2
