@@ -4,7 +4,7 @@
 > import Sound.SC3 {- hsc3 -}
 > import qualified Sound.SC3.UGen.Bindings.DB.External as E {- hsc3 -}
 
-> import qualified Sound.SC3.UGen.External.RDU as RDU {- sc3-rdu -}
+> import qualified Sound.SC3.UGen.Bindings.DB.RDU as RDU {- sc3-rdu -}
 
 distortion creeps in under 200Hz
 
