@@ -7,42 +7,48 @@ module Sound.SC3.UGen.Name where
 import Data.Char {- base -}
 import Data.List.Split {- split -}
 
-import qualified Sound.SC3.Common.Prelude as Common {- hsc3 -}
 import Sound.SC3.UGen.Rate {- hsc3 -}
+
+{-
+import qualified Sound.SC3.Common.Prelude as Common {- hsc3 -}
 
 is_uc_or_num :: Char -> Bool
 is_uc_or_num c = isUpper c || isDigit c
 
 is_lc_or_num :: Char -> Bool
 is_lc_or_num c = isLower c || isDigit c
+-}
 
--- | Find SC3 name edges.
+-- | Find all SC3 name edges. Edges occur at non lower-case letters.
+sc3_name_edges_plain :: String -> [Bool]
+sc3_name_edges_plain = map (not . isLower)
+
+-- | Find non-initial SC3 name edges.
 --
 -- > sc3_name_edges "SinOsc" == [False,False,False,True,False,False]
+-- > sc3_name_edges "FFT" == [False,False,False]
 -- > sc3_name_edges "DFM1" == [False,False,False,False]
 -- > sc3_name_edges "PV_Add" == [False,False,False,True,False,False]
--- > sc3_name_edges "A2K" == [False,False,True]
--- > sc3_name_edges "lag2UD" == [False,False,False,False,True,True]
+-- > sc3_name_edges "A2K" == [False,False,False]
+-- > sc3_name_edges "Lag2UD" == [False,False,False,True,True,True]
 sc3_name_edges :: String -> [Bool]
-sc3_name_edges =
-    let f t =
-          case t of
-            (Nothing,_,_) -> False
-            (Just '_',_,_) -> True
-            (Just p,q,Just r) -> (is_lc_or_num p && isUpper q) || (isUpper p && isUpper q && is_lc_or_num r)
-            (_,q,Nothing) -> isUpper q
-    in map f . Common.pcn_triples
+sc3_name_edges s =
+  let (p,q) = span (== True) (sc3_name_edges_plain s)
+      n = length p
+  in if n < 2 || null q
+     then replicate n False ++ q
+     else replicate (n - 1) False ++ [True] ++ q
 
 -- | Convert from SC3 name to HS style name.
 --
 -- > s = words "SinOsc LFSaw FFT PV_Add AllpassN BHiPass BinaryOpUGen HPZ1 RLPF TGrains DFM1 FBSineC A2K Lag2UD IIRFilter FMGrainB"
--- > l = words "sinOsc lfSaw fft pv_Add allpassN bHiPass binaryOpUGen hpz1 rlpf tGrains dfm1 fbSineC a2k lag2UD iirFilter"
+-- > l = words "sinOsc lfSaw fft pv_Add allpassN bHiPass binaryOpUGen hpz1 rlpf tGrains dfm1 fbSineC a2k lag2UD iirFilter fmGrainB"
 -- > map sc3_name_to_hs_name s == l
 sc3_name_to_hs_name :: String -> String
 sc3_name_to_hs_name s =
     let f (c,e) = if e then toUpper c else c
         s_lc = map toLower s
-    in if all is_uc_or_num s then s_lc else map f (zip s_lc (sc3_name_edges s))
+    in map f (zip s_lc (sc3_name_edges s))
 
 -- | Convert from SC3 name to Lisp style name.
 --

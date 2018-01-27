@@ -64,7 +64,7 @@
   (interactive)
   (hsc3-send-string
    (format
-    "Sound.SC3.viewSC3Help (Sound.SC3.toSC3Name \"%s\")"
+    "Sound.SC3.viewSC3Help (Sound.SC3.UGen.DB.ugenSC3Name \"%s\")"
     (thing-at-point 'symbol))))
 
 (defun hsc3-sc3-server-help ()
