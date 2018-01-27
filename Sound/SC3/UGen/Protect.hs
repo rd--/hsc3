@@ -7,6 +7,7 @@ import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
+{-
 -- | Collect Ids at UGen graph
 ugenIds :: UGen -> [UGenId]
 ugenIds =
@@ -14,37 +15,36 @@ ugenIds =
                 Primitive_U p -> [ugenId p]
                 _ -> []
     in ugenFoldr ((++) . f) []
+-}
 
--- | Apply /f/ at 'UId', or no-op at 'NoId'.
-atUGenId :: (Int -> Int) -> UGenId -> UGenId
-atUGenId f z =
+edit_ugenid :: ID a => a -> UGenId -> UGenId
+edit_ugenid e z =
     case z of
       NoId -> NoId
-      UId i -> UId (f i)
+      UId i -> UId (resolveID (e,i))
 
--- | Add 'idHash' of /e/ to all 'Primitive_U' at /u/.
+-- | 'edit_ugenid' of /e/ at all 'Primitive_U' of /u/.
 uprotect :: ID a => a -> UGen -> UGen
 uprotect e =
-    let e' = resolveID e
-        f u = case u of
-                Primitive_U p -> Primitive_U (p {ugenId = atUGenId (+ e') (ugenId p)})
+    let f u = case u of
+                Primitive_U p -> Primitive_U (p {ugenId = edit_ugenid e (ugenId p)})
                 _ -> u
     in ugenTraverse f
 
 -- | Variant of 'uprotect' with subsequent identifiers derived by
 -- incrementing initial identifier.
-uprotect' :: ID a => a -> [UGen] -> [UGen]
-uprotect' e =
+uprotect_seq :: ID a => a -> [UGen] -> [UGen]
+uprotect_seq e =
     let n = map (+ resolveID e) [1..]
     in zipWith uprotect n
 
--- | Make /n/ parallel instances of 'UGen' with protected identifiers.
-uclone' :: ID a => a -> Int -> UGen -> [UGen]
-uclone' e n = uprotect' e . replicate n
+-- | Make /n/ instances of 'UGen' with protected identifiers.
+uclone_seq :: ID a => a -> Int -> UGen -> [UGen]
+uclone_seq e n = uprotect_seq e . replicate n
 
--- | 'mce' variant of 'uclone''.
+-- | 'mce' of 'uclone_seq'.
 uclone :: ID a => a -> Int -> UGen -> UGen
-uclone e n = mce . uclone' e n
+uclone e n = mce . uclone_seq e n
 
 -- | Left to right UGen function composition with 'UGenId' protection.
 ucompose :: ID a => a -> [UGen -> UGen] -> UGen -> UGen

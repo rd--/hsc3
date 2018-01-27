@@ -3,6 +3,10 @@
 
 > import Sound.SC3 {- hsc3 -}
 
+> g_00 =
+>   let x = mouseX KR 0 1 Linear 0.2
+>   in varSaw AR 220 0 x * 0.1
+
 > g_01 =
 >     let f = lfPulse KR (mce2 3 3.03) 0 0.3 * 200 + 200
 >         w = linLin (lfTri KR 1 0) (-1) 1 0 1
