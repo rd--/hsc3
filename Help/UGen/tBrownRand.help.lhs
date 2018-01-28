@@ -17,3 +17,11 @@
 >         o = sinOsc AR f 0
 >         l = tBrownRand 'γ' (-1) 1 1 4 t
 >     in pan2 o l 0.1
+
+audio rate noise
+
+> g_03 =
+>   let x = mouseX KR 500 5000 Exponential 0.2
+>       y = mouseY KR 10 500 Exponential 0.2
+>       t = dust 'α' AR x
+>   in lag (tBrownRand 'β' (-1) 1 0.2 0 t) (y / 48000)
