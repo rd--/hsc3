@@ -99,6 +99,10 @@ dynKlank i fs fo ds s =
         gen _ = 0
     in gen (mceChannels s)
 
+-- | 'linExp' with input range of (-1,1).
+exprange :: UGen -> UGen -> UGen -> UGen
+exprange l r s = linExp s (-1) 1 l r
+
 -- | Variant FFT constructor with default values for hop size (0.5),
 -- window type (0), active status (1) and window size (0).
 fft' :: UGen -> UGen -> UGen

@@ -2,10 +2,18 @@
     > Sound.SC3.UGen.DB.ugenSummary "Slew"
 
 > import Sound.SC3 {- hsc3 -}
->
+
 > g_01 = let z = lfPulse AR 800 0 0.5 * 0.1 in mce2 z (slew z 4000 4000)
->
+
 > g_02 = let z = saw AR 800 * 0.1 in mce2 z (slew z 400 400)
+
+> f_01 s =
+>   let x = mouseX KR 200 12000 Exponential 0.2
+>       y = mouseY KR 200 12000 Exponential 0.2
+>   in slew s x y * 0.15
+
+> g_03 = f_01 (0 - saw AR 440)
+> g_04 = f_01 (lfPulse AR 800 0 0.5)
 
 Drawings
 
