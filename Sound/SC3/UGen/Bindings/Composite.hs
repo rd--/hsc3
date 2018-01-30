@@ -446,6 +446,15 @@ tWChooseM t a w n = do
 unpackFFT :: UGen -> UGen -> UGen -> UGen -> UGen -> [UGen]
 unpackFFT c nf from to w = map (\i -> unpack1FFT c nf i w) [from .. to]
 
+-- | VarLag in terms of envGen
+varLag_env :: UGen -> UGen -> Envelope_Curve UGen -> UGen -> UGen
+varLag_env in_ time curve start =
+  let rt = rateOf in_
+      e = Envelope [start,in_] [time] [curve] Nothing Nothing 0
+      time_ch = if rateOf time == IR then 0 else changed time 0
+      tr = changed in_ 0 + time_ch + impulse rt 0 0
+  in envGen rt tr 1 0 1 DoNothing e
+
 -- | If @z@ isn't a sink node route to an @out@ node writing to @bus@.
 -- If @fadeTime@ is given multiply by 'makeFadeEnv'.
 --

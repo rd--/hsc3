@@ -28,3 +28,7 @@ as signal filter
 >   let s = varSaw AR 220 0 (range 0 1 (sinOsc KR 0.25 0))
 >   in f_02 s * 0.1
 
+> g_06 =
+>   let x = mouseX KR 0.0 (1/100) Linear 0.2
+>       y = mouseY KR 0.0 (3/100) Linear 0.2
+>   in lagUD (lfPulse AR 50 0 0.25) x y * 0.2

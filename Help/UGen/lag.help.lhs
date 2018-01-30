@@ -12,3 +12,5 @@
 >     in sinOsc AR (220 + (lag n 1 * 220)) 0 * (lag n 2 * 0.1)
 
 > g_03 = lag (impulse AR 100 0) (mouseX KR 0.0 0.01 Linear 0.2)
+
+> g_04 = lag (lfPulse AR 50 0 0.5) (mouseX KR 0.0 (1/50) Linear 0.2) * 0.2
