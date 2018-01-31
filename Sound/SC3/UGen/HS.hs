@@ -185,6 +185,9 @@ lag_f sr t x y1 =
 lag :: Floating t => t -> F_ST1 t (t,t) t
 lag sr ((i,t),st) = let r = lag_f sr t i st in (r,r)
 
+slope :: Num t => t -> F_ST1 t t t
+slope sr = fir1 (\n z0 -> (n - z0) * sr)
+
 latch :: F_ST1 t (t,Bool) t
 latch ((n,b),y1) = let r = if b then n else y1 in (r,r)
 
@@ -215,6 +218,9 @@ l_apply_f_st1 f st xs =
 
 l_lag :: Floating t => t -> [t] -> [t] -> [t]
 l_lag sr i t = l_apply_f_st1 (lag sr) 0 (zip i t)
+
+l_slope :: Floating t => t -> [t] -> [t]
+l_slope sr i = l_apply_f_st1 (slope sr) 0 i
 
 -- > let rp = repeat
 -- > take 10 (l_phasor (rp False) (rp 1) (rp 0) (rp 4) (rp 0)) == [0,1,2,3,0,1,2,3,0,1]
