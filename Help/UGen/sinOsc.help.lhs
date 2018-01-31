@@ -5,17 +5,25 @@
 
 Fixed frequency
 
-> g_01 = sinOsc AR (midiCPS 69) 0 * 0.25
+> g_00 = sinOsc AR 440 0 * 0.25
+
+Control input for frequency
+
+> g_01 = sinOsc AR (midiCPS (control KR "mnn" 69)) 0 * 0.25
+
+    import Sound.OSC {- hosc -}
+    withSC3 (sendMessage (n_set1 (-1) "mnn" 64))
 
 Modulate freq
 
-> g_02 = sinOsc AR (xLine KR 2000 200 9 RemoveSynth) 0 * 0.5
+> g_02 = sinOsc AR (xLine KR 2000 200 1 RemoveSynth) 0 * 0.5
 
 Modulate freq
 
 > g_03 =
->     let f = sinOsc AR (xLine KR 1 1000 9 RemoveSynth) 0 * 200 + 800
->     in sinOsc AR f 0 * 0.1
+>     let f1 = xLine KR 1 1000 9 RemoveSynth
+>         f2 = sinOsc AR f1 0 * 200 + 800 -- (-1,1) ; (-200,200) ; (600,1000)
+>     in sinOsc AR f2 0 * 0.25
 
 Modulate phase
 

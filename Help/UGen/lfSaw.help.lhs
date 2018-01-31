@@ -34,6 +34,10 @@ cross-fade from sum to lfSaw.
 >         o2 = lfSaw AR x 0 * e
 >     in mce2 o1 o2 * y
 
+as phasor input to sin function
+
+> g_05 = sin (range 0 two_pi (lfSaw AR 440 0)) * 0.2
+
 Drawings
 
     > import Sound.SC3.Plot {- hsc3-plot -}

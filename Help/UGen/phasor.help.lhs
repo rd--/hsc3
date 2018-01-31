@@ -64,11 +64,19 @@ Phasor as impulse with reset
 
 If one wants Phasor to output a signal with frequency freq oscilating
 between start and end, then the rate should be (end - start) * freq /
-sr where sr is the sampling rate.
+sr where sr is the sampling rate.  F32 precision is an issue.
 
 > g_05 =
->     let f = mouseX KR 220 440 Exponential 0.1
+>     let f = mouseX KR 220 880 Exponential 0.1
 >         tr = impulse AR f 0
 >         sr = sampleRate
 >         x = phasor AR tr (two_pi * f / sr) 0 two_pi 0
 >     in sin x * 0.1
+
+phasor as lfSaw, but with precision issues
+
+> g_06 = phasor AR (impulse AR 440 0) (2 * 440 / sampleRate) (-1) 1 0 * 0.2
+
+> g_07 =
+>   let ph = phasor AR (impulse AR 440 0) (two_pi * 440 / sampleRate) 0 two_pi 0
+>   in sin ph * 0.2
