@@ -1,4 +1,10 @@
--- | Request and display status information from the synthesis server.
+{- | Request and display status information from the synthesis server.
+
+\/status messages receive \/status.reply messages.
+
+\/g_queryTree messages recieve \/g_queryTree.reply messages.
+
+-}
 module Sound.SC3.Server.Status where
 
 import qualified Data.ByteString.Char8 as C {- bytestring -}
@@ -7,6 +13,8 @@ import Data.Maybe {- base -}
 import qualified Data.Tree as T {- containers -}
 
 import Sound.OSC.Datum {- hosc -}
+
+-- * Status
 
 -- | Get /n/th field of status as 'Floating'.
 extractStatusField :: Floating n => Int -> [Datum] -> n
@@ -75,7 +83,7 @@ queryTree_ctl (p,q) =
                 _ -> err "float/string" d
     in (f p,g q)
 
-{- | If /rc/ is 'True' then 'Query_Ctl' data is expected (ie. flag was set at @/g_queryTree@).
+{- | If /rc/ is 'True' then 'Query_Ctl' data is expected (ie. flag was set at @\/g_queryTree@).
 /k/ is the synth-id, and /nm/ the name.
 
 > let d = [int32 1,string "freq",float 440]
@@ -114,14 +122,7 @@ queryTree_child rc d =
           queryTree_group rc (fromIntegral gid) (fromIntegral nc) d'
       _ -> error "queryTree_child"
 
--- | Parse result of 'g_queryTree'.
---
--- > let r = [int32 1,int32 0,int32 2,int32 1,int32 1
--- >         ,int32 100,int32 1
--- >         ,int32 1000,int32 (-1),string "saw"
--- >         ,int32 1,string "freq",float 440.0
--- >         ,int32 2,int32 0]
--- > in queryTree r
+-- | Parse result of ' g_queryTree '.
 queryTree :: [Datum] -> Query_Node
 queryTree d =
     case d of
@@ -142,17 +143,6 @@ queryNode_to_group_seq nd =
       Query_Synth _ _ _ -> []
 
 -- | Transform 'Query_Node' to 'T.Tree'.
---
--- > putStrLn (T.drawTree (fmap query_node_pp (queryTree_rt (queryTree r))))
--- > > 0
--- > > |
--- > > +- 1
--- > > |  |
--- > > |  `- 100
--- > > |     |
--- > > |     `- (1000,"saw","freq:440.0")
--- > > |
--- > > `- 2
 queryTree_rt :: Query_Node -> T.Tree Query_Node
 queryTree_rt n =
     case n of

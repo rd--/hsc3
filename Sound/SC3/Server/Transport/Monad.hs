@@ -5,7 +5,8 @@ import Control.Monad {- base -}
 import Data.List {- base -}
 import Data.List.Split {- split -}
 import Data.Maybe {- base -}
-import Safe {- safe -}
+import qualified Data.Tree as Tree {- containers -}
+import qualified Safe {- safe -}
 
 import Sound.OSC {- hosc -}
 
@@ -211,7 +212,7 @@ b_fetch n b = do
 --
 -- > withSC3 (b_fetch1 512 123456789)
 b_fetch1 :: DuplexOSC m => Int -> Int -> m [Double]
-b_fetch1 n b = liftM (headNote "b_fetch1: no data") (b_fetch n b)
+b_fetch1 n b = liftM (Safe.headNote "b_fetch1: no data") (b_fetch n b)
 
 -- | Combination of 'b_query1_unpack' and 'b_fetch'.
 b_fetch_hdr :: Transport m => Int -> Int -> m ((Int,Int,Int,Double),[[Double]])
@@ -265,6 +266,8 @@ g_queryTree1_unpack n = do
 -- * Status
 
 -- | Collect server status information.
+--
+-- > withSC3 serverStatus >>= mapM putStrLn
 serverStatus :: DuplexOSC m => m [String]
 serverStatus = liftM statusFormat serverStatusData
 
@@ -285,3 +288,14 @@ serverStatusData :: DuplexOSC m => m [Datum]
 serverStatusData = do
   sendMessage status
   waitDatum "/status.reply"
+
+-- * Tree
+
+-- | Collect server node tree information.
+--
+-- > withSC3 serverTree >>= mapM_ putStrLn
+serverTree :: Transport m => m [String]
+serverTree = do
+  qt <- g_queryTree1_unpack 0
+  let tr = queryTree_rt qt
+  return (["***** SuperCollider Server Tree *****",Tree.drawTree (fmap query_node_pp tr)])
