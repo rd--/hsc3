@@ -6,9 +6,9 @@ Description:       Haskell client for the SuperCollider synthesis server,
                    .
                    For installation and configuration see the Tutorial at
                    <http://rd.slavepianos.org/t/hsc3-texts>.
-License:           GPL
+License:           GPL-3
 Category:          Sound
-Copyright:         (c) Rohan Drape and others, 2005-2017
+Copyright:         (c) Rohan Drape and others, 2005-2018
 Author:            Rohan Drape
 Maintainer:        rd@slavepianos.org
 Stability:         Experimental
