@@ -1,7 +1,6 @@
 -- | Recording @scsynth@.
 module Sound.SC3.Server.Recorder where
 
-import Data.Default {- data-default -}
 import Sound.OSC {- hosc -}
 
 import Sound.SC3.Server.Command
@@ -38,8 +37,6 @@ default_SC3_Recorder =
                  ,rec_node_id = 2001
                  ,rec_group_id = 0
                  ,rec_dur = Just 60}
-
-instance Default SC3_Recorder where def = default_SC3_Recorder
 
 -- | The name indicates the number of channels.
 rec_synthdef_nm :: Int -> String

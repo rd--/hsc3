@@ -29,7 +29,6 @@ Library
                    binary,
                    bytestring,
                    containers,
-                   data-default,
                    data-ordlist,
                    directory,
                    filepath,

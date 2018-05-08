@@ -3,7 +3,6 @@
 module Sound.SC3.Server.Synthdef where
 
 import qualified Data.ByteString.Lazy as L {- bytestring -}
-import Data.Default {- data-default -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
 import System.FilePath {- filepath -}
@@ -19,8 +18,6 @@ import Sound.SC3.UGen.UGen
 data Synthdef = Synthdef {synthdefName :: String
                          ,synthdefUGen :: UGen}
                 deriving (Eq,Show)
-
-instance Default Synthdef where def = defaultSynthdef
 
 -- | Lift a 'UGen' graph into a 'Synthdef'.
 synthdef :: String -> UGen -> Synthdef
