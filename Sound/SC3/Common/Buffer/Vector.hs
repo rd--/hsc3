@@ -20,6 +20,15 @@ clipAt ix c =
 blendAt :: RealFrac a => a -> V.Vector a -> a
 blendAt = C.blendAtBy clipAt
 
+-- | 'C.from_wavetable'
+--
+-- > from_wavetable (V.fromList [-0.5,0.5,0,0.5,1.5,-0.5,1,-0.5])
+from_wavetable :: Num a => V.Vector a -> V.Vector a
+from_wavetable wt =
+  let n = V.length wt
+      f k = let k2 = k * 2 in (wt V.! k2) + (wt V.! (k2 + 1))
+  in V.generate (n `div` 2) f
+
 -- | 'C.resamp1'.
 --
 -- > resamp1 12 (V.fromList [1,2,3,4])
