@@ -6,17 +6,17 @@
 
 Allocate and fill tables 0 to 7.
 
-> square a = a * a
-> bf = [Normalise,Wavetable,Clear]
+> b_flags = [Normalise,Wavetable,Clear]
 > gen_harm i =
->     let n = square (i + 1)
+>     let square a = a * a
+>         n = square (fromIntegral i + 1)
 >         f j = square ((n - j) / n)
 >     in map f [0 .. n - 1]
-> gen_setup i =
->     let i' = fromIntegral i
->     in (b_alloc i 1024 1,b_gen_sine1 i bf (gen_harm i'))
+> gen_setup i = (b_alloc i 1024 1,b_gen_sine1 i b_flags (gen_harm i))
 > run_setup (p,q) = (async p >> sendMessage q)
 
+    import Sound.SC3.Plot {- hsc3-plot -}
+    plotImpulses [gen_harm 7]
     withSC3 (mapM_ (run_setup . gen_setup) [0 .. 7])
 
 Oscillator at buffers 0 through 7, mouse selects buffer.

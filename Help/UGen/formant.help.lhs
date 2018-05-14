@@ -3,6 +3,10 @@
 
 > import Sound.SC3
 
+Default values
+
+> g_00 = formant AR 440 1760 880 * 0.125
+
 Modulate fundamental frequency, formant frequency stays constant.
 
 > g_01 = formant AR (xLine KR 400 1000 8 RemoveSynth) 2000 800 * 0.125

@@ -66,7 +66,7 @@
 >     ,(K_param "freq0",pseq [pbrown 'α' 28 31 1 32,pbrown 'β' 23 26 3 32] inf)
 >     ,(K_param "freq1",pseq [pn 10 16,pn 11 16] inf)]
 
-    paudition (pbind p_03)
+    paudition (pbind p_02)
 
 > p_03 =
 >     [(K_instr,psynth ati_syn)
