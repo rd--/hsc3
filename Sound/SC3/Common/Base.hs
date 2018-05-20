@@ -1,4 +1,4 @@
-module Sound.SC3.Common.Prelude where
+module Sound.SC3.Common.Base where
 
 import Data.Char {- base -}
 import Data.List {- base -}
@@ -44,23 +44,43 @@ parse_enum cr nm =
 
 -- * LIST
 
--- > d_dx [0,1,3,6] == [0,1,2,3]
+-- |
+
+{- |SequenceableCollection.differentiate
+
+> > [3,4,1,1].differentiate == [3,1,-3,0]
+
+> d_dx [3,4,1,1] == [3,1,-3,0]
+> d_dx [0,1,3,6] == [0,1,2,3]
+-}
 d_dx :: (Num a) => [a] -> [a]
 d_dx l = zipWith (-) l (0:l)
 
--- > dx_d (d_dx [0,1,3,6]) == [0,1,3,6]
--- > dx_d [0.5,0.5] == [0.5,1]
+{- | SequenceableCollection.integrate
+
+> > [3,4,1,1].integrate == [3,7,8,9]
+
+> dx_d [3,4,1,1] == [3,7,8,9]
+> dx_d (d_dx [0,1,3,6]) == [0,1,3,6]
+> dx_d [0.5,0.5] == [0.5,1]
+-}
 dx_d :: Num n => [n] -> [n]
 dx_d = scanl1 (+)
 
+-- | Variant that does not prepend zero to input, ie. 'tail' of 'd_dx'.
+--
+-- > d_dx' [3,4,1,1] == [1,-3,0]
 -- > d_dx' [0,1,3,6] == [1,2,3]
 d_dx' :: Num n => [n] -> [n]
-d_dx' l = zipWith (-) (tail l) l
+d_dx' = tail . d_dx
 
+-- | Variant pre-prending zero to output.
+--
+-- > dx_d' [3,4,1,1] == [0,3,7,8,9]
 -- > dx_d' (d_dx' [0,1,3,6]) == [0,1,3,6]
 -- > dx_d' [0.5,0.5] == [0,0.5,1]
 dx_d' :: Num n => [n] -> [n]
-dx_d' = (0 :) . scanl1 (+)
+dx_d' = (0 :) . dx_d
 
 -- | 'lookup' with equality function.
 lookup_by :: (a -> a -> Bool) -> a -> [(a,b)] -> Maybe b

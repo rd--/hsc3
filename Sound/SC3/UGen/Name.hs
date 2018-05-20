@@ -10,7 +10,7 @@ import Data.List.Split {- split -}
 import Sound.SC3.UGen.Rate {- hsc3 -}
 
 {-
-import qualified Sound.SC3.Common.Prelude as Common {- hsc3 -}
+import qualified Sound.SC3.Common.Base {- hsc3 -}
 
 is_uc_or_num :: Char -> Bool
 is_uc_or_num c = isUpper c || isDigit c

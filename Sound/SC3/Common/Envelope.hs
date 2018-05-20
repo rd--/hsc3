@@ -4,7 +4,7 @@ module Sound.SC3.Common.Envelope where
 import Data.List {- base -}
 import Data.Maybe {- base -}
 
-import qualified Sound.SC3.Common.Prelude as P
+import qualified Sound.SC3.Common.Base as B
 import qualified Sound.SC3.Common.Math.Interpolate as I
 
 -- * Curve
@@ -22,13 +22,13 @@ data Envelope_Curve a = EnvStep
                         deriving (Eq, Show)
 
 -- | Envelope curve pair.
-type Envelope_Curve2 a = P.T2 (Envelope_Curve a)
+type Envelope_Curve2 a = B.T2 (Envelope_Curve a)
 
 -- | Envelope curve triple.
-type Envelope_Curve3 a = P.T3 (Envelope_Curve a)
+type Envelope_Curve3 a = B.T3 (Envelope_Curve a)
 
 -- | Envelope curve quadruple.
-type Envelope_Curve4 a = P.T4 (Envelope_Curve a)
+type Envelope_Curve4 a = B.T4 (Envelope_Curve a)
 
 -- | Convert 'Envelope_Curve' to shape value.
 --
@@ -117,7 +117,7 @@ envelope_n_segments = genericLength . env_times
 -- | Determine which envelope segment a given time /t/ falls in.
 envelope_segment_ix :: (Ord a, Num a) => Envelope a -> a -> Maybe Int
 envelope_segment_ix e t =
-    let d = P.dx_d (env_times e)
+    let d = B.dx_d (env_times e)
     in findIndex (>= t) d
 
 -- | A set of start time, start level, end time, end level and curve.
@@ -130,7 +130,7 @@ envelope_segment e i =
         t = env_times e
         x0 = l !! i
         x1 = l !! (i + 1)
-        t0 = (0 : P.dx_d t) !! i
+        t0 = (0 : B.dx_d t) !! i
         t1 = t0 + t !! i
         c = envelope_curves e !! i
     in (t0,x0,t1,x1,c)
@@ -184,15 +184,15 @@ envelope_at e t =
       Nothing -> 0
 
 -- | Render 'Envelope' to breakpoint set of /n/ equi-distant places.
-envelope_render :: (Ord t, Floating t, Enum t) => t -> Envelope t -> [(t,t)]
+envelope_render :: (Ord t, Floating t, Enum t) => Int -> Envelope t -> [(t,t)]
 envelope_render n e =
     let d = envelope_duration e
-        k = d / (n - 1)
+        k = d / (fromIntegral n - 1)
         t = [0,k .. d]
     in zip t (map (envelope_at e) t)
 
 -- | Contruct a lookup table of /n/ places from 'Envelope'.
-envelope_table :: (Ord t, Floating t, Enum t) => t -> Envelope t -> [t]
+envelope_table :: (Ord t, Floating t, Enum t) => Int -> Envelope t -> [t]
 envelope_table n = map snd . envelope_render n
 
 -- | Variant on 'env_curves' that expands the, possibly empty, user
@@ -309,18 +309,28 @@ envTrapezoid_f (lte_f,gte_f) shape skew dur amp =
 {- | Co-ordinate based static envelope generator.  Points are (time,value) pairs.
 
 > let e = envCoord [(0,0),(1/4,1),(1,0)] 1 1 EnvLin
-> in envelope_sc3_array e == Just [0,2,-99,-99,1,1/4,1,0,0,3/4,1,0]
+> envelope_sc3_array e == Just [0,2,-99,-99,1,1/4,1,0,0,3/4,1,0]
 
 > import Sound.SC3.Plot {- hsc3-plot -}
 
 > plotEnvelope [envCoord [(0,0),(1/4,1),(1,0)] 1 1 EnvLin]
 
 -}
-envCoord :: Num a => [(a,a)] -> a -> a -> Envelope_Curve a -> Envelope a
-envCoord bp dur amp c =
-    let l = map ((* amp) . snd) bp
-        t = map (* dur) (tail (P.d_dx (map fst bp)))
-    in Envelope l t [c] Nothing Nothing 0
+envCoord :: Num n => [(n,n)] -> n -> n -> Envelope_Curve n -> Envelope n
+envCoord xy dur amp c =
+    let n = length xy
+        (times,levels) = unzip xy
+        times' = map (* dur) (B.d_dx' times)
+        levels' = map (* amp) levels
+        offset = times' !! 0
+    in Envelope levels' times' (replicate (n - 1) c) Nothing Nothing offset
+
+-- | Segments given as pairs of (time,level).
+--   The input is sorted by time before processing.
+--
+-- > envPairs [(0, 1), (3, 1.4), (2.1, 0.5)] EnvSin
+envPairs :: (Num n,Ord n) => [(n,n)] -> Envelope_Curve n -> Envelope n
+envPairs xy c = envCoord (sortOn fst xy) 1 1 c
 
 -- | Variant 'envPerc' with user specified 'Envelope_Curve a'.
 envPerc' :: Num a => a -> a -> a -> Envelope_Curve2 a -> Envelope a
@@ -481,16 +491,4 @@ envXYC xyc =
       xyc_asc = sortOn (\(x,_,_) -> x) xyc
       (times,levels,curves) = unzip3 xyc_asc
       offset = times !! 0
-  in Envelope levels (P.d_dx' times) (take (n - 1) curves) Nothing Nothing offset
-
--- | Segments given as pairs of (time,level).
---   The input is sorted by time before processing.
---
--- > envPairs [(0, 1), (3, 1.4), (2.1, 0.5)] EnvSin
-envPairs :: (Num n,Ord n) => [(n,n)] -> Envelope_Curve n -> Envelope n
-envPairs xy c =
-  let n = length xy
-      xy_asc = sortOn fst xy
-      (times,levels) = unzip xy_asc
-      offset = times !! 0
-  in Envelope levels (P.d_dx' times) (replicate (n - 1) c) Nothing Nothing offset
+  in Envelope levels (B.d_dx' times) (take (n - 1) curves) Nothing Nothing offset

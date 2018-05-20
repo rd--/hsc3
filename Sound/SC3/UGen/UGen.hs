@@ -6,7 +6,7 @@ import Data.Maybe {- base -}
 import Data.List {- base -}
 
 import qualified Sound.SC3.Common.Envelope as E
-import qualified Sound.SC3.Common.Prelude as P
+import qualified Sound.SC3.Common.Base as B
 import qualified Sound.SC3.UGen.Identifier as ID
 import qualified Sound.SC3.UGen.Operator as O
 import qualified Sound.SC3.UGen.Rate as R
@@ -166,7 +166,7 @@ mceSum = sum . mceChannels
 -- | Given /unmce/ function make halt mce transform.
 halt_mce_transform' :: (a -> [a]) -> [a] -> [a]
 halt_mce_transform' f l =
-    let (l',e) = fromMaybe (error "halt_mce_transform: null?") (P.sep_last l)
+    let (l',e) = fromMaybe (error "halt_mce_transform: null?") (B.sep_last l)
     in l' ++ f e
 
 -- | The halt MCE transform, ie. lift channels of last input into list.
@@ -198,7 +198,7 @@ unpackLabel u =
           in n : s'
       MCE_U m ->
           let x = map unpackLabel (mceProxies m)
-          in if P.equal_length_p x
+          in if B.equal_length_p x
              then map mce (transpose x)
              else error (show ("unpackLabel: mce length /=",x))
       _ -> error (show ("unpackLabel: non-label",u))

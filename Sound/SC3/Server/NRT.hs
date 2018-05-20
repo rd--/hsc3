@@ -9,7 +9,7 @@ import System.Process {- process -}
 import Sound.OSC.Core {- hosc -}
 import qualified Sound.OSC.Coding.Byte as Byte {- hosc -}
 
-import Sound.SC3.Common.Prelude
+import Sound.SC3.Common.Base
 import Sound.SC3.Server.Enum
 
 -- | Encode and prefix with encoded length.
