@@ -1494,6 +1494,12 @@ moogVCF in_ fco res = mkUGen Nothing [AR] (Right [0]) "MoogVCF" [in_,fco,res] No
 multiOutDemandUGen :: Rate -> UGen -> UGen
 multiOutDemandUGen rate maxSize = mkUGen Nothing [DR] (Left rate) "MultiOutDemandUGen" [maxSize] Nothing 1 (Special 0) NoId
 
+-- | Stereo reverb
+--
+--  NHHall [AR] in1=0.0 in2=0.0 rt60=1.0 stereo=0.5 lowFreq=200.0 lowRatio=0.5 hiFreq=4000.0 hiRatio=0.5 earlyDiffusion=0.5 lateDiffusion=0.5 modRate=0.2 modDepth=0.3
+nhHall :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+nhHall in1 in2 rt60 stereo lowFreq lowRatio hiFreq hiRatio earlyDiffusion lateDiffusion modRate modDepth = mkUGen Nothing [AR] (Right [0,1]) "NHHall" [in1,in2,rt60,stereo,lowFreq,lowRatio,hiFreq,hiRatio,earlyDiffusion,lateDiffusion,modRate,modDepth] Nothing 2 (Special 0) NoId
+
 -- | Non Linear Filter Equation
 --
 --  NL [AR] input=0.0 bufnuma=0.0 bufnumb=1.0 guard1=1000.0 guard2=100.0
