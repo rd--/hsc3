@@ -79,3 +79,31 @@ With frequency of zero, operates as table lookup variant of sin.
 >       o2 = sinOsc AR 0 ph
 >       o3 = sin ph
 >   in mce2 o1 (xFade2 o2 o3 (lfTri KR 0.1 0) 1) * 0.1
+
+sync, ie. <https://www.listarc.bham.ac.uk/lists/sc-dev/msg58316.html>
+
+> g_10 =
+>   let _freq = mouseX KR 100 3000 Exponential 0.2
+>	freq = mouseX KR (100 * mce2 1.0 1.003) (3000 * mce2 1.0 1.003) Exponential 0.2
+>       sync_freq = mouseY KR 100 500 Exponential 0.2
+>       ph_freq = impulse AR sync_freq 0 + impulse AR freq 0
+>       o = sinOsc AR 0 (phasor AR ph_freq (freq / sampleRate) 0 1 0 * 2 * pi)
+>   in o * 0.15
+
+reverse sync
+
+> g_11 =
+>   let freq = mouseX KR (100 * mce2 1.0 1.003) (3000 * mce2 1.0 1.003) Exponential 0.2
+>       sync_freq = mouseY KR 100 500 Exponential 0.2
+>       direction = toggleFF (impulse AR sync_freq 0) * (-2) + 1
+>       o = sinOsc AR 0 (wrap (sweep (impulse AR freq 0) (direction * freq)) 0 (2 * pi))
+>   in o * 0.15
+
+reverse cycle & reverse sync
+
+> g_12 =
+>   let freq = mouseX KR (100 * mce2 1.0 1.003) (3000 * mce2 1.0 1.003) Exponential 0.2
+>       sync_freq = mouseY KR 100 500 Exponential 0.2
+>       direction = toggleFF (impulse AR sync_freq 0 + impulse AR freq 0) * (-2) + 1
+>       o = sinOsc AR 0 (wrap (sweep (k2a 0) (direction * freq)) 0 (2 * pi))
+>   in o * 0.5
