@@ -3,6 +3,7 @@
 
 Note: `hsc3` renames UGen to `in'` since `in` is a reserved keyword
 
+> import Sound.OSC {- hosc -}
 > import Sound.SC3 {- hsc3 -}
 
 Patching input to output (see also soundIn).
@@ -37,7 +38,7 @@ There are functions to encapsulate the offset calculation.
 
 Set value on a control bus
 
-    > withSC3 (send (c_set1 0 300))
+    > withSC3 (sendMessage (c_set1 0 300))
 
 Read a control bus
 
@@ -45,7 +46,7 @@ Read a control bus
 
 Re-set value on bus
 
-    > withSC3 (send (c_set1 0 600))
+    > withSC3 (sendMessage (c_set1 0 600))
 
 Control rate graph writing buses 0 & 1.
 

@@ -21,10 +21,14 @@ Allocate and fill tables 0 to 7.
 
 Oscillator at buffers 0 through 7, mouse selects buffer.
 
-> g_01 =
->     let x = mouseX KR 0 7 Linear 0.1
+> f_01 k n =
+>     let x = mouseX KR k (k + n - 1) Linear 0.1
 >         y = mouseY KR 0.01 0.2 Exponential 0.2
 >     in vOsc AR x (mce [120, 121]) 0 * y
+
+> g_01 = f_01 0 8
+
+    > audition (f_01 0 24)
 
 Reallocate buffers while oscillator is running.
 

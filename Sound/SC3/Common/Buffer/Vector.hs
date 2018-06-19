@@ -1,12 +1,12 @@
 -- | 'V.Vector' variants of "Sound.SC3.Common.Buffer".
 module Sound.SC3.Common.Buffer.Vector where
 
-import qualified Data.Vector as V {- vector -}
+import qualified Data.Vector.Storable as V {- vector -}
 
 import qualified Sound.SC3.Common.Buffer as C {- hsc3 -}
 
 -- | 'C.clipAt'.
-clipAt :: Int -> V.Vector a -> a
+clipAt :: V.Storable t => Int -> V.Vector t -> t
 clipAt ix c =
     let r = V.length c
         f = (V.!) c
@@ -17,13 +17,13 @@ clipAt ix c =
 -- > blendAt 0 (V.fromList [2,5,6]) == 2
 -- > blendAt 0.4 (V.fromList [2,5,6]) == 3.2
 -- > blendAt 2.1 (V.fromList [2,5,6]) == 6
-blendAt :: RealFrac a => a -> V.Vector a -> a
+blendAt :: (V.Storable t,RealFrac t) => t -> V.Vector t -> t
 blendAt = C.blendAtBy clipAt
 
 -- | 'C.from_wavetable'
 --
 -- > from_wavetable (V.fromList [-0.5,0.5,0,0.5,1.5,-0.5,1,-0.5])
-from_wavetable :: Num a => V.Vector a -> V.Vector a
+from_wavetable :: (V.Storable t,Num t) => V.Vector t -> V.Vector t
 from_wavetable wt =
   let n = V.length wt
       f k = let k2 = k * 2 in (wt V.! k2) + (wt V.! (k2 + 1))
@@ -33,7 +33,7 @@ from_wavetable wt =
 --
 -- > resamp1 12 (V.fromList [1,2,3,4])
 -- > resamp1 3 (V.fromList [1,2,3,4]) == V.fromList [1,2.5,4]
-resamp1 :: RealFrac n => Int -> V.Vector n -> V.Vector n
+resamp1 :: (V.Storable t,RealFrac t) => Int -> V.Vector t -> V.Vector t
 resamp1 n c =
     let gen = C.resamp1_gen n (V.length c) clipAt c
     in V.generate n gen

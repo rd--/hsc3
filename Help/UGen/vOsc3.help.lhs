@@ -15,3 +15,7 @@ oscillator at buffers 0 through 7, mouse selects buffer.
 >     in mce2 o1 o2 * y
 
 > g_01 = f_01 0 8
+
+  let k = 0 in audition (f_01 k 24)
+  audition (f_01 0 102)
+  audition (f_01 19 31)
