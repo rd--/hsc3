@@ -51,12 +51,12 @@ initial announcement:
 [[2005-11-29/haskell-cafe](?t=hsc3&e=md/announce.text),
  [haskell.org](http://www.haskell.org/pipermail/haskell-cafe/2005-November/012483.html)]
 
-[rd]: http://rd.slavepianos.org/
-[hsc3]: http://rd.slavepianos.org/?t=hsc3
+[rd]: http://rohandrape.net/
+[hsc3]: http://rohandrape.net/?t=hsc3
 [hs]: http://haskell.org/
 [sc3]: http://audiosynth.com/
-[tutorial]: http://rd.slavepianos.org/?t=hsc3-texts&e=lhs/hsc3-tutorial.lhs
-[hsc3-texts]: http://rd.slavepianos.org/?t=hsc3-texts
+[tutorial]: http://rohandrape.net/?t=hsc3-texts&e=lhs/hsc3-tutorial.lhs
+[hsc3-texts]: http://rohandrape.net/?t=hsc3-texts
 [gnu]: http://gnu.org/
 [emacs]: http://gnu.org/software/emacs/
 [darcs]: http://darcs.net/

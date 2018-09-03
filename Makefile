@@ -3,10 +3,11 @@ all:
 
 clean:
 	(cd cmd ; make clean)
+	rm -Rf dist
 
-push-sp:
-	darcs push -a rd@slavepianos.org:sw/hsc3
+push-rd:
+	darcs push -a rd@rohandrape.net:sw/hsc3
 
-pull-sp:
-	darcs pull -a http://rd.slavepianos.org/sw/hsc3
+pull-rd:
+	darcs pull -a http://rohandrape.net/sw/hsc3
 

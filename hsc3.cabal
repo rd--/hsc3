@@ -5,14 +5,14 @@ Description:       Haskell client for the SuperCollider synthesis server,
                    <http://audiosynth.com/>.
                    .
                    For installation and configuration see the Tutorial at
-                   <http://rd.slavepianos.org/t/hsc3-texts>.
+                   <http://rohandrape.net/t/hsc3-texts>.
 License:           GPL-3
 Category:          Sound
 Copyright:         (c) Rohan Drape and others, 2005-2018
 Author:            Rohan Drape
-Maintainer:        rd@slavepianos.org
+Maintainer:        rd@rohandrape.net
 Stability:         Experimental
-Homepage:          http://rd.slavepianos.org/t/hsc3
+Homepage:          http://rohandrape.net/t/hsc3
 Tested-With:       GHC == 8.2.2
 Build-Type:        Simple
 Cabal-Version:     >= 1.8
@@ -117,4 +117,4 @@ Library
 
 Source-Repository  head
   Type:            darcs
-  Location:        http://rd.slavepianos.org/sw/hsc3/
+  Location:        http://rohandrape.net/sw/hsc3/

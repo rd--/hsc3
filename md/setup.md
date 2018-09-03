@@ -1,6 +1,6 @@
 # hsc3-setup (May, 2015)
 
-Co-ordination of [hsc3](http://rd.slavepianos.org/t/hsc3) related packages.
+Co-ordination of [hsc3](http://rohandrape.net/t/hsc3) related packages.
 
 There is a _make_ rule _build-setup_ that builds and installs the
 _hsc3-setup_ executable, which depends only on standard haskell
@@ -23,8 +23,8 @@ hsc3-setup echo all
 Clone or update packages in _category_ from _source_ repositories to _destination_.
 
 ~~~~
-hsc3-setup clone core http://rd.slavepianos.org/sw /tmp
-hsc3-setup update core http://rd.slavepianos.org/sw ~/sw
+hsc3-setup clone core http://rohandrape.net/sw /tmp
+hsc3-setup update core http://rohandrape.net/sw ~/sw
 ~~~~
 
 # local
@@ -75,7 +75,7 @@ _cabal_, and setting LOCAL appropriately:
 
 ~~~~
 LOCAL=...
-REMOTE=http://rd.slavepianos.org/sw
+REMOTE=http://rohandrape.net/sw
 mkdir -p $LOCAL
 cd $LOCAL
 darcs get $REMOTE/hsc3/

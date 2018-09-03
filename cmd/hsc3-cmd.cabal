@@ -1,21 +1,21 @@
 Name:              hsc3-cmd
-Version:           0.16
+Version:           0.17
 Synopsis:          Haskell SuperCollider CLI
 Description:       Haskell SuperCollider CLI
 License:           GPL
 Category:          Sound
-Copyright:         (c) Rohan Drape, 2013-2016
+Copyright:         (c) Rohan Drape, 2013-2018
 Author:            Rohan Drape
-Maintainer:        rd@slavepianos.org
+Maintainer:        rd@rohandrape.net
 Stability:         Experimental
-Homepage:          http://rd.slavepianos.org/t/hsc3
-Tested-With:       GHC == 7.10.3
+Homepage:          http://rohandrape.net/t/hsc3
+Tested-With:       GHC == 8.2.2
 Build-Type:        Simple
 Cabal-Version:     >= 1.8
 
 Source-Repository  head
   Type:            darcs
-  Location:        http://rd.slavepianos.org/sw/hsc3/
+  Location:        http://rohandrape.net/sw/hsc3/
 
 Executable         hsc3-scsyndef-stat
  Main-Is:          scsyndef-stat.hs
@@ -31,4 +31,4 @@ Executable         hsc3-scsynth
 
 Executable         hsc3-setup
  Main-Is:          setup.hs
- Build-Depends:    base,data-ordlist,directory,filepath,hmt,process,regex-compat
+ Build-Depends:    base,data-ordlist,directory,filepath,hmt,process,regex-compat,split
