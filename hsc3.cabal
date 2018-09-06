@@ -116,5 +116,5 @@ Library
                    Sound.SC3.UGen.UId
 
 Source-Repository  head
-  Type:            darcs
-  Location:        http://rohandrape.net/sw/hsc3/
+  Type:            git
+  Location:        https://github.com/rd--/hsc3.git
