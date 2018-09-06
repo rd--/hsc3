@@ -8,10 +8,10 @@ clean:
 	rm -Rf dist
 
 push-gh:
-	darcs push -a $(R)
+	git push $(R)
 
-pull-rd:
-	darcs pull -a $(R)
+pull-gh:
+	git pull $(R)
 
 update-rd:
 	ssh rd@rohandrape.net "(cd sw/hsc3;git pull $(R))"
