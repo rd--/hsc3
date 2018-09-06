@@ -1,3 +1,5 @@
+R=https://github.com/rd--/hsc3
+
 all:
 	echo "hsc3"
 
@@ -5,9 +7,11 @@ clean:
 	(cd cmd ; make clean)
 	rm -Rf dist
 
-push-rd:
-	darcs push -a rd@rohandrape.net:sw/hsc3
+push-gh:
+	darcs push -a $(R)
 
 pull-rd:
-	darcs pull -a http://rohandrape.net/sw/hsc3
+	darcs pull -a $(R)
 
+update-rd:
+	ssh rd@rohandrape.net "(cd sw/hsc3;git pull $(R))"
