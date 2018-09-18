@@ -122,8 +122,8 @@ audioMSG rate in_ index_ = mkUGen Nothing [AR] (Left rate) "AudioMSG" [in_,index
 -- | calculates mean average of audio or control rate signal
 --
 --  AverageOutput [KR,AR] in=0.0 trig=0.0
-averageOutput :: Rate -> UGen -> UGen -> UGen
-averageOutput rate in_ trig_ = mkUGen Nothing [KR,AR] (Left rate) "AverageOutput" [in_,trig_] Nothing 1 (Special 0) NoId
+averageOutput :: UGen -> UGen -> UGen
+averageOutput in_ trig_ = mkUGen Nothing [KR,AR] (Right [0]) "AverageOutput" [in_,trig_] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --

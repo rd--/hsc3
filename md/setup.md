@@ -8,7 +8,7 @@ packages (base, directory, filepath, process, split).
 
 The package db is stored at `hsc3/db/setup.db`.
 
-# echo
+## echo
 
 Print all projects in named category.
 
@@ -18,7 +18,7 @@ Categories are printed by `hsc3-setup -h`.
 hsc3-setup echo all
 ~~~~
 
-# clone & update
+## clone & update
 
 Clone or update packages in _category_ from _source_ repositories to _destination_.
 
@@ -27,7 +27,7 @@ hsc3-setup clone core http://rohandrape.net/sw /tmp
 hsc3-setup update core http://rohandrape.net/sw ~/sw
 ~~~~
 
-# local
+## local
 
 Run a command at each local directory for _category_.
 
@@ -36,7 +36,7 @@ Common operations are to clean, check for local edits and push any changes to re
 ~~~~
 hsc3-setup local all ~/sw cabal clean
 hsc3-setup local all ~/sw darcs wh -ls
-hsc3-setup local all ~/sw make push-sp
+hsc3-setup local all ~/sw make push-rd
 ~~~~
 
 # pkg-dep
@@ -48,7 +48,6 @@ $ for i in $(hsc3-setup pkg-dep -non-local ~/sw/hsc3-graphs/gr/*.hs) ; do echo $
 MonadRandom
 array
 base
-cairo
 containers
 directory
 filepath
