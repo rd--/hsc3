@@ -36,8 +36,10 @@ sc3_floor = fromInteger . floor
 
 -- | Variant of @SC3@ @roundTo@ function.
 --
+-- > sc3_round_to (2/3) 0.25 == 0.75
+--
 -- > let r = [0,0,0.25,0.25,0.5,0.5,0.5,0.75,0.75,1,1]
--- > in map (`sc3_round_to` 0.25) [0,0.1 .. 1] == r
+-- > map (`sc3_round_to` 0.25) [0,0.1 .. 1] == r
 sc3_round_to :: RealFrac n => n -> n -> n
 sc3_round_to a b = if b == 0 then a else sc3_floor ((a / b) + 0.5) * b
 
