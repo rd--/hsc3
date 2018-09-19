@@ -32,3 +32,17 @@ per-note width modulation
 >         o = varSaw AR f 0 w * e * 0.1
 >         l = tRand 'ε' (-1) 1 t
 >     in pan2 o l 1
+
+http://sc-users.bham.ac.narkive.com/sj4Tw3ub/sync-osc#post6
+
+> g_04 =
+>   let freq = control KR "freq" 110
+>       factor = control KR "factor" 1
+>       x = mouseX KR 0 1.0 Linear 0.2
+>       y = mouseY KR (mce2 23 17) 0 Linear 0.2
+>       ph = varSaw AR (freq * factor) 0 x * y
+>   in sinOsc AR (freq * mce2 1.001 1) ph * 0.2
+
+    > import Sound.OSC {- hosc -}
+    > set_factor n = withSC3 (sendMessage (n_set1 (-1) "factor" n))
+    > set_factor 0.125 {- 0.5 1.5 23.0 0.125 1.3 -}

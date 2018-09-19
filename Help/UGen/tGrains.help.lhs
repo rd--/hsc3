@@ -57,3 +57,13 @@ Demand UGens as inputs (may eventually hang scsynth?)
 >         pan = dsq 'ν' [1,1,1,0.5,0.2,0.1,0,0,0] * 2 - 1
 >         amp = dsq 'ξ' [1,0,z 'ο' 'π',0,2,1,1,0.1,0.1]
 >     in tGrains 2 clk b rate pos dur pan amp 2
+
+http://sc-users.bham.ac.narkive.com/sj4Tw3ub/sync-osc#post5
+
+> g_05 =
+>   let b = 10
+>       freq = 100
+>       dur = 2 / freq
+>       clk = impulse AR freq 0
+>       x = mouseX KR 0.5 16 Exponential 0.2
+>   in tGrains 2 clk b x (0.3 * bufDur KR b) dur 0 0.1 2
