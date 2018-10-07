@@ -4,7 +4,7 @@
 > import Sound.SC3 {- hsc3 -}
 > import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
 
-Terrain function
+Terrain function, ie. (x,y) -> z
 
 > ter_f (x,y) =
 >     let a = x ** 2
@@ -26,7 +26,7 @@ Create terrain given function.
 Confirm terrain
 
     import Sound.SC3.Plot {- hsc3-plot -}
-    plot_p3_pt [gen_t ter_f]
+    plot_p3_ln [gen_t ter_f]
 
 Create table.
 

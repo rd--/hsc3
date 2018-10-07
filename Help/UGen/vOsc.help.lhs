@@ -34,6 +34,5 @@ Reallocate buffers while oscillator is running.
 
     > import Sound.SC3.Lang.Random.IO {- hsc3-lang -}
     >
-    > let resetTable i = do {h <- nrrand 12 0 1
-    >                        ;sendMessage (b_gen_sine1 i bf h)}
-    > in withSC3 (mapM_ resetTable [0 .. 7])
+    > resetTable i = do {h <- nrrand 12 0 1;sendMessage (b_gen_sine1 i b_flags h)}
+    > withSC3 (mapM_ resetTable [0 .. 7])

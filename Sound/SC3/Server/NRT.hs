@@ -56,7 +56,19 @@ nrt_span f = span (f . bundleTime) . nrt_bundles
 encodeNRT :: NRT -> B.ByteString
 encodeNRT = B.concat . map oscWithSize . nrt_bundles
 
--- | Write an 'NRT' score.
+{- | Write an 'NRT' score.
+
+import Sound.OSC
+import Sound.SC3
+m1 = g_new [(1, AddToTail, 0)]
+m2 = d_recv (synthdef "sin" (out 0 (sinOsc AR 660 0 * 0.15)))
+m3 = s_new "sin" 100 AddToTail 1 []
+m4 = n_free [100]
+m5 = nrt_end
+sc = NRT [bundle 0 [m1,m2],bundle 1 [m3],bundle 10 [m4],bundle 15 [m5]]
+writeNRT "/tmp/t.osc" sc
+
+-}
 writeNRT :: FilePath -> NRT -> IO ()
 writeNRT fn = B.writeFile fn . encodeNRT
 
@@ -99,29 +111,42 @@ further parameters (ie. ["-m","32768"]) to be inserted before the NRT -N option.
 -}
 type NRT_Param_Plain = (FilePath,(FilePath,Int),(FilePath,Int),Int,SampleFormat,[String])
 
+{- | Compile argument list from NRT_Param_Plain and run scynth.
+
+> opt = ("/tmp/t.osc",("_",0),("/tmp/t.wav",1),48000,PcmInt16,[])
+> nrt_exec_plain opt
+
+-}
+nrt_exec_plain :: NRT_Param_Plain -> IO ()
+nrt_exec_plain (osc_nm,(in_sf,in_nc),(out_sf,out_nc),sr,sf,param) = do
+  let sf_ty = case takeExtension out_sf of
+                '.':ext -> soundFileFormat_from_extension_err ext
+                _ -> error "nrt_render_plain: invalid sf extension"
+      arg = concat [["-i",show in_nc
+                    ,"-o",show out_nc]
+                   ,param
+                   ,["-N"
+                    ,osc_nm,in_sf,out_sf
+                    ,show sr,soundFileFormatString sf_ty,sampleFormatString sf]]
+  callProcess "scsynth" arg
+
 -- | Minimal NRT rendering, for more control see Stefan Kersten's
 -- /hsc3-process/ package at:
 -- <https://github.com/kaoskorobase/hsc3-process>.
 nrt_proc_plain :: NRT_Param_Plain -> NRT -> IO ()
-nrt_proc_plain (osc_nm,(in_sf,in_nc),(out_sf,out_nc),sr,sf,param) sc = do
-  let sf_ty = case takeExtension out_sf of
-                '.':ext -> soundFileFormat_from_extension_err ext
-                _ -> error "nrt_render_plain: invalid sf extension"
-      sys = unwords ["scsynth"
-                    ,"-i",show in_nc
-                    ,"-o",show out_nc
-                    ,unwords param
-                    ,"-N"
-                    ,osc_nm,in_sf,out_sf
-                    ,show sr,soundFileFormatString sf_ty,sampleFormatString sf]
+nrt_proc_plain opt sc = do
+  let (osc_nm,_,_,_,_,_) = opt
   writeNRT osc_nm sc
-  _ <- system sys
-  return ()
+  nrt_exec_plain opt
 
 -- | Variant for no input case.
 type NRT_Render_Plain = (FilePath,FilePath,Int,Int,SampleFormat,[String])
 
--- | Add ("-",0) as input parameters and run 'nrt_proc_plain'.
+{- | Add ("-",0) as input parameters and run 'nrt_proc_plain'.
+
+> nrt_render_plain opt sc
+
+-}
 nrt_render_plain :: NRT_Render_Plain -> NRT -> IO ()
 nrt_render_plain (osc_nm,sf_nm,nc,sr,sf,param) sc =
   let opt = (osc_nm,("-",0),(sf_nm,nc),sr,sf,param)
