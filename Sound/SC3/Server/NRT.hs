@@ -111,24 +111,32 @@ further parameters (ie. ["-m","32768"]) to be inserted before the NRT -N option.
 -}
 type NRT_Param_Plain = (FilePath,(FilePath,Int),(FilePath,Int),Int,SampleFormat,[String])
 
+{- | Compile argument list from NRT_Param_Plain.
+
+> let opt = ("/tmp/t.osc",("_",0),("/tmp/t.wav",1),48000,PcmInt16,[])
+> let r = ["-i","0","-o","1","-N","/tmp/t.osc","_","/tmp/t.wav","48000","wav","int16"]
+> nrt_param_plain_to_arg opt == r
+
+-}
+nrt_param_plain_to_arg :: NRT_Param_Plain -> [String]
+nrt_param_plain_to_arg (osc_nm,(in_sf,in_nc),(out_sf,out_nc),sr,sf,param) =
+  let sf_ty = case takeExtension out_sf of
+                '.':ext -> soundFileFormat_from_extension_err ext
+                _ -> error "nrt_exec_plain: invalid sf extension"
+  in concat [["-i",show in_nc
+             ,"-o",show out_nc]
+            ,param
+            ,["-N"
+             ,osc_nm,in_sf,out_sf
+             ,show sr,soundFileFormatString sf_ty,sampleFormatString sf]]
+
 {- | Compile argument list from NRT_Param_Plain and run scynth.
 
-> opt = ("/tmp/t.osc",("_",0),("/tmp/t.wav",1),48000,PcmInt16,[])
 > nrt_exec_plain opt
 
 -}
 nrt_exec_plain :: NRT_Param_Plain -> IO ()
-nrt_exec_plain (osc_nm,(in_sf,in_nc),(out_sf,out_nc),sr,sf,param) = do
-  let sf_ty = case takeExtension out_sf of
-                '.':ext -> soundFileFormat_from_extension_err ext
-                _ -> error "nrt_render_plain: invalid sf extension"
-      arg = concat [["-i",show in_nc
-                    ,"-o",show out_nc]
-                   ,param
-                   ,["-N"
-                    ,osc_nm,in_sf,out_sf
-                    ,show sr,soundFileFormatString sf_ty,sampleFormatString sf]]
-  callProcess "scsynth" arg
+nrt_exec_plain opt = callProcess "scsynth" (nrt_param_plain_to_arg opt)
 
 -- | Minimal NRT rendering, for more control see Stefan Kersten's
 -- /hsc3-process/ package at:
