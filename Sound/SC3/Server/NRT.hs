@@ -157,5 +157,5 @@ type NRT_Render_Plain = (FilePath,FilePath,Int,Int,SampleFormat,[String])
 -}
 nrt_render_plain :: NRT_Render_Plain -> NRT -> IO ()
 nrt_render_plain (osc_nm,sf_nm,nc,sr,sf,param) sc =
-  let opt = (osc_nm,("-",0),(sf_nm,nc),sr,sf,param)
+  let opt = (osc_nm,("_",0),(sf_nm,nc),sr,sf,param)
   in nrt_proc_plain opt sc

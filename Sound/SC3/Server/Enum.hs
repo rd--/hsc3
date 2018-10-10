@@ -4,6 +4,8 @@ module Sound.SC3.Server.Enum where
 import Data.Maybe {- base -}
 
 -- | Enumeration of possible locations to add new nodes (s_new and g_new).
+--
+-- > fromEnum AddToTail == 1
 data AddAction = AddToHead
                | AddToTail
                | AddBefore
