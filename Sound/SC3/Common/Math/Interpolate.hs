@@ -18,7 +18,9 @@ interpolate f (l,r) x = if x < 0 then l else if x > 1 then r else f l r x
 step :: Interpolation_F t
 step _ x1 _ = x1
 
--- | Linear interpolation.
+-- | Linear interpolation funtion, /x0/ is at /t/ of zero, and /x1/ at /t/ of one.
+--
+-- > map (linear 1 10) [0,0.25 .. 1] == [1,3.25,5.5,7.75,10]
 --
 -- > import Sound.SC3.Plot {- hsc3-plot -}
 -- > plotTable1 (map (linear (-1) 1) [0,0.01 .. 1])
