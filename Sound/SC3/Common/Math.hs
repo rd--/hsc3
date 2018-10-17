@@ -1,7 +1,9 @@
 module Sound.SC3.Common.Math where
 
-import qualified Data.Fixed as F {- base -}
+import Data.Fixed {- base -}
 import Data.Maybe {- base -}
+import Data.Ratio {- base -}
+import Numeric {- base -}
 
 -- | Half pi.
 --
@@ -46,7 +48,7 @@ sc3_round_to a b = if b == 0 then a else sc3_floor ((a / b) + 0.5) * b
 sc3_idiv :: RealFrac n => n -> n -> n
 sc3_idiv a b = fromInteger (floor a `div` floor b)
 
-{- | The SC3 @%@ UGen operator is the 'F.mod'' function.
+{- | The SC3 @%@ UGen operator is the 'Numeric.mod'' function.
 
 > > 1.5 % 1.2 // ~= 0.3
 > > -1.5 % 1.2 // ~= 0.9
@@ -72,7 +74,7 @@ sc3_idiv a b = fromInteger (floor a `div` floor b)
 > map (\n -> sc3_mod n 12.0) [-1.0,12.25,15.0] == [11.0,0.25,3.0]
 -}
 sc3_mod :: RealFrac n => n -> n -> n
-sc3_mod = F.mod'
+sc3_mod = mod'
 
 -- | Type specialised 'sc3_mod'.
 fmod_f32 :: Float -> Float -> Float
@@ -478,3 +480,25 @@ sc3_curvelin curve src_l src_r dst_l dst_r x =
                    a = (src_r - src_l) / (1.0 - grow)
                    b = src_l + a
                in log ((b - x) / a) * (dst_r - dst_l) / curve + dst_l
+
+-- * PP
+
+-- | The default show is odd, 0.05 shows as 5.0e-2.
+--
+-- > unwords (map (double_pp 4) [0.0001,0.001,0.01,0.1,1.0]) == "0.0001 0.001 0.01 0.1 1.0"
+double_pp :: Int -> Double -> String
+double_pp k n =
+    let rev_f f = reverse . f . reverse
+        remv l = case l of
+                   '0':'.':_ -> l
+                   '0':l' -> remv l'
+                   _ -> l
+    in rev_f remv (showFFloat (Just k) n "")
+
+-- | Print as integer if integral, else as real.
+--
+-- > unwords (map real_pp [0.0001,0.001,0.01,0.1,1.0]) == "0.0001 0.001 0.01 0.1 1"
+real_pp :: Double -> String
+real_pp n =
+    let r = toRational n
+    in if denominator r == 1 then show (numerator r) else double_pp 5 n

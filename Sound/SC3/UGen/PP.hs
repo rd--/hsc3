@@ -1,24 +1,11 @@
 module Sound.SC3.UGen.PP where
 
 import Data.List {- split -}
-import Data.Ratio {- base -}
-import Numeric {- base -}
 
+import Sound.SC3.Common.Math
 import Sound.SC3.UGen.MCE
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
-
--- | The default show is odd, 0.05 shows as 5.0e-2.
-double_pp :: Int -> Double -> String
-double_pp k n =
-    let f = reverse . dropWhile (== '0') . reverse
-    in f (showFFloat (Just k) n "")
-
--- | Print as integer if integral, else as real.
-real_pp :: Double -> String
-real_pp n =
-    let r = toRational n
-    in if denominator r == 1 then show (numerator r) else double_pp 5 n
 
 bracketed :: (a,a) -> [a] -> [a]
 bracketed (l,r) x = l : x ++ [r]
