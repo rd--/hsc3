@@ -6,8 +6,8 @@ import Data.List {- base -}
 import Data.Maybe {- base -}
 import Safe {- safe -}
 import System.Random {- random -}
-import qualified Text.Read as R {- base -}
 
+import Sound.SC3.Common.Math
 import Sound.SC3.UGen.MCE
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Rate
@@ -103,10 +103,6 @@ data UGen = Constant_U Constant
             deriving (Eq,Read,Show)
 
 -- * Parser
-
--- | Type-specialised 'R.readMaybe'.
-parse_double :: String -> Maybe Double
-parse_double = R.readMaybe
 
 parse_constant :: String -> Maybe UGen
 parse_constant = fmap constant . parse_double

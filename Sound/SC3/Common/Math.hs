@@ -4,6 +4,7 @@ import Data.Fixed {- base -}
 import Data.Maybe {- base -}
 import Data.Ratio {- base -}
 import Numeric {- base -}
+import Text.Read {- base -}
 
 -- | Half pi.
 --
@@ -502,3 +503,9 @@ real_pp :: Double -> String
 real_pp n =
     let r = toRational n
     in if denominator r == 1 then show (numerator r) else double_pp 5 n
+
+-- * Parser
+
+-- | Type-specialised 'R.readMaybe'.
+parse_double :: String -> Maybe Double
+parse_double = readMaybe
