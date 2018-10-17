@@ -333,8 +333,8 @@ envPairs :: (Num n,Ord n) => [(n,n)] -> Envelope_Curve n -> Envelope n
 envPairs xy c = envCoord (sortOn fst xy) 1 1 c
 
 -- | Variant 'envPerc' with user specified 'Envelope_Curve a'.
-envPerc' :: Num a => a -> a -> a -> Envelope_Curve2 a -> Envelope a
-envPerc' atk rls lvl (c0,c1) =
+envPerc_c :: Num a => a -> a -> a -> Envelope_Curve2 a -> Envelope a
+envPerc_c atk rls lvl (c0,c1) =
     let c = [c0,c1]
     in Envelope [0,lvl,0] [atk,rls] c Nothing Nothing 0
 
@@ -343,7 +343,7 @@ envPerc' atk rls lvl (c0,c1) =
 envPerc :: Num a => a -> a -> Envelope a
 envPerc atk rls =
     let cn = EnvNum (-4)
-    in envPerc' atk rls 1 (cn,cn)
+    in envPerc_c atk rls 1 (cn,cn)
 
 -- | Triangular envelope, with duration and level inputs.
 --
@@ -381,8 +381,8 @@ envLinen_r (LINEN aT sT rT lv (c0,c1,c2)) =
     in Envelope l t c Nothing Nothing 0
 
 -- | Variant of 'envLinen' with user specified 'Envelope_Curve a'.
-envLinen' :: Num a => a -> a -> a -> a -> Envelope_Curve3 a -> Envelope a
-envLinen' aT sT rT lv c = envLinen_r (LINEN aT sT rT lv c)
+envLinen_c :: Num a => a -> a -> a -> a -> Envelope_Curve3 a -> Envelope a
+envLinen_c aT sT rT lv c = envLinen_r (LINEN aT sT rT lv c)
 
 -- | Linear envelope parameter constructor.
 --
@@ -391,9 +391,9 @@ envLinen' aT sT rT lv c = envLinen_r (LINEN aT sT rT lv c)
 -- >     ;p = pack_envelope_segments s}
 -- > in p == (env_levels e,env_times e,env_curves e)
 envLinen :: Num a => a -> a -> a -> a -> Envelope a
-envLinen aT sT rT l =
+envLinen aT sT rT lv =
     let c = (EnvLin,EnvLin,EnvLin)
-    in envLinen' aT sT rT l c
+    in envLinen_c aT sT rT lv c
 
 -- | Parameters for ADSR envelopes.
 --   The sustain level is given as a proportion of the peak level.

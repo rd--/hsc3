@@ -372,7 +372,13 @@ setBuf' b xs o = setBuf b o (fromIntegral (length xs)) (mce xs)
 silent :: Int -> UGen
 silent n = let s = dc AR 0 in mce (replicate n s)
 
--- | Zero indexed audio input buses.
+{- | Zero indexed audio input buses.
+     Optimises case of consecutive UGens.
+
+> soundIn (mce2 0 1) == in' 2 AR numOutputBuses
+> soundIn (mce2 0 2) == in' 1 AR (numOutputBuses + mce2 0 2)
+
+-}
 soundIn :: UGen -> UGen
 soundIn u =
     let r = in' 1 AR (numOutputBuses + u)

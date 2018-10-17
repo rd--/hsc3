@@ -165,30 +165,44 @@ bin_to_freq sr n i = fromIntegral i * sr / fromIntegral n
 midi_to_cps :: Floating a => a -> a
 midi_to_cps i = 440.0 * (2.0 ** ((i - 69.0) * (1.0 / 12.0)))
 
--- | Cycles per second to midi note number.
+-- | Cycles per second to fractional midi note number.
 --
 -- > map (round . cps_to_midi) [8,32,440,8372,12543] == [0,24,69,120,127]
 -- > map (round . cps_to_midi) [1,24000] == [-36,138]
 cps_to_midi :: Floating a => a -> a
 cps_to_midi a = (logBase 2 (a * (1.0 / 440.0)) * 12.0) + 69.0
 
+-- | Cycles per second to linear octave (4.75 = A4 = 440).
+--
+-- > map (cps_to_oct . midi_to_cps) [60,63,69] == [4.0,4.25,4.75]
 cps_to_oct :: Floating a => a -> a
 cps_to_oct a = logBase 2 (a * (1.0 / 440.0)) + 4.75
 
+-- | Linear octave to cycles per second.
+--
+-- > map (cps_to_midi . oct_to_cps) [4.0,4.25,4.75] == [60,63,69]
 oct_to_cps :: Floating a => a -> a
 oct_to_cps a = 440.0 * (2.0 ** (a - 4.75))
+
+-- | Degree, scale and steps per octave to key.
+degree_to_key :: RealFrac a => [a] -> a -> a -> a
+degree_to_key s n d =
+    let l = length s
+        d' = round d
+        a = (d - fromIntegral d') * 10.0 * (n / 12.0)
+    in (n * fromIntegral (d' `div` l)) + (s !! (d' `mod` l)) + a
 
 -- | Linear amplitude to decibels.
 --
 -- > map (round . amp_to_db) [0.01,0.05,0.0625,0.125,0.25,0.5] == [-40,-26,-24,-18,-12,-6]
 amp_to_db :: Floating a => a -> a
-amp_to_db a = logBase 10 a * 20
+amp_to_db = (* 20) . logBase 10
 
 -- | Decibels to linear amplitude.
 --
 -- > map (floor . (* 100). db_to_amp) [-40,-26,-24,-18,-12,-6] == [01,05,06,12,25,50]
 db_to_amp :: Floating a => a -> a
-db_to_amp a = 10 ** (a * 0.05)
+db_to_amp = (10 **) .  (* 0.05)
 
 -- | Fractional midi note interval to frequency multiplier.
 --
@@ -366,10 +380,14 @@ linlin_eq_err src dst = fromMaybe (error "linlin_eq") . linlin_eq src dst
 
 -- * LinExp
 
--- | Linear to exponential range conversion, rule as t linExp UGen,
---   haskell manner argument ordering.
---
--- > map (floor . linexp_hs (1,2) (10,100)) [0,1,1.5,2,3] == [1,10,31,100,1000]
+{- | Linear to exponential range conversion.
+     Rule is as at linExp UGen, haskell manner argument ordering.
+     Destination values must be nonzero and have the same sign.
+
+> map (floor . linexp_hs (1,2) (10,100)) [0,1,1.5,2,3] == [1,10,31,100,1000]
+> map (floor . linexp_hs (-2,2) (1,100)) [-3,-2,-1,0,1,2,3] == [0,1,3,10,31,100,316]
+
+-}
 linexp_hs :: Floating a => (a,a) -> (a,a) -> a -> a
 linexp_hs (in_l,in_r) (out_l,out_r) x =
     let rt = out_r / out_l

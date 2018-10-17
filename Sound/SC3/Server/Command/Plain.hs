@@ -19,7 +19,7 @@ type Buffer_Ix = Int
 -- | File connection flag.
 type Buffer_Leave_File_Open = Bool
 
--- | Control bus identifier (number).
+-- | Audio/control bus identifier (number).
 type Bus_Id = Int
 
 -- | Node identifier (number).
