@@ -157,3 +157,6 @@ mk_duples_l i a b = concatMap (\(x,y) -> a x : i (length y) : map b y)
 -- | 'concatMap' of /f/ at /x/ and /g/ at /y/ and /h/ at /z/.
 mk_triples :: (a -> d) -> (b -> d) -> (c -> d) -> [(a, b, c)] -> [d]
 mk_triples a b c = concatMap (\(x,y,z) -> [a x, b y, c z])
+
+t2_from_list :: [t] -> T2 t
+t2_from_list l = case l of {[p,q] -> (p,q);_ -> error "t2_from_list"}
