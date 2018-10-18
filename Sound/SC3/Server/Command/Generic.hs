@@ -227,8 +227,9 @@ n_map :: Integral i => i -> [(String,i)] -> Message
 n_map nid l = message "/n_map" (int32 nid : B.mk_duples string int32 l)
 
 -- | Map a node's controls to read from buses.
-n_mapn :: Integral i => i -> [(String,i,i)] -> Message
-n_mapn nid l = message "/n_mapn" (int32 nid : B.mk_triples string int32 int32 l)
+--   n_mapn only works if the control is given as an index and not as a name (3.8.0).
+n_mapn :: Integral i => i -> [(i,i,i)] -> Message
+n_mapn nid l = message "/n_mapn" (int32 nid : B.mk_triples int32 int32 int32 l)
 
 -- | Map a node's controls to read from an audio bus.
 n_mapa :: Integral i => i -> [(String,i)] -> Message
@@ -251,9 +252,10 @@ n_set :: (Integral i,Real n) => i -> [(String,n)] -> Message
 n_set nid c = message "/n_set" (int32 nid : B.mk_duples string float c)
 
 -- | Set ranges of a node's control values.
-n_setn :: (Integral i,Real n) => i -> [(String,[n])] -> Message
+-- n_mapn and n_setn only work if the control is given as an index and not as a name.
+n_setn :: (Integral i,Real n) => i -> [(i,[n])] -> Message
 n_setn nid l =
-    let f (s,d) = string s : int32 (length d) : map float d
+    let f (s,d) = int32 s : int32 (length d) : map float d
     in message "/n_setn" (int32 nid : concatMap f l)
 
 -- | Trace a node.

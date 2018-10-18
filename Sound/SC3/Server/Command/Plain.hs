@@ -193,7 +193,8 @@ n_map :: Node_Id -> [(String,Bus_Id)] -> Message
 n_map = G.n_map
 
 -- | Map a node's controls to read from buses.
-n_mapn :: Node_Id -> [(String,Bus_Id,Int)] -> Message
+--   n_mapn only works if the control is given as an index and not as a name (3.8.0).
+n_mapn :: Node_Id -> [(Int,Bus_Id,Int)] -> Message
 n_mapn = G.n_mapn
 
 -- | Map a node's controls to read from an audio bus.
@@ -217,7 +218,7 @@ n_set :: Node_Id -> [(String,Double)] -> Message
 n_set = G.n_set
 
 -- | Set ranges of a node's control values.
-n_setn :: Node_Id -> [(String,[Double])] -> Message
+n_setn :: Node_Id -> [(Int,[Double])] -> Message
 n_setn = G.n_setn
 
 -- | Trace a node.
