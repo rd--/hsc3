@@ -17,7 +17,7 @@
     withSC3 (sendMessage (c_setn [(0,[0,220,0.3])]))
 
     withSC3 (sendMessage (n_set1 1001 "bus" 1))
-    withSC3 (sendMessage (n_set1 1001 "freq" 220))
+    withSC3 (sendMessage (n_set1 1001 "freq" 440))
     withSC3 (sendMessage (n_set1 1001 "amp" 0.2))
     withSC3 (sendMessage (n_setn 1001 [(0,[1,880,0.2])]))
 
