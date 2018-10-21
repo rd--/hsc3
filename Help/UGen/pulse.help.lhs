@@ -9,7 +9,7 @@ Modulate frequency
 >     let f = xLine KR 40 4000 6 RemoveSynth
 >     in pulse AR f 0.1 * 0.1
 
-Modulate pulse width
+Modulate pulse width, 0.5 = square wave
 
 > g_02 =
 >     let w = line KR 0.01 0.99 8 RemoveSynth

@@ -3,7 +3,7 @@
 
 > import Sound.SC3 {- hsc3 -}
 
-Fixed frequency
+Fixed frequency (hz) and initial-phase (radians)
 
 > g_00 = sinOsc AR 440 0 * 0.25
 
