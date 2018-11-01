@@ -44,9 +44,7 @@ parse_enum cr nm =
 
 -- * LIST
 
--- |
-
-{- |SequenceableCollection.differentiate
+{- | SequenceableCollection.differentiate
 
 > > [3,4,1,1].differentiate == [3,1,-3,0]
 
@@ -55,6 +53,14 @@ parse_enum cr nm =
 -}
 d_dx :: (Num a) => [a] -> [a]
 d_dx l = zipWith (-) l (0:l)
+
+{- | Variant that does not prepend zero to input, ie. 'tail' of 'd_dx'.
+
+> d_dx' [3,4,1,1] == [1,-3,0]
+> d_dx' [0,1,3,6] == [1,2,3]
+-}
+d_dx' :: Num n => [n] -> [n]
+d_dx' l = zipWith (-) (tail l) l
 
 {- | SequenceableCollection.integrate
 
@@ -67,18 +73,12 @@ d_dx l = zipWith (-) l (0:l)
 dx_d :: Num n => [n] -> [n]
 dx_d = scanl1 (+)
 
--- | Variant that does not prepend zero to input, ie. 'tail' of 'd_dx'.
---
--- > d_dx' [3,4,1,1] == [1,-3,0]
--- > d_dx' [0,1,3,6] == [1,2,3]
-d_dx' :: Num n => [n] -> [n]
-d_dx' = tail . d_dx
+{- | Variant pre-prending zero to output.
 
--- | Variant pre-prending zero to output.
---
--- > dx_d' [3,4,1,1] == [0,3,7,8,9]
--- > dx_d' (d_dx' [0,1,3,6]) == [0,1,3,6]
--- > dx_d' [0.5,0.5] == [0,0.5,1]
+> dx_d' [3,4,1,1] == [0,3,7,8,9]
+> dx_d' (d_dx' [0,1,3,6]) == [0,1,3,6]
+> dx_d' [0.5,0.5] == [0,0.5,1]
+-}
 dx_d' :: Num n => [n] -> [n]
 dx_d' = (0 :) . dx_d
 
@@ -133,16 +133,24 @@ histogram x =
 
 -- * TUPLES
 
+-- | Two-tuple.
 type T2 a = (a,a)
+
+-- | Three-tuple.
 type T3 a = (a,a,a)
+
+-- | Four-tuple.
 type T4 a = (a,a,a,a)
 
+-- | t -> (t,t)
 dup2 :: t -> T2 t
 dup2 t = (t,t)
 
+-- | t -> (t,t,t)
 dup3 :: t -> T3 t
 dup3 t = (t,t,t)
 
+-- | t -> (t,t,t,t)
 dup4 :: t -> T4 t
 dup4 t = (t,t,t,t)
 
@@ -158,5 +166,6 @@ mk_duples_l i a b = concatMap (\(x,y) -> a x : i (length y) : map b y)
 mk_triples :: (a -> d) -> (b -> d) -> (c -> d) -> [(a, b, c)] -> [d]
 mk_triples a b c = concatMap (\(x,y,z) -> [a x, b y, c z])
 
+-- | [x,y] -> (x,y)
 t2_from_list :: [t] -> T2 t
 t2_from_list l = case l of {[p,q] -> (p,q);_ -> error "t2_from_list"}

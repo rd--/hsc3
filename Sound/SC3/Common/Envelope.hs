@@ -4,7 +4,7 @@ module Sound.SC3.Common.Envelope where
 import Data.List {- base -}
 import Data.Maybe {- base -}
 
-import qualified Sound.SC3.Common.Base as B
+import qualified Sound.SC3.Common.Base as Base
 import qualified Sound.SC3.Common.Math.Interpolate as I
 
 -- * Curve
@@ -22,13 +22,13 @@ data Envelope_Curve a = EnvStep
                         deriving (Eq, Show)
 
 -- | Envelope curve pair.
-type Envelope_Curve2 a = B.T2 (Envelope_Curve a)
+type Envelope_Curve_2 a = Base.T2 (Envelope_Curve a)
 
 -- | Envelope curve triple.
-type Envelope_Curve3 a = B.T3 (Envelope_Curve a)
+type Envelope_Curve_3 a = Base.T3 (Envelope_Curve a)
 
 -- | Envelope curve quadruple.
-type Envelope_Curve4 a = B.T4 (Envelope_Curve a)
+type Envelope_Curve_4 a = Base.T4 (Envelope_Curve a)
 
 -- | Convert 'Envelope_Curve' to shape value.
 --
@@ -117,7 +117,7 @@ envelope_n_segments = genericLength . env_times
 -- | Determine which envelope segment a given time /t/ falls in.
 envelope_segment_ix :: (Ord a, Num a) => Envelope a -> a -> Maybe Int
 envelope_segment_ix e t =
-    let d = B.dx_d (env_times e)
+    let d = Base.dx_d (env_times e)
     in findIndex (>= t) d
 
 -- | A set of start time, start level, end time, end level and curve.
@@ -130,7 +130,7 @@ envelope_segment e i =
         t = env_times e
         x0 = l !! i
         x1 = l !! (i + 1)
-        t0 = (0 : B.dx_d t) !! i
+        t0 = (0 : Base.dx_d t) !! i
         t1 = t0 + t !! i
         c = envelope_curves e !! i
     in (t0,x0,t1,x1,c)
@@ -320,7 +320,7 @@ envCoord :: Num n => [(n,n)] -> n -> n -> Envelope_Curve n -> Envelope n
 envCoord xy dur amp c =
     let n = length xy
         (times,levels) = unzip xy
-        times' = map (* dur) (B.d_dx' times)
+        times' = map (* dur) (Base.d_dx' times)
         levels' = map (* amp) levels
         offset = times' !! 0
     in Envelope levels' times' (replicate (n - 1) c) Nothing Nothing offset
@@ -333,7 +333,7 @@ envPairs :: (Num n,Ord n) => [(n,n)] -> Envelope_Curve n -> Envelope n
 envPairs xy c = envCoord (sortOn fst xy) 1 1 c
 
 -- | Variant 'envPerc' with user specified 'Envelope_Curve a'.
-envPerc_c :: Num a => a -> a -> a -> Envelope_Curve2 a -> Envelope a
+envPerc_c :: Num a => a -> a -> a -> Envelope_Curve_2 a -> Envelope a
 envPerc_c atk rls lvl (c0,c1) =
     let c = [c0,c1]
     in Envelope [0,lvl,0] [atk,rls] c Nothing Nothing 0
@@ -370,7 +370,11 @@ data LINEN a = LINEN {linen_attackTime :: a
                      ,linen_sustainTime :: a
                      ,linen_releaseTime :: a
                      ,linen_level :: a
-                     ,linen_curve :: Envelope_Curve3 a}
+                     ,linen_curve :: Envelope_Curve_3 a}
+
+-- | SC3 defaults for LINEN.
+linen_def :: Fractional t => LINEN t
+linen_def = let c = EnvLin in LINEN 0.01 1 1 1 (c,c,c)
 
 -- | Record ('LINEN') variant of 'envLinen'.
 envLinen_r :: Num a => LINEN a -> Envelope a
@@ -381,7 +385,7 @@ envLinen_r (LINEN aT sT rT lv (c0,c1,c2)) =
     in Envelope l t c Nothing Nothing 0
 
 -- | Variant of 'envLinen' with user specified 'Envelope_Curve a'.
-envLinen_c :: Num a => a -> a -> a -> a -> Envelope_Curve3 a -> Envelope a
+envLinen_c :: Num a => a -> a -> a -> a -> Envelope_Curve_3 a -> Envelope a
 envLinen_c aT sT rT lv c = envLinen_r (LINEN aT sT rT lv c)
 
 -- | Linear envelope parameter constructor.
@@ -402,19 +406,20 @@ data ADSR a = ADSR {adsr_attackTime :: a
                    ,adsr_sustainLevel :: a
                    ,adsr_releaseTime :: a
                    ,adsr_peakLevel :: a
-                   ,adsr_curve :: Envelope_Curve3 a
+                   ,adsr_curve :: Envelope_Curve_3 a
                    ,adsr_bias :: a}
 
-adsrDefault :: Fractional n => ADSR n
-adsrDefault = let c = EnvNum (-4) in ADSR 0.01 0.3 0.5 1 1 (c,c,c) 0
+-- | SC3 defaults for ADSR.
+adsr_def :: Fractional n => ADSR n
+adsr_def = let c = EnvNum (-4) in ADSR 0.01 0.3 0.5 1 1 (c,c,c) 0
 
 -- | Attack, decay, sustain, release envelope parameter constructor.
 envADSR :: Num a => a -> a -> a -> a -> a -> Envelope_Curve a -> a -> Envelope a
 envADSR aT dT sL rT pL c b = envADSR_r (ADSR aT dT sL rT pL (c,c,c) b)
 
--- | Vairant with defaults for pL, c and b.
-envADSR' :: Num a => a -> a -> a -> a -> Envelope a
-envADSR' aT dT sL rT = envADSR aT dT sL rT 1 (EnvNum (-4)) 0
+-- | Variant with defaults for pL, c and b.
+envADSR_def :: Num a => a -> a -> a -> a -> Envelope a
+envADSR_def aT dT sL rT = envADSR aT dT sL rT 1 (EnvNum (-4)) 0
 
 -- | Record ('ADSR') variant of 'envADSR'.
 envADSR_r :: Num a => ADSR a -> Envelope a
@@ -432,7 +437,7 @@ data ADSSR a = ADSSR {adssr_attackTime :: a
                      ,adssr_slopeTime :: a
                      ,adssr_sustainLevel :: a
                      ,adssr_releaseTime :: a
-                     ,adssr_curve :: Envelope_Curve4 a
+                     ,adssr_curve :: Envelope_Curve_4 a
                      ,adssr_bias :: a}
 
 -- | Attack, decay, slope, sustain, release envelope parameter constructor.
@@ -451,10 +456,14 @@ envADSSR_r (ADSSR t1 l1 t2 l2 t3 l3 t4 (c1,c2,c3,c4) b) =
 data ASR a = ASR {asr_attackTime :: a
                  ,asr_sustainLevel :: a
                  ,asr_releaseTime :: a
-                 ,asr_curve :: Envelope_Curve2 a}
+                 ,asr_curve :: Envelope_Curve_2 a}
+
+-- | SC3 default values for ASR.
+asr_def :: Fractional t => ASR t
+asr_def = let c = EnvNum (-4) in ASR 0.01 1 1 (c,c)
 
 -- | SC3 .asr has singular curve argument, hence _c suffix.
-envASR_c :: Num a => a -> a -> a -> Envelope_Curve2 a -> Envelope a
+envASR_c :: Num a => a -> a -> a -> Envelope_Curve_2 a -> Envelope a
 envASR_c aT sL rT c = envASR_r (ASR aT sL rT c)
 
 -- | Attack, sustain, release envelope parameter constructor.
@@ -491,4 +500,4 @@ envXYC xyc =
       xyc_asc = sortOn (\(x,_,_) -> x) xyc
       (times,levels,curves) = unzip3 xyc_asc
       offset = times !! 0
-  in Envelope levels (B.d_dx' times) (take (n - 1) curves) Nothing Nothing offset
+  in Envelope levels (Base.d_dx' times) (take (n - 1) curves) Nothing Nothing offset

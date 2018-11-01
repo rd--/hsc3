@@ -46,3 +46,16 @@ http://sc-users.bham.ac.narkive.com/sj4Tw3ub/sync-osc#post6
     > import Sound.OSC {- hosc -}
     > set_factor n = withSC3 (sendMessage (n_set1 (-1) "factor" n))
     > set_factor 0.125 {- 0.5 1.5 23.0 0.125 1.3 -}
+
+slow indeterminate modulation of width, <http://sccode.org/1-5as>
+
+> g_05 =
+>   let midinote = 60
+>       gate_ = 1
+>       amp = 0.25
+>       asr = envASR 0.1 1 0.1 (EnvNum (-4))
+> 	env = envGen KR gate_ 1 0 1 RemoveSynth asr
+>       freq = midiCPS midinote
+>       width = range 0.2 0.8 (lfNoise2 'β' KR 1) *
+>               range 0.7 0.8 (sinOsc KR 5 (rand 'α' 0.0 1.0))
+>   in varSaw AR freq 0 width * env * amp
