@@ -1,32 +1,31 @@
     Sound.SC3.UGen.Help.viewSC3Help "StkModalBar"
     Sound.SC3.UGen.DB.ugenSummary "StkModalBar"
 
-> import Control.Monad
 > import Sound.SC3 {- hsc3 -}
-> import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
+> import qualified Sound.SC3.UGen.Bindings.DB.External as External {- hsc3 -}
+> import qualified Sound.SC3.UGen.Bindings.DB.RDU as RDU {- sc3-rdu -}
 
-requires "../../rawwaves/marmstk1.raw"
-
-> g_01 :: UId m => m UGen
-> g_01 = do
->   let x = mouseX KR 0.25 4 Linear 0.2
+> g_01 =
+>   let x = mouseX KR 0.25 12 Linear 0.2
 >       tr = impulse KR x 0 - 0.5
->       tR = tRandM 0 127 tr
->   i <- tRandM 0 9 tr
->   mn <- tIRandM 25 96 tr
->   [sh,sp,vg,vf,mx,v] <- replicateM 6 tR
->   return (stkModalBar AR (midiCPS mn) i sh sp vg vf mx v tr)
+>       tR = tRand 'α' 0 127 tr
+>       i = tRand 'β' 0 9 tr
+>       mn = tiRand 'γ' 25 96 tr
+>       [sh,sp,vg,vf,mx,v] = mceChannels (RDU.tRandN 6 'δ' 0 127 tr)
+>   in External.stkModalBar AR (midiCPS mn) i sh sp vg vf mx v tr
 
-> g_02 :: UId m => m UGen
-> g_02 = do
->   let x = mouseX KR 1 6 Linear 0.2
->       t = impulse KR x 0 - 0.5
->       tr = pulseDivider t 6 0
->   mn <- tIRandM 52 64 t
->   sh <- tRandM 4 8 tr
->   sp <- tRandM 54 68 tr
->   vg <- tRandM 66 98 tr
->   vf <- tRandM 4 12 tr
->   mx <- tRandM 0 1 tr
->   v <- tRandM 16 48 tr
->   return (stkModalBar AR (midiCPS mn) 1 sh sp vg vf mx v t)
+> g_02 =
+>   let x = mouseX KR 1 12 Linear 0.2
+>       tr = impulse KR x 0 - 0.5
+>       tr3 = pulseDivider tr 3 0
+>       freq = midiCPS (tiRand 'α' 52 64 tr)
+>       instr = 1 -- instrument (0 - 9)
+>       sh = tRand 'β' 10 50 tr3 -- stickhardness
+>       sp = tRand 'γ' 40 80 tr3 -- stickposition
+>       vg = tRand 'δ' 66 98 tr3 -- vibratogain
+>       vf = tRand 'ε' 4 12 tr3 -- vibratofreq
+>       mx = tRand 'ζ' 0 1 tr3 -- directstickmix
+>       v = tRand 'η' 16 48 tr3 -- volume
+>   in External.stkModalBar AR freq instr sh sp vg vf mx v tr
+
+<https://ccrma.stanford.edu/software/stk/classstk_1_1ModalBar.html>

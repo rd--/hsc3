@@ -2,7 +2,7 @@
     > Sound.SC3.UGen.DB.ugenSummary "Dshuf"
 
 > import Sound.SC3 {- hsc3 -}
-> import qualified Sound.SC3.UGen.External.RDU as RDU {- sc3-rdu -}
+> import qualified Sound.SC3.UGen.Bindings.DB.RDU as RDU {- sc3-rdu -}
 
 > g_01 =
 >     let a = dseq 'α' dinf (dshuf 'β' 3 (mce [1,3,2,7,8.5]))
