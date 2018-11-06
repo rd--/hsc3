@@ -20,9 +20,9 @@ self deleting
 
 re-sounding
 
-> g_02 =
+> f_02 dur =
 >   let sequ e s tr = demand tr 0 (dseq e dinf (mce s))
->       t = let d = dseq 'α' dinf (mce [1,1,2,1,1,1,2,3,1,1,1,1,2,3,4] * 0.175)
+>       t = let d = dseq 'α' dinf dur
 >           in tDuty AR d 0 DoNothing 1 0
 >       freq = let n0 = sequ 'β' [60,62,63,58,48,55] t
 >                  n1 = sequ 'γ' [63,60,48,62,55,58] t
@@ -42,3 +42,12 @@ re-sounding
 >       ps = E.dWGPlucked2 AR freq amp gate_ pos c1 c3 inp release mistune mp gc
 >       pan = tRand 'ο' (-1) 1 t
 >   in pan2 ps pan 0.1
+
+> g_02 = f_02 (mce [1,1,2,1,1,1,2,3,1,1,1,1,2,3,4] * 0.175)
+
+and scaling
+
+> g_03 =
+>   let m = mouseX KR 0.25 2.0 Linear 0.2
+>       d = 1 / (2 ** roundE (mce [1,1,2,1,1,1,2,3,1,1,1,1,2,3,4]))
+>   in f_02 (d * m)

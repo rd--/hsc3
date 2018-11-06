@@ -309,9 +309,9 @@ proxify u =
 -- cf = constant function, rs = rate set, r = rate, nm = name, i =
 -- inputs, o = outputs.
 mkUGen :: Maybe ([Sample] -> Sample) -> [Rate] -> Either Rate [Int] ->
-          String -> [UGen] -> Maybe UGen -> Int -> Special -> UGenId -> UGen
+          String -> [UGen] -> Maybe [UGen] -> Int -> Special -> UGenId -> UGen
 mkUGen cf rs r nm i i_mce o s z =
-    let i' = maybe i ((i ++) . mceChannels) i_mce
+    let i' = maybe i ((i ++) . concatMap mceChannels) i_mce
         f h = let r' = either id (maximum . map (rateOf . atNote ("mkUGen: " ++ nm) h)) r
                   o' = replicate o r'
                   u = Primitive_U (Primitive r' nm h o' s z)

@@ -287,7 +287,7 @@ bufSamples rate bufnum = mkUGen Nothing [IR,KR] (Left rate) "BufSamples" [bufnum
 --
 --  BufWr [KR,AR] bufnum=0.0 phase=0.0 loop=1.0 *inputArray=0.0;    MCE, FILTER: TRUE, REORDERS INPUTS: [3,0,1,2], ENUMERATION INPUTS: 2=Loop
 bufWr :: UGen -> UGen -> Loop -> UGen -> UGen
-bufWr bufnum phase loop inputArray = mkUGen Nothing [KR,AR] (Right [3]) "BufWr" [bufnum,phase,(from_loop loop)] (Just inputArray) 1 (Special 0) NoId
+bufWr bufnum phase loop inputArray = mkUGen Nothing [KR,AR] (Right [3]) "BufWr" [bufnum,phase,(from_loop loop)] (Just [inputArray]) 1 (Special 0) NoId
 
 -- | Chorusing wavetable oscillator.
 --
@@ -497,7 +497,7 @@ delayN in_ maxdelaytime delaytime = mkUGen Nothing [KR,AR] (Right [0]) "DelayN" 
 --
 --  Demand [KR,AR] trig=0.0 reset=0.0 *demandUGens=0.0;    MCE, FILTER: TRUE
 demand :: UGen -> UGen -> UGen -> UGen
-demand trig_ reset demandUGens = mkUGen Nothing [KR,AR] (Right [0]) "Demand" [trig_,reset] (Just demandUGens) (length (mceChannels demandUGens) + 0) (Special 0) NoId
+demand trig_ reset demandUGens = mkUGen Nothing [KR,AR] (Right [0]) "Demand" [trig_,reset] (Just [demandUGens]) (length (mceChannels demandUGens) + 0) (Special 0) NoId
 
 -- | Demand rate envelope generator
 --
@@ -539,7 +539,7 @@ diskIn numChannels bufnum loop = mkUGen Nothing [AR] (Left AR) "DiskIn" [bufnum,
 --
 --  DiskOut [AR] bufnum=0.0 *channelsArray=0.0;    MCE
 diskOut :: UGen -> UGen -> UGen
-diskOut bufnum input = mkUGen Nothing [AR] (Left AR) "DiskOut" [bufnum] (Just input) 1 (Special 0) NoId
+diskOut bufnum input = mkUGen Nothing [AR] (Left AR) "DiskOut" [bufnum] (Just [input]) 1 (Special 0) NoId
 
 -- | Demand rate white noise random generator.
 --
@@ -569,7 +569,7 @@ dpoll z in_ label_ run trigid = mkUGen Nothing [DR] (Left DR) "Dpoll" [in_,label
 --
 --  Drand [DR] repeats=1.0 *list=0.0;    MCE, REORDERS INPUTS: [1,0], DEMAND/NONDET
 drand :: ID a => a -> UGen -> UGen -> UGen
-drand z repeats list_ = mkUGen Nothing [DR] (Left DR) "Drand" [repeats] (Just list_) 1 (Special 0) (toUId z)
+drand z repeats list_ = mkUGen Nothing [DR] (Left DR) "Drand" [repeats] (Just [list_]) 1 (Special 0) (toUId z)
 
 -- | demand rate reset
 --
@@ -581,13 +581,13 @@ dreset z in_ reset = mkUGen Nothing [DR] (Left DR) "Dreset" [in_,reset] Nothing 
 --
 --  Dseq [DR] repeats=1.0 *list=0.0;    MCE, REORDERS INPUTS: [1,0], DEMAND/NONDET
 dseq :: ID a => a -> UGen -> UGen -> UGen
-dseq z repeats list_ = mkUGen Nothing [DR] (Left DR) "Dseq" [repeats] (Just list_) 1 (Special 0) (toUId z)
+dseq z repeats list_ = mkUGen Nothing [DR] (Left DR) "Dseq" [repeats] (Just [list_]) 1 (Special 0) (toUId z)
 
 -- | Demand rate sequence generator.
 --
 --  Dser [DR] repeats=1.0 *list=0.0;    MCE, REORDERS INPUTS: [1,0], DEMAND/NONDET
 dser :: ID a => a -> UGen -> UGen -> UGen
-dser z repeats list_ = mkUGen Nothing [DR] (Left DR) "Dser" [repeats] (Just list_) 1 (Special 0) (toUId z)
+dser z repeats list_ = mkUGen Nothing [DR] (Left DR) "Dser" [repeats] (Just [list_]) 1 (Special 0) (toUId z)
 
 -- | Demand rate arithmetic series UGen.
 --
@@ -599,7 +599,7 @@ dseries z length_ start step = mkUGen Nothing [DR] (Left DR) "Dseries" [length_,
 --
 --  Dshuf [DR] repeats=1.0 *list=0.0;    MCE, REORDERS INPUTS: [1,0], DEMAND/NONDET
 dshuf :: ID a => a -> UGen -> UGen -> UGen
-dshuf z repeats list_ = mkUGen Nothing [DR] (Left DR) "Dshuf" [repeats] (Just list_) 1 (Special 0) (toUId z)
+dshuf z repeats list_ = mkUGen Nothing [DR] (Left DR) "Dshuf" [repeats] (Just [list_]) 1 (Special 0) (toUId z)
 
 -- | Demand rate input replicator
 --
@@ -611,13 +611,13 @@ dstutter z n in_ = mkUGen Nothing [DR] (Left DR) "Dstutter" [n,in_] Nothing 1 (S
 --
 --  Dswitch [DR] index=0.0 *list=0.0;    MCE, REORDERS INPUTS: [1,0], DEMAND/NONDET
 dswitch :: ID a => a -> UGen -> UGen -> UGen
-dswitch z index_ list_ = mkUGen Nothing [DR] (Left DR) "Dswitch" [index_] (Just list_) 1 (Special 0) (toUId z)
+dswitch z index_ list_ = mkUGen Nothing [DR] (Left DR) "Dswitch" [index_] (Just [list_]) 1 (Special 0) (toUId z)
 
 -- | Demand rate generator for switching between inputs.
 --
 --  Dswitch1 [DR] index=0.0 *list=0.0;    MCE, REORDERS INPUTS: [1,0], DEMAND/NONDET
 dswitch1 :: ID a => a -> UGen -> UGen -> UGen
-dswitch1 z index_ list_ = mkUGen Nothing [DR] (Left DR) "Dswitch1" [index_] (Just list_) 1 (Special 0) (toUId z)
+dswitch1 z index_ list_ = mkUGen Nothing [DR] (Left DR) "Dswitch1" [index_] (Just [list_]) 1 (Special 0) (toUId z)
 
 -- | Return the same unique series of values for several demand streams
 --
@@ -654,20 +654,20 @@ dwhite z length_ lo hi = mkUGen Nothing [DR] (Left DR) "Dwhite" [length_,lo,hi] 
 --
 --  Dwrand [DR] repeats=1.0 weights=0.0 *list=0.0;    MCE, REORDERS INPUTS: [2,1,0], DEMAND/NONDET
 dwrand :: ID a => a -> UGen -> UGen -> UGen -> UGen
-dwrand z repeats weights list_ = mkUGen Nothing [DR] (Left DR) "Dwrand" [repeats,weights] (Just list_) 1 (Special 0) (toUId z)
+dwrand z repeats weights list_ = mkUGen Nothing [DR] (Left DR) "Dwrand" [repeats,weights] (Just [list_]) 1 (Special 0) (toUId z)
 -}
 
 -- | Demand rate random sequence generator.
 --
 --  Dxrand [DR] repeats=1.0 *list=0.0;    MCE, REORDERS INPUTS: [1,0], DEMAND/NONDET
 dxrand :: ID a => a -> UGen -> UGen -> UGen
-dxrand z repeats list_ = mkUGen Nothing [DR] (Left DR) "Dxrand" [repeats] (Just list_) 1 (Special 0) (toUId z)
+dxrand z repeats list_ = mkUGen Nothing [DR] (Left DR) "Dxrand" [repeats] (Just [list_]) 1 (Special 0) (toUId z)
 
 -- | Envelope generator
 --
 --  EnvGen [KR,AR] gate=1.0 levelScale=1.0 levelBias=0.0 timeScale=1.0 doneAction=0.0 *envelope=0.0;    MCE, REORDERS INPUTS: [5,0,1,2,3,4,5], ENUMERATION INPUTS: 4=DoneAction, 5=Envelope UGen
 envGen :: Rate -> UGen -> UGen -> UGen -> UGen -> DoneAction -> Envelope UGen -> UGen
-envGen rate gate_ levelScale levelBias timeScale doneAction envelope_ = mkUGen Nothing [KR,AR] (Left rate) "EnvGen" [gate_,levelScale,levelBias,timeScale,(from_done_action doneAction)] (Just (envelope_to_ugen envelope_)) 1 (Special 0) NoId
+envGen rate gate_ levelScale levelBias timeScale doneAction envelope_ = mkUGen Nothing [KR,AR] (Left rate) "EnvGen" [gate_,levelScale,levelBias,timeScale,(from_done_action doneAction)] (Just [envelope_to_ugen envelope_]) 1 (Special 0) NoId
 
 -- | Exponential single random number generator.
 --
@@ -889,7 +889,7 @@ hilbert in_ = mkUGen Nothing [AR] (Right [0]) "Hilbert" [in_] Nothing 2 (Special
 --
 --  IEnvGen [KR,AR] index=0.0 *envelope=0.0;    MCE, REORDERS INPUTS: [1,0], ENUMERATION INPUTS: 1=Envelope UGen
 iEnvGen :: Rate -> UGen -> Envelope UGen -> UGen
-iEnvGen rate index_ envelope_ = mkUGen Nothing [KR,AR] (Left rate) "IEnvGen" [index_] (Just (envelope_to_ienvgen_ugen envelope_)) 1 (Special 0) NoId
+iEnvGen rate index_ envelope_ = mkUGen Nothing [KR,AR] (Left rate) "IEnvGen" [index_] (Just [envelope_to_ienvgen_ugen envelope_]) 1 (Special 0) NoId
 
 -- | Inverse Fast Fourier Transform
 --
@@ -991,13 +991,13 @@ keyTrack rate chain keydecay chromaleak = mkUGen Nothing [KR] (Left rate) "KeyTr
 --
 --  Klang [AR] freqscale=1.0 freqoffset=0.0 *specificationsArrayRef=0.0;    MCE, REORDERS INPUTS: [2,0,1]
 klang :: Rate -> UGen -> UGen -> UGen -> UGen
-klang rate freqscale freqoffset specificationsArrayRef = mkUGen Nothing [AR] (Left rate) "Klang" [freqscale,freqoffset] (Just specificationsArrayRef) 1 (Special 0) NoId
+klang rate freqscale freqoffset specificationsArrayRef = mkUGen Nothing [AR] (Left rate) "Klang" [freqscale,freqoffset] (Just [specificationsArrayRef]) 1 (Special 0) NoId
 
 -- | Bank of resonators
 --
 --  Klank [AR] input=0.0 freqscale=1.0 freqoffset=0.0 decayscale=1.0 *specificationsArrayRef=0.0;    MCE, FILTER: TRUE, REORDERS INPUTS: [4,0,1,2,3]
 klank :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-klank input freqscale freqoffset decayscale specificationsArrayRef = mkUGen Nothing [AR] (Right [0]) "Klank" [input,freqscale,freqoffset,decayscale] (Just specificationsArrayRef) 1 (Special 0) NoId
+klank input freqscale freqoffset decayscale specificationsArrayRef = mkUGen Nothing [AR] (Right [0]) "Klank" [input,freqscale,freqoffset,decayscale] (Just [specificationsArrayRef]) 1 (Special 0) NoId
 
 -- | Clipped noise
 --
@@ -1255,13 +1255,13 @@ localBuf z numChannels numFrames = mkUGen Nothing [IR] (Left IR) "LocalBuf" [num
 --
 --  LocalIn [KR,AR] *default=0.0;    MCE, NC INPUT: True
 localIn :: Int -> Rate -> UGen -> UGen
-localIn numChannels rate default_ = mkUGen Nothing [KR,AR] (Left rate) "LocalIn" [] (Just default_) numChannels (Special 0) NoId
+localIn numChannels rate default_ = mkUGen Nothing [KR,AR] (Left rate) "LocalIn" [] (Just [default_]) numChannels (Special 0) NoId
 
 -- | Write to buses local to a synth.
 --
 --  LocalOut [KR,AR] *channelsArray=0.0;    MCE, FILTER: TRUE
 localOut :: UGen -> UGen
-localOut input = mkUGen Nothing [KR,AR] (Right [0]) "LocalOut" [] (Just input) 0 (Special 0) NoId
+localOut input = mkUGen Nothing [KR,AR] (Right [0]) "LocalOut" [] (Just [input]) 0 (Special 0) NoId
 
 -- | Chaotic noise function
 --
@@ -1393,7 +1393,7 @@ numRunningSynths = mkUGen Nothing [IR,KR] (Left IR) "NumRunningSynths" [] Nothin
 --
 --  OffsetOut [KR,AR] bus=0.0 *channelsArray=0.0;    MCE, FILTER: TRUE
 offsetOut :: UGen -> UGen -> UGen
-offsetOut bus input = mkUGen Nothing [KR,AR] (Right [1]) "OffsetOut" [bus] (Just input) 0 (Special 0) NoId
+offsetOut bus input = mkUGen Nothing [KR,AR] (Right [1]) "OffsetOut" [bus] (Just [input]) 0 (Special 0) NoId
 
 -- | One pole filter.
 --
@@ -1429,7 +1429,7 @@ oscN rate bufnum freq phase = mkUGen Nothing [KR,AR] (Left rate) "OscN" [bufnum,
 --
 --  Out [KR,AR] bus=0.0 *channelsArray=0.0;    MCE, FILTER: TRUE
 out :: UGen -> UGen -> UGen
-out bus input = mkUGen Nothing [KR,AR] (Right [1]) "Out" [bus] (Just input) 0 (Special 0) NoId
+out bus input = mkUGen Nothing [KR,AR] (Right [1]) "Out" [bus] (Just [input]) 0 (Special 0) NoId
 
 -- | Very fast sine grain with a parabolic envelope
 --
@@ -1841,13 +1841,13 @@ randSeed rate trig_ seed = mkUGen Nothing [IR,KR,AR] (Left rate) "RandSeed" [tri
 --
 --  RecordBuf [KR,AR] bufnum=0.0 offset=0.0 recLevel=1.0 preLevel=0.0 run=1.0 loop=1.0 trigger=1.0 doneAction=0.0 *inputArray=0.0;    MCE, REORDERS INPUTS: [8,0,1,2,3,4,5,6,7], ENUMERATION INPUTS: 5=Loop, 7=DoneAction
 recordBuf :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> Loop -> UGen -> DoneAction -> UGen -> UGen
-recordBuf rate bufnum offset recLevel preLevel run loop trigger doneAction inputArray = mkUGen Nothing [KR,AR] (Left rate) "RecordBuf" [bufnum,offset,recLevel,preLevel,run,(from_loop loop),trigger,(from_done_action doneAction)] (Just inputArray) 1 (Special 0) NoId
+recordBuf rate bufnum offset recLevel preLevel run loop trigger doneAction inputArray = mkUGen Nothing [KR,AR] (Left rate) "RecordBuf" [bufnum,offset,recLevel,preLevel,run,(from_loop loop),trigger,(from_done_action doneAction)] (Just [inputArray]) 1 (Special 0) NoId
 
 -- | Send signal to a bus, overwriting previous contents.
 --
 --  ReplaceOut [KR,AR] bus=0.0 *channelsArray=0.0;    MCE, FILTER: TRUE
 replaceOut :: UGen -> UGen -> UGen
-replaceOut bus input = mkUGen Nothing [KR,AR] (Right [1]) "ReplaceOut" [bus] (Just input) 0 (Special 0) NoId
+replaceOut bus input = mkUGen Nothing [KR,AR] (Right [1]) "ReplaceOut" [bus] (Just [input]) 0 (Special 0) NoId
 
 -- | Resonant filter.
 --
@@ -1931,7 +1931,7 @@ scopeOut2 rate inputArray scopeNum maxFrames scopeFrames = mkUGen Nothing [KR,AR
 --
 --  Select [IR,KR,AR] which=0.0 *array=0.0;    MCE, FILTER: TRUE
 select :: UGen -> UGen -> UGen
-select which array = mkUGen Nothing [IR,KR,AR] (Right [0,1]) "Select" [which] (Just array) 1 (Special 0) NoId
+select which array = mkUGen Nothing [IR,KR,AR] (Right [0,1]) "Select" [which] (Just [array]) 1 (Special 0) NoId
 
 -- | Send a trigger message from the server back to the client.
 --
@@ -2111,7 +2111,7 @@ tRand z lo hi trig_ = mkUGen Nothing [KR,AR] (Right [2]) "TRand" [lo,hi,trig_] N
 --
 --  TWindex [KR,AR] in=0.0 normalize=0.0 *array=0.0;    MCE, FILTER: TRUE, REORDERS INPUTS: [0,2,1], NONDET
 tWindex :: ID a => a -> UGen -> UGen -> UGen -> UGen
-tWindex z in_ normalize array = mkUGen Nothing [KR,AR] (Right [0]) "TWindex" [in_,normalize] (Just array) 1 (Special 0) (toUId z)
+tWindex z in_ normalize array = mkUGen Nothing [KR,AR] (Right [0]) "TWindex" [in_,normalize] (Just [array]) 1 (Special 0) (toUId z)
 
 -- | Returns time since last triggered.
 --
@@ -2243,7 +2243,7 @@ xLine rate start end dur doneAction = mkUGen Nothing [KR,AR] (Left rate) "XLine"
 --
 --  XOut [KR,AR] bus=0.0 xfade=0.0 *channelsArray=0.0;    MCE, FILTER: TRUE
 xOut :: UGen -> UGen -> UGen -> UGen
-xOut bus xfade input = mkUGen Nothing [KR,AR] (Right [2]) "XOut" [bus,xfade] (Just input) 0 (Special 0) NoId
+xOut bus xfade input = mkUGen Nothing [KR,AR] (Right [2]) "XOut" [bus,xfade] (Just [input]) 0 (Special 0) NoId
 
 -- | Zero crossing frequency follower
 --
@@ -2267,4 +2267,4 @@ mulAdd in_ mul add = mkUGen Nothing [IR,KR,AR] (Right [0]) "MulAdd" [in_,mul,add
 --
 --  SetBuf [IR] buf=0.0 offset=0.0 length=0.0 *array=0.0;    MCE, REORDERS INPUTS: [0,1,2,3]
 setBuf :: UGen -> UGen -> UGen -> UGen -> UGen
-setBuf buf offset length_ array = mkUGen Nothing [IR] (Left IR) "SetBuf" [buf,offset,length_] (Just array) 1 (Special 0) NoId
+setBuf buf offset length_ array = mkUGen Nothing [IR] (Left IR) "SetBuf" [buf,offset,length_] (Just [array]) 1 (Special 0) NoId

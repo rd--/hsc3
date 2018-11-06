@@ -19,7 +19,7 @@ dwrand z repeats weights list_ =
     let n = mceDegree_err list_
         weights' = mceExtend n weights
         inp = repeats : constant n : weights'
-    in mkUGen Nothing [DR] (Left DR) "Dwrand" inp (Just list_) 1 (Special 0) (U.toUId z)
+    in mkUGen Nothing [DR] (Left DR) "Dwrand" inp (Just [list_]) 1 (Special 0) (U.toUId z)
 
 -- | Outputs signal for @FFT@ chains, without performing FFT.
 fftTrigger :: UGen -> UGen -> UGen -> UGen

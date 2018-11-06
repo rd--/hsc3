@@ -680,9 +680,9 @@ fFTSubbandPower rate chain cutfreqs square scalemode = mkUGen Nothing [KR] (Left
 
 -- | Phase modulation oscillator matrix.
 --
---  FM7 [AR] ctlMatrix=0.0 modMatrix=0.0
+--  FM7 [AR] *ctlMatrix=0.0 *modMatrix=0.0
 fm7 :: Rate -> UGen -> UGen -> UGen
-fm7 rate ctlMatrix modMatrix = mkUGen Nothing [AR] (Left rate) "FM7" [ctlMatrix,modMatrix] Nothing 6 (Special 0) NoId
+fm7 rate ctlMatrix modMatrix = mkUGen Nothing [AR] (Left rate) "FM7" [] (Just [ctlMatrix,modMatrix]) 6 (Special 0) NoId
 
 -- | (Undocumented class)
 --

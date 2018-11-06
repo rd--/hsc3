@@ -510,6 +510,10 @@ osc1 rt buf dur doneAction =
 
 -- * External
 
+-- | FM7 variant where input matrices are not in MCE form.
+fm7_mx :: [[UGen]] -> [[UGen]] -> UGen
+fm7_mx ctlMatrix modMatrix = E.fm7 AR (mce (concat ctlMatrix)) (mce (concat modMatrix))
+
 pulseDPW :: Rate -> UGen -> UGen -> UGen
 pulseDPW rt freq width =
   let o1 = E.sawDPW rt freq 0
