@@ -4,13 +4,16 @@
 > import Sound.SC3 {- hsc3 -}
 > import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
 
+> f_01 zmax s =
+>   let x = mouseX KR 1 10 Exponential 0.2
+>       y = mouseY KR 1 zmax Linear 0.2
+>   in squiz s x y 0.1 * 0.1
+
 Squiz of sin oscillator
 
-> g_01 =
->   let o = sinOsc AR 440 0
->       x = mouseX KR 1 10 Exponential 0.2
->       y = mouseY KR 1 10 Linear 0.2
->   in squiz o x y 0.1 * 0.1
+> g_01 = f_01 10 (sinOsc AR 440 0)
+
+> g_02 = f_01 100 (soundIn 0)
 
 Load sound file to buffer zero
 
@@ -20,9 +23,7 @@ Load sound file to buffer zero
 
 Squiz of audio file.
 
-> g_02 =
+> g_03 =
 >   let r = bufRateScale KR 0
 >       p = playBuf 1 AR 0 (r * 0.5) 1 0 Loop DoNothing
->       x = mouseX KR 1 100 Exponential 0.2
->       y = mouseY KR 1 10 Linear 0.2
->   in squiz p x y 0.1 * 0.5
+>   in f_01 100 p
