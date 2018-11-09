@@ -164,8 +164,8 @@ klangSpec :: [UGen] -> [UGen] -> [UGen] -> UGen
 klangSpec = klanx_spec_f id mce
 
 -- | Variant of 'klangSpec' for non-UGen inputs.
-klangSpec' :: Real n => [n] -> [n] -> [n] -> UGen
-klangSpec' = klanx_spec_f (map constant) mce
+klangSpec_k :: Real n => [n] -> [n] -> [n] -> UGen
+klangSpec_k = klanx_spec_f (map constant) mce
 
 -- | Variant of 'klangSpec' for 'MCE' inputs.
 klangSpec_mce :: UGen -> UGen -> UGen -> UGen
@@ -176,8 +176,8 @@ klankSpec :: [UGen] -> [UGen] -> [UGen] -> UGen
 klankSpec = klanx_spec_f id mce
 
 -- | Variant for non-UGen inputs.
-klankSpec' :: Real n => [n] -> [n] -> [n] -> UGen
-klankSpec' = klanx_spec_f (map constant) mce
+klankSpec_k :: Real n => [n] -> [n] -> [n] -> UGen
+klankSpec_k = klanx_spec_f (map constant) mce
 
 -- | Variant of 'klankSpec' for 'MCE' inputs.
 klankSpec_mce :: UGen -> UGen -> UGen -> UGen

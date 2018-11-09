@@ -1,6 +1,5 @@
 -- | Functions to re-write assigned node identifiers at UGen graphs.
--- Used carefully it allows for composition of sub-graphs with
--- psuedo-random nodes.
+-- Used carefully it allows for composition of sub-graphs with psuedo-random nodes.
 module Sound.SC3.UGen.Protect where
 
 import Sound.SC3.UGen.Identifier
@@ -17,6 +16,7 @@ ugenIds =
     in ugenFoldr ((++) . f) []
 -}
 
+-- | Replace UId /i/ at /z/ with /(e,i)/.
 edit_ugenid :: ID a => a -> UGenId -> UGenId
 edit_ugenid e z =
     case z of
