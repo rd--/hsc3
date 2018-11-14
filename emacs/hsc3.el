@@ -7,7 +7,7 @@
 (require 'comint)
 (require 'thingatpt)
 (require 'find-lisp)
-(require 'inf-haskell)
+(require 'inf-haskell) ;; debian=haskell-mode
 
 (defvar hsc3-help-directory
   nil
