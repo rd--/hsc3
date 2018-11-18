@@ -44,6 +44,18 @@ parse_enum cr nm =
 
 -- * LIST
 
+-- | Left to right composition of a list of functions.
+--
+-- > compose_l [(* 2),(+ 1)] 3 == 7
+compose_l :: [t -> t] -> t -> t
+compose_l = flip (foldl (\x f -> f x))
+
+-- | Right to left composition of a list of functions.
+--
+-- > compose_r [(* 2),(+ 1)] 3 == 8
+compose_r :: [t -> t] -> t -> t
+compose_r = flip (foldr (\f x -> f x))
+
 {- | SequenceableCollection.differentiate
 
 > > [3,4,1,1].differentiate == [3,1,-3,0]

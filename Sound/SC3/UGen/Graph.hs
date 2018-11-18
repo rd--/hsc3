@@ -6,7 +6,7 @@ import Data.Function {- base -}
 import Data.List{- base -}
 import Data.Maybe{- base -}
 
-import qualified Sound.SC3.UGen.Analysis as A
+import qualified Sound.SC3.UGen.Analysis as Analysis
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
@@ -14,77 +14,76 @@ import Sound.SC3.UGen.UGen
 -- * Type
 
 -- | Node identifier.
-type NodeId = Int
+type Node_Id = Int
 
 -- | Port index.
-type PortIndex = Int
+type Port_Index = Int
 
 -- | Type to represent unit generator graph.
-data Graph = Graph {nextId :: NodeId
+data Graph = Graph {next_id :: Node_Id
                    ,constants :: [Node]
                    ,controls :: [Node]
                    ,ugens :: [Node]}
             deriving (Show)
 
 -- | Enumeration of the four operating rates for controls.
-data KType = K_IR | K_KR | K_TR | K_AR
+data K_Type = K_IR | K_KR | K_TR | K_AR
              deriving (Eq,Show,Ord)
 
--- | Type to represent the left hand side of an edge in a unit
---   generator graph.
-data FromPort = FromPort_C {port_nid :: NodeId}
-              | FromPort_K {port_nid :: NodeId,port_kt :: KType}
-              | FromPort_U {port_nid :: NodeId,port_idx :: Maybe PortIndex}
-                deriving (Eq,Show)
+-- | Type to represent the left hand side of an edge in a unit generator graph.
+data From_Port = From_Port_C {port_nid :: Node_Id}
+               | From_Port_K {port_nid :: Node_Id,port_kt :: K_Type}
+               | From_Port_U {port_nid :: Node_Id,port_idx :: Maybe Port_Index}
+               deriving (Eq,Show)
 
 -- | A destination port.
-data ToPort = ToPort NodeId PortIndex deriving (Eq,Show)
+data To_Port = To_Port Node_Id Port_Index deriving (Eq,Show)
 
--- | A connection from 'FromPort' to 'ToPort'.
-type Edge = (FromPort,ToPort)
+-- | A connection from 'From_Port' to 'To_Port'.
+type Edge = (From_Port,To_Port)
 
 -- | Type to represent nodes in unit generator graph.
-data Node = NodeC {node_id :: NodeId
-                  ,node_c_value :: Sample}
-          | NodeK {node_id :: NodeId
-                  ,node_k_rate :: Rate
-                  ,node_k_index :: Maybe Int
-                  ,node_k_name :: String
-                  ,node_k_default :: Sample
-                  ,node_k_type :: KType
-                  ,node_k_meta :: Maybe (C_Meta Sample)}
-          | NodeU {node_id :: NodeId
-                  ,node_u_rate :: Rate
-                  ,node_u_name :: String
-                  ,node_u_inputs :: [FromPort]
-                  ,node_u_outputs :: [Output]
-                  ,node_u_special :: Special
-                  ,node_u_ugenid :: UGenId}
-          | NodeP {node_id :: NodeId
-                  ,node_p_node :: Node
-                  ,node_p_index :: PortIndex}
+data Node = Node_C {node_id :: Node_Id
+                   ,node_c_value :: Sample}
+          | Node_K {node_id :: Node_Id
+                   ,node_k_rate :: Rate
+                   ,node_k_index :: Maybe Int
+                   ,node_k_name :: String
+                   ,node_k_default :: Sample
+                   ,node_k_type :: K_Type
+                   ,node_k_meta :: Maybe (C_Meta Sample)}
+          | Node_U {node_id :: Node_Id
+                   ,node_u_rate :: Rate
+                   ,node_u_name :: String
+                   ,node_u_inputs :: [From_Port]
+                   ,node_u_outputs :: [Output]
+                   ,node_u_special :: Special
+                   ,node_u_ugenid :: UGenId}
+          | Node_P {node_id :: Node_Id
+                   ,node_p_node :: Node
+                   ,node_p_index :: Port_Index}
             deriving (Show)
 
 node_k_eq :: Node -> Node -> Bool
 node_k_eq p q =
     case (p,q) of
-      (NodeK k rt ix nm df tr me,NodeK k' rt' ix' nm' df' tr' me') ->
+      (Node_K k rt ix nm df tr me,Node_K k' rt' ix' nm' df' tr' me') ->
           k == k' && rt == rt' && ix == ix' && nm == nm' && df == df' && tr == tr' && me == me'
       _ -> error "node_k_eq? not Node_K"
 
--- | 'Rate' of 'Node', ie. 'IR' for constants, & see through 'NodeP'.
+-- | 'Rate' of 'Node', ie. 'IR' for constants & see through 'Node_P'.
 node_rate :: Node -> Rate
 node_rate n =
     case n of
-      NodeC {} -> IR
-      NodeK {} -> node_k_rate n
-      NodeU {} -> node_u_rate n
-      NodeP _ n' _ -> node_rate n'
+      Node_C {} -> IR
+      Node_K {} -> node_k_rate n
+      Node_U {} -> node_u_rate n
+      Node_P _ n' _ -> node_rate n'
 
 -- * Building
 
--- | Find 'Node' with indicated 'NodeId'.
-find_node :: Graph -> NodeId -> Maybe Node
+-- | Find 'Node' with indicated 'Node_Id'.
+find_node :: Graph -> Node_Id -> Maybe Node
 find_node (Graph _ cs ks us) n =
     let f x = node_id x == n
     in find f (cs ++ ks ++ us)
@@ -93,78 +92,83 @@ find_node (Graph _ cs ks us) n =
 node_label :: Node -> String
 node_label nd =
     case nd of
-      NodeC n _ -> "c_" ++ show n
-      NodeK n _ _ _ _ _ _ -> "k_" ++ show n
-      NodeU n _ _ _ _ _ _ -> "u_" ++ show n
-      NodeP n _ _ -> "p_" ++ show n
+      Node_C n _ -> "c_" ++ show n
+      Node_K n _ _ _ _ _ _ -> "k_" ++ show n
+      Node_U n _ _ _ _ _ _ -> "u_" ++ show n
+      Node_P n _ _ -> "p_" ++ show n
 
--- | Get 'port_idx' for 'FromPort_U', else @0@.
-port_idx_or_zero :: FromPort -> PortIndex
+-- | Get 'port_idx' for 'From_Port_U', else @0@.
+port_idx_or_zero :: From_Port -> Port_Index
 port_idx_or_zero p =
     case p of
-      FromPort_U _ (Just x) -> x
+      From_Port_U _ (Just x) -> x
       _ -> 0
 
 -- | Is 'Node' a /constant/.
 is_node_c :: Node -> Bool
 is_node_c n =
     case n of
-      NodeC _ _ -> True
+      Node_C _ _ -> True
       _ -> False
 
 -- | Is 'Node' a /control/.
 is_node_k :: Node -> Bool
 is_node_k n =
     case n of
-      NodeK {} -> True
+      Node_K {} -> True
       _ -> False
 
 -- | Is 'Node' a /UGen/.
 is_node_u :: Node -> Bool
 is_node_u n =
     case n of
-      NodeU {} -> True
+      Node_U {} -> True
       _ -> False
 
--- | Calculate all edges given a set of 'NodeU'.
+-- | Calculate all edges given a set of 'Node_U'.
 edges :: [Node] -> [Edge]
 edges =
     let f n = case n of
-                NodeU x _ _ i _ _ _ -> zip i (map (ToPort x) [0..])
-                _ -> error "edges: non NodeU input node"
+                Node_U x _ _ i _ _ _ -> zip i (map (To_Port x) [0..])
+                _ -> error "edges: non Node_U input node"
     in concatMap f
 
--- | Transform 'Node' to 'FromPort'.
-as_from_port :: Node -> FromPort
+-- | Transform 'Node' to 'From_Port'.
+as_from_port :: Node -> From_Port
 as_from_port d =
     case d of
-      NodeC n _ -> FromPort_C n
-      NodeK n _ _ _ _ t _ -> FromPort_K n t
-      NodeU n _ _ _ o _ _ ->
+      Node_C n _ -> From_Port_C n
+      Node_K n _ _ _ _ t _ -> From_Port_K n t
+      Node_U n _ _ _ o _ _ ->
           case o of
-            [_] -> FromPort_U n Nothing
-            _ -> error (show ("as_from_port: non unary NodeU",d))
-      NodeP _ u p -> FromPort_U (node_id u) (Just p)
+            [_] -> From_Port_U n Nothing
+            _ -> error (show ("as_from_port: non unary Node_U",d))
+      Node_P _ u p -> From_Port_U (node_id u) (Just p)
 
--- | Locate 'Node' of 'FromPort' in 'Graph'.
-from_port_node :: Graph -> FromPort -> Maybe Node
+-- | Locate 'Node' of 'From_Port' in 'Graph'.
+from_port_node :: Graph -> From_Port -> Maybe Node
 from_port_node g fp = find_node g (port_nid fp)
+
+-- | Erroring variant of 'from_port_node'.
+from_port_node_err :: Graph -> From_Port -> Node
+from_port_node_err g fp =
+    let e = error "from_port_node_err"
+    in fromMaybe e (from_port_node g fp)
 
 -- | The empty 'Graph'.
 empty_graph :: Graph
 empty_graph = Graph 0 [] [] []
 
--- | Find the maximum 'NodeId' used at 'Graph' (this ought normally be
--- the 'nextId').
-graph_maximum_id :: Graph -> NodeId
+-- | Find the maximum 'Node_Id' used at 'Graph' (this ought normally be the 'next_id').
+graph_maximum_id :: Graph -> Node_Id
 graph_maximum_id (Graph _ c k u) = maximum (map node_id (c ++ k ++ u))
 
--- | Compare 'NodeK' values 'on' 'node_k_type'.
+-- | Compare 'Node_K' values 'on' 'node_k_type'.
 node_k_cmp :: Node -> Node -> Ordering
 node_k_cmp = compare `on` node_k_type
 
 -- | Determine class of control given 'Rate' and /trigger/ status.
-ktype :: Rate -> Bool -> KType
+ktype :: Rate -> Bool -> K_Type
 ktype r tr =
     if tr
     then case r of
@@ -180,15 +184,15 @@ ktype r tr =
 find_c_p :: Sample -> Node -> Bool
 find_c_p x n =
     case n of
-      NodeC _ y -> x == y
-      _ -> error "find_c_p: non NodeC"
+      Node_C _ y -> x == y
+      _ -> error "find_c_p: non Node_C"
 
 -- | Insert a constant 'Node' into the 'Graph'.
 push_c :: Sample -> Graph -> (Node,Graph)
 push_c x g =
-    let n = NodeC (nextId g) x
+    let n = Node_C (next_id g) x
     in (n,g {constants = n : constants g
-            ,nextId = nextId g + 1})
+            ,next_id = next_id g + 1})
 
 -- | Either find existing 'Constant' 'Node', or insert a new 'Node'.
 mk_node_c :: Constant -> Graph -> (Node,Graph)
@@ -201,15 +205,15 @@ mk_node_c (Constant x) g =
 find_k_p :: String -> Node -> Bool
 find_k_p x n =
     case n of
-      NodeK _ _ _ y _ _ _ -> x == y
+      Node_K _ _ _ y _ _ _ -> x == y
       _ -> error "find_k_p"
 
 -- | Insert a control node into the 'Graph'.
 push_k :: Control -> Graph -> (Node,Graph)
 push_k (Control r ix nm d tr meta) g =
-    let n = NodeK (nextId g) r ix nm d (ktype r tr) meta
+    let n = Node_K (next_id g) r ix nm d (ktype r tr) meta
     in (n,g {controls = n : controls g
-            ,nextId = nextId g + 1})
+            ,next_id = next_id g + 1})
 
 -- | Either find existing 'Control' 'Node', or insert a new 'Node'.
 mk_node_k :: Control -> Graph -> (Node,Graph)
@@ -218,22 +222,22 @@ mk_node_k c g =
         y = find (find_k_p nm) (controls g)
     in maybe (push_k c g) (\y' -> (y',g)) y
 
-type UGenParts = (Rate,String,[FromPort],[Output],Special,UGenId)
+type UGenParts = (Rate,String,[From_Port],[Output],Special,UGenId)
 
 -- | Predicate to locate primitive, names must be unique.
 find_u_p :: UGenParts -> Node -> Bool
 find_u_p (r,n,i,o,s,d) nd =
     case nd of
-      NodeU _ r' n' i' o' s' d' ->
+      Node_U _ r' n' i' o' s' d' ->
           r == r' && n == n' && i == i' && o == o' && s == s' && d == d'
       _ ->  error "find_u_p"
 
--- | Insert a /primitive/ 'NodeU' into the 'Graph'.
+-- | Insert a /primitive/ 'Node_U' into the 'Graph'.
 push_u :: UGenParts -> Graph -> (Node,Graph)
 push_u (r,nm,i,o,s,d) g =
-    let n = NodeU (nextId g) r nm i o s d
+    let n = Node_U (next_id g) r nm i o s d
     in (n,g {ugens = n : ugens g
-            ,nextId = nextId g + 1})
+            ,next_id = next_id g + 1})
 
 mk_node_u_acc :: [UGen] -> [Node] -> Graph -> ([Node],Graph)
 mk_node_u_acc u n g =
@@ -252,10 +256,10 @@ mk_node_u (Primitive r nm i o s d) g =
     in maybe (push_u u g') (\y' -> (y',g')) y
 
 -- | Proxies do not get stored in the graph.
-mk_node_p :: Node -> PortIndex -> Graph -> (Node,Graph)
+mk_node_p :: Node -> Port_Index -> Graph -> (Node,Graph)
 mk_node_p n p g =
-    let z = nextId g
-    in (NodeP z n p,g {nextId = z + 1})
+    let z = next_id g
+    in (Node_P z n p,g {next_id = z + 1})
 
 -- | Transform 'UGen' into 'Graph', appending to existing 'Graph'.
 mk_node :: UGen -> Graph -> (Node,Graph)
@@ -307,10 +311,10 @@ mk_graph u =
 
 type Map = M.IntMap Int
 
-type Maps = (Map,[Node],Map,Map,[(KType,Int)])
+type Maps = (Map,[Node],Map,Map,[(K_Type,Int)])
 
--- | Determine 'KType' of a /control/ UGen at 'NodeU', or not.
-node_ktype :: Node -> Maybe KType
+-- | Determine 'K_Type' of a /control/ UGen at 'Node_U', or not.
+node_ktype :: Node -> Maybe K_Type
 node_ktype n =
     case (node_u_name n,node_u_rate n) of
       ("Control",IR) -> Just K_IR
@@ -319,14 +323,14 @@ node_ktype n =
       ("AudioControl",AR) -> Just K_AR
       _ -> Nothing
 
--- | Map associating 'KType' with UGen index.
-mk_ktype_map :: [Node] -> [(KType,Int)]
+-- | Map associating 'K_Type' with UGen index.
+mk_ktype_map :: [Node] -> [(K_Type,Int)]
 mk_ktype_map =
     let f (i,n) = let g ty = (ty,i) in fmap g (node_ktype n)
     in mapMaybe f . zip [0..]
 
--- | Lookup 'KType' index from map (erroring variant of 'lookup').
-ktype_map_lookup :: KType -> [(KType,Int)] -> Int
+-- | Lookup 'K_Type' index from map (erroring variant of 'lookup').
+ktype_map_lookup :: K_Type -> [(K_Type,Int)] -> Int
 ktype_map_lookup k =
     let e = error (show ("ktype_map_lookup",k))
     in fromMaybe e . lookup k
@@ -340,13 +344,13 @@ mk_maps (Graph _ cs ks us) =
     ,M.fromList (zip (map node_id us) [0..])
     ,mk_ktype_map us)
 
--- | Locate index in map given node identifer 'NodeId'.
-fetch :: NodeId -> Map -> Int
+-- | Locate index in map given node identifer 'Node_Id'.
+fetch :: Node_Id -> Map -> Int
 fetch = M.findWithDefault (error "fetch")
 
 -- | Controls are a special case.  We need to know not the overall
 -- index but the index in relation to controls of the same type.
-fetch_k :: NodeId -> KType -> [Node] -> Int
+fetch_k :: Node_Id -> K_Type -> [Node] -> Int
 fetch_k z t =
     let recur i ns =
             case ns of
@@ -360,10 +364,10 @@ fetch_k z t =
 
 -- * Implicit (Control, MaxLocalBuf)
 
--- | 4-tuple to count 'KType's.
+-- | 4-tuple to count 'K_Type's.
 type KS_COUNT = (Int,Int,Int,Int)
 
--- | Count the number of /controls/ of each 'KType'.
+-- | Count the number of /controls/ of each 'K_Type'.
 ks_count :: [Node] -> KS_COUNT
 ks_count =
     let recur r ns =
@@ -393,7 +397,7 @@ mk_implicit_ctl ks =
                 i = replicate n r
             in if n == 0
                then Nothing
-               else Just (NodeU (-1) r nm [] i (Special o) no_id)
+               else Just (Node_U (-1) r nm [] i (Special o) no_id)
     in catMaybes [mk_n K_IR ni 0
                  ,mk_n K_KR nk ni
                  ,mk_n K_TR nt (ni + nk)
@@ -422,7 +426,7 @@ add_implicit_buf g =
       0 -> g
       n -> let (c,g') = mk_node_c (Constant (fromIntegral n)) g
                p = as_from_port c
-               u = NodeU (-1) IR "MaxLocalBufs" [p] [] (Special 0) no_id
+               u = Node_U (-1) IR "MaxLocalBufs" [p] [] (Special 0) no_id
            in g' {ugens = u : ugens g'}
 
 -- | 'add_implicit_buf' and 'add_implicit_ctl'.
@@ -434,7 +438,7 @@ is_implicit_control :: Node -> Bool
 is_implicit_control n =
     let cs = ["AudioControl","Control","TrigControl"]
     in case n of
-        NodeU x _ s _ _ _ _ -> x == -1 && s `elem` cs
+        Node_U x _ s _ _ _ _ -> x == -1 && s `elem` cs
         _ -> False
 
 -- | Is Node implicit?
@@ -449,15 +453,15 @@ remove_implicit g =
 
 -- * Queries
 
--- | Is 'FromPort' 'FromPort_U'.
-is_from_port_u :: FromPort -> Bool
+-- | Is 'From_Port' 'From_Port_U'.
+is_from_port_u :: From_Port -> Bool
 is_from_port_u p =
     case p of
-      FromPort_U _ _ -> True
+      From_Port_U _ _ -> True
       _ -> False
 
--- | List of 'FromPort_U' at /e/ with multiple out edges.
-multiple_u_out_edges :: [Edge] -> [FromPort]
+-- | List of 'From_Port_U' at /e/ with multiple out edges.
+multiple_u_out_edges :: [Edge] -> [From_Port]
 multiple_u_out_edges e =
     let p = filter is_from_port_u (map fst e)
         p' = group (sortBy (compare `on` port_nid) p)
@@ -468,7 +472,7 @@ node_descendents :: Graph -> Node -> [Node]
 node_descendents g n =
     let e = edges (ugens g)
         c = filter ((== node_id n) . port_nid . fst) e
-        f (ToPort k _) = k
+        f (To_Port k _) = k
     in mapMaybe (find_node g . f . snd) c
 
 -- * PV edge accounting
@@ -479,7 +483,7 @@ pv_multiple_out_edges g =
     let e = edges (ugens g)
         p = multiple_u_out_edges e
         n = mapMaybe (find_node g . port_nid) p
-    in filter (A.primitive_is_pv_rate . node_u_name) n
+    in filter (Analysis.primitive_is_pv_rate . node_u_name) n
 
 -- | Error if graph has invalid @PV@ subgraph, ie. multiple out edges
 -- at @PV@ node not connecting to @Unpack1FFT@ & @PackFFT@.
@@ -488,7 +492,7 @@ pv_validate g =
     case pv_multiple_out_edges g of
       [] -> g
       n -> let d = concatMap (map node_u_name . node_descendents g) n
-           in if any A.primitive_is_pv_rate d || any (`elem` ["IFFT"]) d
+           in if any Analysis.primitive_is_pv_rate d || any (`elem` ["IFFT"]) d
               then error (show
                           ("pv_validate: multiple out edges, see pv_split"
                           ,map node_u_name n

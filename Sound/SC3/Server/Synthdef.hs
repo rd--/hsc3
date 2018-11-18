@@ -1,5 +1,4 @@
--- | The unit-generator graph structure implemented by the
---   SuperCollider synthesis server.
+-- | The unit-generator graph structure implemented by the SuperCollider synthesis server.
 module Sound.SC3.Server.Synthdef where
 
 import qualified Data.ByteString.Lazy as L {- bytestring -}
@@ -7,12 +6,13 @@ import Data.List {- base -}
 import Data.Maybe {- base -}
 import System.FilePath {- filepath -}
 
-import qualified Sound.SC3.Server.Graphdef as G
-import qualified Sound.SC3.Server.Graphdef.Graph as G
 import Sound.SC3.UGen.Graph
 import Sound.SC3.UGen.Help.Graph
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
+
+import qualified Sound.SC3.Server.Graphdef as Graphdef
+import qualified Sound.SC3.Server.Graphdef.Graph as Graph
 
 -- | A named unit generator graph.
 data Synthdef = Synthdef {synthdefName :: String
@@ -59,17 +59,17 @@ ugenIndices :: String -> Graph -> [Integer]
 ugenIndices nm =
     let f (k,nd) =
             case nd of
-              NodeU _ _ nm' _ _ _ _ -> if nm == nm' then Just k else Nothing
+              Node_U _ _ nm' _ _ _ _ -> if nm == nm' then Just k else Nothing
               _ -> Nothing
     in mapMaybe f . zip [0..] . ugens
 
 -- | 'graph_to_graphdef' at 'Synthdef'.
-synthdef_to_graphdef :: Synthdef -> G.Graphdef
-synthdef_to_graphdef (Synthdef nm u) = G.graph_to_graphdef nm (ugen_to_graph u)
+synthdef_to_graphdef :: Synthdef -> Graphdef.Graphdef
+synthdef_to_graphdef (Synthdef nm u) = Graph.graph_to_graphdef nm (ugen_to_graph u)
 
 -- | Encode 'Synthdef' as a binary data stream.
 synthdefData :: Synthdef -> L.ByteString
-synthdefData = G.encode_graphdef . synthdef_to_graphdef
+synthdefData = Graphdef.encode_graphdef . synthdef_to_graphdef
 
 -- | Write 'Synthdef' to indicated directory.  The filename is the
 -- 'synthdefName' with the appropriate extension (@scsyndef@).
@@ -85,24 +85,31 @@ graph_stat_ln s =
         ks = controls s
         us = ugens s
         u_nm z = ugen_user_name (node_u_name z) (node_u_special z)
-        f g = let h (x:xs) = (x,length (x:xs))
-                  h [] = error "graph_stat"
-              in show . map h . group . sort . map g
-        sq pp_f = intercalate "," (pp_f (map u_nm us))
+        hist pp_f =
+          let h (x:xs) = (x,length (x:xs))
+              h [] = error "graph_stat_ln"
+          in unwords . map (\(p,q) -> pp_f p ++ "×" ++ show q) . map h . group . sort
     in ["number of constants       : " ++ show (length cs)
        ,"number of controls        : " ++ show (length ks)
-       ,"control rates             : " ++ f node_k_rate ks
+       ,"control rates             : " ++ hist show (map node_k_rate ks)
+       ,"control names             : " ++ unwords (map node_k_name ks)
        ,"number of unit generators : " ++ show (length us)
-       ,"unit generator rates      : " ++ f node_u_rate us
-       ,"unit generator set        : " ++ sq (sort . nub)
-       ,"unit generator sequence   : " ++ sq id]
+       ,"unit generator rates      : " ++ hist show (map node_u_rate us)
+       ,"unit generator set        : " ++ hist id (map u_nm us)
+       ,"unit generator sequence   : " ++ unwords (map u_nm us)]
 
 -- | 'graph_stat_ln' of 'synth'.
 synthstat_ln :: UGen -> [String]
 synthstat_ln = graph_stat_ln . ugen_to_graph
 
 -- | 'unlines' of 'synthstat_ln'.
+--
+-- > putStrLn $ synthstat Sound.SC3.UGen.Help.Graph.default_ugen_graph
 synthstat :: UGen -> String
 synthstat = unlines . synthstat_ln
 
-
+-- | Variant without UGen sequence.
+--
+-- > putStrLn $ synthstat_concise (default_sampler_ugen_graph True)
+synthstat_concise :: UGen -> String
+synthstat_concise = unlines . take 6 . synthstat_ln

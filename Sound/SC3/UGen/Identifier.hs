@@ -17,8 +17,13 @@ instance ID Char where resolveID = fromEnum
 instance ID Int where resolveID = id
 instance (ID p,ID q) => ID (p,q) where
 
+-- | /n/ identifiers from /x/.
+--
+-- > id_seq 10 'α' == [945 .. 954]
+id_seq :: ID a => Int -> a -> [Int]
+id_seq n x = take n [resolveID x ..]
+
 {-
-instance ID Int where
 instance ID Integer where
 instance ID Float where
 instance ID Double where

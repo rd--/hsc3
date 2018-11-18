@@ -1,5 +1,4 @@
--- | Functions to make writing 'Applicative' and 'Monad' UGen graphs
--- less clumsy.
+-- | Functions to make writing 'Applicative' and 'Monad' UGen graphs less clumsy.
 module Sound.SC3.Common.Monad.Operators where
 
 import Control.Applicative {- base -}

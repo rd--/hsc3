@@ -15,13 +15,13 @@ import Sound.SC3.UGen.UGen
 node_sort :: [Node] -> [Node]
 node_sort = sortBy (compare `on` node_id)
 
-from_port_label :: Char -> FromPort -> String
+from_port_label :: Char -> From_Port -> String
 from_port_label jn fp =
     case fp of
-      FromPort_C n -> printf "c_%d" n
-      FromPort_K n _ -> printf "k_%d" n
-      FromPort_U n Nothing -> printf "u_%d" n
-      FromPort_U n (Just i) -> printf "u_%d%co_%d" n jn i
+      From_Port_C n -> printf "c_%d" n
+      From_Port_K n _ -> printf "k_%d" n
+      From_Port_U n Nothing -> printf "u_%d" n
+      From_Port_U n (Just i) -> printf "u_%d%co_%d" n jn i
 
 is_operator_name :: String -> Bool
 is_operator_name nm =
@@ -57,11 +57,11 @@ reconstruct_graph_module nm gr =
 
 > import Sound.SC3
 
-> let {k = control KR "bus" 0
->     ;o = sinOsc AR 440 0 + whiteNoise 'a' AR
->     ;u = out k (pan2 (o * 0.1) 0 1)
->     ;m = mrg [u,out 1 (impulse AR 1 0 * 0.1)]}
-> in putStrLn (reconstruct_graph_str "anon" (ugen_to_graph m))
+> let k = control KR "bus" 0
+> let o = sinOsc AR 440 0 + whiteNoise 'α' AR
+> let u = out k (pan2 (o * 0.1) 0 1)
+> let m = mrg [u,out 1 (impulse AR 1 0 * 0.1)]
+> putStrLn (reconstruct_graph_str "anon" (ugen_to_graph m))
 
 -}
 reconstruct_graph_str :: String -> Graph -> String

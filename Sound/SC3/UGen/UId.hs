@@ -9,8 +9,8 @@ import Data.Functor.Identity {- base -}
 import Data.List {- base -}
 import qualified Data.Unique as U {- base -}
 
-import qualified Control.Monad.Trans.Reader as R {- transformers -}
-import qualified Control.Monad.Trans.State as S {- transformers -}
+import qualified Control.Monad.Trans.Reader as Reader {- transformers -}
+import qualified Control.Monad.Trans.State as State {- transformers -}
 
 import Sound.SC3.UGen.Type {- hsc3 -}
 
@@ -19,20 +19,20 @@ import Sound.SC3.UGen.Type {- hsc3 -}
 class (Functor m,Applicative m,Monad m) => UId m where
    generateUId :: m Int
 
--- | 'S.State' UId.
-type UId_ST = S.State Int
+-- | 'State.State' UId.
+type UId_ST = State.State Int
 
--- | 'S.evalState' with initial state of zero.
+-- | 'State.evalState' with initial state of zero.
 --
 -- > uid_st_eval (replicateM 3 generateUId) == [0,1,2]
 uid_st_eval :: UId_ST t -> t
-uid_st_eval x = S.evalState x 0
+uid_st_eval x = State.evalState x 0
 
--- | Thread state through sequence of 'S.runState'.
+-- | Thread state through sequence of 'State.runState'.
 uid_st_seq :: [UId_ST t] -> ([t],Int)
 uid_st_seq =
     let swap (p,q) = (q,p)
-        step_f n x = swap (S.runState x n)
+        step_f n x = swap (State.runState x n)
     in swap . mapAccumL step_f 0
 
 -- | 'fst' of 'uid_st_seq'.
@@ -41,14 +41,15 @@ uid_st_seq =
 uid_st_seq_ :: [UId_ST t] -> [t]
 uid_st_seq_ = fst . uid_st_seq
 
-instance UId (S.StateT Int Identity) where
-    generateUId = S.get >>= \n -> S.put (n + 1) >> return n
+-- | Requires FlexibleInstances.
+instance UId (State.StateT Int Identity) where
+    generateUId = State.get >>= \n -> State.put (n + 1) >> return n
 
 instance UId IO where
     generateUId = liftM U.hashUnique U.newUnique
 
-instance UId m => UId (R.ReaderT t m) where
-   generateUId = R.ReaderT (const generateUId)
+instance UId m => UId (Reader.ReaderT t m) where
+   generateUId = Reader.ReaderT (const generateUId)
 
 -- * Lift
 
