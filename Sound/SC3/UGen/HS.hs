@@ -116,16 +116,8 @@ sr_to_rps :: Floating n => n -> n
 sr_to_rps sr = two_pi / sr
 
 resonz_f :: Floating n => T3 n -> (n -> n -> n -> T2 n)
-resonz_f (radians_per_sample,f,rq) x y1 y2 =
-    let ff = f * radians_per_sample
-        b = ff * rq
-        r = 1.0 - b * 0.5
-        two_r = 2.0 * r
-        r2 = r * r
-        ct = (two_r * cos ff) / (1.0 + r2)
-        b1 = two_r * ct
-        b2 = negate r2
-        a0 = (1.0 - r2) * 0.5
+resonz_f param x y1 y2 =
+    let (a0,b1,b2) = Filter.resonz_coef param
         y0 = x + b1 * y1 + b2 * y2
     in (a0 * (y0 - y2),y0)
 
@@ -137,16 +129,10 @@ iir2_ff_fb f (n,(y1,y0)) = let (r,y0') = f n y0 y1 in (r,(y0,y0'))
 resonz_ir :: Floating n => T3 n -> F_ST1 (T2 n) n n
 resonz_ir p = iir2_ff_fb (resonz_f p)
 
--- | rlp = resonant low pass
+-- | rlpf = resonant low pass filter
 rlpf_f :: Floating n => (n -> n -> n) -> T3 n -> F_U3 n
-rlpf_f max_f (radians_per_sample,f,rq) x y1 y2 =
-    let qr = max_f 0.001 rq
-        pf = f * radians_per_sample
-        d = tan (pf * qr * 0.5)
-        c = (1.0 - d) / (1.0 + d)
-        b1 = (1.0 + c) * cos pf
-        b2 = negate c
-        a0 = (1.0 + c - b1) * 0.25
+rlpf_f max_f param x y1 y2 =
+    let (a0,b1,b2) = Filter.rlpf_coef max_f param
     in a0 * x + b1 * y1 + b2 * y2
 
 rlpf_ir :: (Floating n, Ord n) => T3 n -> F_ST1 (T2 n) n n

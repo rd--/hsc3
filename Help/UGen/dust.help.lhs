@@ -1,7 +1,7 @@
     Sound.SC3.UGen.Help.viewSC3Help "Dust"
     Sound.SC3.UGen.DB.ugenSummary "Dust"
 
-> import Sound.SC3
+> import Sound.SC3 {- hsc3 -}
 
 > g_01 = dust 'α' AR 2 * 0.25
 

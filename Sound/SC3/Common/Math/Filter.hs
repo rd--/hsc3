@@ -14,3 +14,29 @@ bw_lpf_or_hpf_coef is_hpf sample_rate f =
         b1 = if is_hpf then 2.0 * (c2 - 1.0) * a0 else 2.0 * (1.0 - c2) * a0
         b2 = (1.0 - s2c + c2) * a0
     in (a0,a1,a2,b1,b2)
+
+-- | rlpf coefficients, (a0,b1,b2).
+rlpf_coef :: Floating n => (n -> n -> n) -> (n,n,n) -> (n,n,n)
+rlpf_coef max_f (radians_per_sample,f,rq) =
+    let qr = max_f 0.001 rq
+        pf = f * radians_per_sample
+        d = tan (pf * qr * 0.5)
+        c = (1.0 - d) / (1.0 + d)
+        b1 = (1.0 + c) * cos pf
+        b2 = negate c
+        a0 = (1.0 + c - b1) * 0.25
+    in (a0,b1,b2)
+
+-- | resonz coefficients, (a0,b1,b2).
+resonz_coef :: Floating n => (n,n,n) -> (n,n,n)
+resonz_coef (radians_per_sample,f,rq) =
+    let ff = f * radians_per_sample
+        b = ff * rq
+        r = 1.0 - b * 0.5
+        two_r = 2.0 * r
+        r2 = r * r
+        ct = (two_r * cos ff) / (1.0 + r2)
+        b1 = two_r * ct
+        b2 = negate r2
+        a0 = (1.0 - r2) * 0.5
+    in (a0,b1,b2)
