@@ -3,16 +3,16 @@ module Sound.SC3.Server.Graphdef where
 
 import Control.Monad {- base -}
 import qualified Data.ByteString.Lazy as L {- bytestring -}
-import Data.List
+import Data.List {- base -}
 import System.IO {- base -}
 
-import qualified Sound.OSC.Coding.Byte as B {- hosc -}
-import qualified Sound.OSC.Coding.Cast as C {- hosc -}
-import Sound.OSC.Datum {- hosc -}
+import qualified Sound.OSC.Coding.Byte as Byte {- hosc -}
+import qualified Sound.OSC.Coding.Cast as Cast {- hosc -}
+import qualified Sound.OSC.Datum as Datum {- hosc -}
 
 -- * Type
 
-type Name = ASCII
+type Name = Datum.ASCII
 
 type Control = (Name,Int)
 
@@ -38,7 +38,8 @@ ugen_outputs :: UGen -> [Output]
 ugen_outputs (_,_,_,o,_) = o
 
 ugen_is_control :: UGen -> Bool
-ugen_is_control (nm,_,_,_,_) = ascii_to_string nm `elem` ["Control","LagControl","TrigControl"]
+ugen_is_control (nm,_,_,_,_) =
+  Datum.ascii_to_string nm `elem` ["Control","LagControl","TrigControl"]
 
 ugen_rate :: UGen -> Rate
 ugen_rate (_,r,_,_,_) = r
@@ -73,21 +74,21 @@ graphdef_ugen_nid g n = graphdef_control_nid g 0 + length (graphdef_controls g) 
 -- * Read
 
 read_i8 :: Handle -> IO Int
-read_i8 h = fmap B.decode_i8 (L.hGet h 1)
+read_i8 h = fmap Byte.decode_i8 (L.hGet h 1)
 
 read_i16 :: Handle -> IO Int
-read_i16 h = fmap B.decode_i16 (L.hGet h 2)
+read_i16 h = fmap Byte.decode_i16 (L.hGet h 2)
 
 read_i32 :: Handle -> IO Int
-read_i32 h = fmap B.decode_i32 (L.hGet h 4)
+read_i32 h = fmap Byte.decode_i32 (L.hGet h 4)
 
 read_sample :: Handle -> IO Sample
-read_sample h = fmap (realToFrac . B.decode_f32) (L.hGet h 4)
+read_sample h = fmap (realToFrac . Byte.decode_f32) (L.hGet h 4)
 
-read_pstr :: Handle -> IO ASCII
+read_pstr :: Handle -> IO Name
 read_pstr h = do
-  n <- fmap B.decode_u8 (L.hGet h 1)
-  fmap B.decode_str (L.hGet h n)
+  n <- fmap Byte.decode_u8 (L.hGet h 1)
+  fmap Byte.decode_str (L.hGet h n)
 
 read_control :: (Handle -> IO Int) -> Handle -> IO Control
 read_control read_i h = do
@@ -121,7 +122,7 @@ read_ugen read_i h = do
 
 read_graphdef :: Handle -> IO Graphdef
 read_graphdef h = do
-  magic <- fmap B.decode_str (L.hGet h 4)
+  magic <- fmap Byte.decode_str (L.hGet h 4)
   version <- read_i32 h
   let read_i =
           case version of
@@ -129,7 +130,7 @@ read_graphdef h = do
             2 -> read_i32
             _ -> error ("read_graphdef: version not at {zero | two}: " ++ show version)
   number_of_definitions <- read_i16 h
-  when (magic /= ascii "SCgf")
+  when (magic /= Datum.ascii "SCgf")
        (error "read_graphdef: illegal magic string")
   when (number_of_definitions /= 1)
        (error "read_graphdef: non unary graphdef file")
@@ -163,51 +164,51 @@ read_graphdef_file nm = do
 -- * Encode, we write version zero files
 
 -- | Pascal (length prefixed) encoding of string.
-encode_pstr :: ASCII -> L.ByteString
-encode_pstr = L.pack . C.str_pstr . ascii_to_string
+encode_pstr :: Name -> L.ByteString
+encode_pstr = L.pack . Cast.str_pstr . Datum.ascii_to_string
 
 -- | Byte-encode 'Input' value.
 encode_input :: Input -> L.ByteString
-encode_input (Input u p) = L.append (B.encode_i16 u) (B.encode_i16 p)
+encode_input (Input u p) = L.append (Byte.encode_i16 u) (Byte.encode_i16 p)
 
 encode_control :: Control -> L.ByteString
-encode_control (nm,k) = L.concat [encode_pstr nm,B.encode_i16 k]
+encode_control (nm,k) = L.concat [encode_pstr nm,Byte.encode_i16 k]
 
 -- | Byte-encode 'UGen'.
 encode_ugen :: UGen -> L.ByteString
 encode_ugen (nm,r,i,o,s) =
     L.concat [encode_pstr nm
-             ,B.encode_i8 r
-             ,B.encode_i16 (length i)
-             ,B.encode_i16 (length o)
-             ,B.encode_i16 s
+             ,Byte.encode_i8 r
+             ,Byte.encode_i16 (length i)
+             ,Byte.encode_i16 (length o)
+             ,Byte.encode_i16 s
              ,L.concat (map encode_input i)
-             ,L.concat (map B.encode_i8 o)]
+             ,L.concat (map Byte.encode_i8 o)]
 
 encode_sample :: Sample -> L.ByteString
-encode_sample = B.encode_f32 . realToFrac
+encode_sample = Byte.encode_f32 . realToFrac
 
 encode_graphdef :: Graphdef -> L.ByteString
 encode_graphdef (Graphdef nm cs ks us) =
     let (ks_ctl,ks_def) = unzip ks
-    in L.concat [B.encode_str (ascii "SCgf")
-                ,B.encode_i32 0 -- version
-                ,B.encode_i16 1 -- number of graphs
+    in L.concat [Byte.encode_str (Datum.ascii "SCgf")
+                ,Byte.encode_i32 0 -- version
+                ,Byte.encode_i16 1 -- number of graphs
                 ,encode_pstr nm
-                ,B.encode_i16 (length cs)
+                ,Byte.encode_i16 (length cs)
                 ,L.concat (map encode_sample cs)
-                ,B.encode_i16 (length ks_def)
+                ,Byte.encode_i16 (length ks_def)
                 ,L.concat (map encode_sample ks_def)
-                ,B.encode_i16 (length ks_ctl)
+                ,Byte.encode_i16 (length ks_ctl)
                 ,L.concat (map encode_control ks_ctl)
-                ,B.encode_i16 (length us)
+                ,Byte.encode_i16 (length us)
                 ,L.concat (map encode_ugen us)]
 
 -- * Stat
 
 graphdef_stat :: Graphdef -> String
 graphdef_stat (Graphdef nm cs ks us) =
-    let u_nm (sc3_nm,_,_,_,_) = ascii_to_string sc3_nm
+    let u_nm (sc3_nm,_,_,_,_) = Datum.ascii_to_string sc3_nm
         f g = let h (x:xs) = (x,length (x:xs))
                   h [] = error "graphdef_stat"
               in show . map h . group . sort . map g

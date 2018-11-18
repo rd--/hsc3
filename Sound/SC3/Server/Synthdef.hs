@@ -79,8 +79,8 @@ synthdefWrite s dir =
     in L.writeFile nm (synthdefData s)
 
 -- | Simple statistical analysis of a unit generator graph.
-graph_stat :: Graph -> [String]
-graph_stat s =
+graph_stat_ln :: Graph -> [String]
+graph_stat_ln s =
     let cs = constants s
         ks = controls s
         us = ugens s
@@ -97,11 +97,12 @@ graph_stat s =
        ,"unit generator set        : " ++ sq (sort . nub)
        ,"unit generator sequence   : " ++ sq id]
 
-synthstat' :: UGen -> [String]
-synthstat' = graph_stat . ugen_to_graph
+-- | 'graph_stat_ln' of 'synth'.
+synthstat_ln :: UGen -> [String]
+synthstat_ln = graph_stat_ln . ugen_to_graph
 
--- | 'graph_stat' of 'synth'.
+-- | 'unlines' of 'synthstat_ln'.
 synthstat :: UGen -> String
-synthstat = unlines . synthstat'
+synthstat = unlines . synthstat_ln
 
 
