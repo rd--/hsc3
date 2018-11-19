@@ -5,13 +5,13 @@ import Control.Monad {- base -}
 import System.FilePath {- filepath -}
 import System.Process {- process -}
 
-import Sound.SC3.UGen.Help
+import qualified Sound.SC3.UGen.Help as Help
 
 {- | Generate path to indicated SC3 instance method help.  Adds initial
 forward slash if not present.
 
 > let r = "./Reference/Server-Command-Reference.html#/b_alloc"
-> in sc3_server_command_ref "." "b_alloc" == r
+> sc3_server_command_ref "." "b_alloc" == r
 
 -}
 sc3_server_command_ref :: FilePath -> String -> FilePath
@@ -29,7 +29,7 @@ sc3_server_command_ref d c =
 -}
 viewServerHelp :: String -> IO ()
 viewServerHelp c = do
-  d <- sc3HelpDirectory
+  d <- Help.sc3HelpDirectory
   let nm = sc3_server_command_ref d c
-  br <- get_env_default "BROWSER" "x-www-browser"
+  br <- Help.get_env_default "BROWSER" "x-www-browser"
   void (rawSystem br ["file://" ++ nm])

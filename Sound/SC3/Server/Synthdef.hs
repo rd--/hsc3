@@ -112,4 +112,4 @@ synthstat = unlines . synthstat_ln
 --
 -- > putStrLn $ synthstat_concise (default_sampler_ugen_graph True)
 synthstat_concise :: UGen -> String
-synthstat_concise = unlines . take 6 . synthstat_ln
+synthstat_concise = unlines . reverse . drop 1 . reverse . synthstat_ln
