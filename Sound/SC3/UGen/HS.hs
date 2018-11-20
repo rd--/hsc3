@@ -70,6 +70,10 @@ iir1 f (n,y0) = let r = f n y0 in (r,r)
 iir2 :: F_U3 n -> F_ST1 (T2 n) n n
 iir2 f (n,(y1,y0)) = let r = f n y0 y1 in (r,(y0,r))
 
+-- | ff = feed-forward, fb = feed-back
+iir2_ff_fb :: (n -> n -> n -> T2 n) -> F_ST1 (T2 n) n n
+iir2_ff_fb f (n,(y1,y0)) = let (r,y0') = f n y0 y1 in (r,(y0,y0'))
+
 biquad :: F_U5 n -> F_ST1 (T4 n) n n
 biquad f (n,(x1,x0,y1,y0)) = let r = f n x0 x1 y0 y1 in (r,(x0,n,y0,r))
 
@@ -120,10 +124,6 @@ resonz_f param x y1 y2 =
     let (a0,b1,b2) = Filter.resonz_coef param
         y0 = x + b1 * y1 + b2 * y2
     in (a0 * (y0 - y2),y0)
-
--- | ff = feed-forward, fb = feed-back
-iir2_ff_fb :: (n -> n -> n -> T2 n) -> (n,T2 n) -> (n,T2 n)
-iir2_ff_fb f (n,(y1,y0)) = let (r,y0') = f n y0 y1 in (r,(y0,y0'))
 
 -- | ir = initialization rate
 resonz_ir :: Floating n => T3 n -> F_ST1 (T2 n) n n

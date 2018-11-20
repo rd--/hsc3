@@ -4,13 +4,11 @@
 > import Sound.SC3 {- hsc3 -}
 
 Dust randomly triggers Decay to create an exponential decay envelope
-for the WhiteNoise input source.  The input is mixed with the delay.
+for the WhiteNoise input source.  The input is left, the delay right.
 
 > g_01 =
 >     let i = decay (dust 'α' AR 1) 0.3 * whiteNoise 'β' AR
->         maxdelaytime = 0.2
->         delaytime = mouseX KR 0.0 maxdelaytime Linear 0.1
->     in i + delayN i maxdelaytime delaytime
+>     in mce2 i (delayN i 0.1 0.1)
 
 The delay time can be varied at control rate.  An oscillator either
 reinforcing or cancelling with the delayed copy of itself.
