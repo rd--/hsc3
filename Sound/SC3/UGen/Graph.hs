@@ -1,10 +1,22 @@
--- | 'Graph' and related types.
+{- | 'Graph' and related types.
+
+The UGen type is recursive, inputs to UGens are UGens.
+
+UGen equality is structural, and can be slow to determine for some UGen structures.
+
+A Graph is constructed by a stateful traversal of a UGen.
+
+Graph Nodes have unique identifiers and are non-recursive.
+
+The Graph is represented as a partioned (by type) set of nodes, edges are implicit.
+
+-}
 module Sound.SC3.UGen.Graph where
 
 import qualified Data.IntMap as M {- containers -}
 import Data.Function {- base -}
-import Data.List{- base -}
-import Data.Maybe{- base -}
+import Data.List {- base -}
+import Data.Maybe {- base -}
 
 import qualified Sound.SC3.UGen.Analysis as Analysis
 import Sound.SC3.UGen.Rate
@@ -19,17 +31,6 @@ type Node_Id = Int
 -- | Port index.
 type Port_Index = Int
 
--- | Type to represent unit generator graph.
-data Graph = Graph {next_id :: Node_Id
-                   ,constants :: [Node]
-                   ,controls :: [Node]
-                   ,ugens :: [Node]}
-            deriving (Show)
-
--- | Enumeration of the four operating rates for controls.
-data K_Type = K_IR | K_KR | K_TR | K_AR
-             deriving (Eq,Show,Ord)
-
 -- | Type to represent the left hand side of an edge in a unit generator graph.
 data From_Port = From_Port_C {port_nid :: Node_Id}
                | From_Port_K {port_nid :: Node_Id,port_kt :: K_Type}
@@ -43,6 +44,7 @@ data To_Port = To_Port Node_Id Port_Index deriving (Eq,Show)
 type Edge = (From_Port,To_Port)
 
 -- | Type to represent nodes in unit generator graph.
+--   _C = constant, _K = control, _U = ugen, _P = proxy.
 data Node = Node_C {node_id :: Node_Id
                    ,node_c_value :: Sample}
           | Node_K {node_id :: Node_Id
@@ -62,14 +64,25 @@ data Node = Node_C {node_id :: Node_Id
           | Node_P {node_id :: Node_Id
                    ,node_p_node :: Node
                    ,node_p_index :: Port_Index}
+            deriving (Eq,Show)
+
+-- | Type to represent unit generator graph.
+data Graph = Graph {next_id :: Node_Id
+                   ,constants :: [Node]
+                   ,controls :: [Node]
+                   ,ugens :: [Node]}
             deriving (Show)
 
+-- | Sort by 'node_id'.
+node_sort :: [Node] -> [Node]
+node_sort = sortBy (compare `on` node_id)
+
+-- | Equality test, error if not Node_K.
 node_k_eq :: Node -> Node -> Bool
 node_k_eq p q =
-    case (p,q) of
-      (Node_K k rt ix nm df tr me,Node_K k' rt' ix' nm' df' tr' me') ->
-          k == k' && rt == rt' && ix == ix' && nm == nm' && df == df' && tr == tr' && me == me'
-      _ -> error "node_k_eq? not Node_K"
+  if is_node_k p && is_node_k q
+  then p == q
+  else error "node_k_eq? not Node_K"
 
 -- | 'Rate' of 'Node', ie. 'IR' for constants & see through 'Node_P'.
 node_rate :: Node -> Rate
@@ -133,6 +146,10 @@ edges =
                 _ -> error "edges: non Node_U input node"
     in concatMap f
 
+-- | Calculate all edges of a 'Graph'.
+graph_edges :: Graph -> [Edge]
+graph_edges = edges . ugens
+
 -- | Transform 'Node' to 'From_Port'.
 as_from_port :: Node -> From_Port
 as_from_port d =
@@ -161,24 +178,15 @@ empty_graph = Graph 0 [] [] []
 
 -- | Find the maximum 'Node_Id' used at 'Graph' (this ought normally be the 'next_id').
 graph_maximum_id :: Graph -> Node_Id
-graph_maximum_id (Graph _ c k u) = maximum (map node_id (c ++ k ++ u))
+graph_maximum_id (Graph z c k u) =
+  let z' = maximum (map node_id (c ++ k ++ u))
+  in if z' /= z
+     then error (show ("graph_maximum_id: not next_id?",z,z'))
+     else z
 
 -- | Compare 'Node_K' values 'on' 'node_k_type'.
 node_k_cmp :: Node -> Node -> Ordering
 node_k_cmp = compare `on` node_k_type
-
--- | Determine class of control given 'Rate' and /trigger/ status.
-ktype :: Rate -> Bool -> K_Type
-ktype r tr =
-    if tr
-    then case r of
-           KR -> K_TR
-           _ -> error "ktype: non KR trigger control"
-    else case r of
-           IR -> K_IR
-           KR -> K_KR
-           AR -> K_AR
-           DR -> error "ktype: DR control"
 
 -- | Predicate to determine if 'Node' is a constant with indicated /value/.
 find_c_p :: Sample -> Node -> Bool
@@ -222,18 +230,18 @@ mk_node_k c g =
         y = find (find_k_p nm) (controls g)
     in maybe (push_k c g) (\y' -> (y',g)) y
 
-type UGenParts = (Rate,String,[From_Port],[Output],Special,UGenId)
+-- | All the elements of a Node_U, except the node_id.
+type Node_U_NOID = (Rate,String,[From_Port],[Output],Special,UGenId)
 
 -- | Predicate to locate primitive, names must be unique.
-find_u_p :: UGenParts -> Node -> Bool
-find_u_p (r,n,i,o,s,d) nd =
+find_u_p :: Node_U_NOID -> Node -> Bool
+find_u_p x nd =
     case nd of
-      Node_U _ r' n' i' o' s' d' ->
-          r == r' && n == n' && i == i' && o == o' && s == s' && d == d'
+      Node_U _ r n i o s d -> (r,n,i,o,s,d) == x
       _ ->  error "find_u_p"
 
 -- | Insert a /primitive/ 'Node_U' into the 'Graph'.
-push_u :: UGenParts -> Graph -> (Node,Graph)
+push_u :: Node_U_NOID -> Graph -> (Node,Graph)
 push_u (r,nm,i,o,s,d) g =
     let n = Node_U (next_id g) r nm i o s d
     in (n,g {ugens = n : ugens g

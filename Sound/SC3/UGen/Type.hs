@@ -1,4 +1,4 @@
---  | Unit Generator ('UGen'), and associated types and instances.
+-- | Unit Generator ('UGen'), and associated types and instances.
 module Sound.SC3.UGen.Type where
 
 import Data.Bits {- base -}
@@ -82,7 +82,7 @@ data Primitive = Primitive {ugenRate :: Rate
                            ,ugenId :: UGenId}
                  deriving (Eq,Read,Show)
 
--- | Proxy to multiple channel input.
+-- | Proxy indicating an output port at a multi-channel primitive.
 data Proxy = Proxy {proxySource :: Primitive
                    ,proxyIndex :: Int}
             deriving (Eq,Read,Show)
@@ -276,7 +276,7 @@ proxy :: UGen -> Int -> UGen
 proxy u n =
     case u of
       Primitive_U p -> Proxy_U (Proxy p n)
-      _ -> error "proxy: not primitive"
+      _ -> error "proxy: not primitive?"
 
 -- | Determine the rate of a UGen.
 rateOf :: UGen -> Rate

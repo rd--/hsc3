@@ -7,18 +7,18 @@ import qualified Sound.SC3.UGen.Bindings.DB as DB
 import qualified Sound.SC3.UGen.MCE as MCE
 import Sound.SC3.UGen.Type
 
--- | UGen primitive.  Sees through Proxy and MRG, possible multiple
--- primitives for MCE.
-ugen_primitive :: UGen -> [Primitive]
-ugen_primitive u =
+-- | UGen primitive set.
+--   Sees through Proxy and MRG, possible multiple primitives for MCE.
+ugen_primitive_set :: UGen -> [Primitive]
+ugen_primitive_set u =
     case u of
       Constant_U _ -> []
       Control_U _ -> []
       Label_U _ -> []
       Primitive_U p -> [p]
       Proxy_U p -> [proxySource p]
-      MCE_U m -> concatMap ugen_primitive (MCE.mce_elem m)
-      MRG_U m -> ugen_primitive (mrgLeft m)
+      MCE_U m -> concatMap ugen_primitive_set (MCE.mce_elem m)
+      MRG_U m -> ugen_primitive_set (mrgLeft m)
 
 -- | Heuristic based on primitive name (@FFT@, @PV_@).  Note that
 -- @IFFT@ is at /control/ rate, not @PV@ rate.
@@ -27,7 +27,7 @@ primitive_is_pv_rate nm = nm == "FFT" || "PV_" `isPrefixOf` nm
 
 -- | Variant on primitive_is_pv_rate.
 ugen_is_pv_rate :: UGen -> Bool
-ugen_is_pv_rate = any (primitive_is_pv_rate . ugenName) . ugen_primitive
+ugen_is_pv_rate = any (primitive_is_pv_rate . ugenName) . ugen_primitive_set
 
 -- | Traverse input graph until an @FFT@ or @PV_Split@ node is
 -- encountered, and then locate the buffer input.  Biases left at MCE
@@ -41,7 +41,7 @@ ugen_is_pv_rate = any (primitive_is_pv_rate . ugenName) . ugen_primitive
 -- > pv_track_buffer (pv_BrickWall f2 0.5) == Right (localBuf 'a' 1024 1)
 pv_track_buffer :: UGen -> Either String UGen
 pv_track_buffer u =
-    case ugen_primitive u of
+    case ugen_primitive_set u of
       [] -> Left "pv_track_buffer: not located"
       p:_ -> case ugenName p of
                "FFT" -> Right (ugenInputs p !! 0)
@@ -56,7 +56,7 @@ pv_track_buffer u =
 -- > buffer_nframes (localBuf 'α' 2048 1) == 2048
 buffer_nframes :: UGen -> UGen
 buffer_nframes u =
-    case ugen_primitive u of
+    case ugen_primitive_set u of
       [] -> DB.bufFrames (rateOf u) u
       p:_ -> case ugenName p of
                "LocalBuf" -> ugenInputs p !! 1

@@ -22,7 +22,7 @@ c_irand z l r = fromInteger (round (c_rand z l r))
 -- transformation for very large graphs which are being constructed
 -- and sent each time the graph is played.
 --
--- > import Sound.SC3.UGen.Dot
+-- > import Sound.SC3.UGen.Dot {- hsc3-dot -}
 --
 -- > let u = sinOsc AR (rand 'a' 220 440) 0 * 0.1
 -- > in draw (u + ugen_optimise_ir_rand u)

@@ -65,9 +65,9 @@ commonly heard combination tone occurs at a frequency f2 - f1."
 > g_08 =
 >     let f1 = 300
 >         f2 = 300 * 3/2 {- 450 -}
->         f = mce2 (mce2 f1 f2) (abs (f2 - f1))
->         a = mce2 0.1 (max (sinOsc KR 0.05 0 * 0.1) 0)
->     in sinOsc AR f 0 * a
+>         f3 = abs (f2 - f1) {- 150 -}
+>         a3 = max (sinOsc KR 0.05 0 * 0.1) 0
+>     in mix (sinOsc AR (mce3 f1 f2 f3) 0 * mce3 0.1 0.1 a3)
 
 With frequency of zero, operates as table lookup variant of sin.
 
