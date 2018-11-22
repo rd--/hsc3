@@ -4,11 +4,9 @@ The UGen type is recursive, inputs to UGens are UGens.
 
 This makes writing UGen graphs simple, but manipulating them awkward.
 
-UGen equality is structural, and can be slow to determine for some UGen structures.
+UGen equality is structural, and can be slow to determine for some UGen graph structures.
 
-A U_Node is a non-recursive notation for a UGen.
-
-U_Nodes have unique identifiers and are non-recursive.
+A U_Node is a non-recursive notation for a UGen, all U_Nodes have unique identifiers.
 
 A U_Graph is constructed by a stateful traversal of a UGen.
 
@@ -308,7 +306,7 @@ ug_edges = concatMap u_node_in_edges . ug_ugens
 ug_empty_graph :: U_Graph
 ug_empty_graph = U_Graph 0 [] [] []
 
--- | Find the maximum 'UID_t' used at 'U_Graph' (this ought normally be the 'ug_next_id').
+-- | Find the maximum 'UID_t' used at 'U_Graph'.  It is an error if this is not 'ug_next_id'.
 ug_maximum_id :: U_Graph -> UID_t
 ug_maximum_id (U_Graph z c k u) =
   let z' = maximum (map u_node_id (c ++ k ++ u))
@@ -453,44 +451,49 @@ u_node_descendents g n =
 -- * PV edge accounting
 
 -- | List @PV@ 'U_Node's at 'U_Graph' with multiple out edges.
-pv_multiple_out_edges :: U_Graph -> [U_Node]
-pv_multiple_out_edges g =
+ug_pv_multiple_out_edges :: U_Graph -> [U_Node]
+ug_pv_multiple_out_edges g =
     let e = ug_edges g
         p = u_edge_multiple_out_edges e
         n = mapMaybe (ug_find_node g . port_nid) p
     in filter (Analysis.primitive_is_pv_rate . u_node_u_name) n
 
--- | Error if graph has invalid @PV@ subgraph, ie. multiple out edges
--- at @PV@ node not connecting to @Unpack1FFT@ & @PackFFT@.
-pv_validate :: U_Graph -> U_Graph
-pv_validate g =
-    case pv_multiple_out_edges g of
-      [] -> g
-      n -> let d = concatMap (map u_node_u_name . u_node_descendents g) n
-           in if any Analysis.primitive_is_pv_rate d || any (`elem` ["IFFT"]) d
-              then error (show
-                          ("pv_validate: multiple out edges, see pv_split"
-                          ,map u_node_u_name n
-                          ,d))
-              else g
+-- | Error string if graph has an invalid @PV@ subgraph, ie. multiple out edges
+-- at @PV@ node not connecting to @Unpack1FFT@ & @PackFFT@, else Nothing.
+ug_pv_check :: U_Graph -> Maybe String
+ug_pv_check g =
+    case ug_pv_multiple_out_edges g of
+      [] -> Nothing
+      n ->
+        let d = concatMap (map u_node_u_name . u_node_descendents g) n
+        in if any Analysis.primitive_is_pv_rate d || any (`elem` ["IFFT"]) d
+           then Just (show ("PV: multiple out edges, see pv_split",map u_node_u_name n,d))
+           else Nothing
+
+-- | Variant that runs 'error' as required.
+ug_pv_validate :: U_Graph -> U_Graph
+ug_pv_validate g =
+    case ug_pv_check g of
+      Nothing -> g
+      Just err -> error err
 
 -- * UGen to U_Graph
 
--- | Variant on 'ug_mk_node' starting with an empty graph, reverses the
--- 'UGen' list and sorts the 'Control' list, and adds implicit nodes.
-ug_build_graph :: UGen -> U_Graph
-ug_build_graph u =
+{- | Transform a unit generator into a graph.
+     'ug_mk_node' begins with an empty graph,
+     then reverses the resulting 'UGen' list and sorts the 'Control' list,
+     and finally adds implicit nodes and validates PV sub-graphs.
+
+> import Sound.SC3.UGen
+> ugen_to_graph (out 0 (pan2 (sinOsc AR 440 0) 0.5 0.1))
+
+-}
+ugen_to_graph :: UGen -> U_Graph
+ugen_to_graph u =
     let (_,g) = ug_mk_node (prepare_root u) ug_empty_graph
         g' = g {ug_ugens = reverse (ug_ugens g)
                ,ug_controls = u_node_sort_controls (ug_controls g)}
-    in ug_add_implicit g'
-
--- | Transform a unit generator into a graph.
---
--- > import Sound.SC3.UGen
--- > ugen_to_graph (out 0 (pan2 (sinOsc AR 440 0) 0.5 0.1))
-ugen_to_graph :: UGen -> U_Graph
-ugen_to_graph = pv_validate . ug_build_graph
+    in ug_pv_validate (ug_add_implicit g')
 
 -- * Stat
 
