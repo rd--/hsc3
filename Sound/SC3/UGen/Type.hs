@@ -336,7 +336,7 @@ mkOperator f c i s =
     let ix = [0 .. length i - 1]
     in mkUGen (Just f) all_rates (Right ix) c i Nothing 1 (Special s) NoId
 
--- | Unary math constructor with constant optimization.
+-- | Unary math constructor.
 mkUnaryOperator :: Unary -> (Sample -> Sample) -> UGen -> UGen
 mkUnaryOperator i f a =
     let g [x] = f x
@@ -375,7 +375,7 @@ mkBinaryOperator i f a b =
 
 -- * Numeric instances
 
--- | Applicable only directly at add operator UGen, ie. does not examine immediate node.
+-- | MulAdd re-writer, applicable only directly at add operator UGen.
 mul_add_optimise_direct :: UGen -> UGen
 mul_add_optimise_direct u =
   case u of
@@ -387,10 +387,26 @@ mul_add_optimise_direct u =
       Primitive_U (Primitive r "MulAdd" [i,j,k] [r] (Special 0) NoId)
     _ -> u
 
+-- | Sum3 re-writer, applicable only directly at add operator UGen.
+sum3_optimise_direct :: UGen -> UGen
+sum3_optimise_direct u =
+  case u of
+    Primitive_U
+      (Primitive r _ [Primitive_U (Primitive _ "BinaryOpUGen" [i,j] [_] (Special 0) NoId),k] [_] _ NoId) ->
+      Primitive_U (Primitive r "Sum3" [i,j,k] [r] (Special 0) NoId)
+    Primitive_U
+      (Primitive r _ [k,Primitive_U (Primitive _ "BinaryOpUGen" [i,j] [_] (Special 0) NoId)] [_] _ NoId) ->
+      Primitive_U (Primitive r "Sum3" [i,j,k] [r] (Special 0) NoId)
+    _ -> u
+
+add_optimise_direct :: UGen -> UGen
+add_optimise_direct = sum3_optimise_direct . mul_add_optimise_direct
+
 -- | Unit generators are numbers.
 instance Num UGen where
     negate = mkUnaryOperator Neg negate
-    (+) = fmap mul_add_optimise_direct . mkBinaryOperator_optimize_constants Add (+) (`elem` [Left 0,Right 0])
+    (+) = fmap add_optimise_direct .
+          mkBinaryOperator_optimize_constants Add (+) (`elem` [Left 0,Right 0])
     (-) = mkBinaryOperator_optimize_constants Sub (-) (Right 0 ==)
     (*) = mkBinaryOperator_optimize_constants Mul (*) (`elem` [Left 1,Right 1])
     abs = mkUnaryOperator Abs abs
