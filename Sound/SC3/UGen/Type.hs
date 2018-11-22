@@ -352,10 +352,10 @@ mkUnaryOperator i f a =
 -- > o - 0 == o && 0 - o /= o
 -- > o / 1 == o && 1 / o /= o
 -- > o ** 1 == o && o ** 2 /= o
-mkBinaryOperator_optimize :: Binary -> (Sample -> Sample -> Sample) ->
-                             (Either Sample Sample -> Bool) ->
-                             UGen -> UGen -> UGen
-mkBinaryOperator_optimize i f o a b =
+mkBinaryOperator_optimize_constants :: Binary -> (Sample -> Sample -> Sample) ->
+                                       (Either Sample Sample -> Bool) ->
+                                       UGen -> UGen -> UGen
+mkBinaryOperator_optimize_constants i f o a b =
    let g [x,y] = f x y
        g _ = error "mkBinaryOperator: non binary input"
        r = case (a,b) of
@@ -366,7 +366,7 @@ mkBinaryOperator_optimize i f o a b =
              _ -> Nothing
    in fromMaybe (mkOperator g "BinaryOpUGen" [a, b] (fromEnum i)) r
 
--- | Binary math constructor with constant optimization.
+-- | Plain (non-optimised) binary math constructor.
 mkBinaryOperator :: Binary -> (Sample -> Sample -> Sample) -> UGen -> UGen -> UGen
 mkBinaryOperator i f a b =
    let g [x,y] = f x y
@@ -375,12 +375,24 @@ mkBinaryOperator i f a b =
 
 -- * Numeric instances
 
+-- | Applicable only directly at add operator UGen, ie. does not examine immediate node.
+mul_add_optimise_direct :: UGen -> UGen
+mul_add_optimise_direct u =
+  case u of
+    Primitive_U
+      (Primitive r _ [Primitive_U (Primitive _ "BinaryOpUGen" [i,j] [_] (Special 2) NoId),k] [_] _ NoId) ->
+      Primitive_U (Primitive r "MulAdd" [i,j,k] [r] (Special 0) NoId)
+    Primitive_U
+      (Primitive r _ [k,Primitive_U (Primitive _ "BinaryOpUGen" [i,j] [_] (Special 2) NoId)] [_] _ NoId) ->
+      Primitive_U (Primitive r "MulAdd" [i,j,k] [r] (Special 0) NoId)
+    _ -> u
+
 -- | Unit generators are numbers.
 instance Num UGen where
     negate = mkUnaryOperator Neg negate
-    (+) = mkBinaryOperator_optimize Add (+) (`elem` [Left 0,Right 0])
-    (-) = mkBinaryOperator_optimize Sub (-) (Right 0 ==)
-    (*) = mkBinaryOperator_optimize Mul (*) (`elem` [Left 1,Right 1])
+    (+) = fmap mul_add_optimise_direct . mkBinaryOperator_optimize_constants Add (+) (`elem` [Left 0,Right 0])
+    (-) = mkBinaryOperator_optimize_constants Sub (-) (Right 0 ==)
+    (*) = mkBinaryOperator_optimize_constants Mul (*) (`elem` [Left 1,Right 1])
     abs = mkUnaryOperator Abs abs
     signum = mkUnaryOperator Sign signum
     fromInteger = Constant_U . Constant . fromInteger
@@ -388,7 +400,7 @@ instance Num UGen where
 -- | Unit generators are fractional.
 instance Fractional UGen where
     recip = mkUnaryOperator Recip recip
-    (/) = mkBinaryOperator_optimize FDiv (/) (Right 1 ==)
+    (/) = mkBinaryOperator_optimize_constants FDiv (/) (Right 1 ==)
     fromRational = Constant_U . Constant . fromRational
 
 -- | Unit generators are floating point.
@@ -397,7 +409,7 @@ instance Floating UGen where
     exp = mkUnaryOperator Exp exp
     log = mkUnaryOperator Log log
     sqrt = mkUnaryOperator Sqrt sqrt
-    (**) = mkBinaryOperator_optimize Pow (**) (Right 1 ==)
+    (**) = mkBinaryOperator_optimize_constants Pow (**) (Right 1 ==)
     logBase a b = log b / log a
     sin = mkUnaryOperator Sin sin
     cos = mkUnaryOperator Cos cos
