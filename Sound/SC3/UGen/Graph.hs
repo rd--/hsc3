@@ -484,7 +484,7 @@ ug_pv_validate g =
      then reverses the resulting 'UGen' list and sorts the 'Control' list,
      and finally adds implicit nodes and validates PV sub-graphs.
 
-> import Sound.SC3.UGen
+> import Sound.SC3 {- hsc3 -}
 > ugen_to_graph (out 0 (pan2 (sinOsc AR 440 0) 0.5 0.1))
 
 -}
