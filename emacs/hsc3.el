@@ -185,6 +185,12 @@
   (hsc3-send-string
    (concat "Sound.SC3.UGen.Dot.draw " (thing-at-point 'symbol))))
 
+(defun hsc3-draw-graph-plain ()
+  "Draw the UGen graph at point (plain)."
+  (interactive)
+  (hsc3-send-string
+   (concat "Sound.SC3.UGen.Dot.draw_plain " (thing-at-point 'symbol))))
+
 (defun hsc3-draw-graph-m ()
   "Draw the (monadic) UGen graph at point."
   (interactive)
@@ -221,7 +227,8 @@
   (define-key map [?\C-c ?\C-h] 'hsc3-help)
   (define-key map [?\C-c ?\C-a] 'hsc3-audition-graph)
   (define-key map [?\C-c ?\M-a] 'hsc3-audition-graph-m)
-  (define-key map [?\C-c ?\C-g] 'hsc3-draw-graph)
+  (define-key map (kbd "C-c C-g") 'hsc3-draw-graph)
+  (define-key map (kbd "C-c C-S-g") 'hsc3-draw-graph-plain)
   (define-key map [?\C-c ?\M-g] 'hsc3-draw-graph-m)
   (define-key map [?\C-c ?\C-j] 'hsc3-sc3-ugen-help)
   (define-key map [?\C-c ?\C-/] 'hsc3-sc3-server-help)
