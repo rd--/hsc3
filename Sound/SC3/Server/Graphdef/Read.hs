@@ -1,4 +1,4 @@
--- | Transform (read) a 'Graphdef' into a 'Graph'.
+-- | Decode (read) a 'Graphdef' into a 'Graph'.
 module Sound.SC3.Server.Graphdef.Read where
 
 import Sound.OSC.Datum {- hosc -}
@@ -8,11 +8,11 @@ import qualified Sound.SC3.UGen.Graph as Graph
 import qualified Sound.SC3.UGen.Rate as Rate
 import qualified Sound.SC3.UGen.Type as Type
 
-mk_node_k :: Graphdef -> Graph.Node_Id -> (Control,Type.Sample) -> Graph.Node
-mk_node_k g z ((nm,ix),v) =
+control_to_node :: Graphdef -> Type.UID_t -> (Control,Type.Sample) -> Graph.U_Node
+control_to_node g z ((nm,ix),v) =
     let z' = graphdef_control_nid g z
         nm' = ascii_to_string nm
-    in Graph.Node_K z' Rate.KR (Just ix) nm' v Rate.K_KR Nothing
+    in Graph.U_Node_K z' Rate.KR (Just ix) nm' v Rate.K_KR Nothing
 
 input_to_from_port :: Graphdef -> Input -> Graph.From_Port
 input_to_from_port g (Input u p) =
@@ -28,8 +28,8 @@ input_to_from_port g (Input u p) =
                          else Nothing
               in Graph.From_Port_U (graphdef_ugen_nid g u) port
 
-mk_node_u :: Graphdef -> Graph.Node_Id -> UGen -> Graph.Node
-mk_node_u g z u =
+ugen_to_node :: Graphdef -> Type.UID_t -> UGen -> Graph.U_Node
+ugen_to_node g z u =
     let (name,rate,inputs,outputs,special) = u
         z' = graphdef_ugen_nid g z
         rate' = toEnum rate
@@ -37,13 +37,13 @@ mk_node_u g z u =
         inputs' = map (input_to_from_port g) inputs
         outputs' = map toEnum outputs
         special' = Type.Special special
-    in Graph.Node_U z' rate' name' inputs' outputs' special' (Type.UId z')
+    in Graph.U_Node_U z' rate' name' inputs' outputs' special' (Type.UId z')
 
-graphdef_to_graph :: Graphdef -> (String,Graph.Graph)
+graphdef_to_graph :: Graphdef -> (String,Graph.U_Graph)
 graphdef_to_graph g =
-    let constants_nd = zipWith Graph.Node_C [0..] (graphdef_constants g)
-        controls_nd = zipWith (mk_node_k g) [0 ..] (graphdef_controls g)
-        ugens_nd = zipWith (mk_node_u g) [0 ..] (graphdef_ugens g)
+    let constants_nd = zipWith Graph.U_Node_C [0..] (graphdef_constants g)
+        controls_nd = zipWith (control_to_node g) [0 ..] (graphdef_controls g)
+        ugens_nd = zipWith (ugen_to_node g) [0 ..] (graphdef_ugens g)
         nm = ascii_to_string (graphdef_name g)
-        gr = Graph.Graph (-1) constants_nd controls_nd ugens_nd
+        gr = Graph.U_Graph (-1) constants_nd controls_nd ugens_nd
     in (nm,gr) -- S.Synthdef nm gr

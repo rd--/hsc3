@@ -31,15 +31,15 @@ parenthesise_operator nm =
     then printf "(%s)" nm
     else nm
 
-reconstruct_graph :: Graph.Graph -> ([String],String)
+reconstruct_graph :: Graph.U_Graph -> ([String],String)
 reconstruct_graph g =
-    let (Graph.Graph _ c k u) = g
-        ls = concat [map reconstruct_c_str (Graph.node_sort c)
-                    ,map reconstruct_k_str (Graph.node_sort k)
+    let (Graph.U_Graph _ c k u) = g
+        ls = concat [map reconstruct_c_str (Graph.u_node_sort c)
+                    ,map reconstruct_k_str (Graph.u_node_sort k)
                     ,concatMap reconstruct_u_str u]
     in (filter (not . null) ls,reconstruct_mrg_str u)
 
-reconstruct_graph_module :: String -> Graph.Graph -> [String]
+reconstruct_graph_module :: String -> Graph.U_Graph -> [String]
 reconstruct_graph_module nm gr =
   let imp = ["import Sound.SC3"
             ,"import Sound.SC3.Common"
@@ -62,33 +62,33 @@ reconstruct_graph_module nm gr =
 > putStrLn (reconstruct_graph_str "anon" (ugen_to_graph m))
 
 -}
-reconstruct_graph_str :: String -> Graph.Graph -> String
+reconstruct_graph_str :: String -> Graph.U_Graph -> String
 reconstruct_graph_str nm = unlines . reconstruct_graph_module nm
 
-reconstruct_c_str :: Graph.Node -> String
+reconstruct_c_str :: Graph.U_Node -> String
 reconstruct_c_str u =
-    let l = Graph.node_label u
-        c = Graph.node_c_value u
+    let l = Graph.u_node_label u
+        c = Graph.u_node_c_value u
     in printf "%s = constant (%f::Sample)" l c
 
-reconstruct_c_ugen :: Graph.Node -> UGen
-reconstruct_c_ugen u = constant (Graph.node_c_value u)
+reconstruct_c_ugen :: Graph.U_Node -> UGen
+reconstruct_c_ugen u = constant (Graph.u_node_c_value u)
 
 -- | Discards index.
-reconstruct_k_rnd :: Graph.Node -> (Rate,String,Sample)
+reconstruct_k_rnd :: Graph.U_Node -> (Rate,String,Sample)
 reconstruct_k_rnd u =
-    let r = Graph.node_k_rate u
-        n = Graph.node_k_name u
-        d = Graph.node_k_default u
+    let r = Graph.u_node_k_rate u
+        n = Graph.u_node_k_name u
+        d = Graph.u_node_k_default u
     in (r,n,d)
 
-reconstruct_k_str :: Graph.Node -> String
+reconstruct_k_str :: Graph.U_Node -> String
 reconstruct_k_str u =
-    let l = Graph.node_label u
+    let l = Graph.u_node_label u
         (r,n,d) = reconstruct_k_rnd u
     in printf "%s = control %s \"%s\" %f" l (show r) n d
 
-reconstruct_k_ugen :: Graph.Node -> UGen
+reconstruct_k_ugen :: Graph.U_Node -> UGen
 reconstruct_k_ugen u =
     let (r,n,d) = reconstruct_k_rnd u
     in control_f64 r Nothing n d
@@ -100,42 +100,42 @@ ugen_qname nm (Special n) =
       "BinaryOpUGen" -> ("binop CS",Operator.binaryName n)
       _ -> ("ugen",nm)
 
-reconstruct_mce_str :: Graph.Node -> String
+reconstruct_mce_str :: Graph.U_Node -> String
 reconstruct_mce_str u =
-    let o = length (Graph.node_u_outputs u)
-        l = Graph.node_label u
+    let o = length (Graph.u_node_u_outputs u)
+        l = Graph.u_node_label u
         p = map (printf "%s_o_%d" l) [0 .. o - 1]
         p' = intercalate "," p
     in if o <= 1
        then ""
        else printf "[%s] = mceChannels %s" p' l
 
-reconstruct_u_str :: Graph.Node -> [String]
+reconstruct_u_str :: Graph.U_Node -> [String]
 reconstruct_u_str u =
-    let l = Graph.node_label u
-        r = Graph.node_u_rate u
-        i = Graph.node_u_inputs u
+    let l = Graph.u_node_label u
+        r = Graph.u_node_u_rate u
+        i = Graph.u_node_u_inputs u
         i_s = unwords (map (from_port_label '_') i)
         i_l = intercalate "," (map (from_port_label '_') i)
-        s = Graph.node_u_special u
-        (q,n) = ugen_qname (Graph.node_u_name u) s
-        z = Graph.node_id u
-        o = length (Graph.node_u_outputs u)
+        s = Graph.u_node_u_special u
+        (q,n) = ugen_qname (Graph.u_node_u_name u) s
+        z = Graph.u_node_id u
+        o = length (Graph.u_node_u_outputs u)
         u_s = printf "%s = ugen \"%s\" %s [%s] %d" l n (show r) i_l o
         nd_s = let t = "%s = nondet \"%s\" (UId %d) %s [%s] %d"
                in printf t l n z (show r) i_l o
         c = case q of
-              "ugen" -> if Graph.node_u_ugenid u == NoId then u_s else nd_s
+              "ugen" -> if Graph.u_node_u_ugenid u == NoId then u_s else nd_s
               _ -> printf "%s = %s \"%s\" %s %s" l q n (show r) i_s
         m = reconstruct_mce_str u
-    in if Graph.is_implicit_control u
+    in if Graph.u_node_is_implicit_control u
        then []
        else if null m then [c] else [c,m]
 
-reconstruct_mrg_str :: [Graph.Node] -> String
+reconstruct_mrg_str :: [Graph.U_Node] -> String
 reconstruct_mrg_str u =
-    let zero_out n = not (Graph.is_implicit_control n) && null (Graph.node_u_outputs n)
-    in case map Graph.node_label (filter zero_out u) of
+    let zero_out n = not (Graph.u_node_is_implicit_control n) && null (Graph.u_node_u_outputs n)
+    in case map Graph.u_node_label (filter zero_out u) of
          [] -> error "reconstruct_mrg_str"
          [o] -> printf "%s" o
          o -> printf "mrg [%s]" (intercalate "," o)

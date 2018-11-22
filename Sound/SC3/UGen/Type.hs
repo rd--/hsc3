@@ -14,8 +14,11 @@ import Sound.SC3.UGen.Rate
 
 -- * Basic types
 
--- | Data type for internalised identifier at 'UGen'.
-data UGenId = NoId | UId Int
+-- | Type of unique identifier.
+type UID_t = Int
+
+-- | Data type for the identifier at a 'Primitive' 'UGen'.
+data UGenId = NoId | UId UID_t
               deriving (Eq,Read,Show)
 
 -- | Alias of 'NoId', the 'UGenId' used for deterministic UGens.

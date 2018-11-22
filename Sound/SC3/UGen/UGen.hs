@@ -161,8 +161,8 @@ mceSum = sum . mceChannels
 -- * Transform
 
 -- | Given /unmce/ function make halt mce transform.
-halt_mce_transform' :: (a -> [a]) -> [a] -> [a]
-halt_mce_transform' f l =
+halt_mce_transform_f :: (a -> [a]) -> [a] -> [a]
+halt_mce_transform_f f l =
     let (l',e) = fromMaybe (error "halt_mce_transform: null?") (B.sep_last l)
     in l' ++ f e
 
@@ -170,7 +170,15 @@ halt_mce_transform' f l =
 --
 -- > halt_mce_transform [1,2,mce2 3 4] == [1,2,3,4]
 halt_mce_transform :: [UGen] -> [UGen]
-halt_mce_transform = halt_mce_transform' mceChannels
+halt_mce_transform = halt_mce_transform_f mceChannels
+
+-- | If the root node of a UGen graph is /mce/, transform to /mrg/.
+prepare_root :: UGen -> UGen
+prepare_root u =
+    case u of
+      MCE_U m -> mrg (mceProxies m)
+      MRG_U m -> mrg2 (prepare_root (mrgLeft m)) (prepare_root (mrgRight m))
+      _ -> u
 
 -- * Multiple root graphs
 
