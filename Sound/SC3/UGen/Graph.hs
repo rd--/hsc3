@@ -30,13 +30,14 @@ import Sound.SC3.UGen.UGen
 type Port_Index = Int
 
 -- | Type to represent the left hand side of an edge in a unit generator graph.
-data From_Port = From_Port_C {port_nid :: UID_t}
-               | From_Port_K {port_nid :: UID_t,port_kt :: K_Type}
-               | From_Port_U {port_nid :: UID_t,port_idx :: Maybe Port_Index}
+data From_Port = From_Port_C {from_port_nid :: UID_t}
+               | From_Port_K {from_port_nid :: UID_t,from_port_kt :: K_Type}
+               | From_Port_U {from_port_nid :: UID_t,from_port_idx :: Maybe Port_Index}
                deriving (Eq,Show)
 
 -- | A destination port.
-data To_Port = To_Port UID_t Port_Index deriving (Eq,Show)
+data To_Port = To_Port {to_port_nid :: UID_t,to_port_idx :: Port_Index}
+             deriving (Eq,Show)
 
 -- | A connection from 'From_Port' to 'To_Port'.
 type U_Edge = (From_Port,To_Port)
@@ -293,7 +294,7 @@ u_node_mk_implicit_ctl ks =
 u_edge_multiple_out_edges :: [U_Edge] -> [From_Port]
 u_edge_multiple_out_edges e =
     let p = filter is_from_port_u (map fst e)
-        p' = group (sortBy (compare `on` port_nid) p)
+        p' = group (sortBy (compare `on` from_port_nid) p)
     in map head (filter ((> 1) . length) p')
 
 -- * Graph
@@ -322,7 +323,7 @@ ug_find_node (U_Graph _ cs ks us) n =
 
 -- | Locate 'U_Node' of 'From_Port' in 'U_Graph'.
 ug_from_port_node :: U_Graph -> From_Port -> Maybe U_Node
-ug_from_port_node g fp = ug_find_node g (port_nid fp)
+ug_from_port_node g fp = ug_find_node g (from_port_nid fp)
 
 -- | Erroring variant.
 ug_from_port_node_err :: U_Graph -> From_Port -> U_Node
@@ -444,7 +445,7 @@ ug_remove_implicit g =
 u_node_descendents :: U_Graph -> U_Node -> [U_Node]
 u_node_descendents g n =
     let e = ug_edges g
-        c = filter ((== u_node_id n) . port_nid . fst) e
+        c = filter ((== u_node_id n) . from_port_nid . fst) e
         f (To_Port k _) = k
     in mapMaybe (ug_find_node g . f . snd) c
 
@@ -455,7 +456,7 @@ ug_pv_multiple_out_edges :: U_Graph -> [U_Node]
 ug_pv_multiple_out_edges g =
     let e = ug_edges g
         p = u_edge_multiple_out_edges e
-        n = mapMaybe (ug_find_node g . port_nid) p
+        n = mapMaybe (ug_find_node g . from_port_nid) p
     in filter (Analysis.primitive_is_pv_rate . u_node_u_name) n
 
 -- | Error string if graph has an invalid @PV@ subgraph, ie. multiple out edges
