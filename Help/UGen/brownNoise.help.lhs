@@ -5,6 +5,8 @@
 
 > g_01 = brownNoise 'α' AR * 0.1
 
+KR rate noise as frequency control
+
 > g_02 =
 >     let n = brownNoise 'α' KR
 >     in sinOsc AR (linExp n (-1) 1 64 9600) 0 * 0.1
