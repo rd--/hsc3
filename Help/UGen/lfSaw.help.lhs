@@ -38,6 +38,17 @@ as phasor input to sin function
 
 > g_05 = sin (range 0 two_pi (lfSaw AR 440 0)) * 0.2
 
+mixed with sin, then with distortions
+
+> g_06 =
+>   let f = xLine KR 220 440 10 DoNothing
+>       o1 = sinOsc AR (f + mce2 0 0.7) 0
+>       o2 = lfSaw AR (f + mce2 0 0.7) 0 * 0.3
+>       o3 = cubed (distort (log (distort (o1 + o2))))
+>   in o3 * 0.1
+
+
+
 Drawings
 
     > import Sound.SC3.Plot {- hsc3-plot -}
