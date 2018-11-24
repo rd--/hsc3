@@ -4,7 +4,7 @@ module Sound.SC3.UGen.Math where
 import qualified Data.Fixed as F {- base -}
 import Data.Int {- base -}
 
-import Sound.SC3.Common.Math
+import qualified Sound.SC3.Common.Math as Math
 import Sound.SC3.UGen.Bindings.DB (mulAdd)
 import Sound.SC3.UGen.Operator
 import Sound.SC3.UGen.Type
@@ -13,74 +13,27 @@ import Sound.SC3.UGen.Type
 dinf :: UGen
 dinf = constant (9e8::Float)
 
--- | True is conventionally 1.  The test to determine true is @> 0@.
-sc3_true :: Num n => n
-sc3_true = 1
-
--- | False is conventionally 0.  The test to determine true is @<= 0@.
-sc3_false :: Num n => n
-sc3_false = 0
-
--- | Lifted 'not'.
---
--- > sc3_not sc3_true == sc3_false
--- > sc3_not sc3_false == sc3_true
-sc3_not :: (Ord n,Num n) => n -> n
-sc3_not = sc3_bool . not . (> 0)
-
--- | Translate 'Bool' to 'sc3_true' and 'sc3_false'.
-sc3_bool :: Num n => Bool -> n
-sc3_bool b = if b then sc3_true else sc3_false
-
--- | Lift comparison function.
-sc3_comparison :: Num n => (n -> n -> Bool) -> n -> n -> n
-sc3_comparison f p q = sc3_bool (f p q)
-
--- | Lifted '=='.
-sc3_eq :: (Num n, Eq n) => n -> n -> n
-sc3_eq = sc3_comparison (==)
-
--- | Lifted '/='.
-sc3_neq :: (Num n, Eq n) => n -> n -> n
-sc3_neq = sc3_comparison (/=)
-
--- | Lifted '<'.
-sc3_lt :: (Num n, Ord n) => n -> n -> n
-sc3_lt = sc3_comparison (<)
-
--- | Lifted '<='.
-sc3_lte :: (Num n, Ord n) => n -> n -> n
-sc3_lte = sc3_comparison (<=)
-
--- | Lifted '>'.
-sc3_gt :: (Num n, Ord n) => n -> n -> n
-sc3_gt = sc3_comparison (>)
-
--- | Lifted '>='.
-sc3_gte :: (Num n, Ord n) => n -> n -> n
-sc3_gte = sc3_comparison (>=)
-
 -- | Association table for 'Binary' to haskell function implementing operator.
 binop_hs_tbl :: (Real n,Floating n,RealFrac n) => [(Binary,n -> n -> n)]
 binop_hs_tbl =
     [(Add,(+))
     ,(Sub,(-))
     ,(FDiv,(/))
-    ,(IDiv,sc3_idiv)
-    ,(Mod,sc3_mod)
-    ,(EQ_,sc3_eq)
-    ,(NE,sc3_neq)
-    ,(LT_,sc3_lt)
-    ,(LE,sc3_lte)
-    ,(GT_,sc3_gt)
-    ,(GE,sc3_gte)
+    ,(IDiv,Math.sc3_idiv)
+    ,(Mod,Math.sc3_mod)
+    ,(EQ_,Math.sc3_eq)
+    ,(NE,Math.sc3_neq)
+    ,(LT_,Math.sc3_lt)
+    ,(LE,Math.sc3_lte)
+    ,(GT_,Math.sc3_gt)
+    ,(GE,Math.sc3_gte)
     ,(Min,min)
     ,(Max,max)
     ,(Mul,(*))
     ,(Pow,(**))
     ,(Min,min)
     ,(Max,max)
-    ,(Round,sc3_round_to)]
+    ,(Round,Math.sc3_round_to)]
 
 -- | 'lookup' 'binop_hs_tbl' via 'toEnum'.
 binop_special_hs :: (RealFrac n,Floating n) => Int -> Maybe (n -> n -> n)
@@ -92,14 +45,14 @@ uop_hs_tbl =
     [(Neg,negate)
     ,(Not,\z -> if z > 0 then 0 else 1)
     ,(Abs,abs)
-    ,(Ceil,sc3_ceiling)
-    ,(Floor,sc3_floor)
+    ,(Ceil,Math.sc3_ceiling)
+    ,(Floor,Math.sc3_floor)
     ,(Squared,\z -> z * z)
     ,(Cubed,\z -> z * z * z)
     ,(Sqrt,sqrt)
     ,(Recip,recip)
-    ,(MIDICPS,midi_to_cps)
-    ,(CPSMIDI,cps_to_midi)
+    ,(MIDICPS,Math.midi_to_cps)
+    ,(CPSMIDI,Math.cps_to_midi)
     ,(Sin,sin)
     ,(Cos,cos)
     ,(Tan,tan)]
@@ -114,9 +67,9 @@ uop_special_hs z = lookup (toEnum z) uop_hs_tbl
 -- | Variant on Eq class, result is of the same type as the values compared.
 class (Eq a,Num a) => EqE a where
     (==*) :: a -> a -> a
-    (==*) = sc3_eq
+    (==*) = Math.sc3_eq
     (/=*) :: a -> a -> a
-    (/=*) = sc3_neq
+    (/=*) = Math.sc3_neq
 
 instance EqE Int where
 instance EqE Integer where
@@ -132,13 +85,13 @@ instance EqE UGen where
 -- | Variant on Ord class, result is of the same type as the values compared.
 class (Ord a,Num a) => OrdE a where
     (<*) :: a -> a -> a
-    (<*) = sc3_lt
+    (<*) = Math.sc3_lt
     (<=*) :: a -> a -> a
-    (<=*) = sc3_lte
+    (<=*) = Math.sc3_lte
     (>*) :: a -> a -> a
-    (>*) = sc3_gt
+    (>*) = Math.sc3_gt
     (>=*) :: a -> a -> a
-    (>=*) = sc3_gte
+    (>=*) = Math.sc3_gte
 
 instance OrdE Int
 instance OrdE Integer
@@ -148,30 +101,30 @@ instance OrdE Float
 instance OrdE Double
 
 instance OrdE UGen where
-    (<*) = mkBinaryOperator LT_ sc3_lt
-    (<=*) = mkBinaryOperator LE sc3_lte
-    (>*) = mkBinaryOperator GT_ sc3_gt
-    (>=*) = mkBinaryOperator GE sc3_gte
+    (<*) = mkBinaryOperator LT_ Math.sc3_lt
+    (<=*) = mkBinaryOperator LE Math.sc3_lte
+    (>*) = mkBinaryOperator GT_ Math.sc3_gt
+    (>=*) = mkBinaryOperator GE Math.sc3_gte
 
 -- | Variant of 'RealFrac' with non 'Integral' results.
 class RealFrac a => RealFracE a where
   properFractionE :: a -> (a,a)
-  properFractionE = sc3_properFraction
+  properFractionE = Math.sc3_properFraction
   truncateE :: a -> a
-  truncateE = sc3_truncate
+  truncateE = Math.sc3_truncate
   roundE :: a -> a
-  roundE = sc3_round
+  roundE = Math.sc3_round
   ceilingE :: a -> a
-  ceilingE = sc3_ceiling
+  ceilingE = Math.sc3_ceiling
   floorE :: a -> a
-  floorE = sc3_floor
+  floorE = Math.sc3_floor
 
 instance RealFracE Float
 instance RealFracE Double
 
--- | 'UGen' form or 'sc3_round_to'.
+-- | 'UGen' form or 'Math.sc3_round_to'.
 roundTo :: UGen -> UGen -> UGen
-roundTo = mkBinaryOperator Round sc3_round_to
+roundTo = mkBinaryOperator Round Math.sc3_round_to
 
 instance RealFracE UGen where
     properFractionE = error "UGen.properFractionE"
@@ -189,21 +142,21 @@ ceil = ceilingE
 -- > map (floor . (* 1e4) . dbAmp) [-90,-60,-30,0] == [0,10,316,10000]
 class (Floating a, Ord a) => UnaryOp a where
     ampDb :: a -> a
-    ampDb = amp_to_db
+    ampDb = Math.amp_to_db
     asFloat :: a -> a
     asFloat = error "asFloat"
     asInt :: a -> a
     asInt = error "asInt"
     cpsMIDI :: a -> a
-    cpsMIDI = cps_to_midi
+    cpsMIDI = Math.cps_to_midi
     cpsOct :: a -> a
-    cpsOct = cps_to_oct
+    cpsOct = Math.cps_to_oct
     cubed :: a -> a
     cubed n = n * n * n
     dbAmp :: a -> a
-    dbAmp = db_to_amp
+    dbAmp = Math.db_to_amp
     distort :: a -> a
-    distort = error "distort"
+    distort = Math.sc3_distort
     frac :: a -> a
     frac = error "frac"
     isNil :: a -> a
@@ -213,21 +166,21 @@ class (Floating a, Ord a) => UnaryOp a where
     log2 :: a -> a
     log2 = logBase 2
     midiCPS :: a -> a
-    midiCPS = midi_to_cps
+    midiCPS = Math.midi_to_cps
     midiRatio :: a -> a
-    midiRatio = midi_to_ratio
+    midiRatio = Math.midi_to_ratio
     notE :: a -> a
     notE a = if a > 0.0 then 0.0 else 1.0
     notNil :: a -> a
     notNil a = if a /= 0.0 then 0.0 else 1.0
     octCPS :: a -> a
-    octCPS = oct_to_cps
+    octCPS = Math.oct_to_cps
     ramp_ :: a -> a
     ramp_ _ = error "ramp_"
     ratioMIDI :: a -> a
-    ratioMIDI = ratio_to_midi
+    ratioMIDI = Math.ratio_to_midi
     softClip :: a -> a
-    softClip = error "softClip"
+    softClip = Math.sc3_softclip
     squared :: a -> a
     squared = \z -> z * z
 
@@ -266,11 +219,11 @@ class (Floating a,RealFrac a, Ord a) => BinaryOp a where
     atan2E :: a -> a -> a
     atan2E a b = atan (b/a)
     clip2 :: a -> a -> a
-    clip2 a b = sc3_clip a (-b) b
+    clip2 a b = Math.sc3_clip a (-b) b
     difSqr :: a -> a -> a
-    difSqr = sc3_dif_sqr
+    difSqr = Math.sc3_dif_sqr
     excess :: a -> a -> a
-    excess a b = a - sc3_clip a (-b) b
+    excess a b = a - Math.sc3_clip a (-b) b
     exprandRange :: a -> a -> a
     exprandRange = error "exprandRange"
     fill :: a -> a -> a
@@ -278,15 +231,15 @@ class (Floating a,RealFrac a, Ord a) => BinaryOp a where
     firstArg :: a -> a -> a
     firstArg a _ = a
     fold2 :: a -> a -> a
-    fold2 a b = fold_ a (-b) b
+    fold2 a b = Math.sc3_fold2 a (-b) b
     gcdE :: a -> a -> a
     gcdE = error "gcdE"
     hypot :: a -> a -> a
-    hypot = sc3_hypot
+    hypot = Math.sc3_hypot
     hypotx :: a -> a -> a
-    hypotx = sc3_hypotx
+    hypotx = Math.sc3_hypotx
     iDiv :: a -> a -> a
-    iDiv = sc3_idiv
+    iDiv = Math.sc3_idiv
     lcmE :: a -> a -> a
     lcmE = error "lcmE"
     modE :: a -> a -> a
@@ -319,16 +272,16 @@ class (Floating a,RealFrac a, Ord a) => BinaryOp a where
     wrap2 = error "wrap2"
 
 instance BinaryOp Float where
-    fold2 a b = fold_ a (-b) b
+    fold2 a b = Math.sc3_fold2 a (-b) b
     modE = F.mod'
     roundUp a b = if b == 0 then a else ceilingE (a/b + 0.5) * b
-    wrap2 a b = sc3_wrap_ni a (-b) b
+    wrap2 a b = Math.sc3_wrap_ni a (-b) b
 
 instance BinaryOp Double where
-    fold2 a b = fold_ a (-b) b
+    fold2 a b = Math.sc3_fold2 a (-b) b
     modE = F.mod'
     roundUp a b = if b == 0 then a else ceilingE (a/b + 0.5) * b
-    wrap2 a b = sc3_wrap_ni a (-b) b
+    wrap2 a b = Math.sc3_wrap_ni a (-b) b
 
 instance BinaryOp UGen where
     iDiv = mkBinaryOperator IDiv iDiv
@@ -372,7 +325,7 @@ instance MulAdd Double where
 
 -- | Map from one linear range to another linear range.
 linlin_ma :: (Fractional a,MulAdd a) => a -> a -> a -> a -> a -> a
-linlin_ma i sl sr dl dr = let (m,a) = linlin_muladd sl sr dl dr in mul_add i m a
+linlin_ma i sl sr dl dr = let (m,a) = Math.linlin_muladd sl sr dl dr in mul_add i m a
 
 -- | Scale uni-polar (0,1) input to linear (l,r) range
 urange_ma :: (Fractional a,MulAdd a) => a -> a -> a -> a
@@ -381,4 +334,4 @@ urange_ma l r i = let m = r - l in mul_add i m l
 -- | Scale bi-polar (-1,1) input to linear (l,r) range.  Note that the
 -- argument order is not the same as 'linLin'.
 range_ma :: (Fractional a,MulAdd a) => a -> a -> a -> a
-range_ma l r i = let (m,a) = range_muladd l r in mul_add i m a
+range_ma l r i = let (m,a) = Math.range_muladd l r in mul_add i m a

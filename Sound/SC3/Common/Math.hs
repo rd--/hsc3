@@ -267,8 +267,69 @@ foldToRange i j =
     in f
 
 -- | Variant of 'foldToRange' with @SC3@ argument ordering.
-fold_ :: (Ord a,Num a) => a -> a -> a -> a
-fold_ n i j = foldToRange i j n
+sc3_fold2 :: (Ord a,Num a) => a -> a -> a -> a
+sc3_fold2 n i j = foldToRange i j n
+
+-- | SC3 distort operator.
+sc3_distort :: Fractional n => n -> n
+sc3_distort x = x / (1 + abs x)
+
+-- | SC3 softclip operator.
+sc3_softclip :: (Ord n, Fractional n) => n -> n
+sc3_softclip x = let x' = abs x in if x' <= 0.5 then x else (x' - 0.25) / x
+
+-- * Bool
+
+-- | True is conventionally 1.  The test to determine true is @> 0@.
+sc3_true :: Num n => n
+sc3_true = 1
+
+-- | False is conventionally 0.  The test to determine true is @<= 0@.
+sc3_false :: Num n => n
+sc3_false = 0
+
+-- | Lifted 'not'.
+--
+-- > sc3_not sc3_true == sc3_false
+-- > sc3_not sc3_false == sc3_true
+sc3_not :: (Ord n,Num n) => n -> n
+sc3_not = sc3_bool . not . (> 0)
+
+-- | Translate 'Bool' to 'sc3_true' and 'sc3_false'.
+sc3_bool :: Num n => Bool -> n
+sc3_bool b = if b then sc3_true else sc3_false
+
+-- | Lift comparison function.
+sc3_comparison :: Num n => (n -> n -> Bool) -> n -> n -> n
+sc3_comparison f p q = sc3_bool (f p q)
+
+-- * Eq
+
+-- | Lifted '=='.
+sc3_eq :: (Num n, Eq n) => n -> n -> n
+sc3_eq = sc3_comparison (==)
+
+-- | Lifted '/='.
+sc3_neq :: (Num n, Eq n) => n -> n -> n
+sc3_neq = sc3_comparison (/=)
+
+-- * Ord
+
+-- | Lifted '<'.
+sc3_lt :: (Num n, Ord n) => n -> n -> n
+sc3_lt = sc3_comparison (<)
+
+-- | Lifted '<='.
+sc3_lte :: (Num n, Ord n) => n -> n -> n
+sc3_lte = sc3_comparison (<=)
+
+-- | Lifted '>'.
+sc3_gt :: (Num n, Ord n) => n -> n -> n
+sc3_gt = sc3_comparison (>)
+
+-- | Lifted '>='.
+sc3_gte :: (Num n, Ord n) => n -> n -> n
+sc3_gte = sc3_comparison (>=)
 
 -- * Clip Rule
 
