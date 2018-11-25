@@ -3,6 +3,22 @@ module Sound.SC3.Common.Base where
 import Data.Char {- base -}
 import Data.List {- base -}
 
+-- * Function
+
+-- | Unary function.
+type Fn1 a b = a -> b
+
+-- | Binary function.
+type Fn2 a b c = a -> b -> c
+
+-- | Ternary function.
+type Fn3 a b c d = a -> b -> c -> d
+
+-- | Quaternary function.
+type Fn4 a b c d e = a -> b -> c -> d -> e
+
+-- * Read
+
 -- | Variant of 'reads' requiring exact match.
 reads_exact :: Read a => String -> Maybe a
 reads_exact s =

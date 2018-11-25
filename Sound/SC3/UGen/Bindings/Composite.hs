@@ -10,17 +10,16 @@ import Sound.SC3.Common.Envelope
 import Sound.SC3.Common.Math
 import Sound.SC3.Common.Math.Filter.BEQ
 
+import Sound.SC3.Common.UId
 import Sound.SC3.UGen.Bindings.DB
-import qualified Sound.SC3.UGen.Bindings.DB.External as E
+import qualified Sound.SC3.UGen.Bindings.DB.External as External
 import Sound.SC3.UGen.Bindings.HW
 import Sound.SC3.UGen.Bindings.Monad
 import Sound.SC3.UGen.Enum
-import Sound.SC3.UGen.Identifier
 import Sound.SC3.UGen.Math
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
-import Sound.SC3.UGen.UId
 
 -- | Generate a localBuf and use setBuf to initialise it.
 asLocalBuf :: ID i => i -> [UGen] -> UGen
@@ -65,7 +64,7 @@ choose e = lchoose e . mceChannels
 
 -- | 'liftUId' of 'choose'.
 chooseM :: UId m => UGen -> m UGen
-chooseM = liftUId choose
+chooseM = liftUId1 choose
 
 -- | 'clearBuf' of 'localBuf'.
 clearLocalBuf :: ID a => a -> UGen -> UGen -> UGen
@@ -189,7 +188,7 @@ lchoose e a = select (iRand e 0 (fromIntegral (length a))) (mce a)
 
 -- | 'liftUId' of 'lchoose'.
 lchooseM :: UId m => [UGen] -> m UGen
-lchooseM = liftUId lchoose
+lchooseM = liftUId1 lchoose
 
 -- | 'linExp' of (-1,1).
 linExp_b :: UGen -> UGen -> UGen -> UGen
@@ -512,10 +511,10 @@ osc1 rt buf dur doneAction =
 
 -- | FM7 variant where input matrices are not in MCE form.
 fm7_mx :: [[UGen]] -> [[UGen]] -> UGen
-fm7_mx ctlMatrix modMatrix = E.fm7 AR (mce (concat ctlMatrix)) (mce (concat modMatrix))
+fm7_mx ctlMatrix modMatrix = External.fm7 AR (mce (concat ctlMatrix)) (mce (concat modMatrix))
 
 pulseDPW :: Rate -> UGen -> UGen -> UGen
 pulseDPW rt freq width =
-  let o1 = E.sawDPW rt freq 0
-      o2 = E.sawDPW rt freq (wrap_hs (-1,1) (width+width))
+  let o1 = External.sawDPW rt freq 0
+      o2 = External.sawDPW rt freq (wrap_hs (-1,1) (width+width))
   in o1 - o2

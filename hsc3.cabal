@@ -57,6 +57,7 @@ Library
                    Sound.SC3.Common.Math.Window
                    Sound.SC3.Common.Monad
                    Sound.SC3.Common.Monad.Operators
+                   Sound.SC3.Common.UId
                    Sound.SC3.FD
                    Sound.SC3.Server
                    Sound.SC3.Server.Command
@@ -100,7 +101,6 @@ Library
                    Sound.SC3.UGen.Help
                    Sound.SC3.UGen.Help.Graph
                    Sound.SC3.UGen.HS
-                   Sound.SC3.UGen.Identifier
                    Sound.SC3.UGen.Math
                    Sound.SC3.UGen.Math.Composite
                    Sound.SC3.UGen.MCE
@@ -113,7 +113,6 @@ Library
                    Sound.SC3.UGen.Rate
                    Sound.SC3.UGen.Type
                    Sound.SC3.UGen.UGen
-                   Sound.SC3.UGen.UId
 
 Source-Repository  head
   Type:            git

@@ -2,7 +2,7 @@
 -- Used carefully it allows for composition of sub-graphs with psuedo-random nodes.
 module Sound.SC3.UGen.Protect where
 
-import Sound.SC3.UGen.Identifier
+import Sound.SC3.Common.UId
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 

@@ -512,16 +512,3 @@ instance Bits UGen where
     popCount = error "UGen.popCount"
     bitSizeMaybe = error "UGen.bitSizeMaybe"
     isSigned _ = True
-
-{-
-import Sound.SC3.UGen.Identifier
-
--- * UGen ID Instance
-
--- | Hash function for unit generators.
-hashUGen :: UGen -> Int
-hashUGen = hash . show
-
-instance ID UGen where
-    resolveID = hashUGen
--}

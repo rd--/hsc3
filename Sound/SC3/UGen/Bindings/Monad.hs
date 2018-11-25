@@ -1,12 +1,12 @@
 -- | Monad constructors for 'UGen's.
 module Sound.SC3.UGen.Bindings.Monad where
 
+import Sound.SC3.Common.UId
 import Sound.SC3.UGen.Bindings.DB
 import Sound.SC3.UGen.Bindings.HW
 import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
-import Sound.SC3.UGen.UId
 
 -- * Demand
 
@@ -96,11 +96,11 @@ pv_RandWipeM = liftUId4 pv_RandWipe
 
 -- | Brown noise.
 brownNoiseM :: (UId m) => Rate -> m UGen
-brownNoiseM = liftUId brownNoise
+brownNoiseM = liftUId1 brownNoise
 
 -- | Clip noise.
 clipNoiseM :: (UId m) => Rate -> m UGen
-clipNoiseM = liftUId clipNoise
+clipNoiseM = liftUId1 clipNoise
 
 -- | Randomly pass or block triggers.
 coinGateM :: (UId m) => UGen -> UGen -> m UGen
@@ -120,7 +120,7 @@ expRandM = liftUId2 expRand
 
 -- | Gray noise.
 grayNoiseM :: (UId m) => Rate -> m UGen
-grayNoiseM = liftUId grayNoise
+grayNoiseM = liftUId1 grayNoise
 
 -- | Random integer in uniform distribution.
 iRandM :: (UId m) => UGen -> UGen -> m UGen
@@ -168,7 +168,7 @@ nRandM = liftUId3 nRand
 
 -- | Pink noise.
 pinkNoiseM :: (UId m) => Rate -> m UGen
-pinkNoiseM = liftUId pinkNoise
+pinkNoiseM = liftUId1 pinkNoise
 
 -- | Random value in uniform distribution.
 randM :: (UId m) => UGen -> UGen -> m UGen
@@ -192,4 +192,4 @@ tWindexM = liftUId3 tWindex
 
 -- | White noise.
 whiteNoiseM :: (UId m) => Rate -> m UGen
-whiteNoiseM = liftUId whiteNoise
+whiteNoiseM = liftUId1 whiteNoise

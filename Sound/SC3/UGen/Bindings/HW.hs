@@ -1,8 +1,8 @@
 -- | Hand-written bindings.
 module Sound.SC3.UGen.Bindings.HW where
 
+import qualified Sound.SC3.Common.UId as I
 import qualified Sound.SC3.UGen.Bindings.HW.Construct as C
-import qualified Sound.SC3.UGen.Identifier as I
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 import qualified Sound.SC3.UGen.UGen as U
