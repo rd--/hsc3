@@ -1,0 +1,7 @@
+resolver: lts-12.20
+packages:
+- .
+- location:
+    git: https://github.com/rd--/hosc.git
+    commit: master
+  extra-dep: true
