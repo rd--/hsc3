@@ -267,8 +267,8 @@ foldToRange i j =
     in f
 
 -- | Variant of 'foldToRange' with @SC3@ argument ordering.
-sc3_fold2 :: (Ord a,Num a) => a -> a -> a -> a
-sc3_fold2 n i j = foldToRange i j n
+sc3_fold :: (Ord a,Num a) => a -> a -> a -> a
+sc3_fold n i j = foldToRange i j n
 
 -- | SC3 distort operator.
 sc3_distort :: Fractional n => n -> n

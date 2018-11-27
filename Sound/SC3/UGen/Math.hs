@@ -231,7 +231,7 @@ class (Floating a,RealFrac a, Ord a) => BinaryOp a where
     firstArg :: a -> a -> a
     firstArg a _ = a
     fold2 :: a -> a -> a
-    fold2 a b = Math.sc3_fold2 a (-b) b
+    fold2 a b = Math.sc3_fold a (-b) b
     gcdE :: a -> a -> a
     gcdE = error "gcdE"
     hypot :: a -> a -> a
@@ -272,13 +272,13 @@ class (Floating a,RealFrac a, Ord a) => BinaryOp a where
     wrap2 = error "wrap2"
 
 instance BinaryOp Float where
-    fold2 a b = Math.sc3_fold2 a (-b) b
+    fold2 a b = Math.sc3_fold a (-b) b
     modE = F.mod'
     roundUp a b = if b == 0 then a else ceilingE (a/b + 0.5) * b
     wrap2 a b = Math.sc3_wrap_ni a (-b) b
 
 instance BinaryOp Double where
-    fold2 a b = Math.sc3_fold2 a (-b) b
+    fold2 a b = Math.sc3_fold a (-b) b
     modE = F.mod'
     roundUp a b = if b == 0 then a else ceilingE (a/b + 0.5) * b
     wrap2 a b = Math.sc3_wrap_ni a (-b) b
