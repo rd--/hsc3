@@ -1,16 +1,17 @@
 import System.Environment {- base -}
 
-import qualified Sound.SC3.Server.Synthdef as S {- hsc3 -}
+import qualified Sound.SC3.UGen.Graph as Graph {- hsc3 -}
+
 import qualified Sound.SC3.Server.Graphdef as G {- hsc3 -}
 import qualified Sound.SC3.Server.Graphdef.Read as R {- hsc3 -}
 
--- > let sy = "/home/rohan/sw/hsc3-graphs/scsyndef/why-supercollider.scsyndef"
+-- > let sy = "/home/rohan/sw/hsc3-graphs/scsyndef/why-supercollider.sc.scsyndef"
 -- > scsyndef_stat sy "/dev/stdout"
 scsyndef_stat :: FilePath -> FilePath -> IO ()
 scsyndef_stat sy_nm st_nm = do
   d <- G.read_graphdef_file sy_nm
   let (_,g) = R.graphdef_to_graph d
-  writeFile st_nm (unlines (S.graph_stat_ln g))
+  writeFile st_nm (unlines (Graph.ug_stat_ln g))
 
 main :: IO ()
 main = do
