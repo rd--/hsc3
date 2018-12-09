@@ -444,7 +444,7 @@ pc_preparePartConv b irb fft_size =
 
 -- * Unpack
 
--- | Result is null for non-conforming data, or has five or sevel elements.
+-- | Result is null for non-conforming data, or has five or seven elements.
 unpack_n_info_datum_plain :: Num i => [Datum] -> [i]
 unpack_n_info_datum_plain m =
     let to_i = fromIntegral
