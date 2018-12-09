@@ -4,10 +4,10 @@
 -- at some point at least part of the duplication will be removed.
 module Sound.SC3.Server.Transport.FD where
 
-import Data.List {- base -}
-import Data.List.Split {- split -}
-import Data.Maybe {- base -}
 import Control.Monad {- base -}
+import Data.List {- base -}
+import qualified Data.List.Split as Split {- split -}
+
 import Sound.OSC.FD {- hosc -}
 
 import Sound.SC3.Server.Command
@@ -126,11 +126,9 @@ withNotifications fd f = do
 -- > withSC3 (\fd -> b_getn1_data fd 0 (0,5))
 b_getn1_data :: Transport t => t -> Int -> (Int,Int) -> IO [Double]
 b_getn1_data fd b s = do
-  let f d = case d of
-              Int32 _:Int32 _:Int32 _:x -> mapMaybe datum_floating x
-              _ -> error "b_getn1_data"
+  let f m = let (_,_,_,r) = unpack_b_setn_err m in r
   sendMessage fd (b_getn1 b s)
-  fmap f (waitDatum fd "/b_setn")
+  fmap f (waitReply fd "/b_setn")
 
 -- | Variant of 'b_getn1_data' that segments individual 'b_getn'
 -- messages to /n/ elements.
@@ -145,14 +143,12 @@ b_getn1_data_segment fd n b (i,j) = do
 -- | Variant of 'b_getn1_data_segment' that gets the entire buffer.
 b_fetch :: Transport t => t -> Int -> Int -> IO [[Double]]
 b_fetch fd n b = do
-  let f d = case d of
-              [Int32 _,Int32 nf,Int32 nc,Float _] ->
-                  let ix = (0,fromIntegral (nf * nc))
-                      deinterleave = transpose . chunksOf (fromIntegral nc)
-                  in liftM deinterleave (b_getn1_data_segment fd n b ix)
-              _ -> error "b_fetch"
+  let f m = let (_,nf,nc,_) = unpack_b_info_err m
+                ix = (0,nf * nc)
+                deinterleave = transpose . Split.chunksOf nc
+            in liftM deinterleave (b_getn1_data_segment fd n b ix)
   sendMessage fd (b_query1 b)
-  waitDatum fd "/b_info" >>= f
+  waitReply fd "/b_info" >>= f
 
 b_fetch1 :: Transport t => t -> Int -> Int -> IO [Double]
 b_fetch1 fd n b = liftM head (b_fetch fd n b)
