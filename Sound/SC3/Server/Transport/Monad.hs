@@ -3,7 +3,7 @@ module Sound.SC3.Server.Transport.Monad where
 
 import Control.Monad {- base -}
 import Data.List {- base -}
-import Data.List.Split {- split -}
+import qualified Data.List.Split as Split {- split -}
 import Data.Maybe {- base -}
 import qualified Data.Tree as Tree {- containers -}
 import qualified Safe {- safe -}
@@ -12,14 +12,14 @@ import Sound.OSC {- hosc -}
 
 import Sound.SC3.Server.Command
 import qualified Sound.SC3.Server.Command.Generic as Generic
-import Sound.SC3.Server.Enum
-import qualified Sound.SC3.Server.Graphdef as G
-import Sound.SC3.Server.NRT
-import Sound.SC3.Server.Status
-import Sound.SC3.Server.Synthdef
+import qualified Sound.SC3.Server.Enum as Enum
+import qualified Sound.SC3.Server.Graphdef as Graphdef
+import qualified Sound.SC3.Server.NRT as NRT
+import qualified Sound.SC3.Server.Status as Status
+import qualified Sound.SC3.Server.Synthdef as Synthdef
 
 import Sound.SC3.UGen.Bindings.Composite (wrapOut)
-import Sound.SC3.UGen.Type
+import Sound.SC3.UGen.Type (UGen)
 
 -- * hosc variants
 
@@ -58,6 +58,10 @@ withSC3 = withTransport sc3_default_udp
 withSC3_ :: Connection UDP a -> IO ()
 withSC3_ = void . withSC3
 
+-- | 'timeout_r' of 'withSC3'
+withSC3_tm :: Double -> Connection UDP a -> IO (Maybe a)
+withSC3_tm tm = timeout_r tm . withSC3
+
 -- * Server control
 
 -- | Free all nodes ('g_freeAll') at group @1@.
@@ -71,33 +75,33 @@ reset :: SendOSC m => m ()
 reset =
     let m = [clearSched
             ,n_free [1,2]
-            ,g_new [(1,AddToHead,0),(2,AddToTail,0)]]
+            ,g_new [(1,Enum.AddToHead,0),(2,Enum.AddToTail,0)]]
     in sendBundle (bundle immediately m)
 
 -- | (node-id,add-action,group-id,parameters)
-type Play_Opt = (Node_Id,AddAction,Group_Id,[(String,Double)])
+type Play_Opt = (Node_Id,Enum.AddAction,Group_Id,[(String,Double)])
 
-play_graphdef_msg :: Play_Opt -> G.Graphdef -> Message
+play_graphdef_msg :: Play_Opt -> Graphdef.Graphdef -> Message
 play_graphdef_msg (nid,act,gid,param) g =
-    let nm = ascii_to_string (G.graphdef_name g)
+    let nm = ascii_to_string (Graphdef.graphdef_name g)
     in s_new nm nid act gid param
 
 -- | Send 'd_recv' and 's_new' messages to scsynth.
-playGraphdef :: DuplexOSC m => Play_Opt -> G.Graphdef -> m ()
+playGraphdef :: DuplexOSC m => Play_Opt -> Graphdef.Graphdef -> m ()
 playGraphdef opt g = async_ (d_recv' g) >> sendMessage (play_graphdef_msg opt g)
 
-play_synthdef_msg :: Play_Opt -> Synthdef -> Message
-play_synthdef_msg (nid,act,gid,param) syn = s_new (synthdefName syn) nid act gid param
+play_synthdef_msg :: Play_Opt -> Synthdef.Synthdef -> Message
+play_synthdef_msg (nid,act,gid,param) syn = s_new (Synthdef.synthdefName syn) nid act gid param
 
 -- | Send 'd_recv' and 's_new' messages to scsynth.
-playSynthdef :: DuplexOSC m => Play_Opt -> Synthdef -> m ()
+playSynthdef :: DuplexOSC m => Play_Opt -> Synthdef.Synthdef -> m ()
 playSynthdef opt syn = async_ (d_recv syn) >> sendMessage (play_synthdef_msg opt syn)
 
 -- | Send an /anonymous/ instrument definition using 'playSynthdef'.
 playUGen :: DuplexOSC m => Play_Opt -> UGen -> m ()
 playUGen loc =
     playSynthdef loc .
-    synthdef "Anonymous" .
+    Synthdef.synthdef "Anonymous" .
     wrapOut Nothing
 
 -- * NRT
@@ -119,24 +123,24 @@ run_bundle t0 b = do
 > in withSC3 (nrt_play sc)
 
 -}
-nrt_play :: Transport m => NRT -> m ()
+nrt_play :: Transport m => NRT.NRT -> m ()
 nrt_play sc = do
   t0 <- liftIO time
-  mapM_ (run_bundle t0) (nrt_bundles sc)
+  mapM_ (run_bundle t0) (NRT.nrt_bundles sc)
 
 -- | Variant where asynchronous commands at time @0@ are separated out and run before
 -- the initial time-stamp is taken.  This re-orders synchronous
 -- commands in relation to asynchronous at time @0@.
-nrt_play_reorder :: Transport m => NRT -> m ()
+nrt_play_reorder :: Transport m => NRT.NRT -> m ()
 nrt_play_reorder s = do
-  let (i,r) = nrt_span (<= 0) s
+  let (i,r) = NRT.nrt_span (<= 0) s
       i' = concatMap bundleMessages i
       (a,b) = partition_async i'
   mapM_ async a
   t <- liftIO time
   mapM_ (run_bundle t) (Bundle 0 b : r)
 
-nrt_audition :: NRT -> IO ()
+nrt_audition :: NRT.NRT -> IO ()
 nrt_audition = withSC3 . nrt_play
 
 -- * Audible
@@ -146,12 +150,12 @@ class Audible e where
     play_at :: Transport m => Play_Opt -> e -> m ()
     -- | Variant where /id/ is @-1@.
     play :: Transport m => e -> m ()
-    play = play_at (-1,AddToHead,1,[])
+    play = play_at (-1,Enum.AddToHead,1,[])
 
-instance Audible G.Graphdef where
+instance Audible Graphdef.Graphdef where
     play_at = playGraphdef
 
-instance Audible Synthdef where
+instance Audible Synthdef.Synthdef where
     play_at = playSynthdef
 
 instance Audible UGen where
@@ -163,7 +167,7 @@ audition_at k = withSC3 . play_at k
 
 -- | Variant where /id/ is @-1@.
 audition :: Audible e => e -> IO ()
-audition = audition_at (-1,AddToHead,1,[])
+audition = audition_at (-1,Enum.AddToHead,1,[])
 
 -- * Notifications
 
@@ -179,7 +183,7 @@ withNotifications f = do
 
 -- | Variant of 'b_getn1' that waits for return message and unpacks it.
 --
--- > withSC3 (b_getn1_data 0 (0,5))
+-- > withSC3_tm 1.0 (b_getn1_data 0 (0,5))
 b_getn1_data :: DuplexOSC m => Int -> (Int,Int) -> m [Double]
 b_getn1_data b s = do
   let f m = let (_,_,_,r) = unpack_b_setn_err m in r
@@ -189,7 +193,7 @@ b_getn1_data b s = do
 -- | Variant of 'b_getn1_data' that segments individual 'b_getn'
 -- messages to /n/ elements.
 --
--- > withSC3 (b_getn1_data_segment 1 0 (0,5))
+-- > withSC3_tm 1.0 (b_getn1_data_segment 1 0 (0,5))
 b_getn1_data_segment :: DuplexOSC m =>
                         Int -> Int -> (Int,Int) -> m [Double]
 b_getn1_data_segment n b (i,j) = do
@@ -198,12 +202,11 @@ b_getn1_data_segment n b (i,j) = do
   return (concat d)
 
 -- | Variant of 'b_getn1_data_segment' that gets the entire buffer.
---
 b_fetch :: DuplexOSC m => Int -> Int -> m [[Double]]
 b_fetch n b = do
   let f m = let (_,nf,nc,_) = unpack_b_info_err m
                 ix = (0,nf * nc)
-                deinterleave = transpose . chunksOf nc
+                deinterleave = transpose . Split.chunksOf nc
             in liftM deinterleave (b_getn1_data_segment n b ix)
   sendMessage (b_query1 b)
   waitReply "/b_info" >>= f
@@ -257,11 +260,11 @@ n_query1_unpack_plain :: Transport m => Node_Id -> m [Int]
 n_query1_unpack_plain = n_query1_unpack_f unpack_n_info_plain
 
 -- | Variant of 'g_queryTree' that waits for and unpacks the reply.
-g_queryTree1_unpack :: Transport m => Group_Id -> m Query_Node
+g_queryTree1_unpack :: Transport m => Group_Id -> m Status.Query_Node
 g_queryTree1_unpack n = do
   sendMessage (g_queryTree [(n,True)])
   r <- waitReply "/g_queryTree.reply"
-  return (queryTree (messageDatum r))
+  return (Status.queryTree (messageDatum r))
 
 -- * Status
 
@@ -269,19 +272,19 @@ g_queryTree1_unpack n = do
 --
 -- > withSC3 serverStatus >>= mapM putStrLn
 serverStatus :: DuplexOSC m => m [String]
-serverStatus = liftM statusFormat serverStatusData
+serverStatus = liftM Status.statusFormat serverStatusData
 
 -- | Read nominal sample rate of server.
 --
 -- > withSC3 serverSampleRateNominal
 serverSampleRateNominal :: DuplexOSC m => m Double
-serverSampleRateNominal = liftM (extractStatusField 7) serverStatusData
+serverSampleRateNominal = liftM (Status.extractStatusField 7) serverStatusData
 
 -- | Read actual sample rate of server.
 --
 -- > withSC3 serverSampleRateActual
 serverSampleRateActual :: DuplexOSC m => m Double
-serverSampleRateActual = liftM (extractStatusField 8) serverStatusData
+serverSampleRateActual = liftM (Status.extractStatusField 8) serverStatusData
 
 -- | Retrieve status data from server.
 serverStatusData :: DuplexOSC m => m [Datum]
@@ -297,5 +300,5 @@ serverStatusData = do
 serverTree :: Transport m => m [String]
 serverTree = do
   qt <- g_queryTree1_unpack 0
-  let tr = queryTree_rt qt
-  return (["***** SuperCollider Server Tree *****",Tree.drawTree (fmap query_node_pp tr)])
+  let tr = Status.queryTree_rt qt
+  return (["***** SuperCollider Server Tree *****",Tree.drawTree (fmap Status.query_node_pp tr)])
