@@ -232,13 +232,23 @@ cps_to_incr sr r cps = (r / sr) * cps
 incr_to_cps :: Fractional a => a -> a -> a -> a
 incr_to_cps sr r ic = ic / (r / sr)
 
+-- | Pan2 function, identity is linear, sqrt is equal power.
+pan2_f :: Fractional t => (t -> t) -> t -> t -> (t, t)
+pan2_f f p q =
+    let q' = (q / 2) + 0.5
+    in (p * f (1 - q'),p * f q')
+
 -- | Linear pan.
 --
--- > map (lin_pan2 1) [-1,0,1] == [(1,0),(0.5,0.5),(0,1)]
+-- > map (lin_pan2 1) [-1,-0.5,0,0.5,1] == [(1,0),(0.75,0.25),(0.5,0.5),(0.25,0.75),(0,1)]
 lin_pan2 :: Fractional t => t -> t -> (t, t)
-lin_pan2 p q =
-    let q' = (q / 2) + 0.5
-    in (p * (1 - q'),p * q')
+lin_pan2 = pan2_f id
+
+-- | Equal power pan.
+--
+-- > map (eq_pan2 1) [-1,-0.5,0,0.5,1]
+eq_pan2 :: Floating t => t -> t -> (t, t)
+eq_pan2 = pan2_f sqrt
 
 sc3_properFraction :: RealFrac t => t -> (t,t)
 sc3_properFraction a =
