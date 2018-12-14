@@ -158,14 +158,38 @@ brown_noise (g,y1) =
         r = brown_noise_f (n / 8.0) y1
     in (r,(g',r))
 
+-- | <http://musicdsp.org/files/pink.txt>
+pk_pinking_filter_f :: Fractional a => (a, a, a, a, a, a, a) -> a -> (a, (a, a, a, a, a, a, a))
+pk_pinking_filter_f (b0,b1,b2,b3,b4,b5,b6) w =
+  let b0' = 0.99886 * b0 + w * 0.0555179
+      b1' = 0.99332 * b1 + w * 0.0750759
+      b2' = 0.96900 * b2 + w * 0.1538520
+      b3' = 0.86650 * b3 + w * 0.3104856
+      b4' = 0.55000 * b4 + w * 0.5329522
+      b5' = -0.7616 * b5 - w * 0.0168980
+      p = b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * 0.5362
+      b6' = w * 0.115926
+  in (p,(b0',b1',b2',b3',b4',b5',b6'))
+
+-- | <http://musicdsp.org/files/pink.txt>
+pk_pinking_filter_economy_f :: Fractional a => (a, a, a) -> a -> (a, (a, a, a))
+pk_pinking_filter_economy_f (b0,b1,b2) w =
+  let b0' = 0.99765 * b0 + w * 0.0990460
+      b1' = 0.96300 * b1 + w * 0.2965164
+      b2' = 0.57000 * b2 + w * 1.0526913
+      p = b0 + b1 + b2 + w * 0.1848
+  in (p,(b0',b1',b2'))
+
+-- | dt must not be zero.
 decay_f :: Floating a => a -> a -> a -> a -> a
 decay_f sr dt x y1 =
     let b1 = exp (log 0.001 / (dt * sr))
     in x + b1 * y1
 
+-- | dt must not be zero.
 lag_f :: Floating a => a -> a -> a -> a -> a
-lag_f sr t x y1 =
-    let b1 = exp (log (0.001 / (t * sr)))
+lag_f sr dt x y1 =
+    let b1 = exp (log 0.001 / (dt * sr))
     in x + b1 * (y1 - x)
 
 lag :: Floating t => t -> F_ST1 t (t,t) t
@@ -190,9 +214,11 @@ phasor ((trig,rate,start,end,resetPos),ph) =
 l_apply_f_st0 :: F_ST0 st o -> st -> [o]
 l_apply_f_st0 f st = let (r,st') = f st in r : l_apply_f_st0 f st'
 
+-- > take 10 (l_white_noise 'α')
 l_white_noise :: (Enum e, Fractional n, R.Random n) => e -> [n]
 l_white_noise e = l_apply_f_st0 white_noise (R.mkStdGen (fromEnum e))
 
+-- > take 10 (l_brown_noise 'α')
 l_brown_noise :: (Enum e, Fractional n, Ord n, R.Random n) => e -> [n]
 l_brown_noise e = l_apply_f_st0 brown_noise (R.mkStdGen (fromEnum e),0.0)
 

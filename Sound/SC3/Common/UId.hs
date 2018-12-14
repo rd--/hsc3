@@ -89,7 +89,7 @@ liftUId4 f a b c d = do
 
 -- | Typeclass to constrain UGen identifiers.
 --
--- > map resolveID [0::Int,1] == [0::Int,1]
+-- > map resolveID [0::Int,1] == [0,1]
 -- > map resolveID ['α','β'] == [945,946]
 -- > map resolveID [('α','β'),('β','α')] == [15854849041,15871627911]
 -- > map resolveID [('α',('α','β')),('β',('α','β'))] == [266006616529191908,266288126000523575]
