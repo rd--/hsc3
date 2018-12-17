@@ -179,6 +179,12 @@
   (hsc3-send-string
    (concat "Sound.SC3.audition =<<" (thing-at-point 'symbol))))
 
+(defun hsc3-audition-pattern ()
+  "Audition the pattern at point."
+  (interactive)
+  (hsc3-send-string
+   (concat "Sound.SC3.Lang.Pattern.paudition " (thing-at-point 'symbol))))
+
 (defun hsc3-draw-graph ()
   "Draw the UGen graph at point."
   (interactive)
@@ -227,6 +233,7 @@
   (define-key map [?\C-c ?\C-h] 'hsc3-help)
   (define-key map [?\C-c ?\C-a] 'hsc3-audition-graph)
   (define-key map [?\C-c ?\M-a] 'hsc3-audition-graph-m)
+  (define-key map (kbd "C-c p") 'hsc3-audition-pattern)
   (define-key map (kbd "C-c C-g") 'hsc3-draw-graph)
   (define-key map (kbd "C-c C-S-g") 'hsc3-draw-graph-plain)
   (define-key map [?\C-c ?\M-g] 'hsc3-draw-graph-m)

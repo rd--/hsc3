@@ -11,7 +11,7 @@ import qualified Data.Unique as Unique {- base -}
 
 import qualified Control.Monad.Trans.Reader as Reader {- transformers -}
 import qualified Control.Monad.Trans.State as State {- transformers -}
-import qualified Data.Hashable as H {- hashable -}
+import qualified Data.Digest.Murmur32 as Murmur32 {- hashable -}
 
 import qualified Sound.SC3.Common.Base as Base {- hsc3 -}
 
@@ -89,16 +89,16 @@ liftUId4 f a b c d = do
 
 -- | Typeclass to constrain UGen identifiers.
 --
--- > map resolveID [0::Int,1] == [0,1]
--- > map resolveID ['α','β'] == [945,946]
--- > map resolveID [('α','β'),('β','α')] == [15854849041,15871627911]
--- > map resolveID [('α',('α','β')),('β',('α','β'))] == [266006616529191908,266288126000523575]
-class H.Hashable a => ID a where
+-- > map resolveID [0::Int,1] == [3151710696,1500603050]
+-- > map resolveID ['α','β'] == [1439603815,4131151318]
+-- > map resolveID [('α','β'),('β','α')] == [3538183581,3750624898]
+-- > map resolveID [('α',('α','β')),('β',('α','β'))] == [0020082907,2688286317]
+class Murmur32.Hashable32 a => ID a where
     resolveID :: a -> Id
-    resolveID = H.hash
+    resolveID = fromIntegral . Murmur32.asWord32 . Murmur32.hash32
 
-instance ID Char where resolveID = fromEnum
-instance ID Int where resolveID = id
+instance ID Char where
+instance ID Int where
 instance (ID p,ID q) => ID (p,q) where
 
 -- | /n/ identifiers from /x/.
