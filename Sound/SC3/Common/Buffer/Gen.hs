@@ -32,7 +32,6 @@ sine1_l n ampl = map (sine1_p n) (zip [1..] ampl)
 
 -- | 'sum_l' of 'sine1_l'.
 --
--- > import Sound.SC3.Plot {- hsc3-plot -}
 -- > plotTable1 (sine1 256 [1,0.95 .. 0.5])
 sine1 :: (Enum n,Floating n) => Int -> [n] -> [n]
 sine1 n = sum_l . sine1_l n
@@ -82,7 +81,6 @@ sine3 n = sum_l . sine3_l n
 
 {- | Generate Chebyshev waveshaping table, see b_gen_cheby.
 
-> import Sound.SC3.Plot
 > plotTable1 (gen_cheby 256 [1,0,1,1,0,1])
 
 -}
