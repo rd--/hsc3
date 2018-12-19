@@ -210,11 +210,13 @@ unpackLabel u =
 
 -- * Envelope
 
+-- | 'mce' of 'E.envelope_sc3_array'.
 envelope_to_ugen :: E.Envelope UGen -> UGen
 envelope_to_ugen =
     let err = error "envGen: bad Envelope"
     in mce . fromMaybe err . E.envelope_sc3_array
 
+-- | 'mce' of 'E.envelope_sc3_ienvgen_array'.
 envelope_to_ienvgen_ugen :: E.Envelope UGen -> UGen
 envelope_to_ienvgen_ugen =
     let err = error "envGen: bad Envelope"
@@ -222,29 +224,38 @@ envelope_to_ienvgen_ugen =
 
 -- * Bitwise
 
+-- | 'O.BitAnd'
 bitAnd :: UGen -> UGen -> UGen
 bitAnd = mkBinaryOperator O.BitAnd undefined
 
+-- | 'O.BitOr'
 bitOr :: UGen -> UGen -> UGen
 bitOr = mkBinaryOperator O.BitOr undefined
 
+-- | 'O.BitXor'
 bitXOr :: UGen -> UGen -> UGen
 bitXOr = mkBinaryOperator O.BitXor undefined
 
+-- | 'O.BitNot'
 bitNot :: UGen -> UGen
 bitNot = mkUnaryOperator O.BitNot undefined
 
+-- | 'O.ShiftLeft'
 shiftLeft :: UGen -> UGen -> UGen
 shiftLeft = mkBinaryOperator O.ShiftLeft undefined
 
+-- | 'O.ShiftRight'
 shiftRight :: UGen -> UGen -> UGen
 shiftRight = mkBinaryOperator O.ShiftRight undefined
 
+-- | 'O.UnsignedShift'
 unsignedShift :: UGen -> UGen -> UGen
 unsignedShift = mkBinaryOperator O.UnsignedShift undefined
 
+-- | 'shiftLeft' operator.
 (.<<.) :: UGen -> UGen -> UGen
 (.<<.) = shiftLeft
 
+-- | 'shiftRight' operator.
 (.>>.) :: UGen -> UGen -> UGen
 (.>>.) = shiftRight

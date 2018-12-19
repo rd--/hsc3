@@ -1,3 +1,4 @@
+-- | 'UGen' pretty-printer.
 module Sound.SC3.UGen.PP where
 
 import Data.List {- split -}
@@ -7,6 +8,7 @@ import Sound.SC3.UGen.MCE
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
+-- | Place /x/ in (/l/,/r/) brackets.
 bracketed :: (a,a) -> [a] -> [a]
 bracketed (l,r) x = l : x ++ [r]
 

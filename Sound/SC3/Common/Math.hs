@@ -1,3 +1,4 @@
+-- | Common math functions.
 module Sound.SC3.Common.Math where
 
 import Data.Fixed {- base -}
@@ -25,15 +26,19 @@ two_pi = 2 * pi
 mul_add_hs :: Num a => a -> a -> a -> a
 mul_add_hs m a = (+ a) . (* m)
 
+-- | 'fromInteger' of 'truncate'.
 sc3_truncate :: RealFrac a => a -> a
 sc3_truncate = fromInteger . truncate
 
+-- | 'fromInteger' of 'round'.
 sc3_round :: RealFrac a => a -> a
 sc3_round = fromInteger . round
 
+-- | 'fromInteger' of 'ceiling'.
 sc3_ceiling :: RealFrac a => a -> a
 sc3_ceiling = fromInteger . ceiling
 
+-- | 'fromInteger' of 'floor'.
 sc3_floor :: RealFrac a => a -> a
 sc3_floor = fromInteger . floor
 
@@ -46,6 +51,7 @@ sc3_floor = fromInteger . floor
 sc3_round_to :: RealFrac n => n -> n -> n
 sc3_round_to a b = if b == 0 then a else sc3_floor ((a / b) + 0.5) * b
 
+-- | 'fromInteger' of 'div' of 'floor'.
 sc3_idiv :: RealFrac n => n -> n -> n
 sc3_idiv a b = fromInteger (floor a `div` floor b)
 
@@ -157,6 +163,8 @@ generic_wrap (l,r) n =
        then f (n + d)
        else if n > r then f (n - d) else n
 
+-- | Given sample-rate /sr/ and bin-count /n/ calculate frequency of /i/th bin.
+--
 -- > bin_to_freq 44100 2048 32 == 689.0625
 bin_to_freq :: (Fractional n, Integral i) => n -> i -> i -> n
 bin_to_freq sr n i = fromIntegral i * sr / fromIntegral n
@@ -250,17 +258,21 @@ lin_pan2 = pan2_f id
 eq_pan2 :: Floating t => t -> t -> (t, t)
 eq_pan2 = pan2_f sqrt
 
+-- | 'fromInteger' of 'properFraction'.
 sc3_properFraction :: RealFrac t => t -> (t,t)
 sc3_properFraction a =
     let (p,q) = properFraction a
     in (fromInteger p,q)
 
+-- | a^2 - b^2.
 sc3_dif_sqr :: Num a => a -> a -> a
 sc3_dif_sqr a b = (a * a) - (b * b)
 
+-- | Euclidean distance function ('sqrt' of sum of squares).
 sc3_hypot :: Floating a => a -> a -> a
 sc3_hypot x y = sqrt (x * x + y * y)
 
+-- | SC3 hypotenuse approximation function.
 sc3_hypotx :: (Ord a, Floating a) => a -> a -> a
 sc3_hypotx x y = abs x + abs y - ((sqrt 2 - 1) * min (abs x) (abs y))
 
@@ -343,6 +355,7 @@ sc3_gte = sc3_comparison (>=)
 
 -- * Clip Rule
 
+-- | Enumeration of clipping rules.
 data Clip_Rule = Clip_None | Clip_Left | Clip_Right | Clip_Both
                  deriving (Enum,Bounded)
 
@@ -381,6 +394,7 @@ range_muladd = linlin_muladd (-1) 1
 range :: Fractional a => a -> a -> a -> a
 range l r i = let (m,a) = range_muladd l r in i * m + a
 
+-- | Tuple variant of 'range'.
 range_hs :: Fractional a => (a,a) -> a -> a
 range_hs (l,r) = range l r
 

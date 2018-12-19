@@ -14,6 +14,8 @@ import qualified Data.Tree as T {- containers -}
 
 import Sound.OSC.Datum {- hosc -}
 
+import Sound.SC3.Server.Command.Plain
+
 -- * Status
 
 -- | Get /n/th field of status as 'Floating'.
@@ -48,13 +50,15 @@ statusFormat d =
 type Query_Ctl = (Either String Int,Either Double Int)
 
 -- | Nodes are either groups of synths.
-data Query_Node = Query_Group Int [Query_Node]
-                | Query_Synth Int String (Maybe [Query_Ctl])
+data Query_Node = Query_Group Group_Id [Query_Node]
+                | Query_Synth Synth_Id String (Maybe [Query_Ctl])
                 deriving (Eq,Show)
 
+-- | Pretty-print 'Query_Ctl'
 query_ctl_pp :: Query_Ctl -> String
 query_ctl_pp (p,q) = either id show p ++ ":" ++ either show show q
 
+-- | Pretty-print 'Query_Node'
 query_node_pp :: Query_Node -> String
 query_node_pp n =
     case n of
@@ -90,7 +94,7 @@ queryTree_ctl (p,q) =
 > in queryTree_synth True 1000 "saw" d
 
 -}
-queryTree_synth :: Bool -> Int -> String -> [Datum] -> (Query_Node,[Datum])
+queryTree_synth :: Bool -> Synth_Id -> String -> [Datum] -> (Query_Node,[Datum])
 queryTree_synth rc k nm d =
     let pairs l = case l of
                     e0:e1:l' -> (e0,e1) : pairs l'
@@ -104,7 +108,8 @@ queryTree_synth rc k nm d =
             in (Query_Synth k nm (Just p),d')
        else (Query_Synth k nm Nothing,d)
 
-queryTree_group :: Bool -> Int -> Int -> [Datum] -> (Query_Node,[Datum])
+-- | Generate 'Query_Node' for indicated 'Group_Id'.
+queryTree_group :: Bool -> Group_Id -> Int -> [Datum] -> (Query_Node,[Datum])
 queryTree_group rc gid nc =
     let recur n r d =
             if n == 0
@@ -113,6 +118,7 @@ queryTree_group rc gid nc =
                  in recur (n - 1) (c : r) d'
     in recur nc []
 
+-- | Either 'queryTree_synth' or 'queryTree_group'.
 queryTree_child :: Bool -> [Datum] -> (Query_Node,[Datum])
 queryTree_child rc d =
     case d of
@@ -135,8 +141,8 @@ queryTree d =
                _ -> error "queryTree"
       _ -> error "queryTree"
 
--- | Extact sequence of group-ids from 'Query_Node'.
-queryNode_to_group_seq :: Query_Node -> [Int]
+-- | Extact sequence of 'Group_Id's from 'Query_Node'.
+queryNode_to_group_seq :: Query_Node -> [Group_Id]
 queryNode_to_group_seq nd =
     case nd of
       Query_Group k ch -> k : concatMap queryNode_to_group_seq ch

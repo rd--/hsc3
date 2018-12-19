@@ -107,6 +107,7 @@ data UGen = Constant_U Constant
 
 -- * Parser
 
+-- | 'constant' of 'parse_double'.
 parse_constant :: String -> Maybe UGen
 parse_constant = fmap constant . parse_double
 
@@ -165,6 +166,7 @@ un_proxy u =
       Proxy_U p -> Just p
       _ -> Nothing
 
+-- | Is 'UGen' a 'Proxy'?
 isProxy :: UGen -> Bool
 isProxy = isJust . un_proxy
 
@@ -399,6 +401,7 @@ sum3_optimise_direct u =
       Primitive_U (Primitive r "Sum3" [i,j,k] [r] (Special 0) NoId)
     _ -> u
 
+-- | 'sum3_optimise_direct' of 'mul_add_optimise_direct'.
 add_optimise_direct :: UGen -> UGen
 add_optimise_direct = sum3_optimise_direct . mul_add_optimise_direct
 

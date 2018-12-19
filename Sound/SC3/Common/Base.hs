@@ -1,3 +1,4 @@
+-- | Common core functions.
 module Sound.SC3.Common.Base where
 
 import Data.Char {- base -}
@@ -160,6 +161,10 @@ histogram x =
     in zip (map head g) (map length g)
 
 -- * TUPLES
+
+-- | Zip two 4-tuples.
+p4_zip :: (a,b,c,d) -> (e,f,g,h) -> ((a,e),(b,f),(c,g),(d,h))
+p4_zip (a,b,c,d) (e,f,g,h) = ((a,e),(b,f),(c,g),(d,h))
 
 -- | Two-tuple.
 type T2 a = (a,a)

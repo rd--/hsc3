@@ -81,6 +81,7 @@ reset =
 -- | (node-id,add-action,group-id,parameters)
 type Play_Opt = (Node_Id,Enum.AddAction,Group_Id,[(String,Double)])
 
+-- | Make 's_new' message to play 'Graphdef.Graphdef'.
 play_graphdef_msg :: Play_Opt -> Graphdef.Graphdef -> Message
 play_graphdef_msg (nid,act,gid,param) g =
     let nm = ascii_to_string (Graphdef.graphdef_name g)
@@ -90,6 +91,7 @@ play_graphdef_msg (nid,act,gid,param) g =
 playGraphdef :: DuplexOSC m => Play_Opt -> Graphdef.Graphdef -> m ()
 playGraphdef opt g = async_ (d_recv' g) >> sendMessage (play_graphdef_msg opt g)
 
+-- | Make 's_new' message to play 'Synthdef.Synthdef'.
 play_synthdef_msg :: Play_Opt -> Synthdef.Synthdef -> Message
 play_synthdef_msg (nid,act,gid,param) syn = s_new (Synthdef.synthdefName syn) nid act gid param
 
@@ -140,6 +142,7 @@ nrt_play_reorder s = do
   t <- liftIO time
   mapM_ (run_bundle t) (Bundle 0 b : r)
 
+-- | 'withSC3' of 'nrt_play'.
 nrt_audition :: NRT.NRT -> IO ()
 nrt_audition = withSC3 . nrt_play
 
@@ -246,6 +249,7 @@ c_getn1_data s = do
   sendMessage (c_getn1 s)
   liftM f (waitDatum "/c_setn")
 
+-- | Apply /f/ to result of 'n_query'.
 n_query1_unpack_f :: Transport m => (Message -> t) -> Node_Id -> m t
 n_query1_unpack_f f n = do
   sendMessage (n_query [n])
@@ -256,6 +260,7 @@ n_query1_unpack_f f n = do
 n_query1_unpack :: Transport m => Node_Id -> m (Maybe (Int,Int,Int,Int,Int,Maybe (Int,Int)))
 n_query1_unpack = n_query1_unpack_f unpack_n_info
 
+-- | Variant of 'n_query1_unpack' that returns plain (un-lifted) result.
 n_query1_unpack_plain :: Transport m => Node_Id -> m [Int]
 n_query1_unpack_plain = n_query1_unpack_f unpack_n_info_plain
 

@@ -19,6 +19,7 @@ import Sound.SC3.UGen.UGen
 envTrapezoid :: OrdE t => t -> t -> t -> t -> Envelope t
 envTrapezoid = envTrapezoid_f ((<=*),(>=*))
 
+-- | 'env_circle_z' of 'latch' of 'impulse'.
 env_circle_u :: UGen -> Envelope_Curve UGen -> Envelope UGen -> Envelope UGen
 env_circle_u = env_circle_z (latch 1 (impulse KR 0 0))
 

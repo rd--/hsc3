@@ -80,11 +80,13 @@ soundFileFormat_from_extension =
               ,("wav",Wave)]
     in flip lookup tbl
 
+-- | Erroring variant.
 soundFileFormat_from_extension_err :: String -> SoundFileFormat
 soundFileFormat_from_extension_err =
   fromMaybe (error "soundFileFormat_from_extension: unknown sf extension") .
   soundFileFormat_from_extension
 
+-- | 'SampleFormat' string as recognised by scsynth NRT mode.
 sampleFormatString :: SampleFormat -> String
 sampleFormatString f =
     case f of

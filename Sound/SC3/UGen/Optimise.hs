@@ -74,7 +74,8 @@ ugen_optimise_const_operator =
             case u of
               Primitive_U p ->
                   case p of
-                    Primitive _ "BinaryOpUGen" [Constant_U (Constant l),Constant_U (Constant r)] [_] (Special z) _ ->
+                    Primitive _ "BinaryOpUGen" [Constant_U (Constant l)
+                                               ,Constant_U (Constant r)] [_] (Special z) _ ->
                         case binop_special_hs z of
                           Just fn -> Constant_U (Constant (fn l r))
                           _ -> u
@@ -86,6 +87,7 @@ ugen_optimise_const_operator =
               _ -> u
     in ugenTraverse f
 
+-- | 'u_constant' of 'ugen_optimise_ir_rand'.
 constant_opt :: UGen -> Maybe Sample
 constant_opt = u_constant . ugen_optimise_ir_rand
 

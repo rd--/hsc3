@@ -7,6 +7,8 @@ import Sound.SC3.UGen.Bindings.HW.Construct
 import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 
+-- | Parameter (name,value) pairs.
+--
 -- > unwords $ map fst zitaRev_param
 zitaRev_param :: [(String, Double)]
 zitaRev_param =
@@ -25,5 +27,6 @@ zitaRev_param =
   ,("level",-20) -- lin, -9, 9
   ]
 
+-- | ZitaRev binding.
 zitaRev :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 zitaRev in1 in2 in_delay lf_x low_rt60 mid_rt60 hf_damping eq1_freq eq1_level eq2_freq eq2_level dry_wet_mix level = mkFilterR [AR] "FaustZitaRev" [in1,in2,in_delay,lf_x,low_rt60,mid_rt60,hf_damping,eq1_freq,eq1_level,eq2_freq,eq2_level,dry_wet_mix,level] 2

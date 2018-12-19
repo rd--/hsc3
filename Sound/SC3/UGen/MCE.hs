@@ -5,6 +5,7 @@ module Sound.SC3.UGen.MCE where
 data MCE n = MCE_Unit n | MCE_Vector [n]
              deriving (Eq,Read,Show)
 
+-- | Elements at 'MCE'.
 mce_elem :: MCE t -> [t]
 mce_elem m =
     case m of
@@ -18,12 +19,14 @@ mce_extend n m =
       MCE_Unit e -> MCE_Vector (replicate n e)
       MCE_Vector e -> MCE_Vector (take n (cycle e))
 
+-- | Apply /f/ at elements of /m/.
 mce_map :: (a -> b) -> MCE a -> MCE b
 mce_map f m =
     case m of
       MCE_Unit e -> MCE_Unit (f e)
       MCE_Vector e -> MCE_Vector (map f e)
 
+-- | Apply /f/ pairwise at elements of /m1/ and /m2/.
 mce_binop :: (a -> b -> c) -> MCE a -> MCE b -> MCE c
 mce_binop f m1 m2 =
     case (m1,m2) of

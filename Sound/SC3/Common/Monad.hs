@@ -1,3 +1,4 @@
+-- | Common 'Control.Monad' variations.
 module Sound.SC3.Common.Monad where
 
 import Control.Monad {- base -}

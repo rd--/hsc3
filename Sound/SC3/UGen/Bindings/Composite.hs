@@ -475,6 +475,7 @@ wrapOut fadeTime z =
 
 -- * wslib
 
+-- | Cross-fading version of 'playBuf'.
 playBufCF :: Int -> UGen -> UGen -> UGen -> UGen -> Loop -> UGen -> Int -> UGen
 playBufCF nc bufnum rate trigger startPos loop lag' n =
     let trigger' = if rateOf trigger == DR
@@ -513,6 +514,7 @@ osc1 rt buf dur doneAction =
 fm7_mx :: [[UGen]] -> [[UGen]] -> UGen
 fm7_mx ctlMatrix modMatrix = External.fm7 AR (mce (concat ctlMatrix)) (mce (concat modMatrix))
 
+-- | pulse signal as difference of two 'sawDPW' signals.
 pulseDPW :: Rate -> UGen -> UGen -> UGen
 pulseDPW rt freq width =
   let o1 = External.sawDPW rt freq 0

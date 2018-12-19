@@ -19,44 +19,61 @@ nrm_u = Buffer.normalize (-1) 1
 
 -- * sine1
 
+-- | 'sine3_p' with zero phase.
+--
+-- > import Sound.SC3.Plot {- hsc3-plot -}
+-- > plotTable1 (sine1_p 512 (1,1))
 sine1_p :: (Enum n,Floating n) => Int -> (n,n) -> [n]
 sine1_p n (pfreq,ampl) = sine3_p n (pfreq,ampl,0)
 
+-- | Series of sine wave harmonics using specified amplitudes.
 sine1_l :: (Enum n,Floating n) => Int -> [n] -> [[n]]
 sine1_l n ampl = map (sine1_p n) (zip [1..] ampl)
 
--- > import Sound.SC3.Plot
+-- | 'sum_l' of 'sine1_l'.
+--
+-- > import Sound.SC3.Plot {- hsc3-plot -}
 -- > plotTable1 (sine1 256 [1,0.95 .. 0.5])
 sine1 :: (Enum n,Floating n) => Int -> [n] -> [n]
 sine1 n = sum_l . sine1_l n
 
+-- | 'nrm_u' of 'sine1_l'.
+--
 -- > plotTable1 (sine1_nrm 256 [1,0.95 .. 0.5])
 sine1_nrm :: (Enum n,Floating n,Ord n) => Int -> [n] -> [n]
 sine1_nrm n = nrm_u . sine1 n
 
 -- * sine2
 
+-- | Series of /n/ sine wave partials using specified frequencies and amplitudes.
 sine2_l :: (Enum n,Floating n) => Int -> [(n,n)] -> [[n]]
 sine2_l n = map (sine1_p n)
 
+-- | 'sum_l' of 'sine2_l'.
+--
 -- > plotTable1 (sine2 256 (zip [1,2..] [1,0.95 .. 0.5]))
 -- > plotTable1 (sine2 256 (zip [1,1.5 ..] [1,0.95 .. 0.5]))
 sine2 :: (Enum n,Floating n) => Int -> [(n,n)] -> [n]
 sine2 n = sum_l . sine2_l n
 
+-- | 'nrm_u' of 'sine2_l'.
 sine2_nrm :: (Enum n,Floating n,Ord n) => Int -> [n] -> [n]
 sine2_nrm n = nrm_u . sine1 n
 
 -- * sine3
 
+-- | Sine wave table at specified frequency, amplitude and phase.
 sine3_p :: (Enum n,Floating n) => Int -> (n,n,n) -> [n]
 sine3_p n (pfreq,ampl,phase) =
     let incr = (Math.two_pi / (fromIntegral n - 1)) * pfreq
     in map ((*) ampl . sin) (take n [phase,phase + incr ..])
 
+-- | 'map' of 'sine3_p'.
 sine3_l :: (Enum n,Floating n) => Int -> [(n,n,n)] -> [[n]]
 sine3_l n = map (sine3_p n)
 
+-- | 'sum_l' of 'sine3_l'.
+--
 -- > plotTable1 (sine3 256 (zip3 [1,1.5 ..] [1,0.95 .. 0.5] [0,pi/7..]))
 sine3 :: (Enum n,Floating n) => Int -> [(n,n,n)] -> [n]
 sine3 n = sum_l . sine3_l n
@@ -78,5 +95,6 @@ gen_cheby n =
         c_normalize x = let m = maximum (map abs x) in map (* (recip m)) x
     in c_normalize . mix . map (\(k,a) -> map ((* a) . (c k)) ix) . zip [1..]
 
+-- | Type specialised 'gen_cheby'.
 cheby :: (Enum n, Floating n, Ord n) => Int -> [n] -> [n]
 cheby = gen_cheby

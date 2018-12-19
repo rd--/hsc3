@@ -82,6 +82,7 @@ run_bundle fd t0 b = do
 nrt_play :: Transport t => t -> NRT -> IO ()
 nrt_play fd sc = time >>= \t0 -> mapM_ (run_bundle fd t0) (nrt_bundles sc)
 
+-- | 'withSC3' of 'nrt_play'
 nrt_audition :: NRT -> IO ()
 nrt_audition sc = withSC3 (\fd -> nrt_play fd sc)
 
@@ -102,9 +103,11 @@ instance Audible Synthdef where
 instance Audible UGen where
     play_id = playUGen
 
+-- | 'withSC3' of 'play_id'
 audition_id :: Audible e => Int -> e -> IO ()
 audition_id k e = withSC3 (\fd -> play_id k fd e)
 
+-- | 'audition_id' of @-1@.
 audition :: Audible e => e -> IO ()
 audition = audition_id (-1)
 
@@ -150,6 +153,7 @@ b_fetch fd n b = do
   sendMessage fd (b_query1 b)
   waitReply fd "/b_info" >>= f
 
+-- | 'head' of 'b_fetch'.
 b_fetch1 :: Transport t => t -> Int -> Int -> IO [Double]
 b_fetch1 fd n b = liftM head (b_fetch fd n b)
 

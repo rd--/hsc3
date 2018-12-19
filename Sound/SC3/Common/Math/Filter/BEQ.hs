@@ -29,6 +29,7 @@ bHiPassCoef sr freq rq =
       b2 = (1 - alpha) * negate b0rz
   in (a0, a1, a0, b1, b2)
 
+-- | Calculate coefficients for bi-quad all pass filter.
 bAllPassCoef :: Floating t => t -> t -> t -> (t, t, t, t, t)
 bAllPassCoef sr freq rq =
   let w0 = pi * 2 * freq * (1 / sr)
@@ -38,6 +39,7 @@ bAllPassCoef sr freq rq =
       b1 = 2.0 * cos w0 * b0rz
   in (a0,negate b1, 1.0, b1,negate a0)
 
+-- | Calculate coefficients for bi-quad band pass filter.
 bBandPassCoef :: Floating t => t -> t -> t -> (t, t, t, t, t)
 bBandPassCoef sr freq bw =
   let w0 = pi * 2 * freq * (1 / sr)
@@ -49,6 +51,7 @@ bBandPassCoef sr freq bw =
       b2 = (1 - alpha) * negate b0rz
   in (a0, 0.0, negate a0, b1, b2)
 
+-- | Calculate coefficients for bi-quad stop band filter.
 bBandStopCoef :: Floating t => t -> t -> t -> (t, t, t, t, t)
 bBandStopCoef sr freq bw =
   let w0 = pi * 2 * freq * (1 / sr)
@@ -59,6 +62,7 @@ bBandStopCoef sr freq bw =
       b2 = (1 - alpha) * negate b0rz
   in (b0rz, negate b1, b0rz, b1, b2)
 
+-- | Calculate coefficients for bi-quad peaking EQ filter.
 bPeakEQCoef :: Floating t => t -> t -> t -> t -> (t, t, t, t, t)
 bPeakEQCoef sr freq rq db =
   let a = 10 ** (db / 40)
@@ -71,6 +75,7 @@ bPeakEQCoef sr freq rq db =
       b2 = (1 - (alpha / a)) * negate b0rz
   in (a0, negate b1, a2, b1, b2)
 
+-- | Calculate coefficients for bi-quad low shelf filter.
 bLowShelfCoef :: Floating t => t -> t -> t -> t -> (t, t, t, t, t)
 bLowShelfCoef sr freq rs db =
   let a = 10 ** (db / 40)
@@ -89,6 +94,7 @@ bLowShelfCoef sr freq rs db =
       b2 = ((a + 1) + j - k) * negate b0rz
   in (a0, a1, a2, b1, b2)
 
+-- | Calculate coefficients for bi-quad high shelf filter.
 bHiShelfCoef :: Floating t => t -> t -> t -> t -> (t, t, t, t, t)
 bHiShelfCoef sr freq rs db =
   let a = 10 ** (db / 40)

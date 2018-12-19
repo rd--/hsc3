@@ -42,12 +42,15 @@ type Special = Int
 -- | Unit generator type.
 type UGen = (Name,Rate,[Input],[Output],Special)
 
+-- | 'UGen' 'Rate'.
 ugen_rate :: UGen -> Rate
 ugen_rate (_,r,_,_,_) = r
 
+-- | 'UGen' 'Input's.
 ugen_inputs :: UGen -> [Input]
 ugen_inputs (_,_,i,_,_) = i
 
+-- | 'UGen' 'Output's.
 ugen_outputs :: UGen -> [Output]
 ugen_outputs (_,_,_,o,_) = o
 
@@ -78,12 +81,15 @@ graphdef_ugen g = (graphdef_ugens g !!)
 graphdef_control :: Graphdef -> Int -> (Control,Sample)
 graphdef_control g = (graphdef_controls g !!)
 
+-- | nid of constant.
 graphdef_constant_nid :: Graphdef -> Int -> Int
 graphdef_constant_nid _ = id
 
+-- | nid of control.
 graphdef_control_nid :: Graphdef -> Int -> Int
 graphdef_control_nid g = (+) (length (graphdef_constants g))
 
+-- | nid of UGen.
 graphdef_ugen_nid :: Graphdef -> Int -> Int
 graphdef_ugen_nid g n = graphdef_control_nid g 0 + length (graphdef_controls g) + n
 

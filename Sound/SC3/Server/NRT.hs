@@ -33,9 +33,6 @@ type NRT_STAT =
 nrt_stat_param :: (String, String, String, String)
 nrt_stat_param = ("duration","# bundles","# messages","command set")
 
-p4_zip :: (a,b,c,d) -> (e,f,g,h) -> ((a,e),(b,f),(c,g),(d,h))
-p4_zip (a,b,c,d) (e,f,g,h) = ((a,e),(b,f),(c,g),(d,h))
-
 -- | Trivial NRT statistics.
 nrt_stat :: NRT -> NRT_STAT
 nrt_stat (NRT b_seq) =

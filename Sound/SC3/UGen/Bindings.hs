@@ -1,3 +1,4 @@
+-- | SC3 UGen bindings (composite module).
 module Sound.SC3.UGen.Bindings (module B) where
 
 import Sound.SC3.UGen.Bindings.Composite as B

@@ -1,3 +1,4 @@
+-- | SC3 UGen bindings (auto-generated).
 module Sound.SC3.UGen.Bindings.DB where
 
 import Sound.SC3.Common.Envelope
