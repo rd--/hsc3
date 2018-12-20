@@ -17,6 +17,7 @@ clean:
 	rm -f *.hi *.o
 	rm -f $(cmd)
 	rm -f $(cmd_rw)
+	rm -Rf dist
 
 query:
 	echo prefix = $(prefix)
