@@ -5,7 +5,7 @@ import Sound.SC3.UGen.DB {- hsc3-db -}
 import Sound.SC3.UGen.DB.Record {- hsc3-db -}
 
 is_filter :: U -> Bool
-is_filter = isJust . ugen_filter
+is_filter u = isJust (ugen_filter u) || isJust (ugen_fixed_rate u)
 
 n_inputs :: U -> Int
 n_inputs = length . ugen_inputs
@@ -34,6 +34,6 @@ gen_u nm =
   in [gen_sig nm u,gen_def nm u]
 
 {-
-> u = ["allpassL","allpassN","combL","delayN","dust","lfNoise1","out","rand","resonz","sinOsc","whiteNoise"]
+> u = ["allpassL","allpassN","bpz2","brownNoise","combL","delayN","dust","lfNoise1","lfPulse","out","rand","resonz","rhpf","sinOsc","whiteNoise"]
 > mapM_ (putStrLn . unlines . gen_u) u
 -}

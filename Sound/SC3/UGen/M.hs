@@ -77,6 +77,18 @@ instance Monad m => Fractional (UGen m) where
   recip = lift_ugen_1 recip
   fromRational = UGen . return . fromRational
 
+instance Monad m => Eq (UGen m) where
+
+instance Monad m => Ord (UGen m) where
+{-
+    (<) = lift_ugen_2 (<)
+    (<=) = lift_ugen_2 (<=)
+    (>) = lift_ugen_2 (>)
+    (>=) = lift_ugen_2 (>=)
+-}
+    min = lift_ugen_2 min
+    max = lift_ugen_2 max
+
 {-
 import qualified Sound.SC3.UGen.Dot as Dot {- hsc3-dot -}
 
@@ -97,21 +109,7 @@ t0 = out 0 (mce2 (sinOsc AR 440 0 * 0.1) ((whiteNoise AR - whiteNoise AR) * 0.1)
 mce2 :: Monad m => UGen m -> UGen m -> UGen m
 mce2 = lift_ugen_2 SC3.mce2
 
--- * NONDET
-
-dust :: UId m => Rate -> UGen m -> UGen m
-dust rate = lift_ugenM_1 (SC3.dustM rate)
-
-lfNoise1 :: UId m => Rate -> UGen m -> UGen m
-lfNoise1 rate = lift_ugenM_1 (SC3.lfNoise1M rate)
-
-rand :: UId m => UGen m -> UGen m -> UGen m
-rand = lift_ugenM_2 SC3.randM
-
-whiteNoise :: UId m => Rate -> UGen m
-whiteNoise rate = lift_ugenM_0 (SC3.whiteNoiseM rate)
-
--- * PLAIN
+-- * AUTOGEN
 
 allpassL :: Monad m => UGen m -> UGen m -> UGen m -> UGen m -> UGen m
 allpassL = lift_ugen_4 SC3.allpassL
@@ -119,17 +117,41 @@ allpassL = lift_ugen_4 SC3.allpassL
 allpassN :: Monad m => UGen m -> UGen m -> UGen m -> UGen m -> UGen m
 allpassN = lift_ugen_4 SC3.allpassN
 
+bpz2 :: Monad m => UGen m -> UGen m
+bpz2 = lift_ugen_1 SC3.bpz2
+
+brownNoise :: UId m => Rate -> UGen m
+brownNoise rate = lift_ugenM_0 (SC3.brownNoiseM rate)
+
 combL :: Monad m => UGen m -> UGen m -> UGen m -> UGen m -> UGen m
 combL = lift_ugen_4 SC3.combL
 
 delayN :: Monad m => UGen m -> UGen m -> UGen m -> UGen m
 delayN = lift_ugen_3 SC3.delayN
 
+dust :: UId m => Rate -> UGen m -> UGen m
+dust rate = lift_ugenM_1 (SC3.dustM rate)
+
+lfNoise1 :: UId m => Rate -> UGen m -> UGen m
+lfNoise1 rate = lift_ugenM_1 (SC3.lfNoise1M rate)
+
+lfPulse :: Monad m => Rate -> UGen m -> UGen m -> UGen m -> UGen m
+lfPulse rate = lift_ugen_3 (SC3.lfPulse rate)
+
 out :: Monad m => UGen m -> UGen m -> UGen m
 out = lift_ugen_2 SC3.out
+
+rand :: UId m => UGen m -> UGen m -> UGen m
+rand = lift_ugenM_2 SC3.randM
 
 resonz :: Monad m => UGen m -> UGen m -> UGen m -> UGen m
 resonz = lift_ugen_3 SC3.resonz
 
+rhpf :: Monad m => UGen m -> UGen m -> UGen m -> UGen m
+rhpf = lift_ugen_3 SC3.rhpf
+
 sinOsc :: Monad m => Rate -> UGen m -> UGen m -> UGen m
 sinOsc rate = lift_ugen_2 (SC3.sinOsc rate)
+
+whiteNoise :: UId m => Rate -> UGen m
+whiteNoise rate = lift_ugenM_0 (SC3.whiteNoiseM rate)
