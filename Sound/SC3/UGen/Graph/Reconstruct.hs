@@ -42,7 +42,7 @@ reconstruct_graph g =
 reconstruct_graph_module :: String -> Graph.U_Graph -> [String]
 reconstruct_graph_module nm gr =
   let imp = ["import Sound.SC3"
-            ,"import Sound.SC3.Common"
+            ,"import Sound.SC3.Common.Base"
             ,"import Sound.SC3.UGen.Plain"]
       (b0:bnd,res) = reconstruct_graph gr
       hs = ("  let " ++ b0) : map ("      " ++ ) bnd ++ ["  in " ++ res]
