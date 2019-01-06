@@ -1,10 +1,10 @@
 import Data.List {- base -}
 import Text.Printf {- base -}
 
-import Sound.SC3.UGen.Name {- hsc3 -}
 import Sound.SC3.UGen.Operator {- hsc3 -}
 
 import Sound.SC3.UGen.DB {- hsc3-db -}
+import Sound.SC3.UGen.DB.Rename {- hsc3-db -}
 
 ugen_renamer :: String -> String
 ugen_renamer u =

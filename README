@@ -36,7 +36,11 @@ is written for [GNU][gnu] [Emacs][emacs].
 [scsynth](?t=hsc3&e=md/scsynth.md),
 [setup](?t=hsc3&e=md/setup.md)
 
-© [rohan drape][rd] and others, 2005-2018, [gpl][gpl].
+## help
+
+[UGen Index](?t=hsc3&e=Help/UGen/ix.md)
+
+© [rohan drape][rd] and others, 2005-2019, [gpl][gpl].
 with contributions by:
 
 - henning thielemann

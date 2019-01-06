@@ -8,7 +8,7 @@ Description:       Haskell client for the SuperCollider synthesis server,
                    <http://rohandrape.net/t/hsc3-texts>.
 License:           GPL-3
 Category:          Sound
-Copyright:         (c) Rohan Drape and others, 2005-2018
+Copyright:         (c) Rohan Drape and others, 2005-2019
 Author:            Rohan Drape
 Maintainer:        rd@rohandrape.net
 Stability:         Experimental
