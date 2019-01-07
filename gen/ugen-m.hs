@@ -2,6 +2,7 @@ import Data.List {- base -}
 import Data.Maybe {- base -}
 
 import Sound.SC3.UGen.DB {- hsc3-db -}
+import Sound.SC3.UGen.DB.Bindings {- hsc3-db -}
 import Sound.SC3.UGen.DB.Record {- hsc3-db -}
 
 is_filter :: U -> Bool
@@ -28,12 +29,8 @@ gen_def nm u =
      then concat [nm," = ",lift,show (n_inputs u)," SC3.",nm']
      else concat [nm," rate = ",lift,show (n_inputs u)," (SC3.",nm', " rate)"]
 
-gen_u :: String -> [String]
-gen_u nm =
-  let Just u = uLookup_ci nm
+-- > mapM_ (putStrLn . unlines . gen_u) ugenDB_core
+gen_u :: U -> [String]
+gen_u u =
+  let nm = ugen_hs_name u
   in [gen_sig nm u,gen_def nm u]
-
-{-
-> u = ["allpassL","allpassN","bpz2","brownNoise","combL","delayN","dust","lfNoise1","lfPulse","out","rand","resonz","rhpf","sinOsc","whiteNoise"]
-> mapM_ (putStrLn . unlines . gen_u) u
--}
