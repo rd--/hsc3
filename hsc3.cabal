@@ -101,7 +101,6 @@ Library
                    Sound.SC3.UGen.Help
                    Sound.SC3.UGen.Help.Graph
                    Sound.SC3.UGen.HS
-                   Sound.SC3.UGen.M
                    Sound.SC3.UGen.Math
                    Sound.SC3.UGen.Math.Composite
                    Sound.SC3.UGen.MCE
