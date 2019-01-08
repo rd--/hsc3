@@ -25,6 +25,7 @@ There are a number of related projects:
 - [hsc3-rw](?t=hsc3-rw): UGen Graph Re-writing (2013)
 - [hsc3-forth](?t=hsc3-forth): FORTH SuperCollider (2014)
 - [hsc3-lisp](?t=hsc3-lisp): LISP SuperCollider (2014)
+- [hsc3-m](?t=hsc3-m): UGen variants (2018)
 
 The hsc3 interaction environment ([hsc3.el](?t=hsc3&e=emacs/hsc3.el))
 is written for [GNU][gnu] [Emacs][emacs].
