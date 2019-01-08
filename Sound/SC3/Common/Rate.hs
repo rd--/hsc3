@@ -1,10 +1,11 @@
 -- | Operating rate definitions and utilities.
-module Sound.SC3.UGen.Rate where
+module Sound.SC3.Common.Rate where
 
 import Data.Char {- base -}
 import Data.Function {- base -}
 
 -- | Operating rate of unit generator.
+--   I = initialisation, K = control, A = audio, D = demand.
 data Rate = IR | KR | AR | DR
             deriving (Eq,Enum,Bounded,Show,Read)
 
@@ -52,7 +53,7 @@ rate_parse r =
 -- * Control rates
 
 -- | Enumeration of the four operating rates for controls.
---   IR = initialisation rate, KR = control rate, TR = trigger rate, AR = audio rate.
+--   I = initialisation, K = control, T = trigger, A = audio.
 data K_Type = K_IR | K_KR | K_TR | K_AR
              deriving (Eq,Show,Ord)
 

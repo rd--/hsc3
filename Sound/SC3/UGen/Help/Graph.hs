@@ -2,10 +2,10 @@
 module Sound.SC3.UGen.Help.Graph where
 
 import Sound.SC3.Common.Envelope
+import Sound.SC3.Common.Rate
 
 import Sound.SC3.UGen.Bindings
 import Sound.SC3.UGen.Enum
-import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 

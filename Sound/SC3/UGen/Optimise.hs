@@ -3,8 +3,8 @@ module Sound.SC3.UGen.Optimise where
 
 import System.Random {- random -}
 
+import Sound.SC3.Common.Rate
 import Sound.SC3.UGen.Math
-import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 

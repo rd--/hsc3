@@ -3,12 +3,13 @@ module Sound.SC3.Server.Recorder where
 
 import Sound.OSC {- hosc -}
 
+import Sound.SC3.Common.Rate
 import Sound.SC3.Server.Command
 import Sound.SC3.Server.Enum
 import Sound.SC3.Server.NRT
 import Sound.SC3.Server.Synthdef
-import Sound.SC3.UGen
 import Sound.SC3.UGen.Bindings
+import Sound.SC3.UGen.UGen
 
 -- | Parameters for recording @scsynth@.
 data SC3_Recorder =

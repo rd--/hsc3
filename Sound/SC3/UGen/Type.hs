@@ -8,9 +8,9 @@ import Safe {- safe -}
 import System.Random {- random -}
 
 import Sound.SC3.Common.Math
+import Sound.SC3.Common.Rate
 import Sound.SC3.UGen.MCE
 import Sound.SC3.UGen.Operator
-import Sound.SC3.UGen.Rate
 
 -- * Basic types
 

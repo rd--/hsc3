@@ -4,8 +4,8 @@ module Sound.SC3.UGen.Graph.Transform where
 import Data.Either {- base -}
 import Data.List {- base -}
 
+import Sound.SC3.Common.Rate
 import Sound.SC3.UGen.Graph
-import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 
 -- * Lift constants

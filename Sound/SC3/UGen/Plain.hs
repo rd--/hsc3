@@ -9,8 +9,8 @@
 module Sound.SC3.UGen.Plain where
 
 import Sound.SC3.Common.Base
+import Sound.SC3.Common.Rate
 import Sound.SC3.UGen.Operator
-import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 
 -- | Variant of 'mkUGen'.

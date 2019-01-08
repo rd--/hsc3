@@ -3,11 +3,11 @@ module Sound.SC3.UGen.Bindings.Monad where
 
 import Control.Monad {- base -}
 
+import Sound.SC3.Common.Rate
 import Sound.SC3.Common.UId
 import Sound.SC3.UGen.Bindings.DB
 import Sound.SC3.UGen.Bindings.HW
 import Sound.SC3.UGen.Enum
-import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 
 -- | Clone a unit generator (mce . replicateM).

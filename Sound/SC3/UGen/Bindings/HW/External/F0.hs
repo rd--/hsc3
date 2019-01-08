@@ -1,8 +1,8 @@
 -- | F0 UGens (f0plugins)
 module Sound.SC3.UGen.Bindings.HW.External.F0 where
 
+import Sound.SC3.Common.Rate
 import Sound.SC3.UGen.Bindings.HW.Construct
-import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 
 -- | Emulation of the sound generation hardware of the Atari TIA chip.

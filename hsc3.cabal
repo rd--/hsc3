@@ -57,6 +57,7 @@ Library
                    Sound.SC3.Common.Math.Window
                    Sound.SC3.Common.Monad
                    Sound.SC3.Common.Monad.Operators
+                   Sound.SC3.Common.Rate
                    Sound.SC3.Common.UId
                    Sound.SC3.FD
                    Sound.SC3.Server
@@ -110,7 +111,6 @@ Library
                    Sound.SC3.UGen.Plain
                    Sound.SC3.UGen.PP
                    Sound.SC3.UGen.Protect
-                   Sound.SC3.UGen.Rate
                    Sound.SC3.UGen.Type
                    Sound.SC3.UGen.UGen
 

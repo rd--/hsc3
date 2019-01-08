@@ -19,8 +19,8 @@ import Data.Function {- base -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
 
+import Sound.SC3.Common.Rate
 import qualified Sound.SC3.UGen.Analysis as Analysis
-import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 

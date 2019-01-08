@@ -6,8 +6,8 @@ import Data.Maybe {- base -}
 
 import qualified Sound.OSC.Datum as Datum {- hosc -}
 
+import qualified Sound.SC3.Common.Rate as Rate
 import qualified Sound.SC3.UGen.Graph as Graph
-import qualified Sound.SC3.UGen.Rate as Rate
 import qualified Sound.SC3.UGen.Type as Type
 import qualified Sound.SC3.Server.Graphdef as Graphdef
 

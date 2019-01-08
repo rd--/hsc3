@@ -1,7 +1,7 @@
 -- | For hand-writing UGens.
 module Sound.SC3.UGen.Bindings.HW.Construct where
 
-import Sound.SC3.UGen.Rate
+import Sound.SC3.Common.Rate
 import Sound.SC3.UGen.Type
 
 -- | Oscillator constructor with constrained set of operating 'Rate's.

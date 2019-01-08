@@ -10,6 +10,5 @@ import Sound.SC3.UGen.Math as U
 import Sound.SC3.UGen.Name as U
 import Sound.SC3.UGen.Operator as U
 import Sound.SC3.UGen.Optimise as U
-import Sound.SC3.UGen.Rate as U
 import Sound.SC3.UGen.Type as U
 import Sound.SC3.UGen.UGen as U

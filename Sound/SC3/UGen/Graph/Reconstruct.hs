@@ -5,9 +5,9 @@ import Data.Char {- base -}
 import Data.List {- base -}
 import Text.Printf {- base -}
 
+import Sound.SC3.Common.Rate
 import qualified Sound.SC3.UGen.Graph as Graph
 import qualified Sound.SC3.UGen.Operator as Operator
-import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 

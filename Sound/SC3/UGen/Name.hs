@@ -7,7 +7,7 @@ module Sound.SC3.UGen.Name where
 import Data.Char {- base -}
 import Data.List.Split {- split -}
 
-import Sound.SC3.UGen.Rate {- hsc3 -}
+import Sound.SC3.Common.Rate {- hsc3 -}
 
 {-
 import qualified Sound.SC3.Common.Base {- hsc3 -}

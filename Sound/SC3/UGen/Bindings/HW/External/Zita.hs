@@ -3,8 +3,8 @@
 -- See hsc3/ext/faust to build the SC3 plugin.
 module Sound.SC3.UGen.Bindings.HW.External.Zita where
 
+import Sound.SC3.Common.Rate
 import Sound.SC3.UGen.Bindings.HW.Construct
-import Sound.SC3.UGen.Rate
 import Sound.SC3.UGen.Type
 
 -- | Parameter (name,value) pairs.
