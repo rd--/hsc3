@@ -428,6 +428,12 @@ dbufrd z bufnum phase loop = mkUGen Nothing [DR] (Left DR) "Dbufrd" [bufnum,phas
 dbufwr :: ID a => a -> UGen -> UGen -> UGen -> Loop -> UGen
 dbufwr z bufnum phase loop input = mkUGen Nothing [DR] (Left DR) "Dbufwr" [bufnum,phase,loop,(from_loop input)] Nothing 1 (Special 0) (toUId z)
 
+-- | Constrain a demand-rate stream to a given sum
+--
+--  Dconst [DR] sum=0.0 in=0.0 tolerance=1.0e-3;    DEMAND/NONDET
+dconst :: ID a => a -> UGen -> UGen -> UGen -> UGen
+dconst z sum_ in_ tolerance = mkUGen Nothing [DR] (Left DR) "Dconst" [sum_,in_,tolerance] Nothing 1 (Special 0) (toUId z)
+
 -- | Exponential decay
 --
 --  Decay [KR,AR] in=0.0 decayTime=1.0;    FILTER: TRUE
@@ -1347,6 +1353,12 @@ mouseY rate minval maxval warp lag_ = mkUGen Nothing [KR] (Left rate) "MouseY" [
 --  NRand [IR] lo=0.0 hi=1.0 n=0.0;    NONDET
 nRand :: ID a => a -> UGen -> UGen -> UGen -> UGen
 nRand z lo hi n = mkUGen Nothing [IR] (Left IR) "NRand" [lo,hi,n] Nothing 1 (Special 0) (toUId z)
+
+-- | (Undocumented class)
+--
+--  NodeID [IR]
+nodeID :: Rate -> UGen
+nodeID rate = mkUGen Nothing [IR] (Left rate) "NodeID" [] Nothing 1 (Special 0) NoId
 
 -- | Flattens dynamics.
 --

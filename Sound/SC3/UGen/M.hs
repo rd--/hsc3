@@ -21,6 +21,7 @@ type F6 t = t -> t -> t -> t -> t -> t -> t
 type F7 t = t -> t -> t -> t -> t -> t -> t -> t
 type F8 t = t -> t -> t -> t -> t -> t -> t -> t -> t
 type F9 t = t -> t -> t -> t -> t -> t -> t -> t -> t -> t
+type F10 t = t -> t -> t -> t -> t -> t -> t -> t -> t -> t -> t
 
 -- * LIFT
 
@@ -108,6 +109,21 @@ lift_ugen_9 f (UGen p) (UGen q) (UGen r) (UGen s) (UGen t) (UGen u) (UGen v) (UG
   x' <- x
   return (f p' q' r' s' t' u' v' w' x')
 
+
+lift_ugen_10 :: Monad m => F10 SC3.UGen -> F10 (UGen m)
+lift_ugen_10 f (UGen p) (UGen q) (UGen r) (UGen s) (UGen t) (UGen u) (UGen v) (UGen w) (UGen x) (UGen y) = UGen $ do
+  p' <- p
+  q' <- q
+  r' <- r
+  s' <- s
+  t' <- t
+  u' <- u
+  v' <- v
+  w' <- w
+  x' <- x
+  y' <- y
+  return (f p' q' r' s' t' u' v' w' x' y')
+
 -- * LIFT M
 
 lift_ugenM_0 :: Monad m => m SC3.UGen -> UGen m
@@ -156,6 +172,7 @@ instance Monad m => Fractional (UGen m) where
   fromRational = UGen . return . fromRational
 
 instance Monad m => Eq (UGen m) where
+  (==) = error "UGen: =="
 
 instance Monad m => Ord (UGen m) where
 {-
@@ -164,8 +181,9 @@ instance Monad m => Ord (UGen m) where
     (>) = lift_ugen_2 (>)
     (>=) = lift_ugen_2 (>=)
 -}
-    min = lift_ugen_2 min
-    max = lift_ugen_2 max
+  compare = error "UGen: compare"
+  min = lift_ugen_2 min
+  max = lift_ugen_2 max
 
 {-
 import qualified Sound.SC3.UGen.Dot as Dot {- hsc3-dot -}
@@ -396,8 +414,8 @@ dbrown = lift_ugenM_4 SC3.dbrownM
 --dbufwr :: UId m => UGen m -> UGen m -> UGen m -> UGen m -> UGen m
 --dbufwr = lift_ugenM_4 SC3.dbufwrM
 
---dconst :: UId m => UGen m -> UGen m -> UGen m -> UGen m
---dconst = lift_ugenM_3 SC3.dconstM
+dconst :: UId m => UGen m -> UGen m -> UGen m -> UGen m
+dconst = lift_ugenM_3 SC3.dconstM
 
 decay :: Monad m => UGen m -> UGen m -> UGen m
 decay = lift_ugen_2 SC3.decay
@@ -405,8 +423,8 @@ decay = lift_ugen_2 SC3.decay
 decay2 :: Monad m => UGen m -> UGen m -> UGen m -> UGen m
 decay2 = lift_ugen_3 SC3.decay2
 
---decodeB2 :: Monad m => Rate -> UGen m -> UGen m -> UGen m -> UGen m -> UGen m
---decodeB2 rate = lift_ugen_4 (SC3.decodeB2 rate)
+decodeB2 :: Monad m => Int -> Rate -> UGen m -> UGen m -> UGen m -> UGen m -> UGen m
+decodeB2 numChannels rate = lift_ugen_4 (SC3.decodeB2 numChannels rate)
 
 degreeToKey :: Monad m => UGen m -> UGen m -> UGen m -> UGen m
 degreeToKey = lift_ugen_3 SC3.degreeToKey
@@ -459,20 +477,20 @@ diskOut = lift_ugen_2 SC3.diskOut
 diwhite :: UId m => UGen m -> UGen m -> UGen m -> UGen m
 diwhite = lift_ugenM_3 SC3.diwhiteM
 
---donce :: UId m => UGen m -> UGen m
---donce = lift_ugenM_1 SC3.donceM
+donce :: UId m => UGen m -> UGen m
+donce = lift_ugenM_1 SC3.donceM
 
 done :: Monad m => UGen m -> UGen m
 done = lift_ugen_1 SC3.done
 
---dpoll :: UId m => UGen m -> UGen m -> UGen m -> UGen m -> UGen m
---dpoll = lift_ugenM_4 SC3.dpollM
+dpoll :: UId m => UGen m -> UGen m -> UGen m -> UGen m -> UGen m
+dpoll = lift_ugenM_4 SC3.dpollM
 
 drand :: UId m => UGen m -> UGen m -> UGen m
 drand = lift_ugenM_2 SC3.drandM
 
---dreset :: UId m => UGen m -> UGen m -> UGen m
---dreset = lift_ugenM_2 SC3.dresetM
+dreset :: UId m => UGen m -> UGen m -> UGen m
+dreset = lift_ugenM_2 SC3.dresetM
 
 dseq :: UId m => UGen m -> UGen m -> UGen m
 dseq = lift_ugenM_2 SC3.dseqM
@@ -495,8 +513,8 @@ dswitch = lift_ugenM_2 SC3.dswitchM
 dswitch1 :: UId m => UGen m -> UGen m -> UGen m
 dswitch1 = lift_ugenM_2 SC3.dswitch1M
 
---dunique :: UId m => UGen m -> UGen m -> UGen m -> UGen m
---dunique = lift_ugenM_3 SC3.duniqueM
+dunique :: UId m => UGen m -> UGen m -> UGen m -> UGen m
+dunique = lift_ugenM_3 SC3.duniqueM
 
 dust :: UId m => Rate -> UGen m -> UGen m
 dust rate = lift_ugenM_1 (SC3.dustM rate)
@@ -567,8 +585,8 @@ freeVerb2 = lift_ugen_5 SC3.freeVerb2
 freqShift :: Monad m => UGen m -> UGen m -> UGen m -> UGen m
 freqShift = lift_ugen_3 SC3.freqShift
 
---gVerb :: Monad m => UGen m -> UGen m -> UGen m -> UGen m -> UGen m -> UGen m -> UGen m -> UGen m -> UGen m -> UGen m -> UGen m
---gVerb = lift_ugen_10 SC3.gVerb
+gVerb :: Monad m => UGen m -> UGen m -> UGen m -> UGen m -> UGen m -> UGen m -> UGen m -> UGen m -> UGen m -> UGen m -> UGen m
+gVerb = lift_ugen_10 SC3.gVerb
 
 gate :: Monad m => UGen m -> UGen m -> UGen m
 gate = lift_ugen_2 SC3.gate
@@ -809,8 +827,8 @@ linXFade2 = lift_ugen_4 SC3.linXFade2
 --linen :: Monad m => UGen m -> UGen m -> UGen m -> UGen m -> UGen m -> UGen m
 --linen = lift_ugen_5 SC3.linen
 
---localBuf :: UId m => UGen m -> UGen m -> UGen m
---localBuf = lift_ugenM_2 SC3.localBufM
+localBuf :: UId m => UGen m -> UGen m -> UGen m
+localBuf = lift_ugenM_2 SC3.localBufM
 
 localIn :: Monad m => Int -> Rate -> UGen m -> UGen m
 localIn numChannels rate = lift_ugen_1 (SC3.localIn numChannels rate)
@@ -860,8 +878,8 @@ mouseButton rate = lift_ugen_3 (SC3.mouseButton rate)
 nRand :: UId m => UGen m -> UGen m -> UGen m -> UGen m
 nRand = lift_ugenM_3 SC3.nRandM
 
---nodeID :: Monad m => Rate -> UGen m
---nodeID rate = lift_ugen_0 (SC3.nodeID rate)
+nodeID :: Monad m => Rate -> UGen m
+nodeID rate = lift_ugen_0 (SC3.nodeID rate)
 
 normalizer :: Monad m => UGen m -> UGen m -> UGen m -> UGen m
 normalizer = lift_ugen_3 SC3.normalizer
@@ -1277,8 +1295,8 @@ vOsc rate = lift_ugen_3 (SC3.vOsc rate)
 vOsc3 :: Monad m => Rate -> UGen m -> UGen m -> UGen m -> UGen m -> UGen m
 vOsc3 rate = lift_ugen_4 (SC3.vOsc3 rate)
 
---varLag :: Monad m => UGen m -> UGen m -> UGen m -> UGen m -> UGen m -> UGen m
---varLag = lift_ugen_5 SC3.varLag
+varLag :: Monad m => UGen m -> UGen m -> UGen m -> UGen m
+varLag = lift_ugen_3 SC3.varLag
 
 varSaw :: Monad m => Rate -> UGen m -> UGen m -> UGen m -> UGen m
 varSaw rate = lift_ugen_3 (SC3.varSaw rate)

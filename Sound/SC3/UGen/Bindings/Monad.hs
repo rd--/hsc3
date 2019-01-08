@@ -16,39 +16,59 @@ clone n = liftM mce . replicateM n
 
 -- * Demand
 
--- | Buffer demand ugen.
+-- | 'dbufrd'
 dbufrdM :: (UId m) => UGen -> UGen -> Loop -> m UGen
 dbufrdM = liftUId3 dbufrd
 
--- | Buffer write on demand unit generator.
+-- | 'dbufwr'
 dbufwrM :: (UId m) => UGen -> UGen -> UGen -> Loop -> m UGen
 dbufwrM = liftUId4 dbufwr
 
--- | Demand rate white noise.
+-- | 'dconst'
+dconstM :: (UId m) => UGen -> UGen -> UGen -> m UGen
+dconstM = liftUId3 dconst
+
+-- | 'dwhite'
 dwhiteM :: (UId m) => UGen -> UGen -> UGen -> m UGen
 dwhiteM = liftUId3 dwhite
 
--- | Demand rate integer white noise.
+-- | 'diwhite'
 diwhiteM :: (UId m) => UGen -> UGen -> UGen -> m UGen
 diwhiteM = liftUId3 diwhite
 
--- | Demand rate brown noise.
+-- | 'dbrown'
 dbrownM :: (UId m) => UGen -> UGen -> UGen -> UGen -> m UGen
 dbrownM = liftUId4 dbrown
 
--- | Demand rate integer brown noise.
+-- | 'dibrown'
 dibrownM :: (UId m) => UGen -> UGen -> UGen -> UGen -> m UGen
 dibrownM = liftUId4 dibrown
 
--- | Demand rate random selection.
+-- | 'donce'
+donceM :: (UId m) => UGen -> m UGen
+donceM = liftUId1 donce
+
+-- | 'dpoll'
+dpollM :: (UId m) => UGen -> UGen -> UGen -> UGen -> m UGen
+dpollM = liftUId4 dpoll
+
+-- | 'drand'
 drandM :: (UId m) => UGen -> UGen -> m UGen
 drandM = liftUId2 drand
 
--- | Demand rate weighted random sequence generator.
+-- | 'dreset'
+dresetM :: (UId m) => UGen -> UGen -> m UGen
+dresetM = liftUId2 dreset
+
+-- | 'dunique'
+duniqueM :: (UId m) => UGen -> UGen -> UGen -> m UGen
+duniqueM = liftUId3 dunique
+
+-- | 'dwrand'
 dwrandM :: (UId m) => UGen -> UGen -> UGen -> m UGen
 dwrandM = liftUId3 dwrand
 
--- | Demand rate random selection with no immediate repetition.
+-- | 'dxrand'
 dxrandM :: (UId m) => UGen -> UGen -> m UGen
 dxrandM = liftUId2 dxrand
 
@@ -167,6 +187,10 @@ lfNoise2M = liftUId2 lfNoise2
 -- | Random value in skewed linear distribution.
 linRandM :: (UId m) => UGen -> UGen -> UGen -> m UGen
 linRandM = liftUId3 linRand
+
+-- | 'localBuf'
+localBufM :: (UId m) => UGen -> UGen -> m UGen
+localBufM = liftUId2 localBuf
 
 -- | Random value in sum of n linear distribution.
 nRandM :: (UId m) => UGen -> UGen -> UGen -> m UGen
