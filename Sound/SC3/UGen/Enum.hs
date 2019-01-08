@@ -38,22 +38,23 @@ from_interpolation e =
       Interpolation u -> u
 
 -- | Completion mode indicator input.
-data DoneAction = DoNothing
-                | PauseSynth
-                | RemoveSynth
-                | RemoveGroup
-                | DoneAction UGen
-                  deriving (Eq, Show)
+data DoneAction t
+  = DoNothing
+  | PauseSynth
+  | RemoveSynth
+  | RemoveGroup
+  | DoneAction t
+  deriving (Eq, Show)
 
 -- | Resolve 'DoneAction'.
-from_done_action :: DoneAction -> UGen
+from_done_action :: Num t => DoneAction t -> t
 from_done_action e =
     case e of
       DoNothing -> 0
       PauseSynth -> 1
       RemoveSynth -> 2
       RemoveGroup -> 14
-      DoneAction u -> u
+      DoneAction x -> x
 
 -- | Warp interpolation indicator input.
 data Warp = Linear

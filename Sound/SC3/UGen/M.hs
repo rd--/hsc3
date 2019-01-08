@@ -2,6 +2,7 @@ module Sound.SC3.UGen.M where
 
 import Control.Monad.Trans.State.Lazy {- transformers -}
 import Data.Functor.Identity {- base -}
+import Data.Maybe {- base -}
 
 import Sound.SC3.Common.UId {- hsc3 -}
 import Sound.SC3.UGen.Rate {- hsc3 -}
@@ -171,6 +172,26 @@ instance Monad m => Fractional (UGen m) where
   recip = lift_ugen_1 recip
   fromRational = UGen . return . fromRational
 
+instance Monad m => Floating (UGen m) where
+  pi = lift_ugen_0 pi
+  exp = lift_ugen_1 exp
+  log = lift_ugen_1 log
+  sqrt = lift_ugen_1 sqrt
+  (**) = lift_ugen_2 (**)
+  logBase = lift_ugen_2 logBase
+  sin = lift_ugen_1 sin
+  cos = lift_ugen_1 cos
+  tan = lift_ugen_1 tan
+  asin = lift_ugen_1 asin
+  acos = lift_ugen_1 acos
+  atan = lift_ugen_1 atan
+  sinh = lift_ugen_1 sinh
+  cosh = lift_ugen_1 cosh
+  tanh = lift_ugen_1 tanh
+  asinh = lift_ugen_1 asinh
+  acosh = lift_ugen_1 acosh
+  atanh = lift_ugen_1 atanh
+
 instance Monad m => Eq (UGen m) where
   (==) = error "UGen: =="
 
@@ -184,6 +205,10 @@ instance Monad m => Ord (UGen m) where
   compare = error "UGen: compare"
   min = lift_ugen_2 min
   max = lift_ugen_2 max
+
+instance Monad m => SC3.UnaryOp (UGen m) where
+  midiCPS = lift_ugen_1 SC3.midiCPS
+
 
 {-
 import qualified Sound.SC3.UGen.Dot as Dot {- hsc3-dot -}
@@ -201,6 +226,11 @@ t0 :: UId m => UGen m
 t0 = out 0 (mce2 (sinOsc AR 440 0 * 0.1) ((whiteNoise AR - whiteNoise AR) * 0.1))
 
 -- * UTIL
+
+mce :: Monad m => [UGen m] -> UGen m
+mce x = UGen $ do
+  x' <- sequence (map mk_ugen x)
+  return (SC3.mce x')
 
 mce2 :: Monad m => UGen m -> UGen m -> UGen m
 mce2 = lift_ugen_2 SC3.mce2
@@ -534,8 +564,20 @@ dwrand = lift_ugenM_3 SC3.dwrandM
 dxrand :: UId m => UGen m -> UGen m -> UGen m
 dxrand = lift_ugenM_2 SC3.dxrandM
 
---envGen :: Monad m => Rate -> UGen m -> UGen m -> UGen m -> UGen m -> UGen m -> UGen m -> UGen m
---envGen rate = lift_ugen_6 (SC3.envGen rate)
+envelope_to_ugen :: Monad m => SC3.Envelope (UGen m) -> [UGen m]
+envelope_to_ugen =
+    let err = error "envGen: bad Envelope"
+    in fromMaybe err . SC3.envelope_sc3_array
+
+envGen :: Monad m => Rate -> UGen m -> UGen m -> UGen m -> UGen m -> SC3.DoneAction (UGen m) -> SC3.Envelope (UGen m) -> UGen m
+envGen rate (UGen p) (UGen q) (UGen r) (UGen s) t u = UGen $ do
+  p' <- p
+  q' <- q
+  r' <- r
+  s' <- s
+  t' <- mk_ugen (SC3.from_done_action t)
+  u' <- sequence (map mk_ugen (envelope_to_ugen u))
+  return (SC3.envGen_ll rate p' q' r' s' t' (SC3.mce u'))
 
 expRand :: UId m => UGen m -> UGen m -> UGen m
 expRand = lift_ugenM_2 SC3.expRandM

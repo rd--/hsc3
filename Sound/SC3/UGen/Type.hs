@@ -312,7 +312,7 @@ proxify u =
 -- | Construct proxied and multiple channel expanded UGen.
 --
 -- cf = constant function, rs = rate set, r = rate, nm = name, i =
--- inputs, o = outputs.
+-- inputs, i_mce = list of MCE inputs, o = outputs.
 mkUGen :: Maybe ([Sample] -> Sample) -> [Rate] -> Either Rate [Int] ->
           String -> [UGen] -> Maybe [UGen] -> Int -> Special -> UGenId -> UGen
 mkUGen cf rs r nm i i_mce o s z =

@@ -24,7 +24,7 @@ env_circle_u :: UGen -> Envelope_Curve UGen -> Envelope UGen -> Envelope UGen
 env_circle_u = env_circle_z (latch 1 (impulse KR 0 0))
 
 -- | Singleton fade envelope.
-envGate :: UGen -> UGen -> UGen -> DoneAction -> Envelope_Curve UGen -> UGen
+envGate :: UGen -> UGen -> UGen -> DoneAction UGen -> Envelope_Curve UGen -> UGen
 envGate level gate_ fadeTime doneAction curve =
     let startVal = fadeTime <=* 0
         e = Envelope [startVal,1,0] [1,1] [curve] (Just 1) Nothing 0
