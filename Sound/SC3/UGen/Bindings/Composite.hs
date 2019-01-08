@@ -6,6 +6,7 @@ import Data.List {- base -}
 import qualified Data.List.Split as Split {- split -}
 import Data.Maybe {- base -}
 
+import Sound.SC3.Common.Enum
 import Sound.SC3.Common.Envelope
 import Sound.SC3.Common.Math
 import Sound.SC3.Common.Math.Filter.BEQ
@@ -16,7 +17,6 @@ import Sound.SC3.UGen.Bindings.DB
 import qualified Sound.SC3.UGen.Bindings.DB.External as External
 import Sound.SC3.UGen.Bindings.HW
 import Sound.SC3.UGen.Bindings.Monad
-import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Math
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
@@ -43,15 +43,15 @@ bHiPass4 i f rq =
   in flt (flt i)
 
 -- | Buffer reader (no interpolation).
-bufRdN :: Int -> Rate -> UGen -> UGen -> Loop -> UGen
+bufRdN :: Int -> Rate -> UGen -> UGen -> Loop UGen -> UGen
 bufRdN n r b p l = bufRd n r b p l NoInterpolation
 
 -- | Buffer reader (linear interpolation).
-bufRdL :: Int -> Rate -> UGen -> UGen -> Loop -> UGen
+bufRdL :: Int -> Rate -> UGen -> UGen -> Loop UGen -> UGen
 bufRdL n r b p l = bufRd n r b p l LinearInterpolation
 
 -- | Buffer reader (cubic interpolation).
-bufRdC :: Int -> Rate -> UGen -> UGen -> Loop -> UGen
+bufRdC :: Int -> Rate -> UGen -> UGen -> Loop UGen -> UGen
 bufRdC n r b p l = bufRd n r b p l CubicInterpolation
 
 -- | Triggers when a value changes
@@ -256,7 +256,7 @@ mouseButton' rt l r tm =
     in lag (linLin o (-1) 1 l r) tm
 
 -- | Randomised mouse UGen (see also 'mouseX'' and 'mouseY'').
-mouseR :: ID a => a -> Rate -> UGen -> UGen -> Warp -> UGen -> UGen
+mouseR :: ID a => a -> Rate -> UGen -> UGen -> Warp UGen -> UGen -> UGen
 mouseR z rt l r ty tm =
   let f = case ty of
             Linear -> linLin
@@ -265,11 +265,11 @@ mouseR z rt l r ty tm =
   in lag (f (lfNoise1 z rt 1) (-1) 1 l r) tm
 
 -- | Variant that randomly traverses the mouseX space.
-mouseX' :: Rate -> UGen -> UGen -> Warp -> UGen -> UGen
+mouseX' :: Rate -> UGen -> UGen -> Warp UGen -> UGen -> UGen
 mouseX' = mouseR 'x'
 
 -- | Variant that randomly traverses the mouseY space.
-mouseY' :: Rate -> UGen -> UGen -> Warp -> UGen -> UGen
+mouseY' :: Rate -> UGen -> UGen -> Warp UGen -> UGen -> UGen
 mouseY' = mouseR 'y'
 
 -- | Translate onset type string to constant UGen value.
@@ -476,7 +476,7 @@ wrapOut fadeTime z =
 -- * wslib
 
 -- | Cross-fading version of 'playBuf'.
-playBufCF :: Int -> UGen -> UGen -> UGen -> UGen -> Loop -> UGen -> Int -> UGen
+playBufCF :: Int -> UGen -> UGen -> UGen -> UGen -> Loop UGen -> UGen -> Int -> UGen
 playBufCF nc bufnum rate trigger startPos loop lag' n =
     let trigger' = if rateOf trigger == DR
                    then tDuty AR trigger 0 DoNothing 1 0

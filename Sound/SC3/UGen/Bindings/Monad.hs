@@ -3,11 +3,11 @@ module Sound.SC3.UGen.Bindings.Monad where
 
 import Control.Monad {- base -}
 
+import Sound.SC3.Common.Enum
 import Sound.SC3.Common.Rate
 import Sound.SC3.Common.UId
 import Sound.SC3.UGen.Bindings.DB
 import Sound.SC3.UGen.Bindings.HW
-import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Type
 
 -- | Clone a unit generator (mce . replicateM).
@@ -17,11 +17,11 @@ clone n = liftM mce . replicateM n
 -- * Demand
 
 -- | 'dbufrd'
-dbufrdM :: (UId m) => UGen -> UGen -> Loop -> m UGen
+dbufrdM :: (UId m) => UGen -> UGen -> Loop UGen -> m UGen
 dbufrdM = liftUId3 dbufrd
 
 -- | 'dbufwr'
-dbufwrM :: (UId m) => UGen -> UGen -> UGen -> Loop -> m UGen
+dbufwrM :: (UId m) => UGen -> UGen -> UGen -> Loop UGen -> m UGen
 dbufwrM = liftUId4 dbufwr
 
 -- | 'dconst'

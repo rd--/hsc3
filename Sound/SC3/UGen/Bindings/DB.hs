@@ -1,10 +1,10 @@
 -- | SC3 UGen bindings (auto-generated).
 module Sound.SC3.UGen.Bindings.DB where
 
+import Sound.SC3.Common.Enum
 import Sound.SC3.Common.Envelope
 import Sound.SC3.Common.Rate
 import Sound.SC3.Common.UId
-import Sound.SC3.UGen.Enum
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
@@ -268,8 +268,8 @@ bufRateScale rate bufnum = mkUGen Nothing [IR,KR] (Left rate) "BufRateScale" [bu
 
 -- | Buffer reading oscillator.
 --
---  BufRd [KR,AR] bufnum=0.0 phase=0.0 loop=1.0 interpolation=2.0;    NC INPUT: True, ENUMERATION INPUTS: 2=Loop, 3=Interpolation
-bufRd :: Int -> Rate -> UGen -> UGen -> Loop -> Interpolation -> UGen
+--  BufRd [KR,AR] bufnum=0.0 phase=0.0 loop=1.0 interpolation=2.0;    NC INPUT: True, ENUMERATION INPUTS: 2=Loop UGen, 3=Interpolation
+bufRd :: Int -> Rate -> UGen -> UGen -> Loop UGen -> Interpolation UGen -> UGen
 bufRd numChannels rate bufnum phase loop interpolation = mkUGen Nothing [KR,AR] (Left rate) "BufRd" [bufnum,phase,(from_loop loop),(from_interpolation interpolation)] Nothing numChannels (Special 0) NoId
 
 -- | Buffer sample rate.
@@ -286,8 +286,8 @@ bufSamples rate bufnum = mkUGen Nothing [IR,KR] (Left rate) "BufSamples" [bufnum
 
 -- | Buffer writing oscillator.
 --
---  BufWr [KR,AR] bufnum=0.0 phase=0.0 loop=1.0 *inputArray=0.0;    MCE, FILTER: TRUE, REORDERS INPUTS: [3,0,1,2], ENUMERATION INPUTS: 2=Loop
-bufWr :: UGen -> UGen -> Loop -> UGen -> UGen
+--  BufWr [KR,AR] bufnum=0.0 phase=0.0 loop=1.0 *inputArray=0.0;    MCE, FILTER: TRUE, REORDERS INPUTS: [3,0,1,2], ENUMERATION INPUTS: 2=Loop UGen
+bufWr :: UGen -> UGen -> Loop UGen -> UGen -> UGen
 bufWr bufnum phase loop inputArray = mkUGen Nothing [KR,AR] (Right [3]) "BufWr" [bufnum,phase,(from_loop loop)] (Just [inputArray]) 1 (Special 0) NoId
 
 -- | Chorusing wavetable oscillator.
@@ -418,14 +418,14 @@ dbrown z length_ lo hi step = mkUGen Nothing [DR] (Left DR) "Dbrown" [length_,lo
 
 -- | Buffer read demand ugen
 --
---  Dbufrd [DR] bufnum=0.0 phase=0.0 loop=1.0;    ENUMERATION INPUTS: 2=Loop, DEMAND/NONDET
-dbufrd :: ID a => a -> UGen -> UGen -> Loop -> UGen
+--  Dbufrd [DR] bufnum=0.0 phase=0.0 loop=1.0;    ENUMERATION INPUTS: 2=Loop UGen, DEMAND/NONDET
+dbufrd :: ID a => a -> UGen -> UGen -> Loop UGen -> UGen
 dbufrd z bufnum phase loop = mkUGen Nothing [DR] (Left DR) "Dbufrd" [bufnum,phase,(from_loop loop)] Nothing 1 (Special 0) (toUId z)
 
 -- | Buffer write demand ugen
 --
---  Dbufwr [DR] bufnum=0.0 phase=0.0 loop=1.0 input=0.0;    REORDERS INPUTS: [3,0,1,2], ENUMERATION INPUTS: 3=Loop, DEMAND/NONDET
-dbufwr :: ID a => a -> UGen -> UGen -> UGen -> Loop -> UGen
+--  Dbufwr [DR] bufnum=0.0 phase=0.0 loop=1.0 input=0.0;    REORDERS INPUTS: [3,0,1,2], ENUMERATION INPUTS: 3=Loop UGen, DEMAND/NONDET
+dbufwr :: ID a => a -> UGen -> UGen -> UGen -> Loop UGen -> UGen
 dbufwr z bufnum phase loop input = mkUGen Nothing [DR] (Left DR) "Dbufwr" [bufnum,phase,loop,(from_loop input)] Nothing 1 (Special 0) (toUId z)
 
 -- | Constrain a demand-rate stream to a given sum
@@ -538,8 +538,8 @@ dibrown z length_ lo hi step = mkUGen Nothing [DR] (Left DR) "Dibrown" [length_,
 
 -- | Stream in audio from a file.
 --
---  DiskIn [AR] bufnum=0.0 loop=0.0;    NC INPUT: True, ENUMERATION INPUTS: 1=Loop
-diskIn :: Int -> UGen -> Loop -> UGen
+--  DiskIn [AR] bufnum=0.0 loop=0.0;    NC INPUT: True, ENUMERATION INPUTS: 1=Loop UGen
+diskIn :: Int -> UGen -> Loop UGen -> UGen
 diskIn numChannels bufnum loop = mkUGen Nothing [AR] (Left AR) "DiskIn" [bufnum,(from_loop loop)] Nothing numChannels (Special 0) NoId
 
 -- | Record to a soundfile to disk.
@@ -1047,8 +1047,8 @@ lfdNoise3 z rate freq = mkUGen Nothing [KR,AR] (Left rate) "LFDNoise3" [freq] No
 
 -- | Gaussian function oscillator
 --
---  LFGauss [KR,AR] duration=1.0 width=0.1 iphase=0.0 loop=1.0 doneAction=0.0;    ENUMERATION INPUTS: 3=Loop, 4=DoneAction UGen
-lfGauss :: Rate -> UGen -> UGen -> UGen -> Loop -> DoneAction UGen -> UGen
+--  LFGauss [KR,AR] duration=1.0 width=0.1 iphase=0.0 loop=1.0 doneAction=0.0;    ENUMERATION INPUTS: 3=Loop UGen, 4=DoneAction UGen
+lfGauss :: Rate -> UGen -> UGen -> UGen -> Loop UGen -> DoneAction UGen -> UGen
 lfGauss rate duration width iphase loop doneAction = mkUGen Nothing [KR,AR] (Left rate) "LFGauss" [duration,width,iphase,(from_loop loop),(from_done_action doneAction)] Nothing 1 (Special 0) NoId
 
 -- | Step noise
@@ -1341,14 +1341,14 @@ mouseButton rate minval maxval lag_ = mkUGen Nothing [KR] (Left rate) "MouseButt
 
 -- | Cursor tracking UGen.
 --
---  MouseX [KR] minval=0.0 maxval=1.0 warp=0.0 lag=0.2;    ENUMERATION INPUTS: 2=Warp
-mouseX :: Rate -> UGen -> UGen -> Warp -> UGen -> UGen
+--  MouseX [KR] minval=0.0 maxval=1.0 warp=0.0 lag=0.2;    ENUMERATION INPUTS: 2=Warp UGen
+mouseX :: Rate -> UGen -> UGen -> Warp UGen -> UGen -> UGen
 mouseX rate minval maxval warp lag_ = mkUGen Nothing [KR] (Left rate) "MouseX" [minval,maxval,(from_warp warp),lag_] Nothing 1 (Special 0) NoId
 
 -- | Cursor tracking UGen.
 --
---  MouseY [KR] minval=0.0 maxval=1.0 warp=0.0 lag=0.2;    ENUMERATION INPUTS: 2=Warp
-mouseY :: Rate -> UGen -> UGen -> Warp -> UGen -> UGen
+--  MouseY [KR] minval=0.0 maxval=1.0 warp=0.0 lag=0.2;    ENUMERATION INPUTS: 2=Warp UGen
+mouseY :: Rate -> UGen -> UGen -> Warp UGen -> UGen -> UGen
 mouseY rate minval maxval warp lag_ = mkUGen Nothing [KR] (Left rate) "MouseY" [minval,maxval,(from_warp warp),lag_] Nothing 1 (Special 0) NoId
 
 -- | Sum of uniform distributions.
@@ -1757,8 +1757,8 @@ pitchShift in_ windowSize pitchRatio pitchDispersion timeDispersion = mkUGen Not
 
 -- | Sample playback oscillator.
 --
---  PlayBuf [KR,AR] bufnum=0.0 rate=1.0 trigger=1.0 startPos=0.0 loop=0.0 doneAction=0.0;    NC INPUT: True, ENUMERATION INPUTS: 4=Loop, 5=DoneAction UGen
-playBuf :: Int -> Rate -> UGen -> UGen -> UGen -> UGen -> Loop -> DoneAction UGen -> UGen
+--  PlayBuf [KR,AR] bufnum=0.0 rate=1.0 trigger=1.0 startPos=0.0 loop=0.0 doneAction=0.0;    NC INPUT: True, ENUMERATION INPUTS: 4=Loop UGen, 5=DoneAction UGen
+playBuf :: Int -> Rate -> UGen -> UGen -> UGen -> UGen -> Loop UGen -> DoneAction UGen -> UGen
 playBuf numChannels rate bufnum rate_ trigger startPos loop doneAction = mkUGen Nothing [KR,AR] (Left rate) "PlayBuf" [bufnum,rate_,trigger,startPos,(from_loop loop),(from_done_action doneAction)] Nothing numChannels (Special 0) NoId
 
 -- | A Karplus-Strong UGen
@@ -1855,8 +1855,8 @@ randSeed rate trig_ seed = mkUGen Nothing [IR,KR,AR] (Left rate) "RandSeed" [tri
 
 -- | Record or overdub into a Buffer.
 --
---  RecordBuf [KR,AR] bufnum=0.0 offset=0.0 recLevel=1.0 preLevel=0.0 run=1.0 loop=1.0 trigger=1.0 doneAction=0.0 *inputArray=0.0;    MCE, REORDERS INPUTS: [8,0,1,2,3,4,5,6,7], ENUMERATION INPUTS: 5=Loop, 7=DoneAction UGen
-recordBuf :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> Loop -> UGen -> DoneAction UGen -> UGen -> UGen
+--  RecordBuf [KR,AR] bufnum=0.0 offset=0.0 recLevel=1.0 preLevel=0.0 run=1.0 loop=1.0 trigger=1.0 doneAction=0.0 *inputArray=0.0;    MCE, REORDERS INPUTS: [8,0,1,2,3,4,5,6,7], ENUMERATION INPUTS: 5=Loop UGen, 7=DoneAction UGen
+recordBuf :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> Loop UGen -> UGen -> DoneAction UGen -> UGen -> UGen
 recordBuf rate bufnum offset recLevel preLevel run loop trigger doneAction inputArray = mkUGen Nothing [KR,AR] (Left rate) "RecordBuf" [bufnum,offset,recLevel,preLevel,run,(from_loop loop),trigger,(from_done_action doneAction)] (Just [inputArray]) 1 (Special 0) NoId
 
 -- | Send signal to a bus, overwriting previous contents.
@@ -2179,8 +2179,8 @@ unaryOpUGen a = mkUGen Nothing [IR,KR,AR,DR] (Right [0]) "UnaryOpUGen" [a] Nothi
 
 -- | Stream in audio from a file, with variable rate
 --
---  VDiskIn [AR] bufnum=0.0 rate=1.0 loop=0.0 sendID=0.0;    NC INPUT: True, ENUMERATION INPUTS: 2=Loop
-vDiskIn :: Int -> UGen -> UGen -> Loop -> UGen -> UGen
+--  VDiskIn [AR] bufnum=0.0 rate=1.0 loop=0.0 sendID=0.0;    NC INPUT: True, ENUMERATION INPUTS: 2=Loop UGen
+vDiskIn :: Int -> UGen -> UGen -> Loop UGen -> UGen -> UGen
 vDiskIn numChannels bufnum rate_ loop sendID = mkUGen Nothing [AR] (Left AR) "VDiskIn" [bufnum,rate_,(from_loop loop),sendID] Nothing numChannels (Special 0) NoId
 
 -- | Variable wavetable oscillator.
@@ -2213,9 +2213,9 @@ varSaw rate freq iphase width = mkUGen Nothing [KR,AR] (Left rate) "VarSaw" [fre
 vibrato :: ID a => a -> Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 vibrato z rate freq rate_ depth delay onset rateVariation depthVariation iphase = mkUGen Nothing [KR,AR] (Left rate) "Vibrato" [freq,rate_,depth,delay,onset,rateVariation,depthVariation,iphase] Nothing 1 (Special 0) (toUId z)
 
--- | Warp a buffer with a time pointer
+-- | Warp UGen a buffer with a time pointer
 --
---  Warp1 [AR] bufnum=0.0 pointer=0.0 freqScale=1.0 windowSize=0.2 envbufnum=-1.0 overlaps=8.0 windowRandRatio=0.0 interp=1.0;    NC INPUT: True
+--  Warp UGen1 [AR] bufnum=0.0 pointer=0.0 freqScale=1.0 windowSize=0.2 envbufnum=-1.0 overlaps=8.0 windowRandRatio=0.0 interp=1.0;    NC INPUT: True
 warp1 :: Int -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 warp1 numChannels bufnum pointer freqScale windowSize envbufnum overlaps windowRandRatio interp = mkUGen Nothing [AR] (Left AR) "Warp1" [bufnum,pointer,freqScale,windowSize,envbufnum,overlaps,windowRandRatio,interp] Nothing numChannels (Special 0) NoId
 
