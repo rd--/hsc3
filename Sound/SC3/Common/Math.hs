@@ -594,3 +594,15 @@ real_pp n =
 -- | Type-specialised 'R.readMaybe'.
 parse_double :: String -> Maybe Double
 parse_double = readMaybe
+
+-- * Optimiser
+
+-- | Non-specialised optimised sum function (3 & 4 element adders).
+sum_opt_f :: Num t => (t -> t -> t -> t) -> (t -> t -> t -> t -> t) -> [t] -> t
+sum_opt_f f3 f4 =
+  let recur l =
+        case l of
+          p:q:r:s:l' -> recur (f4 p q r s : l')
+          p:q:r:l' -> recur (f3 p q r : l')
+          _ -> sum l
+  in recur

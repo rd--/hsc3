@@ -400,13 +400,9 @@ splay i s l c lc =
         a = if lc then sqrt (1 / n) else 1
     in mix (pan2 i (mce p * s + c) 1) * l * a
 
--- | Optimised sum function.
+-- | Optimised UGen sum function.
 sum_opt :: [UGen] -> UGen
-sum_opt l =
-    case l of
-      p:q:r:s:l' -> sum_opt (sum4 p q r s : l')
-      p:q:r:l' -> sum_opt (sum3 p q r : l')
-      _ -> sum l
+sum_opt = sum_opt_f sum3 sum4
 
 -- | Single tap into a delayline
 tap :: Int -> UGen -> UGen -> UGen
