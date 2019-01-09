@@ -1,23 +1,26 @@
 import System.Environment {- base -}
 
-import qualified Sound.SC3.UGen.Graph as Graph {- hsc3 -}
+import qualified Sound.SC3.Server.Graphdef as Graphdef {- hsc3 -}
+import qualified Sound.SC3.Server.Graphdef.Read as Read {- hsc3 -}
 
-import qualified Sound.SC3.Server.Graphdef as G {- hsc3 -}
-import qualified Sound.SC3.Server.Graphdef.Read as R {- hsc3 -}
-
--- > let sy = "/home/rohan/sw/hsc3-graphs/scsyndef/why-supercollider.sc.scsyndef"
+-- > let sy = "/home/rohan/sw/hsc3-graphs/scsyndef/why-supercollider-rand.sc.scsyndef"
 -- > scsyndef_stat sy "/dev/stdout"
 scsyndef_stat :: FilePath -> FilePath -> IO ()
 scsyndef_stat sy_nm st_nm = do
-  d <- G.read_graphdef_file sy_nm
-  let (_,g) = R.graphdef_to_graph d
-  writeFile st_nm (unlines (Graph.ug_stat_ln g))
+  str <- Graphdef.scsyndef_stat sy_nm
+  writeFile st_nm str
+
+-- > scsyndef_ug_stat sy "/dev/stdout"
+scsyndef_ug_stat :: FilePath -> FilePath -> IO ()
+scsyndef_ug_stat sy_nm st_nm = do
+  str <- Read.scsyndef_ug_stat sy_nm
+  writeFile st_nm str
 
 main :: IO ()
 main = do
   arg <- getArgs
   case arg of
-    [] -> scsyndef_stat "/dev/stdin" "/dev/stdout"
-    [sy] -> scsyndef_stat sy "/dev/stdout"
-    [sy,st] -> scsyndef_stat sy st
+    [] -> scsyndef_ug_stat "/dev/stdin" "/dev/stdout"
+    [sy] -> scsyndef_ug_stat sy "/dev/stdout"
+    [sy,st] -> scsyndef_ug_stat sy st
     _ -> putStrLn "scsyndef-stat scyndef [stat]"

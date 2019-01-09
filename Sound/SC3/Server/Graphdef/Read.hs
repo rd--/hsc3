@@ -4,7 +4,7 @@ module Sound.SC3.Server.Graphdef.Read where
 import Sound.OSC.Datum {- hosc -}
 
 import qualified Sound.SC3.Common.Rate as Rate
-import           Sound.SC3.Server.Graphdef
+import           Sound.SC3.Server.Graphdef as Graphdef
 import qualified Sound.SC3.UGen.Graph as Graph
 import qualified Sound.SC3.UGen.Type as Type
 
@@ -47,3 +47,16 @@ graphdef_to_graph g =
         nm = ascii_to_string (graphdef_name g)
         gr = Graph.U_Graph (-1) constants_nd controls_nd ugens_nd
     in (nm,gr) -- S.Synthdef nm gr
+
+-- | Read graphdef file and translate to graph.
+read_graph :: FilePath -> IO Graph.U_Graph
+read_graph sy_nm = do
+  d <- Graphdef.read_graphdef_file sy_nm
+  let (_,g) = graphdef_to_graph d
+  return g
+
+-- | Read graphdef file, translate to graph, and run 'ug_stat_ln'.
+scsyndef_ug_stat :: FilePath -> IO String
+scsyndef_ug_stat sy_nm = do
+  g <- read_graph sy_nm
+  return (unlines (Graph.ug_stat_ln g))

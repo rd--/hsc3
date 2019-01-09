@@ -162,7 +162,7 @@ read_graphdef h = do
                    (zip controls control_defaults)
                    ugens)
 
-{- | Read Graphdef from file.
+{- | Read Graphdef from .scsyndef file.
 
 > dir = "/home/rohan/sw/rsc3-disassembler/scsyndef/"
 > pp nm = read_graphdef_file (dir ++ nm) >>= putStrLn . graphdef_stat
@@ -178,6 +178,12 @@ read_graphdef_file nm = do
   g <- read_graphdef h
   hClose h
   return g
+
+-- | Read scsyndef file and run 'graphdef_stat'.
+scsyndef_stat :: FilePath -> IO String
+scsyndef_stat fn = do
+  g <- read_graphdef_file fn
+  return (graphdef_stat g)
 
 -- * Encode (version zero)
 
