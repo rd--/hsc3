@@ -296,6 +296,7 @@ pc_calcAccumSize fft_size ir_length =
     in fft_size * num_partitions
 
 -- | PM oscillator.
+-- cf = carrier frequency, mf = modulation frequency, pm = pm-index = 0.0, mp = mod-phase = 0.0
 pmOsc :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
 pmOsc r cf mf pm mp = sinOsc r cf (sinOsc r mf mp * pm)
 
