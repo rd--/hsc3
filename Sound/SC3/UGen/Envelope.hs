@@ -3,10 +3,10 @@ module Sound.SC3.UGen.Envelope where
 
 import Sound.SC3.Common.Enum
 import Sound.SC3.Common.Envelope
+import Sound.SC3.Common.Math.Operator
 import Sound.SC3.Common.Rate
 
 import Sound.SC3.UGen.Bindings
-import Sound.SC3.UGen.Math
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 

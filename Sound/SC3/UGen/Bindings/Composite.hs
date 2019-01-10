@@ -10,6 +10,7 @@ import Sound.SC3.Common.Enum
 import Sound.SC3.Common.Envelope
 import Sound.SC3.Common.Math
 import Sound.SC3.Common.Math.Filter.BEQ
+import Sound.SC3.Common.Math.Operator
 
 import Sound.SC3.Common.Rate
 import Sound.SC3.Common.UId
@@ -17,7 +18,6 @@ import Sound.SC3.UGen.Bindings.DB
 import qualified Sound.SC3.UGen.Bindings.DB.External as External
 import Sound.SC3.UGen.Bindings.HW
 import Sound.SC3.UGen.Bindings.Monad
-import Sound.SC3.UGen.Math
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
@@ -200,7 +200,7 @@ linExp_u i = linExp i 0 1
 
 -- | Map from one linear range to another linear range.
 linLin :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-linLin = linlin_ma
+linLin = linlin_ma mulAdd
 
 -- | 'linLin' where source is (0,1).
 linLin_u :: UGen -> UGen -> UGen -> UGen

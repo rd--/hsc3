@@ -7,9 +7,9 @@ import Data.List {- base -}
 
 import qualified Sound.SC3.Common.Envelope as E
 import qualified Sound.SC3.Common.Base as B
+import qualified Sound.SC3.Common.Math.Operator as O
 import qualified Sound.SC3.Common.Rate as R
 import qualified Sound.SC3.Common.UId as UId
-import qualified Sound.SC3.UGen.Operator as O
 import Sound.SC3.UGen.Type
 
 -- | 'UId' of 'resolveID'.

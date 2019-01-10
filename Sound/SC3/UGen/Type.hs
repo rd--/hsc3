@@ -2,15 +2,16 @@
 module Sound.SC3.UGen.Type where
 
 import Data.Bits {- base -}
+import qualified Data.Fixed as F {- base -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
 import Safe {- safe -}
 import System.Random {- random -}
 
-import Sound.SC3.Common.Math
+import qualified Sound.SC3.Common.Math as Math
+import Sound.SC3.Common.Math.Operator
 import Sound.SC3.Common.Rate
 import Sound.SC3.UGen.MCE
-import Sound.SC3.UGen.Operator
 
 -- * Basic types
 
@@ -105,11 +106,90 @@ data UGen = Constant_U Constant
           | MRG_U MRG
             deriving (Eq,Read,Show)
 
+instance EqE UGen where
+    (==*) = mkBinaryOperator EQ_ (==*)
+    (/=*) = mkBinaryOperator NE (/=*)
+
+instance OrdE UGen where
+    (<*) = mkBinaryOperator LT_ Math.sc3_lt
+    (<=*) = mkBinaryOperator LE Math.sc3_lte
+    (>*) = mkBinaryOperator GT_ Math.sc3_gt
+    (>=*) = mkBinaryOperator GE Math.sc3_gte
+
+
+-- | 'UGen' form or 'Math.sc3_round_to'.
+roundTo :: UGen -> UGen -> UGen
+roundTo = mkBinaryOperator Round Math.sc3_round_to
+
+instance RealFracE UGen where
+    properFractionE = error "UGen.properFractionE"
+    truncateE = error "UGen.truncateE"
+    roundE i = roundTo i 1
+    ceilingE = mkUnaryOperator Ceil ceilingE
+    floorE = mkUnaryOperator Floor floorE
+
+
+instance UnaryOp UGen where
+    ampDb = mkUnaryOperator AmpDb ampDb
+    asFloat = mkUnaryOperator AsFloat asFloat
+    asInt = mkUnaryOperator AsInt asInt
+    cpsMIDI = mkUnaryOperator CPSMIDI cpsMIDI
+    cpsOct = mkUnaryOperator CPSOct cpsOct
+    cubed = mkUnaryOperator Cubed cubed
+    dbAmp = mkUnaryOperator DbAmp dbAmp
+    distort = mkUnaryOperator Distort distort
+    frac = mkUnaryOperator Frac frac
+    isNil = mkUnaryOperator IsNil isNil
+    log10 = mkUnaryOperator Log10 log10
+    log2 = mkUnaryOperator Log2 log2
+    midiCPS = mkUnaryOperator MIDICPS midiCPS
+    midiRatio = mkUnaryOperator MIDIRatio midiRatio
+    notE = mkUnaryOperator Not notE
+    notNil = mkUnaryOperator NotNil notNil
+    octCPS = mkUnaryOperator OctCPS octCPS
+    ramp_ = mkUnaryOperator Ramp_ ramp_
+    ratioMIDI = mkUnaryOperator RatioMIDI ratioMIDI
+    softClip = mkUnaryOperator SoftClip softClip
+    squared = mkUnaryOperator Squared squared
+
+instance BinaryOp UGen where
+    iDiv = mkBinaryOperator IDiv iDiv
+    modE = mkBinaryOperator Mod F.mod'
+    lcmE = mkBinaryOperator LCM lcmE
+    gcdE = mkBinaryOperator GCD gcdE
+    roundUp = mkBinaryOperator RoundUp roundUp
+    trunc = mkBinaryOperator Trunc trunc
+    atan2E = mkBinaryOperator Atan2 atan2E
+    hypot = mkBinaryOperator Hypot hypot
+    hypotx = mkBinaryOperator Hypotx hypotx
+    fill = mkBinaryOperator Fill fill
+    ring1 = mkBinaryOperator Ring1 ring1
+    ring2 = mkBinaryOperator Ring2 ring2
+    ring3 = mkBinaryOperator Ring3 ring3
+    ring4 = mkBinaryOperator Ring4 ring4
+    difSqr = mkBinaryOperator DifSqr difSqr
+    sumSqr = mkBinaryOperator SumSqr sumSqr
+    sqrSum = mkBinaryOperator SqrSum sqrSum
+    sqrDif = mkBinaryOperator SqrDif sqrDif
+    absDif = mkBinaryOperator AbsDif absDif
+    thresh = mkBinaryOperator Thresh thresh
+    amClip = mkBinaryOperator AMClip amClip
+    scaleNeg = mkBinaryOperator ScaleNeg scaleNeg
+    clip2 = mkBinaryOperator Clip2 clip2
+    excess = mkBinaryOperator Excess excess
+    fold2 = mkBinaryOperator Fold2 fold2
+    wrap2 = mkBinaryOperator Wrap2 wrap2
+    firstArg = mkBinaryOperator FirstArg firstArg
+    randRange = mkBinaryOperator RandRange randRange
+    exprandRange = mkBinaryOperator ExpRandRange exprandRange
+
+--instance MulAdd UGen where mul_add = mulAdd
+
 -- * Parser
 
 -- | 'constant' of 'parse_double'.
 parse_constant :: String -> Maybe UGen
-parse_constant = fmap constant . parse_double
+parse_constant = fmap constant . Math.parse_double
 
 -- * Accessors
 

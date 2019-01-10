@@ -1339,17 +1339,23 @@ mostChange a b = mkUGen Nothing [KR,AR] (Right [0,1]) "MostChange" [a,b] Nothing
 mouseButton :: Rate -> UGen -> UGen -> UGen -> UGen
 mouseButton rate minval maxval lag_ = mkUGen Nothing [KR] (Left rate) "MouseButton" [minval,maxval,lag_] Nothing 1 (Special 0) NoId
 
+mouseX_ll :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+mouseX_ll rate minval maxval warp lag_ = mkUGen Nothing [KR] (Left rate) "MouseX" [minval,maxval,warp,lag_] Nothing 1 (Special 0) NoId
+
 -- | Cursor tracking UGen.
 --
 --  MouseX [KR] minval=0.0 maxval=1.0 warp=0.0 lag=0.2;    ENUMERATION INPUTS: 2=Warp UGen
 mouseX :: Rate -> UGen -> UGen -> Warp UGen -> UGen -> UGen
-mouseX rate minval maxval warp lag_ = mkUGen Nothing [KR] (Left rate) "MouseX" [minval,maxval,(from_warp warp),lag_] Nothing 1 (Special 0) NoId
+mouseX rate minval maxval warp lag_ = mouseX_ll rate minval maxval (from_warp warp) lag_
+
+mouseY_ll :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+mouseY_ll rate minval maxval warp lag_ = mkUGen Nothing [KR] (Left rate) "MouseY" [minval,maxval,warp,lag_] Nothing 1 (Special 0) NoId
 
 -- | Cursor tracking UGen.
 --
 --  MouseY [KR] minval=0.0 maxval=1.0 warp=0.0 lag=0.2;    ENUMERATION INPUTS: 2=Warp UGen
 mouseY :: Rate -> UGen -> UGen -> Warp UGen -> UGen -> UGen
-mouseY rate minval maxval warp lag_ = mkUGen Nothing [KR] (Left rate) "MouseY" [minval,maxval,(from_warp warp),lag_] Nothing 1 (Special 0) NoId
+mouseY rate minval maxval warp lag_ = mouseY_ll rate minval maxval (from_warp warp) lag_
 
 -- | Sum of uniform distributions.
 --

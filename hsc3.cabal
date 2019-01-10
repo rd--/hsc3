@@ -55,6 +55,7 @@ Library
                    Sound.SC3.Common.Math.Filter
                    Sound.SC3.Common.Math.Filter.BEQ
                    Sound.SC3.Common.Math.Interpolate
+                   Sound.SC3.Common.Math.Operator
                    Sound.SC3.Common.Math.Window
                    Sound.SC3.Common.Monad
                    Sound.SC3.Common.Monad.Operators
@@ -107,7 +108,6 @@ Library
                    Sound.SC3.UGen.Math.Composite
                    Sound.SC3.UGen.MCE
                    Sound.SC3.UGen.Name
-                   Sound.SC3.UGen.Operator
                    Sound.SC3.UGen.Optimise
                    Sound.SC3.UGen.Plain
                    Sound.SC3.UGen.PP
