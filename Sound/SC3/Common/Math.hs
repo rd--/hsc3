@@ -374,20 +374,22 @@ apply_clip_rule clip_rule sl sr dl dr x =
 
 -- * LinLin
 
--- | Scale uni-polar (0,1) input to linear (l,r) range
+-- | Scale (0,1) input to linear (l,r) range. u = uni-polar.
 --
 -- > map (urange 3 4) [0,0.5,1] == [3,3.5,4]
 urange :: Fractional a => a -> a -> a -> a
 urange l r i = let m = r - l in i * m + l
 
--- | Calculate multiplier and add values for 'range' transform.
+-- | Calculate multiplier and add values for (-1,1) 'range' transform.
 --
 -- > range_muladd 3 4 == (0.5,3.5)
 range_muladd :: Fractional t => t -> t -> (t,t)
 range_muladd = linlin_muladd (-1) 1
 
--- | Scale bi-polar (-1,1) input to linear (l,r) range.  Note that the
--- argument order is not the same as 'linlin'.
+-- | Scale (-1,1) input to linear (l,r) range.  Note that the argument
+-- order is not the same as 'linlin'. Note also that the various range
+-- UGen methods at sclang select mul-add values given the output range
+-- of the UGen, ie LFPulse.range selects a (0,1) input range.
 --
 -- > map (range 3 4) [-1,0,1] == [3,3.5,4]
 -- > map (\x -> let (m,a) = linlin_muladd (-1) 1 3 4 in x * m + a) [-1,0,1] == [3,3.5,4]

@@ -239,7 +239,7 @@ mix = sum_opt . mceChannels
 mixN :: Int -> UGen -> UGen
 mixN n u =
     let xs = transpose (Split.chunksOf n (mceChannels u))
-    in mce (map sum xs)
+    in mce (map sum_opt xs)
 
 -- | Construct and sum a set of UGens.
 mixFill :: Integral n => Int -> (n -> UGen) -> UGen
@@ -247,7 +247,7 @@ mixFill n f = mix (mce (map f [0 .. fromIntegral n - 1]))
 
 -- | Monad variant on mixFill.
 mixFillM :: (Integral n,Monad m) => Int -> (n -> m UGen) -> m UGen
-mixFillM n f = liftM sum (mapM f [0 .. fromIntegral n - 1])
+mixFillM n f = liftM sum_opt (mapM f [0 .. fromIntegral n - 1])
 
 -- | Variant that is randomly pressed.
 mouseButton' :: Rate -> UGen -> UGen -> UGen -> UGen
@@ -430,7 +430,7 @@ triAS n f0 =
         mk_ph i = if i + 1 `mod` 4 == 0 then pi else 0
         m = [1,3 .. n]
         param = zip3 (map mk_freq m) (map mk_ph m) (map mk_amp m)
-    in sum (map (\(fr,ph,am) -> sinOsc AR fr ph * am) param)
+    in sum_opt (map (\(fr,ph,am) -> sinOsc AR fr ph * am) param)
 
 -- | Randomly select one of several inputs on trigger (weighted).
 tWChoose :: ID m => m -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -495,7 +495,7 @@ playBufCF nc bufnum rate trigger startPos loop lag' n =
             (\(on',r) -> let p = playBuf nc AR bufnum r on' startPos' loop DoNothing
                          in p * sqrt (slew on' lag'' lag''))
             (zip on rate')
-    in sum s
+    in sum_opt s
 
 -- * adc
 
