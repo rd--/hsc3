@@ -395,32 +395,6 @@ instance BinaryOp Double where
     roundUp a b = if b == 0 then a else ceilingE (a/b + 0.5) * b
     wrap2 a b = Math.sc3_wrap_ni a (-b) b
 
--- | MulAdd type signature.
-type MulAdd t = t -> t -> t -> t
-
--- | Ordinary (un-optimised) multiply-add.
-mul_add :: Num t => MulAdd t
-mul_add i m a = i * m + a
-
--- | Map from one linear range to another linear range.
-linlin_ma :: Fractional a => MulAdd a -> a -> a -> a -> a -> a -> a
-linlin_ma mul_add_f i sl sr dl dr =
-  let (m,a) = Math.linlin_muladd sl sr dl dr
-  in mul_add_f i m a
-
--- | Scale uni-polar (0,1) input to linear (l,r) range
-urange_ma :: Fractional a => MulAdd a -> a -> a -> a -> a
-urange_ma mul_add_f l r i =
-  let m = r - l
-  in mul_add_f i m l
-
--- | Scale bi-polar (-1,1) input to linear (l,r) range.  Note that the
--- argument order is not the same as 'linLin'.
-range_ma :: Fractional a => MulAdd a -> a -> a -> a -> a
-range_ma mul_add_f l r i =
-  let (m,a) = Math.range_muladd l r
-  in mul_add_f i m a
-
 -- * Tables
 
 -- | Association table for 'Binary' to haskell function implementing operator.

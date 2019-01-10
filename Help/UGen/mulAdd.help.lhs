@@ -10,3 +10,5 @@ These should both optimise to the same graph...
 > g_02 = sinOsc AR 440 0 * 0.1 + 0.05
 
 > g_03 = 0.05 + sinOsc AR 440 0 * 0.1
+
+    > putStrLn $ unlines (map synthstat [g_01,g_02,g_03])

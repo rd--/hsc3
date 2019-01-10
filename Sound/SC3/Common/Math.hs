@@ -19,12 +19,24 @@ half_pi = pi / 2
 two_pi :: Floating n => n
 two_pi = 2 * pi
 
--- | Multiply and add, ordinary haskell argument order.
--- See also 'mul_add' of the 'MulAdd' class.
+-- | SC3 MulAdd type signature, arguments in SC3 order of input, multiply, add.
+type SC3_MulAdd t = t -> t -> t -> t
+
+-- | Ordinary (un-optimised) multiply-add, see also mulAdd UGen.
 --
--- > map (mul_add_hs 2 3) [1,2] == [5,7] && map (mul_add_hs 3 4) [1,2] == [7,10]
-mul_add_hs :: Num a => a -> a -> a -> a
-mul_add_hs m a = (+ a) . (* m)
+-- > map (\x -> sc3_mul_add x 2 3) [1,5] == [5,13] && map (\x -> sc3_mul_add x 3 2) [1,5] == [5,17]
+sc3_mul_add :: Num t => SC3_MulAdd t
+sc3_mul_add i m a = i * m + a
+
+-- | Haskell order (un-optimised) multiply-add.
+--
+-- > map (mul_add 2 3) [1,5] == [5,13] && map (mul_add 3 4) [1,5] == [7,19]
+mul_add :: Num t => t -> t -> t -> t
+mul_add m a = (+ a) . (* m)
+
+-- | 'uncurry' 'mul_add'
+mul_add_hs :: Num t => (t,t) -> t -> t
+mul_add_hs = uncurry mul_add
 
 -- | 'fromInteger' of 'truncate'.
 sc3_truncate :: RealFrac a => a -> a
@@ -374,17 +386,28 @@ apply_clip_rule clip_rule sl sr dl dr x =
 
 -- * LinLin
 
+-- | Scale uni-polar (0,1) input to linear (l,r) range.
+urange_ma :: Fractional a => SC3_MulAdd a -> a -> a -> a -> a
+urange_ma mul_add_f l r i = mul_add_f i (r - l) l
+
 -- | Scale (0,1) input to linear (l,r) range. u = uni-polar.
 --
 -- > map (urange 3 4) [0,0.5,1] == [3,3.5,4]
 urange :: Fractional a => a -> a -> a -> a
-urange l r i = let m = r - l in i * m + l
+urange = urange_ma sc3_mul_add
 
 -- | Calculate multiplier and add values for (-1,1) 'range' transform.
 --
 -- > range_muladd 3 4 == (0.5,3.5)
 range_muladd :: Fractional t => t -> t -> (t,t)
 range_muladd = linlin_muladd (-1) 1
+
+-- | Scale bi-polar (-1,1) input to linear (l,r) range.  Note that the
+-- argument order is not the same as 'linLin'.
+range_ma :: Fractional a => SC3_MulAdd a -> a -> a -> a -> a
+range_ma mul_add_f l r i =
+  let (m,a) = range_muladd l r
+  in mul_add_f i m a
 
 -- | Scale (-1,1) input to linear (l,r) range.  Note that the argument
 -- order is not the same as 'linlin'. Note also that the various range
@@ -394,11 +417,11 @@ range_muladd = linlin_muladd (-1) 1
 -- > map (range 3 4) [-1,0,1] == [3,3.5,4]
 -- > map (\x -> let (m,a) = linlin_muladd (-1) 1 3 4 in x * m + a) [-1,0,1] == [3,3.5,4]
 range :: Fractional a => a -> a -> a -> a
-range l r i = let (m,a) = range_muladd l r in i * m + a
+range = range_ma sc3_mul_add
 
--- | Tuple variant of 'range'.
+-- | 'uncurry' 'range'
 range_hs :: Fractional a => (a,a) -> a -> a
-range_hs (l,r) = range l r
+range_hs = uncurry range
 
 -- | Calculate multiplier and add values for 'linlin' transform.
 --
@@ -413,11 +436,17 @@ linlin_muladd sl sr dl dr =
         a = dl - (m * sl)
     in (m,a)
 
+-- | Map from one linear range to another linear range.
+linlin_ma :: Fractional a => SC3_MulAdd a -> a -> a -> a -> a -> a -> a
+linlin_ma mul_add_f i sl sr dl dr =
+  let (m,a) = linlin_muladd sl sr dl dr
+  in mul_add_f i m a
+
 -- | 'sc3_linlin' with a more typical haskell argument structure, ranges as pairs and input last.
 --
--- > map (linlin_hs (0,127) (-0.5,0.5)) [0,63.5,127]
+-- > map (linlin_hs (0,127) (-0.5,0.5)) [0,63.5,127] == [-0.5,0.0,0.5]
 linlin_hs :: Fractional a => (a, a) -> (a, a) -> a -> a
-linlin_hs (sl,sr) (dl,dr) i = let (m,a) = linlin_muladd sl sr dl dr in i * m + a
+linlin_hs (sl,sr) (dl,dr) = let (m,a) = linlin_muladd sl sr dl dr in (+ a) . (* m)
 
 {- | Map from one linear range to another linear range.
 
