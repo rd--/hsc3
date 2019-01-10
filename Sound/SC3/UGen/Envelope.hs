@@ -19,9 +19,13 @@ import Sound.SC3.UGen.UGen
 envTrapezoid :: OrdE t => t -> t -> t -> t -> Envelope t
 envTrapezoid = envTrapezoid_f ((<=*),(>=*))
 
--- | 'env_circle_z' of 'latch' of 'impulse'.
+-- | 'latch' 1 of 'impulse' 0.
+first_zero_then_one :: Rate -> UGen
+first_zero_then_one rt = latch 1 (impulse rt 0 0)
+
+-- | 'env_circle_z' of k-rate 'first_zero_thereafter_one'.
 env_circle_u :: UGen -> Envelope_Curve UGen -> Envelope UGen -> Envelope UGen
-env_circle_u = env_circle_z (latch 1 (impulse KR 0 0))
+env_circle_u = env_circle_z (first_zero_then_one KR)
 
 -- | Singleton fade envelope.
 envGate :: UGen -> UGen -> UGen -> DoneAction UGen -> Envelope_Curve UGen -> UGen

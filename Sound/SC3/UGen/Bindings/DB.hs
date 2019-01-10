@@ -2209,9 +2209,9 @@ varSaw rate freq iphase width = mkUGen Nothing [KR,AR] (Left rate) "VarSaw" [fre
 
 -- | The Vibrato oscillator models a slow frequency modulation.
 --
---  Vibrato [KR,AR] freq=440.0 rate=6.0 depth=2.0e-2 delay=0.0 onset=0.0 rateVariation=4.0e-2 depthVariation=0.1 iphase=0.0;    NONDET
-vibrato :: ID a => a -> Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-vibrato z rate freq rate_ depth delay onset rateVariation depthVariation iphase = mkUGen Nothing [KR,AR] (Left rate) "Vibrato" [freq,rate_,depth,delay,onset,rateVariation,depthVariation,iphase] Nothing 1 (Special 0) (toUId z)
+--  Vibrato [KR,AR] freq=440.0 rate=6.0 depth=2.0e-2 delay=0.0 onset=0.0 rateVariation=4.0e-2 depthVariation=0.1 iphase=0.0 trig=0.0;    NONDET
+vibrato :: ID a => a -> Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+vibrato z rate freq rate_ depth delay onset rateVariation depthVariation iphase trig_ = mkUGen Nothing [KR,AR] (Left rate) "Vibrato" [freq,rate_,depth,delay,onset,rateVariation,depthVariation,iphase,trig_] Nothing 1 (Special 0) (toUId z)
 
 -- | Warp UGen a buffer with a time pointer
 --
