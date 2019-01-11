@@ -25,7 +25,7 @@
 
 > tape_delay dt fb z =
 >     let a = amplitude KR (mix z) 0.01 0.01
->         z' = z * (a >* 0.02)
+>         z' = z * (a >** 0.02)
 >         l0 = localIn 2 AR 0
 >         l1 = onePole l0 0.4
 >         l2 = onePole l1 (-0.08)

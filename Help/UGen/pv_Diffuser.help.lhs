@@ -18,7 +18,7 @@ Trigger revised phase shifts with MouseX crossing center of screen
 > f_01 z =
 >   let f = fft' (localBuf 'α' 2048 1) z
 >       x = mouseX KR 0 1 Linear 0.1
->       h = pv_Diffuser f (x >* 0.5)
+>       h = pv_Diffuser f (x >** 0.5)
 >   in ifft' h * 0.5
 
 > g_03 = f_01 g_02

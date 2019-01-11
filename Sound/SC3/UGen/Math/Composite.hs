@@ -16,7 +16,7 @@ ugen_integral_and_fractional_parts :: UGen -> UGen
 ugen_integral_and_fractional_parts n =
     let gt_eq_0 = let n' = floorE n in mce2 n' (n - n')
         lt_0 = let n' = ceilingE n in mce2 n' (n - n')
-    in ugen_if (n >=* 0) gt_eq_0 lt_0
+    in ugen_if (n `greater_than_or_equal_to` 0) gt_eq_0 lt_0
 
 -- | Fractional midi into integral midi and cents detune.
 --

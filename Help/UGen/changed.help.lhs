@@ -3,7 +3,7 @@
 
 > import Sound.SC3 {- hsc3 -}
 
-simple composition of hpz1 and >*
+simple composition of hpz1 and greater_than
 
 > g_01 =
 >     let s = lfNoise0 'α' KR 2

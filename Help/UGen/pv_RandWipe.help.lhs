@@ -21,5 +21,5 @@
 >       f2 = fft' (localBuf 'β' 2048 1) g_02
 >       x = mouseX KR 0 1 Linear 0.1
 >       y = mouseY KR 0 1 Linear 0.1
->       h = pv_RandWipe 'γ' f1 f2 x (y >* 0.5)
+>       h = pv_RandWipe 'γ' f1 f2 x (y >** 0.5)
 >   in pan2 (ifft' h) 0 0.5

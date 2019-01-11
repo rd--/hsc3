@@ -13,7 +13,7 @@
 
 > gr_01 =
 >     let p = tRand 'α' 0 1 (impulse AR 6 0)
->         t = impulse AR (9 * ( 1 + ( p >* 0.95))) 0
+>         t = impulse AR (9 * ( 1 + ( p >** 0.95))) 0
 >         x = mouseX KR 0.25 2 Linear 0.2
 >         y = mouseY KR 0.25 0.75 Linear 0.2
 >         z = 9

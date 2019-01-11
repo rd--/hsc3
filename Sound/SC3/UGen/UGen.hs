@@ -154,10 +154,6 @@ mceChannel n u =
 mceTranspose :: UGen -> UGen
 mceTranspose = mce . map mce . transpose . map mceChannels . mceChannels
 
--- | Collapse mce by summing (see also mix and mixN).
-mceSum :: UGen -> UGen
-mceSum = sum . mceChannels
-
 -- * Transform
 
 -- | Given /unmce/ function make halt mce transform.

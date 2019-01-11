@@ -17,7 +17,7 @@ import Sound.SC3.UGen.UGen
 
 -}
 envTrapezoid :: OrdE t => t -> t -> t -> t -> Envelope t
-envTrapezoid = envTrapezoid_f ((<=*),(>=*))
+envTrapezoid = envTrapezoid_f (less_than_or_equal_to,greater_than_or_equal_to)
 
 -- | 'latch' 1 of 'impulse' 0.
 first_zero_then_one :: Rate -> UGen
@@ -30,7 +30,7 @@ env_circle_u = env_circle_z (first_zero_then_one KR)
 -- | Singleton fade envelope.
 envGate :: UGen -> UGen -> UGen -> DoneAction UGen -> Envelope_Curve UGen -> UGen
 envGate level gate_ fadeTime doneAction curve =
-    let startVal = fadeTime <=* 0
+    let startVal = fadeTime `less_than_or_equal_to` 0
         e = Envelope [startVal,1,0] [1,1] [curve] (Just 1) Nothing 0
     in envGen KR gate_ level 0 fadeTime doneAction e
 

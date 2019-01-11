@@ -7,5 +7,5 @@
 > g_01 =
 >   let f = fft' (localBuf 'α' 2048 1) (soundIn 0)
 >       x = mouseX KR 0 1 Linear 0.1
->       h = pv_Freeze f (x >* 0.5)
+>       h = pv_Freeze f (x >** 0.5)
 >   in ifft' h * 0.5

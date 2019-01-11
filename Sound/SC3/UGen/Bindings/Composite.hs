@@ -56,7 +56,7 @@ bufRdC n r b p l = bufRd n r b p l CubicInterpolation
 
 -- | Triggers when a value changes
 changed :: UGen -> UGen -> UGen
-changed input threshold = abs (hpz1 input) >* threshold
+changed input threshold = abs (hpz1 input) `greater_than` threshold
 
 -- | 'mce' variant of 'lchoose'.
 choose :: ID m => m -> UGen -> UGen
@@ -223,7 +223,7 @@ makeFadeEnv :: Double -> UGen
 makeFadeEnv fadeTime =
     let dt = control KR "fadeTime" (realToFrac fadeTime)
         gate_ = control KR "gate" 1
-        startVal = dt <=* 0
+        startVal = dt `less_than_or_equal_to` 0
         env = Envelope [startVal,1,0] [1,1] [EnvLin,EnvLin] (Just 1) Nothing 0
     in envGen KR gate_ 1 0 dt RemoveSynth env
 

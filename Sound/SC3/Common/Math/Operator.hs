@@ -224,12 +224,12 @@ resolve_operator cr nm =
 
 -- * Classes
 
--- | Variant on Eq class, result is of the same type as the values compared.
+-- | Variant on 'Eq' class, result is of the same type as the values compared.
 class (Eq a,Num a) => EqE a where
-    (==*) :: a -> a -> a
-    (==*) = Math.sc3_eq
-    (/=*) :: a -> a -> a
-    (/=*) = Math.sc3_neq
+  equal_to :: a -> a -> a
+  equal_to = Math.sc3_eq
+  not_equal_to :: a -> a -> a
+  not_equal_to = Math.sc3_neq
 
 instance EqE Int where
 instance EqE Integer where
@@ -240,14 +240,14 @@ instance EqE Double where
 
 -- | Variant on Ord class, result is of the same type as the values compared.
 class (Ord a,Num a) => OrdE a where
-    (<*) :: a -> a -> a
-    (<*) = Math.sc3_lt
-    (<=*) :: a -> a -> a
-    (<=*) = Math.sc3_lte
-    (>*) :: a -> a -> a
-    (>*) = Math.sc3_gt
-    (>=*) :: a -> a -> a
-    (>=*) = Math.sc3_gte
+    less_than :: a -> a -> a
+    less_than = Math.sc3_lt
+    less_than_or_equal_to :: a -> a -> a
+    less_than_or_equal_to = Math.sc3_lte
+    greater_than :: a -> a -> a
+    greater_than = Math.sc3_gt
+    greater_than_or_equal_to :: a -> a -> a
+    greater_than_or_equal_to = Math.sc3_gte
 
 instance OrdE Int
 instance OrdE Integer
@@ -394,6 +394,26 @@ instance BinaryOp Double where
     modE = F.mod'
     roundUp a b = if b == 0 then a else ceilingE (a/b + 0.5) * b
     wrap2 a b = Math.sc3_wrap_ni a (-b) b
+
+-- * Infix
+
+(==**) :: EqE a => a -> a -> a
+(==**) = equal_to
+
+(/=**) :: EqE a => a -> a -> a
+(/=**) = not_equal_to
+
+(<**) :: OrdE a => a -> a -> a
+(<**) = less_than
+
+(<=**) :: OrdE a => a -> a -> a
+(<=**) = less_than_or_equal_to
+
+(>**) :: OrdE a => a -> a -> a
+(>**) = greater_than
+
+(>=**) :: OrdE a => a -> a -> a
+(>=**) = greater_than_or_equal_to
 
 -- * Tables
 

@@ -107,15 +107,14 @@ data UGen = Constant_U Constant
             deriving (Eq,Read,Show)
 
 instance EqE UGen where
-    (==*) = mkBinaryOperator EQ_ (==*)
-    (/=*) = mkBinaryOperator NE (/=*)
+    equal_to = mkBinaryOperator EQ_ Math.sc3_eq
+    not_equal_to = mkBinaryOperator NE Math.sc3_neq
 
 instance OrdE UGen where
-    (<*) = mkBinaryOperator LT_ Math.sc3_lt
-    (<=*) = mkBinaryOperator LE Math.sc3_lte
-    (>*) = mkBinaryOperator GT_ Math.sc3_gt
-    (>=*) = mkBinaryOperator GE Math.sc3_gte
-
+    less_than = mkBinaryOperator LT_ Math.sc3_lt
+    less_than_or_equal_to = mkBinaryOperator LE Math.sc3_lte
+    greater_than = mkBinaryOperator GT_ Math.sc3_gt
+    greater_than_or_equal_to = mkBinaryOperator GE Math.sc3_gte
 
 -- | 'UGen' form or 'Math.sc3_round_to'.
 roundTo :: UGen -> UGen -> UGen
