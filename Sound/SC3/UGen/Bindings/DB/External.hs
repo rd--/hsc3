@@ -42,6 +42,12 @@ amplitudeMod rate in_ attackTime releaseTime = mkUGen Nothing [KR,AR] (Left rate
 analyseEvents2 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 analyseEvents2 rate in_ bufnum threshold triggerid circular pitch_ = mkUGen Nothing [AR] (Left rate) "AnalyseEvents2" [in_,bufnum,threshold,triggerid,circular,pitch_] Nothing 1 (Special 0) NoId
 
+-- | 2-species Predator-Prey model
+--
+--  ArneodoCoulletTresser [AR] freq=22050.0 alpha=1.5 h=5.0e-2 xi=0.5 yi=0.5 zi=0.5
+arneodoCoulletTresser :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+arneodoCoulletTresser rate freq alpha h xi yi zi = mkUGen Nothing [AR] (Left rate) "ArneodoCoulletTresser" [freq,alpha,h,xi,yi,zi] Nothing 3 (Special 0) NoId
+
 -- | detect the largest value (and its position) in an array of UGens
 --
 --  ArrayMax [KR,AR] array=0.0

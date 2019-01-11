@@ -71,10 +71,14 @@ synthstat_ln :: UGen -> [String]
 synthstat_ln = ug_stat_ln . ugen_to_graph
 
 -- | 'unlines' of 'synthstat_ln'.
---
--- > putStrLn $ synthstat Sound.SC3.UGen.Help.Graph.default_ugen_graph
 synthstat :: UGen -> String
 synthstat = unlines . synthstat_ln
+
+-- | 'putStrLn' of 'synthstat'.
+--
+-- > synthstat_wr Sound.SC3.UGen.Help.Graph.default_ugen_graph
+synthstat_wr :: UGen -> IO ()
+synthstat_wr = putStrLn . synthstat
 
 -- | Variant without UGen sequence.
 --

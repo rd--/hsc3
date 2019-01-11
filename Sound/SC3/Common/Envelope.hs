@@ -102,6 +102,10 @@ envelope_coerce f e =
     let Envelope l t c rn ln os = e
     in Envelope (map f l) (map f t) (map (env_curve_coerce f) c) rn ln (f os)
 
+-- | fmap = 'envelope_coerce'
+instance Functor Envelope where
+  fmap = envelope_coerce
+
 -- | Variant without release and loop node inputs (defaulting to nil).
 envelope :: Num a => [a] -> [a] -> [Envelope_Curve a] -> Envelope a
 envelope l t c = Envelope l t c Nothing Nothing 0
