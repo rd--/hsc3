@@ -3,7 +3,11 @@
 
 > import Sound.SC3 {- hsc3 -}
 
-> g_01 = whiteNoise 'α' AR * 0.05
+> g_00 = whiteNoise 'α' AR * 0.05
+
+> g_01_m = fmap (* 0.05) (whiteNoiseM AR)
+
+> g_01 = uid_st_eval g_01_m
 
 Random filtered noise bursts.
 
@@ -17,8 +21,7 @@ Random filtered noise bursts.
 
 Monadic form of above graph.
 
-> g_03 :: UId m => m UGen
-> g_03 = do
+> g_03_m = do
 >   n <- whiteNoiseM AR
 >   t <- dustM AR (mce [3, 7])
 >   f <- tExpRandM 20 1800 t
@@ -26,16 +29,19 @@ Monadic form of above graph.
 >   let e = decay2 t 0.01 0.2
 >   return (resonz (n * e) f bw)
 
+> g_03 = uid_st_eval g_03_m
+
 The same graph again, without using do notation.
 
-> g_04 :: UId m => m UGen
-> g_04 =
+> g_04_m =
 >     whiteNoiseM AR >>= \n ->
 >     dustM AR (mce [3, 7]) >>= \t ->
 >     tExpRandM 20 1800 t >>= \f ->
 >     tExpRandM 0.001 1 t >>= \bw ->
 >     let e = decay2 t 0.01 0.2
 >     in return (resonz (n * e) f bw)
+
+> g_04 = uid_st_eval g_04_m
 
 Drawing
 

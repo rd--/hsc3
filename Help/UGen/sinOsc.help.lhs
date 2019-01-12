@@ -1,6 +1,7 @@
     Sound.SC3.UGen.Help.viewSC3Help "SinOsc"
     Sound.SC3.UGen.DB.ugenSummary "SinOsc"
 
+> import Data.Functor.Identity
 > import Sound.SC3 {- hsc3 -}
 
 Fixed frequency (hz) and initial-phase (radians)
@@ -108,3 +109,10 @@ reverse cycle & reverse sync
 >       direction = toggleFF (impulse AR sync_freq 0 + impulse AR freq 0) * (-2) + 1
 >       o = sinOsc AR 0 (wrap (sweep (k2a 0) (direction * freq)) 0 (2 * pi))
 >   in o * 0.5
+
+uid_id_eval is the Identity form of uid_st_eval
+
+> g_13_m :: Monad m => m UGen
+> g_13_m = return (sinOsc AR 440 0 * 0.1)
+
+> g_13 = uid_id_eval g_13_m

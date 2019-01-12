@@ -9,6 +9,7 @@ import Data.Functor.Identity {- base -}
 import Data.List {- base -}
 import qualified Data.Unique as Unique {- base -}
 
+--import qualified Control.Monad.Trans.Identity as Identity {- transformers -}
 import qualified Control.Monad.Trans.Reader as Reader {- transformers -}
 import qualified Control.Monad.Trans.State as State {- transformers -}
 import qualified Data.Digest.Murmur32 as Murmur32 {- hashable -}
@@ -39,6 +40,10 @@ instance UId m => UId (Reader.ReaderT t m) where
 
 -- | 'State.State' UId.
 type UId_ST = State.State Int
+
+-- | Alias for 'runIdentity'.
+uid_id_eval :: Identity t -> t
+uid_id_eval = runIdentity
 
 -- | 'State.evalState' with initial state of zero.
 --
