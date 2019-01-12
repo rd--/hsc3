@@ -111,7 +111,6 @@ Library
                    Sound.SC3.UGen.Optimise
                    Sound.SC3.UGen.Plain
                    Sound.SC3.UGen.PP
-                   Sound.SC3.UGen.Protect
                    Sound.SC3.UGen.Type
                    Sound.SC3.UGen.UGen
 
