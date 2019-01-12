@@ -26,22 +26,25 @@ ugen_user_name nm (Special n) =
 
 -- * UGen graph functions
 
--- | Depth first traversal of graph at `u' applying `f' to each node.
-ugenTraverse :: (UGen -> UGen) -> UGen -> UGen
-ugenTraverse f u =
-    let recur = ugenTraverse f
+-- | Depth first traversal of graph at `u', stopping at `halt_f', else applying `map_f' to each node.
+ugenTraverse :: (UGen -> Bool) -> (UGen -> UGen) -> UGen -> UGen
+ugenTraverse halt_f map_f u =
+  if halt_f u
+  then u
+  else
+    let recur = ugenTraverse halt_f map_f
     in case u of
          Primitive_U p ->
              let i = ugenInputs p
-             in f (Primitive_U (p {ugenInputs = map recur i}))
+             in map_f (Primitive_U (p {ugenInputs = map recur i}))
          Proxy_U p ->
              let s = Primitive_U (proxySource p)
              in case recur s of
-                  Primitive_U p' -> f (Proxy_U (p {proxySource = p'}))
+                  Primitive_U p' -> map_f (Proxy_U (p {proxySource = p'}))
                   _ -> error "ugenTraverse"
-         MCE_U m -> f (mce (map recur (mceProxies m)))
-         MRG_U (MRG l r) -> f (MRG_U (MRG (recur l) (recur r)))
-         _ -> f u
+         MCE_U m -> map_f (mce (map recur (mceProxies m)))
+         MRG_U (MRG l r) -> map_f (MRG_U (MRG (recur l) (recur r)))
+         _ -> map_f u
 
 -- | Right fold of UGen graph.
 ugenFoldr :: (UGen -> a -> a) -> a -> UGen -> a

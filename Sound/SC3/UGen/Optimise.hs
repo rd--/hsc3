@@ -49,7 +49,7 @@ ugen_optimise_ir_rand =
                         Constant_U (Constant (c_irand z l r))
                     _ -> u
               _ -> u
-    in ugenTraverse f
+    in ugenTraverse (const False) f
 
 -- | Optimise 'UGen' graph by re-writing binary operators with
 -- 'Constant' inputs.  The standard graph constructors already do
@@ -85,7 +85,7 @@ ugen_optimise_const_operator =
                           _ -> u
                     _ -> u
               _ -> u
-    in ugenTraverse f
+    in ugenTraverse (const False) f
 
 -- | 'u_constant' of 'ugen_optimise_ir_rand'.
 constant_opt :: UGen -> Maybe Sample
