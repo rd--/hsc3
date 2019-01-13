@@ -1,6 +1,8 @@
 -- | Data types for enumerated and non signal unit generator inputs.
 module Sound.SC3.Common.Enum where
 
+-- * Loop
+
 -- | Loop indicator input.
 data Loop t =
     Loop
@@ -28,6 +30,8 @@ from_loop e =
       Loop -> 1
       WithLoop u -> u
 
+-- * Interpolation
+
 -- | Interpolation indicator input.
 data Interpolation t =
     NoInterpolation
@@ -44,6 +48,8 @@ from_interpolation e =
       LinearInterpolation -> 2
       CubicInterpolation -> 4
       WithInterpolation u -> u
+
+-- * DoneAction
 
 -- | Completion mode indicator input.
 data DoneAction t
@@ -78,6 +84,8 @@ from_done_action e =
       RemoveGroup -> 14
       WithDoneAction x -> x
 
+-- * Warp
+
 -- | Warp interpolation indicator input.
 data Warp t =
     Linear
@@ -104,6 +112,8 @@ warp_coerce f e =
 -- | fmap = 'warp_coerce'
 instance Functor Warp where
   fmap = warp_coerce
+
+-- * Buffer
 
 -- | Unification of integer and 'UGen' buffer identifiers.
 data Buffer t =

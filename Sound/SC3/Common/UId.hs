@@ -108,6 +108,6 @@ instance (ID p,ID q) => ID (p,q) where
 
 -- | /n/ identifiers from /x/.
 --
--- > id_seq 10 'α' == [945 .. 954]
+-- > id_seq 10 'α' == [1439603815 .. 1439603824]
 id_seq :: ID a => Int -> a -> [Id]
 id_seq n x = take n [resolveID x ..]

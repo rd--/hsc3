@@ -8,6 +8,10 @@ import Sound.SC3.Common.UId
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
+envGen_ll :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+envGen_ll rate gate_ levelScale levelBias timeScale doneAction envelope_ = mkUGen Nothing [KR,AR] (Left rate) "EnvGen" [gate_,levelScale,levelBias,timeScale,doneAction] (Just [envelope_]) 1 (Special 0) NoId
+
+-- | Envelope generator
 -- | Audio to control rate converter.
 --
 --  A2K [KR] in=0.0
@@ -670,14 +674,11 @@ dwrand z repeats weights list_ = mkUGen Nothing [DR] (Left DR) "Dwrand" [repeats
 dxrand :: ID a => a -> UGen -> UGen -> UGen
 dxrand z repeats list_ = mkUGen Nothing [DR] (Left DR) "Dxrand" [repeats] (Just [list_]) 1 (Special 0) (toUId z)
 
-envGen_ll :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-envGen_ll rate gate_ levelScale levelBias timeScale doneAction envelope_ = mkUGen Nothing [KR,AR] (Left rate) "EnvGen" [gate_,levelScale,levelBias,timeScale,doneAction] (Just [envelope_]) 1 (Special 0) NoId
-
 -- | Envelope generator
 --
---  EnvGen [KR,AR] gate=1.0 levelScale=1.0 levelBias=0.0 timeScale=1.0 doneAction=0.0 *envelope=0.0;    MCE, REORDERS INPUTS: [5,0,1,2,3,4,5], ENUMERATION INPUTS: 4=DoneAction UGen, 5=Envelope UGen
+--  EnvGen [KR,AR] gate=1.0 levelScale=1.0 levelBias=0.0 timeScale=1.0 doneAction=0.0 *envelope=0.0;    MCE=1, REORDERS INPUTS: [5,0,1,2,3,4,5], ENUMERATION INPUTS: 4=DoneAction, 5=Envelope UGen
 envGen :: Rate -> UGen -> UGen -> UGen -> UGen -> DoneAction UGen -> Envelope UGen -> UGen
-envGen rate gate_ levelScale levelBias timeScale doneAction envelope_ = envGen_ll rate gate_ levelScale levelBias timeScale (from_done_action doneAction) (envelope_to_ugen envelope_)
+envGen rate gate_ levelScale levelBias timeScale doneAction envelope_ = mkUGen Nothing [KR,AR] (Left rate) "EnvGen" [gate_,levelScale,levelBias,timeScale,(from_done_action doneAction)] (Just [(envelope_to_ugen envelope_)]) 1 (Special 0) NoId
 
 -- | Exponential single random number generator.
 --
@@ -1339,23 +1340,17 @@ mostChange a b = mkUGen Nothing [KR,AR] (Right [0,1]) "MostChange" [a,b] Nothing
 mouseButton :: Rate -> UGen -> UGen -> UGen -> UGen
 mouseButton rate minval maxval lag_ = mkUGen Nothing [KR] (Left rate) "MouseButton" [minval,maxval,lag_] Nothing 1 (Special 0) NoId
 
-mouseX_ll :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-mouseX_ll rate minval maxval warp lag_ = mkUGen Nothing [KR] (Left rate) "MouseX" [minval,maxval,warp,lag_] Nothing 1 (Special 0) NoId
-
 -- | Cursor tracking UGen.
 --
---  MouseX [KR] minval=0.0 maxval=1.0 warp=0.0 lag=0.2;    ENUMERATION INPUTS: 2=Warp UGen
+--  MouseX [KR] minval=0.0 maxval=1.0 warp=0.0 lag=0.2;    ENUMERATION INPUTS: 2=Warp
 mouseX :: Rate -> UGen -> UGen -> Warp UGen -> UGen -> UGen
-mouseX rate minval maxval warp lag_ = mouseX_ll rate minval maxval (from_warp warp) lag_
-
-mouseY_ll :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-mouseY_ll rate minval maxval warp lag_ = mkUGen Nothing [KR] (Left rate) "MouseY" [minval,maxval,warp,lag_] Nothing 1 (Special 0) NoId
+mouseX rate minval maxval warp lag_ = mkUGen Nothing [KR] (Left rate) "MouseX" [minval,maxval,(from_warp warp),lag_] Nothing 1 (Special 0) NoId
 
 -- | Cursor tracking UGen.
 --
---  MouseY [KR] minval=0.0 maxval=1.0 warp=0.0 lag=0.2;    ENUMERATION INPUTS: 2=Warp UGen
+--  MouseY [KR] minval=0.0 maxval=1.0 warp=0.0 lag=0.2;    ENUMERATION INPUTS: 2=Warp
 mouseY :: Rate -> UGen -> UGen -> Warp UGen -> UGen -> UGen
-mouseY rate minval maxval warp lag_ = mouseY_ll rate minval maxval (from_warp warp) lag_
+mouseY rate minval maxval warp lag_ = mkUGen Nothing [KR] (Left rate) "MouseY" [minval,maxval,(from_warp warp),lag_] Nothing 1 (Special 0) NoId
 
 -- | Sum of uniform distributions.
 --
