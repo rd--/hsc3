@@ -2,6 +2,7 @@
 module Sound.SC3.Common.Base where
 
 import Data.Char {- base -}
+import Data.Function {- base -}
 import Data.List {- base -}
 
 -- * Function
@@ -65,13 +66,13 @@ parse_enum cr nm =
 --
 -- > compose_l [(* 2),(+ 1)] 3 == 7
 compose_l :: [t -> t] -> t -> t
-compose_l = flip (foldl (\x f -> f x))
+compose_l = flip (foldl (&))
 
 -- | Right to left composition of a list of functions.
 --
 -- > compose_r [(* 2),(+ 1)] 3 == 8
 compose_r :: [t -> t] -> t -> t
-compose_r = flip (foldr (\f x -> f x))
+compose_r = flip (foldr ($))
 
 {- | SequenceableCollection.differentiate
 
