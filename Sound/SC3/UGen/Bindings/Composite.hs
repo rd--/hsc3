@@ -227,6 +227,14 @@ makeFadeEnv fadeTime =
         env = Envelope [startVal,1,0] [1,1] [EnvLin,EnvLin] (Just 1) Nothing 0
     in envGen KR gate_ 1 0 dt RemoveSynth env
 
+-- | 'mce' of 'map' /f/ of 'id_seq' /n/.
+mce_gen :: ID z => (Id -> UGen) -> Int -> z -> UGen
+mce_gen f n = mce . map f . id_seq n
+
+-- | Monad/applicative variant of mce_gen.
+mce_genM :: Applicative f => f UGen -> Int -> f UGen
+mce_genM f n = fmap mce (replicateM n f)
+
 -- | Count 'mce' channels.
 mceN :: UGen -> UGen
 mceN = constant . length . mceChannels
