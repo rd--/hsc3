@@ -3,6 +3,28 @@
 
 > import Sound.SC3 {- hsc3 -}
 
+The Q factor of a resonator is defined as the center-frequency (cf) divided by the bandwidth (bw).
+
+    > let q cf bw = cf / bw
+
+The higher the Q the narrower the filter.
+
+    > let bw_set = [1,4,10,100,200,400]
+    > map (q 400) bw_set == [400,100,40,4,2,1]
+
+Q multipled by the band-width gives the center-frequency.
+
+    > map (\bw -> q 400 bw * bw) bw_set == replicate (length bw_set) 400
+
+The third argument to resonz is the reciprocal of Q (rq).
+
+    > let rq cf = recip . q cf
+    > map (rq 400) [1,4,10,100,200,400] == [1/400,1/100,1/40,1/4,1/2,1]
+
+1/Q multiplied by the center-frequency gives the bandwidth.
+
+    > map (\bw -> rq 400 bw * 400) bw_set == bw_set
+
 > g_01 =
 >   let n = whiteNoise 'α' AR
 >   in resonz (n * 0.5) 2000 0.1

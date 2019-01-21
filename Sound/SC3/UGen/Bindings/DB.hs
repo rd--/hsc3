@@ -8,9 +8,6 @@ import Sound.SC3.Common.UId
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
-envGen_ll :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-envGen_ll rate gate_ levelScale levelBias timeScale doneAction envelope_ = mkUGen Nothing [KR,AR] (Left rate) "EnvGen" [gate_,levelScale,levelBias,timeScale,doneAction] (Just [envelope_]) 1 (Special 0) NoId
-
 -- | Envelope generator
 -- | Audio to control rate converter.
 --

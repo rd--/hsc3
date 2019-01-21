@@ -21,6 +21,10 @@ dwrand z repeats weights list_ =
         inp = repeats : constant n : weights'
     in mkUGen Nothing [DR] (Left DR) "Dwrand" inp (Just [list_]) 1 (Special 0) (U.toUId z)
 
+-- | Variant on 'envGen' without enumeration types.
+envGen_ll :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+envGen_ll rate gate_ levelScale levelBias timeScale doneAction envelope_ = mkUGen Nothing [KR,AR] (Left rate) "EnvGen" [gate_,levelScale,levelBias,timeScale,doneAction] (Just [envelope_]) 1 (Special 0) NoId
+
 -- | Outputs signal for @FFT@ chains, without performing FFT.
 fftTrigger :: UGen -> UGen -> UGen -> UGen
 fftTrigger b h p = C.mkOsc KR "FFTTrigger" [b,h,p] 1
