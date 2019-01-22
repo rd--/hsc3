@@ -11,11 +11,11 @@ allocate & initialise buffer zero
 
 modal space, mouse x controls discrete pitch in dorian mode
 
-> f_01 b =
->     let n = lfNoise1 'α' KR (mce [3,3.05])
->         x = mouseX KR 0 15 Linear 0.1
->         k = degreeToKey b x 12
->         f b = let o = sinOsc AR (midiCPS (b + k + n * 0.04)) 0 * 0.1
+> f_01 buf =
+>     let x = mouseX KR 0 15 Linear 0.1
+>         k = degreeToKey buf x 12
+>         f b = let n = lfNoise1 'α' KR (mce [3,3.05])
+>                   o = sinOsc AR (midiCPS (b + k + n * 0.04)) 0 * 0.1
 >                   t = lfPulse AR (midiCPS (mce [48,55])) 0.15 0.5
 >                   d = rlpf t (midiCPS (sinOsc KR 0.1 0 * 10 + b)) 0.1 * 0.1
 >                   m = o + d

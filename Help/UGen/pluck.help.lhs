@@ -2,6 +2,7 @@
     Sound.SC3.UGen.DB.ugenSummary "Pluck"
 
 > import Sound.SC3 {- hsc3 -}
+> import Sound.SC3.UGen.Protect {- hsc3-rw -}
 
 Excitation signal is white noise, triggered twice a second with varying OnePole coef.
 
@@ -15,7 +16,7 @@ Excitation signal is white noise, triggered twice a second with varying OnePole 
 
 > g_02 =
 >     let n = 50
->         udup = uclone 'α'
+>         udup = uclone (const False) 'α'
 >         f = udup n (rand 'β' 0.05 0.2)
 >         p = udup n (rand 'γ' 0 1)
 >         w = udup n (whiteNoise 'δ' AR)
