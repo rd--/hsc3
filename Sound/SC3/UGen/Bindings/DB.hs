@@ -2223,12 +2223,6 @@ warp1 numChannels bufnum pointer freqScale windowSize envbufnum overlaps windowR
 whiteNoise :: ID a => a -> Rate -> UGen
 whiteNoise z rate = mkUGen Nothing [KR,AR] (Left rate) "WhiteNoise" [] Nothing 1 (Special 0) (toUId z)
 
--- | (Undocumented class)
---
---  WidthFirstUGen [] maxSize=0.0
-widthFirstUGen :: Rate -> UGen -> UGen
-widthFirstUGen rate maxSize = mkUGen Nothing [IR,KR,AR,DR] (Left rate) "WidthFirstUGen" [maxSize] Nothing 1 (Special 0) NoId
-
 -- | Wrap a signal outside given thresholds.
 --
 --  Wrap [IR,KR,AR] in=0.0 lo=0.0 hi=1.0;    FILTER: TRUE

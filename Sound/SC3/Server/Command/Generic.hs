@@ -132,12 +132,16 @@ c_setn l =
 -- * Instrument definition commands (d_)
 
 -- | Install a bytecode instrument definition. (Asynchronous)
-d_recv' :: G.Graphdef -> Message
-d_recv' g = message "/d_recv" [Blob (G.encode_graphdef g)]
+d_recv_bytes :: BLOB -> Message
+d_recv_bytes b = message "/d_recv" [Blob b]
 
--- | Install a bytecode instrument definition. (Asynchronous)
+-- | 'G.Graphdef' encoding variant.
+d_recv_gr :: G.Graphdef -> Message
+d_recv_gr = d_recv_bytes . G.encode_graphdef
+
+-- | 'S.Synthdef' encoding variant.
 d_recv :: S.Synthdef -> Message
-d_recv d = message "/d_recv" [Blob (S.synthdefData d)]
+d_recv = d_recv_bytes . S.synthdefData
 
 -- | Load an instrument definition from a named file. (Asynchronous)
 d_load :: String -> Message

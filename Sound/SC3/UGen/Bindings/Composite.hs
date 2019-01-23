@@ -326,7 +326,7 @@ privateOut k = out (k + firstPrivateBus)
 
 -- | Apply function /f/ to each bin of an @FFT@ chain, /f/ receives
 -- magnitude, phase and index and returns a (magnitude,phase).
-pvcollect :: UGen -> UGen -> (UGen -> UGen -> UGen -> (UGen, UGen)) -> UGen -> UGen -> UGen -> UGen
+pvcollect :: UGen -> Int -> (UGen -> UGen -> Int -> (UGen, UGen)) -> Int -> Int -> UGen -> UGen
 pvcollect c nf f from to z =
     let m = unpackFFT c nf from to 0
         p = unpackFFT c nf from to 1
@@ -453,8 +453,8 @@ tWChooseM t a w n = do
   return (select i a)
 
 -- | Unpack an FFT chain into separate demand-rate FFT bin streams.
-unpackFFT :: UGen -> UGen -> UGen -> UGen -> UGen -> [UGen]
-unpackFFT c nf from to w = map (\i -> unpack1FFT c nf i w) [from .. to]
+unpackFFT :: UGen -> Int -> Int -> Int -> UGen -> [UGen]
+unpackFFT c nf from to w = map (\i -> unpack1FFT c (constant nf) (constant i) w) [from .. to]
 
 -- | VarLag in terms of envGen
 varLag_env :: UGen -> UGen -> Envelope_Curve UGen -> UGen -> UGen

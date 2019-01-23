@@ -5,8 +5,10 @@
 module Sound.SC3.Server.Transport.FD where
 
 import Control.Monad {- base -}
+import qualified Data.ByteString.Lazy as L {- bytestring -}
 import Data.List {- base -}
 import qualified Data.List.Split as Split {- split -}
+import System.FilePath {- filepath -}
 
 import Sound.OSC.FD {- hosc -}
 
@@ -54,8 +56,13 @@ reset fd = do
 -- | Send 'd_recv' and 's_new' messages to scsynth.
 playGraphdef :: Transport t => Int -> t -> G.Graphdef -> IO ()
 playGraphdef k fd g = do
-  _ <- async fd (d_recv' g)
-  sendMessage fd (s_new0 (ascii_to_string (G.graphdef_name g)) k AddToTail 1)
+  let nm = ascii_to_string (G.graphdef_name g)
+      fn = "/tmp" </> nm <.> "scsyndef"
+      by = G.encode_graphdef g
+      sz = L.length by
+  if sz < 65507
+    then void (async fd (d_recv_bytes by))
+    else G.graphdefWrite fn g >> async fd (d_load fn) >> sendMessage fd (s_new0 nm k AddToTail 1)
 
 -- | 'playGraphdef' of 'synthdef_to_graphdef'.
 playSynthdef :: Transport t => Int -> t -> Synthdef -> IO ()

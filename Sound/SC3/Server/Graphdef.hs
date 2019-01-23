@@ -5,6 +5,7 @@ module Sound.SC3.Server.Graphdef where
 import Control.Monad {- base -}
 import qualified Data.ByteString.Lazy as L {- bytestring -}
 import Data.List {- base -}
+import System.FilePath {- filepath -}
 import System.IO {- base -}
 
 import qualified Sound.OSC.Coding.Byte as Byte {- hosc -}
@@ -230,6 +231,19 @@ encode_graphdef (Graphdef nm cs ks us) =
                 ,L.concat (map encode_control ks_ctl)
                 ,Byte.encode_i16 (length us)
                 ,L.concat (map encode_ugen us)]
+
+-- * IO
+
+-- | Write 'Graphdef' to indicated file.
+graphdefWrite :: FilePath -> Graphdef -> IO ()
+graphdefWrite fn = L.writeFile fn . encode_graphdef
+
+-- | Write 'Graphdef' to indicated directory.  The filename is the
+-- 'graphdef_name' with the appropriate extension (@scsyndef@).
+graphdefWrite_dir :: FilePath -> Graphdef -> IO ()
+graphdefWrite_dir dir s =
+    let fn = dir </> Datum.ascii_to_string (graphdef_name s) <.> "scsyndef"
+    in graphdefWrite fn s
 
 -- * Stat
 

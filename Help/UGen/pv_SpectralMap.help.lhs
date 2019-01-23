@@ -2,9 +2,10 @@
     Sound.SC3.UGen.DB.ugenSummary "PV_SpectralMap"
 
 > import Sound.SC3 {- hsc3 -}
-> import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
+> import qualified Sound.SC3.UGen.Bindings.DB.External as X {- hsc3 -}
 
-> n_01 = "/home/rohan/opt/src/supercollider/sounds/a11wlk01.wav"
+> n_01 = "/usr/share/SuperCollider/sounds/a11wlk01.wav"
+> n_02 = "/home/rohan/data/audio/instr/bosendorfer/064/C5.aif"
 
 > m_01 = b_allocRead 10 n_01 0 0
 
@@ -16,5 +17,5 @@
 >       b = localBuf 'β' 2048 1
 >       c1 = fft' a (soundIn 0)
 >       c2 = fft' b (playBuf 1 AR 10 1 1 0 Loop DoNothing)
->       c3 = pv_SpectralMap c1 c2 0.0 freeze (mouseX KR (-1) 1 Linear 0.2) 1 0
+>       c3 = X.pv_SpectralMap c1 c2 0.0 freeze (mouseX KR (-1) 1 Linear 0.2) 1 0
 >   in ifft' c3

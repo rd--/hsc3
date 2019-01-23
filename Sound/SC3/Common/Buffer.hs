@@ -76,9 +76,7 @@ resamp1 n c =
 -- > > [1,2,3].normalizeSum == [1/6,1/3,0.5]
 -- > normalizeSum [1,2,3] == [1/6,2/6,3/6]
 normalizeSum :: (Fractional a) => [a] -> [a]
-normalizeSum l =
-    let n = sum l
-    in map (/ n) l
+normalizeSum l = let n = sum l in map (/ n) l
 
 -- | Variant that specifies range of input sequence separately.
 normalise_rng :: Fractional n => (n,n) -> (n,n) -> [n] -> [n]

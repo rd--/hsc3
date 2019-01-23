@@ -2,7 +2,6 @@
 module Sound.SC3.Server.Synthdef where
 
 import qualified Data.ByteString.Lazy as L {- bytestring -}
-import System.FilePath {- filepath -}
 
 import Sound.SC3.UGen.Graph
 import Sound.SC3.UGen.Help.Graph
@@ -59,12 +58,14 @@ synthdef_to_graphdef (Synthdef nm u) = Graph.graph_to_graphdef nm (ugen_to_graph
 synthdefData :: Synthdef -> L.ByteString
 synthdefData = Graphdef.encode_graphdef . synthdef_to_graphdef
 
+-- | Write 'Synthdef' to indicated file.
+synthdefWrite :: FilePath -> Synthdef -> IO ()
+synthdefWrite fn = Graphdef.graphdefWrite fn . synthdef_to_graphdef
+
 -- | Write 'Synthdef' to indicated directory.  The filename is the
 -- 'synthdefName' with the appropriate extension (@scsyndef@).
-synthdefWrite :: Synthdef -> FilePath -> IO ()
-synthdefWrite s dir =
-    let nm = dir </> synthdefName s <.> "scsyndef"
-    in L.writeFile nm (synthdefData s)
+synthdefWrite_dir :: FilePath -> Synthdef -> IO ()
+synthdefWrite_dir dir = Graphdef.graphdefWrite_dir dir . synthdef_to_graphdef
 
 -- | 'graph_stat_ln' of 'synth'.
 synthstat_ln :: UGen -> [String]

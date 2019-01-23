@@ -2,11 +2,14 @@
 module Sound.SC3.Server.Transport.Monad where
 
 import Control.Monad {- base -}
+import qualified Data.ByteString.Lazy as L {- bytestring -}
 import Data.List {- base -}
 import qualified Data.List.Split as Split {- split -}
 import Data.Maybe {- base -}
 import qualified Data.Tree as Tree {- containers -}
 import qualified Safe {- safe -}
+import System.Directory {- directory -}
+import System.FilePath {- filepath -}
 
 import Sound.OSC {- hosc -}
 
@@ -87,20 +90,27 @@ play_graphdef_msg (nid,act,gid,param) g =
     let nm = ascii_to_string (Graphdef.graphdef_name g)
     in s_new nm nid act gid param
 
--- | Send 'd_recv' and 's_new' messages to scsynth.
-playGraphdef :: DuplexOSC m => Play_Opt -> Graphdef.Graphdef -> m ()
-playGraphdef opt g = async_ (d_recv' g) >> sendMessage (play_graphdef_msg opt g)
+recv_or_load_graphdef :: Transport m => Graphdef.Graphdef -> m Message
+recv_or_load_graphdef g = do
+  tmp <- liftIO getTemporaryDirectory
+  let nm = ascii_to_string (Graphdef.graphdef_name g)
+      fn = tmp </> nm <.> "scsyndef"
+      by = Graphdef.encode_graphdef g
+      sz = L.length by
+  if sz < 65507
+    then async (d_recv_bytes by)
+    else liftIO (Graphdef.graphdefWrite fn g) >> async (d_load fn)
 
--- | Make 's_new' message to play 'Synthdef.Synthdef'.
-play_synthdef_msg :: Play_Opt -> Synthdef.Synthdef -> Message
-play_synthdef_msg (nid,act,gid,param) syn = s_new (Synthdef.synthdefName syn) nid act gid param
+-- | Send 'd_recv' and 's_new' messages to scsynth.
+playGraphdef :: Transport m => Play_Opt -> Graphdef.Graphdef -> m ()
+playGraphdef opt g = recv_or_load_graphdef g >> sendMessage (play_graphdef_msg opt g)
 
 -- | Send 'd_recv' and 's_new' messages to scsynth.
-playSynthdef :: DuplexOSC m => Play_Opt -> Synthdef.Synthdef -> m ()
-playSynthdef opt syn = async_ (d_recv syn) >> sendMessage (play_synthdef_msg opt syn)
+playSynthdef :: Transport m => Play_Opt -> Synthdef.Synthdef -> m ()
+playSynthdef opt = playGraphdef opt . Synthdef.synthdef_to_graphdef
 
 -- | Send an /anonymous/ instrument definition using 'playSynthdef'.
-playUGen :: DuplexOSC m => Play_Opt -> UGen -> m ()
+playUGen :: Transport m => Play_Opt -> UGen -> m ()
 playUGen loc =
     playSynthdef loc .
     Synthdef.synthdef "Anonymous" .

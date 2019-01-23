@@ -2,10 +2,11 @@
 module Sound.SC3.UGen.Type where
 
 import Data.Bits {- base -}
+import Data.Either {- base -}
 import qualified Data.Fixed as F {- base -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
-import Safe {- safe -}
+import qualified Safe {- safe -}
 import System.Random {- random -}
 
 import qualified Sound.SC3.Common.Math as Math
@@ -388,6 +389,17 @@ proxify u =
       Constant_U _ -> u
       _ -> error "proxify: illegal ugen"
 
+-- | Filters with DR inputs run at KR.  This is a little unfortunate,
+-- it'd be nicer if the rate in this circumstance could be given.
+mk_ugen_select_rate :: String -> [UGen] -> [Rate] -> Either Rate [Int] -> Rate
+mk_ugen_select_rate nm h rs r =
+  let r' = either id (maximum . map (rateOf . Safe.atNote ("mkUGen: " ++ nm) h)) r
+  in if isRight r && r' == DR && DR `notElem` rs
+     then if KR `elem` rs then KR else error "mkUGen: DR input to non-KR filter"
+     else if r' `elem` rs || r' == DR
+          then r'
+          else error ("mkUGen: rate restricted: " ++ show (r,r',rs,nm))
+
 -- | Construct proxied and multiple channel expanded UGen.
 --
 -- cf = constant function, rs = rate set, r = rate, nm = name, i =
@@ -396,17 +408,15 @@ mkUGen :: Maybe ([Sample] -> Sample) -> [Rate] -> Either Rate [Int] ->
           String -> [UGen] -> Maybe [UGen] -> Int -> Special -> UGenId -> UGen
 mkUGen cf rs r nm i i_mce o s z =
     let i' = maybe i ((i ++) . concatMap mceChannels) i_mce
-        f h = let r' = either id (maximum . map (rateOf . atNote ("mkUGen: " ++ nm) h)) r
+        f h = let r' = mk_ugen_select_rate nm h rs r
                   o' = replicate o r'
                   u = Primitive_U (Primitive r' nm h o' s z)
-              in if r' `elem` rs
-                 then case cf of
-                        Just cf' ->
-                            if all isConstant h
-                            then constant (cf' (mapMaybe u_constant h))
-                            else u
-                        Nothing -> u
-                 else error ("mkUGen: rate restricted: " ++ show (r,rs,nm))
+              in case cf of
+                   Just cf' ->
+                     if all isConstant h
+                     then constant (cf' (mapMaybe u_constant h))
+                     else u
+                   Nothing -> u
     in proxify (mceBuild f (map checkInput i'))
 
 -- * Operators

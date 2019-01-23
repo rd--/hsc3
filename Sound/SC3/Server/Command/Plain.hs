@@ -1,7 +1,7 @@
 -- | Functions from "Sound.SC3.Server.Command.Generic" specialised to 'Int' and 'Double'.
 module Sound.SC3.Server.Command.Plain where
 
-import Sound.OSC.Core (Datum,Message) {- hosc -}
+import Sound.OSC.Core (BLOB,Datum,Message) {- hosc -}
 
 import qualified Sound.SC3.Server.Command.Generic as G
 import qualified Sound.SC3.Server.Enum as E
@@ -122,10 +122,14 @@ c_setn = G.c_setn
 -- * Instrument definition commands (d_)
 
 -- | Install a bytecode instrument definition. (Asynchronous)
-d_recv' :: Graphdef -> Message
-d_recv' = G.d_recv'
+d_recv_bytes :: BLOB -> Message
+d_recv_bytes = G.d_recv_bytes
 
--- | Install a bytecode instrument definition. (Asynchronous)
+-- | 'Graphdef' encoding variant.
+d_recv_gr :: Graphdef -> Message
+d_recv_gr = G.d_recv_gr
+
+-- | 'Synthdef' encoding variant.
 d_recv :: Synthdef -> Message
 d_recv = G.d_recv
 

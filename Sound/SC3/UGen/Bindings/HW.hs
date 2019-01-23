@@ -34,10 +34,10 @@ ladspa :: Int -> Rate -> UGen -> [UGen] -> UGen
 ladspa nc rt k z = C.mkOsc rt "LADSPA" (constant nc : k : z) nc
 
 -- | Pack demand-rate FFT bin streams into an FFT chain.
-packFFT :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+packFFT :: UGen -> Int -> Int -> Int -> UGen -> UGen -> UGen
 packFFT b sz from to z mp =
     let n = constant (mceDegree_err mp)
-    in C.mkOscMCE KR "PackFFT" [b, sz, from, to, z, n] mp 1
+    in C.mkOscMCE KR "PackFFT" [b, constant sz, constant from, constant to, z, n] mp 1
 
 -- | Poll value of input UGen when triggered.
 poll :: UGen -> UGen -> UGen -> UGen -> UGen
@@ -62,5 +62,5 @@ sendReply i k n v = C.mkFilter "SendReply" ([i,k] ++ string_to_ugens n ++ v) 0
 
 -- | Unpack a single value (magnitude or phase) from an FFT chain
 unpack1FFT :: UGen -> UGen -> UGen -> UGen -> UGen
-unpack1FFT buf size index' which = C.mkOsc DR "Unpack1FFT" [buf, size, index', which] 1
+unpack1FFT buf size index_ which = C.mkOsc DR "Unpack1FFT" [buf, size, index_, which] 1
 

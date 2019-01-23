@@ -1,22 +1,24 @@
     Sound.SC3.UGen.Help.viewSC3Help "LocalBuf"
     Sound.SC3.UGen.DB.ugenSummary "LocalBuf"
 
-> import Sound.SC3
+> import Sound.SC3 {- hsc3 -}
 
-Allocate a buffer local to the synthesis graph.
+Allocate a buffer local to the synthesis graph, 1-channel, 2048
 
 > g_01 =
->     let n = whiteNoise 'α' AR
->         b = localBuf 'β' 2048 1
->         f = fft' b n
+>     let nc = 1
+>         nf = 2048
+>         buf = localBuf 'α' nc nf
+>         f = fft' buf (whiteNoise 'β' AR)
 >         c = pv_BrickWall f (sinOsc KR 0.1 0 * 0.75)
 >     in ifft' c * 0.1
 
 Variant with two local buffers
 
 > g_02 =
->     let n = uclone 'α' 2 (whiteNoise 'β' AR)
->         b = uclone 'γ' 2 (localBuf 'δ' 2048 1)
+>     let dup (p,q) f = mce2 (f p) (f q)
+>         n = dup ('α','β') (\z -> whiteNoise z AR)
+>         b = dup ('γ','δ') (\z -> localBuf z 1 2048)
 >         f = fft' b n
 >         c = pv_BrickWall f (sinOsc KR (mce2 0.1 0.11) 0 * 0.75)
 >     in ifft' c * 0.1
@@ -24,24 +26,26 @@ Variant with two local buffers
 Not clearing the buffer accesses old data, slowly overwrite data with noise
 
 > g_03 =
->     let b = localBuf 'α' 2048 2
+>     let dup (p,q) f = mce2 (f p) (f q)
+>         b = localBuf 'α' 2 2048
 >         nf = bufFrames KR b
 >         x = mouseX KR 1 2 Linear 0.2
 >         r = playBuf 2 AR b x 1 0 Loop DoNothing * 0.1
 >         wr p i = bufWr b (linLin p (-1) 1 0 nf) Loop i
->         n = uclone 'β' 2 (whiteNoise 'γ' AR)
+>         n = dup ('β','γ') (\z -> whiteNoise z AR)
 >         ph = lfNoise0 'δ' AR 530
 >     in mrg2 r (wr ph n)
 
 bufCombC needs no clearing, because the delay line is filled by the ugen
 
 > g_04 =
->     let d = uclone 'α' 2 (dust 'β' AR 1)
+>     let dup (p,q) f = mce2 (f p) (f q)
+>         d = dup ('α','β') (\z -> dust z AR 1)
 >         n = whiteNoise 'γ' AR
 >         z = decay d 0.3 * n
 >         l = xLine KR 0.0001 0.01 20 DoNothing
 >         sr = sampleRate
->         b = uclone 'δ' 2 (localBuf 'ε' sr 2)
+>         b = dup ('δ','ε') (\z -> localBuf z 2 sr)
 >     in bufCombC b z l 0.2
 
 asLocalBuf combines localBuf and setBuf
