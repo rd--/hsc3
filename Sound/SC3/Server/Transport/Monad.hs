@@ -49,6 +49,10 @@ maybe_async_at t m =
 sc3_default_udp :: IO UDP
 sc3_default_udp = openUDP "127.0.0.1" 57110
 
+-- | Maximum packet size, in bytes, that can be sent over UDP.
+sc3_udp_limit :: Num n => n
+sc3_udp_limit = 65507
+
 -- | Bracket @SC3@ communication, ie. 'withTransport' 'sc3_default_udp'.
 --
 -- > import Sound.SC3.Server.Command
@@ -90,6 +94,9 @@ play_graphdef_msg (nid,act,gid,param) g =
     let nm = ascii_to_string (Graphdef.graphdef_name g)
     in s_new nm nid act gid param
 
+-- | If the graph size is less than 'sc3_udp_limit' encode and send
+-- using 'd_recv_bytes', else write to temporary directory and read
+-- using 'd_load'.
 recv_or_load_graphdef :: Transport m => Graphdef.Graphdef -> m Message
 recv_or_load_graphdef g = do
   tmp <- liftIO getTemporaryDirectory
@@ -97,7 +104,7 @@ recv_or_load_graphdef g = do
       fn = tmp </> nm <.> "scsyndef"
       by = Graphdef.encode_graphdef g
       sz = L.length by
-  if sz < 65507
+  if sz < sc3_udp_limit
     then async (d_recv_bytes by)
     else liftIO (Graphdef.graphdefWrite fn g) >> async (d_load fn)
 
