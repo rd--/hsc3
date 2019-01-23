@@ -24,6 +24,12 @@ import qualified Sound.SC3.Server.Synthdef as Synthdef
 import Sound.SC3.UGen.Bindings.Composite (wrapOut)
 import Sound.SC3.UGen.Type (UGen)
 
+{-
+import qualified Control.Monad.IO.Class as M {- transformers -}
+import qualified Control.Monad.Trans.Reader as R {- transformers -}
+import qualified Sound.SC3.Server.Transport.FD as FD
+-}
+
 -- * hosc variants
 
 -- | 'sendMessage' and 'waitReply' for a @\/done@ reply.
@@ -267,22 +273,22 @@ c_getn1_data s = do
   liftM f (waitDatum "/c_setn")
 
 -- | Apply /f/ to result of 'n_query'.
-n_query1_unpack_f :: Transport m => (Message -> t) -> Node_Id -> m t
+n_query1_unpack_f :: DuplexOSC m => (Message -> t) -> Node_Id -> m t
 n_query1_unpack_f f n = do
   sendMessage (n_query [n])
   r <- waitReply "/n_info"
   return (f r)
 
 -- | Variant of 'n_query' that waits for and unpacks the reply.
-n_query1_unpack :: Transport m => Node_Id -> m (Maybe (Int,Int,Int,Int,Int,Maybe (Int,Int)))
+n_query1_unpack :: DuplexOSC m => Node_Id -> m (Maybe (Int,Int,Int,Int,Int,Maybe (Int,Int)))
 n_query1_unpack = n_query1_unpack_f unpack_n_info
 
 -- | Variant of 'n_query1_unpack' that returns plain (un-lifted) result.
-n_query1_unpack_plain :: Transport m => Node_Id -> m [Int]
+n_query1_unpack_plain :: DuplexOSC m => Node_Id -> m [Int]
 n_query1_unpack_plain = n_query1_unpack_f unpack_n_info_plain
 
 -- | Variant of 'g_queryTree' that waits for and unpacks the reply.
-g_queryTree1_unpack :: Transport m => Group_Id -> m Status.Query_Node
+g_queryTree1_unpack :: DuplexOSC m => Group_Id -> m Status.Query_Node
 g_queryTree1_unpack n = do
   sendMessage (g_queryTree [(n,True)])
   r <- waitReply "/g_queryTree.reply"
@@ -319,7 +325,7 @@ serverStatusData = do
 -- | Collect server node tree information.
 --
 -- > withSC3 serverTree >>= mapM_ putStrLn
-serverTree :: Transport m => m [String]
+serverTree :: DuplexOSC m => m [String]
 serverTree = do
   qt <- g_queryTree1_unpack 0
   let tr = Status.queryTree_rt qt
