@@ -86,6 +86,7 @@ Library
                    Sound.SC3.UGen.Analysis
                    Sound.SC3.UGen.Bindings
                    Sound.SC3.UGen.Bindings.Composite
+                   Sound.SC3.UGen.Bindings.Composite.External
                    Sound.SC3.UGen.Bindings.DB
                    Sound.SC3.UGen.Bindings.DB.External
                    Sound.SC3.UGen.Bindings.HW

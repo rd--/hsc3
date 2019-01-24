@@ -1,8 +1,8 @@
     Sound.SC3.UGen.Help.viewSC3Help "DWGPluckedStiff"
     Sound.SC3.UGen.DB.ugenSummary "DWGPluckedStiff"
 
-> import Sound.SC3
-> import qualified Sound.SC3.UGen.Bindings.DB.External as E {- hsc3 -}
+> import Sound.SC3 {- hsc3 -}
+> import qualified Sound.SC3.UGen.Bindings.DB.External as X {- hsc3 -}
 
 self deleting
 
@@ -17,7 +17,7 @@ self deleting
 >             in amp * lfClipNoise 'α' AR 2000 * envGen AR gate_ 1 0 1 DoNothing e
 >       release = 0.1
 >       fB = 2.0
->       ps = E.dWGPluckedStiff AR freq amp gate_ pos c1 c3 inp release fB
+>       ps = X.dWGPluckedStiff AR freq amp gate_ pos c1 c3 inp release fB
 >       pan = 0
 >       z = detectSilence ps 0.001 0.1 RemoveSynth
 >   in mrg2 (pan2 ps pan 0.1) z
@@ -41,6 +41,6 @@ re-sounding
 >             in amp * lfClipNoise 'κ' AR 2000 * env -- pluck signal
 >       release = tRand 'λ' 0.05 0.15 t -- release time (seconds, def = 0.1)
 >       fB = tRand 'μ' 1.0 4.0 t -- inharmonicity factor (def = 2.0)
->       ps = E.dWGPluckedStiff AR freq amp gate_ pos c1 c3 inp release fB
+>       ps = X.dWGPluckedStiff AR freq amp gate_ pos c1 c3 inp release fB
 >       pan = tRand 'ο' (-1) 1 t
 >   in pan2 ps pan 0.1

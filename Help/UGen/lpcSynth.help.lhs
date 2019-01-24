@@ -3,19 +3,19 @@
 
 > import Sound.OSC {- hosc -}
 > import Sound.SC3 {- hsc3 -}
-> import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
+> import qualified Sound.SC3.UGen.Bindings.DB.External as X {- hsc3 -}
 
 > import qualified Sound.SC3.Data.LPC as LPC {- hsc3-data -}
 
 > lpc_instr b n lpc =
->     let x = mouseX KR 0.05 1.5 Linear 0.2
+>     let x = mouseX KR 0.01 1.5 Linear 0.2
 >         y = mouseY KR 0.25 2.0 Linear 0.2
 >         f = x / constant (LPC.lpcAnalysisDuration (LPC.lpcHeader lpc))
 >         ptr = lfSaw AR f 1 * 0.5 + 0.5
->         [cps, rms, err] = mceChannels (lpcVals AR b ptr)
+>         [cps, rms, err] = mceChannels (X.lpcVals AR b ptr)
 >         nh = floorE (22000 / cps)
 >         voc = blip AR (cps * y) nh * (1 - err)
->         s = lpcSynth b (voc + (n * err * 20)) ptr
+>         s = X.lpcSynth b (voc + (n * err * 20)) ptr
 >     in s * 1e-5 * rms
 
 > fn_01 = "/home/rohan/sw/hsc3-data/data/lpc/fate.lpc"

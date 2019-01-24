@@ -2,7 +2,7 @@
     Sound.SC3.UGen.DB.ugenSummary "DWGPlucked2"
 
 > import Sound.SC3
-> import qualified Sound.SC3.UGen.Bindings.DB.External as E {- hsc3 -}
+> import qualified Sound.SC3.UGen.Bindings.DB.External as X {- hsc3 -}
 
 self deleting
 
@@ -13,7 +13,7 @@ self deleting
 >       c3 = 20
 >       inp = let e = envelope [0,1,1,0] [0.001,0.006,0.0005] (map EnvNum [5,-5,-8])
 >             in amp * lfClipNoise 'α' AR 2000 * envGen AR gate_ 1 0 1 DoNothing e
->       ps = E.dWGPlucked2 AR freq amp gate_ 0.1 1 c3 inp 0.1 1.008 0.55 0.01
+>       ps = X.dWGPlucked2 AR freq amp gate_ 0.1 1 c3 inp 0.1 1.008 0.55 0.01
 >       pan = 0
 >       z = detectSilence ps 0.001 0.1 RemoveSynth
 >   in mrg2 (pan2 ps pan 0.1) z
@@ -39,7 +39,7 @@ re-sounding
 >       mistune = tRand 'μ' 0.992 1.008 t -- factor for detuning second string (def = 1.008)
 >       mp = tRand 'ν' 0.35 0.65 t -- exitation mixer (def = 0.55)
 >       gc = tRand 'ξ' 0.001 0.020 t -- coupling string factor (def = 0.01)
->       ps = E.dWGPlucked2 AR freq amp gate_ pos c1 c3 inp release mistune mp gc
+>       ps = X.dWGPlucked2 AR freq amp gate_ pos c1 c3 inp release mistune mp gc
 >       pan = tRand 'ο' (-1) 1 t
 >   in pan2 ps pan 0.1
 

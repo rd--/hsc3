@@ -11,11 +11,10 @@ import Sound.SC3.Common.Envelope
 import Sound.SC3.Common.Math
 import Sound.SC3.Common.Math.Filter.BEQ
 import Sound.SC3.Common.Math.Operator
-
 import Sound.SC3.Common.Rate
 import Sound.SC3.Common.UId
+
 import Sound.SC3.UGen.Bindings.DB
-import qualified Sound.SC3.UGen.Bindings.DB.External as External
 import Sound.SC3.UGen.Bindings.HW
 import Sound.SC3.UGen.Bindings.Monad
 import Sound.SC3.UGen.Type
@@ -512,16 +511,3 @@ osc1 :: Rate -> UGen -> UGen -> DoneAction UGen -> UGen
 osc1 rt buf dur doneAction =
     let ph = line rt 0 (bufFrames IR buf - 1) dur doneAction
     in bufRd 1 rt buf ph NoLoop LinearInterpolation
-
--- * External
-
--- | FM7 variant where input matrices are not in MCE form.
-fm7_mx :: [[UGen]] -> [[UGen]] -> UGen
-fm7_mx ctlMatrix modMatrix = External.fm7 AR (mce (concat ctlMatrix)) (mce (concat modMatrix))
-
--- | pulse signal as difference of two 'sawDPW' signals.
-pulseDPW :: Rate -> UGen -> UGen -> UGen
-pulseDPW rt freq width =
-  let o1 = External.sawDPW rt freq 0
-      o2 = External.sawDPW rt freq (wrap_hs (-1,1) (width+width))
-  in o1 - o2

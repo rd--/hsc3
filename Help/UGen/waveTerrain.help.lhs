@@ -2,7 +2,7 @@
     > Sound.SC3.UGen.DB.ugenSummary "WaveTerrain"
 
 > import Sound.SC3 {- hsc3 -}
-> import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
+> import qualified Sound.SC3.UGen.Bindings.DB.External as X {- hsc3 -}
 
 Terrain function, ie. (x,y) -> z
 
@@ -48,7 +48,7 @@ Hear terrain
 >         x = abs (sinOsc AR x' 0) + lfNoise2 'α' AR 2
 >         y = abs (sinOsc AR y' (pi / 2))
 >         b = 0
->     in waveTerrain AR b x y 100 50
+>     in X.waveTerrain AR b x y 100 50
 
 Alternate terrain function.
 
