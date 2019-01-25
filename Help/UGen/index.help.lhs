@@ -7,7 +7,7 @@ Index buffer for frequency values
 
 > g_01 =
 >   let b = asLocalBuf 'α' [50,100,200,400,800,1600]
->       f = index b (lfSaw KR 2 3 * 4)
+>       f = index b (range 0 6 (lfSaw KR 2 0))
 >   in sinOsc AR (mce [f,f * 9]) 0 * 0.1
 
 > g_02 =
