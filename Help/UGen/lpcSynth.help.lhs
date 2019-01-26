@@ -14,10 +14,11 @@
 >       ptr = lfSaw AR f 1 * 0.5 + 0.5
 >       [cps, rms, err] = mceChannels (X.lpcVals AR buf ptr)
 >       nh = floorE (22000 / cps)
->       voc = blip AR (cps * y) nh -- * (1 - err)
+>       voc = blip AR (cps * y) nh * (1 - err)
 >   in X.lpcSynth buf (voc + (noise * err)) ptr * rms
 
 > fn_01 = "/home/rohan/sw/hsc3-data/data/lpc/fate.lpc"
+> fn_02 = "/home/rohan/uc/invisible/clarity/lpc/z.01.lpc"
 
 > au_01 lpc noise = do
 >   let d = map realToFrac (LPC.lpcSC3 lpc)
@@ -26,5 +27,6 @@
 >   let s = lpc_instr 10 noise lpc
 >   play (out 0 s)
 
-    lpc <- LPC.lpcRead fn_01
-    withSC3 (au_01 lpc (pinkNoise 'α' AR * 2.5))
+    lpc <- LPC.lpc_read_binary LPC.BigEndian fn_01
+    lpc <- LPC.lpc_read_text fn_02
+    withSC3 (au_01 lpc (whiteNoise 'α' AR * 10))

@@ -12,7 +12,7 @@
 
 load ATS file at scsynth
 
-    > ATS.ats_load_sc3 0 ats_fn_0
+    > ATS.ats_load_sc3 0 ats_fn_0 -- ats_fn_1
     > withSC3 (b_query1_unpack 0)
 
 read ATS header
