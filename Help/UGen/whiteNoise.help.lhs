@@ -3,7 +3,7 @@
 
 > import Sound.SC3 {- hsc3 -}
 
-> g_00 = whiteNoise 'α' AR * 0.05
+> g_00 = let n = whiteNoise 'α' AR * 0.05 in mce2 n n
 
 > g_01_m = fmap (* 0.05) (whiteNoiseM AR)
 
