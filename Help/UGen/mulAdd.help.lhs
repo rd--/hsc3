@@ -21,3 +21,5 @@ sclang re-orders these if required.
     {MulAdd(0.1,SinOsc.ar(440,0),0.05)}.draw
 
 > g_05 = 0.05 + 0.1 * sinOsc AR 440 0
+
+    {0.05 + (0.1 * SinOsc.ar(440,0))}.draw
