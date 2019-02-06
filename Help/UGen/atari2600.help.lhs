@@ -2,34 +2,35 @@
     Sound.SC3.UGen.DB.ugenSummary "Atari2600"
 
 > import Sound.SC3 {- hsc3 -}
+> import qualified Sound.SC3.UGen.Bindings.HW.External.F0 as X {- hsc3 -}
+
 > import Sound.SC3.Lang.Pattern {- hsc3-lang -}
-> import Sound.SC3.UGen.Bindings.HW.External.F0 {- hsc3 -}
 
-> gr_00 = atari2600 1 2 3 4 5 5 1
+> gr_00 = X.atari2600 1 2 3 4 5 5 1
 
-> gr_01 = atari2600 2 3 10 10 5 5 1
+> gr_01 = X.atari2600 2 3 10 10 5 5 1
 
 > gr_02 =
 >     let x = mouseX KR 0 15 Linear 0.1
 >         y = mouseY KR 0 15 Linear 0.1
->     in atari2600 x y 10 10 5 5 1
+>     in X.atari2600 x y 10 10 5 5 1
 
 > gr_03 =
 >     let x = mouseX KR 0 31 Linear 0.1
 >         y = mouseY KR 0 31 Linear 0.1
->     in atari2600 2 3 x y 5 5 1
+>     in X.atari2600 2 3 x y 5 5 1
 
 > gr_04 =
 >     let x = mouseX KR 0 15 Linear 0.1
 >         y = mouseY KR 0 15 Linear 0.1
->     in atari2600 2 3 10 10 x y 1
+>     in X.atari2600 2 3 10 10 x y 1
 
 > gr_05 =
 >     let x = mouseX KR 0 15 Linear 0.1
 >         o1 = sinOsc KR 0.35 0 * 7.5 + 7.5
 >         y = mouseY KR 0 31 Linear 0.1
 >         o2 = sinOsc KR 0.3 0 * 5.5 + 5.5
->     in atari2600 x o1 10 y o2 5 1
+>     in X.atari2600 x o1 10 y o2 5 1
 
 > ati_syn =
 >     let gate' = control KR "gate" 1
@@ -42,7 +43,7 @@
 >         pan = control KR "pan" 0
 >         e = envASR 0.01 amp 0.05 (EnvNum (-4))
 >         eg = envGen KR gate' 1 0 1 RemoveSynth e
->         z = atari2600 tone0 tone1 freq0 freq1 15 15 rate
+>         z = X.atari2600 tone0 tone1 freq0 freq1 15 15 rate
 >         o = out 0 (pan2 (z * eg) pan 1)
 >     in synthdef "atari2600" o
 
