@@ -2269,7 +2269,7 @@ maxLocalBufs count = mkUGen Nothing [IR] (Left IR) "MaxLocalBufs" [count] Nothin
 --
 --  MulAdd [IR,KR,AR] in=0.0 mul=0.0 add=0.0;    FILTER: TRUE
 mulAdd :: UGen -> UGen -> UGen -> UGen
-mulAdd in_ mul add = mkUGen Nothing [IR,KR,AR] (Right [0]) "MulAdd" [in_,mul,add] Nothing 1 (Special 0) NoId
+mulAdd in_ mul add = mkUGen Nothing [IR,KR,AR] (Right [0,1,2]) "MulAdd" [in_,mul,add] Nothing 1 (Special 0) NoId
 
 -- | Set local buffer
 --

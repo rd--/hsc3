@@ -145,6 +145,8 @@ nrt_proc_plain opt sc = do
   nrt_exec_plain opt
 
 -- | Variant for no input case.
+--
+-- (osc-file-name,audio-file-name,number-of-channels,sample-rate,sample-format,param)
 type NRT_Render_Plain = (FilePath,FilePath,Int,Int,SampleFormat,[String])
 
 {- | Add ("-",0) as input parameters and run 'nrt_proc_plain'.
