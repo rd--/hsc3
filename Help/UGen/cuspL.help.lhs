@@ -2,11 +2,16 @@
     Sound.SC3.UGen.DB.ugenSummary "CuspL"
 
 > import Sound.SC3 {- hsc3 -}
+> import Sound.SC3.Common.Math.Noise {- hsc3 -}
+
+Default values
+
+> g_00 = cuspL AR 22050 1.0 1.9 0.0 * 0.1
 
 Vary frequency
 
 > g_01 =
->     let x = mouseX KR 20 sampleRate Linear 0.1
+>     let x = mouseX KR 20 (sampleRate / 2) Linear 0.1
 >     in cuspL AR x 1.0 1.99 0 * 0.3
 
 Mouse-controlled parameters.
@@ -26,8 +31,8 @@ As frequency control.
 
 Haskell implementation of equation.
 
-> cuspl_hs a b = iterate (\x -> a - (b * sqrt (abs x))) 0
+> cusp_hs a b = iterate (cusp_f a b) 0
 
     import Sound.SC3.Plot {- hsc3-plot -}
-    plotTable1 (take 600 (cuspl_hs 1.0 1.9))
+    plotTable1 (take 600 (cusp_hs 1.0 1.9))
     plot_ugen_nrt (600,1) 1.0 (cuspL AR 600 1.0 1.9 0)

@@ -1,7 +1,8 @@
     Sound.SC3.UGen.Help.viewSC3Help "LatoocarfianC"
     Sound.SC3.UGen.DB.ugenSummary "LatoocarfianC"
 
-> import Sound.SC3
+> import Sound.SC3 {- hsc3 -}
+> import Sound.SC3.Common.Math.Noise {- hsc3 -}
 
 SC3 default initial parameters.
 
@@ -19,3 +20,11 @@ Randomly modulate all parameters.
 >       c = n2 * 0.5 + 1.5
 >       d = n3 * 0.5 + 1.5
 >   in latoocarfianC AR f a b c d 0.5 0.5 * 0.2
+
+Haskell implementation of equation.
+
+> latoocarfian_hs a b c d = map fst (iterate (latoocarfian_f a b c d) (0.5,0.5))
+
+    import Sound.SC3.Plot {- hsc3-plot -}
+    plotTable1 (take 600 (latoocarfian_hs 1.0 3.0 0.5 0.5))
+    plot_ugen_nrt (600,1) 1.0 (latoocarfianC AR 600 1.0 3.0 0.5 0.5 0.5 0.5)

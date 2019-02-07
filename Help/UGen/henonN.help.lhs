@@ -2,6 +2,7 @@
     > Sound.SC3.UGen.DB.ugenSummary "HenonN"
 
 > import Sound.SC3 {- hsc3 -}
+> import Sound.SC3.Common.Math.Noise {- hsc3 -}
 
 With SC3 default initial parameters.
 
@@ -38,3 +39,11 @@ Drawing
     > plot_ugen1 0.1 (henonN AR 2500 1.4 0.3 0 0 * 0.1)
 
 ![](sw/hsc3/Help/SVG/henonN.0.svg)
+
+In haskell:
+
+> henon_hs a b = map snd (iterate (henon_f a b) (0.0,0.0))
+
+    import Sound.SC3.Plot {- hsc3-plot -}
+    plotTable1 (take 600 (henon_hs 1.4 0.3))
+    plot_ugen_nrt (600,1) 1.0 (henonN AR 600 1.4 0.3 0 0)

@@ -2,10 +2,15 @@
     > Sound.SC3.UGen.DB.ugenSummary "FBSineC"
 
 > import Sound.SC3 {- hsc3 -}
+> import Sound.SC3.Common.Math.Noise {- hsc3 -}
 
 SC3 default values.
 
-> g_01 = fbSineC AR (sampleRate / 4) 1 0.1 1.1 0.5 0.1 0.1 * 0.2
+> g_00 = fbSineC AR (sampleRate / 2) 1 0.1 1.1 0.5 0.1 0.1 * 0.2
+
+FB generating noise
+
+> g_01 = fbSineC AR (sampleRate / 2) 1 4 1.1 0.5 0.1 0.1 * 0.2
 
 Increase feedback
 
@@ -30,3 +35,11 @@ Randomly modulate parameters
 >         n3 = n 'δ' * 0.05 + 1.05
 >         n4 = n 'ε' * 0.3 + 0.3
 >     in fbSineC AR n0 n1 n2 n3 n4 0.1 0.1 * 0.2
+
+Haskell implementation of equation.
+
+> fbSineC_hs im fb a c = map fst (iterate (fbSine_f im fb a c) (0.1,0.1))
+
+    import Sound.SC3.Plot {- hsc3-plot -}
+    plotTable1 (take 600 (fbSineC_hs 1.0 4.0 1.1 0.5))
+    plot_ugen_nrt (600,1) 1.0 (fbSineC AR 600 1.0 4.0 1.1 0.5 0.1 0.1)

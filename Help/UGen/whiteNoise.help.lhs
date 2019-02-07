@@ -67,4 +67,3 @@ Speaker balance
 >     in pan2 n l 0.1
 
 > g_07 = hpz1 (whiteNoise 'α' AR * 0.01)
-
