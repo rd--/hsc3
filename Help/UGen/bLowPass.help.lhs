@@ -25,3 +25,6 @@ calculate coefficients and use sos (see also bLowPass4)
 >         rq = mouseY KR 0.1 1 Linear 0.2
 >         (a0, a1, a2, b1, b2) = bLowPassCoef sampleRate f rq
 >     in sos i a0 a1 a2 b1 b2
+
+> g_04 = bLowPass (whiteNoise 'α' AR) (xLine KR 24000 20 10 DoNothing) 1
+> g_05 = bLowPass (whiteNoise 'α' AR) 1200 (xLine KR 0.5 100 10 DoNothing)

@@ -5,9 +5,11 @@ See lfdNoise0
 
 Drawings
 
-    > import Sound.SC3 {- hsc3 -}
-    > import Sound.SC3.Plot {- hsc3-plot -}
-    > plot_ugen1 0.1 (lfdNoise3 'α' AR (xLine AR 1000 100 0.1 DoNothing))
+> import Sound.SC3 {- hsc3 -}
+
+> g_01 = lfdNoise3 'α' AR (xLine AR 1000 100 0.1 DoNothing)
+
+    > Sound.SC3.Plot.plot_ugen1 0.1 g_01
 
 ![](sw/hsc3/Help/SVG/lfdNoise3.0.svg)
 

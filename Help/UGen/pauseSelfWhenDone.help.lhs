@@ -12,7 +12,9 @@ using PauseSynth done action
 
 Run paused node (assuming no intermediate node is created).
 
-    > withSC3 (send (n_run [(-1, True)]))
+    > withSC3 (Sound.OSC.sendMessage (n_run [(-1, True)]))
+
+using pauseSelfWhenDone UGen
 
 > g_02 =
 >     let x = mouseX KR (-1) 1 Linear 0.1
@@ -20,4 +22,4 @@ Run paused node (assuming no intermediate node is created).
 >         o = sinOsc AR 440 0 * e
 >     in mrg [o,pauseSelfWhenDone e]
 
-    > withSC3 (send (n_run [(-1, True)]))
+    > withSC3 (Sound.OSC.sendMessage (n_run [(-1, True)]))
