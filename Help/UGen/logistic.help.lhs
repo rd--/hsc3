@@ -5,7 +5,9 @@
 
 SC3 default parameters
 
-> g_01 = logistic AR 3 1000 0.5
+> g_00 = logistic AR 3 1000 0.5
+
+> g_01 = logistic AR 3.95 sampleRate 0.5
 
 Onset of chaos
 

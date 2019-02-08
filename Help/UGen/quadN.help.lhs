@@ -3,7 +3,7 @@
 
 > import Sound.SC3 {- hsc3 -}
 
-> g_01 = quadC AR (sampleRate / 4) 1 (-1) (-0.75) 0 * 0.2
+> g_01 = quadC AR (sampleRate / 2) 1 (-1) (-0.75) 0 * 0.2
 
 > g_02 =
 >   let x = mouseX KR 3.5441 4 Linear 0.1

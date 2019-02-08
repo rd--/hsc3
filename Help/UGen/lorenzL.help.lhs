@@ -3,6 +3,10 @@
 
 > import Sound.SC3 {- hsc3 -}
 
+Default parameters
+
+> g_00 = lorenzL AR (sampleRate / 2) 10 28 2.667 0.05 0.1 0 0 * 0.2
+
 Vary frequency
 
 > g_01 =
