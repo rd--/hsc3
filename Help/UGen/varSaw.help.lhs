@@ -45,7 +45,7 @@ http://sc-users.bham.ac.narkive.com/sj4Tw3ub/sync-osc#post6
 
     > import Sound.OSC {- hosc -}
     > set_factor n = withSC3 (sendMessage (n_set1 (-1) "factor" n))
-    > set_factor 0.125 {- 0.5 1.5 23.0 0.125 1.3 -}
+    > set_factor 0.125 {- 0.125 0.5 1.3 1.5 23.0 -}
 
 slow indeterminate modulation of width, <http://sccode.org/1-5as>
 

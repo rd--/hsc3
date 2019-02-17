@@ -2,7 +2,7 @@
     Sound.SC3.UGen.DB.ugenSummary "LorenzTrig"
 
 > import Sound.SC3 {- hsc3 -}
-> import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
+> import qualified Sound.SC3.UGen.Bindings.DB.External as X {- hsc3 -}
 
 > f_01 minfreq maxfreq s b =
 >   let r = 28
@@ -10,7 +10,7 @@
 >       x0 = 0.090879182417163
 >       y0 = 2.97077458055
 >       z0 = 24.282041054363
->   in lorenzTrig AR minfreq maxfreq s r b h x0 y0 z0
+>   in X.lorenzTrig AR minfreq maxfreq s r b h x0 y0 z0
 
 > f_02 = f_01 11025 44100
 

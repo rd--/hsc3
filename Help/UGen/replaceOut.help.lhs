@@ -8,21 +8,21 @@
 
 Send signal to a bus, overwrite existing signal.
 
-> g_02 =
->     let a = out 0 (sinOsc AR (mce [330, 331]) 0 * 0.1)
->         b = replaceOut 0 (sinOsc AR (mce [880, 881]) 0 * 0.1)
->         c = out 0 (sinOsc AR (mce [120, 121]) 0 * 0.1)
+> f_02 a_out b_out c_out =
+>     let a = a_out 0 (sinOsc AR (mce [330, 331]) 0 * 0.1)
+>         b = b_out 0 (sinOsc AR (mce [880, 881]) 0 * 0.1)
+>         c = c_out 0 (sinOsc AR (mce [120, 121]) 0 * 0.1)
 >     in mrg [a, b, c]
 
-Compare to
+The MRG nodes are ordered right to left, so below b replaces c and a is summed
 
-> g_03 =
->     let a = out 0 (sinOsc AR (mce [330, 331]) 0 * 0.1)
->         b = out 0 (sinOsc AR (mce [880, 881]) 0 * 0.1)
->         c = out 0 (sinOsc AR (mce [120, 121]) 0 * 0.1)
->     in mrg [a,b,c]
+> g_02 = f_02 out replaceOut out
 
-- a writes noise to 24
+Compare to, where c is also heard
+
+> g_03 = f_02 out out out
+
+- a writes noise to bus 24
 - b reads 24 and replaces with filtered variant
 - c reads 24 and writes to 0
 

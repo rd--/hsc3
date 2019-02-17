@@ -17,3 +17,8 @@ Here used as a sequencer:
 >         f = select (lfSaw KR 0.5 0 * c + c) a
 >     in saw AR f * 0.2
 
+i-rate...
+
+> g_03 =
+>     let a = mce [rand 'α' 110 220,rand 'β' 220 440,rand 'γ' 440 880]
+>     in sinOsc AR (select (rand 'δ' 0 3) a) 0 * 0.1

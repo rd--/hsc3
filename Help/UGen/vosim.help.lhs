@@ -2,16 +2,16 @@
     > Sound.SC3.UGen.DB.ugenSummary "VOSIM"
 
 > import Sound.SC3 {- hsc3 -}
-> import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
+> import qualified Sound.SC3.UGen.Bindings.DB.External as X {- hsc3 -}
 
-> gr_00 =
+> g_00 =
 >     let trg = impulse AR 100 0
 >         frq = mouseX KR 440 880 Exponential 0.2
 >         n_cycles = 3
 >         dcy = 0.1
->     in vosim AR trg frq n_cycles dcy * 0.25
+>     in X.vosim AR trg frq n_cycles dcy * 0.25
 
-> gr_01 =
+> g_01 =
 >     let p = tRand 'α' 0 1 (impulse AR 6 0)
 >         t = impulse AR (9 * ( 1 + ( p >** 0.95))) 0
 >         x = mouseX KR 0.25 2 Linear 0.2
@@ -27,5 +27,5 @@
 >         l = tR 'ζ' [-1] [1] t
 >         xn = mk_n 'η'
 >         yn = mk_n 'θ'
->         v = vosim AR t (f * x * xn) n (d * y * yn) * a
+>         v = X.vosim AR t (f * x * xn) n (d * y * yn) * a
 >     in pan2 (mix v) l 1

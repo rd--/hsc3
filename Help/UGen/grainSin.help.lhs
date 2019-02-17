@@ -2,7 +2,7 @@
     > Sound.SC3.UGen.DB.ugenSummary "GrainSin"
 
 > import Sound.SC3 {- hsc3 -}
->
+
 > g_01 =
 >     let n = whiteNoise 'α' KR
 >         x = mouseX KR (-0.5) 0.5 Linear 0.1

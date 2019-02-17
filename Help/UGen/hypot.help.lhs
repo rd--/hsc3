@@ -15,11 +15,11 @@ from the listener.  The speed of sound is 344 meters/sec.
 >     let x = 10
 >         y = lfSaw KR (1 / 6) 0 * 100
 >         d = hypot x y
+>         a = 10 / (squared d)
 >         v = slope d
 >         r = (344 - v) / 344
->         a = 10 / (squared d)
 >     in fSinOsc AR (1000 * r) 0 * a
->
+
 > g_03 =
 >     let x = 10
 >         y = lfSaw KR (1 / 6) 0 * 100

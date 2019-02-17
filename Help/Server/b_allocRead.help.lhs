@@ -5,9 +5,10 @@
 
 Read a large audio file into a buffer.
 
-> fn = "/home/rohan/data/audio/xenakis/jonchaies.wav"
+> f_00 = "/home/rohan/data/audio/xenakis/jonchaies.wav"
+> m_00 = b_allocRead 0 f_00 0 0
 
-    withSC3 (async (b_allocRead 0 fn 0 0))
+    withSC3 (async m_00)
 
 Audio data is loaded in IEEE 32-bit form, so in-memory storage can be
 greater than on-disk storage.
@@ -25,20 +26,20 @@ $
 
 Query buffer.
 
-> q0 :: Connection UDP ()
-> q0 = do
->      sendMessage (b_query [0])
->      r <- waitReply "/b_info"
->      liftIO (print r)
+> q_00 :: Connection UDP ()
+> q_00 = do
+>   sendMessage (b_query [0])
+>   r <- waitReply "/b_info"
+>   liftIO (print r)
 
-    withSC3 q0
+    withSC3 q_00
 
 Play buffer.
 
-> g0 =
->     let n = 257
->         s = bufRateScale KR n
->     in playBuf 1 AR n s 1 0 NoLoop RemoveSynth
+> g_00 =
+>   let bufnum = 257
+>       s = bufRateScale KR bufnum
+>   in playBuf 1 AR bufnum s 1 0 NoLoop RemoveSynth
 
 Re-read file into buffer with the same identifier.  The existing
 buffer is freed but not before further memory is allocated,

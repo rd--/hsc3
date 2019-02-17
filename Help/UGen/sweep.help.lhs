@@ -68,6 +68,6 @@ continues past end point if not re-triggered.
 >       sw = sweep tr rt + st
 >   in sinOsc AR sw 0 * 0.2
 
-    > import Sound.OSC
+    > import Sound.OSC {- hosc -}
     > withSC3 (sendMessage (n_set (-1) [("st",660),("en",550),("tm",4),("tr",1)]))
     > withSC3 (sendMessage (n_set (-1) [("st",110),("en",990),("tm",1),("tr",1)]))

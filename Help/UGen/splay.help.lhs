@@ -33,23 +33,24 @@ n_set control
 
 full stereo
 
-    > withSC3 (send (n_set (-1) [("spread",1),("center",0)]))
+    > import Sound.OSC {- hosc -}
+    > withSC3 (sendMessage (n_set (-1) [("spread",1),("center",0)]))
 
 less wide
 
-    > withSC3 (send (n_set (-1) [("spread",0.5),("center",0)]))
+    > withSC3 (sendMessage (n_set (-1) [("spread",0.5),("center",0)]))
 
 mono center
 
-    > withSC3 (send (n_set (-1) [("spread",0),("center",0)]))
+    > withSC3 (sendMessage (n_set (-1) [("spread",0),("center",0)]))
 
 from center to right
 
-    > withSC3 (send (n_set (-1) [("spread",0.5),("center",0.5)]))
+    > withSC3 (sendMessage (n_set (-1) [("spread",0.5),("center",0.5)]))
 
 all left
 
-    > withSC3 (send (n_set (-1) [("spread",0),("center",-1)]))
+    > withSC3 (sendMessage (n_set (-1) [("spread",0),("center",-1)]))
 
 single channel input
 

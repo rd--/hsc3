@@ -3,7 +3,7 @@
 
 pmOsc is a composite of sinOsc, ie. sinOsc r cf (sinOsc r mf mp * pm)
 
-> import Sound.SC3
+> import Sound.SC3 {- hsc3 -}
 
 Random parameters, linear modulation index motion over n seconds
 

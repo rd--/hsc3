@@ -2,14 +2,14 @@
     Sound.SC3.UGen.DB.ugenSummary "LADSPA"
 
 > import Sound.SC3 {- hsc3 -}
-> import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
+> import qualified Sound.SC3.UGen.Bindings.HW.External as X {- hsc3 -}
 
 Note: debian sc3-plugins doesn't build ladspalist, to build type:
 
     cd opt/src/sc3-plugins/source/LadspaUGen
     gcc -ldl search.c ladspalist.c -o ladspalist
 
-CAPS = http://quitte.de/dsp/caps.html, http://packages.debian.org/stretch/caps
+CAPS = http://quitte.de/dsp/caps.html, http://packages.debian.org/stable/caps
 
     # 1767 C* ChorusI - Mono chorus/flanger
     > k: t (ms) (2.5 to 40)
@@ -27,7 +27,7 @@ CAPS = http://quitte.de/dsp/caps.html, http://packages.debian.org/stretch/caps
 >       y = mouseY KR 0 1 Linear 0.2
 >       n1 = range 2.5 40 (lfNoise2 'α' KR 0.2)
 >       n2 = range 0.5 10 (lfNoise2 'β' KR 0.2)
->   in ladspa 1 AR 1767 [n1,n2,0.5,0.5,x,y,s]
+>   in X.ladspa 1 AR 1767 [n1,n2,0.5,0.5,x,y,s]
 
     # 1769 C* Click - Metronome
     > k: model (0 to 3)
@@ -39,7 +39,7 @@ CAPS = http://quitte.de/dsp/caps.html, http://packages.debian.org/stretch/caps
 > caps_1769_01 =
 >   let x = roundE (mouseX KR 0 3 Linear 0.2)
 >       y = mouseY KR 4 240 Linear 0.2
->   in ladspa 1 AR 1769 [x,y,0.5,0.5]
+>   in X.ladspa 1 AR 1769 [x,y,0.5,0.5]
 
     # 1773 C* Eq10 - 10-band equaliser
     > k: 31 Hz (-48 to 24)
@@ -60,7 +60,7 @@ CAPS = http://quitte.de/dsp/caps.html, http://packages.debian.org/stretch/caps
 > caps_1773_01 =
 >   let s = soundIn 0
 >       n = map (\z -> range (-24) 48 (lfNoise2 z KR 0.2)) (enumN 10 'α')
->   in ladspa 1 AR 1773 (n ++ [s]) * 0.5
+>   in X.ladspa 1 AR 1773 (n ++ [s]) * 0.5
 
     # 1771 C* Saturate - Various static nonlinearities, 8x oversampled
     > k: mode (0 to 11)
@@ -71,13 +71,13 @@ CAPS = http://quitte.de/dsp/caps.html, http://packages.debian.org/stretch/caps
 
 > caps_1771_01 =
 >   let s = soundIn 0
->   in ladspa 1 AR 1771 [1,0,0,s]
+>   in X.ladspa 1 AR 1771 [1,0,0,s]
 
 > caps_1771_02 =
 >   let s = soundIn 0
 >       x = roundE (mouseX KR 0 11 Linear 0.2)
 >       y = mouseY KR (-24) 72 Linear 0.2
->   in ladspa 1 AR 1771 [x,y,0.0,s]
+>   in X.ladspa 1 AR 1771 [x,y,0.0,s]
 
     # 1772 C* Compress - Compressor and saturating limiter
     > k: measure (0 to 1)
@@ -95,7 +95,7 @@ CAPS = http://quitte.de/dsp/caps.html, http://packages.debian.org/stretch/caps
 >   let s = soundIn 0
 >       x = roundE (mouseX KR 0 2 Linear 0.2)
 >       y = mouseY KR 0 1 Linear 0.2
->   in ladspa 1 AR 1772 [0.5,x,y,0.5,0.5,0.1,0,s]
+>   in X.ladspa 1 AR 1772 [0.5,x,y,0.5,0.5,0.1,0,s]
 
     # 1779 C* Plate - Versatile plate reverb
     > k: bandwidth (0 to 1)
@@ -110,7 +110,7 @@ CAPS = http://quitte.de/dsp/caps.html, http://packages.debian.org/stretch/caps
 >   let s = soundIn 0
 >       x = mouseX KR 0 1 Linear 0.2
 >       y = mouseY KR 0 1 Linear 0.2
->   in ladspa 2 AR 1779 [x,y,0.5,0.5,s]
+>   in X.ladspa 2 AR 1779 [x,y,0.5,0.5,s]
 
     # 1788 C* Wider - Stereo image synthesis
     > k: pan (-1 to 1)
@@ -123,7 +123,7 @@ CAPS = http://quitte.de/dsp/caps.html, http://packages.debian.org/stretch/caps
 >   let s = soundIn 0
 >       x = mouseX KR (-1) 1 Linear 0.2
 >       y = mouseY KR 0 1 Linear 0.2
->   in ladspa 2 AR 1788 [x,y,s]
+>   in X.ladspa 2 AR 1788 [x,y,s]
 
     # 2586 C* PhaserII - Mono phaser
     > k: rate (0 to 1)
@@ -138,7 +138,7 @@ CAPS = http://quitte.de/dsp/caps.html, http://packages.debian.org/stretch/caps
 >   let s = soundIn 0
 >       x = mouseX KR 0 1 Linear 0.2
 >       y = mouseY KR 0 1 Linear 0.2
->   in ladspa 1 AR 2586 [0.3,x,0.5,y,0.8,s]
+>   in X.ladspa 1 AR 2586 [0.3,x,0.5,y,0.8,s]
 
     # 2588 C* Scape - Stereo delay with chromatic resonances
     > k: bpm (30 to 164)
@@ -157,7 +157,7 @@ CAPS = http://quitte.de/dsp/caps.html, http://packages.debian.org/stretch/caps
 >       y = roundE (mouseY KR 2 4 Linear 0.2)
 >       n1 = lfNoise2 'α' KR 0.2
 >       n2 = lfNoise2 'β' KR 0.2
->   in ladspa 2 AR 2588 [x,y,n1,n2,0.5,440,s]
+>   in X.ladspa 2 AR 2588 [x,y,n1,n2,0.5,440,s]
 
     # 2592 C* AmpVTS - Idealised guitar amplification
     > k: over (0 to 2)
@@ -176,14 +176,14 @@ CAPS = http://quitte.de/dsp/caps.html, http://packages.debian.org/stretch/caps
 
 > caps_2592_def s = [1,0.25,0.75,0.5,1,0.25,1,0.75,0.75,0.25,0.5,s]
 
-> caps_2592_01 = ladspa 1 AR 2592 (caps_2592_def (soundIn 0))
+> caps_2592_01 = X.ladspa 1 AR 2592 (caps_2592_def (soundIn 0))
 
 > caps_2592_02 =
 >   let s = soundIn 0
 >       x = roundE (mouseX KR 0 8 Linear 0.2)
 >       y = mouseY KR 0 1 Linear 0.2
 >       [n1,n2,n3,n4,n5,n6,n7,n8] = map (\z -> lfNoise2 z KR 0.2) (enumN 8 'α')
->   in ladspa 1 AR 2592 [1,y,n1,n2,x,n3,n4,n5,n6,n7,n8,s]
+>   in X.ladspa 1 AR 2592 [1,y,n1,n2,x,n3,n4,n5,n6,n7,n8,s]
 
     # 2603 C* Spice - Not an exciter
     > k: lo.f (Hz) (50 to 400)
@@ -198,7 +198,7 @@ CAPS = http://quitte.de/dsp/caps.html, http://packages.debian.org/stretch/caps
 >   let s = soundIn 0
 >       x = mouseX KR 50 400 Exponential 0.2
 >       y = mouseY KR 400 5000 Exponential 0.2
->   in ladspa 1 AR 2603 [x,0.5,0.5,y,0.5,s]
+>   in X.ladspa 1 AR 2603 [x,0.5,0.5,y,0.5,s]
 
     # 2609 C* EqFA4p - 4-band parametric eq
     > k: a.act (0 to 1)
@@ -243,4 +243,4 @@ CAPS = http://quitte.de/dsp/caps.html, http://packages.debian.org/stretch/caps
 >           ,f 'π' linLin (-24) 24
 >           ,0
 >           ,s]
->   in ladspa 1 AR 2609 p * 0.5
+>   in X.ladspa 1 AR 2609 p * 0.5

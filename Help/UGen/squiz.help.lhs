@@ -2,16 +2,17 @@
     Sound.SC3.UGen.DB.ugenSummary "Squiz"
 
 > import Sound.SC3 {- hsc3 -}
-> import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
+> import qualified Sound.SC3.UGen.Bindings.DB.External as X {- hsc3 -}
 
 > f_01 zmax s =
 >   let x = mouseX KR 1 10 Exponential 0.2
 >       y = mouseY KR 1 zmax Linear 0.2
->   in squiz s x y 0.1 * 0.1
+>   in X.squiz s x y 0.1 * 0.1
 
 Squiz of sin oscillator
 
 > g_01 = f_01 10 (sinOsc AR 440 0)
+
 
 > g_02 = f_01 100 (soundIn 0)
 
