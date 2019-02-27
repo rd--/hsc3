@@ -12,3 +12,6 @@ mk-install-ugen:
 clean:
 	rm -fR faust.*
 	rm -f zitaRev.sc zitaRev.so
+
+mk-dep:
+	sudo apt-get install faust
