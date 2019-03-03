@@ -5,6 +5,7 @@ module Sound.SC3.Server.Graphdef where
 import Control.Monad {- base -}
 import qualified Data.ByteString.Lazy as L {- bytestring -}
 import Data.List {- base -}
+import qualified Safe {- safe -}
 import System.FilePath {- filepath -}
 import System.IO {- base -}
 
@@ -76,11 +77,11 @@ data Graphdef = Graphdef {graphdef_name :: Name
 
 -- | Lookup UGen by index.
 graphdef_ugen :: Graphdef -> Int -> UGen
-graphdef_ugen g = (graphdef_ugens g !!)
+graphdef_ugen g = Safe.atNote "graphdef_ugen" (graphdef_ugens g)
 
 -- | Lookup Control and default value by index.
 graphdef_control :: Graphdef -> Int -> (Control,Sample)
-graphdef_control g = (graphdef_controls g !!)
+graphdef_control g = Safe.atNote "graphdef_controls" (graphdef_controls g)
 
 -- | nid of constant.
 graphdef_constant_nid :: Graphdef -> Int -> Int

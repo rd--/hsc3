@@ -7,10 +7,12 @@
 -}
 module Sound.SC3.Server.Status where
 
-import qualified Data.ByteString.Char8 as C {- bytestring -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
+
+import qualified Data.ByteString.Char8 as C {- bytestring -}
 import qualified Data.Tree as T {- containers -}
+import qualified Safe {- safe -}
 
 import Sound.OSC.Datum {- hosc -}
 
@@ -23,7 +25,7 @@ extractStatusField :: Floating n => Int -> [Datum] -> n
 extractStatusField n =
     fromMaybe (error "extractStatusField")
     . datum_floating
-    . (!! n)
+    . flip (Safe.atNote "extractStatusField") n
 
 -- | Names of status fields.
 statusFields :: [String]

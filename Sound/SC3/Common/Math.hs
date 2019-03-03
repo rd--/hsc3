@@ -7,6 +7,8 @@ import Data.Ratio {- base -}
 import Numeric {- base -}
 import Text.Read {- base -}
 
+import qualified Safe {- safe -}
+
 -- | Half pi.
 --
 -- > half_pi == 1.5707963267948966
@@ -214,7 +216,7 @@ degree_to_key s n d =
     let l = length s
         d' = round d
         a = (d - fromIntegral d') * 10.0 * (n / 12.0)
-    in (n * fromIntegral (d' `div` l)) + (s !! (d' `mod` l)) + a
+    in (n * fromIntegral (d' `div` l)) + (Safe.atNote "degree_to_key" s (d' `mod` l)) + a
 
 -- | Linear amplitude to decibels.
 --
@@ -601,25 +603,29 @@ sc3_curvelin curve src_l src_r dst_l dst_r x =
 
 -- * PP
 
--- | The default show is odd, 0.05 shows as 5.0e-2.
---
--- > unwords (map (double_pp 4) [0.0001,0.001,0.01,0.1,1.0]) == "0.0001 0.001 0.01 0.1 1.0"
-double_pp :: Int -> Double -> String
-double_pp k n =
+-- | Removes all but the last trailing zero from floating point string.
+double_pp_rm0 :: String -> String
+double_pp_rm0 =
     let rev_f f = reverse . f . reverse
         remv l = case l of
                    '0':'.':_ -> l
                    '0':l' -> remv l'
                    _ -> l
-    in rev_f remv (showFFloat (Just k) n "")
+    in rev_f remv
+
+-- | The default show is odd, 0.05 shows as 5.0e-2.
+--
+-- > unwords (map (double_pp 4) [0.0001,0.001,0.01,0.1,1.0]) == "0.0001 0.001 0.01 0.1 1.0"
+double_pp :: Int -> Double -> String
+double_pp k n = double_pp_rm0 (showFFloat (Just k) n "")
 
 -- | Print as integer if integral, else as real.
 --
--- > unwords (map real_pp [0.0001,0.001,0.01,0.1,1.0]) == "0.0001 0.001 0.01 0.1 1"
-real_pp :: Double -> String
-real_pp n =
+-- > unwords (map (real_pp 5) [0.0001,0.001,0.01,0.1,1.0]) == "0.0001 0.001 0.01 0.1 1"
+real_pp :: Int -> Double -> String
+real_pp k n =
     let r = toRational n
-    in if denominator r == 1 then show (numerator r) else double_pp 5 n
+    in if denominator r == 1 then show (numerator r) else double_pp k n
 
 -- * Parser
 

@@ -18,11 +18,10 @@ blend z i j = i + (z * (j - i))
 
 -- | Variant of '(!!)' but values for index greater than the size of
 -- the collection will be clipped to the last index.
+--
+-- > map (\x -> clipAt x "abc") [-1,0,1,2,3] == "aabcc"
 clipAt :: Int -> [a] -> a
-clipAt ix c =
-    if ix > length c - 1
-    then last c
-    else c !! ix
+clipAt ix c = if ix > length c - 1 then last c else if ix < 0 then c !! 0 else c !! ix
 
 -- | 'abs' of '(-)'.
 absdif :: Num a => a -> a -> a

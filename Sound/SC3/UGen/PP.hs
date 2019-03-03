@@ -18,9 +18,10 @@ bracketed (l,r) x = l : x ++ [r]
 ugen_concise_pp :: UGen -> String
 ugen_concise_pp u =
     let prim_pp (Primitive _ nm _ _ sp _) = ugen_user_name nm sp
+        k = 5
     in case u of
-         Constant_U (Constant n) -> real_pp n
-         Control_U (Control _ _ nm def _ _) -> nm ++ "=" ++ real_pp def
+         Constant_U (Constant n) -> real_pp k n
+         Control_U (Control _ _ nm def _ _) -> nm ++ "=" ++ real_pp k def
          Label_U (Label s) -> bracketed ('"','"') s
          Primitive_U p -> prim_pp p
          Proxy_U (Proxy p n) -> prim_pp p ++ "@" ++ show n
