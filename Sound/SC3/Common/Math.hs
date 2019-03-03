@@ -206,6 +206,7 @@ cps_to_oct a = logBase 2 (a * (1.0 / 440.0)) + 4.75
 
 -- | Linear octave to cycles per second.
 --
+-- > > [4.0,4.25,4.75].octcps.cpsmidi == [60,63,69]
 -- > map (cps_to_midi . oct_to_cps) [4.0,4.25,4.75] == [60,63,69]
 oct_to_cps :: Floating a => a -> a
 oct_to_cps a = 440.0 * (2.0 ** (a - 4.75))
