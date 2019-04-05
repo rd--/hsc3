@@ -35,3 +35,11 @@ poll at trigger control
 
     import Sound.OSC {- hosc -}
     withSC3 (sendMessage (n_set1 (-1) "t" 1))
+
+print oscillator frequency
+
+> g_05 =
+>     let x = mouseX KR 200 260 Exponential 0.2
+>         o = sinOsc AR x 0 * 0.25
+>         t = impulse KR 2 0
+>     in mrg2 o (poll t x 0 (label "polling..."))
