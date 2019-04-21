@@ -9,6 +9,7 @@ module Sound.SC3.Server.Status where
 
 import Data.List {- base -}
 import Data.Maybe {- base -}
+import Text.Printf {- base -}
 
 import qualified Data.ByteString.Char8 as C {- bytestring -}
 import qualified Data.Tree as T {- containers -}
@@ -20,21 +21,21 @@ import Sound.SC3.Server.Command.Plain
 
 -- * Status
 
--- | Get /n/th field of status as 'Floating'.
+-- | Get /n/th field of /status.reply message as 'Floating'.
 extractStatusField :: Floating n => Int -> [Datum] -> n
 extractStatusField n =
     fromMaybe (error "extractStatusField")
     . datum_floating
     . flip (Safe.atNote "extractStatusField") n
 
--- | Names of status fields.
+-- | Names of /status.reply fields sent in reply to /status request.
 statusFields :: [String]
 statusFields =
     ["Unused                      "
     ,"# UGens                     "
     ,"# Synths                    "
     ,"# Groups                    "
-    ,"# Instruments               "
+    ,"# Synthdefs                 "
     ,"% CPU (Average)             "
     ,"% CPU (Peak)                "
     ,"Sample Rate (Nominal)       "
@@ -45,6 +46,16 @@ statusFormat :: [Datum] -> [String]
 statusFormat d =
     let s = "***** SuperCollider Server Status *****"
     in s : zipWith (++) (tail statusFields) (map (datum_pp_typed (Just 5)) (tail d))
+
+-- | Concise pretty printer, one line, omits PEAK-CPU and NOMINAL-SR.
+status_format_concise :: [Datum] -> String
+status_format_concise d =
+  case d of
+    [Int32 _,Int32 ugn,Int32 grp,Int32 syn,Int32 ins,Float cpu1,Float _cpu2,Double _sr1,Double sr2] ->
+      printf
+      "UGN=%-5d GRP=%-5d SYN=%-5d INS=%-5d CPU=%-5.1f SR=%-7.1f"
+      ugn grp syn ins cpu1 sr2
+    _ -> error "status_format_concise?"
 
 -- * Query Group
 

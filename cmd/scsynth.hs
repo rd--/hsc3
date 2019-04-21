@@ -3,6 +3,7 @@ import Control.Monad {- base -}
 import qualified Data.Tree as T {- containers -}
 import System.Environment {- base -}
 import System.FilePath {- filepath -}
+import System.IO {- base -}
 
 import Sound.OSC {- hosc -}
 import Sound.SC3 {- hsc3 -}
@@ -73,6 +74,12 @@ message_print addr =
     let pr = waitReply addr >>= \r -> liftIO (putStrLn (messagePP (Just 4) r))
     in withSC3 (async_ (notify True) >> forever pr)
 
+status_monitor :: (DuplexOSC m,MonadIO m) => Double -> m ()
+status_monitor dly = do
+  str <- server_status_concise
+  liftIO (hPutStr stdout ('\r' : str) >> hFlush stdout)
+  pauseThread dly
+
 help :: [String]
 help =
     ["buffer query id:int"
@@ -83,7 +90,7 @@ help =
     ,"group query-tree id:int"
     ,"node query id:int"
     ,"reset"
-    ,"status"
+    ,"status print|monitor [delay:float]"
     ,"message print address"
     ,"nrt audition file-name:string"
     ,"nrt stat file-name:string"
@@ -101,7 +108,8 @@ main = do
     ["group","query-tree",n] -> group_query_tree (read n)
     ["node","query",n] -> node_query (read n)
     ["reset"] -> withSC3 reset
-    ["status"] -> withSC3 serverStatus >>= mapM_ putStrLn
+    ["status","print"] -> withSC3 serverStatus >>= mapM_ putStrLn
+    ["status","monitor",dly] -> withSC3 (forever (status_monitor (read dly)))
     ["message","print",addr] -> message_print addr
     ["nrt","audition",fn] -> readNRT fn >>= nrt_audition
     ["nrt","stat",fn] -> readNRT fn >>= print . nrt_stat

@@ -1,7 +1,9 @@
 import System.Environment {- base -}
 
-import qualified Sound.SC3.Server.Graphdef as Graphdef {- hsc3 -}
 import qualified Sound.SC3.Server.Graphdef.Read as Read {- hsc3 -}
+
+{-
+import qualified Sound.SC3.Server.Graphdef as Graphdef {- hsc3 -}
 
 -- > let sy = "/home/rohan/sw/hsc3-graphs/scsyndef/why-supercollider-rand.sc.scsyndef"
 -- > scsyndef_stat sy "/dev/stdout"
@@ -9,6 +11,7 @@ scsyndef_stat :: FilePath -> FilePath -> IO ()
 scsyndef_stat sy_nm st_nm = do
   str <- Graphdef.scsyndef_stat sy_nm
   writeFile st_nm str
+-}
 
 -- > scsyndef_ug_stat sy "/dev/stdout"
 scsyndef_ug_stat :: FilePath -> FilePath -> IO ()

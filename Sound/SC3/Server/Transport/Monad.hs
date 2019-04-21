@@ -302,6 +302,12 @@ g_queryTree1_unpack n = do
 serverStatus :: DuplexOSC m => m [String]
 serverStatus = liftM Status.statusFormat serverStatusData
 
+-- | Collect server status information.
+--
+-- > withSC3 server_status_concise >>= putStrLn
+server_status_concise :: DuplexOSC m => m String
+server_status_concise = liftM Status.status_format_concise serverStatusData
+
 -- | Read nominal sample rate of server.
 --
 -- > withSC3 serverSampleRateNominal

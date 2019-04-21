@@ -138,7 +138,7 @@ read_ugen read_i h = do
 -- | Read a 'Graphdef'. Ignores variants.
 read_graphdef :: Handle -> IO Graphdef
 read_graphdef h = do
-  magic <- fmap Byte.decode_str (L.hGet h 4)
+  magic <- fmap Byte.decode_ascii (L.hGet h 4)
   version <- Byte.read_i32 h
   let read_i =
           case version of
@@ -220,7 +220,7 @@ encode_sample = Byte.encode_f32 . realToFrac
 encode_graphdef :: Graphdef -> L.ByteString
 encode_graphdef (Graphdef nm cs ks us) =
     let (ks_ctl,ks_def) = unzip ks
-    in L.concat [Byte.encode_str (Datum.ascii "SCgf")
+    in L.concat [Byte.encode_ascii (Datum.ascii "SCgf")
                 ,Byte.encode_i32 0 -- version
                 ,Byte.encode_i16 1 -- number of graphs
                 ,encode_pstr nm

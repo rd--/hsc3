@@ -58,11 +58,11 @@ the messages sent by `sendTrig`.
 
 ## status
 
-`status` sends a `/status` message and prints the `/status.reply`,
+`status print` sends a `/status` message and prints the `/status.reply`,
 `C-cC-p` in emacs.
 
 ~~~~
-$ hsc3-scsynth status
+$ hsc3-scsynth status print
 ***** SuperCollider Server Status *****
 # UGens                     219:Int32
 # Synths                    5:Int32
@@ -72,6 +72,14 @@ $ hsc3-scsynth status
 % CPU (Peak)                6.52434:Float
 Sample Rate (Nominal)       48000.0:Double
 Sample Rate (Actual)        47998.52114:Double
+$
+~~~~
+
+`status monitor DELAY` updates a concise status line every `DELAY` seconds.
+
+~~~~
+$ hsc3-scsynth status monitor 0.5
+UGN=364   GRP=13    SYN=18    INS=10    CPU=4.8   SR=47998.7
 $
 ~~~~
 
