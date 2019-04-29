@@ -72,6 +72,15 @@ sc3_opt_set opt (k,v) =
     Left x -> map (\(c,s,y) -> if c == x then (c,s,v) else (c,s,y)) opt
     Right x -> map (\(c,s,y) -> if s == x then (c,s,v) else (c,s,y)) opt
 
+-- | Apply set of edits to options.
+--
+-- > sc3_opt_edit sc3_opt_def_udp [(Left 'w',256),(Left 'm',2 ^ 16)]
+sc3_opt_edit :: [SC3_OPT i] -> [(Either Char String,i)] -> [SC3_OPT i]
+sc3_opt_edit opt edt =
+  case edt of
+    [] -> opt
+    x:rst -> sc3_opt_edit (sc3_opt_set opt x) rst
+
 -- | Generate scsynth argument list.
 --
 -- > unwords (sc3_opt_arg sc3_opt_def_udp)
