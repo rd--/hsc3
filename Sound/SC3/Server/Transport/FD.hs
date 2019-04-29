@@ -16,6 +16,7 @@ import Sound.SC3.Server.Command
 import Sound.SC3.Server.Enum
 import qualified Sound.SC3.Server.Graphdef as G
 import Sound.SC3.Server.NRT
+import Sound.SC3.Server.Options
 import Sound.SC3.Server.Status
 import Sound.SC3.Server.Synthdef
 import Sound.SC3.UGen.Type
@@ -39,7 +40,7 @@ maybe_async_at fd t m =
 
 -- | Bracket @SC3@ communication.
 withSC3 :: (UDP -> IO a) -> IO a
-withSC3 = withTransport (openUDP "127.0.0.1" 57110)
+withSC3 = withTransport (openUDP "127.0.0.1" sc3_port_def)
 
 -- * Server control
 

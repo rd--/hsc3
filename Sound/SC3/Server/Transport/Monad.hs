@@ -18,6 +18,7 @@ import qualified Sound.SC3.Server.Command.Generic as Generic
 import qualified Sound.SC3.Server.Enum as Enum
 import qualified Sound.SC3.Server.Graphdef as Graphdef
 import qualified Sound.SC3.Server.NRT as NRT
+import qualified Sound.SC3.Server.Options as Options
 import qualified Sound.SC3.Server.Status as Status
 import qualified Sound.SC3.Server.Synthdef as Synthdef
 
@@ -51,9 +52,9 @@ maybe_async_at t m =
     then async_ m
     else sendBundle (bundle t [m])
 
--- | Local host (ie. @127.0.0.1@) at port @57110@.
+-- | Local host (ie. @127.0.0.1@) at port 'sc3_port_def'
 sc3_default_udp :: IO UDP
-sc3_default_udp = openUDP "127.0.0.1" 57110
+sc3_default_udp = openUDP "127.0.0.1" Options.sc3_port_def
 
 -- | Maximum packet size, in bytes, that can be sent over UDP.
 sc3_udp_limit :: Num n => n
