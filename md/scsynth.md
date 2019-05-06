@@ -31,6 +31,10 @@ $
 
 ![](sw/hsc3-data/data/gif/monopole.gif)
 
+## dump-osc
+
+`dump-osc` sets the flag that tells scsynth to print (or not) incoming OSC messages.
+
 ## group
 
 `group query-tree` sends a `/g_queryTree` message and prints the

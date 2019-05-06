@@ -80,6 +80,10 @@ status_monitor dly = do
   liftIO (hPutStr stdout ('\r' : str) >> hFlush stdout)
   pauseThread dly
 
+-- > dump_osc 1
+dump_osc :: Int -> IO ()
+dump_osc md = withSC3 (sendMessage (message "/dumpOSC" [int32 md]))
+
 help :: [String]
 help =
     ["buffer query id:int"
@@ -87,6 +91,7 @@ help =
     ,"buffer store-seq id:int dt:float iso|ntpi dir:string"
     ,"buffer free-range b0:int bN:int"
     ,"clear-all"
+    ,"dump-osc mode:int (0=none,1=text,2=hex,3=all)"
     ,"group query-tree id:int"
     ,"node query id:int"
     ,"reset"
@@ -105,6 +110,7 @@ main = do
     ["buffer","store-seq",n,dt,ts,dir] -> buffer_store_seq (read n) (read dt) (ts == "iso") dir
     ["buffer","free-range",b0,bN] -> buffer_free_range (read b0) (read bN)
     ["clear-all"] -> clear_all
+    ["dump-osc",md] -> dump_osc (read md)
     ["group","query-tree",n] -> group_query_tree (read n)
     ["node","query",n] -> node_query (read n)
     ["reset"] -> withSC3 reset
