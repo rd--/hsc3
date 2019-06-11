@@ -55,3 +55,7 @@ Control rate graph writing buses 0 & 1.
 Audio rate graph reading control buses 0 & 1.
 
 > g_07 = sinOsc AR (in' 1 KR 0) 0 * decay (in' 1 KR 1) 0.2 * 0.1
+
+Patch mono input to stereo output
+
+> g_08 = pan2 (in' 1 AR numOutputBuses) 0 1

@@ -1,9 +1,9 @@
 http://kokkinizita.linuxaudio.org/linuxaudio/zita-rev1-doc/quickguide.html
 
 > import Sound.SC3 {- hsc3 -}
-> import qualified Sound.SC3.UGen.Bindings.HW.External.Zita as Zita {- hsc3 -}
+> import qualified Sound.SC3.UGen.Bindings.HW.External.X as X {- hsc3 -}
 
-    > Zita.zitaRev_param
+    > X.zitaRev_param
 
 mostly default settings
 
@@ -14,7 +14,7 @@ mostly default settings
 >         eq2_freq = 1500
 >         dry_wet_mix = 0.5
 >         level = 0
->     in Zita.zitaRev i i in_delay 200 3 2 6000 eq1_freq 0 eq2_freq 0 dry_wet_mix level
+>     in X.zitaRev i i in_delay 200 3 2 6000 eq1_freq 0 eq2_freq 0 dry_wet_mix level
 
 longer
 
@@ -29,7 +29,7 @@ longer
 >         eq2_level = 6
 >         dry_wet_mix = 0
 >         level = 0
->     in Zita.zitaRev i i in_delay 200 low_rt60 mid_rt60 6000 eq1_freq eq1_level eq2_freq eq2_level dry_wet_mix level
+>     in X.zitaRev i i in_delay 200 low_rt60 mid_rt60 6000 eq1_freq eq1_level eq2_freq eq2_level dry_wet_mix level
 
 longer still
 
@@ -44,6 +44,6 @@ longer still
 >         eq2_level = 6
 >         dry_wet_mix = 0.5
 >         level = 0.0
->     in Zita.zitaRev i i in_delay 200 low_rt60 mid_rt60 6000 eq1_freq eq1_level eq2_freq eq2_level dry_wet_mix level
+>     in X.zitaRev i i in_delay 200 low_rt60 mid_rt60 6000 eq1_freq eq1_level eq2_freq eq2_level dry_wet_mix level
 
 

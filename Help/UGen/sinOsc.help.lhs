@@ -6,7 +6,7 @@
 
 Fixed frequency (hz) and initial-phase (radians)
 
-> g_00 = sinOsc AR 440 0 * 0.25
+> g_00 = sinOsc AR 440 0 * 0.25 -- 415 440
 
 Control input for frequency
 

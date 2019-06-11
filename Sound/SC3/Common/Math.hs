@@ -184,10 +184,11 @@ generic_wrap (l,r) n =
 bin_to_freq :: (Fractional n, Integral i) => n -> i -> i -> n
 bin_to_freq sr n i = fromIntegral i * sr / fromIntegral n
 
--- | Midi note number to cycles per second.
+-- | Fractional midi note number to cycles per second.
 --
 -- > map (floor . midi_to_cps) [0,24,69,120,127] == [8,32,440,8372,12543]
 -- > map (floor . midi_to_cps) [-36,138] == [1,23679]
+-- > map (floor . midi_to_cps) [69.0,69.25 .. 70.0] == [440,446,452,459,466]
 midi_to_cps :: Floating a => a -> a
 midi_to_cps i = 440.0 * (2.0 ** ((i - 69.0) * (1.0 / 12.0)))
 
@@ -233,7 +234,7 @@ db_to_amp = (10 **) .  (* 0.05)
 
 -- | Fractional midi note interval to frequency multiplier.
 --
--- > map midi_to_ratio [0,7,12] == [1,1.4983070768766815,2]
+-- > map midi_to_ratio [-12,0,7,12] == [0.5,1,1.4983070768766815,2]
 midi_to_ratio :: Floating a => a -> a
 midi_to_ratio a = 2.0 ** (a * (1.0 / 12.0))
 
