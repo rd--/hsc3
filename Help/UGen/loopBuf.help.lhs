@@ -40,7 +40,7 @@ Simple sampler instrument
     let send = sendMessage
     let run = withSC3 . send
 
-    audition (sinOsc AR 440 0 * 0.2)
+    audition (sinOsc AR (midiCPS 69) 0 * 0.2)
     run (s_new "lb0" 3000 AddToTail 1 [("bufnum",0),("amp",0.1),("startLoop",5376),("endLoop",5504)])
 
     run (n_set1 3000 "amp" 0.25) -- louder
