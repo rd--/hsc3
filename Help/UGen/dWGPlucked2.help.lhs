@@ -37,7 +37,7 @@ re-sounding
 >             in amp * lfClipNoise 'κ' AR 2000 * env -- pluck signal
 >       release = tRand 'λ' 0.05 0.15 t -- release time (seconds, def = 0.1)
 >       mistune = tRand 'μ' 0.992 1.008 t -- factor for detuning second string (def = 1.008)
->       mp = tRand 'ν' 0.35 0.65 t -- exitation mixer (def = 0.55)
+>       mp = tRand 'ν' 0.35 0.65 t -- excitation mixer (def = 0.55)
 >       gc = tRand 'ξ' 0.001 0.020 t -- coupling string factor (def = 0.01)
 >       ps = X.dWGPlucked2 AR freq amp gate_ pos c1 c3 inp release mistune mp gc
 >       pan = tRand 'ο' (-1) 1 t

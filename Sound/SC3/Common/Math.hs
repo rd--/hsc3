@@ -26,17 +26,21 @@ type SC3_MulAdd t = t -> t -> t -> t
 
 -- | Ordinary (un-optimised) multiply-add, see also mulAdd UGen.
 --
+-- > sc3_mul_add 2 3 4 == 2 * 3 + 4
 -- > map (\x -> sc3_mul_add x 2 3) [1,5] == [5,13] && map (\x -> sc3_mul_add x 3 2) [1,5] == [5,17]
 sc3_mul_add :: Num t => SC3_MulAdd t
 sc3_mul_add i m a = i * m + a
 
--- | Haskell order (un-optimised) multiply-add.
+-- | Ordinary Haskell order (un-optimised) multiply-add.
 --
+-- > mul_add 3 4 2 == 2 * 3 + 4
 -- > map (mul_add 2 3) [1,5] == [5,13] && map (mul_add 3 4) [1,5] == [7,19]
 mul_add :: Num t => t -> t -> t -> t
 mul_add m a = (+ a) . (* m)
 
 -- | 'uncurry' 'mul_add'
+--
+-- > mul_add_hs (3,4) 2 == 2 * 3 + 4
 mul_add_hs :: Num t => (t,t) -> t -> t
 mul_add_hs = uncurry mul_add
 
@@ -429,6 +433,7 @@ range_hs :: Fractional a => (a,a) -> a -> a
 range_hs = uncurry range
 
 -- | Calculate multiplier and add values for 'linlin' transform.
+--   Inputs are: input-min input-max output-min output-max
 --
 -- > range_muladd 3 4 == (0.5,3.5)
 -- > linlin_muladd (-1) 1 3 4 == (0.5,3.5)
@@ -442,12 +447,14 @@ linlin_muladd sl sr dl dr =
     in (m,a)
 
 -- | Map from one linear range to another linear range.
+--
+-- > linlin_ma hs_muladd 5 0 10 (-1) 1 == 0
 linlin_ma :: Fractional a => SC3_MulAdd a -> a -> a -> a -> a -> a -> a
 linlin_ma mul_add_f i sl sr dl dr =
   let (m,a) = linlin_muladd sl sr dl dr
   in mul_add_f i m a
 
--- | 'sc3_linlin' with a more typical haskell argument structure, ranges as pairs and input last.
+-- | 'linLin' with a more typical haskell argument structure, ranges as pairs and input last.
 --
 -- > map (linlin_hs (0,127) (-0.5,0.5)) [0,63.5,127] == [-0.5,0.0,0.5]
 linlin_hs :: Fractional a => (a, a) -> (a, a) -> a -> a
