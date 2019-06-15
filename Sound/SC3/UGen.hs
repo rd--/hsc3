@@ -7,6 +7,7 @@ import Sound.SC3.UGen.Enum as U
 import Sound.SC3.UGen.Help as U
 import Sound.SC3.UGen.Help.Graph as U
 import Sound.SC3.UGen.Math as U
+import Sound.SC3.UGen.Math.Composite as U
 import Sound.SC3.UGen.Name as U
 import Sound.SC3.UGen.Optimise as U
 import Sound.SC3.UGen.Type as U

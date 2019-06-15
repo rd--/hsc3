@@ -464,12 +464,14 @@ varLag_env in_ time curve start =
       tr = changed in_ 0 + time_ch + impulse rt 0 0
   in envGen rt tr 1 0 1 DoNothing e
 
--- | If @z@ isn't a sink node route to an @out@ node writing to @bus@.
--- If @fadeTime@ is given multiply by 'makeFadeEnv'.
---
--- > import Sound.SC3
--- > audition (wrapOut (sinOsc AR 440 0 * 0.1) 1)
--- > withSC3 (send (n_set1 (-1) "gate" 0))
+{- | If @z@ isn't a sink node route to an @out@ node writing to @bus@.
+     If @fadeTime@ is given multiply by 'makeFadeEnv'.
+
+> import Sound.SC3 {- hsc3 -}
+> audition (wrapOut (Just 1) (sinOsc AR 440 0 * 0.1))
+> import Sound.OSC {- hosc -}
+> withSC3 (sendMessage (n_set1 (-1) "gate" 0))
+-}
 wrapOut :: Maybe Double -> UGen -> UGen
 wrapOut fadeTime z =
     let bus = control KR "out" 0
