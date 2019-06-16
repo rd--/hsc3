@@ -467,16 +467,27 @@ mkBinaryOperator i f a b =
 -- * Numeric instances
 
 -- | MulAdd re-writer, applicable only directly at add operator UGen.
+--   The MulAdd UGen is very sensitive to input rates.
+--   ADD=AR with IN|MUL=IR|CONST will CRASH scsynth.
 mul_add_optimise_direct :: UGen -> UGen
 mul_add_optimise_direct u =
-  case u of
-    Primitive_U
-      (Primitive r _ [Primitive_U (Primitive _ "BinaryOpUGen" [i,j] [_] (Special 2) NoId),k] [_] _ NoId) ->
-      Primitive_U (Primitive r "MulAdd" [i,j,k] [r] (Special 0) NoId)
-    Primitive_U
-      (Primitive r _ [k,Primitive_U (Primitive _ "BinaryOpUGen" [i,j] [_] (Special 2) NoId)] [_] _ NoId) ->
-      Primitive_U (Primitive r "MulAdd" [i,j,k] [r] (Special 0) NoId)
-    _ -> u
+  let reorder (i,j,k) =
+        let (ri,rj,rk) = (rateOf i,rateOf j,rateOf k)
+        in if rk > max ri rj
+           then Nothing
+           else Just (max (max ri rj) rk,if rj > ri then (j,i,k) else (i,j,k))
+  in case u of
+       Primitive_U
+         (Primitive _ _ [Primitive_U (Primitive _ "BinaryOpUGen" [i,j] [_] (Special 2) NoId),k] [_] _ NoId) ->
+         case reorder (i,j,k) of
+           Just (rt,(p,q,r)) -> Primitive_U (Primitive rt "MulAdd" [p,q,r] [rt] (Special 0) NoId)
+           Nothing -> u
+       Primitive_U
+         (Primitive _ _ [k,Primitive_U (Primitive _ "BinaryOpUGen" [i,j] [_] (Special 2) NoId)] [_] _ NoId) ->
+         case reorder (i,j,k) of
+           Just (rt,(p,q,r)) -> Primitive_U (Primitive rt "MulAdd" [p,q,r] [rt] (Special 0) NoId)
+           Nothing -> u
+       _ -> u
 
 -- | Sum3 re-writer, applicable only directly at add operator UGen.
 sum3_optimise_direct :: UGen -> UGen

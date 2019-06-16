@@ -8,11 +8,14 @@ import Sound.SC3.Common.Rate
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
--- | MulAdd optimiser, applicable at any UGen.
---
--- > import Sound.SC3
--- > g1 = mul_add_optimise (sinOsc AR 440 0 * 0.1 + 0.05)
--- > g2 = mul_add_optimise (0.05 + sinOsc AR 440 0 * 0.1)
+{- | MulAdd optimiser, applicable at any UGen.
+
+> import Sound.SC3
+> g1 = sinOsc AR 440 0 * 0.1 + control IR "x" 0.05
+> g2 = sinOsc AR 440 0 * control IR "x" 0.1 + 0.05
+> g3 = control IR "x" 0.1 * sinOsc AR 440 0 + 0.05
+> g4 = 0.05 + sinOsc AR 440 0 * 0.1
+-}
 mul_add_optimise :: UGen -> UGen
 mul_add_optimise u =
   case u of
