@@ -1,12 +1,21 @@
 hsc3 - haskell supercollider
 ----------------------------
 
-[hsc3][hsc3] provides `Sound.SC3`, a module for using [Haskell][hs] as
-a client to the [SuperCollider][sc3] synthesis server.  hsc3 requires
-[hosc](?t=hosc).
+[hsc3](http://rohandrape.net/?t=hsc3)
+provides `Sound.SC3`, a module for using
+[Haskell](http://haskell.org/)
+as a client to the
+[SuperCollider](http://audiosynth.com/)
+synthesis server.
+hsc3 requires
+[hosc](http://rohandrape.net/?t=hosc).
 
-For installation and configuration information see the
-[tutorial][tutorial] at [hsc3-texts][hsc3-texts].
+There is an
+[introduction](http://rohandrape.net/?t=hsc3-texts&e=lhs/hsc3-introduction.lhs)
+and a
+[tutorial](http://rohandrape.net/?t=hsc3-texts&e=lhs/hsc3-tutorial.lhs)
+at
+[hsc3-texts](http://rohandrape.net/?t=hsc3-texts).
 
 There are a number of related projects:
 
@@ -17,7 +26,7 @@ There are a number of related projects:
 - [hsc3-unsafe](?t=hsc3-unsafe): Unsafe UGen variants (2006)
 - [hsc3-lang](?t=hsc3-lang): SC3 language (2007)
 - [hsc3-rec](?t=hsc3-rec): Record UGens (2008)
-- [hsc3-sf-hsndfile](?t=hsc3-sf): Sound file IO (libsndfile) (2010)
+- [hsc3-sf-hsndfile](?t=hsc3-sf-hsndfile): Sound file IO (libsndfile) (2010)
 - [hsc3-auditor](?t=hsc3-auditor): Simple-minded auditioner (2010)
 - [hsc3-cairo](?t=hsc3-cairo): Drawing (2012)
 - [hsc3-plot](?t=hsc3-plot): Plotting (2013)
@@ -28,12 +37,12 @@ There are a number of related projects:
 - [hsc3-m](?t=hsc3-m): UGen variants (2018)
 
 The hsc3 interaction environment ([hsc3.el](?t=hsc3&e=emacs/hsc3.el))
-is written for [GNU][gnu] [Emacs][emacs].
+is written for
+[GNU](http://gnu.org/)
+[Emacs](http://gnu.org/software/emacs/).
 
 ## cli
 
-[scsyndef-stat](?t=hsc3&e=md/scsyndef-stat.md),
-[scsyndef-to-hs](?t=hsc3&e=md/scsyndef-to-hs.md),
 [scsynth](?t=hsc3&e=md/scsynth.md),
 [setup](?t=hsc3&e=md/setup.md)
 
@@ -41,7 +50,11 @@ is written for [GNU][gnu] [Emacs][emacs].
 
 [UGen Index](?t=hsc3&e=Help/UGen/ix.md)
 
-© [rohan drape][rd] and others, 2005-2019, [gpl][gpl].
+©
+[rohan drape](http://rohandrape.net/)
+and others, 2005-2019,
+[gpl](http://gnu.org/copyleft/)
+
 with contributions by:
 
 - henning thielemann
@@ -50,18 +63,11 @@ with contributions by:
 - brent yorgey
 - shae erisson
 
-see the [git](https://git-scm.com/) [history](?t=hsc3&q=history) for details
+see the
+[git](https://git-scm.com/)
+[history](?t=hsc3&q=history)
+for details
 
 initial announcement:
 [[2005-11-29/haskell-cafe](?t=hsc3&e=md/announce.text),
  [haskell.org](http://www.haskell.org/pipermail/haskell-cafe/2005-November/012483.html)]
-
-[rd]: http://rohandrape.net/
-[hsc3]: http://rohandrape.net/?t=hsc3
-[hs]: http://haskell.org/
-[sc3]: http://audiosynth.com/
-[tutorial]: http://rohandrape.net/?t=hsc3-texts&e=lhs/hsc3-tutorial.lhs
-[hsc3-texts]: http://rohandrape.net/?t=hsc3-texts
-[gnu]: http://gnu.org/
-[emacs]: http://gnu.org/software/emacs/
-[gpl]: http://gnu.org/copyleft/
