@@ -1,5 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Splay"
-
 splay is a composite UGen, arguments are:
 inArray spread=1 level=1 center=0 levelComp=true
 

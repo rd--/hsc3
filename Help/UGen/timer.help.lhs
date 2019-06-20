@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Timer"
-    Sound.SC3.UGen.DB.ugenSummary "Timer"
-
 > import Sound.SC3 {- hsc3 -}
 
 > g_01 =

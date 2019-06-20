@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "DetectIndex"
-    > Sound.SC3.UGen.DB.ugenSummary "DetectIndex"
-
 > import Sound.SC3 {- hsc3 -}
 
 Find indexes and map to an audible frequency range.

@@ -1,10 +1,7 @@
-    Sound.SC3.UGen.Help.viewSC3Help "StkModalBar"
-    Sound.SC3.UGen.DB.ugenSummary "StkModalBar"
-
 > import Sound.SC3 {- hsc3 -}
 > import Sound.SC3.UGen.Record.Plain.StkModalBar {- hsc3-rec -}
 
-instrument: Marimba = 0, Vibraphone = 1, Agogo = 2, Wood1 = 3, Reso = 4, Wood2 = 5, Beats = 6, Two Fixed = 7, Clump = 8
+instrument: Marimba=0, Vibraphone=1, Agogo=2, Wood1=3, Reso=4, Wood2=5, Beats=6, Two Fixed=7, Clump=8
 
 > g_01 =
 >   let x = mouseX KR 0.25 12 Linear 0.2

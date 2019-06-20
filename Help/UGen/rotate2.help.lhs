@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Rotate2"
-    > Sound.SC3.UGen.DB.ugenSummary "Rotate2"
-
 > import Sound.SC3 {- hsc3 -}
 
 Rotation of stereo sound, via LFO.

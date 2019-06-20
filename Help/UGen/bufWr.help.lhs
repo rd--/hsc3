@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "BufWr"
-    > Sound.SC3.UGen.DB.ugenSummary "BufWr"
-
 > import Sound.SC3 {- hsc3 -}
 
 allocate a buffer (id = 0) for writing into

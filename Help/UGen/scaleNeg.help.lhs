@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Operator.scaleneg"
-    > :t scaleNeg
-
 > import Prelude hiding ((<*)) {- base -}
 > import Sound.SC3 {- hsc3 -}
 >

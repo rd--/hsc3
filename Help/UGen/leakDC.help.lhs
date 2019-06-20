@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "LeakDC"
-    > Sound.SC3.UGen.DB.ugenSummary "LeakDC"
-
 > import Sound.SC3
 
 > g_01 =

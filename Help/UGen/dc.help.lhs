@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "DC"
-    > Sound.SC3.UGen.DB.ugenSummary "DC"
-
 > import Sound.SC3 {- hsc3 -}
 
 error...

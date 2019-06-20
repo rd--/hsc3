@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Operator.atan2"
-    > :t atan2
-
 > import Sound.SC3 {- hsc3 -}
 
 Add a pan to the hypot doppler examples by using atan2 to find the

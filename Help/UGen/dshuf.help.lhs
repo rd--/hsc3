@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Dshuf"
-    > Sound.SC3.UGen.DB.ugenSummary "Dshuf"
-
 > import Sound.SC3 {- hsc3 -}
 > import qualified Sound.SC3.UGen.Bindings.DB.RDU as RDU {- sc3-rdu -}
 

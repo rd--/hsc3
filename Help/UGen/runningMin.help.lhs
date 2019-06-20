@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "RunningMin"
-    > Sound.SC3.UGen.DB.ugenSummary "RunningMin"
-
 > import Sound.SC3 {- hsc3 -}
 
 Follow a sine lfo, reset rate controlled by mouseX

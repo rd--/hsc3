@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Slew"
-    > Sound.SC3.UGen.DB.ugenSummary "Slew"
-
 > import Sound.SC3 {- hsc3 -}
 
 > g_01 = let z = lfPulse AR 800 0 0.5 * 0.1 in mce2 z (slew z 4000 4000)

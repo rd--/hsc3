@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "TwoPole"
-    Sound.SC3.UGen.DB.ugenSummary "TwoPole"
-
 > import Sound.SC3 {- hsc3 -}
 
 > g_01 =

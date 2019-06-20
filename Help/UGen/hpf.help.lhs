@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "HPF"
-    > Sound.SC3.UGen.DB.ugenSummary "HPF"
-
 > import Sound.SC3 {- hsc3 -}
 >
 > g_01 =

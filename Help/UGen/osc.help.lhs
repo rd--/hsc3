@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Osc"
-    > Sound.SC3.UGen.DB.ugenSummary "Osc"
-
 > import Sound.SC3 {- hsc3 -}
 
 Allocate and generate wavetable buffer

@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "IndexL"
-    > Sound.SC3.UGen.DB.ugenSummary "IndexL"
-
 > import Sound.SC3 {- hsc3 -}
 
 Index buffer for frequency values

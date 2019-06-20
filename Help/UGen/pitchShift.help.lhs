@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "PitchShift"
-    > Sound.SC3.UGen.DB.ugenSummary "PitchShift"
-
 > import Sound.SC3 {- hsc3 -}
 
 > gr_01 =

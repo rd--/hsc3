@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "FreeSelfWhenDone"
-    > Sound.SC3.UGen.DB.ugenSummary "FreeSelfWhenDone"
-
 > import Sound.SC3 {- hsc3 -}
 
 using RemoveSynth doneAction

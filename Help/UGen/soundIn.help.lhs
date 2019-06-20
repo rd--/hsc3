@@ -1,5 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "SoundIn"
-
 soundIn is a composite of the UGens in' and numOutputBuses
 
 > import Sound.SC3 {- hsc3 -}

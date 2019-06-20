@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "PV_ChainUGen.pvcollect"
-    > :t pvcollect
-
 > import Data.List {- base -}
 > import Sound.OSC {- hosc -}
 > import Sound.SC3 {- hsc3 -}

@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "VOsc"
-    Sound.SC3.UGen.DB.ugenSummary "VOsc"
-
 > import Sound.OSC {- hosc -}
 > import Sound.SC3 {- hsc3 -}
 

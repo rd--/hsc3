@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Formlet"
-    > Sound.SC3.UGen.DB.ugenSummary "Formlet"
-
 > import Sound.SC3 {- hsc3 -}
 
 > g_01 = formlet (impulse AR 20 0.5) 1000 0.01 0.1

@@ -1,5 +1,3 @@
-    > :t mrg2
-
 > import Sound.SC3 {- hsc3 -}
 
 mrg2 defines a node indicating a multiple root graph.

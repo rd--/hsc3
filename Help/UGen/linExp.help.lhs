@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "LinExp"
-    > Sound.SC3.UGen.DB.ugenSummary "LinExp"
-
 > import Sound.SC3 {- hsc3 -}
 
 {var mod = SinOsc.kr(Line.kr(1, 10, 10)); SinOsc.ar(mod * 400 + 500) * 0.1}.play

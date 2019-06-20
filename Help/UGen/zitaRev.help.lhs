@@ -1,4 +1,4 @@
-http://kokkinizita.linuxaudio.org/linuxaudio/zita-rev1-doc/quickguide.html
+<http://kokkinizita.linuxaudio.org/linuxaudio/zita-rev1-doc/quickguide.html>
 
 > import Sound.SC3 {- hsc3 -}
 > import qualified Sound.SC3.UGen.Bindings.HW.External.X as X {- hsc3 -}

@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Slope"
-    > Sound.SC3.UGen.DB.ugenSummary "Slope"
-
 > import Sound.SC3 {- hsc3 -}
 
 > f_01 f0 =

@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "MouseY"
-    > Sound.SC3.UGen.DB.ugenSummary "MouseY"
-
 > import Sound.SC3 {- hsc3 -}
 
 Frequency at X axis and amplitude at Y axis.

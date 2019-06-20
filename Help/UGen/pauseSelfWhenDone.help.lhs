@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "PauseSelfWhenDone"
-    > Sound.SC3.UGen.DB.ugenSummary "PauseSelfWhenDone"
-
 > import Sound.SC3 {- hsc3 -}
 
 using PauseSynth done action

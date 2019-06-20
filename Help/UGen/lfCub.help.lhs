@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "LFCub"
-    > Sound.SC3.UGen.DB.ugenSummary "LFCub"
-
 > import Sound.SC3
 
 > g_01 = lfCub AR (lfCub KR (lfCub KR 0.2 0 * 8 + 10) 0 * 400 + 800) 0 * 0.1

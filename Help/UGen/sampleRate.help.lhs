@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "SampleRate"
-    > Sound.SC3.UGen.DB.ugenSummary "SampleRate"
-
 > import Sound.SC3 {- hsc3 -}
 
 the current nominal sample rate of the server

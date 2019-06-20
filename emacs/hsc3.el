@@ -67,7 +67,7 @@
 (defun hsc3-sc3-help ()
   "Lookup up the name at point in the SC3 (RTF) help files."
   (interactive)
-  (let ((rgx (concat "^" (thing-at-point 'symbol) "\\.help\\.rtf$")))
+  (let ((rgx (concat "^" (thing-at-point 'symbol) "\\\(.help\\\)?.rtf$")))
     (hsc3-find-files sc3-help-directory rgx)))
 
 (defun hsc3-ugen-summary ()

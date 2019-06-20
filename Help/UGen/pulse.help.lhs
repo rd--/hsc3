@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Pulse"
-    > Sound.SC3.UGen.DB.ugenSummary "Pulse"
-
 > import Sound.SC3 {- hsc3 -}
 
 Modulate frequency

@@ -1,7 +1,4 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Streson"
-    Sound.SC3.UGen.DB.ugenSummary "Streson"
-
-    <http://www.csounds.com/manual/html/streson.html>
+<http://www.csounds.com/manual/html/streson.html>
 
 > import Sound.SC3 {- hsc3 -}
 > import qualified Sound.SC3.UGen.Bindings.DB.External as X {- hsc3 -}

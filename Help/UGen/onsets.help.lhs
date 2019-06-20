@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Onsets"
-    > Sound.SC3.UGen.DB.ugenSummary "Onsets"
-
 > import Sound.SC3 {- hsc3 -}
 
     > withSC3 (async (b_alloc 10 512 1))

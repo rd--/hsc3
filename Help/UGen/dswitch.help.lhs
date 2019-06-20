@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Dswitch"
-    > Sound.SC3.UGen.DB.ugenSummary "Dswitch"
-
 > import Sound.SC3 {- hsc3 -}
 >
 > mk_g :: UId m => (UGen -> UGen -> m UGen) -> m UGen

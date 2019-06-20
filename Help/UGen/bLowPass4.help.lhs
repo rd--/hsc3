@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "BLowPass4"
-    > :t bLowPass4
-
 > import Sound.SC3 {- hsc3 -}
 
 > g_01 =

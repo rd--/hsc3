@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "BufRateScale"
-    > Sound.SC3.UGen.DB.ugenSummary "BufRateScale"
-
 > import Sound.SC3 {- hsc 3 -}
 
 Load sound file to buffer zero (required for examples)

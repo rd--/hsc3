@@ -1,5 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "TWChoose"
-
 tWChoose is a composite of tWindex and select
 
 > import Sound.SC3 {- hsc3 -}

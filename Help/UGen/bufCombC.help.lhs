@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "BufCombC"
-    > Sound.SC3.UGen.DB.ugenSummary "BufCombC"
-
 > import Sound.SC3 {- hsc3 -}
 
 Allocate buffer zero (required for examples below)

@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Operator.dbamp"
-    > :t dbAmp
-
 > import Sound.SC3 {- hsc3 -}
 
 Linear db motion is exponential amplitude decay

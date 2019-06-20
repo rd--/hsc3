@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Stepper"
-    > Sound.SC3.UGen.DB.ugenSummary "Stepper"
-
 > import Sound.OSC {- hosc -}
 > import Sound.SC3 {- hsc3 -}
 

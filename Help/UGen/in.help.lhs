@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "In"
-    > Sound.SC3.UGen.DB.ugenSummary "In"
-
 Note: `hsc3` renames UGen to `in'` since `in` is a reserved keyword
 
 > import Sound.OSC {- hosc -}

@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "BufDelayC"
-    > Sound.SC3.UGen.DB.ugenSummary "BufDelayC"
-
 > import Sound.SC3 {- hsc3 -}
 
 Allocate buffer zero (required for examples below)

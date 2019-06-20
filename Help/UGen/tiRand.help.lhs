@@ -1,7 +1,8 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "TIRand"
-    > Sound.SC3.UGen.DB.ugenSummary "TIRand"
-
 > import Sound.SC3 {- hsc3 -}
+
+> g_00 =
+>   let l = tiRand 'α' (-1) 1 (dust 'β' KR 10)
+>   in pan2 (pinkNoise 'γ' AR * 0.1) l 1
 
 > g_01 :: UId m => m UGen
 > g_01 = do

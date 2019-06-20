@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Operator.=="
-    > :t (==**)
-
 The star suffixes (==**,/=**,<**,<=**,>**,>=**) are because the result of the
 operators is not of type Bool, as is required by the signature for the
 classes Eq and Ord.

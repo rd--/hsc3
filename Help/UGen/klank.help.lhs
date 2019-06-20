@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Klank"
-    > Sound.SC3.UGen.DB.ugenSummary "Klank"
-
 > import Sound.SC3 {- hsc3 -}
 
 The klankSpec family of functions can help create the 'spec' entry.

@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Free"
-    > Sound.SC3.UGen.DB.ugenSummary "Free"
-
 > import Sound.SC3 {- hsc3 -}
 >
 > g_01 = out 0 (sinOsc AR 880 0 * 0.1)

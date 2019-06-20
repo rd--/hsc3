@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "BufAllpassC"
-    > Sound.SC3.UGen.DB.ugenSummary "BufAllpassC"
-
 > import Sound.SC3 {- hsc3 -}
 
 Allocate buffer

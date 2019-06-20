@@ -1,5 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "StandardL"
-
 > import Sound.SC3 {- hsc3 -}
 
 > g_00 = standardL AR (sampleRate / 2) 1.0 0.5 0 * 0.2

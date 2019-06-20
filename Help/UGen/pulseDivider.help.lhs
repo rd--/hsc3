@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "PulseDivider"
-    > Sound.SC3.UGen.DB.ugenSummary "PulseDivider"
-
 > import Sound.SC3 {- hsc3 -}
 
 > g_01 =

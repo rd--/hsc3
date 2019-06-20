@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Shaper"
-    > Sound.SC3.UGen.DB.ugenSummary "Shaper"
-
 > import Sound.SC3 {- hsc3 -}
 > import qualified Sound.SC3.Common.Buffer.Gen as Gen {- hsc3 -}
 

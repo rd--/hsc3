@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "COsc"
-    > Sound.SC3.UGen.DB.ugenSummary "COsc"
-
 > import Sound.SC3 {- hsc3 -}
 
 Allocate and fill buffer.

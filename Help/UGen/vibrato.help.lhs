@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Vibrato"
-    Sound.SC3.UGen.DB.ugenSummary "Vibrato"
-
 > import Sound.SC3 {- hsc3 -}
 
 vibrato at 1 Hz, note the use of DC.ar

@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Klang"
-    > Sound.SC3.UGen.DB.ugenSummary "Klang"
-
 Note: SC2 had mul/add inputs.
 
 > import Sound.SC3 {- hsc3 -}

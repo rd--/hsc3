@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "WT_TimeWipe"
-    Sound.SC3.UGen.DB.ugenSummary "WT_TimeWipe"
-
 > import Sound.SC3 {- hsc3 -}
 > import Sound.SC3.UGen.Bindings.HW.External.Wavelets {- hsc3 -}
 

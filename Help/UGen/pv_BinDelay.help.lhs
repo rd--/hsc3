@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "PV_BinDelay"
-    > Sound.SC3.UGen.DB.ugenSummary "PV_BinDelay"
-
 > import Sound.OSC {- hsc3 -}
 > import Sound.SC3 {- hsc3 -}
 > import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}

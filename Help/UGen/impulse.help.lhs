@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Impulse"
-    > Sound.SC3.UGen.DB.ugenSummary "Impulse"
-
 Note: SC2 had no phase input.
 
 > import Sound.SC3 {- hsc3 -}

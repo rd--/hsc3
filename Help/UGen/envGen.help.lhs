@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "EnvGen"
-    > Sound.SC3.UGen.DB.ugenSummary "EnvGen"
-
 See also help files for the following envelope constructors:
 
 - envADSR

@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "RunningSum"
-    > Sound.SC3.UGen.DB.ugenSummary "RunningSum"
-
 > import Sound.SC3 {- hsc3 -}
 
 distorts of course - would need scaling

@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "BlockSize"
-    > Sound.SC3.UGen.DB.ugenSummary "BlockSize"
-
 > import Sound.SC3 {- hsc3 -}
 
 default block size is 64 samples

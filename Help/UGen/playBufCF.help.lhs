@@ -1,5 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "PlayBufCF"
-
 wslib: external/composite
 
 > import Sound.SC3 {- hsc3 -}

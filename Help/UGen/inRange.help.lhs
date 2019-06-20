@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "InRange"
-    > Sound.SC3.UGen.DB.ugenSummary "InRange"
-
 > import Sound.SC3 {- hsc3 -}
 
 trigger noise burst

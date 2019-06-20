@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "TDuty"
-    > Sound.SC3.UGen.DB.ugenSummary "TDuty"
-
 > import Data.List {- base -}
 > import Sound.SC3 {- hsc3 -}
 

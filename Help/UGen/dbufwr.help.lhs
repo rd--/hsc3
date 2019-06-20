@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Dbufwr"
-    > Sound.SC3.UGen.DB.ugenSummary "Dbufwr"
-
 > import Sound.SC3 {- hsc3 -}
 
 allocate buffer

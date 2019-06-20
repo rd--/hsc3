@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "TChoose"
-    :t tChoose
-
 tChoose is a composite of tIRand and select.
 
 > import Sound.SC3 {- hsc3 -}

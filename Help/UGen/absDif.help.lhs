@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Operator.absdif"
-    > :t absDif
-
 > import Sound.SC3 {- hsc3 -}
 
 Finding the magnitude of the difference of two values is a common operation.

@@ -1,7 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "BLowPass"
-    > Sound.SC3.UGen.DB.ugenSummary "BLowPass"
-    > :t bLowPassCoef
-
 > import Sound.SC3 {- hsc3 -}
 > import Sound.SC3.Common.Math.Filter.BEQ {- hsc3 -}
 

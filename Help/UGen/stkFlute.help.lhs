@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "StkFlute"
-    Sound.SC3.UGen.DB.ugenSummary "StkFlute"
-
 > import Sound.SC3 {- hsc3 -}
 > import Sound.SC3.UGen.Record.Plain.StkFlute {- hsc3-rec -}
 

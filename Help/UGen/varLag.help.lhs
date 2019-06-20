@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "VarLag"
-    Sound.SC3.UGen.DB.ugenSummary "VarLag"
-
 > import Sound.SC3 {- hsc3 -}
 
 The implemented varLag UGen has three inputs: (input, lagTime, start)

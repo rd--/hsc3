@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "SendReply"
-    > Sound.SC3.UGen.DB.ugenSummary "SendReply"
-
 > import Sound.OSC {- hosc3 -}
 > import Sound.SC3 {- hsc3 -}
 

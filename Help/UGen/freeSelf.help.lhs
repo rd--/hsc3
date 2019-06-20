@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "FreeSelf"
-    > Sound.SC3.UGen.DB.ugenSummary "FreeSelf"
-
 > import Sound.SC3 {- hsc3 -}
 >
 > g_01 =

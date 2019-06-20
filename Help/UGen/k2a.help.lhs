@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "K2A"
-    > Sound.SC3.UGen.DB.ugenSummary "K2A"
-
 > import Sound.SC3 {- hsc3 -}
 
 > g_01 = k2a (whiteNoise 'α' KR * 0.3)

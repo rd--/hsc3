@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "StkBandedWG"
-    Sound.SC3.UGen.DB.ugenSummary "StkBandedWG"
-
 > import Sound.SC3 {- hsc3 -}
 > import Sound.SC3.UGen.Record.Plain.StkBandedWG {- hsc3-rec -}
 

@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "FreeVerb"
-    > Sound.SC3.UGen.DB.ugenSummary "FreeVerb"
-
 > import Sound.SC3 {- hsc3 -}
 
 > g_01 =

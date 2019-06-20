@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "TGrains"
-    > Sound.SC3.UGen.DB.ugenSummary "TGrains"
-
 > import Sound.SC3 {- hsc3 -}
 
 Load audio (#10) data

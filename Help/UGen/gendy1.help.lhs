@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "Gendy1"
-    > Sound.SC3.UGen.DB.ugenSummary "Gendy1"
-
 > import Data.Char {- base -}
 > import Sound.SC3 {- base -}
 

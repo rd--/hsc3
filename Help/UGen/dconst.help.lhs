@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "DConst"
-    > Sound.SC3.UGen.DB.ugenSummary "DConst"
-
 > import Sound.SC3 {- hsc3 -}
 
 fast notes of random duration for 0.5 seconds, then a single note for 0.5 seconds

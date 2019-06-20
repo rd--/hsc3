@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "InTrig"
-    > Sound.SC3.UGen.DB.ugenSummary "InTrig"
-
 > import Sound.SC3 {- hsc3 -}
 
 Run an oscillator with the trigger at bus 10.

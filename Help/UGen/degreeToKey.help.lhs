@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "DegreeToKey"
-    > Sound.SC3.UGen.DB.ugenSummary "DegreeToKey"
-
 > import Sound.SC3 {- hsc3 -}
 
 allocate & initialise buffer zero

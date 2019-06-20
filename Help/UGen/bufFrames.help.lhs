@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "BufFrames"
-    > Sound.SC3.UGen.DB.ugenSummary "BufFrames"
-
 > import Sound.SC3
 
 Load sound file to buffer zero (required for examples)

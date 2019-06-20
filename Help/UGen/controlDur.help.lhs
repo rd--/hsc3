@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "ControlDur"
-    > Sound.SC3.UGen.DB.ugenSummary "ControlDur"
-
 > import Sound.SC3 {- hsc3 -}
 
 default block size = 64, default sample rate = 48000

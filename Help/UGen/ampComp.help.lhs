@@ -1,6 +1,3 @@
-    > Sound.SC3.UGen.Help.viewSC3Help "AmpComp"
-    > Sound.SC3.UGen.DB.ugenSummary "AmpComp"
-
 > import Sound.SC3 {- hsc3 -}
 
 mouse X axis frequency control

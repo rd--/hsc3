@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Sweep"
-    Sound.SC3.UGen.DB.ugenSummary "Sweep"
-
 > import Sound.SC3 {- hsc3 -}
 
 Using sweep to modulate sine frequency
