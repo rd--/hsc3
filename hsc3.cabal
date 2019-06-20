@@ -74,7 +74,6 @@ Library
                    Sound.SC3.Server.Graphdef.Graph
                    Sound.SC3.Server.Graphdef.Read
                    Sound.SC3.Server.FD
-                   Sound.SC3.Server.Help
                    Sound.SC3.Server.Monad
                    Sound.SC3.Server.NRT
                    Sound.SC3.Server.NRT.Edit
@@ -104,7 +103,6 @@ Library
                    Sound.SC3.UGen.Graph
                    Sound.SC3.UGen.Graph.Reconstruct
                    Sound.SC3.UGen.Graph.Transform
-                   Sound.SC3.UGen.Help
                    Sound.SC3.UGen.Help.Graph
                    Sound.SC3.UGen.HS
                    Sound.SC3.UGen.Math
