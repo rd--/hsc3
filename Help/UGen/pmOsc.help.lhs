@@ -1,4 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "PMOsc"
     :t pmOsc
 
 pmOsc is a composite of sinOsc, ie. sinOsc r cf (sinOsc r mf mp * pm)

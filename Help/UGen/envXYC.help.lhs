@@ -1,5 +1,4 @@
     Sound.SC3.UGen.Help.viewSC3Help "Env.*xyc"
-    :t Sound.SC3.envXYC
 
 > import Sound.SC3 {- hsc3 -}
 

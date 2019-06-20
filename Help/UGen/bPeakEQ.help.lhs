@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "BPeakEQ"
-    Sound.SC3.UGen.DB.ugenSummary "BPeakEQ"
-
 > import Sound.SC3 {- hsc3 -}
 > import Sound.SC3.Common.Math.Filter.BEQ {- hsc3 -}
 

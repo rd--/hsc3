@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "QuadN"
-    Sound.SC3.UGen.DB.ugenSummary "QuadN"
-
 > import Sound.SC3 {- hsc3 -}
 
 > g_01 = quadC AR (sampleRate / 2) 1 (-1) (-0.75) 0 * 0.2

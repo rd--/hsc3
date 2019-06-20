@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "RandSeed"
-    Sound.SC3.UGen.DB.ugenSummary "RandSeed"
-
 > import Sound.SC3
 
 start a noise patch

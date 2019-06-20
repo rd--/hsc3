@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Formant"
-    Sound.SC3.UGen.DB.ugenSummary "Formant"
-
 > import Sound.SC3 {- hsc3 -}
 
 Default values

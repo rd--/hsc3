@@ -1,6 +1,5 @@
     Sound.SC3.UGen.Help.viewSC3Help "Env.*linen"
     :i Sound.SC3.LINEN
-    :t envLinen
 
 > import Sound.SC3 {- hsc3 -}
 

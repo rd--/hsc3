@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "LFPulse"
-    Sound.SC3.UGen.DB.ugenSummary "LFPulse"
-
 Note: SC2 had no initial phase argument.
 
 > import Sound.SC3

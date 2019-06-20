@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Resonz"
-    Sound.SC3.UGen.DB.ugenSummary "Resonz"
-
 > import Sound.SC3 {- hsc3 -}
 
 The Q factor of a resonator is defined as the center-frequency (cf) divided by the bandwidth (bw).

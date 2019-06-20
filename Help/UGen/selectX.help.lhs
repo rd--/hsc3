@@ -1,4 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "SelectX"
     :t selectX
 
 selectX is a composite ugen graph

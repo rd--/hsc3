@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "LocalIn"
-    Sound.SC3.UGen.DB.ugenSummary "LocalIn"
-
 > import Sound.SC3 {- hsc3 -}
 
 > noise_signal =

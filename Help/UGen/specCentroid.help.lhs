@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "SpecCentroid"
-    Sound.SC3.UGen.DB.ugenSummary "SpecCentroid"
-
 > import Sound.SC3 {- hsc3 -}
 
 as the number of harmonics increases, the centroid is pushed higher

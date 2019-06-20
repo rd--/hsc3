@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "BeatTrack"
-    Sound.SC3.UGen.DB.ugenSummary "BeatTrack"
-
 > import Sound.SC3 {- hsc3 -}
 
     > withSC3 (async (b_alloc 10 1024 1))

@@ -1,5 +1,5 @@
 > import Sound.SC3 {- hsc3 -}
->
+
 > g_01 =
 >     let n = dwrand 'α' dinf (mce [0.3,0.2,0.1,0.2,0.2]) (mce [1,3,2,7,8])
 >         x = mouseX KR 1 400 Exponential 0.1

@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "MZPokey"
-    Sound.SC3.UGen.DB.ugenSummary "MZPokey"
-
 > import Sound.SC3 {- hsc3 -}
 > import qualified Sound.SC3.UGen.Bindings.HW.External.F0 as F0 {- hsc3 -}
 > import qualified Sound.SC3.Lang.Math as M

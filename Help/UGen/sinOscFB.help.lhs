@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "SinOscFB"
-    Sound.SC3.UGen.DB.ugenSummary "SinOscFB"
-
 > import Sound.SC3 {- hsc3 -}
 
     {SinOscFB.ar([400,301],MouseX.kr(0,4))*0.1}.play

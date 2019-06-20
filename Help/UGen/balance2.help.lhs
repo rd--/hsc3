@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Balance2"
-    Sound.SC3.UGen.DB.ugenSummary "Balance2"
-
 > import Sound.SC3 {- hsc3 -}
 
 {Balance2.ar(LFSaw.ar(44),Pulse.ar(33),FSinOsc.kr(0.5),0.1)}.play

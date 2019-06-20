@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Hasher"
-    Sound.SC3.UGen.DB.ugenSummary "Hasher"
-
 > import Sound.SC3 {- hsc3 -}
 
 noise

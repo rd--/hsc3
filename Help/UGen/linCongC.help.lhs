@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "LinCongC"
-    Sound.SC3.UGen.DB.ugenSummary "LinCongC"
-
 > import Sound.SC3 {- hsc3 -}
 > import Sound.SC3.Common.Math.Noise {- hsc3 -}
 

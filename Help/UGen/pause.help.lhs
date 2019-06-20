@@ -1,5 +1,5 @@
 > import Sound.SC3 {- hsc3 -}
->
+
 > g_01 =
 >     let f = control KR "f" 440
 >         g = control KR "g" 1

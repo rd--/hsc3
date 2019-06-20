@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "RedPhasor"
-    Sound.SC3.UGen.DB.ugenSummary "RedPhasor"
-
 > import Sound.SC3 {- hsc3 -}
 > import qualified Sound.SC3.UGen.Bindings.HW.External.F0 as F0 {- hsc3 -}
 

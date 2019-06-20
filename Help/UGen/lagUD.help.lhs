@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "LagUD"
-    Sound.SC3.UGen.DB.ugenSummary "LagUD"
-
 > import Sound.SC3 {- hsc3 -}
 
 lag pitch, slower down (5 seconds) than up (1 second)

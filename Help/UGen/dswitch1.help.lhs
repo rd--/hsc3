@@ -1,5 +1,5 @@
 > import Sound.SC3 {- hsc3 -}
->
+
 > g_01 =
 >     let x = mouseX KR 0 4 Linear 0.1
 >         y = mouseY KR 1 15 Linear 0.1

@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Decay"
-    Sound.SC3.UGen.DB.ugenSummary "Decay"
-
 > import Sound.SC3 {- hsc3 -}
 
 Used as an envelope.

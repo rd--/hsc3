@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Mix"
-    Sound.SC3.UGen.DB.ugenSummary "Mix"
-
 > import Sound.SC3 {- hsc3 -}
 
 optimized summation (see sum_opt), ie. Sum3

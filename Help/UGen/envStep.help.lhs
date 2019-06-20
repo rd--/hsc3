@@ -1,5 +1,4 @@
     Sound.SC3.UGen.Help.viewSC3Help "Env.*step"
-    :i Sound.SC3.envStep
 
 > import Sound.SC3 {- hsc3 -}
 

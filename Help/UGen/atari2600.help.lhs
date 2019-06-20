@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Atari2600"
-    Sound.SC3.UGen.DB.ugenSummary "Atari2600"
-
 > import Sound.SC3 {- hsc3 -}
 > import qualified Sound.SC3.UGen.Bindings.HW.External.F0 as X {- hsc3 -}
 

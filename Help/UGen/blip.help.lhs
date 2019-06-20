@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Blip"
-    Sound.SC3.UGen.DB.ugenSummary "Blip"
-
 > import Sound.SC3 {- hsc3 -}
 
 > g_01 = blip AR 440 200 * 0.1

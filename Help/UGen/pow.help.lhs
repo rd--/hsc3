@@ -1,5 +1,5 @@
 > import Sound.SC3 {- hsc3 -}
->
+
 > g_01 =
 >     let a = fSinOsc AR 100 0 * 0.1
 >     in mce2 a (a ** 10)

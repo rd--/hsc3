@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "MulAdd"
-    Sound.SC3.UGen.DB.ugenSummary "MulAdd"
-
 > import Sound.SC3 {- hsc3 -}
 
 > g_01 = mulAdd (sinOsc AR 440 0) 0.1 0.05

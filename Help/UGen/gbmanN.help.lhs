@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "GbmanN"
-    Sound.SC3.UGen.DB.ugenSummary "GbmanN"
-
 > import Sound.SC3 {- hsc3 -}
 
 default initial params

@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "RecordBuf"
-    Sound.SC3.UGen.DB.ugenSummary "RecordBuf"
-
 > import Sound.SC3 {- hsc3 -}
 
 > b_01 :: Num n => n

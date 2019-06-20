@@ -1,5 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "EnvGate"
-
 > import Sound.SC3 {- hsc3 -}
 
 Make envGate, giving the /default/ arguments, as used by envGate_def.

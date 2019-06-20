@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "SendTrig"
-    Sound.SC3.UGen.DB.ugenSummary "SendTrig"
-
 > import Control.Monad {- base -}
 > import Data.Maybe {- base -}
 

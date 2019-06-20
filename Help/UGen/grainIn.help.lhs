@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "GrainIn"
-    Sound.SC3.UGen.DB.ugenSummary "GrainIn"
-
 > import Sound.SC3 {- hsc3 -}
 
 > f_01 s =

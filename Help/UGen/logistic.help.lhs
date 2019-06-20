@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Logistic"
-    Sound.SC3.UGen.DB.ugenSummary "Logistic"
-
 > import Sound.SC3 {- hsc3 -}
 
 SC3 default parameters

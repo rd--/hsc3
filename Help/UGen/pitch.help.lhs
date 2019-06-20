@@ -1,5 +1,5 @@
-     Sound.SC3.UGen.Help.viewSC3Help "Pitch"
-     Sound.SC3.UGen.DB.ugenSummary "Pitch"
+ 
+ 
 
 > import Sound.SC3 {- hsc3 -}
 

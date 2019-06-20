@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "NodeId"
-    Sound.SC3.UGen.DB.ugenSummary "NodeId"
-
 > import Sound.SC3 {- hsc3 -}
 
 NodeId, except that negative nodeId are not reported.

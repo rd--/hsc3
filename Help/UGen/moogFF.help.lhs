@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "MoogFF"
-    Sound.SC3.UGen.DB.ugenSummary "MoogFF"
-
 > import Sound.SC3 {- hsc3 -}
 
 > g_01 =

@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "PulseDPW"
-    Sound.SC3.UGen.DB.ugenSummary "PulseDPW"
-
 > import Sound.SC3 {- hsc3 -}
 > import qualified Sound.SC3.UGen.Bindings.Composite.External as X {- hsc3 -}
 

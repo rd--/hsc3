@@ -1,5 +1,5 @@
 > import Sound.SC3 {- hsc3 -}
->
+
 > g_01 :: UId m => m UGen
 > g_01 = do
 >   r <- dustM KR 1
@@ -8,7 +8,7 @@
 >       f = demand t r s
 >       o = sinOsc AR (mce [f,f + 0.7]) 0
 >   return (max (cubed o) 0 * 0.1)
->
+
 > g_02 =
 >     let n = diwhite 'α' dinf 60 72
 >         t = impulse KR 10 0

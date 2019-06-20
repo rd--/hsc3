@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Phasor"
-    Sound.SC3.UGen.DB.ugenSummary "Phasor"
-
 > import Sound.SC3
 
 phasor controls sine frequency, end frequency matches second sine.

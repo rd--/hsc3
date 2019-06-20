@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "SOS"
-    Sound.SC3.UGen.DB.ugenSummary "SOS"
-
 > import Sound.SC3 {- hsc3 -}
 
 Same as TwoPole

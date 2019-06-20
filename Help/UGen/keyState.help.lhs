@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "KeyState"
-    Sound.SC3.UGen.DB.ugenSummary "KeyState"
-
 > import Sound.SC3 {- hsc3 -}
 
 The keycode 38 is the A key on my keyboard.  Under X the xev(1)

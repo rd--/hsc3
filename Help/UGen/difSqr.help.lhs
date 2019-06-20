@@ -1,5 +1,5 @@
 > import Sound.SC3 {- hsc3 -}
->
+
 > g_01 =
 >     let a = fSinOsc AR 800 0
 >         b = fSinOsc AR (xLine KR 200 500 5 DoNothing) 0

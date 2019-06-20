@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Saw"
-    Sound.SC3.UGen.DB.ugenSummary "Saw"
-
 > import Sound.SC3 {- hsc3 -}
 
 SC3 saw is descending

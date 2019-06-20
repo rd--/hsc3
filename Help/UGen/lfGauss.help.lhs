@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "LFGauss"
-    Sound.SC3.UGen.DB.ugenSummary "LFGauss"
-
 > import Sound.SC3 {- hsc3 -}
 
 modulating duration

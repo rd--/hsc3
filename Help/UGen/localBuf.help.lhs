@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "LocalBuf"
-    Sound.SC3.UGen.DB.ugenSummary "LocalBuf"
-
 > import Sound.SC3 {- hsc3 -}
 
 Allocate a buffer local to the synthesis graph, 1-channel, 2048

@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "LinLin"
-    Sound.SC3.UGen.DB.ugenSummary "LinLin"
-
 > import Sound.SC3 {- hsc3 -}
 
 linLin is a function for writing a MulAdd UGen.

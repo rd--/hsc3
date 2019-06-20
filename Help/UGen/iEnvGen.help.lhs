@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "IEnvGen"
-    Sound.SC3.UGen.DB.ugenSummary "IEnvGen"
-
 > import Sound.SC3 {- hsc3 -}
 
 > e_01 :: (Fractional n,Ord n) => Envelope n

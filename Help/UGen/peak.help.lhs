@@ -1,5 +1,5 @@
 > import Sound.SC3 {- hsc3 -}
->
+
 > g_01 =
 >     let t = dust 'α' AR 20
 >         r = impulse AR 0.4 0

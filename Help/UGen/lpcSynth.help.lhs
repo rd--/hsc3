@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "LPCSynth"
-    Sound.SC3.UGen.DB.ugenSummary "LPCSynth"
-
 > import Sound.OSC {- hosc -}
 > import Sound.SC3 {- hsc3 -}
 > import qualified Sound.SC3.UGen.Bindings.DB.External as X {- hsc3 -}

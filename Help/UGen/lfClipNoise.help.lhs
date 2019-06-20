@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "LFClipNoise"
-    Sound.SC3.UGen.DB.ugenSummary "LFClipNoise"
-
 > import Sound.SC3 {- hsc3 -}
 
 > g_01 = lfClipNoise 'α' AR 1000 * 0.05

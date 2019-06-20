@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "MouseX"
-    Sound.SC3.UGen.DB.ugenSummary "MouseX"
-
 > import Sound.SC3
 
 > e_01 = map from_warp [Linear,Exponential]

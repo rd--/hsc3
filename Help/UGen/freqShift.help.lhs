@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "FreqShift"
-    Sound.SC3.UGen.DB.ugenSummary "FreqShift"
-
 > import Sound.SC3 {- hcs3 -}
 
 Shifting a 100Hz tone by 1 Hz rising to 500Hz

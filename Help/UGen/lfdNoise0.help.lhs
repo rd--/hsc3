@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "LFDNoise0"
-    Sound.SC3.UGen.DB.ugenSummary "LFDNoise0"
-
 > import Sound.SC3 {- hsc3 -}
 
 for fast x LFNoise frequently seems stuck, LFDNoise changes smoothly

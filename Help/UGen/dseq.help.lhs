@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Dseq"
-    Sound.SC3.UGen.DB.ugenSummary "Dseq"
-
 > import Sound.SC3 {- hsc3 -}
 
 At control rate.

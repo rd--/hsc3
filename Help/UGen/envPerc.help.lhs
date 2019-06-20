@@ -1,5 +1,4 @@
     Sound.SC3.UGen.Help.viewSC3Help "Env.*perc"
-    :t envPerc'
 
 > import Sound.SC3 {- hsc3 -}
 

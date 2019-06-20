@@ -1,7 +1,4 @@
     Sound.SC3.UGen.Help.viewSC3Help "Env.*adsr"
-    :i Sound.SC3.ADSR
-    :t Sound.SC3.envADSR_r
-    :t Sound.SC3.envADSR
 
 > import Sound.SC3 {- hsc3 -}
 

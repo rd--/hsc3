@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Ramp"
-    Sound.SC3.UGen.DB.ugenSummary "Ramp"
-
 > import Sound.SC3 {- hsc3 -}
 
 Used to lag pitch

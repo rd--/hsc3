@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "LFDClipNoise"
-    Sound.SC3.UGen.DB.ugenSummary "LFDClipNoise"
-
 > import Sound.SC3 {- hsc3 -}
 
 for fast x lfClipNoise frequently seems stuck, lfdClipNoise changes smoothly

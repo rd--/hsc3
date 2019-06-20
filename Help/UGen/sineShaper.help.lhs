@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "SineShaper"
-    Sound.SC3.UGen.DB.ugenSummary "SineShaper"
-
 > import Sound.SC3 {- hsc3 -}
 > import qualified Sound.SC3.UGen.Bindings.DB.External as X {- hsc3 -}
 

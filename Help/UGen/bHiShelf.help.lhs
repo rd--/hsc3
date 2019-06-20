@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "BHiShelf"
-    Sound.SC3.UGen.DB.ugenSummary "BHiShelf"
-
 > import Sound.SC3 {- hsc3 -}
 > import Sound.SC3.Common.Math.Filter.BEQ {- hsc3 -}
 

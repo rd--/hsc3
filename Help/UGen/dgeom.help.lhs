@@ -1,5 +1,5 @@
 > import Sound.SC3 {- hsc3 -}
->
+
 > g_01 =
 >     let n = dgeom 'α' 15 1 1.2
 >         x = mouseX KR 1 40 Exponential 0.1

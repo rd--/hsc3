@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Compander"
-    Sound.SC3.UGen.DB.ugenSummary "Compander"
-
 > import Sound.SC3 {- hsc3 -}
 
 Example signal to process.

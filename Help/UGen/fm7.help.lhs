@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "FM7"
-    Sound.SC3.UGen.DB.ugenSummary "FM7"
-
 > import Sound.SC3 {- hsc3 -}
 > import qualified Sound.SC3.UGen.Bindings.Composite.External as X {- hsc3 -}
 

@@ -1,5 +1,3 @@
-    :t Sound.SC3.envTrapezoid
-
 > import Sound.SC3
 
 > g_01 =

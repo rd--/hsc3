@@ -1,8 +1,5 @@
-    Sound.SC3.UGen.Help.viewSC3Help "ClipNoise"
-    Sound.SC3.UGen.DB.ugenSummary "ClipNoise"
-
 > import Sound.SC3
->
+
 > g_01 = clipNoise 'α' AR * 0.1 {- hsc3 -}
 
 Drawings

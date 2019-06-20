@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "SinOsc"
-    Sound.SC3.UGen.DB.ugenSummary "SinOsc"
-
 > import Sound.SC3 {- hsc3 -}
 
 Fixed frequency (hz) and initial-phase (radians)

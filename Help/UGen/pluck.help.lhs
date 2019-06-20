@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Pluck"
-    Sound.SC3.UGen.DB.ugenSummary "Pluck"
-
 > import Sound.SC3 {- hsc3 -}
 > import Sound.SC3.UGen.Protect {- hsc3-rw -}
 

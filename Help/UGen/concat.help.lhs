@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Concat"
-    Sound.SC3.UGen.DB.ugenSummary "Concat"
-
 > import Sound.SC3 {- hsc3 -}
 
 > fn_01 = "/home/rohan/data/audio/pf-c5.snd"

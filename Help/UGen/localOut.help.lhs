@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "LocalOut"
-    Sound.SC3.UGen.DB.ugenSummary "LocalOut"
-
 > import Sound.SC3 {- hsc3 -}
 
 Resonator, must subtract blockSize for correct tuning

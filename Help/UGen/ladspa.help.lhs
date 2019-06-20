@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "LADSPA"
-    Sound.SC3.UGen.DB.ugenSummary "LADSPA"
-
 > import Sound.SC3 {- hsc3 -}
 > import qualified Sound.SC3.UGen.Bindings.HW.External as X {- hsc3 -}
 

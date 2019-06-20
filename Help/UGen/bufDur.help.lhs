@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "BufDur"
-    Sound.SC3.UGen.DB.ugenSummary "BufDur"
-
 > import Sound.SC3 {- hsc3 -}
 
 Load sound file to buffer zero (required for examples)

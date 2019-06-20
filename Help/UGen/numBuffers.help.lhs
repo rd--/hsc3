@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "NumBuffers"
-    Sound.SC3.UGen.DB.ugenSummary "NumBuffers"
-
 > import Sound.SC3 {- hsc3 -}
 
 the number of audio buffers available at the server (by default 1024)

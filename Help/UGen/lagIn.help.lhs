@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "LagIn"
-    Sound.SC3.UGen.DB.ugenSummary "LagIn"
-
 > import Sound.SC3 {- hsc3 -}
 
 Set frequency at control bus

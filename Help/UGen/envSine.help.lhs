@@ -1,5 +1,4 @@
     Sound.SC3.UGen.Help.viewSC3Help "Env.*sine"
-    :t Sound.SC3.envSine
 
 > import Sound.SC3 {- hsc3 -}
 

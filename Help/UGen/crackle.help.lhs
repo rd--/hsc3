@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Crackle"
-    Sound.SC3.UGen.DB.ugenSummary "Crackle"
-
 > import Sound.SC3 {- hsc3 -}
 
 > g_01 = crackle AR 1.95 * 0.2

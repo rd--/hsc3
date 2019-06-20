@@ -1,6 +1,6 @@
 > import Prelude hiding ((<*)) {- base -}
 > import Sound.SC3 {- hsc3 -}
->
+
 > g_01 =
 >     let o = fSinOsc AR 1000 0
 >         l = line AR 1 (-1) 4 RemoveSynth

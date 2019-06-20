@@ -1,5 +1,5 @@
 > import Sound.SC3 {- hsc3 -}
->
+
 > mk_g :: UId m => (UGen -> UGen -> m UGen) -> m UGen
 > mk_g sw = do
 >   a0 <- dwhiteM 2 3 4

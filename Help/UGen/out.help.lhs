@@ -1,6 +1,3 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Out"
-    Sound.SC3.UGen.DB.ugenSummary "Out"
-
 > import Sound.SC3 {- hsc3 -}
 
 Oscillators at outputs zero (330) and one (331)

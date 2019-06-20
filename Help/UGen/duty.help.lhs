@@ -1,5 +1,5 @@
 > import Sound.SC3 {- hsc3 -}
->
+
 > g_01 :: UId m => m UGen
 > g_01 = do
 >   n0 <- drandM dinf (mce [0.01,0.2,0.4])

@@ -1,5 +1,3 @@
-    :t envCoord
-
 > import Sound.SC3 {- hsc3 -}
 
 co-ordinate (break-point) envelope
