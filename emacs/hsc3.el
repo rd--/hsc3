@@ -13,6 +13,10 @@
   nil
   "*The directory containing the help files (default=nil).")
 
+(defvar sc3-help-directory
+  nil
+  "*The directory containing the SC3 RTF help files (default=nil).")
+
 (defvar hsc3-literate-p
   t
   "*Flag to indicate if we are in literate mode (default=t).")
@@ -49,30 +53,22 @@
   "Remove initial comment and Bird-literate markers if present."
    (replace-regexp-in-string "^[- ]*[> ]*" "" s))
 
+(defun hsc3-find-files (dir rgx)
+  (mapc (lambda (filename)
+          (find-file-other-window filename))
+        (find-lisp-find-files dir rgx)))
+
 (defun hsc3-help ()
   "Lookup up the name at point in the hsc3 help files."
   (interactive)
-  (mapc (lambda (filename)
-	  (find-file-other-window filename))
-	(find-lisp-find-files hsc3-help-directory
-			      (concat "^"
-				      (thing-at-point 'symbol)
-				      "\\.help\\.l?hs$"))))
+  (let ((rgx (concat "^" (thing-at-point 'symbol) "\\.help\\.l?hs$")))
+    (hsc3-find-files hsc3-help-directory rgx)))
 
-(defun hsc3-sc3-ugen-help ()
-  "Lookup up the UGen name at point in the SC3 help files."
+(defun hsc3-sc3-help ()
+  "Lookup up the name at point in the SC3 (RTF) help files."
   (interactive)
-  (hsc3-send-string
-   (format
-    "Sound.SC3.viewSC3Help (Sound.SC3.UGen.DB.ugenSC3Name \"%s\")"
-    (thing-at-point 'symbol))))
-
-(defun hsc3-sc3-server-help ()
-  "Lookup up the Server Command name at point in the SC3 help files."
-  (interactive)
-  (hsc3-send-string
-   (format "Sound.SC3.Server.Help.viewServerHelp \"%s\""
-           (thing-at-point 'symbol))))
+  (let ((rgx (concat "^" (thing-at-point 'symbol) "\\.help\\.rtf$")))
+    (hsc3-find-files sc3-help-directory rgx)))
 
 (defun hsc3-ugen-summary ()
   "Lookup up the UGen at point in hsc3-db"

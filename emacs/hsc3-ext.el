@@ -120,3 +120,19 @@
 ;;   (hsc3-send-string ":{")
 ;;   (hsc3-send-string (hsc3-region-string))
 ;;   (hsc3-send-string ":}"))
+
+;;(defun hsc3-sc3-ugen-help ()
+;;  "Lookup up the UGen name at point in the SC3 (HTML) help files."
+;;  (interactive)
+;;  (hsc3-send-string
+;;   (format
+;;    "Sound.SC3.viewSC3Help (Sound.SC3.UGen.DB.ugenSC3Name \"%s\")"
+;;    (thing-at-point 'symbol))))
+
+;;(defun hsc3-sc3-server-help ()
+;;  "Lookup up the Server Command name at point in the SC3 help files."
+;;  (interactive)
+;;  (hsc3-send-string
+;;   (format "Sound.SC3.Server.Help.viewServerHelp \"%s\""
+;;           (thing-at-point 'symbol))))
+
