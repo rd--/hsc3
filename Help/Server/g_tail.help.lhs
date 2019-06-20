@@ -1,1 +1,1 @@
-> Sound.SC3.Server.Help.viewServerHelp "/g_tail"
+    Sound.SC3.Lang.Help.viewServerHelp "/g_tail"

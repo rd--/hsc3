@@ -1,4 +1,4 @@
-    Sound.SC3.Server.Help.viewServerHelp "/status"
+    Sound.SC3.Lang.Help.viewServerHelp "/status"
 
 > import Sound.SC3 {- hsc3 -}
 

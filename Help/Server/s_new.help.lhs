@@ -1,1 +1,1 @@
-    > Sound.SC3.Server.Help.viewServerHelp "/s_new"
+    Sound.SC3.Lang.Help.viewServerHelp "/s_new"

@@ -1,4 +1,4 @@
-    Sound.SC3.Server.Help.viewServerHelp "/g_queryTree"
+    Sound.SC3.Lang.Help.viewServerHelp "/g_queryTree"
 
 > import Sound.OSC {- hosc -}
 > import Sound.SC3 {- hsc3 -}

@@ -1,1 +1,1 @@
-> Sound.SC3.Server.Help.viewServerHelp "/n_fill"
+    Sound.SC3.Lang.Help.viewServerHelp "/n_fill"

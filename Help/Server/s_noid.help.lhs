@@ -1,1 +1,1 @@
-> Sound.SC3.Server.Help.viewServerHelp "/s_noid"
+    Sound.SC3.Lang.Help.viewServerHelp "/s_noid"

@@ -1,1 +1,1 @@
-> Sound.SC3.Server.Help.viewServerHelp "/c_setn"
+    Sound.SC3.Lang.Help.viewServerHelp "/c_setn"

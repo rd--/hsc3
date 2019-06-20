@@ -1,1 +1,1 @@
-> Sound.SC3.Server.Help.viewServerHelp "/d_recv"
+    Sound.SC3.Lang.Help.viewServerHelp "/d_recv"

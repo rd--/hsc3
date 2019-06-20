@@ -1,1 +1,1 @@
-> Sound.SC3.Server.Help.viewServerHelp "/clearSched"
+    Sound.SC3.Lang.Help.viewServerHelp "/clearSched"

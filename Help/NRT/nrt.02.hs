@@ -1,5 +1,5 @@
-import Sound.OSC
-import Sound.SC3
+import Sound.OSC {- hosc3 -}
+import Sound.SC3 {- hsc3 -}
 
 sy = synthdef "sin" (out 0 (sinOsc AR (control KR "freq" 440) 0 * 0.2))
 b0 = bundle 0.0 [g_new [(1, AddToTail, 0)], d_recv sy]

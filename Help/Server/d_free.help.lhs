@@ -1,1 +1,1 @@
-> Sound.SC3.Server.Help.viewServerHelp "/d_free"
+    Sound.SC3.Lang.Help.viewServerHelp "/d_free"

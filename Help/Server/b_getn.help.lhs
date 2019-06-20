@@ -1,4 +1,4 @@
-    Sound.SC3.Server.Help.viewServerHelp "/b_getn"
+    Sound.SC3.Lang.Help.viewServerHelp "/b_getn"
 
 > import Sound.OSC {- hosc -}
 > import Sound.SC3 {- hsc3 -}

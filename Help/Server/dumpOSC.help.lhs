@@ -1,4 +1,4 @@
-    Sound.SC3.Server.Help.viewServerHelp "/dumpOSC"
+    Sound.SC3.Lang.Help.viewServerHelp "/dumpOSC"
 
 > import Sound.OSC {- hosc -}
 > import Sound.SC3 {- hsc3 -}

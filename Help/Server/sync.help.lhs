@@ -1,1 +1,1 @@
-> Sound.SC3.Server.Help.viewServerHelp "/sync"
+    Sound.SC3.Lang.Help.viewServerHelp "/sync"

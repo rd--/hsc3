@@ -1,4 +1,4 @@
-    Sound.SC3.Server.Help.viewServerHelp "/b_free"
+    Sound.SC3.Lang.Help.viewServerHelp "/b_free"
 
 > import Sound.SC3 {- hsc3 -}
 

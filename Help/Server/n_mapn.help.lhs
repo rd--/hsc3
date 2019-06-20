@@ -1,4 +1,4 @@
-    Sound.SC3.Server.Help.viewServerHelp "/n_mapn"
+    Sound.SC3.Lang.Help.viewServerHelp "/n_mapn"
 
 > import Sound.OSC {- hosc -}
 > import Sound.SC3 {- hsc3 -}

@@ -1,1 +1,1 @@
-> Sound.SC3.Server.Help.viewServerHelp "/quit"
+    Sound.SC3.Lang.Help.viewServerHelp "/quit"

@@ -1,4 +1,4 @@
-    > Sound.SC3.Server.Help.viewServerHelp "/g_freeAll"
+    Sound.SC3.Lang.Help.viewServerHelp "/g_freeAll"
 
 > import Sound.OSC
 > import Sound.SC3

@@ -1,4 +1,4 @@
-    Sound.SC3.Server.Help.viewServerHelp "/b_alloc"
+    Sound.SC3.Lang.Help.viewServerHelp "/b_alloc"
 
 Buffer indices are not restricted by the number of available buffers
 at the server.  Below allocates a buffer at index 2 ^ 15.  Note the

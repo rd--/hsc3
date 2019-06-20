@@ -1,4 +1,4 @@
-    Sound.SC3.Server.Help.viewServerHelp "/b_allocRead"
+    Sound.SC3.Lang.Help.viewServerHelp "/b_allocRead"
 
 > import Sound.OSC {- hosc -}
 > import Sound.SC3 {- hsc3 -}
