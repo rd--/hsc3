@@ -1,9 +1,14 @@
 -- | Common core functions.
 module Sound.SC3.Common.Base where
 
+import Control.Exception {- base -}
+import Control.Monad {- base -}
 import Data.Char {- base -}
 import Data.Function {- base -}
 import Data.List {- base -}
+import Data.Maybe {- base -}
+import System.IO.Error {- base -}
+import System.Environment {- base -}
 
 -- * Function
 
@@ -203,3 +208,19 @@ mk_triples a b c = concatMap (\(x,y,z) -> [a x, b y, c z])
 -- | [x,y] -> (x,y)
 t2_from_list :: [t] -> T2 t
 t2_from_list l = case l of {[p,q] -> (p,q);_ -> error "t2_from_list"}
+
+-- * System
+
+-- | Guarded variant of 'getEnv' with default value.
+get_env_default :: String -> String -> IO String
+get_env_default e k = do
+  r <- tryJust (guard . isDoesNotExistError) (getEnv e)
+  case r of
+    Right v -> return v
+    _ -> return k
+
+-- | 'lookupEnv' with default value.
+--
+-- > lookup_env_default "PATH" "/usr/bin"
+lookup_env_default :: String -> String -> IO String
+lookup_env_default e k = fmap (fromMaybe k) (lookupEnv e)
