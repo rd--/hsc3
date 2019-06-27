@@ -27,6 +27,19 @@ audio rate (poll output is equal for x1 and x2)
 >         x1 = demand t 0 d
 >         x2 = latch i t
 >         s = mce2 x1 x2
->         p = poll t s (mce2 (label "x1") (label "x2")) 0
+>         p = poll t s 0 (mce2 (label "x1") (label "x2"))
 >         o = sinOsc AR (s * 300 + 400) 0 * 0.1
 >     in mrg2 o p
+
+> g_04 =
+>   let t = impulse AR 5 0
+>       d1 = dseq 'α' dinf (mce [1,0,1,1,0,1,0,0,1,0,1])
+>       d2 = dseq 'β' dinf (mce [0,1,0,0,1,0,1,1,0,1,0])
+>       x = demand t 0 (mce2 d1 d2) * t
+>   in decay x 1 * brownNoise 'γ' AR * 0.1
+
+> g_05 =
+>   let t = impulse AR 5 0
+>       d = drand 'α' dinf (mce [dseq 'β' 1 (mce [1,1,1,1]),dseq 'γ' 1 (mce [1,0,0,0])])
+>       x = demand t 0 d * t
+>   in decay x 1 * brownNoise 'δ' AR * 0.1

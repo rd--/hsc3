@@ -1948,8 +1948,8 @@ qitch rate in_ databufnum ampThreshold algoflag ampbufnum minfreq maxfreq = mkUG
 -- | TB303 Filter Emulation
 --
 --  RLPFD [KR,AR] in=0.0 ffreq=440.0 res=0.0 dist=0.0
-rLPFD :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-rLPFD rate in_ ffreq res dist = mkUGen Nothing [KR,AR] (Left rate) "RLPFD" [in_,ffreq,res,dist] Nothing 1 (Special 0) NoId
+rlpfD :: UGen -> UGen -> UGen -> UGen -> UGen
+rlpfD in_ ffreq res dist = mkUGen Nothing [KR,AR] (Right [0]) "RLPFD" [in_,ffreq,res,dist] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --

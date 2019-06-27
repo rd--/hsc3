@@ -2,7 +2,7 @@
 
 At control rate.
 
-> gr_01 =
+> g_01 =
 >     let n = dseq 'α' 3 (mce [1,3,2,7,8])
 >         x = mouseX KR 1 40 Exponential 0.1
 >         t = impulse KR x 0
@@ -11,7 +11,7 @@ At control rate.
 
 At audio rate.
 
-> gr_02 =
+> g_02 =
 >     let n = dseq 'α' dinf (mce [1,3,2,7,8,32,16,18,12,24])
 >         x = mouseX KR 1 10000 Exponential 0.1
 >         t = impulse AR x 0
@@ -20,7 +20,7 @@ At audio rate.
 
 The SC2 Sequencer UGen is somewhat like the sequ function below
 
-> gr_03 =
+> g_03 =
 >     let sequ e s tr = demand tr 0 (dseq e dinf (mce s))
 >         t = impulse AR 6 0
 >         n0 = sequ 'α' [60,62,63,58,48,55] t
