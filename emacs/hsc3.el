@@ -242,6 +242,7 @@
   (define-key map [?\C-c ?\C-q] 'hsc3-quit-haskell)
   (define-key map [?\C-c ?\C-0] 'hsc3-quit-scsynth)
   (define-key map [?\C-c ?\C-.] 'hsc3-stop)
+  (define-key map [?\C-c ?\C-s] 'hsc3-stop) ; ie. sclang-mode key
   (define-key map [?\C-c ?\C-u] 'hsc3-ugen-summary))
 
 (defun hsc3-mode-menu (map)
