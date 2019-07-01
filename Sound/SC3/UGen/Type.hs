@@ -428,7 +428,7 @@ mkOperator f c i s =
     in mkUGen (Just f) all_rates (Right ix) c i Nothing 1 (Special s) NoId
 
 -- | Unary math constructor.
-mkUnaryOperator :: Unary -> (Sample -> Sample) -> UGen -> UGen
+mkUnaryOperator :: SC3_Unary_Op -> (Sample -> Sample) -> UGen -> UGen
 mkUnaryOperator i f a =
     let g [x] = f x
         g _ = error "mkUnaryOperator: non unary input"
@@ -443,7 +443,7 @@ mkUnaryOperator i f a =
 -- > o - 0 == o && 0 - o /= o
 -- > o / 1 == o && 1 / o /= o
 -- > o ** 1 == o && o ** 2 /= o
-mkBinaryOperator_optimize_constants :: Binary -> (Sample -> Sample -> Sample) ->
+mkBinaryOperator_optimize_constants :: SC3_Binary_Op -> (Sample -> Sample -> Sample) ->
                                        (Either Sample Sample -> Bool) ->
                                        UGen -> UGen -> UGen
 mkBinaryOperator_optimize_constants i f o a b =
@@ -458,7 +458,7 @@ mkBinaryOperator_optimize_constants i f o a b =
    in fromMaybe (mkOperator g "BinaryOpUGen" [a, b] (fromEnum i)) r
 
 -- | Plain (non-optimised) binary math constructor.
-mkBinaryOperator :: Binary -> (Sample -> Sample -> Sample) -> UGen -> UGen -> UGen
+mkBinaryOperator :: SC3_Binary_Op -> (Sample -> Sample -> Sample) -> UGen -> UGen -> UGen
 mkBinaryOperator i f a b =
    let g [x,y] = f x y
        g _ = error "mkBinaryOperator: non binary input"

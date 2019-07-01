@@ -1,7 +1,7 @@
 {- | Non-standard mathematical enumerations, classes and base instances.
 
-Enumerations of the unary and binary math unit generators.  Names
-that conflict with existing names have a @_@ suffix.
+Enumerations of the unary and binary math unit generators.
+Names that conflict with existing names have a @_@ suffix.
 
 The Eq and Ord classes in the Prelude require Bool, hence EqE and OrdE.
 True is 1.0, False is 0.0
@@ -22,8 +22,9 @@ import qualified Sound.SC3.Common.Math as Math {- hsc3 -}
 -- * Unary
 
 -- | Enumeration of @SC3@ unary operator UGens.
-data Unary  = Neg
-            | Not
+data SC3_Unary_Op
+            = Neg -- -
+            | Not -- !
             | IsNil
             | NotNil
             | BitNot
@@ -78,19 +79,27 @@ data Unary  = Neg
             | SCurve
               deriving (Eq,Show,Enum,Bounded,Read)
 
--- | Type-specialised 'parse_enum'.
-parse_unary :: Base.Case_Rule -> String -> Maybe Unary
+-- | Type-specialised 'Base.parse_enum'.
+--
+-- > mapMaybe (parse_unary Base.CS) (words "Abs Rand_") == [Abs,Rand_]
+parse_unary :: Base.Case_Rule -> String -> Maybe SC3_Unary_Op
 parse_unary = Base.parse_enum
 
+-- | Table of operator names (non-symbolic) and indices.
+--
+-- > map fst sc3_unary_op_tbl
+sc3_unary_op_tbl :: [(String,Int)]
+sc3_unary_op_tbl = zip (map show [Neg .. SCurve]) [0..]
+
 -- | Table of symbolic names for standard unary operators.
-unaryTable :: [(Unary,String)]
-unaryTable = [] -- (Neg,"-")
+unary_sym_tbl :: [(SC3_Unary_Op,String)]
+unary_sym_tbl = [] -- (Neg,"-"),(Not,"!")
 
 -- | Lookup possibly symbolic name for standard unary operators.
 unaryName :: Int -> String
 unaryName n =
     let e = toEnum n
-    in fromMaybe (show e) (lookup e unaryTable)
+    in fromMaybe (show e) (lookup e unary_sym_tbl)
 
 -- | Given name of unary operator derive index.
 --
@@ -98,7 +107,7 @@ unaryName n =
 -- > unaryIndex CS "SinOsc" == Nothing
 unaryIndex :: Base.Case_Rule -> String -> Maybe Int
 unaryIndex cr nm =
-    let ix = Base.rlookup_str cr nm unaryTable
+    let ix = Base.rlookup_str cr nm unary_sym_tbl
         ix' = parse_unary cr nm
     in fmap fromEnum (mplus ix' ix)
 
@@ -114,7 +123,8 @@ is_unary cr = isJust . unaryIndex cr
 -- | Enumeration of @SC3@ unary operator UGens.
 --
 -- > map show [minBound :: Binary .. maxBound]
-data Binary = Add -- 0
+data SC3_Binary_Op
+            = Add -- 0
             | Sub -- 1
             | Mul -- 2
             | IDiv
@@ -165,25 +175,39 @@ data Binary = Add -- 0
             | ExpRandRange
               deriving (Eq,Show,Enum,Bounded,Read)
 
+-- | Table of operator names (non-symbolic) and indices.
+sc3_binary_op_tbl :: [(String,Int)]
+sc3_binary_op_tbl = zip (map show [Add .. ExpRandRange]) [0..]
+
 -- | Type-specialised 'parse_enum'.
-parse_binary :: Base.Case_Rule -> String -> Maybe Binary
+parse_binary :: Base.Case_Rule -> String -> Maybe SC3_Binary_Op
 parse_binary = Base.parse_enum
 
 -- | Table of symbolic names for standard binary operators.
-binaryTable :: [(Binary,String)]
-binaryTable =
+binary_sym_tbl :: [(SC3_Binary_Op,String)]
+binary_sym_tbl =
     [(Add,"+")
     ,(Sub,"-")
     ,(Mul,"*")
     ,(FDiv,"/")
     ,(Mod,"%")
     ,(EQ_,"==")
-    ,(NE,"/=")
+    ,(NE,"/=") -- !=
     ,(LT_,"<")
     ,(GT_,">")
     ,(LE,"<=")
     ,(GE,">=")
+    ,(BitAnd,".&.") -- &
+    ,(BitOr,".|.") -- |
     ,(Pow,"**")]
+
+-- | Table of operator names (non-symbolic) and indices.
+--
+-- > map fst sc3_binary_op_sym_tbl
+sc3_binary_op_sym_tbl :: [(String,Int)]
+sc3_binary_op_sym_tbl =
+  let f x = maybe (show x) id (lookup x binary_sym_tbl)
+  in zip (map f [Add .. ExpRandRange]) [0..]
 
 -- | Lookup possibly symbolic name for standard binary operators.
 --
@@ -191,7 +215,7 @@ binaryTable =
 binaryName :: Int -> String
 binaryName n =
     let e = toEnum n
-    in fromMaybe (show e) (lookup e binaryTable)
+    in fromMaybe (show e) (lookup e binary_sym_tbl)
 
 -- | Given name of binary operator derive index.
 --
@@ -199,7 +223,7 @@ binaryName n =
 -- > binaryIndex CI "SINOSC" == Nothing
 binaryIndex :: Base.Case_Rule -> String -> Maybe Int
 binaryIndex cr nm =
-    let ix = Base.rlookup_str cr nm binaryTable
+    let ix = Base.rlookup_str cr nm binary_sym_tbl
         ix' = parse_binary cr nm
     in fmap fromEnum (mplus ix' ix)
 
@@ -217,7 +241,7 @@ is_binary cr = isJust . binaryIndex cr
 resolve_operator :: Base.Case_Rule -> String -> (String,Maybe Int)
 resolve_operator cr nm =
     case binaryIndex cr nm of
-      Just sp -> ("BinaryOpUGen",Just sp)
+      Just sp -> ("SC3_Binary_OpOpUGen",Just sp)
       Nothing -> case unaryIndex cr nm of
                    Just sp -> ("UnaryOpUGen",Just sp)
                    _ -> (nm,Nothing)
@@ -322,7 +346,7 @@ class (Floating a, Ord a) => UnaryOp a where
 instance UnaryOp Float where
 instance UnaryOp Double where
 
--- | Binary operator class.
+-- | SC3_Binary_Op operator class.
 class (Floating a,RealFrac a, Ord a) => BinaryOp a where
     absDif :: a -> a -> a
     absDif a b = abs (a - b)
@@ -417,8 +441,8 @@ instance BinaryOp Double where
 
 -- * Tables
 
--- | Association table for 'Binary' to haskell function implementing operator.
-binop_hs_tbl :: (Real n,Floating n,RealFrac n) => [(Binary,n -> n -> n)]
+-- | Association table for 'SC3_Binary_Op' to haskell function implementing operator.
+binop_hs_tbl :: (Real n,Floating n,RealFrac n) => [(SC3_Binary_Op,n -> n -> n)]
 binop_hs_tbl =
     [(Add,(+))
     ,(Sub,(-))
@@ -444,7 +468,7 @@ binop_special_hs :: (RealFrac n,Floating n) => Int -> Maybe (n -> n -> n)
 binop_special_hs z = lookup (toEnum z) binop_hs_tbl
 
 -- | Association table for 'Unary' to haskell function implementing operator.
-uop_hs_tbl :: (RealFrac n,Floating n) => [(Unary,n -> n)]
+uop_hs_tbl :: (RealFrac n,Floating n) => [(SC3_Unary_Op,n -> n)]
 uop_hs_tbl =
     [(Neg,negate)
     ,(Not,\z -> if z > 0 then 0 else 1)
