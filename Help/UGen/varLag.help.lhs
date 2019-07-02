@@ -1,10 +1,10 @@
 > import Sound.SC3 {- hsc3 -}
 
-The implemented varLag UGen has three inputs: (input, lagTime, start)
+The implemented varLag UGen has five inputs: (input, lagTime, curvature, warp, start)
 
-> g_00 = varLag (lfPulse AR 50 0 0.5) (mouseX KR 0.0 (1/50) Linear 0.2) 0 * 0.2
+> g_00 = varLag (lfPulse AR 50 0 0.5) (mouseX KR 0.0 (1/50) Linear 0.2) 0 5 0 * 0.2
 
-> g_01 = varLag (impulse AR 50 0) (mouseX KR 0.0 (1/50) Linear 0.2) 0 * 0.2
+> g_01 = varLag (impulse AR 50 0) (mouseX KR 0.0 (1/50) Linear 0.2) 0 5 0 * 0.2
 
 The varLag_env composite UGen has various odd behaviours
 
@@ -32,7 +32,7 @@ as signal filter (step behaviour is wrong?)
 
 > f_03 s =
 >   let x = mouseX KR 0.0001 0.01 Exponential 0.2
->   in varLag s x s
+>   in varLag s x 0 5 s
 
 > g_07 = f_03 (0 - saw AR 440) * 0.15
 > g_08 = f_03 (impulse AR (range 6 24 (lfNoise2 'γ' KR 4)) 0) * 0.5
@@ -40,3 +40,10 @@ as signal filter (step behaviour is wrong?)
 > g_09 =
 >   let s = varSaw AR 220 0 (range 0 1 (sinOsc KR 0.25 0))
 >   in f_03 s * 0.1
+
+used to lag pitch
+
+> g_10 =
+>   let f1 = range 100 400 (lfPulse KR 1 0 0.5)
+>       f2 = varLag f1 0.2 (line KR (-8) 8 15 RemoveSynth) 5 0
+>   in sinOsc AR f2 0 * 0.3
