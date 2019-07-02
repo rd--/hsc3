@@ -44,10 +44,6 @@ dbrownM = liftUId4 dbrown
 dibrownM :: UId m => UGen -> UGen -> UGen -> UGen -> m UGen
 dibrownM = liftUId4 dibrown
 
--- | 'donce'
-donceM :: UId m => UGen -> m UGen
-donceM = liftUId1 donce
-
 -- | 'dpoll'
 dpollM :: UId m => UGen -> UGen -> UGen -> UGen -> m UGen
 dpollM = liftUId4 dpoll

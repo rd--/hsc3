@@ -20,19 +20,19 @@ a2k in_ = mkUGen Nothing [KR] (Left KR) "A2K" [in_] Nothing 1 (Special 0) NoId
 apf :: UGen -> UGen -> UGen -> UGen
 apf in_ freq radius = mkUGen Nothing [KR,AR] (Right [0]) "APF" [in_,freq,radius] Nothing 1 (Special 0) NoId
 
--- | All pass delay line with cubic interpolation.
+-- | Schroeder allpass delay line with cubic interpolation.
 --
 --  AllpassC [KR,AR] in=0.0 maxdelaytime=0.2 delaytime=0.2 decaytime=1.0;    FILTER: TRUE
 allpassC :: UGen -> UGen -> UGen -> UGen -> UGen
 allpassC in_ maxdelaytime delaytime decaytime = mkUGen Nothing [KR,AR] (Right [0]) "AllpassC" [in_,maxdelaytime,delaytime,decaytime] Nothing 1 (Special 0) NoId
 
--- | All pass delay line with linear interpolation.
+-- | Schroeder allpass delay line with linear interpolation.
 --
 --  AllpassL [KR,AR] in=0.0 maxdelaytime=0.2 delaytime=0.2 decaytime=1.0;    FILTER: TRUE
 allpassL :: UGen -> UGen -> UGen -> UGen -> UGen
 allpassL in_ maxdelaytime delaytime decaytime = mkUGen Nothing [KR,AR] (Right [0]) "AllpassL" [in_,maxdelaytime,delaytime,decaytime] Nothing 1 (Special 0) NoId
 
--- | All pass delay line with no interpolation.
+-- | Schroeder allpass delay line with no interpolation.
 --
 --  AllpassN [KR,AR] in=0.0 maxdelaytime=0.2 delaytime=0.2 decaytime=1.0;    FILTER: TRUE
 allpassN :: UGen -> UGen -> UGen -> UGen -> UGen
@@ -512,7 +512,7 @@ demandEnvGen rate level dur shape curve gate_ reset levelScale levelBias timeSca
 detectIndex :: UGen -> UGen -> UGen
 detectIndex bufnum in_ = mkUGen Nothing [KR,AR] (Right [1]) "DetectIndex" [bufnum,in_] Nothing 1 (Special 0) NoId
 
--- | When input falls below a threshold, evaluate doneAction.
+-- | Detect when input falls below an amplitude threshold
 --
 --  DetectSilence [KR,AR] in=0.0 amp=1.0e-4 time=0.1 doneAction=0.0;    FILTER: TRUE, ENUMERATION INPUTS: 3=DoneAction
 detectSilence :: UGen -> UGen -> UGen -> DoneAction UGen -> UGen
@@ -547,12 +547,6 @@ diskOut bufnum input = mkUGen Nothing [AR] (Left AR) "DiskOut" [bufnum] (Just [i
 --  Diwhite [DR] length=1.0e8 lo=0.0 hi=1.0;    REORDERS INPUTS: [1,2,0], DEMAND/NONDET
 diwhite :: ID a => a -> UGen -> UGen -> UGen -> UGen
 diwhite z length_ lo hi = mkUGen Nothing [DR] (Left DR) "Diwhite" [length_,lo,hi] Nothing 1 (Special 0) (toUId z)
-
--- | (Undocumented class)
---
---  Donce [DR] in=0.0;    DEMAND/NONDET
-donce :: ID a => a -> UGen -> UGen
-donce z in_ = mkUGen Nothing [DR] (Left DR) "Donce" [in_] Nothing 1 (Special 0) (toUId z)
 
 -- | Monitors another UGen to see when it is finished
 --
@@ -856,7 +850,7 @@ hpz1 in_ = mkUGen Nothing [KR,AR] (Right [0]) "HPZ1" [in_] Nothing 1 (Special 0)
 hpz2 :: UGen -> UGen
 hpz2 in_ = mkUGen Nothing [KR,AR] (Right [0]) "HPZ2" [in_] Nothing 1 (Special 0) NoId
 
--- | Randomized value.
+-- | Scrambled value with a hash function.
 --
 --  Hasher [KR,AR] in=0.0;    FILTER: TRUE
 hasher :: UGen -> UGen
@@ -1440,7 +1434,7 @@ out bus input = mkUGen Nothing [KR,AR] (Right [1]) "Out" [bus] (Just [input]) 0 
 
 -- | Very fast sine grain with a parabolic envelope
 --
---  PSinGrain [AR] freq=440.0 dur=0.2 amp=1.0
+--  PSinGrain [AR] freq=440.0 dur=0.2 amp=0.1
 pSinGrain :: Rate -> UGen -> UGen -> UGen -> UGen
 pSinGrain rate freq dur amp = mkUGen Nothing [AR] (Left rate) "PSinGrain" [freq,dur,amp] Nothing 1 (Special 0) NoId
 
@@ -1473,12 +1467,6 @@ pv_BinWipe bufferA bufferB wipe = mkUGen Nothing [KR] (Left KR) "PV_BinWipe" [bu
 --  PV_BrickWall [KR] buffer=0.0 wipe=0.0
 pv_BrickWall :: UGen -> UGen -> UGen
 pv_BrickWall buffer wipe = mkUGen Nothing [KR] (Left KR) "PV_BrickWall" [buffer,wipe] Nothing 1 (Special 0) NoId
-
--- | Base class for UGens that alter FFT chains
---
---  PV_ChainUGen [KR] maxSize=0.0
-pv_ChainUGen :: UGen -> UGen
-pv_ChainUGen maxSize = mkUGen Nothing [KR] (Left KR) "PV_ChainUGen" [maxSize] Nothing 1 (Special 0) NoId
 
 -- | Complex plane attack.
 --
@@ -1910,6 +1898,12 @@ sampleDur = mkUGen Nothing [IR] (Left IR) "SampleDur" [] Nothing 1 (Special 0) N
 sampleRate :: UGen
 sampleRate = mkUGen Nothing [IR] (Left IR) "SampleRate" [] Nothing 1 (Special 0) NoId
 
+-- | Remove infinity, NaN, and denormals
+--
+--  Sanitize [KR,AR] in=0.0 replace=0.0
+sanitize :: UGen -> UGen -> UGen
+sanitize in_ replace = mkUGen Nothing [KR,AR] (Right [0]) "Sanitize" [in_,replace] Nothing 1 (Special 0) NoId
+
 -- | Band limited sawtooth.
 --
 --  Saw [KR,AR] freq=440.0
@@ -1921,18 +1915,6 @@ saw rate freq = mkUGen Nothing [KR,AR] (Left rate) "Saw" [freq] Nothing 1 (Speci
 --  Schmidt [IR,KR,AR] in=0.0 lo=0.0 hi=1.0;    FILTER: TRUE
 schmidt :: UGen -> UGen -> UGen -> UGen
 schmidt in_ lo hi = mkUGen Nothing [IR,KR,AR] (Right [0]) "Schmidt" [in_,lo,hi] Nothing 1 (Special 0) NoId
-
--- | FIXME: ScopeOut purpose.
---
---  ScopeOut [KR,AR] inputArray=0.0 bufnum=0.0
-scopeOut :: Rate -> UGen -> UGen -> UGen
-scopeOut rate inputArray bufnum = mkUGen Nothing [KR,AR] (Left rate) "ScopeOut" [inputArray,bufnum] Nothing 0 (Special 0) NoId
-
--- | (Undocumented class)
---
---  ScopeOut2 [KR,AR] inputArray=0.0 scopeNum=0.0 maxFrames=4096.0 scopeFrames=0.0
-scopeOut2 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-scopeOut2 rate inputArray scopeNum maxFrames scopeFrames = mkUGen Nothing [KR,AR] (Left rate) "ScopeOut2" [inputArray,scopeNum,maxFrames,scopeFrames] Nothing 0 (Special 0) NoId
 
 -- | Select output from an array of inputs.
 --
@@ -2143,14 +2125,6 @@ trig in_ dur = mkUGen Nothing [KR,AR] (Right [0]) "Trig" [in_,dur] Nothing 1 (Sp
 --  Trig1 [KR,AR] in=0.0 dur=0.1;    FILTER: TRUE
 trig1 :: UGen -> UGen -> UGen
 trig1 in_ dur = mkUGen Nothing [KR,AR] (Right [0]) "Trig1" [in_,dur] Nothing 1 (Special 0) NoId
-
-{-
--- | FIXME: TrigControl purpose.
---
---  TrigControl [IR,KR] values=0.0
-trigControl :: Rate -> UGen -> UGen
-trigControl rate values = mkUGen Nothing [IR,KR] (Left rate) "TrigControl" [values] Nothing 1 (Special 0) NoId
--}
 
 -- | Two pole filter.
 --
