@@ -9,3 +9,6 @@ build-setup:
 
 print-exec:
 	hsc3-setup cabal print-exec hsc3- [a-z]*.hs
+
+dep:
+	cabal install regex-compat
