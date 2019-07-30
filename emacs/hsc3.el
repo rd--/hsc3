@@ -233,8 +233,8 @@
   (define-key map (kbd "C-c C-g") 'hsc3-draw-graph)
   (define-key map (kbd "C-c C-S-g") 'hsc3-draw-graph-plain)
   (define-key map [?\C-c ?\M-g] 'hsc3-draw-graph-m)
-  (define-key map [?\C-c ?\C-j] 'hsc3-sc3-ugen-help)
-  (define-key map [?\C-c ?\C-/] 'hsc3-sc3-server-help)
+  (define-key map [?\C-c ?\C-j] 'hsc3-sc3-help)
+  ;(define-key map [?\C-c ?\C-/] 'hsc3-sc3-html-help)
   (define-key map [?\C-c ?i] 'hsc3-interrupt-haskell)
   (define-key map [?\C-c ?\C-k] 'hsc3-reset-scsynth)
   (define-key map [?\C-c ?\C-m] 'hsc3-run-main)
@@ -252,13 +252,13 @@
   (define-key map [menu-bar hsc3 help]
     (cons "Help" (make-sparse-keymap "Help")))
   (define-key map [menu-bar hsc3 help hsc3]
-    '("Haskell SuperCollider help" . hsc3-help))
+    '("HSC3 Help" . hsc3-help))
   (define-key map [menu-bar hsc3 help ugen]
-    '("UGen parameter summary" . hsc3-ugen-summary))
-  (define-key map [menu-bar hsc3 help sc3-server]
-    '("SuperCollider Server Command help" . hsc3-sc3-server-help))
+    '("UGen Summary" . hsc3-ugen-summary))
+  ;(define-key map [menu-bar hsc3 help sc3-server]
+  ;  '("SuperCollider Server Command help" . hsc3-sc3-server-help))
   (define-key map [menu-bar hsc3 help sc3-ugen]
-    '("SuperCollider UGen help" . hsc3-sc3-ugen-help))
+    '("SC3 Help" . hsc3-sc3-ugen-help))
   (define-key map [menu-bar hsc3 expression]
     (cons "Expression" (make-sparse-keymap "Expression")))
   (define-key map [menu-bar hsc3 expression stop]
