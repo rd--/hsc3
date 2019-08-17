@@ -46,9 +46,9 @@ synthdefGraph = ugen_to_graph . synthdefUGen
 
 -- | Parameter names at 'Synthdef'.
 --
--- > synthdefParam defaultSynthdef == ["amp","pan","gate","freq","out"]
-synthdefParam :: Synthdef -> [String]
-synthdefParam = map u_node_k_name . ug_controls . synthdefGraph
+-- > synthdefParam defaultSynthdef == [("amp",0.1),("pan",0),("gate",1),("freq",440),("out",0)]
+synthdefParam :: Synthdef -> [(String,Sample)]
+synthdefParam = map (\n -> (u_node_k_name n,u_node_k_default n)) . ug_controls . synthdefGraph
 
 -- | 'graph_to_graphdef' at 'Synthdef'.
 synthdef_to_graphdef :: Synthdef -> Graphdef.Graphdef
