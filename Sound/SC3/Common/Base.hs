@@ -118,8 +118,12 @@ dx_d' :: Num n => [n] -> [n]
 dx_d' = (0 :) . dx_d
 
 -- | 'lookup' with equality function.
-lookup_by :: (a -> a -> Bool) -> a -> [(a,b)] -> Maybe b
+lookup_by :: (a -> t -> Bool) -> a -> [(t,b)] -> Maybe b
 lookup_by f x = fmap snd . find (f x . fst)
+
+-- | Erroring variant.
+lookup_by_err :: (a -> t -> Bool) -> a -> [(t,b)] -> b
+lookup_by_err f x = fromMaybe (error "lookup_by") . lookup_by f x
 
 -- | Reverse 'lookup' with equality function.
 rlookup_by :: (b -> b -> Bool) -> b -> [(a,b)] -> Maybe a
