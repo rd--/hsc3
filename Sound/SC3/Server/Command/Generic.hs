@@ -12,35 +12,54 @@ import qualified Sound.SC3.Server.Enum as E
 import qualified Sound.SC3.Server.Graphdef as G
 import qualified Sound.SC3.Server.Synthdef as S
 
+cmd_check_arg :: String -> (t -> Bool) -> t -> t
+cmd_check_arg e f x = if not (f x) then error e else x
+
 -- * Buffer commands (b_)
+
+-- | BUF-NUM must be >= 0
+b_bufnum :: Integral t => t -> Datum
+b_bufnum = int32 . cmd_check_arg "buffer-number < 0?" (>= 0)
+
+-- | BUF-FRAME-IX must be >= 0
+b_ix :: Integral t => t -> Datum
+b_ix = int32 . cmd_check_arg "buffer-ix < 0?" (>= 0)
+
+-- | BUF-CHANNEL must be >= 0
+b_ch :: Integral t => t -> Datum
+b_ch = int32 . cmd_check_arg "buffer-channel < 0?" (>= 0)
+
+-- | BUF-FRAME-CNT must be >= 0
+b_size :: Integral t => t -> Datum
+b_size = int32 . cmd_check_arg "buffer-size < 0?" (>= 0)
 
 -- | Allocates zero filled buffer to number of channels and samples. (Asynchronous)
 b_alloc :: Integral i => i -> i -> i -> Message
-b_alloc nid frames channels = message "/b_alloc" [int32 nid,int32 frames,int32 channels]
+b_alloc b frames channels = message "/b_alloc" [b_bufnum b,b_size frames,int32 channels]
 
 -- | Allocate buffer space and read a sound file. (Asynchronous)
 b_allocRead :: Integral i => i -> String -> i -> i -> Message
-b_allocRead nid p f n = message "/b_allocRead" [int32 nid,string p,int32 f,int32 n]
+b_allocRead b p f n = message "/b_allocRead" [b_bufnum b,string p,b_ix f,b_ix n]
 
 -- | Allocate buffer space and read a sound file, picking specific channels. (Asynchronous)
 b_allocReadChannel :: Integral i => i -> String -> i -> i -> [i] -> Message
-b_allocReadChannel nid p f n cs = message "/b_allocReadChannel" ([int32 nid,string p,int32 f,int32 n] ++ map int32 cs)
+b_allocReadChannel b p f n cs = message "/b_allocReadChannel" ([b_bufnum b,string p,b_ix f,b_ix n] ++ map b_ch cs)
 
 -- | Close attached soundfile and write header information. (Asynchronous)
 b_close :: Integral i => i -> Message
-b_close nid = message "/b_close" [int32 nid]
+b_close b = message "/b_close" [b_bufnum b]
 
 -- | Fill ranges of sample values.
 b_fill :: (Integral i,Real n) => i -> [(i,i,n)] -> Message
-b_fill nid l = message "/b_fill" (int32 nid : B.mk_triples int32 int32 float l)
+b_fill b l = message "/b_fill" (b_bufnum b : B.mk_triples int32 int32 float l)
 
 -- | Free buffer data. (Asynchronous)
 b_free :: Integral i => i -> Message
-b_free nid = message "/b_free" [int32 nid]
+b_free b = message "/b_free" [b_bufnum b]
 
 -- | Call a command to fill a buffer.  (Asynchronous)
 b_gen :: Integral i => i -> String -> [Datum] -> Message
-b_gen bid name arg = message "/b_gen" (int32 bid : string name : arg)
+b_gen b name arg = message "/b_gen" (b_bufnum b : string name : arg)
 
 -- | Call @sine1@ 'b_gen' command.
 b_gen_sine1 :: (Integral i,Real n) => i -> [E.B_Gen] -> [n] -> Message
@@ -66,11 +85,11 @@ b_gen_copy dst_b dst_ix src_b src_ix nf =
 
 -- | Get sample values.
 b_get :: Integral i => i -> [i] -> Message
-b_get nid i = message "/b_get" (int32 nid : map int32 i)
+b_get b i = message "/b_get" (b_bufnum b : map int32 i)
 
 -- | Get ranges of sample values.
 b_getn :: Integral i => i -> [(i,i)] -> Message
-b_getn nid l = message "/b_getn" (int32 nid : B.mk_duples int32 int32 l)
+b_getn b l = message "/b_getn" (b_bufnum b : B.mk_duples b_ix b_size l)
 
 -- | Request \/b_info messages.
 b_query :: Integral i => [i] -> Message
@@ -78,32 +97,32 @@ b_query = message "/b_query" . map int32
 
 -- | Read sound file data into an existing buffer. (Asynchronous)
 b_read :: Integral i => i -> String -> i -> i -> i -> Bool -> Message
-b_read nid p f n f' z = message "/b_read" [int32 nid,string p,int32 f,int32 n,int32 f',int32 (fromEnum z)]
+b_read b p f n f' z = message "/b_read" [b_bufnum b,string p,int32 f,int32 n,int32 f',int32 (fromEnum z)]
 
 -- | Read sound file data into an existing buffer, picking specific channels. (Asynchronous)
 b_readChannel :: Integral i => i -> String -> i -> i -> i -> Bool -> [i] -> Message
-b_readChannel nid p f n f' z cs = message "/b_readChannel" ([int32 nid,string p,int32 f,int32 n,int32 f',int32 (fromEnum z)] ++ map int32 cs)
+b_readChannel b p f n f' z cs = message "/b_readChannel" ([b_bufnum b,string p,int32 f,int32 n,int32 f',int32 (fromEnum z)] ++ map int32 cs)
 
 -- | Set sample values.
 b_set :: (Integral i,Real n) => i -> [(i,n)] -> Message
-b_set nid l = message "/b_set" (int32 nid : B.mk_duples int32 float l)
+b_set b l = message "/b_set" (b_bufnum b : B.mk_duples int32 float l)
 
 -- | Set ranges of sample values.
 b_setn :: (Integral i,Real n) => i -> [(i,[n])] -> Message
-b_setn nid l =
+b_setn b l =
     let f (i,d) = int32 i : int32 (length d) : map float d
-    in message "/b_setn" (int32 nid : concatMap f l)
+    in message "/b_setn" (b_bufnum b : concatMap f l)
 
 -- | Write sound file data. (Asynchronous)
 b_write :: Integral i => i -> String -> E.SoundFileFormat -> E.SampleFormat -> i -> i -> Bool -> Message
-b_write nid p h t f s z =
+b_write b p h t f s z =
     let h' = string (E.soundFileFormatString h)
         t' = string (E.sampleFormatString t)
-    in message "/b_write" [int32 nid,string p,h',t',int32 f,int32 s,int32 (fromEnum z)]
+    in message "/b_write" [b_bufnum b,string p,h',t',int32 f,int32 s,int32 (fromEnum z)]
 
 -- | Zero sample data. (Asynchronous)
 b_zero :: Integral i => i -> Message
-b_zero nid = message "/b_zero" [int32 nid]
+b_zero b = message "/b_zero" [b_bufnum b]
 
 -- * Control bus commands (c_)
 
@@ -211,9 +230,13 @@ g_queryTree = message "/g_queryTree" . B.mk_duples int32 (int32 . fromEnum)
 
 -- * Node commands (n_)
 
+-- | NODE-ID must be > -1
+n_id :: Integral t => t -> Datum
+n_id = int32 . cmd_check_arg "node-id < -1?" (> (-1))
+
 -- | Place a node after another.
 n_after :: Integral i => [(i,i)] -> Message
-n_after = message "/n_after" . B.mk_duples int32 int32
+n_after = message "/n_after" . B.mk_duples n_id n_id
 
 -- | Place a node before another.
 n_before :: Integral i => [(i,i)] -> Message
@@ -221,46 +244,46 @@ n_before = message "/n_before" . B.mk_duples int32 int32
 
 -- | Fill ranges of a node's control values.
 n_fill :: (Integral i,Real f) => i -> [(String,i,f)] -> Message
-n_fill nid l = message "/n_fill" (int32 nid : B.mk_triples string int32 float l)
+n_fill n l = message "/n_fill" (n_id n : B.mk_triples string int32 float l)
 
 -- | Delete a node.
 n_free :: Integral i => [i] -> Message
-n_free = message "/n_free" . map int32
+n_free = message "/n_free" . map n_id
 
 n_map :: Integral i => i -> [(String,i)] -> Message
-n_map nid l = message "/n_map" (int32 nid : B.mk_duples string int32 l)
+n_map n l = message "/n_map" (n_id n : B.mk_duples string int32 l)
 
 -- | Map a node's controls to read from buses.
 --   n_mapn only works if the control is given as an index and not as a name (3.8.0).
 n_mapn :: Integral i => i -> [(i,i,i)] -> Message
-n_mapn nid l = message "/n_mapn" (int32 nid : B.mk_triples int32 int32 int32 l)
+n_mapn n l = message "/n_mapn" (n_id n : B.mk_triples int32 int32 int32 l)
 
 -- | Map a node's controls to read from an audio bus.
 n_mapa :: Integral i => i -> [(String,i)] -> Message
-n_mapa nid l = message "/n_mapa" (int32 nid : B.mk_duples string int32 l)
+n_mapa n l = message "/n_mapa" (n_id n : B.mk_duples string int32 l)
 
 -- | Map a node's controls to read from audio buses.
 n_mapan :: Integral i => i -> [(String,i,i)] -> Message
-n_mapan nid l = message "/n_mapan" (int32 nid : B.mk_triples string int32 int32 l)
+n_mapan n l = message "/n_mapan" (n_id n : B.mk_triples string int32 int32 l)
 
 -- | Get info about a node.
 n_query :: Integral i => [i] -> Message
-n_query = message "/n_query" . map int32
+n_query = message "/n_query" . map n_id
 
 -- | Turn node on or off.
 n_run :: Integral i => [(i,Bool)] -> Message
-n_run = message "/n_run" . B.mk_duples int32 (int32 . fromEnum)
+n_run = message "/n_run" . B.mk_duples n_id (int32 . fromEnum)
 
 -- | Set a node's control values.
 n_set :: (Integral i,Real n) => i -> [(String,n)] -> Message
-n_set nid c = message "/n_set" (int32 nid : B.mk_duples string float c)
+n_set n c = message "/n_set" (n_id n : B.mk_duples string float c)
 
 -- | Set ranges of a node's control values.
 -- n_mapn and n_setn only work if the control is given as an index and not as a name.
 n_setn :: (Integral i,Real n) => i -> [(i,[n])] -> Message
-n_setn nid l =
+n_setn n l =
     let f (s,d) = int32 s : int32 (length d) : map float d
-    in message "/n_setn" (int32 nid : concatMap f l)
+    in message "/n_setn" (n_id n : concatMap f l)
 
 -- | Trace a node.
 n_trace :: Integral i => [i] -> Message
@@ -280,11 +303,11 @@ p_new = message "/p_new" . B.mk_triples int32 (int32 . fromEnum) int32
 
 -- | Get control values.
 s_get :: Integral i => i -> [String] -> Message
-s_get nid i = message "/s_get" (int32 nid : map string i)
+s_get n i = message "/s_get" (n_id n : map string i)
 
 -- | Get ranges of control values.
 s_getn :: Integral i => i -> [(String,i)] -> Message
-s_getn nid l = message "/s_getn" (int32 nid : B.mk_duples string int32 l)
+s_getn n l = message "/s_getn" (n_id n : B.mk_duples string int32 l)
 
 -- | Create a new synth.
 s_new :: (Integral i,Real n) => String -> i -> E.AddAction -> i -> [(String,n)] -> Message
@@ -298,7 +321,7 @@ s_noid = message "/s_noid" . map int32
 
 -- | Send a command to a unit generator.
 u_cmd :: Integral i => i -> i -> String -> [Datum] -> Message
-u_cmd nid uid name arg = message "/u_cmd" ([int32 nid,int32 uid,string name] ++ arg)
+u_cmd n uid name arg = message "/u_cmd" ([n_id n,int32 uid,string name] ++ arg)
 
 -- * Server operation commands
 
@@ -364,14 +387,14 @@ withCM m cm = with_completion_packet m (Packet_Message cm)
 
 -- | Pre-allocate for b_setn1, values preceding offset are zeroed.
 b_alloc_setn1 :: (Integral i,Real n) => i -> i -> [n] -> Message
-b_alloc_setn1 nid i xs =
+b_alloc_setn1 b i xs =
     let k = i + genericLength xs
         xs' = genericReplicate i 0 ++ xs
-    in withCM (b_alloc nid k 1) (b_setn1 nid 0 xs')
+    in withCM (b_alloc b k 1) (b_setn1 b 0 xs')
 
 -- | Get ranges of sample values.
 b_getn1 :: Integral i => i -> (i,i) -> Message
-b_getn1 nid = b_getn nid . return
+b_getn1 b = b_getn b . return
 
 -- | Variant on 'b_query'.
 b_query1 :: Integral i => i -> Message
@@ -379,11 +402,11 @@ b_query1 = b_query . return
 
 -- | Set single sample value.
 b_set1 :: (Integral i,Real n) => i -> i -> n -> Message
-b_set1 nid i x = b_set nid [(i,x)]
+b_set1 b i x = b_set b [(i,x)]
 
 -- | Set a range of sample values.
 b_setn1 :: (Integral i,Real n) => i -> i -> [n] -> Message
-b_setn1 nid i xs = b_setn nid [(i,xs)]
+b_setn1 b i xs = b_setn b [(i,xs)]
 
 -- | Segmented variant of 'b_setn1'.
 b_setn1_segmented :: (Integral i,Real n) => i -> i -> i -> [n] -> [Message]
@@ -406,11 +429,11 @@ c_setn1 = c_setn . return
 
 -- | Turn a single node on or off.
 n_run1 :: Integral i => i -> Bool -> Message
-n_run1 nid k = n_run [(nid,k)]
+n_run1 n k = n_run [(n,k)]
 
 -- | Set a single node control value.
 n_set1 :: (Integral i,Real n) => i -> String -> n -> Message
-n_set1 nid k n = n_set nid [(k,n)]
+n_set1 n k v = n_set n [(k,v)]
 
 -- | @s_new@ with no parameters.
 s_new0 :: Integral i => String -> i -> E.AddAction -> i -> Message

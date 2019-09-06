@@ -5,8 +5,8 @@ module Sound.SC3.Common.Enum where
 
 -- | Loop indicator input.
 data Loop t =
-    Loop
-  | NoLoop
+    NoLoop -- ^ 0
+  | Loop -- ^ 1
   | WithLoop t
   deriving (Eq, Show)
 
@@ -14,8 +14,8 @@ data Loop t =
 loop_coerce :: (t -> u) -> Loop t -> Loop u
 loop_coerce f lp =
   case lp of
-    Loop -> Loop
     NoLoop -> NoLoop
+    Loop -> Loop
     WithLoop t -> WithLoop (f t)
 
 -- | fmap is 'loop_coerce'

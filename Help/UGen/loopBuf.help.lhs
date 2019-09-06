@@ -19,8 +19,8 @@ Simple sampler instrument
 >         gt = control KR "gate" 1
 >         lr = control KR "loopRel" 0
 >         sp = control KR "startPos" 0
->         sl = control KR "startLoop" 0
->         el = control KR "endLoop" 0
+>         sl = control KR "startLoop" 0 -- FRAME
+>         el = control KR "endLoop" 0 -- FRAME
 >         ip = control KR "ipol" 2
 >         am = control KR "amp" 1
 >         rt' = lag rt gl * bufRateScale KR bf
