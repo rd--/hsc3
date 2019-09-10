@@ -1,10 +1,12 @@
 -- | Non-realtime score generation.
 module Sound.SC3.Server.NRT where
 
-import qualified Data.ByteString.Lazy as B {- bytestring -}
+import Data.Maybe {- base -}
 import System.FilePath {- filepath -}
 import System.IO {- base -}
 import System.Process {- process -}
+
+import qualified Data.ByteString.Lazy as B {- bytestring -}
 
 import Sound.OSC.Core {- hosc -}
 import qualified Sound.OSC.Coding.Byte as Byte {- hosc -}
@@ -158,3 +160,12 @@ nrt_render_plain :: NRT_Render_Plain -> NRT -> IO ()
 nrt_render_plain (osc_nm,sf_nm,nc,sr,sf,param) sc =
   let opt = (osc_nm,("_",0),(sf_nm,nc),sr,sf,param)
   in nrt_proc_plain opt sc
+
+-- * QUERY
+
+-- | Find any non-ascending sequences.
+nrt_non_ascending :: NRT -> [(Bundle, Bundle)]
+nrt_non_ascending (NRT b) =
+  let p = zip b (tail b)
+      f (i,j) = if bundleTime i > bundleTime j then Just (i,j) else Nothing
+  in mapMaybe f p
