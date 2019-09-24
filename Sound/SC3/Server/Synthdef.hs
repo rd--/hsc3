@@ -9,6 +9,7 @@ import Sound.SC3.UGen.Type
 
 import qualified Sound.SC3.Server.Graphdef as Graphdef
 import qualified Sound.SC3.Server.Graphdef.Graph as Graph
+import qualified Sound.SC3.Server.Param as Param
 
 -- | A named unit generator graph.
 data Synthdef = Synthdef {synthdefName :: String
@@ -47,7 +48,7 @@ synthdefGraph = ugen_to_graph . synthdefUGen
 -- | Parameter names at 'Synthdef'.
 --
 -- > synthdefParam defaultSynthdef == [("amp",0.1),("pan",0),("gate",1),("freq",440),("out",0)]
-synthdefParam :: Synthdef -> [(String,Sample)]
+synthdefParam :: Synthdef -> Param.Param
 synthdefParam = map (\n -> (u_node_k_name n,u_node_k_default n)) . ug_controls . synthdefGraph
 
 -- | 'graph_to_graphdef' at 'Synthdef'.

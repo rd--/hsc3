@@ -79,6 +79,7 @@ Library
                    Sound.SC3.Server.NRT.Edit
                    Sound.SC3.Server.NRT.UGen
                    Sound.SC3.Server.Options
+                   Sound.SC3.Server.Param
                    Sound.SC3.Server.Recorder
                    Sound.SC3.Server.Status
                    Sound.SC3.Server.Synthdef

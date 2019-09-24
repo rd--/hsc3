@@ -9,4 +9,5 @@ import Sound.SC3.Server.Synthdef as S
 import Sound.SC3.Server.Status as S
 import Sound.SC3.Server.NRT as S
 import Sound.SC3.Server.NRT.Edit as S
+import Sound.SC3.Server.Param as S
 import Sound.SC3.Server.Recorder as S
