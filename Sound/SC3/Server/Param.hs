@@ -5,6 +5,10 @@ import Data.Function {- base -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
 
+import Data.List.Split {- split -}
+
+import Sound.SC3.Common.Math {- hsc3 -}
+
 -- | An SC3 synthesis parameters, ie. (control-name,control-value).
 type Param1 = (String,Double)
 
@@ -42,3 +46,22 @@ param_merge_r_seq = foldr1 param_merge_r
 -- | Lookup parameter value, with default.
 param_get :: Param -> String -> Double -> Double
 param_get p k v = fromMaybe v (lookup k p)
+
+-- | Given (param-separator,key-value-separator) parse paramter string.
+--
+-- > param_parse (';','=') "a=1;b=2" == [("a",1),("b",2)]
+param_parse :: (Char,Char) -> String -> Param
+param_parse (c1,c2) str =
+    let f x = case splitOn [c2] x of
+                [lhs,rhs] -> (lhs,read rhs)
+                _ -> error ("param_parse: " ++ x)
+    in if null str then [] else map f (splitOn [c1] str)
+
+-- | Inverse of 'param_parse', /k/ is the precision to print values to.
+--
+-- > param_pp (';','=') 4 [("a",1),("b",2)] == "a=1.0;b=2.0"
+param_pp :: (Char,Char) -> Int -> Param -> String
+param_pp (c1,c2) k =
+    let f (lhs,rhs) = concat [lhs,[c2],double_pp k rhs]
+    in intercalate [c1] . map f
+
