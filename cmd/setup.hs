@@ -176,7 +176,7 @@ main = do
     "local":nm:dir:cmd:arg -> s_at_each' nm (Just dir) cmd arg
     "pkg-dep":"-all":nm -> hs_file_set_pkg_dep nm >>= putStrLn . unwords
     "pkg-dep":"-non-local":nm -> hs_file_set_pkg_dep_non_local nm >>= putStrLn . unwords
-    ["rebuild",nm,dir] -> s_with_all nm dir (\pkg -> ("cabal","install" : pkg))
+    ["rebuild",nm,dir] -> s_with_all nm dir (\pkg -> ("cabal","v1-install" : pkg))
     ["unregister",nm] -> s_at_each nm Nothing (\pkg -> ("ghc-pkg",["unregister","--force",pkg]))
     ["update",nm,src,dst] -> s_update nm src dst
     _ -> putStrLn (unlines help)
