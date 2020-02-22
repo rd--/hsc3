@@ -230,9 +230,9 @@ g_queryTree = message "/g_queryTree" . B.mk_duples int32 (int32 . fromEnum)
 
 -- * Node commands (n_)
 
--- | NODE-ID must be > -1
+-- | NODE-ID must be >= -1
 n_id :: Integral t => t -> Datum
-n_id = int32 . cmd_check_arg "node-id < -1?" (> (-1))
+n_id = int32 . cmd_check_arg "node-id < -1?" (>= (-1))
 
 -- | Place a node after another.
 n_after :: Integral i => [(i,i)] -> Message
