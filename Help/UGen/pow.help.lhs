@@ -15,3 +15,7 @@ see also <http://create.ucsb.edu/pipermail/sc-users/2006-December/029998.html>
 >         d = latch s (impulse AR x 0)
 >         b = roundUp d (0.5 ** y)
 >     in mce2 d b
+
+optimises identity
+
+> g_03 = (sinOsc AR 440 0 ** 1) * 0.1

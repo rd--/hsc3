@@ -434,7 +434,7 @@ mkUnaryOperator i f a =
         g _ = error "mkUnaryOperator: non unary input"
     in mkOperator g "UnaryOpUGen" [a] (fromEnum i)
 
--- | Binary math constructor with constant optimization.
+-- | Binary math constructor with constant optimisation.
 --
 -- > let o = sinOsc AR 440 0
 --
@@ -443,10 +443,10 @@ mkUnaryOperator i f a =
 -- > o - 0 == o && 0 - o /= o
 -- > o / 1 == o && 1 / o /= o
 -- > o ** 1 == o && o ** 2 /= o
-mkBinaryOperator_optimize_constants :: SC3_Binary_Op -> (Sample -> Sample -> Sample) ->
+mkBinaryOperator_optimise_constants :: SC3_Binary_Op -> (Sample -> Sample -> Sample) ->
                                        (Either Sample Sample -> Bool) ->
                                        UGen -> UGen -> UGen
-mkBinaryOperator_optimize_constants i f o a b =
+mkBinaryOperator_optimise_constants i f o a b =
    let g [x,y] = f x y
        g _ = error "mkBinaryOperator: non binary input"
        r = case (a,b) of
@@ -466,6 +466,24 @@ mkBinaryOperator i f a b =
 
 -- * Numeric instances
 
+-- | Is /u/ a binary math operator with SPECIAL of /k/.
+is_math_binop :: Int -> UGen -> Bool
+is_math_binop k u =
+    case u of
+      Primitive_U (Primitive _ "BinaryOpUGen" [_,_] [_] (Special s) NoId) -> s == k
+      _ -> False
+
+-- | Is /u/ an ADD operator?
+is_add_operator :: UGen -> Bool
+is_add_operator = is_math_binop 0
+
+assert_is_add_operator :: String -> UGen -> UGen
+assert_is_add_operator msg u = if is_add_operator u then u else error ("assert_is_add_operator: " ++ msg)
+
+-- | Is /u/ an MUL operator?
+is_mul_operator :: UGen -> Bool
+is_mul_operator = is_math_binop 2
+
 -- | MulAdd re-writer, applicable only directly at add operator UGen.
 --   The MulAdd UGen is very sensitive to input rates.
 --   ADD=AR with IN|MUL=IR|CONST will CRASH scsynth.
@@ -476,7 +494,7 @@ mul_add_optimise_direct u =
         in if rk > max ri rj
            then Nothing
            else Just (max (max ri rj) rk,if rj > ri then (j,i,k) else (i,j,k))
-  in case u of
+  in case assert_is_add_operator "MUL-ADD" u of
        Primitive_U
          (Primitive _ _ [Primitive_U (Primitive _ "BinaryOpUGen" [i,j] [_] (Special 2) NoId),k] [_] _ NoId) ->
          case reorder (i,j,k) of
@@ -489,10 +507,21 @@ mul_add_optimise_direct u =
            Nothing -> u
        _ -> u
 
+{- | MulAdd optimiser, applicable at any UGen (ie. checks /u/ is an ADD ugen)
+
+> import Sound.SC3
+> g1 = sinOsc AR 440 0 * 0.1 + control IR "x" 0.05
+> g2 = sinOsc AR 440 0 * control IR "x" 0.1 + 0.05
+> g3 = control IR "x" 0.1 * sinOsc AR 440 0 + 0.05
+> g4 = 0.05 + sinOsc AR 440 0 * 0.1
+-}
+mul_add_optimise :: UGen -> UGen
+mul_add_optimise u = if is_add_operator u then mul_add_optimise_direct u else u
+
 -- | Sum3 re-writer, applicable only directly at add operator UGen.
 sum3_optimise_direct :: UGen -> UGen
 sum3_optimise_direct u =
-  case u of
+  case assert_is_add_operator "SUM3" u of
     Primitive_U
       (Primitive r _ [Primitive_U (Primitive _ "BinaryOpUGen" [i,j] [_] (Special 0) NoId),k] [_] _ NoId) ->
       Primitive_U (Primitive r "Sum3" [i,j,k] [r] (Special 0) NoId)
@@ -501,17 +530,21 @@ sum3_optimise_direct u =
       Primitive_U (Primitive r "Sum3" [i,j,k] [r] (Special 0) NoId)
     _ -> u
 
--- | 'sum3_optimise_direct' of 'mul_add_optimise_direct'.
-add_optimise_direct :: UGen -> UGen
-add_optimise_direct = sum3_optimise_direct . mul_add_optimise_direct
+-- | /Sum3/ optimiser, applicable at any /u/ (ie. checks if /u/ is an ADD operator).
+sum3_optimise :: UGen -> UGen
+sum3_optimise u = if is_add_operator u then sum3_optimise_direct u else u
+
+-- | 'sum3_optimise' of 'mul_add_optimise'.
+add_optimise :: UGen -> UGen
+add_optimise = sum3_optimise . mul_add_optimise
 
 -- | Unit generators are numbers.
 instance Num UGen where
     negate = mkUnaryOperator Neg negate
-    (+) = fmap add_optimise_direct .
-          mkBinaryOperator_optimize_constants Add (+) (`elem` [Left 0,Right 0])
-    (-) = mkBinaryOperator_optimize_constants Sub (-) (Right 0 ==)
-    (*) = mkBinaryOperator_optimize_constants Mul (*) (`elem` [Left 1,Right 1])
+    (+) = fmap add_optimise .
+          mkBinaryOperator_optimise_constants Add (+) (`elem` [Left 0,Right 0])
+    (-) = mkBinaryOperator_optimise_constants Sub (-) (Right 0 ==)
+    (*) = mkBinaryOperator_optimise_constants Mul (*) (`elem` [Left 1,Right 1])
     abs = mkUnaryOperator Abs abs
     signum = mkUnaryOperator Sign signum
     fromInteger = Constant_U . Constant . fromInteger
@@ -519,7 +552,7 @@ instance Num UGen where
 -- | Unit generators are fractional.
 instance Fractional UGen where
     recip = mkUnaryOperator Recip recip
-    (/) = mkBinaryOperator_optimize_constants FDiv (/) (Right 1 ==)
+    (/) = mkBinaryOperator_optimise_constants FDiv (/) (Right 1 ==)
     fromRational = Constant_U . Constant . fromRational
 
 -- | Unit generators are floating point.
@@ -528,7 +561,7 @@ instance Floating UGen where
     exp = mkUnaryOperator Exp exp
     log = mkUnaryOperator Log log
     sqrt = mkUnaryOperator Sqrt sqrt
-    (**) = mkBinaryOperator_optimize_constants Pow (**) (Right 1 ==)
+    (**) = mkBinaryOperator_optimise_constants Pow (**) (Right 1 ==)
     logBase a b = log b / log a
     sin = mkUnaryOperator Sin sin
     cos = mkUnaryOperator Cos cos

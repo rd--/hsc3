@@ -15,3 +15,9 @@ Ring modulation.
 >     let p = sinOsc AR (xLine KR 100 1001 10 DoNothing) 0
 >         q = syncSaw AR 100 200
 >     in p * q * 0.25
+
+Optimises identity
+
+> g_04 = sinOsc AR 440 0 * 1 / 10
+
+> g_05 = 1 * sinOsc AR 440 0 / 10
