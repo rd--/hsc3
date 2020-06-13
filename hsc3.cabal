@@ -15,7 +15,7 @@ Stability:         Experimental
 Homepage:          http://rohandrape.net/t/hsc3
 Tested-With:       GHC == 8.6.5
 Build-Type:        Simple
-Cabal-Version:     >= 1.8
+Cabal-Version:     >= 1.10
 
 Data-files:        README
                    emacs/hsc3.el
@@ -41,6 +41,7 @@ Library
                    split >= 0.2,
                    transformers,
                    vector
+  Default-Language:Haskell2010
   GHC-Options:     -Wall -fwarn-tabs
   Exposed-modules: Sound.SC3
                    Sound.SC3.Common

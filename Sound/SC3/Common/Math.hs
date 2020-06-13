@@ -1,11 +1,11 @@
 -- | Common math functions.
 module Sound.SC3.Common.Math where
 
-import Data.Fixed {- base -}
+import qualified Data.Fixed {- base -}
 import Data.Maybe {- base -}
 import Data.Ratio {- base -}
-import Numeric {- base -}
-import Text.Read {- base -}
+import qualified Numeric {- base -}
+import qualified Text.Read {- base -}
 
 import qualified Safe {- safe -}
 
@@ -74,7 +74,7 @@ sc3_round_to a b = if b == 0 then a else sc3_floor ((a / b) + 0.5) * b
 sc3_idiv :: RealFrac n => n -> n -> n
 sc3_idiv a b = fromInteger (floor a `div` floor b)
 
-{- | The SC3 @%@ UGen operator is the 'Numeric.mod'' function.
+{- | The SC3 @%@ UGen operator is the 'Data.Fixed.mod'' function.
 
 > > 1.5 % 1.2 // ~= 0.3
 > > -1.5 % 1.2 // ~= 0.9
@@ -100,7 +100,7 @@ sc3_idiv a b = fromInteger (floor a `div` floor b)
 > map (\n -> sc3_mod n 12.0) [-1.0,12.25,15.0] == [11.0,0.25,3.0]
 -}
 sc3_mod :: RealFrac n => n -> n -> n
-sc3_mod = mod'
+sc3_mod = Data.Fixed.mod'
 
 -- | Type specialised 'sc3_mod'.
 fmod_f32 :: Float -> Float -> Float
@@ -626,7 +626,7 @@ double_pp_rm0 =
 --
 -- > unwords (map (double_pp 4) [0.0001,0.001,0.01,0.1,1.0]) == "0.0001 0.001 0.01 0.1 1.0"
 double_pp :: Int -> Double -> String
-double_pp k n = double_pp_rm0 (showFFloat (Just k) n "")
+double_pp k n = double_pp_rm0 (Numeric.showFFloat (Just k) n "")
 
 -- | Print as integer if integral, else as real.
 --
@@ -638,9 +638,9 @@ real_pp k n =
 
 -- * Parser
 
--- | Type-specialised 'R.readMaybe'.
+-- | Type-specialised 'Text.Read.readMaybe'.
 parse_double :: String -> Maybe Double
-parse_double = readMaybe
+parse_double = Text.Read.readMaybe
 
 -- * Optimiser
 

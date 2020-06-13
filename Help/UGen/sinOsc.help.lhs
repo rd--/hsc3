@@ -105,3 +105,15 @@ reverse cycle & reverse sync
 >       direction = toggleFF (impulse AR sync_freq 0 + impulse AR freq 0) * (-2) + 1
 >       o = sinOsc AR 0 (wrap (sweep (k2a 0) (direction * freq)) 0 (2 * pi))
 >   in o * 0.5
+
+15.5 khz
+
+> f_13 x = pan2 (sinOsc AR x 0) 0
+
+> g_13 = f_13 15500 0.75
+
+12 khz - 15.5 khz sweep
+
+> f_14 x = pan2 (sinOsc AR (range_hs x (sinOsc KR (1/6) 0)) 0) 0
+
+> g_14 = f_14 (12000,15500) 0.75
