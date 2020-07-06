@@ -1,13 +1,20 @@
 ;; Indentation and font locking is courtesy `haskell' mode.
-;; Inter-process communication is courtesy `comint' and `inf-haskell'.
+;; Inter-process communication is courtesy `comint'.
 ;; Symbol at point acquisition is courtesy `thingatpt'.
 ;; Directory search facilities are courtesy `find-lisp'.
 
-(require 'scheme)
+(require 'haskell)
 (require 'comint)
 (require 'thingatpt)
 (require 'find-lisp)
-(require 'inf-haskell) ;; debian=haskell-mode
+
+(defvar hsc3-buffer
+  "*hsc3*"
+  "*The name of the hsc3 haskell process buffer.")
+
+(defvar hsc3-interpreter
+  (list "ghci")
+  "*The name of the haskell interpreter to run (default=\"ghci\").")
 
 (defvar hsc3-help-directory
   nil
@@ -33,10 +40,10 @@
       (cons c (hsc3-chunk-string n (substring s n))))))
 
 (defun hsc3-send-string (s)
-  (if (comint-check-proc inferior-haskell-buffer)
+  (if (comint-check-proc hsc3-buffer)
       (let ((cs (hsc3-chunk-string 64 (concat s "\n"))))
         (mapcar
-         (lambda (c) (comint-send-string inferior-haskell-buffer c))
+         (lambda (c) (comint-send-string hsc3-buffer c))
          cs))
     (error "no hsc3 process running?")))
 
@@ -120,18 +127,32 @@
   (interactive)
   (shell-command-on-region (point-min) (point-max) "hsc3-id-rewrite" nil t))
 
-(defun hsc3-interrupt-haskell ()
-  "Interrupt haskell interpreter"
-  (interactive)
-  (if (comint-check-proc inferior-haskell-buffer)
-      (with-current-buffer inferior-haskell-buffer
-        (interrupt-process (get-buffer-process (current-buffer))))
-    (error "no haskell interpreter process running?")))
-
 (defun hsc3-reset-scsynth ()
   "Reset scsynth"
   (interactive)
   (hsc3-send-string "Sound.SC3.withSC3 Sound.SC3.reset"))
+
+(defun hsc3-start-haskell ()
+  "Start the hsc3 haskell process.
+
+If `hsc3-interpreter' is not already running as a subprocess it is
+started and a new window is created to display the results of
+evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
+  (interactive)
+  (if (comint-check-proc hsc3-buffer)
+      (hsc3-see-haskell)
+    (apply
+     'make-comint
+     "hsc3"
+     (car hsc3-interpreter)
+     nil
+     (cdr hsc3-interpreter))
+    (hsc3-see-haskell)))
+
+(defun hsc3-interrupt-haskell ()
+  "Interupt haskell process."
+  (interactive)
+  (interrupt-process hsc3-buffer comint-ptyp))
 
 (defun hsc3-stop ()
   "Interrupt haskell interpreter & reset scsynth"
@@ -207,12 +228,12 @@
 (defun hsc3-see-haskell ()
  "Show haskell output."
  (interactive)
- (let* ((p (inferior-haskell-process))
-        (b (process-buffer p)))
+  (if (not (comint-check-proc hsc3-buffer))
+      (hsc3-start-haskell)
    (hsc3-set-prompt)
    (delete-other-windows)
    (split-window-vertically)
-   (with-current-buffer b
+   (with-current-buffer hsc3-buffer
      (let ((window (display-buffer (current-buffer))))
        (goto-char (point-max))
        (save-selected-window
@@ -310,7 +331,7 @@
   hsc3-mode
   haskell-mode
   "Haskell SuperCollider"
-  "Major mode for interacting with an inferior haskell process."
+  "Major mode for interacting with an inferior hsc3 process."
   (setq hsc3-literate-p nil)
   (turn-on-font-lock))
 
