@@ -37,6 +37,7 @@ Common operations are to clean, check for local edits and push any changes to re
 hsc3-setup local all ~/sw cabal clean
 hsc3-setup local all ~/sw darcs wh -ls
 hsc3-setup local all ~/sw make push-rd
+hsc3-setup local all ~/sw make mk-cmd
 ~~~~
 
 # pkg-dep
@@ -69,7 +70,7 @@ hsc3-setup rebuild all ~/sw
 
 # bootstrap
 
-To setup all _hsc3_ packages on a new machine, given _darcs_ & _ghc_ &
+To setup all _hsc3_ packages on a new machine, given _darcs_ & _git_ & _ghc_ &
 _cabal_, and setting LOCAL appropriately:
 
 ~~~~
