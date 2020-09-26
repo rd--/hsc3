@@ -1,6 +1,6 @@
 Note: SC2 did not have the initial phase argument.
 
-> import Sound.SC3
+> import Sound.SC3 {- hsc3 -}
 
 > g_01 = lfSaw AR 500 1 * 0.1
 
