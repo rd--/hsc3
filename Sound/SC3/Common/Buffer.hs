@@ -23,16 +23,12 @@ blend z i j = i + (z * (j - i))
 clipAt :: Int -> [a] -> a
 clipAt ix c = if ix > length c - 1 then last c else if ix < 0 then c !! 0 else c !! ix
 
--- | 'abs' of '(-)'.
-absdif :: Num a => a -> a -> a
-absdif i j = abs (j - i)
-
 -- | 'blendAt' with @clip@ function as argument.
 blendAtBy :: (Integral i,RealFrac n) => (i -> t -> n) -> n -> t -> n
 blendAtBy f ix c =
     let m = floor ix
         m' = fromIntegral m
-    in blend (absdif ix m') (f m c) (f (m + 1) c)
+    in blend (S.absdif ix m') (f m c) (f (m + 1) c)
 
 -- | @SequenceableCollection.blendAt@ returns a linearly interpolated
 -- value between the two closest indices.  Inverse operation is

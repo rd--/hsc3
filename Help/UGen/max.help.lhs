@@ -1,8 +1,3 @@
 > import Sound.SC3 {- hsc3 -}
 
-q modulates and envelopes p
-
-> g_01 =
->     let p = fSinOsc AR 500 0 * 0.25
->         q = fSinOsc AR 0.5 0
->     in p `max` q
+> g_01 = (fSinOsc AR 500 0 `max` fSinOsc AR 0.1 0) * 0.1

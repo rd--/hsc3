@@ -128,7 +128,6 @@ instance RealFracE UGen where
     ceilingE = mkUnaryOperator Ceil ceilingE
     floorE = mkUnaryOperator Floor floorE
 
-
 instance UnaryOp UGen where
     ampDb = mkUnaryOperator AmpDb ampDb
     asFloat = mkUnaryOperator AsFloat asFloat

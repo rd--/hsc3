@@ -1,4 +1,4 @@
-    Sound.SC3.UGen.Help.viewSC3Help "Operator.ring2"
+    Sound.SC3.Lang.Help.viewSC3Help "Operator.ring2"
     :t ring2
 
 > import Sound.SC3 {- hsc3 -}

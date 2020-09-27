@@ -21,6 +21,10 @@ half_pi = pi / 2
 two_pi :: Floating n => n
 two_pi = 2 * pi
 
+-- | 'abs' of '(-)'.
+absdif :: Num a => a -> a -> a
+absdif i j = abs (j - i)
+
 -- | SC3 MulAdd type signature, arguments in SC3 order of input, multiply, add.
 type SC3_MulAdd t = t -> t -> t -> t
 
@@ -138,27 +142,40 @@ sc3_mod_alt n hi =
 
 > map (sc3_wrap_ni 0 5) [4,5,6] == [4,0,1]
 > map (sc3_wrap_ni 5 10) [3..12] == [8,9,5,6,7,8,9,5,6,7]
+> Sound.SC3.Plot.plot_fn_r1_ln (sc3_wrap_ni (-1) 1) (-2,2)
 
 -}
 sc3_wrap_ni :: RealFrac a => a -> a -> a -> a
 sc3_wrap_ni lo hi n = sc3_mod (n - lo) (hi - lo) + lo
 
+{- | sc_wrap::int
+
+> > [5,6].wrap(0,5) == [5,0]
+> map (wrap_hs_int (0,5)) [5,6] == [5,0]
+
+> > [9,10,5,6,7,8,9,10,5,6].wrap(5,10) == [9,10,5,6,7,8,9,10,5,6]
+> map (wrap_hs_int (5,10)) [3..12] == [9,10,5,6,7,8,9,10,5,6]
+-}
+wrap_hs_int :: Integral a => (a, a) -> a -> a
+wrap_hs_int (i,j) n = ((n - i) `mod` (j - i + 1)) + i
+
 {- | Wrap /n/ to within range /(i,j)/, ie. @AbstractFunction.wrap@,
 ie. /inclusive/ at right edge.  'wrap' is a 'UGen', hence prime.
 
-> > [5,6].wrap(0,5) == [5,0]
-> map (wrap_hs (0,5)) [5,6] == [5,0]
+> > [5.0,6.0].wrap(0.0,5.0) == [0.0,1.0]
+> map (wrap_hs (0,5)) [5,6] == [0,1]
+> map (wrap_hs (5,10)) [3..12] == [8,9,5,6,7,8,9,5,6,7]
 
-> > [9,10,5,6,7,8,9,10,5,6].wrap(5,10) == [9,10,5,6,7,8,9,10,5,6]
-> map (wrap_hs (5,10)) [3..12] == [9,10,5,6,7,8,9,10,5,6]
+> Sound.SC3.Plot.plot_fn_r1_ln (wrap_hs (-1,1)) (-2,2)
 
 -}
 wrap_hs :: RealFrac n => (n,n) -> n -> n
 wrap_hs (i,j) n =
-    let r = j - i + 1
-    in if n >= i && n <= j
-       then n
-       else n - r * sc3_floor ((n - i) / r)
+    let r = j - i -- + 1
+        n' = if n >= j then n - r else if n < i then n + r else n
+    in if n' >= i && n' < j
+       then n'
+       else n' - r * sc3_floor ((n' - i) / r)
 
 -- | Variant of 'wrap_hs' with @SC3@ argument ordering.
 --

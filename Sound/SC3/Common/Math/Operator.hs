@@ -379,7 +379,7 @@ class (Floating a,RealFrac a, Ord a) => BinaryOp a where
     lcmE :: a -> a -> a
     lcmE = error "lcmE"
     modE :: a -> a -> a
-    modE = error "modE"
+    modE = Math.sc3_mod
     randRange :: a -> a -> a
     randRange = error "randRange"
     ring1 :: a -> a -> a
@@ -411,13 +411,13 @@ instance BinaryOp Float where
     fold2 a b = Math.sc3_fold a (-b) b
     modE = F.mod'
     roundUp a b = if b == 0 then a else ceilingE (a/b + 0.5) * b
-    wrap2 a b = Math.sc3_wrap_ni a (-b) b
+    wrap2 a b = Math.sc3_wrap_ni (-b) b a
 
 instance BinaryOp Double where
     fold2 a b = Math.sc3_fold a (-b) b
     modE = F.mod'
     roundUp a b = if b == 0 then a else ceilingE (a/b + 0.5) * b
-    wrap2 a b = Math.sc3_wrap_ni a (-b) b
+    wrap2 a b = Math.sc3_wrap_ni (-b) b a
 
 -- * Infix
 
