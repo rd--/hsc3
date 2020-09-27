@@ -7,4 +7,5 @@
 
 Drawings:
 
+    Sound.SC3.is_unary Sound.SC3.Common.Base.CS "TanH"
     Sound.SC3.Plot.plot_fn_r1_ln tanh (-4,4)

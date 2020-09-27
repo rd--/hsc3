@@ -122,7 +122,7 @@ is_unary cr = isJust . unaryIndex cr
 
 -- | Enumeration of @SC3@ unary operator UGens.
 --
--- > map show [minBound :: Binary .. maxBound]
+-- > map show [minBound :: SC3_Binary_Op .. maxBound]
 data SC3_Binary_Op
             = Add -- 0
             | Sub -- 1
