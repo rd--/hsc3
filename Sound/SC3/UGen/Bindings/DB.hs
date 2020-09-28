@@ -1510,13 +1510,13 @@ pv_Div bufferA bufferB = mkUGen Nothing [KR] (Left KR) "PV_Div" [bufferA,bufferB
 --  PV_HainsworthFoote [KR,AR] maxSize=0.0
 pv_HainsworthFoote :: UGen -> UGen
 pv_HainsworthFoote maxSize = mkUGen Nothing [KR,AR] (Left KR) "PV_HainsworthFoote" [maxSize] Nothing 1 (Special 0) NoId
--}
 
 -- | FFT feature detector for onset detection.
 --
 --  PV_JensenAndersen [KR,AR] maxSize=0.0
 pv_JensenAndersen :: UGen -> UGen
 pv_JensenAndersen maxSize = mkUGen Nothing [KR,AR] (Left KR) "PV_JensenAndersen" [maxSize] Nothing 1 (Special 0) NoId
+-}
 
 -- | Pass bins which are a local maximum.
 --

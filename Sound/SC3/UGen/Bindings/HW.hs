@@ -46,6 +46,12 @@ poll trig_ in_ trigid label_ =
 pv_HainsworthFoote :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 pv_HainsworthFoote buf h f thr wt = C.mkOsc AR "PV_HainsworthFoote" [buf,h,f,thr,wt] 1
 
+-- | FFT feature detector for onset detection.
+--
+-- buffer, propsc=0.25, prophfe=0.25, prophfc=0.25, propsf=0.25, threshold=1.0, waittime=0.04
+pv_JensenAndersen :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+pv_JensenAndersen buffer propsc prophfe prophfc propsf threshold waittime = C.mkOsc AR "PV_JensenAndersen" [buffer,propsc,prophfe,prophfc,propsf,threshold,waittime] 1
+
 -- | ASCII string to length prefixed list of constant UGens.
 --
 -- > string_to_ugens "/label" == map fromIntegral [6,47,108,97,98,101,108]
