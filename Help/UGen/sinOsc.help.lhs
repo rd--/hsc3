@@ -117,3 +117,8 @@ reverse cycle & reverse sync
 > f_14 x = pan2 (sinOsc AR (range_hs x (sinOsc KR (1/6) 0)) 0) 0
 
 > g_14 = f_14 (12000,15500) 0.75
+
+Drawings:
+
+    import Sound.SC3.Plot {- hsc3-plot -}
+    plot_ugen_nrt (48000,64) 1.0 (sinOsc AR 1 0)

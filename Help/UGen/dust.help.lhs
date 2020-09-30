@@ -9,8 +9,8 @@
 Drawings
 
     import Sound.SC3.Plot {- hsc3-plot -}
-    plot_ugen1 0.1 (dust 'γ' AR 300)
-    plot_ugen1 0.1 (dust 'γ' AR (xLine KR 5000 100 0.1 RemoveSynth))
+    plot_ugen_nrt (48000,64) 0.1 (dust 'γ' AR 300)
+    plot_ugen_nrt (48000,64) 0.1 (dust 'δ' AR (xLine KR 5000 100 0.1 RemoveSynth))
 
 ![](sw/hsc3/Help/SVG/dust.0.svg)
 ![](sw/hsc3/Help/SVG/dust.1.svg)

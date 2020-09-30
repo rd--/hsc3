@@ -16,3 +16,8 @@ Note: SC2 had no phase input.
 An impulse with frequency 0 returns a single impulse
 
 > g_04 = decay (impulse AR 0 0) 1 * brownNoise 'α' AR * 0.1
+
+Drawings:
+
+    import Sound.SC3.Plot {- hsc3-plot -}
+    plot_ugen_nrt (48000,64) 1.0 (impulse AR 10 0)
