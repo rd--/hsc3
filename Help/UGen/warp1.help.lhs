@@ -1,6 +1,6 @@
 > import Sound.SC3 {- hsc3 -}
 
-> fn_01 = "/home/rohan/data/audio/pf-c5.aif"
+> fn_01 = "/home/rohan/data/audio/metal.wav"
 
 > m_01 = b_allocRead 10 fn_01 0 0
 

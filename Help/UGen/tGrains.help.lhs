@@ -2,7 +2,7 @@
 
 Load audio (#10) data
 
-> f_01 = "/home/rohan/data/audio/pf-c5.aif"
+> f_01 = "/home/rohan/data/audio/metal.wav"
 
 > m_01 = b_allocRead 10 f_01 0 0
 
