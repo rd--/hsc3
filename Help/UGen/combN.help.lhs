@@ -3,8 +3,7 @@ Sound.SC3.UGen.DB.ugenSummary "CombN"
 
 > import Sound.SC3 {- hsc3 -}
 
-Comb filter as resonator. The resonant fundamental is equal to
-reciprocal of the delay time.
+Comb filter as resonator. The resonant fundamental is equal to reciprocal of the delay time.
 
 > g_01 =
 >     let n = whiteNoise 'α' AR

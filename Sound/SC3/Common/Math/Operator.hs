@@ -219,8 +219,8 @@ binaryName n =
 
 -- | Given name of binary operator derive index.
 --
--- > mapMaybe (binaryIndex CI) (words "* MUL RING1") == [2,2,30]
--- > binaryIndex CI "SINOSC" == Nothing
+-- > mapMaybe (binaryIndex Base.CI) (words "* MUL RING1") == [2,2,30]
+-- > binaryIndex Base.CI "SINOSC" == Nothing
 binaryIndex :: Base.Case_Rule -> String -> Maybe Int
 binaryIndex cr nm =
     let ix = Base.rlookup_str cr nm binary_sym_tbl
@@ -235,13 +235,21 @@ is_binary cr = isJust . binaryIndex cr
 
 -- * Operator
 
+-- | Lookup operator name for operator UGens, else UGen name.
+ugen_operator_name :: String -> Int -> Maybe String
+ugen_operator_name nm n =
+    case nm of
+      "UnaryOpUGen" -> Just (unaryName n)
+      "BinaryOpUGen" -> Just (binaryName n)
+      _ -> Nothing
+
 -- | Order of lookup: binary then unary.
 --
 -- > map (resolve_operator Sound.SC3.Common.Base.CI) (words "+ - ADD SUB NEG")
 resolve_operator :: Base.Case_Rule -> String -> (String,Maybe Int)
 resolve_operator cr nm =
     case binaryIndex cr nm of
-      Just sp -> ("SC3_Binary_OpOpUGen",Just sp)
+      Just sp -> ("BinaryOpUGen",Just sp)
       Nothing -> case unaryIndex cr nm of
                    Just sp -> ("UnaryOpUGen",Just sp)
                    _ -> (nm,Nothing)

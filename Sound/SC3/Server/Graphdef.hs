@@ -13,9 +13,11 @@ import qualified Sound.OSC.Coding.Byte as Byte {- hosc -}
 import qualified Sound.OSC.Coding.Cast as Cast {- hosc -}
 import qualified Sound.OSC.Datum as Datum {- hosc -}
 
+import qualified Sound.SC3.Common.Math.Operator as O {- hsc3 -}
+
 -- * Type
 
--- | Names are ASCII strings.
+-- | Names are ASCII strings (ie. ByteString.Char8)
 type Name = Datum.ASCII
 
 -- | Controls are a name and a ugen-index.
@@ -44,6 +46,14 @@ type Special = Int
 -- | Unit generator type.
 type UGen = (Name,Rate,[Input],[Output],Special)
 
+-- | 'UGen' name.
+ugen_name_str :: UGen -> String
+ugen_name_str (nm,_,_,_,_) = Datum.ascii_to_string nm
+
+-- | 'UGen' name, using operator name if appropriate.
+ugen_name_op :: UGen -> String
+ugen_name_op (nm,_,_,_,k) = let s = Datum.ascii_to_string nm in maybe s id (O.ugen_operator_name s k)
+
 -- | 'UGen' 'Rate'.
 ugen_rate :: UGen -> Rate
 ugen_rate (_,r,_,_,_) = r
@@ -58,8 +68,9 @@ ugen_outputs (_,_,_,o,_) = o
 
 -- | Predicate to examine Ugen name and decide if it is a control.
 ugen_is_control :: UGen -> Bool
-ugen_is_control (nm,_,_,_,_) =
-  Datum.ascii_to_string nm `elem` ["Control","LagControl","TrigControl"]
+ugen_is_control =
+  (`elem` ["Control","LagControl","TrigControl"]) .
+  ugen_name_str
 
 -- | Input is a UGen and the UGen is a control.
 input_is_control :: Graphdef -> Input -> Bool
@@ -189,7 +200,7 @@ scsyndef_stat fn = do
 
 -- * Encode (version zero)
 
--- | Pascal (length prefixed) encoding of string.
+-- | Pascal (length prefixed) encoding of 'Name'.
 encode_pstr :: Name -> L.ByteString
 encode_pstr = L.pack . Cast.str_pstr . Datum.ascii_to_string
 
@@ -251,11 +262,10 @@ graphdefWrite_dir dir s =
 -- | Simple statistics printer for 'Graphdef'.
 graphdef_stat :: Graphdef -> String
 graphdef_stat (Graphdef nm cs ks us) =
-    let u_nm (sc3_nm,_,_,_,_) = Datum.ascii_to_string sc3_nm
-        f g = let h (x:xs) = (x,length (x:xs))
+    let f g = let h (x:xs) = (x,length (x:xs))
                   h [] = error "graphdef_stat"
               in show . map h . group . sort . map g
-        sq pp_f = intercalate "," (pp_f (map u_nm us))
+        sq pp_f = intercalate "," (pp_f (map ugen_name_op us))
     in unlines ["name                      : " ++ show nm
                ,"number of constants       : " ++ show (length cs)
                ,"number of controls        : " ++ show (length ks)

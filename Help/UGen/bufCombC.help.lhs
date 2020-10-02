@@ -4,8 +4,7 @@ Allocate buffer zero (required for examples below)
 
     > withSC3 (async (b_alloc 0 44100 1))
 
-Comb filter as resonator. The resonant fundamental is equal to
-reciprocal of the delay time.
+Comb filter as resonator. The resonant fundamental is equal to reciprocal of the delay time.
 
 > g_01 =
 >     let n = whiteNoise 'α' AR

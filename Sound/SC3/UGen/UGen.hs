@@ -18,11 +18,7 @@ toUId = UId . UId.resolveID
 
 -- | Lookup operator name for operator UGens, else UGen name.
 ugen_user_name :: String -> Special -> String
-ugen_user_name nm (Special n) =
-    case nm of
-      "UnaryOpUGen" -> O.unaryName n
-      "BinaryOpUGen" -> O.binaryName n
-      _ -> nm
+ugen_user_name nm (Special n) = maybe nm id (O.ugen_operator_name nm n)
 
 -- * UGen graph functions
 
