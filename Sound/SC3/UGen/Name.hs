@@ -1,6 +1,6 @@
 {- | Functions to normalise UGen names.
 
-@SC3@ UGen names are capitalised.
+@SC3@ UGen names are capitalised at word boundaries.
 @hsc3@ cannot use these names for UGen constructor functions.
 Haskell names are given by lower-casing until the first word edge.
 Lisp names are given by lower-casing everything and adding hyphens before edges.

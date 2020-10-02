@@ -138,6 +138,7 @@ status_monitor dly = do
 
 help :: [String]
 help =
+  "hsc3-scynth command [arguments]" : map (' ' :)
     ["buffer query id:int"
     ,"buffer store id:int au-file:string"
     ,"buffer store-seq id:int dt:float iso|ntpi dir:string"
