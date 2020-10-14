@@ -2,7 +2,7 @@
 
 Fixed frequency (hz) and initial-phase (radians)
 
-> g_00 = sinOsc AR (midiCPS 69) 0 * 0.75 -- 415 440
+> g_00 = sinOsc AR (midiCPS 69) 0 * 0.15 -- 415 440
 
 Control input for frequency
 

@@ -103,7 +103,7 @@ Structure is:
 OSC file name,
 input audio file name and input number of channels,
 output audio file name and output number of channels,
-sample rate,
+sample rate (int),
 sample format,
 further parameters (ie. ["-m","32768"]) to be inserted before the NRT -N option.
 

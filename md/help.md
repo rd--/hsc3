@@ -22,6 +22,8 @@ $ hsc3-help sc3-help scdoc-local SinOsc Collection.inject 'Collection.*fill'
 $
 ~~~~
 
+`ugen-default-param` prints the default values for UGen parameters in sequence.
+
 `ugen-summary` prints UGen information from [hsc3-db](?t=hsc3-db).
 
 ~~~~
