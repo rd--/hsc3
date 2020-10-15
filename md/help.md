@@ -22,7 +22,17 @@ $ hsc3-help sc3-help scdoc-local SinOsc Collection.inject 'Collection.*fill'
 $
 ~~~~
 
-`ugen-default-param` prints the default values for UGen parameters in sequence.
+`ugen-default-param` prints the default values of UGen parameters in sequence.
+
+~~~~
+$ hsc3-help ugen-default-param sinOsc # oscillator
+AR 440.0 0.0
+$ hsc3-help ugen-default-param resonz # filter
+0.0 440.0 1.0
+$ hsc3-help ugen-default-param pitch # fixed rate
+0.0 440.0 60.0 4000.0 100.0 16.0 1.0 0.01 0.5 1.0 0.0
+$
+~~~~
 
 `ugen-summary` prints UGen information from [hsc3-db](?t=hsc3-db).
 

@@ -3,10 +3,10 @@ module Sound.SC3.Server.Graphdef.Read where
 
 import Sound.OSC.Datum {- hosc -}
 
-import qualified Sound.SC3.Common.Rate as Rate
-import           Sound.SC3.Server.Graphdef as Graphdef
-import qualified Sound.SC3.UGen.Graph as Graph
-import qualified Sound.SC3.UGen.Type as Type
+import qualified Sound.SC3.Common.Rate as Rate {- hsc3 -}
+import           Sound.SC3.Server.Graphdef as Graphdef {- hsc3 -}
+import qualified Sound.SC3.UGen.Graph as Graph {- hsc3 -}
+import qualified Sound.SC3.UGen.Type as Type {- hsc3 -}
 
 control_to_node :: Graphdef -> Type.UID_t -> (Control,Type.Sample) -> Graph.U_Node
 control_to_node g z ((nm,ix),v) =

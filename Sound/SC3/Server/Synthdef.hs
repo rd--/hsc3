@@ -3,13 +3,13 @@ module Sound.SC3.Server.Synthdef where
 
 import qualified Data.ByteString.Lazy as L {- bytestring -}
 
-import Sound.SC3.UGen.Graph
-import Sound.SC3.UGen.Help.Graph
-import Sound.SC3.UGen.Type
+import Sound.SC3.UGen.Graph {- hsc3 -}
+import Sound.SC3.UGen.Help.Graph {- hsc3 -}
+import Sound.SC3.UGen.Type {- hsc3 -}
 
-import qualified Sound.SC3.Server.Graphdef as Graphdef
-import qualified Sound.SC3.Server.Graphdef.Graph as Graph
-import qualified Sound.SC3.Server.Param as Param
+import qualified Sound.SC3.Server.Graphdef as Graphdef {- hsc3 -}
+import qualified Sound.SC3.Server.Graphdef.Graph as Graph {- hsc3 -}
+import qualified Sound.SC3.Server.Param as Param {- hsc3 -}
 
 -- | A named unit generator graph.
 data Synthdef = Synthdef {synthdefName :: String

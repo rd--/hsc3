@@ -19,10 +19,11 @@ import Data.Function {- base -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
 
-import Sound.SC3.Common.Rate
+import Sound.SC3.Common.Rate {- hsc3 -}
+import Sound.SC3.UGen.Type {- hsc3 -}
+import Sound.SC3.UGen.UGen {- hsc3 -}
+
 import qualified Sound.SC3.UGen.Analysis as Analysis
-import Sound.SC3.UGen.Type
-import Sound.SC3.UGen.UGen
 
 -- * Types
 

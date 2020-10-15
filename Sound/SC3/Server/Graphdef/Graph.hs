@@ -1,15 +1,16 @@
 -- | Transform 'Graph.U_Graph' to 'Graphdef.Graphdef'.
 module Sound.SC3.Server.Graphdef.Graph where
 
-import qualified Data.IntMap as M {- containers -}
 import Data.Maybe {- base -}
+
+import qualified Data.IntMap as M {- containers -}
 
 import qualified Sound.OSC.Datum as Datum {- hosc -}
 
-import qualified Sound.SC3.Common.Rate as Rate
-import qualified Sound.SC3.UGen.Graph as Graph
-import qualified Sound.SC3.UGen.Type as Type
-import qualified Sound.SC3.Server.Graphdef as Graphdef
+import qualified Sound.SC3.Common.Rate as Rate {- hsc3 -}
+import qualified Sound.SC3.UGen.Graph as Graph {- hsc3 -}
+import qualified Sound.SC3.UGen.Type as Type {- hsc3 -}
+import qualified Sound.SC3.Server.Graphdef as Graphdef {- hsc3 -}
 
 -- * Maps
 

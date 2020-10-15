@@ -3,11 +3,14 @@
 module Sound.SC3.Server.Graphdef where
 
 import Control.Monad {- base -}
-import qualified Data.ByteString.Lazy as L {- bytestring -}
+import Data.Char {- base -}
 import Data.List {- base -}
-import qualified Safe {- safe -}
 import System.FilePath {- filepath -}
 import System.IO {- base -}
+
+import qualified Data.ByteString.Lazy as L {- bytestring -}
+import qualified Numeric {- base -}
+import qualified Safe {- safe -}
 
 import qualified Sound.OSC.Coding.Byte as Byte {- hosc -}
 import qualified Sound.OSC.Coding.Cast as Cast {- hosc -}
@@ -178,7 +181,7 @@ read_graphdef h = do
 {- | Read Graphdef from .scsyndef file.
 
 > dir = "/home/rohan/sw/rsc3-disassembler/scsyndef/"
-> pp nm = read_graphdef_file (dir ++ nm) >>= putStrLn . graphdef_stat
+> pp nm = read_graphdef_file (dir ++ nm) >>= putStrLn . unlines . print_graphdef False -- graphdef_stat
 > pp "simple.scsyndef"
 > pp "with-ctl.scsyndef"
 > pp "mce.scsyndef"
@@ -200,49 +203,106 @@ scsyndef_stat fn = do
 
 -- * Encode (version zero)
 
+-- | (join_f,str_f,i8_f,i16_f,i32_f,f32_f,com_f)
+type ENCODE_F t = ([t] -> t,Name -> t,Int -> t,Int -> t,Int -> t,Double -> t,String -> t)
+
+-- | 'ENCODE_F' for 'L.ByteString'
+enc_bytestring :: ENCODE_F L.ByteString
+enc_bytestring =
+  (L.concat,encode_pstr,Byte.encode_i8,Byte.encode_i16,Byte.encode_i32,encode_sample
+  ,\_ -> L.empty)
+
 -- | Pascal (length prefixed) encoding of 'Name'.
 encode_pstr :: Name -> L.ByteString
 encode_pstr = L.pack . Cast.str_pstr . Datum.ascii_to_string
 
+encode_input_f :: ENCODE_F t -> Input -> t
+encode_input_f (join_f,_,_,i16_f,_,_,_) (Input u p) = join_f (map i16_f [u,p])
+
 -- | Byte-encode 'Input'.
 encode_input :: Input -> L.ByteString
-encode_input (Input u p) = L.append (Byte.encode_i16 u) (Byte.encode_i16 p)
+encode_input = encode_input_f enc_bytestring
+
+encode_control_f :: ENCODE_F t -> Control -> t
+encode_control_f (join_f,str_f,_,i16_f,_,_,_) (nm,k) = join_f [str_f nm,i16_f k]
 
 -- | Byte-encode 'Control'.
 encode_control :: Control -> L.ByteString
-encode_control (nm,k) = L.concat [encode_pstr nm,Byte.encode_i16 k]
+encode_control = encode_control_f enc_bytestring
+
+encode_ugen_f :: ENCODE_F t -> UGen -> t
+encode_ugen_f enc (nm,r,i,o,s) =
+  let (join_f,str_f,i8_f,i16_f,_,_,com_f) = enc
+  in join_f [com_f "ugen-name",str_f nm
+            ,com_f "ugen-rate",i8_f r
+            ,com_f "ugen-number-of-inputs",i16_f (length i)
+            ,com_f "ugen-number-of-outputs",i16_f (length o)
+            ,com_f "ugen-special",i16_f s
+            ,com_f "ugen-inputs (ugen-index,port-index)",join_f (map (encode_input_f enc) i)
+            ,com_f "ugen-output-rates",join_f (map i8_f o)
+            ]
 
 -- | Byte-encode 'UGen'.
 encode_ugen :: UGen -> L.ByteString
-encode_ugen (nm,r,i,o,s) =
-    L.concat [encode_pstr nm
-             ,Byte.encode_i8 r
-             ,Byte.encode_i16 (length i)
-             ,Byte.encode_i16 (length o)
-             ,Byte.encode_i16 s
-             ,L.concat (map encode_input i)
-             ,L.concat (map Byte.encode_i8 o)]
+encode_ugen = encode_ugen_f enc_bytestring
 
 -- | Encode 'Sample' as 32-bit IEEE float.
 encode_sample :: Sample -> L.ByteString
 encode_sample = Byte.encode_f32 . realToFrac
 
+encode_graphdef_f :: ENCODE_F t -> Graphdef -> t
+encode_graphdef_f enc (Graphdef nm cs ks us) =
+    let (join_f,str_f,_,i16_f,i32_f,f32_f,com_f) = enc
+        (ks_ctl,ks_def) = unzip ks
+    in join_f [com_f "SCgf",i32_f scgf_i32
+              ,com_f "version",i32_f 0
+              ,com_f "number of graphs",i16_f 1
+              ,com_f "name",str_f nm
+              ,com_f "number-of-constants",i16_f (length cs)
+              ,com_f "constant-values",join_f (map f32_f cs)
+              ,com_f "number-of-controls",i16_f (length ks_def)
+              ,com_f "control-default-values",join_f (map f32_f ks_def)
+              ,com_f "number-of-controls",i16_f (length ks_ctl)
+              ,com_f "controls",join_f (map (encode_control_f enc) ks_ctl)
+              ,com_f "number-of-ugens",i16_f (length us)
+              ,join_f (map (encode_ugen_f enc) us)]
+
 -- | Encode 'Graphdef'.
 encode_graphdef :: Graphdef -> L.ByteString
-encode_graphdef (Graphdef nm cs ks us) =
-    let (ks_ctl,ks_def) = unzip ks
-    in L.concat [Byte.encode_ascii (Datum.ascii "SCgf")
-                ,Byte.encode_i32 0 -- version
-                ,Byte.encode_i16 1 -- number of graphs
-                ,encode_pstr nm
-                ,Byte.encode_i16 (length cs)
-                ,L.concat (map encode_sample cs)
-                ,Byte.encode_i16 (length ks_def)
-                ,L.concat (map encode_sample ks_def)
-                ,Byte.encode_i16 (length ks_ctl)
-                ,L.concat (map encode_control ks_ctl)
-                ,Byte.encode_i16 (length us)
-                ,L.concat (map encode_ugen us)]
+encode_graphdef = encode_graphdef_f enc_bytestring
+
+-- | "SCgf" encoded as 32-bit unsigned integer.
+--
+-- > Byte.decode_i32 (Byte.encode_ascii (Datum.ascii "SCgf"))
+scgf_i32 :: Num n => n
+scgf_i32 = 1396926310
+
+-- | * PRINT
+
+-- | Print string.  Strings must not have internal whitespace or semi-colons.
+print_string :: Datum.ASCII -> String
+print_string a =
+  let s = Datum.ascii_to_string a
+  in if any isSpace s || ';' `elem` s then error "print_string" else s
+
+enc_text :: (String -> String) -> ENCODE_F String
+enc_text com_f =
+  (unwords . filter (not . null),print_string,show,show,show,\n -> Numeric.showFFloat Nothing n ""
+  ,com_f)
+
+{- | 'encode_graphdef_f' of 'enc_text'
+
+> dir = "/home/rohan/sw/rsc3-disassembler/scsyndef/"
+> pp nm = read_graphdef_file (dir ++ nm) >>= putStrLn . print_graphdef False
+> pp "simple.scsyndef"
+> pp "with-ctl.scsyndef"
+> pp "mce.scsyndef"
+> pp "mrg.scsyndef"
+-}
+print_graphdef :: Bool -> Graphdef -> String
+print_graphdef with_com =
+    let com_f = if with_com then \c -> concat ["\n; ",c,"\n"] else const ""
+    in encode_graphdef_f (enc_text com_f)
 
 -- * IO
 
