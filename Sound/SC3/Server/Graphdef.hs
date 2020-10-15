@@ -6,8 +6,9 @@ import Control.Monad {- base -}
 import Data.Char {- base -}
 import Data.List {- base -}
 import System.FilePath {- filepath -}
-import System.IO {- base -}
 
+import qualified Data.Binary.Get as G {- binary -}
+import qualified Data.Binary.IEEE754 as I {- data-binary-ieee754 -}
 import qualified Data.ByteString.Lazy as L {- bytestring -}
 import qualified Numeric {- base -}
 import qualified Safe {- safe -}
@@ -109,79 +110,87 @@ graphdef_control_nid g = (+) (length (graphdef_constants g))
 graphdef_ugen_nid :: Graphdef -> Int -> Int
 graphdef_ugen_nid g n = graphdef_control_nid g 0 + length (graphdef_controls g) + n
 
--- * Read (version 0 or 2).
+-- * BINARY GET (version 0 or 2)
 
--- | Read a 'Sample'.
-read_sample :: Handle -> IO Sample
-read_sample = fmap realToFrac . Byte.read_f32
+-- | Get a 'Sample'
+get_sample :: G.Get Sample
+get_sample = fmap realToFrac I.getFloat32be
 
--- | Read a 'Control'.
-read_control :: (Handle -> IO Int) -> Handle -> IO Control
-read_control read_i h = do
-  nm <- Byte.read_pstr h
-  ix <- read_i h
+-- | Get a 'Name' (Pascal string).
+get_pstr :: G.Get Name
+get_pstr = do
+  n <- fmap fromIntegral G.getWord8
+  fmap Byte.decode_ascii (G.getLazyByteString n)
+
+-- | Get a 'Control'.
+get_control :: G.Get Int -> G.Get Control
+get_control get_i = do
+  nm <- get_pstr
+  ix <- get_i
   return (nm,ix)
 
--- | Read an 'Input'.
-read_input :: (Handle -> IO Int) -> Handle -> IO Input
-read_input read_i h = do
-  u <- read_i h
-  p <- read_i h
+-- | Get an 'Input'.
+get_input :: G.Get Int -> G.Get Input
+get_input get_i = do
+  u <- get_i
+  p <- get_i
   return (Input u p)
 
--- | Read an 'output'.
-read_output :: Handle -> IO Output
-read_output = Byte.read_i8
+-- | Get an 'Output'
+get_output :: G.Get Output
+get_output = fmap fromIntegral G.getInt8
 
--- | Read a 'UGen'.
-read_ugen :: (Handle -> IO Int) -> Handle -> IO UGen
-read_ugen read_i h = do
-  name <- Byte.read_pstr h
-  rate <- Byte.read_i8 h
-  number_of_inputs <- read_i h
-  number_of_outputs <- read_i h
-  special <- Byte.read_i16 h
-  inputs <- replicateM number_of_inputs (read_input read_i h)
-  outputs <- replicateM number_of_outputs (read_output h)
+-- | Get a 'UGen'
+get_ugen :: G.Get Int -> G.Get UGen
+get_ugen get_i = do
+  name <- get_pstr
+  rate <- fmap fromIntegral G.getInt8
+  number_of_inputs <- get_i
+  number_of_outputs <- get_i
+  special <- fmap fromIntegral G.getInt16be
+  inputs <- replicateM number_of_inputs (get_input get_i)
+  outputs <- replicateM number_of_outputs get_output
   return (name
          ,rate
          ,inputs
          ,outputs
          ,special)
 
--- | Read a 'Graphdef'. Ignores variants.
-read_graphdef :: Handle -> IO Graphdef
-read_graphdef h = do
-  magic <- fmap Byte.decode_ascii (L.hGet h 4)
-  version <- Byte.read_i32 h
-  let read_i =
+-- | Get a 'Graphdef'.  Ignores variants.
+get_graphdef :: G.Get Graphdef
+get_graphdef = do
+  magic <- G.getInt32be
+  version <- G.getInt32be
+  let get_i =
           case version of
-            0 -> Byte.read_i16
-            2 -> Byte.read_i32
-            _ -> error ("read_graphdef: version not at {zero | two}: " ++ show version)
-  number_of_definitions <- Byte.read_i16 h
-  when (magic /= Datum.ascii "SCgf")
-       (error "read_graphdef: illegal magic string")
+            0 -> fmap fromIntegral G.getInt16be
+            2 -> fmap fromIntegral G.getInt32be
+            _ -> error ("get_graphdef: version not at {zero | two}: " ++ show version)
+  number_of_definitions <- G.getInt16be
+  when (magic /= scgf_i32)
+       (error "get_graphdef: illegal magic string")
   when (number_of_definitions /= 1)
-       (error "read_graphdef: non unary graphdef file")
-  name <- Byte.read_pstr h
-  number_of_constants <- read_i h
-  constants <- replicateM number_of_constants (read_sample h)
-  number_of_control_defaults <- read_i h
-  control_defaults <- replicateM number_of_control_defaults (read_sample h)
-  number_of_controls <- read_i h
-  controls <- replicateM number_of_controls (read_control read_i h)
-  number_of_ugens <- read_i h
-  ugens <- replicateM number_of_ugens (read_ugen read_i h)
+       (error "get_graphdef: non unary graphdef file")
+  name <- get_pstr
+  number_of_constants <- get_i
+  constants <- replicateM number_of_constants get_sample
+  number_of_control_defaults <- get_i
+  control_defaults <- replicateM number_of_control_defaults get_sample
+  number_of_controls <- get_i
+  controls <- replicateM number_of_controls (get_control get_i)
+  number_of_ugens <- get_i
+  ugens <- replicateM number_of_ugens (get_ugen get_i)
   return (Graphdef name
                    constants
                    (zip controls control_defaults)
                    ugens)
 
+-- * READ
+
 {- | Read Graphdef from .scsyndef file.
 
 > dir = "/home/rohan/sw/rsc3-disassembler/scsyndef/"
-> pp nm = read_graphdef_file (dir ++ nm) >>= putStrLn . unlines . print_graphdef False -- graphdef_stat
+> pp nm = read_graphdef_file (dir ++ nm) >>= putStrLn . graphdef_stat
 > pp "simple.scsyndef"
 > pp "with-ctl.scsyndef"
 > pp "mce.scsyndef"
@@ -190,16 +199,34 @@ read_graphdef h = do
 -}
 read_graphdef_file :: FilePath -> IO Graphdef
 read_graphdef_file nm = do
-  h <- openFile nm ReadMode
-  g <- read_graphdef h
-  hClose h
-  return g
+  b <- L.readFile nm
+  return (G.runGet get_graphdef b)
 
--- | Read scsyndef file and run 'graphdef_stat'.
+-- * STAT
+
+-- | 'read_graphdef_file' and run 'graphdef_stat'.
 scsyndef_stat :: FilePath -> IO String
 scsyndef_stat fn = do
   g <- read_graphdef_file fn
   return (graphdef_stat g)
+
+{-
+import qualified Control.Monad.State as S {- mtl -}
+
+-- * LIST INPUT
+
+-- | Read the next value from a list.
+list_read :: S.State [t] t
+list_read = do
+  l <- S.get
+  when (null l) (error "list_read")
+  S.put (tail l)
+  return (head l)
+
+-- | 'flip' 'evalState'.
+with_list :: [t] -> S.State [t] u -> u
+with_list = flip S.evalState
+-}
 
 -- * Encode (version zero)
 

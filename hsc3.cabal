@@ -29,6 +29,7 @@ Library
                    binary,
                    bytestring,
                    containers,
+                   data-binary-ieee754,
                    data-ordlist,
                    directory,
                    filepath,
