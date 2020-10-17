@@ -53,7 +53,7 @@ data U_Node = U_Node_C {u_node_id :: UID_t
                        ,u_node_k_name :: String
                        ,u_node_k_default :: Sample
                        ,u_node_k_type :: K_Type
-                       ,u_node_k_meta :: Maybe (C_Meta Sample)}
+                       ,u_node_k_meta :: Maybe (Control_Meta Sample)}
             | U_Node_U {u_node_id :: UID_t
                        ,u_node_u_rate :: Rate
                        ,u_node_u_name :: String

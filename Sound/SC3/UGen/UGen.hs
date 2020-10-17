@@ -71,9 +71,9 @@ control :: R.Rate -> String -> Double -> UGen
 control r = control_f64 r Nothing
 
 -- | Variant of 'control' with meta data.
-meta_control :: R.Rate -> String -> Double -> C_Meta_T5 Double -> UGen
+meta_control :: R.Rate -> String -> Double -> Control_Meta_T5 Double -> UGen
 meta_control rt nm df meta =
-    let m = c_meta_t5 id meta
+    let m = control_meta_t5 id meta
     in Control_U (Control rt Nothing nm df False (Just m))
 
 -- | Triggered (kr) control input node constructor.

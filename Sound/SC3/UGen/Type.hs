@@ -41,21 +41,21 @@ data Constant = Constant {constantValue :: Sample}
                 deriving (Eq,Ord,Read,Show)
 
 -- | Control meta-data.
-data C_Meta n =
-    C_Meta {ctl_min :: n -- ^ Minimum
-           ,ctl_max :: n -- ^ Maximum
-           ,ctl_warp :: String -- ^ @(0,1)@ @(min,max)@ transfer function.
-           ,ctl_step :: n -- ^ The step to increment & decrement by.
-           ,ctl_units :: String -- ^ Unit of measure (ie hz, ms etc.).
-           }
+data Control_Meta n =
+    Control_Meta {ctl_min :: n -- ^ Minimum
+                 ,ctl_max :: n -- ^ Maximum
+                 ,ctl_warp :: String -- ^ @(0,1)@ @(min,max)@ transfer function.
+                 ,ctl_step :: n -- ^ The step to increment & decrement by.
+                 ,ctl_units :: String -- ^ Unit of measure (ie hz, ms etc.).
+                 }
     deriving (Eq,Read,Show)
 
--- | 5-tuple form of 'C_Meta' data.
-type C_Meta_T5 n = (n,n,String,n,String)
+-- | 5-tuple form of 'Control_Meta' data.
+type Control_Meta_T5 n = (n,n,String,n,String)
 
--- | Lift 'C_Meta_5' to 'C_Meta' allowing type coercion.
-c_meta_t5 :: (n -> m) -> C_Meta_T5 n -> C_Meta m
-c_meta_t5 f (l,r,w,stp,u) = C_Meta (f l) (f r) w (f stp) u
+-- | Lift 'Control_Meta_5' to 'Control_Meta' allowing type coercion.
+control_meta_t5 :: (n -> m) -> Control_Meta_T5 n -> Control_Meta m
+control_meta_t5 f (l,r,w,stp,u) = Control_Meta (f l) (f r) w (f stp) u
 
 -- | Control inputs.  It is an invariant that controls with equal
 -- names within a UGen graph must be equal in all other respects.
@@ -64,7 +64,7 @@ data Control = Control {controlOperatingRate :: Rate
                        ,controlName :: String
                        ,controlDefault :: Sample
                        ,controlTriggered :: Bool
-                       ,controlMeta :: Maybe (C_Meta Sample)}
+                       ,controlMeta :: Maybe (Control_Meta Sample)}
                deriving (Eq,Read,Show)
 
 -- | Labels.
