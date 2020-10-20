@@ -186,11 +186,14 @@ decay_f sr dt x y1 =
     let b1 = exp (log 0.001 / (dt * sr))
     in x + b1 * y1
 
--- | dt must not be zero.
+-- | Given time /dt/ in frames construct 'iir1' 'lag' function.
+--   dt must not be zero.
+lag_f_frames :: Floating a => a -> a -> a -> a
+lag_f_frames dt x y1 = let b1 = exp (log 0.001 / dt) in x + b1 * (y1 - x)
+
+-- | 'lag_f_frames' with /dt/ in seconds.
 lag_f :: Floating a => a -> a -> a -> a -> a
-lag_f sr dt x y1 =
-    let b1 = exp (log 0.001 / (dt * sr))
-    in x + b1 * (y1 - x)
+lag_f sr dt = lag_f_frames (dt * sr)
 
 lag :: Floating t => t -> F_ST1 t (t,t) t
 lag sr ((i,t),st) = let r = lag_f sr t i st in (r,r)
