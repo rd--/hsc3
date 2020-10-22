@@ -22,6 +22,14 @@ $ hsc3-help sc3-help scdoc-local SinOsc Collection.inject 'Collection.*fill'
 $
 ~~~~
 
+`ugen-control-param` prints the default values of UGen parameters in sequence.
+
+~~~~
+$ hsc3-help ugen-control-param pitch
+Pitch KR (control KR "in" 0.0) (control KR "initFreq" 440.0) (control KR "minFreq" 60.0) (control KR "maxFreq" 4000.0) (control KR "execFreq" 100.0) (control KR "maxBinsPerOctave" 16.0) (control KR "median" 1.0) (control KR "ampThreshold" 1.0e-2) (control KR "peakThreshold" 0.5) (control KR "downSample" 1.0) (control KR "clar" 0.0)
+$
+~~~~
+
 `ugen-default-param` prints the default values of UGen parameters in sequence.
 
 ~~~~

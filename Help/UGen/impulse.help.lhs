@@ -17,6 +17,12 @@ An impulse with frequency 0 returns a single impulse
 
 > g_04 = decay (impulse AR 0 0) 1 * brownNoise 'α' AR * 0.1
 
+Non-bandlimited
+
+> g_05 =
+>   let f = sinOsc AR 0.25 0.0 * 2500.0 + 2505.0
+>   in impulse AR f 0.0 * 0.1
+
 Drawings:
 
     import Sound.SC3.Plot {- hsc3-plot -}
