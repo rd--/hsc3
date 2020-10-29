@@ -412,11 +412,11 @@ splay i s l c lc =
 sum_opt :: [UGen] -> UGen
 sum_opt = sum_opt_f sum3 sum4
 
--- | Single tap into a delayline
-tap :: Int -> UGen -> UGen -> UGen
-tap numChannels bufnum delaytime =
+-- | Single tap into a delayline.  AR only.
+tap :: Int -> Rate -> UGen -> UGen -> UGen
+tap numChannels rt bufnum delaytime =
     let n = delaytime * negate sampleRate
-    in playBuf numChannels AR bufnum 1 0 n Loop DoNothing
+    in playBuf numChannels rt bufnum 1 0 n Loop DoNothing
 
 -- | Randomly select one of several inputs on trigger.
 tChoose :: ID m => m -> UGen -> UGen -> UGen

@@ -81,7 +81,7 @@
   "Lookup up the UGen at point in hsc3-db"
   (interactive)
   (hsc3-send-string
-      (format "Sound.SC3.UGen.DB.ugenSummary \"%s\""
+      (format "Sound.SC3.UGen.DB.ugen_summary_wr \"%s\""
               (thing-at-point 'symbol))))
 
 (defun hsc3-remove-trailing-newline (s)
