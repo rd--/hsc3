@@ -114,13 +114,6 @@
 ;;   (mapcar 'hsc3-send-string
 ;;           (split-string (hsc3-region-string) "\n")))
 
-;; (defun hsc3-run-layout-block ()
-;;   "Variant of `hsc3-run-consecutive-lines' with ghci layout quoting."
-;;   (interactive)
-;;   (hsc3-send-string ":{")
-;;   (hsc3-send-string (hsc3-region-string))
-;;   (hsc3-send-string ":}"))
-
 ;;(defun hsc3-sc3-ugen-help ()
 ;;  "Lookup up the UGen name at point in the SC3 (HTML) help files."
 ;;  (interactive)

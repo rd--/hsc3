@@ -47,6 +47,9 @@
          cs))
     (error "no hsc3 process running?")))
 
+(defun hsc3-send-layout-block (s)
+  (hsc3-send-string (mapconcat 'identity (list ":{" s ":}") "\n")))
+
 (defun hsc3-quit-haskell ()
   "Quit haskell."
   (interactive)
@@ -113,6 +116,16 @@
   "Run current main."
   (interactive)
   (hsc3-send-string "main"))
+
+(defun hsc3-run-layout-block ()
+  "Send layout region with ghci layout quoting."
+  (interactive)
+  (hsc3-send-layout-block (buffer-substring-no-properties (region-beginning) (region-end))))
+
+(defun hsc3-audition-layout-block ()
+  "Send layout region with ghci layout quoting."
+  (interactive)
+  (hsc3-send-layout-block (concat "audition $\n" (buffer-substring-no-properties (region-beginning) (region-end)))))
 
 (defun hsc3-id-rewrite-region ()
   (interactive)

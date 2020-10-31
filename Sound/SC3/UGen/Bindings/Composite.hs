@@ -477,7 +477,7 @@ wrapOut fadeTime z =
     let bus = control KR "out" 0
     in if isSink z
        then z
-       else out bus (z * maybe 1 makeFadeEnv fadeTime)
+       else out bus (maybe z ((* z) . makeFadeEnv) fadeTime)
 
 -- * wslib
 
