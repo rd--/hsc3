@@ -115,6 +115,7 @@ unaryIndex cr nm =
 --
 -- > map (is_unary CI) (words "ABS MIDICPS NEG")
 -- > map (is_unary CI) (words "- RAND")
+-- > map (is_unary CI) (words "arctan atan")
 is_unary :: Base.Case_Rule -> String -> Bool
 is_unary cr = isJust . unaryIndex cr
 
