@@ -94,6 +94,8 @@ data Warp t =
   deriving (Eq, Show)
 
 -- | Resolve 'Warp'.
+--
+-- > map from_warp [Linear,Exponential] == [0,1]
 from_warp :: Num t => Warp t -> t
 from_warp e =
     case e of

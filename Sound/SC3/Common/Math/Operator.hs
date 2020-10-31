@@ -377,7 +377,7 @@ class (Floating a,RealFrac a, Ord a) => BinaryOp a where
     fold2 :: a -> a -> a
     fold2 a b = Math.sc3_fold a (-b) b
     gcdE :: a -> a -> a
-    gcdE = error "gcdE"
+    gcdE = Math.sc3_gcd
     hypot :: a -> a -> a
     hypot = Math.sc3_hypot
     hypotx :: a -> a -> a
@@ -385,7 +385,7 @@ class (Floating a,RealFrac a, Ord a) => BinaryOp a where
     iDiv :: a -> a -> a
     iDiv = Math.sc3_idiv
     lcmE :: a -> a -> a
-    lcmE = error "lcmE"
+    lcmE = Math.sc3_lcm
     modE :: a -> a -> a
     modE = Math.sc3_mod
     randRange :: a -> a -> a

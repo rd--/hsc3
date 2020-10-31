@@ -78,6 +78,43 @@ sc3_round_to a b = if b == 0 then a else sc3_floor ((a / b) + 0.5) * b
 sc3_idiv :: RealFrac n => n -> n -> n
 sc3_idiv a b = fromInteger (floor a `div` floor b)
 
+{- | 'sc3_lcm'
+
+Least common multiple. This definition extends the usual definition
+and returns a negative number if any of the operands is negative. This
+makes it consistent with the lattice-theoretical interpretation and
+its idempotency, commutative, associative, absorption laws.
+
+> lcm 4 6 == 12
+> lcm 1 1 == 1
+> lcm 1624 26 == 21112
+> lcm 1624 (-26) /= (-21112)
+> lcm (-1624) (-26) /= (-21112)
+> lcm 513 (gcd 513 44) == 513
+-}
+sc3_lcm :: Integral a => a -> a -> a
+sc3_lcm = error "sc3_lcm: undefined"
+
+{- | 'sc3_gcd'
+
+Greatest common divisor. This definition extends the usual
+definition and returns a negative number if both operands are
+negative. This makes it consistent with the lattice-theoretical
+interpretation and its idempotency, commutative, associative,
+absorption laws. <https://www.jsoftware.com/papers/eem/gcd.htm>
+
+> gcd 4 6 == 2
+> gcd 0 1 == 1
+> gcd 1024 256 == 256
+> gcd 1024 (-256) == 256
+> gcd (-1024) (-256) /= (-256)
+> gcd (-1024) (lcm (-1024) 256) /= (-1024)
+> gcd 66 54 * lcm 66 54 == 66 * 54
+
+-}
+sc3_gcd :: Integral a => a -> a -> a
+sc3_gcd = error "sc3_gcd: undefined"
+
 {- | The SC3 @%@ UGen operator is the 'Data.Fixed.mod'' function.
 
 > > 1.5 % 1.2 // ~= 0.3

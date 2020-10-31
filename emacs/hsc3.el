@@ -105,8 +105,9 @@
 (defun hsc3-run-line ()
   "Send the current line to the interpreter."
   (interactive)
-  (let* ((s (buffer-substring (line-beginning-position)
-			      (line-end-position)))
+  (let* ((s (buffer-substring-no-properties
+             (line-beginning-position)
+             (line-end-position)))
 	 (s* (if hsc3-literate-p
 		 (hsc3-unlit s)
 	       (hsc3-uncomment s))))
@@ -118,14 +119,24 @@
   (hsc3-send-string "main"))
 
 (defun hsc3-run-layout-block ()
-  "Send layout region with ghci layout quoting."
+  "Send region with ghci layout quoting"
   (interactive)
-  (hsc3-send-layout-block (buffer-substring-no-properties (region-beginning) (region-end))))
+  (hsc3-send-layout-block
+   (buffer-substring-no-properties (region-beginning) (region-end))))
 
 (defun hsc3-audition-layout-block ()
-  "Send layout region with ghci layout quoting."
+  "Play region with ghci layout quoting"
   (interactive)
-  (hsc3-send-layout-block (concat "audition $\n" (buffer-substring-no-properties (region-beginning) (region-end)))))
+  (hsc3-send-layout-block
+   (concat "audition $\n" (buffer-substring-no-properties (region-beginning) (region-end)))))
+
+(defun hsc3-draw-layout-block ()
+  "Draw region with ghci layout quoting"
+  (interactive)
+  (hsc3-send-layout-block
+   (concat
+    "Sound.SC3.UGen.Dot.draw $\n"
+    (buffer-substring-no-properties (region-beginning) (region-end)))))
 
 (defun hsc3-id-rewrite-region ()
   (interactive)

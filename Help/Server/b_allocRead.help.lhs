@@ -50,3 +50,12 @@ intermediate in-memory use is greater than final memory use.
 Free buffer.  Memory is immediately made free.
 
     withSC3 (async (b_free 0))
+
+Small sample buffer
+
+> f_01 = "/home/rohan/data/audio/metal.wav"
+
+    withSC3 (async m_01)
+
+> m_01 :: Message
+> m_01 = b_allocRead 0 f_01 0 0

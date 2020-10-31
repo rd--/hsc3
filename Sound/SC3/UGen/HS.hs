@@ -212,6 +212,22 @@ phasor ((trig,rate,start,end,resetPos),ph) =
     let r = if trig then resetPos else sc3_wrap start end (ph + rate)
     in (ph,r)
 
+-- > Sound.SC3.Plot.plot_fn_r1_ln (\x -> mod_dif x 0 1) (0,4)
+mod_dif :: RealFrac a => a -> a -> a -> a
+mod_dif i j m =
+  let d = absdif i j `sc3_mod` m
+      h = m * 0.5
+  in h - absdif d h
+
+{-
+-- > Sound.SC3.Plot.plot_fn_r1_ln (\x -> modDif x 0 1) (0,4)
+modDif :: BinaryOp a => a -> a -> a -> a
+modDif i j m =
+  let d = absDif i j `modE` m
+      h = m * 0.5
+  in h - absDif d h
+-}
+
 -- | * LIST PROCESSING
 
 l_apply_f_st0 :: F_ST0 st o -> st -> [o]

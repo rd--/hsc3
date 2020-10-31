@@ -106,7 +106,11 @@ envelope_coerce f e =
 instance Functor Envelope where
   fmap = envelope_coerce
 
--- | Variant without release and loop node inputs (defaulting to nil).
+{- | Variant without release and loop node inputs (defaulting to nil).
+
+> Sound.SC3.Plot.plotEnvelope [envelope [0,1,0] [3,2] [EnvSin,EnvSin]]
+
+-}
 envelope :: Num a => [a] -> [a] -> [Envelope_Curve a] -> Envelope a
 envelope l t c = Envelope l t c Nothing Nothing 0
 
