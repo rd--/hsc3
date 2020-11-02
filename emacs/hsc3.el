@@ -244,6 +244,35 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (hsc3-send-string
    (concat "Sound.SC3.UGen.Dot.draw =<<" (thing-at-point 'symbol))))
 
+(defun hsc3-ugen-menu-core ()
+  "xmenu of categorised core SC3 UGens"
+  (interactive)
+  (insert (shell-command-to-string "xmenu < ~/sw/hsc3-db/lib/xmenu/ugen-core-tree.text")))
+
+(defun hsc3-ugen-menu-ext ()
+  "xmenu of categorised external SC3 UGens"
+  (interactive)
+  (insert (shell-command-to-string "xmenu < ~/sw/hsc3-db/lib/xmenu/ugen-ext-tree.text")))
+
+(defun hsc3-ugen-menu ()
+  "xmenu of categorised core and external SC3 UGens"
+  (interactive)
+  (insert (shell-command-to-string "cat ~/sw/hsc3-db/lib/xmenu/ugen-core-tree.text ~/sw/hsc3-db/lib/xmenu/nil.text ~/sw/hsc3-db/lib/xmenu/ugen-ext-tree.text | xmenu")))
+
+(defun hsc3-import-standard-modules ()
+  "import standard set of hsc3 and related modules"
+  (interactive)
+  (mapc 'hsc3-send-string
+       (list "import Data.Bits {- base -}"
+             "import Data.List {- base -}"
+             "import System.Random {- random -}"
+             "import Sound.SC3 {- hsc3 -}"
+             "import qualified Sound.SC3.UGen.Bindings.DB.External as X {- hsc3 -}"
+             "import qualified Sound.SC3.UGen.Bindings.Composite.External as X {- hsc3 -}"
+             "import qualified Sound.SC3.UGen.Bindings.HW.External.Zita as X {- hsc3 -}"
+             "import qualified Sound.SC3.UGen.Bindings.DB.RDU as X {- sc3-rdu -}"
+             "import qualified Sound.SC3.UGen.Protect as Protect {- hsc3-rw -}")))
+
 (defun hsc3-set-prompt ()
   "Set ghci prompt to hsc3."
   (interactive)
