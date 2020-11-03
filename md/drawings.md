@@ -36,6 +36,19 @@ dust2
 ![](sw/hsc3/Help/SVG/dust2.0.svg)
 ![](sw/hsc3/Help/SVG/dust2.1.svg)
 
+grayNoise
+
+![](sw/hsc3/Help/SVG/grayNoise.0.svg)
+![](sw/hsc3/Help/SVG/grayNoise.1.svg)
+
+henonN
+
+![](sw/hsc3/Help/SVG/henonN.0.svg)
+
+integrator
+
+![](sw/hsc3/Help/SVG/integrator.0.svg)
+
 lfClipNoise
 
 ![](sw/hsc3/Help/SVG/lfClipNoise.0.svg)
@@ -61,6 +74,12 @@ lfdNoise0
 lfdNoise3
 
 ![](sw/hsc3/Help/SVG/lfdNoise3.0.svg)
+
+lfNoise0
+
+![](sw/hsc3/Help/SVG/lfNoise0.0.svg)
+![](sw/hsc3/Help/SVG/lfNoise0.1.svg)
+![](sw/hsc3/Help/SVG/lfNoise0.2.svg)
 
 lfNoise2
 

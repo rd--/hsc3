@@ -43,6 +43,9 @@ in pan2 n l (dbAmp y)
 -- whiteNoise ; hpz1
 hpz1 (whiteNoise 'α' AR * 0.01)
 
+-- whiteNoise ; frequency control
+sinOsc AR (whiteNoise 'α' KR * 300 + 500) 0 * 0.1
+
 ---- ; drawings
 Sound.SC3.Plot.plot_ugen1 0.01 (whiteNoise 'γ' AR)
 Sound.SC3.Plot.plot_ugen1 0.05 (lpf (whiteNoise 'γ' AR) 500)
