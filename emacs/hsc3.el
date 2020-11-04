@@ -14,7 +14,7 @@
 
 (defvar hsc3-interpreter
   (list "ghci")
-  "*The name of the haskell interpreter to run (default=\"ghci\").")
+  "*The name of the haskell interpreter (default=\"ghci\").")
 
 (defvar hsc3-help-directory
   nil
@@ -45,18 +45,18 @@
         (mapcar
          (lambda (c) (comint-send-string hsc3-buffer c))
          cs))
-    (error "no hsc3 process running?")))
+    (error "no hsc3 process?")))
 
 (defun hsc3-send-layout-block (s)
   (hsc3-send-string (mapconcat 'identity (list ":{" s ":}") "\n")))
 
-(defun hsc3-quit-haskell ()
-  "Quit haskell."
+(defun hsc3-send-quit ()
+  "Send :quit to haskell."
   (interactive)
   (hsc3-send-string ":quit"))
 
 (defun hsc3-unlit (s)
-  "Remove bird literate marks and preceding comment marker"
+  "Remove bird literate marks and preceding comment marker."
    (replace-regexp-in-string "^[> ]* ?" "" s))
 
 (defun hsc3-uncomment (s)
@@ -81,7 +81,7 @@
     (hsc3-find-files sc3-help-directory rgx)))
 
 (defun hsc3-ugen-summary ()
-  "Lookup up the UGen at point in hsc3-db"
+  "Lookup up the UGen at point in hsc3-db."
   (interactive)
   (hsc3-send-string
       (format "Sound.SC3.UGen.DB.ugen_summary_wr \"%s\""
@@ -95,14 +95,14 @@
   (interactive)
   (hsc3-send-string (format ":cd %s" default-directory)))
 
-(defun hsc3-load-buffer ()
-  "Load the current buffer."
+(defun hsc3-load-current-file ()
+  "Send :load and the current buffer file name to the interpreter."
   (interactive)
   (save-buffer)
   (hsc3-see-haskell)
   (hsc3-send-string (format ":load \"%s\"" buffer-file-name)))
 
-(defun hsc3-run-line ()
+(defun hsc3-send-current-line ()
   "Send the current line to the interpreter."
   (interactive)
   (let* ((s (buffer-substring-no-properties
@@ -113,32 +113,32 @@
 	       (hsc3-uncomment s))))
     (hsc3-send-string s*)))
 
-(defun hsc3-run-main ()
-  "Run current main."
+(defun hsc3-send-main ()
+  "Send :main to the inerpreter."
   (interactive)
   (hsc3-send-string "main"))
 
-(defun hsc3-run-layout-block ()
-  "Send region with ghci layout quoting"
-  (interactive)
-  (hsc3-send-layout-block
-   (buffer-substring-no-properties (region-beginning) (region-end))))
+(defun hsc3-region-string ()
+  (buffer-substring-no-properties (region-beginning) (region-end)))
 
-(defun hsc3-audition-layout-block ()
-  "Play region with ghci layout quoting"
+(defun hsc3-audition-region ()
+  "Play region, if region spans multiple lines send using using ghci layout quoting"
   (interactive)
-  (hsc3-send-layout-block
-   (concat "audition $\n" (buffer-substring-no-properties (region-beginning) (region-end)))))
+  (let ((str (hsc3-region-string)))
+    (if (string-match "\n" str)
+        (hsc3-send-layout-block (concat "audition $\n" str))
+      (hsc3-send-string (concat "audition $ " str)))))
 
-(defun hsc3-draw-layout-block ()
-  "Draw region with ghci layout quoting"
+(defun hsc3-draw-region ()
+  "Draw region, if region spans multiple lines send using using ghci layout quoting"
   (interactive)
-  (hsc3-send-layout-block
-   (concat
-    "Sound.SC3.UGen.Dot.draw $\n"
-    (buffer-substring-no-properties (region-beginning) (region-end)))))
+  (let ((str (hsc3-region-string)))
+    (if (string-match "\n" str)
+        (hsc3-send-layout-block (concat "Sound.SC3.UGen.Dot.draw $\n" str))
+    (hsc3-send-string (concat "Sound.SC3.UGen.Dot.draw $ " str)))))
 
 (defun hsc3-id-rewrite-region ()
+  "Run hsc3-id-rewrite on region."
   (interactive)
   (shell-command-on-region
    (region-beginning)
@@ -159,7 +159,7 @@
 (defun hsc3-start-haskell ()
   "Start the hsc3 haskell process.
 
-If `hsc3-interpreter' is not already running as a subprocess it is
+If `hsc3-interpreter' is not already a subprocess it is
 started and a new window is created to display the results of
 evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (interactive)
@@ -198,52 +198,6 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (hsc3-send-string
    "Sound.SC3.withSC3 (Sound.SC3.send Sound.SC3.quit)"))
 
-(defun hsc3-update-hsc3-tags ()
-  "Update hsc3 TAGS file, must be run from hsc3 directory."
-  (interactive)
-  (if (and (executable-find "hasktags") (file-exists-p "hsc3.cabal"))
-      (call-process-shell-command
-       "find Sound . -name '*.hs' | xargs hasktags -e"
-       nil
-       nil)
-    (error "no hasktags binary or not at hsc3 directory?")))
-
-(defun hsc3-audition-graph ()
-  "Audition the UGen graph at point."
-  (interactive)
-  (hsc3-send-string
-   (concat "Sound.SC3.audition " (thing-at-point 'symbol))))
-
-(defun hsc3-audition-graph-m ()
-  "Audition the (monadic) UGen graph at point."
-  (interactive)
-  (hsc3-send-string
-   (concat "Sound.SC3.audition =<<" (thing-at-point 'symbol))))
-
-(defun hsc3-audition-pattern ()
-  "Audition the pattern at point."
-  (interactive)
-  (hsc3-send-string
-   (concat "Sound.SC3.Lang.Pattern.paudition " (thing-at-point 'symbol))))
-
-(defun hsc3-draw-graph ()
-  "Draw the UGen graph at point."
-  (interactive)
-  (hsc3-send-string
-   (concat "Sound.SC3.UGen.Dot.draw " (thing-at-point 'symbol))))
-
-(defun hsc3-draw-graph-plain ()
-  "Draw the UGen graph at point (plain)."
-  (interactive)
-  (hsc3-send-string
-   (concat "Sound.SC3.UGen.Dot.draw_plain " (thing-at-point 'symbol))))
-
-(defun hsc3-draw-graph-m ()
-  "Draw the (monadic) UGen graph at point."
-  (interactive)
-  (hsc3-send-string
-   (concat "Sound.SC3.UGen.Dot.draw =<<" (thing-at-point 'symbol))))
-
 (defun hsc3-ugen-menu-core ()
   "xmenu of categorised core SC3 UGens"
   (interactive)
@@ -260,7 +214,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (insert (shell-command-to-string "cat ~/sw/hsc3-db/lib/xmenu/ugen-core-tree.text ~/sw/hsc3-db/lib/xmenu/nil.text ~/sw/hsc3-db/lib/xmenu/ugen-ext-tree.text | xmenu")))
 
 (defun hsc3-import-standard-modules ()
-  "import standard set of hsc3 and related modules"
+  "Import standard set of hsc3 and related modules"
   (interactive)
   (mapc 'hsc3-send-string
        (list "import Data.Bits {- base -}"
@@ -298,30 +252,23 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
 
 (defun hsc3-mode-keybindings (map)
   "Haskell SuperCollider keybindings."
-  (define-key map [?\C-c ?<] 'hsc3-load-buffer)
-  (define-key map [?\C-c ?>] 'hsc3-see-haskell)
-  (define-key map [?\C-c ?\C-c] 'hsc3-run-line)
-  (define-key map [?\C-c ?\C-h] 'hsc3-help)
-  (define-key map [?\C-c ?\C-a] 'hsc3-audition-graph)
-  (define-key map [?\C-c ?\M-a] 'hsc3-audition-graph-m)
-  (define-key map (kbd "C-c p") 'hsc3-audition-pattern)
-  (define-key map (kbd "C-c C-g") 'hsc3-draw-graph)
-  (define-key map (kbd "C-c C-S-g") 'hsc3-draw-graph-plain)
-  (define-key map [?\C-c ?\M-g] 'hsc3-draw-graph-m)
-  (define-key map [?\C-c ?\C-j] 'hsc3-sc3-help)
-  ;(define-key map [?\C-c ?\C-/] 'hsc3-sc3-html-help)
-  (define-key map [?\C-c ?i] 'hsc3-interrupt-haskell)
-  (define-key map [?\C-c ?\C-k] 'hsc3-reset-scsynth)
-  (define-key map [?\C-c ?\C-m] 'hsc3-run-main)
-  (define-key map [?\C-c ?\C-p] 'hsc3-status-scsynth)
-  (define-key map [?\C-c ?\C-q] 'hsc3-quit-haskell)
-  (define-key map [?\C-c ?\C-0] 'hsc3-quit-scsynth)
-  (define-key map [?\C-c ?\C-.] 'hsc3-stop)
-  (define-key map [?\C-c ?\C-s] 'hsc3-stop) ; ie. sclang-mode key
-  (define-key map [?\C-c ?\C-u] 'hsc3-ugen-summary))
+  (define-key map (kbd "C-c <") 'hsc3-load-current-file)
+  (define-key map (kbd "C-c >") 'hsc3-see-haskell)
+  (define-key map (kbd "C-c C-c") 'hsc3-send-current-line)
+  (define-key map (kbd "C-c C-h") 'hsc3-help)
+  (define-key map (kbd "C-c C-a") 'hsc3-audition-region)
+  (define-key map (kbd "C-c C-g") 'hsc3-draw-region)
+  (define-key map (kbd "C-c C-j") 'hsc3-sc3-help)
+  (define-key map (kbd "C-c C-i") 'hsc3-interrupt-haskell)
+  (define-key map (kbd "C-c C-k") 'hsc3-reset-scsynth)
+  (define-key map (kbd "C-c C-m") 'hsc3-send-main)
+  (define-key map (kbd "C-c C-p") 'hsc3-status-scsynth)
+  (define-key map (kbd "C-c C-q") 'hsc3-send-quit)
+  (define-key map (kbd "C-c C-.") 'hsc3-stop)
+  (define-key map (kbd "C-c C-u") 'hsc3-ugen-summary))
 
 (defun hsc3-mode-menu (map)
-  "Haskell SuperCollider menu."
+  "Haskell SuperCollider Menu"
   (define-key map [menu-bar hsc3]
     (cons "Haskell-SuperCollider" (make-sparse-keymap "Haskell-SuperCollider")))
   (define-key map [menu-bar hsc3 help]
@@ -330,8 +277,6 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
     '("HSC3 Help" . hsc3-help))
   (define-key map [menu-bar hsc3 help ugen]
     '("UGen Summary" . hsc3-ugen-summary))
-  ;(define-key map [menu-bar hsc3 help sc3-server]
-  ;  '("SuperCollider Server Command help" . hsc3-sc3-server-help))
   (define-key map [menu-bar hsc3 help sc3-ugen]
     '("SC3 Help" . hsc3-sc3-ugen-help))
   (define-key map [menu-bar hsc3 expression]
@@ -340,12 +285,12 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
     '("Stop (interrupt and reset)" . hsc3-stop))
   (define-key map [menu-bar hsc3 expression change-directory]
     '("Change directory" . hsc3-cd))
-  (define-key map [menu-bar hsc3 expression load-buffer]
-    '("Load buffer" . hsc3-load-buffer))
-  (define-key map [menu-bar hsc3 expression run-main]
-    '("Run main" . hsc3-run-main))
-  (define-key map [menu-bar hsc3 expression run-line]
-    '("Run line" . hsc3-run-line))
+  (define-key map [menu-bar hsc3 expression load-current-file]
+    '("Load current file" . hsc3-load-current-file))
+  (define-key map [menu-bar hsc3 expression send-main]
+    '("Send main" . hsc3-send-main))
+  (define-key map [menu-bar hsc3 expression send-current-line]
+    '("Send current line" . hsc3-send-current-line))
   (define-key map [menu-bar hsc3 scsynth]
     (cons "SCSynth" (make-sparse-keymap "SCSynth")))
   (define-key map [menu-bar hsc3 scsynth quit]

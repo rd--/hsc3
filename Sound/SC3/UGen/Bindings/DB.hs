@@ -1225,8 +1225,8 @@ linRand z lo hi minmax = mkUGen Nothing [IR] (Left IR) "LinRand" [lo,hi,minmax] 
 -- | Two channel linear crossfade.
 --
 --  LinXFade2 [KR,AR] inA=0.0 inB=0.0 pan=0.0 level=1.0;    FILTER: TRUE, PSUEDO INPUTS: [3]
-linXFade2 :: UGen -> UGen -> UGen -> UGen -> UGen
-linXFade2 inA inB pan level = mkUGen Nothing [KR,AR] (Right [0,1]) "LinXFade2" [inA,inB,pan,level] Nothing 1 (Special 0) NoId
+linXFade2 :: UGen -> UGen -> UGen -> UGen
+linXFade2 inA inB pan = mkUGen Nothing [KR,AR] (Right [0,1]) "LinXFade2" [inA,inB,pan] Nothing 1 (Special 0) NoId
 
 -- | Line generator.
 --

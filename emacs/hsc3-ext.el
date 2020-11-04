@@ -114,6 +114,7 @@
 ;;   (mapcar 'hsc3-send-string
 ;;           (split-string (hsc3-region-string) "\n")))
 
+;; (define-key map [?\C-c ?\C-/] 'hsc3-sc3-html-help)
 ;;(defun hsc3-sc3-ugen-help ()
 ;;  "Lookup up the UGen name at point in the SC3 (HTML) help files."
 ;;  (interactive)
@@ -129,3 +130,61 @@
 ;;   (format "Sound.SC3.Server.Help.viewServerHelp \"%s\""
 ;;           (thing-at-point 'symbol))))
 
+
+(defun hsc3-update-hsc3-tags ()
+  "Update hsc3 TAGS file, must be run from hsc3 directory."
+  (interactive)
+  (if (and (executable-find "hasktags") (file-exists-p "hsc3.cabal"))
+      (call-process-shell-command
+       "find Sound . -name '*.hs' | xargs hasktags -e"
+       nil
+       nil)
+    (error "no hasktags binary or not at hsc3 directory?")))
+
+
+(defun hsc3-audition-graph ()
+  "Audition the UGen graph at point."
+  (interactive)
+  (hsc3-send-string
+   (concat "Sound.SC3.audition " (thing-at-point 'symbol))))
+
+;; (define-key map [?\C-c ?\M-a] 'hsc3-audition-graph-m)
+(defun hsc3-audition-graph-m ()
+  "Audition the (monadic) UGen graph at point."
+  (interactive)
+  (hsc3-send-string
+   (concat "Sound.SC3.audition =<<" (thing-at-point 'symbol))))
+
+;; (define-key map (kbd "C-c p") 'hsc3-audition-pattern)
+(defun hsc3-audition-pattern ()
+  "Audition the pattern at point."
+  (interactive)
+  (hsc3-send-string
+   (concat "Sound.SC3.Lang.Pattern.paudition " (thing-at-point 'symbol))))
+
+(defun hsc3-draw-graph ()
+  "Draw the UGen graph at point."
+  (interactive)
+  (hsc3-send-string
+   (concat "Sound.SC3.UGen.Dot.draw " (thing-at-point 'symbol))))
+
+;; (define-key map (kbd "C-c C-S-g") 'hsc3-draw-graph-plain)
+(defun hsc3-draw-graph-plain ()
+  "Draw the UGen graph at point (plain)."
+  (interactive)
+  (hsc3-send-string
+   (concat "Sound.SC3.UGen.Dot.draw_plain " (thing-at-point 'symbol))))
+
+;; (define-key map [?\C-c ?\M-g] 'hsc3-draw-graph-m)
+(defun hsc3-draw-graph-m ()
+  "Draw the (monadic) UGen graph at point."
+  (interactive)
+  (hsc3-send-string
+   (concat "Sound.SC3.UGen.Dot.draw =<<" (thing-at-point 'symbol))))
+
+;; (define-key map [menu-bar hsc3 help sc3-server]
+;;   '("SuperCollider Server Command help" . hsc3-sc3-server-help))
+
+;; (define-key map (kbd "C-c C-s") 'hsc3-stop) ; ie. sclang-mode key
+
+;; (define-key map [?\C-c ?\C-0] 'hsc3-quit-scsynth)
