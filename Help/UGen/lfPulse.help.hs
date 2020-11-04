@@ -15,5 +15,5 @@ let mk_freq f0 n = f0 * fromInteger n
     o2 = lfPulse AR x 0 0.5 * e
 in mce2 o1 o2 * y
 
----- ; drawings
+---- ; drawings ; pulse is unary, ie. range is (0,1)
 Sound.SC3.Plot.plot_ugen1 0.1 (lfPulse AR (line KR 100 800 0.1 DoNothing) 0 0.5)

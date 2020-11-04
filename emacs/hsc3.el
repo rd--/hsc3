@@ -25,8 +25,8 @@
   "*The directory containing the SC3 RTF help files (default=nil).")
 
 (defvar hsc3-literate-p
-  t
-  "*Flag to indicate if we are in literate mode (default=t).")
+  nil
+  "*Flag to indicate if we are in literate mode (default=nil).")
 
 (make-variable-buffer-local 'hsc3-literate-p)
 
@@ -40,6 +40,7 @@
       (cons c (hsc3-chunk-string n (substring s n))))))
 
 (defun hsc3-send-string (s)
+  "Send string and newline to haskell."
   (if (comint-check-proc hsc3-buffer)
       (let ((cs (hsc3-chunk-string 64 (concat s "\n"))))
         (mapcar
@@ -48,15 +49,16 @@
     (error "no hsc3 process?")))
 
 (defun hsc3-send-layout-block (s)
+  "Send string to haskell using ghci layout block notation."
   (hsc3-send-string (mapconcat 'identity (list ":{" s ":}") "\n")))
 
 (defun hsc3-send-quit ()
-  "Send :quit to haskell."
+  "Send :quit instruction to haskell."
   (interactive)
   (hsc3-send-string ":quit"))
 
 (defun hsc3-unlit (s)
-  "Remove bird literate marks and preceding comment marker."
+  "Remove Bird-literate marks."
    (replace-regexp-in-string "^[> ]* ?" "" s))
 
 (defun hsc3-uncomment (s)
@@ -88,6 +90,7 @@
               (thing-at-point 'symbol))))
 
 (defun hsc3-remove-trailing-newline (s)
+  "Delete trailing newlines from string."
   (replace-regexp-in-string "\n\\'" "" s))
 
 (defun hsc3-cd ()
@@ -96,14 +99,14 @@
   (hsc3-send-string (format ":cd %s" default-directory)))
 
 (defun hsc3-load-current-file ()
-  "Send :load and the current buffer file name to the interpreter."
+  "Send :load and the current buffer file name to haskell."
   (interactive)
   (save-buffer)
   (hsc3-see-haskell)
   (hsc3-send-string (format ":load \"%s\"" buffer-file-name)))
 
 (defun hsc3-send-current-line ()
-  "Send the current line to the interpreter."
+  "Send the current line to haskell."
   (interactive)
   (let* ((s (buffer-substring-no-properties
              (line-beginning-position)
@@ -114,14 +117,15 @@
     (hsc3-send-string s*)))
 
 (defun hsc3-send-main ()
-  "Send :main to the inerpreter."
+  "Send main to haskell."
   (interactive)
   (hsc3-send-string "main"))
 
 (defun hsc3-region-string ()
+  "Get current region as string."
   (buffer-substring-no-properties (region-beginning) (region-end)))
 
-(defun hsc3-audition-region ()
+(defun hsc3-play-region ()
   "Play region, if region spans multiple lines send using using ghci layout quoting"
   (interactive)
   (let ((str (hsc3-region-string)))
@@ -130,7 +134,7 @@
       (hsc3-send-string (concat "audition $ " str)))))
 
 (defun hsc3-draw-region ()
-  "Draw region, if region spans multiple lines send using using ghci layout quoting"
+  "Draw region, if region spans multiple lines send using using ghci layout quoting."
   (interactive)
   (let ((str (hsc3-region-string)))
     (if (string-match "\n" str)
@@ -147,12 +151,13 @@
    nil
    t))
 
-(defun hsc3-id-rewrite ()
+(defun hsc3-id-rewrite-buffer ()
+  "Run hsc3-id-rewrite on buffer."
   (interactive)
   (shell-command-on-region (point-min) (point-max) "hsc3-id-rewrite" nil t))
 
 (defun hsc3-reset-scsynth ()
-  "Reset scsynth"
+  "Send SC3 reset instruction to haskell."
   (interactive)
   (hsc3-send-string "Sound.SC3.withSC3 Sound.SC3.reset"))
 
@@ -174,20 +179,20 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
     (hsc3-see-haskell)))
 
 (defun hsc3-interrupt-haskell ()
-  "Interupt haskell process."
+  "Interupt haskell."
   (interactive)
   (interrupt-process hsc3-buffer comint-ptyp))
 
 (defun hsc3-stop ()
-  "Interrupt haskell interpreter & reset scsynth"
+  "Interrupt haskell & reset scsynth."
   (interactive)
   (progn
     (hsc3-interrupt-haskell)
     (sleep-for 0.15)
     (hsc3-reset-scsynth)))
 
-(defun hsc3-status-scsynth ()
-  "Status"
+(defun hsc3-server-status ()
+  "Send serverStatus request to haskell."
   (interactive)
   (hsc3-send-string
    "Sound.SC3.withSC3 Sound.SC3.serverStatus >>= mapM putStrLn"))
@@ -198,23 +203,38 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (hsc3-send-string
    "Sound.SC3.withSC3 (Sound.SC3.send Sound.SC3.quit)"))
 
-(defun hsc3-ugen-menu-core ()
-  "xmenu of categorised core SC3 UGens"
+(defun hsc3-dmenu-ugen-core ()
+  "dmenu of categorised core SC3 UGens"
   (interactive)
-  (insert (shell-command-to-string "xmenu < ~/sw/hsc3-db/lib/xmenu/ugen-core-tree.text")))
+  (insert (shell-command-to-string "hsc3-db dmenu ugen core")))
 
-(defun hsc3-ugen-menu-ext ()
+(defun hsc3-dmenu-ugen-ext ()
   "xmenu of categorised external SC3 UGens"
   (interactive)
-  (insert (shell-command-to-string "xmenu < ~/sw/hsc3-db/lib/xmenu/ugen-ext-tree.text")))
+  (insert (shell-command-to-string "hsc3-db dmenu ugen external")))
 
-(defun hsc3-ugen-menu ()
-  "xmenu of categorised core and external SC3 UGens"
+(defun hsc3-dmenu-ugen-all ()
+  "dmenu of categorised all SC3 UGens"
+  (interactive)
+  (insert (shell-command-to-string "hsc3-db dmenu ugen all")))
+
+(defun hsc3-xmenu-ugen-core ()
+  "xmenu of categorised core SC3 UGens"
+  (interactive)
+  (insert (shell-command-to-string "hsc3-db xmenu core")))
+
+(defun hsc3-xmenu-ugen-ext ()
+  "xmenu of categorised external SC3 UGens"
+  (interactive)
+  (insert (shell-command-to-string "hsc3-db xmenu external")))
+
+(defun hsc3-xmenu-ugen-all ()
+  "xmenu of categorised core and external SC3 UGens."
   (interactive)
   (insert (shell-command-to-string "cat ~/sw/hsc3-db/lib/xmenu/ugen-core-tree.text ~/sw/hsc3-db/lib/xmenu/nil.text ~/sw/hsc3-db/lib/xmenu/ugen-ext-tree.text | xmenu")))
 
 (defun hsc3-import-standard-modules ()
-  "Import standard set of hsc3 and related modules"
+  "Send standard set of hsc3 and related module imports to haskell."
   (interactive)
   (mapc 'hsc3-send-string
        (list "import Data.Bits {- base -}"
@@ -256,57 +276,45 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (define-key map (kbd "C-c >") 'hsc3-see-haskell)
   (define-key map (kbd "C-c C-c") 'hsc3-send-current-line)
   (define-key map (kbd "C-c C-h") 'hsc3-help)
-  (define-key map (kbd "C-c C-a") 'hsc3-audition-region)
+  (define-key map (kbd "C-c C-a") 'hsc3-play-region)
   (define-key map (kbd "C-c C-g") 'hsc3-draw-region)
   (define-key map (kbd "C-c C-j") 'hsc3-sc3-help)
   (define-key map (kbd "C-c C-i") 'hsc3-interrupt-haskell)
   (define-key map (kbd "C-c C-k") 'hsc3-reset-scsynth)
   (define-key map (kbd "C-c C-m") 'hsc3-send-main)
-  (define-key map (kbd "C-c C-p") 'hsc3-status-scsynth)
+  (define-key map (kbd "C-c C-p") 'hsc3-server-status)
   (define-key map (kbd "C-c C-q") 'hsc3-send-quit)
   (define-key map (kbd "C-c C-.") 'hsc3-stop)
   (define-key map (kbd "C-c C-u") 'hsc3-ugen-summary))
 
 (defun hsc3-mode-menu (map)
   "Haskell SuperCollider Menu"
-  (define-key map [menu-bar hsc3]
-    (cons "Haskell-SuperCollider" (make-sparse-keymap "Haskell-SuperCollider")))
-  (define-key map [menu-bar hsc3 help]
-    (cons "Help" (make-sparse-keymap "Help")))
-  (define-key map [menu-bar hsc3 help hsc3]
-    '("HSC3 Help" . hsc3-help))
-  (define-key map [menu-bar hsc3 help ugen]
-    '("UGen Summary" . hsc3-ugen-summary))
-  (define-key map [menu-bar hsc3 help sc3-ugen]
-    '("SC3 Help" . hsc3-sc3-ugen-help))
-  (define-key map [menu-bar hsc3 expression]
-    (cons "Expression" (make-sparse-keymap "Expression")))
-  (define-key map [menu-bar hsc3 expression stop]
-    '("Stop (interrupt and reset)" . hsc3-stop))
-  (define-key map [menu-bar hsc3 expression change-directory]
-    '("Change directory" . hsc3-cd))
-  (define-key map [menu-bar hsc3 expression load-current-file]
-    '("Load current file" . hsc3-load-current-file))
-  (define-key map [menu-bar hsc3 expression send-main]
-    '("Send main" . hsc3-send-main))
-  (define-key map [menu-bar hsc3 expression send-current-line]
-    '("Send current line" . hsc3-send-current-line))
-  (define-key map [menu-bar hsc3 scsynth]
-    (cons "SCSynth" (make-sparse-keymap "SCSynth")))
-  (define-key map [menu-bar hsc3 scsynth quit]
-    '("Quit scsynth" . hsc3-quit-scsynth))
-  (define-key map [menu-bar hsc3 scsynth status]
-    '("Display status" . hsc3-status-scsynth))
-  (define-key map [menu-bar hsc3 scsynth reset]
-    '("Reset scsynth" . hsc3-reset-scsynth))
-  (define-key map [menu-bar hsc3 haskell]
-    (cons "Haskell" (make-sparse-keymap "Haskell")))
-  (define-key map [menu-bar hsc3 haskell quit-haskell]
-    '("Quit haskell" . hsc3-quit-haskell))
-  (define-key map [menu-bar hsc3 haskell interrupt-haskell]
-    '("Interrupt haskell" . hsc3-interrupt-haskell))
-  (define-key map [menu-bar hsc3 haskell see-haskell]
-    '("See haskell" . hsc3-see-haskell)))
+  (define-key map [menu-bar hsc3] (cons "Haskell-SuperCollider" (make-sparse-keymap "Haskell-SuperCollider")))
+  (define-key map [menu-bar hsc3 help] (cons "Help" (make-sparse-keymap "Help")))
+  (define-key map [menu-bar hsc3 help hsc3] '("HSC3 Help" . hsc3-help))
+  (define-key map [menu-bar hsc3 help ugen] '("UGen Summary" . hsc3-ugen-summary))
+  (define-key map [menu-bar hsc3 help sc3-ugen] '("SC3 Help" . hsc3-sc3-ugen-help))
+  (define-key map [menu-bar hsc3 expression] (cons "Expression" (make-sparse-keymap "Expression")))
+  (define-key map [menu-bar hsc3 expression stop] '("Stop (interrupt and reset)" . hsc3-stop))
+  (define-key map [menu-bar hsc3 expression change-directory] '("Change directory" . hsc3-cd))
+  (define-key map [menu-bar hsc3 expression import-standard-modules] '("Import standard modules" . hsc3-import-standard-modules))
+  (define-key map [menu-bar hsc3 expression server-status] '("Print server status" . hsc3-server-status))
+  (define-key map [menu-bar hsc3 expression send-main] '("Send main" . hsc3-send-main))
+  (define-key map [menu-bar hsc3 expression send-current-line] '("Send current line" . hsc3-send-current-line))
+  (define-key map [menu-bar hsc3 expression id-rewrite-region] '("ID-rewrite region" . hsc3-id-rewrite-region))
+  (define-key map [menu-bar hsc3 expression load-current-file] '("Load current file" . hsc3-load-current-file))
+  (define-key map [menu-bar hsc3 expression dmenu-ugen] '("UGen dmenu" . hsc3-dmenu-ugen-all))
+  (define-key map [menu-bar hsc3 expression xmenu-ugen] '("UGen xmenu" . hsc3-xmenu-ugen-all))
+  (define-key map [menu-bar hsc3 expression draw-region] '("Draw region" . hsc3-draw-region))
+  (define-key map [menu-bar hsc3 expression play-region] '("Play region" . hsc3-play-region))
+  (define-key map [menu-bar hsc3 scsynth] (cons "SCSynth" (make-sparse-keymap "SCSynth")))
+  (define-key map [menu-bar hsc3 scsynth quit] '("Quit scsynth" . hsc3-quit-scsynth))
+  (define-key map [menu-bar hsc3 scsynth status] '("Display status" . hsc3-status-scsynth))
+  (define-key map [menu-bar hsc3 scsynth reset] '("Reset scsynth" . hsc3-reset-scsynth))
+  (define-key map [menu-bar hsc3 haskell] (cons "Haskell" (make-sparse-keymap "Haskell")))
+  (define-key map [menu-bar hsc3 haskell quit-haskell] '("Quit haskell" . hsc3-quit-haskell))
+  (define-key map [menu-bar hsc3 haskell interrupt-haskell] '("Interrupt haskell" . hsc3-interrupt-haskell))
+  (define-key map [menu-bar hsc3 haskell see-haskell] '("See haskell" . hsc3-see-haskell)))
 
 (if hsc3-mode-map
     ()

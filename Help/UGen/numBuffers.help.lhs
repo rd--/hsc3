@@ -1,7 +1,0 @@
-> import Sound.SC3 {- hsc3 -}
-
-the number of audio buffers available at the server (by default 1024)
-
-> g_01 = poll (impulse KR 1 0) numBuffers 0 (label "numBuffers")
-
-> g_02 = let f = 110 + numBuffers in sinOsc AR f 0 * 0.1

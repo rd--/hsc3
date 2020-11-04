@@ -15,6 +15,13 @@ let x = midiCPS (mouseX KR 20 72 Linear 0.2)
     o2 = lfTri AR x 0 * e
 in mce2 o1 o2 * 0.1
 
+-- lfTri ; c.f. dpw3Tri fast sweeps
+lfTri AR (mouseX KR 200 12000 Exponential 0.2) 0 * 0.1
+
+-- lfTri ; c.f. dpw3Tri efficiency
+let f = X.randN 50 'α' 50 5000
+in splay (lfTri AR f 0) 1 0.1 0 True
+
 ---- ; drawings
 Sound.SC3.Plot.plot_ugen1 0.1 (lfTri AR 40 0)
 Sound.SC3.Plot.plot_ugen1 0.1 (lfTri AR (xLine KR 1 800 0.1 DoNothing) 0)

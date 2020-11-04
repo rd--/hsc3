@@ -26,8 +26,8 @@ let s0 = sinOsc AR 440 0
 in balance2 s0 s1 x 0.2
 
 -- balance2
-let s = soundIn 0
+let s = pinkNoise 'α' AR
     l = lpf s 500
     h = s - l
-    n = lfNoise0 'α' KR 4
-in balance2 l h n 0.3
+    n = lfNoise2 'β' KR 4
+in balance2 l h n 0.1
