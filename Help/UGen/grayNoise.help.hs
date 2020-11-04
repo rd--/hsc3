@@ -1,5 +1,5 @@
 -- grayNoise
-g_01 = grayNoise 'α' AR * 0.1
+grayNoise 'α' AR * 0.1
 
 ---- ; drawings
 Sound.SC3.Plot.plot_ugen1 0.025 (grayNoise 'γ' AR)

@@ -92,7 +92,7 @@ its idempotency, commutative, associative, absorption laws.
 > lcm (-1624) (-26) /= (-21112)
 > lcm 513 (gcd 513 44) == 513
 -}
-sc3_lcm :: Integral a => a -> a -> a
+sc3_lcm :: t -> t -> t
 sc3_lcm = error "sc3_lcm: undefined"
 
 {- | 'sc3_gcd'
@@ -112,7 +112,7 @@ absorption laws. <https://www.jsoftware.com/papers/eem/gcd.htm>
 > gcd 66 54 * lcm 66 54 == 66 * 54
 
 -}
-sc3_gcd :: Integral a => a -> a -> a
+sc3_gcd :: t -> t -> t
 sc3_gcd = error "sc3_gcd: undefined"
 
 {- | The SC3 @%@ UGen operator is the 'Data.Fixed.mod'' function.

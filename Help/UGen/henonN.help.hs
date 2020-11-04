@@ -23,7 +23,7 @@ in sinOsc AR f 0 * 0.4
 Sound.SC3.Plot.plot_ugen1 0.1 (henonN AR 2500 1.4 0.3 0 0 * 0.1)
 
 ---- ; haskell
-> import qualified Sound.SC3.Common.Math.Noise as Math {- hsc3 -}
-> henon_hs a b = map snd (iterate (Math.henon_f a b) (0.0,0.0))
+import qualified Sound.SC3.Common.Math.Noise as Math {- hsc3 -}
+henon_hs a b = map snd (iterate (Math.henon_f a b) (0.0,0.0))
 Sound.SC3.Plot.plot_p1_ln [take 600 (henon_hs 1.4 0.3)]
 Sound.SC3.Plot.plot_ugen_nrt (600,1) 1.0 (henonN AR 600 1.4 0.3 0 0)
