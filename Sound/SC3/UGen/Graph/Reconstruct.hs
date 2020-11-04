@@ -1,4 +1,4 @@
--- | A /disassembler/ for UGen graphs.
+-- | A disassembler for UGen graphs.
 module Sound.SC3.UGen.Graph.Reconstruct where
 
 import Data.Char {- base -}
@@ -6,11 +6,12 @@ import Data.List {- base -}
 import Text.Printf {- base -}
 
 import qualified Sound.SC3.Common.Math.Operator as Operator
-import Sound.SC3.Common.Rate
+import qualified Sound.SC3.Common.Rate as Rate
 import qualified Sound.SC3.UGen.Graph as Graph
-import Sound.SC3.UGen.Type
-import Sound.SC3.UGen.UGen
+import qualified Sound.SC3.UGen.Type as Type
+import qualified Sound.SC3.UGen.UGen as UGen
 
+-- | Generate label for 'Graph.From_Port'
 from_port_label :: Char -> Graph.From_Port -> String
 from_port_label jn fp =
     case fp of
@@ -19,6 +20,7 @@ from_port_label jn fp =
       Graph.From_Port_U n Nothing -> printf "u_%d" n
       Graph.From_Port_U n (Just i) -> printf "u_%d%co_%d" n jn i
 
+-- | Any name that does not begin with a letter is considered an operator.
 is_operator_name :: String -> Bool
 is_operator_name nm =
     case nm of
@@ -41,9 +43,9 @@ reconstruct_graph g =
 
 reconstruct_graph_module :: String -> Graph.U_Graph -> [String]
 reconstruct_graph_module nm gr =
-  let imp = ["import Sound.SC3"
-            ,"import Sound.SC3.Common.Base"
-            ,"import Sound.SC3.UGen.Plain"]
+  let imp = ["import Sound.SC3 {- hsc3 -}"
+            ,"import Sound.SC3.Common.Base {- hsc3 -}"
+            ,"import Sound.SC3.UGen.Plain {- hsc3 -}"]
       (b0:bnd,res) = reconstruct_graph gr
       hs = ("  let " ++ b0) : map ("      " ++ ) bnd ++ ["  in " ++ res]
       pre = [nm ++ " :: UGen",nm ++ " ="]
@@ -71,11 +73,11 @@ reconstruct_c_str u =
         c = Graph.u_node_c_value u
     in printf "%s = constant (%f::Sample)" l c
 
-reconstruct_c_ugen :: Graph.U_Node -> UGen
-reconstruct_c_ugen u = constant (Graph.u_node_c_value u)
+reconstruct_c_ugen :: Graph.U_Node -> Type.UGen
+reconstruct_c_ugen u = Type.constant (Graph.u_node_c_value u)
 
 -- | Discards index.
-reconstruct_k_rnd :: Graph.U_Node -> (Rate,String,Sample)
+reconstruct_k_rnd :: Graph.U_Node -> (Rate.Rate,String,Type.Sample)
 reconstruct_k_rnd u =
     let r = Graph.u_node_k_rate u
         n = Graph.u_node_k_name u
@@ -88,13 +90,13 @@ reconstruct_k_str u =
         (r,n,d) = reconstruct_k_rnd u
     in printf "%s = control %s \"%s\" %f" l (show r) n d
 
-reconstruct_k_ugen :: Graph.U_Node -> UGen
+reconstruct_k_ugen :: Graph.U_Node -> Type.UGen
 reconstruct_k_ugen u =
     let (r,n,d) = reconstruct_k_rnd u
-    in control_f64 r Nothing n d
+    in UGen.control_f64 r Nothing n d
 
-ugen_qname :: String -> Special -> (String,String)
-ugen_qname nm (Special n) =
+ugen_qname :: String -> Type.Special -> (String,String)
+ugen_qname nm (Type.Special n) =
     case nm of
       "UnaryOpUGen" -> ("uop CS",Operator.unaryName n)
       "BinaryOpUGen" -> ("binop CS",Operator.binaryName n)
@@ -125,7 +127,7 @@ reconstruct_u_str u =
         nd_s = let t = "%s = nondet \"%s\" (UId %d) %s [%s] %d"
                in printf t l n z (show r) i_l o
         c = case q of
-              "ugen" -> if Graph.u_node_u_ugenid u == NoId then u_s else nd_s
+              "ugen" -> if Graph.u_node_u_ugenid u == Type.NoId then u_s else nd_s
               _ -> printf "%s = %s \"%s\" %s %s" l q n (show r) i_s
         m = reconstruct_mce_str u
     in if Graph.u_node_is_implicit_control u

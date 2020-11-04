@@ -3,8 +3,9 @@ module Sound.SC3.UGen.Analysis where
 
 import Data.List {- base -}
 
-import qualified Sound.SC3.UGen.Bindings.DB as DB
-import qualified Sound.SC3.UGen.MCE as MCE
+import qualified Sound.SC3.Common.Rate as Rate {- hsc3 -}
+import qualified Sound.SC3.UGen.Bindings.DB as DB {- hsc3 -}
+import qualified Sound.SC3.UGen.MCE as MCE {- hsc3 -}
 import Sound.SC3.UGen.Type
 
 -- | UGen primitive set.
@@ -65,3 +66,18 @@ buffer_nframes u =
 -- | 'pv_track_buffer' then 'buffer_nframes'.
 pv_track_nframes :: UGen -> Either String UGen
 pv_track_nframes u = pv_track_buffer u >>= Right . buffer_nframes
+
+{- | UGen is required to be the root node of complete graph.  This
+     function returns the name of the output UGen (ie. "Out" or an
+     allowed variant) and the input to that UGen.  It allows
+     multiple-root graphs.  It is in some sense the inverse of
+     'wrapOut'.
+-}
+ugen_remove_out_node :: UGen -> (String,UGen)
+ugen_remove_out_node u =
+  let err = error "ugen_remove_out_node?"
+      assert_is_output x = if x `elem` ["Out","ReplaceOut","OffsetOut"] then x else err
+  in case u of
+       Primitive_U (Primitive Rate.AR nm (_bus:inputs) [] _special _uid) -> (assert_is_output nm,mce inputs)
+       MRG_U (MRG lhs rhs) -> let (nm,res) = ugen_remove_out_node lhs in (nm,MRG_U (MRG res rhs))
+       _ -> err

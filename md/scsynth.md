@@ -4,8 +4,7 @@ Send control messages to `scsynth` and print replies.
 
 ## buffer
 
-`buffer query` sends a `/b_query` message and prints the `/b_info`
-reply.
+`buffer query` sends a `/b_query` message and prints the `/b_info` reply.
 
 ~~~~
 $ hsc3-scsynth buffer query 0
@@ -37,8 +36,7 @@ $
 
 ## group
 
-`group query-tree` sends a `/g_queryTree` message and prints the
-`/g_queryTree.reply`.
+`group query-tree` sends a `/g_queryTree` message and prints the `/g_queryTree.reply`.
 
 ## message
 
