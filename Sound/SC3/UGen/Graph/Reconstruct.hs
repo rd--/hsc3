@@ -138,6 +138,6 @@ reconstruct_mrg_str :: [Graph.U_Node] -> String
 reconstruct_mrg_str u =
     let zero_out n = not (Graph.u_node_is_implicit_control n) && null (Graph.u_node_u_outputs n)
     in case map Graph.u_node_label (filter zero_out u) of
-         [] -> error "reconstruct_mrg_str"
+         [] -> error "reconstruct_mrg_str: nil input?"
          [o] -> printf "%s" o
          o -> printf "mrg [%s]" (intercalate "," o)
