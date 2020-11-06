@@ -237,7 +237,8 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   "Send standard set of hsc3 and related module imports to haskell."
   (interactive)
   (mapc 'hsc3-send-string
-       (list "import Data.Bits {- base -}"
+       (list "import Control.Monad {- base -}"
+             "import Data.Bits {- base -}"
              "import Data.List {- base -}"
              "import System.Random {- random -}"
              "import Sound.SC3 {- hsc3 -}"

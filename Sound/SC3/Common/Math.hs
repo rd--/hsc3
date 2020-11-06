@@ -284,9 +284,19 @@ degree_to_key s n d =
 amp_to_db :: Floating a => a -> a
 amp_to_db = (* 20) . logBase 10
 
--- | Decibels to linear amplitude.
---
--- > map (floor . (* 100). db_to_amp) [-40,-26,-24,-18,-12,-6] == [01,05,06,12,25,50]
+{- | Decibels to linear amplitude.
+
+map (floor . (* 100). db_to_amp) [-40,-26,-24,-18,-12,-6] == [01,05,06,12,25,50]
+
+let amp = map (2 **) [0 .. 15]
+let db = [0,-6 .. -90]
+map (round . ampDb . (/) 1) amp == db
+map (round . amp_to_db . (/) 1) amp == db
+ zip amp db
+
+db_to_amp (-3) == 0.7079457843841379
+amp_to_db 0.7079457843841379 == -3
+-}
 db_to_amp :: Floating a => a -> a
 db_to_amp = (10 **) .  (* 0.05)
 
