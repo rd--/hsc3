@@ -1,9 +1,9 @@
-    Sound.SC3.Lang.Help.viewServerHelp "/b_allocRead"
+    Sound.SC3.Lang.Help.sc3_scdoc_help_server_command_open False "/b_allocRead"
 
 > import Sound.OSC {- hosc -}
 > import Sound.SC3 {- hsc3 -}
 
-Read a large audio file into a buffer.
+Read an audio file into a buffer.
 
 > f_00 = "/home/rohan/data/audio/xenakis/jonchaies.wav"
 > m_00 = b_allocRead 0 f_00 0 0

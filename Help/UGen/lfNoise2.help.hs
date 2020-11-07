@@ -9,5 +9,5 @@ in lfNoise2 'α' AR f * 0.05
 let f = lfNoise2 'α' KR 4
 in sinOsc AR (f * 400 + 450) 0 * 0.1
 
----- ; drawings
+---- ; drawings ; lfNoise2 is bi-polar
 Sound.SC3.Plot.plot_ugen1 0.1 (lfNoise2 'α' AR 1000)

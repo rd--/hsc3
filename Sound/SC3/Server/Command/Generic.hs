@@ -522,7 +522,7 @@ unpack_b_setn m =
 unpack_b_setn_err :: (Num i,Fractional f) => Message -> (i,i,i,[f])
 unpack_b_setn_err = fromMaybe (error "unpack_b_setn") . unpack_b_setn
 
--- | Unpack @b_info@ message, fields are (id,frames,channels,sample-rate).
+-- | Unpack b_info message, fields are (id,frames,channels,sample-rate).
 unpack_b_info :: (Num i,Fractional f) => Message -> Maybe (i,i,i,f)
 unpack_b_info m =
     let to_i = fromIntegral
