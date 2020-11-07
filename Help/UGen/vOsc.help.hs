@@ -1,4 +1,4 @@
--- vOsc ; oscillator at eight consecutive wavetable buffers, mouse selects
+-- vOsc ; oscillator at eight consecutive wavetable buffers, mouse selects ; requires=tbl
 let n = 8
     b = control KR "tbl" 0
     x = mouseX KR b (b + n - 1) Linear 0.1

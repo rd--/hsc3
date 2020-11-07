@@ -1,22 +1,22 @@
--- osc ; fixed frequency wavetable oscillator
+-- osc ; requires=tbl ; fixed frequency wavetable oscillator
 let b = control KR "tbl" 0
 in osc AR b 220 0 * 0.1
 
--- osc ; mouse frequency control
+-- osc ; requires=tbl ; mouse frequency control
 let b = control KR "tbl" 0
 in osc AR b (mouseX KR 110 220 Exponential 0.2) 0 * 0.1
 
--- osc ; modulate frequency
+-- osc ; requires=tbl ;  modulate frequency
 let b = control KR "tbl" 0
     f = xLine KR 2000 200 1 DoNothing
 in osc AR b f 0 * 0.1
 
--- osc ; as frequency modulator
+-- osc ; requires=tbl ; as frequency modulator
 let b = control KR "tbl" 0
     f = osc AR b (xLine KR 1 1000 9 RemoveSynth) 0 * 200 + 800
 in osc AR b f 0 * 0.1
 
--- osc ; as phase modulator
+-- osc ; requires=tbl ; as phase modulator
 let b = control KR "tbl" 0
     p = osc AR b (xLine KR 20 8000 10 RemoveSynth) 0 * 2 * pi
 in osc AR b 800 p * 0.1

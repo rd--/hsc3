@@ -12,6 +12,10 @@
 
 ![](sw/hsc3/Help/SVG/clipNoise.0.svg)
 
+[cOsc](?t=hsc3&e=Help/UGen/cOsc.help.hs)
+
+![](sw/hsc3/Help/SVG/cOsc.0.svg)
+
 [crackle](?t=hsc3&e=Help/UGen/crackle.help.hs)
 
 ![](sw/hsc3/Help/SVG/crackle.0.svg)

@@ -1,4 +1,4 @@
--- concat ; granulator
+-- concat ; requires=buf ; granulator
 let b = control KR "buf" 0
     y0 = mouseY KR 0.01 1 Linear 0.2
     y1 = mouseY KR b 100 Linear 0.2

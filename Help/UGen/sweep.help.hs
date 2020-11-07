@@ -4,14 +4,14 @@ let x = mouseX KR 0.5 20 Exponential 0.1
     f = sweep t 700 + 500
 in sinOsc AR f 0 * 0.2
 
--- sweep ; requires=buf ; using sweep to index into a buffer
+-- sweep ; using sweep to index into a buffer ; requires=buf
 let b = control KR "buf" 0
     x = mouseX KR 0.5 20 Exponential 0.1
     t = impulse AR x 0
     p = sweep t (bufSampleRate KR 0)
 in bufRdL 1 AR 0 p NoLoop
 
--- sweep ; backwards, variable offset
+-- sweep ; backwards, variable offset ; requires=buf
 let n = lfNoise0 'α' KR 15
     x = mouseX KR 0.5 10 Exponential 0.1
     t = impulse AR x 0
@@ -19,7 +19,7 @@ let n = lfNoise0 'α' KR 15
     p = sweep t (negate r) + (bufFrames KR 0 * n)
 in bufRdL 1 AR 0 p NoLoop
 
--- sweep ; raising rate
+-- sweep ; raising rate ; requires=buf
 let x = mouseX KR 0.5 10 Exponential 0.1
     t = impulse AR x 0
     r = sweep t 2 + 0.5
@@ -44,5 +44,5 @@ let tr = tr_control "tr" 1
 in sinOsc AR sw 0 * 0.2
 
 ---- ; send new line segments to running sweeper
-withSC3 (sendMessage (n_set (-1) [("st",660),("en",550),("tm",4),("tr",1)]))
-withSC3 (sendMessage (n_set (-1) [("st",110),("en",990),("tm",1),("tr",1)]))
+withSC3 (Sound.OSC.sendMessage (n_set (-1) [("st",660),("en",550),("tm",4),("tr",1)]))
+withSC3 (Sound.OSC.sendMessage (n_set (-1) [("st",110),("en",990),("tm",1),("tr",1)]))

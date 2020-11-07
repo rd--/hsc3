@@ -1,11 +1,11 @@
--- tGrains ; mouse control
+-- tGrains ; mouse control ; requires=buf
 let b = control KR "buf" 0
     tRate = mouseY KR 2 200 Exponential 0.1
     ctr = mouseX KR 0 (bufDur KR 0) Linear 0.1
     tr = impulse AR tRate 0
 in tGrains 2 tr b 1 ctr (4 / tRate) 0 0.25 2
 
--- tGrains ; mouse control
+-- tGrains ; mouse control ; requires=buf
 let b = control KR "buf" 0
     rt = mouseY KR 8 120 Exponential 0.1
     dur = 4 / rt
@@ -16,7 +16,7 @@ let b = control KR "buf" 0
     pos = x + r
 in tGrains 2 clk b 1 pos dur pan 0.25 2
 
--- tGrains ; mouse control
+-- tGrains ; mouse control ; requires=buf
 let b = control KR "buf" 0
     rt = mouseY KR 2 120 Exponential 0.1
     dur = 1.2 / rt
@@ -27,7 +27,7 @@ let b = control KR "buf" 0
     rate = shiftLeft 1.2 (roundTo (n0 * 3) 1)
 in tGrains 2 clk b rate pos dur (n1 * 0.6) 0.25 2
 
--- tGrains ; demand UGens as inputs
+-- tGrains ; demand UGens as inputs ; requires=buf
 --         ; (Warning: empty sequence in Dseq - Server 'localhost' exited with exit code 0)
 --         ; (also at sclang graph)
 let b = control KR "buf" 0
@@ -44,7 +44,8 @@ let b = control KR "buf" 0
     amp = dsq 'Ο' [1,0,z 'Π' 'Ρ' 'Σ' 'Τ' 'Υ' 'Φ' 'Χ' 'Ψ',0,2,1,1,0.1,0.1]
 in tGrains 2 clk b rate pos dur pan amp 2
 
--- tGrains ; http://sc-users.bham.ac.narkive.com/sj4Tw3ub/sync-osc#post5 (jmcc)
+-- tGrains ; sync oscillator ; requires=buf
+--         ; http://sc-users.bham.ac.narkive.com/sj4Tw3ub/sync-osc#post5 (jmcc)
 --         ; "A wavetable windowed sync oscillator could be written.
 --         ;  You can actually do a version of this with TGrains."
 let b = control KR "buf" 0

@@ -11,7 +11,7 @@ let zmax = 100
     y = mouseY KR 1 zmax Linear 0.2
 in X.squiz (soundIn 0) x y 0.1 * 0.1
 
--- squiz ; of buffer
+-- squiz ; of buffer ; requires=buf
 let b = control KR "buf" 0
     zmax = 100
     s = sinOsc AR 440 0
