@@ -1,11 +1,8 @@
 -- | Plain notation for SuperCollider UGen graphs.
 --
--- > let {s = ugen "SinOsc" AR [440,0] 1
--- >     ;m = binop "*" AR s 0.1
--- >     ;o = ugen "Out" AR [0,m] 0}
--- > in Sound.SC3.Server.Play.audition o >> Sound.SC3.UGen.Dot.draw o
---
--- > audition (out 0 (sinOsc AR 440 0 * 0.1))
+-- > s = ugen "SinOsc" AR [440,0] 1
+-- > m = binop CI "*" AR s 0.1
+-- > o = ugen "Out" AR [0,m] 0
 module Sound.SC3.UGen.Plain where
 
 import Sound.SC3.Common.Base
@@ -46,7 +43,7 @@ ugen nm r i nc = mk_plain r nm i nc (Special 0) NoId
 
 -- | Construct non-deterministic UGen.
 --
--- > import Sound.SC3.ID
--- > nondet "WhiteNoise" (UId (fromEnum 'a')) AR [] 1 == whiteNoise 'a' AR
+-- > import Sound.SC3.Common.UId
+-- > binop CI "*" AR (nondet "WhiteNoise" (UId (fromEnum 'a')) AR [] 1) 0.05
 nondet :: String -> UGenId -> Rate -> [UGen] -> Int -> UGen
 nondet nm z r i nc = mk_plain r nm i nc (Special 0) z

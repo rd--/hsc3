@@ -23,6 +23,7 @@ is_lc_or_num c = isLower c || isDigit c
 -}
 
 -- | Find all SC3 name edges. Edges occur at non lower-case letters.
+--   This rule is very simple but is coherent and predictable and works well for .hs names.
 sc3_name_edges_plain :: String -> [Bool]
 sc3_name_edges_plain = map (not . isLower)
 
@@ -34,6 +35,7 @@ sc3_name_edges_plain = map (not . isLower)
 > sc3_name_edges "PV_Add" == [False,False,False,True,False,False]
 > sc3_name_edges "A2K" == [False,False,False]
 > sc3_name_edges "Lag2UD" == [False,False,False,True,True,True]
+> sc3_name_edges "PeakEQ" == [False,False,False,False,True,True]
 -}
 sc3_name_edges :: String -> [Bool]
 sc3_name_edges s =
@@ -45,20 +47,19 @@ sc3_name_edges s =
 
 {- | Convert from SC3 name to HS style name.
 
-> s = words "SinOsc LFSaw FFT PV_Add AllpassN BHiPass BinaryOpUGen HPZ1 RLPF TGrains DFM1 FBSineC A2K Lag2UD IIRFilter FMGrainB"
-> l = words "sinOsc lfSaw fft pv_Add allpassN bHiPass binaryOpUGen hpz1 rlpf tGrains dfm1 fbSineC a2k lag2UD iirFilter fmGrainB"
+> s = words "SinOsc LFSaw FFT PV_Add AllpassN BHiPass BinaryOpUGen HPZ1 RLPF TGrains DFM1 FBSineC A2K Lag2UD IIRFilter FMGrainB Pan2 PeakEQ"
+> l = words "sinOsc lfSaw fft pv_Add allpassN bHiPass binaryOpUGen hpz1 rlpf tGrains dfm1 fbSineC a2k lag2UD iirFilter fmGrainB pan2 peakEQ"
 > map sc3_name_to_hs_name s == l
 -}
 sc3_name_to_hs_name :: String -> String
 sc3_name_to_hs_name s =
     let f (c,e) = if e then toUpper c else c
-        s_lc = map toLower s
-    in map f (zip s_lc (sc3_name_edges s))
+    in map f (zip (map toLower s) (sc3_name_edges s))
 
 {- | Convert from SC3 name to Lisp style name.
 
-> s = words "SinOsc LFSaw FFT PV_Add AllpassN BHiPass BinaryOpUGen HPZ1 RLPF TGrains DFM1"
-> l = words "sin-osc lf-saw fft pv-add allpass-n b-hi-pass binary-op-u-gen hpz1 rlpf t-grains dfm1"
+> s = words "SinOsc LFSaw FFT PV_Add AllpassN BHiPass BinaryOpUGen HPZ1 RLPF TGrains DFM1 BPeakEQ Pan2"
+> l = words "sin-osc lf-saw fft pv-add allpass-n b-hi-pass binary-op-u-gen hpz1 rlpf t-grains dfm1 b-peak-e-q pan-2"
 > map sc3_name_to_lisp_name s == l
 -}
 sc3_name_to_lisp_name :: String -> String

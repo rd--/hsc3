@@ -103,8 +103,8 @@ unaryName n =
 
 -- | Given name of unary operator derive index.
 --
--- > mapMaybe (unaryIndex CI) (words "NEG CUBED") == [0,13]
--- > unaryIndex CS "SinOsc" == Nothing
+-- > mapMaybe (unaryIndex Base.CI) (words "abs CUBED midicps NEG") == [5,13,17,0]
+-- > unaryIndex Base.CS "SinOsc" == Nothing
 unaryIndex :: Base.Case_Rule -> String -> Maybe Int
 unaryIndex cr nm =
     let ix = Base.rlookup_str cr nm unary_sym_tbl
@@ -220,8 +220,9 @@ binaryName n =
 
 -- | Given name of binary operator derive index.
 --
--- > mapMaybe (binaryIndex Base.CI) (words "* MUL RING1") == [2,2,30]
+-- > mapMaybe (binaryIndex Base.CI) (words "* MUL RING1 +") == [2,2,30,0]
 -- > binaryIndex Base.CI "SINOSC" == Nothing
+-- > map (\x -> (x,binaryIndex Base.CI x)) (map snd binary_sym_tbl)
 binaryIndex :: Base.Case_Rule -> String -> Maybe Int
 binaryIndex cr nm =
     let ix = Base.rlookup_str cr nm binary_sym_tbl
