@@ -254,3 +254,14 @@ unsignedShift = mkBinaryOperator O.UnsignedShift undefined
 -- | 'shiftRight' operator.
 (.>>.) :: UGen -> UGen -> UGen
 (.>>.) = shiftRight
+
+-- * Rate Flow
+
+-- | Traverse graph rewriting audio rate nodes as control rate.
+rewriteToControlRate :: UGen -> UGen
+rewriteToControlRate =
+  let f u = case u of
+              Primitive_U p -> let Primitive rt nm i o s z = p
+                               in Primitive_U (if rt == R.AR then Primitive R.KR nm i o s z else p)
+              _ -> u
+  in ugenTraverse (const False) f -- requires endRewrite node (see rsc3-arf)

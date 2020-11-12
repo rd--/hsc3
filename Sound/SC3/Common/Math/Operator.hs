@@ -22,48 +22,50 @@ import qualified Sound.SC3.Common.Math as Math {- hsc3 -}
 -- * Unary
 
 -- | Enumeration of @SC3@ unary operator UGens.
+--
+-- > zip (map show [minBound :: SC3_Unary_Op .. maxBound]) [0..]
 data SC3_Unary_Op
             = Neg -- -
             | Not -- !
             | IsNil
             | NotNil
             | BitNot
-            | Abs
+            | Abs -- 5
             | AsFloat
             | AsInt
             | Ceil
             | Floor
-            | Frac
+            | Frac -- 10
             | Sign
             | Squared
             | Cubed
             | Sqrt
-            | Exp
-            | Recip
+            | Exp -- 15
+            | Recip -- 16
             | MIDICPS
             | CPSMIDI
             | MIDIRatio
-            | RatioMIDI
+            | RatioMIDI -- 20
             | DbAmp
             | AmpDb
             | OctCPS
             | CPSOct
-            | Log
+            | Log -- 25
             | Log2
             | Log10
             | Sin
             | Cos
-            | Tan
+            | Tan -- 30
             | ArcSin
             | ArcCos
             | ArcTan
             | SinH
-            | CosH
+            | CosH -- 35
             | TanH
             | Rand_ -- UGen
             | Rand2
             | LinRand_ -- UGen
-            | BiLinRand
+            | BiLinRand -- 40
             | Sum3Rand
             | Distort
             | SoftClip
@@ -123,7 +125,7 @@ is_unary cr = isJust . unaryIndex cr
 
 -- | Enumeration of @SC3@ unary operator UGens.
 --
--- > map show [minBound :: SC3_Binary_Op .. maxBound]
+-- > zip (map show [minBound :: SC3_Binary_Op .. maxBound]) [0..]
 data SC3_Binary_Op
             = Add -- 0
             | Sub -- 1
@@ -138,14 +140,14 @@ data SC3_Binary_Op
             | LE -- 10
             | GE -- 11
             | Min -- 12
-            | Max
+            | Max -- 13
             | BitAnd
-            | BitOr
+            | BitOr -- 15
             | BitXor
             | LCM
             | GCD
             | Round
-            | RoundUp
+            | RoundUp -- 20
             | Trunc
             | Atan2
             | Hypot
@@ -155,19 +157,19 @@ data SC3_Binary_Op
             | ShiftRight
             | UnsignedShift
             | Fill
-            | Ring1
+            | Ring1 -- 30
             | Ring2
             | Ring3
             | Ring4
             | DifSqr
-            | SumSqr
+            | SumSqr -- 35
             | SqrSum
             | SqrDif
             | AbsDif
             | Thresh
-            | AMClip
+            | AMClip -- 40
             | ScaleNeg
-            | Clip2
+            | Clip2 -- 42
             | Excess
             | Fold2
             | Wrap2
