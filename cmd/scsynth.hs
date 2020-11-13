@@ -121,6 +121,12 @@ scsyndef_to_hs sy_nm hs_nm = do
       hs = Reconstruct.reconstruct_graph_module nm gr'
   writeFile hs_nm (unlines hs)
 
+-- > scsyndef_play "/home/rohan/sw/hsc3-graphs/db/cc9cd860f859576d.scsyndef"
+scsyndef_play :: FilePath -> IO ()
+scsyndef_play sy_nm = do
+  gr <- Graphdef.read_graphdef_file sy_nm
+  audition gr
+
 -- * STATUS
 
 message_print :: String -> IO ()
@@ -148,6 +154,7 @@ help =
     ,"group query-tree id:int"
     ,"node query id:int"
     ,"reset"
+    ,"scsyndef play scyndef-file"
     ,"scsyndef stat [scyndef-file] [stat-file]"
     ,"scsyndef to-hs [scyndef-file] [hs-file]"
     ,"status print|monitor [delay:float]"
@@ -169,6 +176,7 @@ main = do
     ["group","query-tree",n] -> group_query_tree (read n)
     ["node","query",n] -> node_query (read n)
     ["reset"] -> withSC3 reset
+    ["scsyndef","play",sy] -> scsyndef_play sy
     ["scsyndef","stat"] -> scsyndef_ug_stat "/dev/stdin" "/dev/stdout"
     ["scsyndef","stat",sy] -> scsyndef_ug_stat sy "/dev/stdout"
     ["scsyndef","stat",sy,st] -> scsyndef_ug_stat sy st

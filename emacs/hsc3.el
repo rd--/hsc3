@@ -16,9 +16,9 @@
   (list "ghci")
   "*The name of the haskell interpreter (default=\"ghci\").")
 
-(defvar hsc3-help-directory
+(defvar hsc3-directory
   nil
-  "*The directory containing the help files (default=nil).")
+  "*The hsc3 directory (default=nil).")
 
 (defvar sc3-help-directory
   nil
@@ -74,7 +74,7 @@
   "Lookup up the name at point in the hsc3 help files."
   (interactive)
   (let ((rgx (concat "^" (thing-at-point 'symbol) "\\.help\\.l?hs$")))
-    (hsc3-find-files hsc3-help-directory rgx)))
+    (hsc3-find-files (concat hsc3-directory "Help/") rgx)))
 
 (defun hsc3-sc3-help ()
   "Lookup up the name at point in the SC3 (RTF) help files."
@@ -233,22 +233,20 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (interactive)
   (insert (shell-command-to-string "cat ~/sw/hsc3-db/lib/xmenu/ugen-core-tree.text ~/sw/hsc3-db/lib/xmenu/nil.text ~/sw/hsc3-db/lib/xmenu/ugen-ext-tree.text | xmenu")))
 
+(defun hsc3-load-file (fn)
+  "Load named file as string"
+  (with-temp-buffer
+    (insert-file-contents fn)
+    (buffer-substring-no-properties
+       (point-min)
+       (point-max))))
+
 (defun hsc3-import-standard-modules ()
   "Send standard set of hsc3 and related module imports to haskell."
   (interactive)
-  (mapc 'hsc3-send-string
-       (list "import Control.Monad {- base -}"
-             "import Data.Bits {- base -}"
-             "import Data.List {- base -}"
-             "import System.Random {- random -}"
-             "import Sound.SC3 {- hsc3 -}"
-             "import qualified Sound.SC3.Common.Buffer.Gen as Gen {- hsc3 -}"
-             "import qualified Sound.SC3.UGen.Bindings.DB.External as X {- hsc3 -}"
-             "import qualified Sound.SC3.UGen.Bindings.Composite.External as X {- hsc3 -}"
-             "import qualified Sound.SC3.UGen.Bindings.HW.External.F0 as X {- hsc3 -}"
-             "import qualified Sound.SC3.UGen.Bindings.HW.External.Zita as X {- hsc3 -}"
-             "import qualified Sound.SC3.UGen.Bindings.DB.RDU as X {- sc3-rdu -}"
-             "import qualified Sound.SC3.UGen.Protect as Protect {- hsc3-rw -}")))
+  (mapc
+   'hsc3-send-string
+   (split-string (hsc3-load-file (concat hsc3-directory "lib/hsc3-std-imports.hs")) "\n")))
 
 (defun hsc3-set-prompt ()
   "Set ghci prompt to hsc3."
