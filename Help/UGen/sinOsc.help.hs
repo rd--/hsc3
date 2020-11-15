@@ -1,5 +1,5 @@
 -- sinOsc ; fixed frequency (hz) and initial-phase (radians)
-sinOsc AR (midiCPS 69) 0 * 0.15 -- 415 440
+sinOsc AR (midiCPS 69) 0 * 0.1 -- 415 440
 
 -- sinOsc ; control input for frequency ; ie. withSC3 (Sound.OSC.sendMessage (n_set1 (-1) "mnn" 64))
 sinOsc AR (midiCPS (control KR "mnn" 69)) 0 * 0.25

@@ -24,12 +24,17 @@ ugen_default_param nm = maybe ("ERROR: NO ENTRY: " ++ nm) DB.u_default_param (DB
 ugen_control_param :: String -> String
 ugen_control_param nm = maybe ("ERROR: NO ENTRY: " ++ nm) DB.u_control_inputs_pp (DB.u_lookup_ci nm)
 
+-- > map ugen_smalltalk ["sinosc","whiteNoise","drand","pitch"]
+ugen_smalltalk :: String -> String
+ugen_smalltalk nm = maybe ("ERROR: NO ENTRY: " ++ nm) DB.u_smalltalk_pp (DB.u_lookup_ci nm)
+
 help :: [String]
 help =
     ["hsc3-help command [arguments]"
     ," sc3-help {rtf|scdoc-local|scdoc-online} subject..."
     ," ugen-control-param ugen-name..."
     ," ugen-default-param ugen-name..."
+    ," ugen-smalltalk ugen-name..."
     ," ugen-summary ugen-name..."]
 
 main :: IO ()
@@ -41,5 +46,6 @@ main = do
     "sc3-help":"scdoc-online":x -> mapM_ (Help.sc3_scdoc_help_open False . Help.sc3_scdoc_help_path) x
     "ugen-control-param":u -> mapM_ (putStrLn . ugen_control_param) u
     "ugen-default-param":u -> mapM_ (putStrLn . ugen_default_param) u
+    "ugen-smalltalk":u -> mapM_ (putStrLn . ugen_smalltalk) u
     "ugen-summary":u -> mapM_ DB.ugen_summary_wr u
     _ -> putStrLn (unlines help)

@@ -435,6 +435,8 @@ mkUnaryOperator i f a =
 
 -- | Binary math constructor with constant optimisation.
 --
+-- > constant 2 * constant 3 == constant 6
+--
 -- > let o = sinOsc AR 440 0
 --
 -- > o * 1 == o && 1 * o == o && o * 2 /= o
