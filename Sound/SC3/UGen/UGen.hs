@@ -258,10 +258,22 @@ unsignedShift = mkBinaryOperator O.UnsignedShift undefined
 -- * Rate Flow
 
 -- | Traverse graph rewriting audio rate nodes as control rate.
-rewriteToControlRate :: UGen -> UGen
-rewriteToControlRate =
+rewriteUGenRates :: (R.Rate -> Bool) -> R.Rate -> UGen -> UGen
+rewriteUGenRates sel_f set_rt =
   let f u = case u of
               Primitive_U p -> let Primitive rt nm i o s z = p
-                               in Primitive_U (if rt == R.AR then Primitive R.KR nm i o s z else p)
+                               in Primitive_U (if sel_f rt then Primitive set_rt nm i o s z else p)
               _ -> u
   in ugenTraverse (const False) f -- requires endRewrite node (see rsc3-arf)
+
+-- | Traverse graph rewriting audio rate nodes as control rate.
+rewriteToControlRate :: UGen -> UGen
+rewriteToControlRate = rewriteUGenRates (== R.AR) R.KR
+
+-- | Traverse graph rewriting all nodes as demand rate.
+rewriteToDemandRate :: UGen -> UGen
+rewriteToDemandRate = rewriteUGenRates (const True) R.DR
+
+-- | Traverse graph rewriting audio and control nodes as initialisation rate.
+rewriteToInitialisationRate :: UGen -> UGen
+rewriteToInitialisationRate = rewriteUGenRates (`elem` [R.KR,R.AR]) R.IR

@@ -67,7 +67,7 @@ data SC3_Unary_Op
             | LinRand_ -- UGen
             | BiLinRand -- 40
             | Sum3Rand
-            | Distort
+            | Distort -- 42
             | SoftClip
             | Coin
             | DigitValue
