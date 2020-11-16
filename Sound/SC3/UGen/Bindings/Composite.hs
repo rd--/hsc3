@@ -27,6 +27,10 @@ asLocalBuf i xs =
         s = setBuf' b xs 0
     in mrg2 b s
 
+-- | balance2 with MCE input.
+balanceStereo :: UGen -> UGen -> UGen -> UGen
+balanceStereo sig pos level = let (x,y) = unmce2 sig in balance2 x y pos level
+
 -- | 24db/oct rolloff - 4th order resonant Low Pass Filter
 bLowPass4 :: UGen -> UGen -> UGen -> UGen
 bLowPass4 i f rq =
@@ -359,6 +363,10 @@ rand2 z n = rand z (negate n) n
 -- | 'UId' form of 'rand2'.
 rand2M :: UId m => UGen -> m UGen
 rand2M n = randM (negate n) n
+
+-- | rotate2 with MCE input.
+rotateStereo :: UGen -> UGen -> UGen
+rotateStereo sig pos = let (x,y) = unmce2 sig in rotate2 x y pos
 
 -- | RMS variant of 'runningSum'.
 runningSumRMS :: UGen -> UGen -> UGen
