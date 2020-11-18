@@ -42,7 +42,7 @@ data SC3_Unary_Op
             | Sqrt
             | Exp -- 15
             | Recip -- 16
-            | MIDICPS
+            | MIDICPS -- 17
             | CPSMIDI
             | MIDIRatio
             | RatioMIDI -- 20
@@ -53,7 +53,7 @@ data SC3_Unary_Op
             | Log -- 25
             | Log2
             | Log10
-            | Sin
+            | Sin -- 28
             | Cos
             | Tan -- 30
             | ArcSin
@@ -146,7 +146,7 @@ data SC3_Binary_Op
             | BitXor
             | LCM
             | GCD
-            | Round
+            | Round -- 19
             | RoundUp -- 20
             | Trunc
             | Atan2
