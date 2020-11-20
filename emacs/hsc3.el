@@ -209,7 +209,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (insert (shell-command-to-string "hsc3-db dmenu ugen core")))
 
 (defun hsc3-dmenu-ugen-ext ()
-  "xmenu of categorised external SC3 UGens"
+  "dmenu of categorised external SC3 UGens"
   (interactive)
   (insert (shell-command-to-string "hsc3-db dmenu ugen external")))
 

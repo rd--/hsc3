@@ -1932,7 +1932,7 @@ sendTrig in_ id_ value = mkUGen Nothing [KR,AR] (Right [0]) "SendTrig" [in_,id_,
 --
 --  SetResetFF [KR,AR] trig=0.0 reset=0.0;    FILTER: TRUE
 setResetFF :: UGen -> UGen -> UGen
-setResetFF trig_ reset = mkUGen Nothing [KR,AR] (Right [0]) "SetResetFF" [trig_,reset] Nothing 1 (Special 0) NoId
+setResetFF trig_ reset = mkUGen Nothing [KR,AR] (Right [0,1]) "SetResetFF" [trig_,reset] Nothing 1 (Special 0) NoId
 
 -- | Wave shaper.
 --

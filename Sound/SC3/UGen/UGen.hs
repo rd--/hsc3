@@ -277,3 +277,12 @@ rewriteToDemandRate = rewriteUGenRates (const True) R.DR
 -- | Traverse graph rewriting audio and control nodes as initialisation rate.
 rewriteToInitialisationRate :: UGen -> UGen
 rewriteToInitialisationRate = rewriteUGenRates (`elem` [R.KR,R.AR]) R.IR
+
+-- | Select rewriting function given 'R.Rate'.
+rewriteToRate :: R.Rate -> UGen -> UGen
+rewriteToRate rt =
+  case rt of
+    R.KR -> rewriteToControlRate
+    R.DR -> rewriteToDemandRate
+    R.IR -> rewriteToInitialisationRate
+    R.AR -> error "rewriteToRate: AR?"
