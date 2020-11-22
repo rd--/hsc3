@@ -1471,6 +1471,72 @@ membraneHexagon rate excitation tension loss = mkUGen Nothing [AR] (Left rate) "
 metro :: Rate -> UGen -> UGen -> UGen
 metro rate bpm numBeats = mkUGen Nothing [KR,AR] (Left rate) "Metro" [bpm,numBeats] Nothing 1 (Special 0) NoId
 
+-- | a macro oscillator
+--
+--  MiBraids [AR] pitch=60.0 timbre=0.5 color=0.5 model=0.0 trig=0.0 resamp=0.0 decim=0.0 bits=0.0 ws=0.0
+miBraids :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+miBraids rate pitch_ timbre color model trig_ resamp decim bits ws = mkUGen Nothing [AR] (Left rate) "MiBraids" [pitch_,timbre,color,model,trig_,resamp,decim,bits,ws] Nothing 1 (Special 0) NoId
+
+-- | granular audio processor and texture synthesizer
+--
+--  MiClouds [AR] pit=0.0 pos=0.5 size=0.25 dens=0.4 tex=0.5 drywet=0.5 in_gain=1.0 spread=0.5 rvb=0.0 fb=0.0 freeze=0.0 mode=0.0 lofi=0.0 trig=0.0 *inputArray=0.0;    MCE=1, REORDERS INPUTS: [14,0,1,2,3,4,5,6,7,8,9,10,11,12,13]
+miClouds :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+miClouds rate pit pos size dens tex drywet in_gain spread rvb fb freeze mode lofi trig_ inputArray = mkUGen Nothing [AR] (Left rate) "MiClouds" [pit,pos,size,dens,tex,drywet,in_gain,spread,rvb,fb,freeze,mode,lofi,trig_] (Just [inputArray]) 2 (Special 0) NoId
+
+-- | Physical modelling based on Modal Synthesis.
+--
+--  MiElements [AR] blow_in=0.0 strike_in=0.0 gate=0.0 pit=48.0 strength=0.5 contour=0.2 bow_level=0.0 blow_level=0.0 strike_level=0.0 flow=0.5 mallet=0.5 bow_timb=0.5 blow_timb=0.5 strike_timb=0.5 geom=0.25 bright=0.5 damp=0.7 pos=0.2 space=0.3 model=0.0 easteregg=0.0
+miElements :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+miElements rate blow_in strike_in gate_ pit strength contour bow_level blow_level strike_level flow mallet bow_timb blow_timb strike_timb geom bright damp pos space model easteregg = mkUGen Nothing [AR] (Left rate) "MiElements" [blow_in,strike_in,gate_,pit,strength,contour,bow_level,blow_level,strike_level,flow,mallet,bow_timb,blow_timb,strike_timb,geom,bright,damp,pos,space,model,easteregg] Nothing 2 (Special 0) NoId
+
+-- | µ-law audio companding
+--
+--  MiMu [AR] in=0.0 gain=1.0 bypass=0.0
+miMu :: Rate -> UGen -> UGen -> UGen -> UGen
+miMu rate in_ gain bypass = mkUGen Nothing [AR] (Left rate) "MiMu" [in_,gain,bypass] Nothing 1 (Special 0) NoId
+
+-- | FM Synth-Voice based on 'ominous'
+--
+--  MiOmi [AR] audio_in=0.0 gate=0.0 pit=48.0 contour=0.2 detune=0.25 level1=0.5 level2=0.5 ratio1=0.5 ratio2=0.5 fm1=0.0 fm2=0.0 fb=0.0 xfb=0.0 filter_mode=0.0 cutoff=0.5 reson=0.0 strength=0.5 env=0.5 rotate=0.2 space=0.5
+miOmi :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+miOmi rate audio_in gate_ pit contour detune level1 level2 ratio1 ratio2 fm1 fm2 fb xfb filter_mode cutoff reson strength env rotate_ space = mkUGen Nothing [AR] (Left rate) "MiOmi" [audio_in,gate_,pit,contour,detune,level1,level2,ratio1,ratio2,fm1,fm2,fb,xfb,filter_mode,cutoff,reson,strength,env,rotate_,space] Nothing 2 (Special 0) NoId
+
+-- | a macro oscillator
+--
+--  MiPlaits [AR] pitch=60.0 engine=0.0 harm=0.1 timbre=0.5 morph=0.5 trigger=0.0 level=0.0 fm_mod=0.0 timb_mod=0.0 morph_mod=0.0 decay=0.5 lpg_colour=0.5
+miPlaits :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+miPlaits rate pitch_ engine harm timbre morph trigger level fm_mod timb_mod morph_mod decay_ lpg_colour = mkUGen Nothing [AR] (Left rate) "MiPlaits" [pitch_,engine,harm,timbre,morph,trigger,level,fm_mod,timb_mod,morph_mod,decay_,lpg_colour] Nothing 2 (Special 0) NoId
+
+-- | a resonator
+--
+--  MiRings [AR] in=0.0 trig=0.0 pit=60.0 struct=0.25 bright=0.5 damp=0.7 pos=0.25 model=0.0 poly=1.0 intern_exciter=0.0 easteregg=0.0 bypass=0.0
+miRings :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+miRings rate in_ trig_ pit struct bright damp pos model poly intern_exciter easteregg bypass = mkUGen Nothing [AR] (Left rate) "MiRings" [in_,trig_,pit,struct,bright,damp,pos,model,poly,intern_exciter,easteregg,bypass] Nothing 2 (Special 0) NoId
+
+-- | Classic resonant LP filter
+--
+--  MiRipples [AR] in=0.0 cf=0.3 reson=0.2 drive=1.0
+miRipples :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+miRipples rate in_ cf reson drive = mkUGen Nothing [AR] (Left rate) "MiRipples" [in_,cf,reson,drive] Nothing 1 (Special 0) NoId
+
+-- | a quad LFO
+--
+--  MiTides [AR] freq=1.0 shape=0.5 slope=0.5 smooth=0.5 shift=0.2 trig=0.0 clock=0.0 output_mode=3.0 ramp_mode=1.0 ratio=9.0 rate=1.0
+miTides :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+miTides rate freq shape slope_ smooth shift trig_ clock output_mode ramp_mode ratio rate_ = mkUGen Nothing [AR] (Left rate) "MiTides" [freq,shape,slope_,smooth,shift,trig_,clock,output_mode,ramp_mode,ratio,rate_] Nothing 4 (Special 0) NoId
+
+-- | stereo reverb
+--
+--  MiVerb [AR] inputArray=0.0 time=0.7 drywet=0.5 damp=0.5 hp=5.0e-2 freeze=0.0 diff=0.625
+miVerb :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+miVerb rate inputArray time drywet damp hp freeze diff = mkUGen Nothing [AR] (Left rate) "MiVerb" [inputArray,time,drywet,damp,hp,freeze,diff] Nothing 2 (Special 0) NoId
+
+-- | (Undocumented class)
+--
+--  MiWarps [AR] carrier=0.0 modulator=0.0 lev1=0.5 lev2=0.5 algo=0.0 timb=0.0 osc=1.0 pit=60.0 easteregg=0.0
+miWarps :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+miWarps rate carrier modulator lev1 lev2 algo timb osc_ pit easteregg = mkUGen Nothing [AR] (Left rate) "MiWarps" [carrier,modulator,lev1,lev2,algo,timb,osc_,pit,easteregg] Nothing 2 (Special 0) NoId
+
 -- | (Undocumented class)
 --
 --  MonoGrain [AR] in=0.0 winsize=0.1 grainrate=10.0 winrandpct=0.0
