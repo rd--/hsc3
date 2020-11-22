@@ -1516,8 +1516,8 @@ miRings rate in_ trig_ pit struct bright damp pos model poly intern_exciter east
 -- | Classic resonant LP filter
 --
 --  MiRipples [AR] in=0.0 cf=0.3 reson=0.2 drive=1.0
-miRipples :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-miRipples rate in_ cf reson drive = mkUGen Nothing [AR] (Left rate) "MiRipples" [in_,cf,reson,drive] Nothing 1 (Special 0) NoId
+miRipples :: UGen -> UGen -> UGen -> UGen -> UGen
+miRipples in_ cf reson drive = mkUGen Nothing [AR] (Right [0]) "MiRipples" [in_,cf,reson,drive] Nothing 1 (Special 0) NoId
 
 -- | a quad LFO
 --

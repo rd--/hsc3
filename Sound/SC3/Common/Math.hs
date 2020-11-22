@@ -496,6 +496,10 @@ range = range_ma sc3_mul_add
 range_hs :: Fractional a => (a,a) -> a -> a
 range_hs = uncurry range
 
+-- | 'flip' 'range_hs'.  This allows cases such as osc `in_range` (0,1)
+in_range :: Fractional a => a -> (a,a) -> a
+in_range = flip range_hs
+
 -- | Calculate multiplier and add values for 'linlin' transform.
 --   Inputs are: input-min input-max output-min output-max
 --
