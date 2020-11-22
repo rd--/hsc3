@@ -1528,8 +1528,8 @@ miTides rate freq shape slope_ smooth shift trig_ clock output_mode ramp_mode ra
 -- | stereo reverb
 --
 --  MiVerb [AR] inputArray=0.0 time=0.7 drywet=0.5 damp=0.5 hp=5.0e-2 freeze=0.0 diff=0.625
-miVerb :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-miVerb rate inputArray time drywet damp hp freeze diff = mkUGen Nothing [AR] (Left rate) "MiVerb" [inputArray,time,drywet,damp,hp,freeze,diff] Nothing 2 (Special 0) NoId
+miVerb :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+miVerb time drywet damp hp freeze diff inputArray = mkUGen Nothing [AR] (Right [6]) "MiVerb" [time,drywet,damp,hp,freeze,diff] (Just [inputArray]) 2 (Special 0) NoId
 
 -- | (Undocumented class)
 --
