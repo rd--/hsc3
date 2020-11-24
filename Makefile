@@ -1,5 +1,5 @@
 GH=https://github.com/rd--/hsc3
-GL=https://gitlab.com/rd--/hsc3.git
+GL=git@gitlab.com:rd--/hsc3.git
 
 all:
 	echo "hsc3"
