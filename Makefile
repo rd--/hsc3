@@ -1,5 +1,5 @@
 GH=https://github.com/rd--/hsc3
-GL=git@gitlab.com:rd--/hsc3.git
+GL=gitlab.com:rd--/hsc3.git
 
 all:
 	echo "hsc3"
@@ -12,13 +12,13 @@ mk-cmd:
 	(cd cmd ; make all install)
 
 push-gl:
-	git push $(GL)
+	git push git@$(GL)
 
 pull-gl:
-	git pull $(GL)
+	git pull https://$(GL)
 
 update-rd:
-	ssh rd@rohandrape.net "(cd sw/hsc3;git pull $(GL))"
+	ssh rd@rohandrape.net "(cd sw/hsc3;git pull https://$(GL))"
 
 push-rd:
 	make push-gl update-rd
