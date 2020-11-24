@@ -18,7 +18,7 @@ in X.rShufflerB b 0.4 0.5 0.5 2 0.05 0.15 0.2 0.5 0.3 0.7 0.3 0.7 0 1 0.05 0.25 
 -- rShufflerB ; controls
 let b = control KR "buf" 0
     k nm def = meta_control KR nm def
-in rShufflerB b
+in X.rShufflerB b
    (k "readLocationMinima" 0.0 (0,1,"lin",0.01,""))
    (k "readLocationMaxima" 0.05 (0,1,"lin",0.01,""))
    (k "readIncrementMinima" 1.99975 (0.25,4,"lin",0.01,""))
