@@ -29,4 +29,3 @@ Sound.SC3.Plot.plot_ugen_nrt (600,1) 1.0 (fbSineC AR 600 1.0 4.0 1.1 0.5 0.1 0.1
 import Sound.SC3.Common.Math.Noise {- hsc3 -}
 fbSineC_hs im fb a c = map fst (iterate (fbSine_f im fb a c) (0.1,0.1))
 Sound.SC3.Plot.plot_p1_ln [take 600 (fbSineC_hs 1.0 4.0 1.1 0.5)]
-

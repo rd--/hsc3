@@ -32,6 +32,8 @@ linear x0 x1 t = t * (x1 - x0) + x0
      x0 must not be zero and (x0,x1) must not span zero.
 
 > plot_fn_r1_ln (exponential 0.001 1) (0,1)
+> plot_fn_r1_ln (exponential 1 2) (0,1)
+> plot_fn_r1_ln (exponential 20 20000) (0,1)
 -}
 exponential :: Floating t => Interpolation_F t
 exponential x0 x1 t = x0 * ((x1 / x0) ** t)
@@ -72,15 +74,18 @@ welch x0 x1 t =
     else x1 - (x1 - x0) * sin (half_pi - (half_pi * t))
 
 {- | Curvature controlled by single parameter c.
-     Zero is 'linear', increasing c approaches 'exponential' at c=14 and continues.
+     Zero is 'linear', increasing c approaches 'exponential' and continues past it.
+     The value for c at which the curve is close to exponential depends on the range.
 
 > plot_p1_ln (map (\c-> map (curve c (-1) 1) [0,0.01 .. 1]) [-6,-4 .. 6])
-> plot_p1_ln (map (\f -> map f [0,0.01 .. 1]) [curve 13 0 1,exponential_0 0 1,curve 15 0 1])
+> plot_p1_ln (map (\f -> map f [0,0.01 .. 1]) [curve 4.4 1 100,exponential 1 100,curve 4.5 1 100])
+> plot_p1_ln (map (\f -> map f [0,0.01 .. 1]) [exponential 20 20000,curve 7 20 20000])
+> plot_p1_ln (map (\f -> map f [0,0.01 .. 1]) [fader 0 2,curve 2 0 2])
 -}
 curve :: (Ord t, Floating t) => t -> Interpolation_F t
 curve c x0 x1 t =
     if abs c < 0.0001
-    then t * (x1 - x0) + x0 -- linear
+    then linear x0 x1 t
     else let d = 1 - exp c
              n = 1 - exp (t * c)
          in x0 + (x1 - x0) * (n/d)
