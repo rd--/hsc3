@@ -58,28 +58,28 @@ let harm = range 0 1 (lfNoise2 'α' KR 0.2)
     lev = squared (tRand 'β' 0 1 trigger)
 in mix (X.miPlaits AR 56 (X.miPlaits_mode "modal") harm 0 0.85 trigger lev 0 0 0 0.5 0.5)
 
--- MiPlaits ; snare drumsss
-{var harm = lfNoise2 'α' KR 0.5).range(0,0.5);
- var timbre = 0.173;
- var morph = 0.827;
- var trigger = Impulse.kr(8);
- var lev = TRand.kr(trig: trigger).squared;
- X.miPlaits AR 47, 14, harm, timbre, morph, trigger, lev, fm_mod: 0.2, timb_mod: 0.43, decay: 0.4) * 0.1}
+-- MiPlaits ; snare drums
+let harm = range 0 0.5 (lfNoise2 'α' KR 0.5)
+    timbre = 0.173
+    morph = 0.827
+    trigger = impulse KR 8 0
+    lev = squared (tRand 'β' 0 1 trigger)
+in X.miPlaits AR 47 14 harm timbre morph trigger lev 0.2 0.43 0 0.4 0.5 * 0.1
 
 -- MiPlaits ; filtered noise
-{var harm = 0.575;
- var timbre = 0.02;
- var morph = lfNoise1 'α' KR 0.3).range(0.55,0.9); -- filter resonance
- X.miPlaits AR 62, 9, harm, timbre, morph) * 0.25}
+let harm = 0.575
+    timbre = 0.02
+    morph = range_hs (0.55,0.9) (lfNoise1 'α' KR 0.3) -- filter resonance
+in X.miPlaits AR 62 9 harm timbre morph 0 0 0 0 0 0.5 0.5 * 0.25
 
 -- MiPlaits ; something...
-{var trigger = Dust.kr(lfNoise2 'α' KR 0.1).range(0.1, 7) );
- var harmonics = SinOsc.kr(0.03, 0, 0.5, 0.5).range(0.0, 1.0);
- var timbre = LFTri.kr(0.07, 0, 0.5, 0.5).range(0.0, 1.0);
- var morph = LFTri.kr(0.11, 0, 0.5, 0.5).squared;
- var pitch = TIRand.kr(24, 48, trigger);
- var engine = TRand.kr(0, 15, trig: trigger).round;
- var sub = SinOsc.ar(pitch.midicps, 0, 0.1);
- var mi = X.miPlaits AR  pitch, engine, harmonics, timbre, morph, trigger: trigger, decay: 0.8, lpg_colour: 0.2, mul: 0.5);
- (mi + sub) * 0.2}
+let trigger = dust 'α' KR (range_hs (0.1,7) (lfNoise2 'β' KR 0.1))
+    harmonics = sinOsc KR 0.03 0 * 0.5 + 0.5
+    timbre = lfTri KR 0.07 0 * 0.5 + 0.5
+    morph = lfTri KR 0.11 0 * 0.5 + 0.5
+    pitch_ = tiRand 'γ' 24 48 trigger
+    engine = roundE (tRand 'δ' 0 15 trigger)
+    sub = sinOsc AR (midiCPS pitch_) 0 * 0.1
+    mi = X.miPlaits AR pitch_ engine harmonics timbre morph trigger 0 0 0 0 0.8 0.2 * 0.5
+in (mi + sub) * 0.2
 

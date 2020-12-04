@@ -1303,8 +1303,8 @@ midEQ in_ freq rq db = mkUGen Nothing [KR,AR] (Right [0]) "MidEQ" [in_,freq,rq,d
 -- | Minimum difference of two values in modulo arithmetics
 --
 --  ModDif [IR,KR,AR] x=0.0 y=0.0 mod=1.0
-modDif :: Rate -> UGen -> UGen -> UGen -> UGen
-modDif rate x y mod_ = mkUGen Nothing [IR,KR,AR] (Left rate) "ModDif" [x,y,mod_] Nothing 1 (Special 0) NoId
+modDif :: UGen -> UGen -> UGen -> UGen
+modDif x y mod_ = mkUGen Nothing [IR,KR,AR] (Right [0]) "ModDif" [x,y,mod_] Nothing 1 (Special 0) NoId
 
 -- | Moog VCF implementation, designed by Federico Fontana
 --

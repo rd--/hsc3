@@ -13,6 +13,9 @@ clean:
 mk-cmd:
 	(cd cmd ; make all install)
 
+mk-tags:
+	find . -name '*.hs' | xargs hasktags -e
+
 push-gl:
 	git push $(GL_GIT)
 

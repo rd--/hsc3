@@ -246,6 +246,10 @@ mceN = constant . length . mceChannels
 mix :: UGen -> UGen
 mix = sum_opt . mceChannels
 
+-- | Mix divided by number of inputs.
+mceMean :: UGen -> UGen
+mceMean e = let p = mceChannels e in sum_opt p / constant (length p)
+
 -- | Mix variant, sum to n channels.
 mixN :: Int -> UGen -> UGen
 mixN n u =

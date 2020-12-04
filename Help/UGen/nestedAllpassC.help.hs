@@ -1,5 +1,5 @@
 -- nestedAllpassL
-let sig = sound In 0
+let sig = soundIn 0
     nc = 2
     nestedAllpassL_def s =
       let d1 = 0.036
