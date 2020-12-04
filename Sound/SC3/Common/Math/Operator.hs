@@ -144,8 +144,8 @@ data SC3_Binary_Op
             | BitAnd
             | BitOr -- 15
             | BitXor
-            | LCM
-            | GCD
+            | LCM -- 17
+            | GCD -- 18
             | Round -- 19
             | RoundUp -- 20
             | Trunc
