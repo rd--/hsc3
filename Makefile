@@ -1,7 +1,8 @@
-GH=https://github.com/rd--/hsc3
-
 GL_GIT=git@gitlab.com:rd--/hsc3.git
 GL_HTTP=https://gitlab.com/rd--/hsc3.git
+
+GH_GIT=git@github.com:rd--/hsc3.git
+GH_HTTP=https://github.com/rd--/hsc3.git
 
 all:
 	echo "hsc3"
@@ -29,8 +30,8 @@ push-rd:
 	make push-gl update-rd
 
 push-gh:
-	git push $(GH)
+	git push $(GH_GIT)
 
 pull-gh:
-	git pull $(GH)
+	git pull $(GH_HTTP)
 
