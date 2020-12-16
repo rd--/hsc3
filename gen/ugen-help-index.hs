@@ -1,7 +1,7 @@
 import Data.List {- base -}
 import Text.Printf {- base -}
 
-import Sound.SC3.UGen.Operator {- hsc3 -}
+import Sound.SC3.Common.Math.Operator {- hsc3 -}
 
 import Sound.SC3.UGen.DB {- hsc3-db -}
 import Sound.SC3.UGen.DB.Rename {- hsc3-db -}
@@ -15,7 +15,7 @@ ugen_renamer u =
 gen_ln :: String -> String
 gen_ln u =
     let u' = ugen_renamer (fromSC3Name u)
-    in printf "[%s](?t=hsc3&e=Help/UGen/%s.help.lhs)" u' u'
+    in printf "[%s](?t=hsc3&e=Help/UGen/%s.help.hs)" u' u'
 
 ugen_blacklist :: [String]
 ugen_blacklist =
@@ -25,27 +25,28 @@ ugen_blacklist =
     ,"InBus" -- jitlib
     ,"Filter"]
 
-gen_cat :: (String, [String]) -> String
-gen_cat (c,u) =
-    let Just c' = stripPrefix "UGens>" c
-        u' = filter (`notElem` ugen_blacklist) u
-    in unlines ["## " ++ c',"",intercalate ",\n" (map gen_ln u'),""]
+gen_cat :: UGen_Cat_Table_Entry -> String
+gen_cat (c1,s) =
+    let mk_hd = concat . maybe ["## ",c1] (\c2 -> ["## ",c1,":",c2])
+        f (m_c2,u) = let u' = filter (`notElem` ugen_blacklist) u
+                     in unlines [mk_hd m_c2,intercalate ",\n" (map gen_ln u'),""]
+    in unlines (map f s)
 
 cat_blacklist :: [String]
-cat_blacklist = ["UGens>Base","UGens>Input"]
+cat_blacklist = ["Base","Input"]
 
-cat_sub :: [(String, [String])]
-cat_sub = filter ((`notElem` cat_blacklist) . fst) ugen_categories_table
+cat_sub :: UGen_Cat_Table
+cat_sub = filter ((`notElem` cat_blacklist) . fst) (ugen_categories_table sc3_ugen_cat_composite)
 
 drop_last :: [a] -> [a]
 drop_last = reverse . tail . reverse
 
-cat_op :: [(String, [String])]
+cat_op :: UGen_Cat_Table
 cat_op =
     let rw s = if last s == '_' then drop_last s else s
         nm = fromSC3Name . rw . show
-    in [("UGens>Operator>Binary",map nm [minBound :: Binary .. maxBound])
-       ,("UGens>Operator>Unary",map show [minBound :: Unary .. maxBound])]
+    in [("Operator",[(Just "Binary",map nm [minBound :: SC3_Binary_Op .. maxBound])
+                    ,(Just "Unary",map show [minBound :: SC3_Unary_Op .. maxBound])])]
 
 main :: IO ()
 main = do
