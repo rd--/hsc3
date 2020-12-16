@@ -1,6 +1,8 @@
 # hsc3-help
 
-`sc3-help rtf` locates the RTF file for a subject,
+## sc3-help rtf
+
+Locates the RTF file for a subject,
 runs [unrtf](https://www.gnu.org/software/unrtf/) to write a `.scd` file,
 which it opens in [emacs](https://www.gnu.org/software/emacs/).
 The RTF files must be at `SC3_RTF_HELP_DIR`.
@@ -12,7 +14,9 @@ $ hsc3-help sc3-help rtf SinOsc lfSaw softclip
 $
 ~~~~
 
-`sc3-help scdoc-local` locates entries for some subjects at the
+## sc3-help scdoc-local
+
+Locates entries for some subjects at the
 SC3-DOC HTML system and opens them using `BROWSER` or `x-www-browser`.
 
 ~~~~
@@ -22,15 +26,19 @@ $ hsc3-help sc3-help scdoc-local SinOsc Collection.inject 'Collection.*fill'
 $
 ~~~~
 
-`ugen-control-param` prints the default values of UGen parameters in sequence.
+## ugen-control-param
+
+Prints the default values of UGen parameters in sequence as named control values.
 
 ~~~~
 $ hsc3-help ugen-control-param pitch
-Pitch KR (control KR "in" 0.0) (control KR "initFreq" 440.0) (control KR "minFreq" 60.0) (control KR "maxFreq" 4000.0) (control KR "execFreq" 100.0) (control KR "maxBinsPerOctave" 16.0) (control KR "median" 1.0) (control KR "ampThreshold" 1.0e-2) (control KR "peakThreshold" 0.5) (control KR "downSample" 1.0) (control KR "clar" 0.0)
+Pitch KR (control KR "in" 0.0) (control KR "initFreq" 440.0) ...
 $
 ~~~~
 
-`ugen-default-param` prints the default values of UGen parameters in sequence.
+## ugen-default-param
+
+Prints the default values of UGen parameters in sequence.
 
 ~~~~
 $ hsc3-help ugen-default-param sinOsc # oscillator
@@ -42,7 +50,9 @@ $ hsc3-help ugen-default-param pitch # fixed rate
 $
 ~~~~
 
-`ugen-summary` prints UGen information from [hsc3-db](?t=hsc3-db).
+## ugen-summary
+
+Prints UGen information from [hsc3-db](?t=hsc3-db).
 
 ~~~~
 $ hsc3-help ugen-summary bufRd demand
