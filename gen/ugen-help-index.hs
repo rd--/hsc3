@@ -1,6 +1,8 @@
 import Data.List {- base -}
 import Text.Printf {- base -}
 
+import qualified Music.Theory.Directory as T {- hmt -}
+
 import Sound.SC3.Common.Math.Operator {- hsc3 -}
 
 import Sound.SC3.UGen.DB {- hsc3-db -}
@@ -12,10 +14,11 @@ ugen_renamer u =
       "in'" -> "in"
       _ -> u
 
-gen_ln :: String -> String
-gen_ln u =
-    let u' = ugen_renamer (fromSC3Name u)
-    in printf "[%s](?t=hsc3&e=Help/UGen/%s.help.hs)" u' u'
+gen_ln :: [FilePath] -> String -> String
+gen_ln db u =
+    let nm = ugen_renamer (fromSC3Name u)
+        fn = nm ++ ".help.hs"
+    in if fn `elem` db then printf "[%s](?t=hsc3&e=Help/UGen/%s)" nm fn else nm
 
 ugen_blacklist :: [String]
 ugen_blacklist =
@@ -25,11 +28,11 @@ ugen_blacklist =
     ,"InBus" -- jitlib
     ,"Filter"]
 
-gen_cat :: UGen_Cat_Table_Entry -> String
-gen_cat (c1,s) =
+gen_cat :: [FilePath] -> UGen_Cat_Table_Entry -> String
+gen_cat db (c1,s) =
     let mk_hd = concat . maybe ["## ",c1] (\c2 -> ["## ",c1,":",c2])
         f (m_c2,u) = let u' = filter (`notElem` ugen_blacklist) u
-                     in unlines [mk_hd m_c2,intercalate ",\n" (map gen_ln u'),""]
+                     in unlines [mk_hd m_c2,intercalate ",\n" (map (gen_ln db) u'),""]
     in unlines (map f s)
 
 cat_blacklist :: [String]
@@ -50,5 +53,6 @@ cat_op =
 
 main :: IO ()
 main = do
-  let c = map gen_cat (cat_sub ++ cat_op)
+  db <- T.dir_subset_rel [".hs"] "/home/rohan/sw/hsc3/Help/UGen/"
+  let c = map (gen_cat db) (cat_sub ++ cat_op)
   writeFile "/home/rohan/sw/hsc3/Help/UGen/ix.md" (unlines c)
