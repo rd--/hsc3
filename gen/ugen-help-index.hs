@@ -26,7 +26,7 @@ ugen_blacklist =
     ,"AbstractIn", "AbstractOut"
     ,"SharedIn", "SharedOut"
     ,"InBus" -- jitlib
-    ,"Filter"]
+    ,"BEQSuite","ChaosGen","Filter"]
 
 gen_cat :: [FilePath] -> UGen_Cat_Table_Entry -> String
 gen_cat db (c1,s) =
