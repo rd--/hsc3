@@ -213,6 +213,10 @@ mk_triples a b c = concatMap (\(x,y,z) -> [a x, b y, c z])
 t2_from_list :: [t] -> T2 t
 t2_from_list l = case l of {[p,q] -> (p,q);_ -> error "t2_from_list"}
 
+-- | [x,y,z] -> (x,y,z)
+t3_from_list :: [t] -> (t,t,t)
+t3_from_list l = case l of {[p,q,r] -> (p,q,r);_ -> error "t3_from_list"}
+
 -- * System
 
 -- | Guarded variant of 'getEnv' with default value.

@@ -441,44 +441,44 @@ dpw4Saw rate freq = mkUGen Nothing [AR] (Left rate) "DPW4Saw" [freq] Nothing 1 (
 -- | Plucked physical model.
 --
 --  DWGBowed [AR] freq=440.0 velb=0.5 force=1.0 gate=1.0 pos=0.14 release=0.1 c1=1.0 c3=3.0 impZ=0.55 fB=2.0
-dWGBowed :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-dWGBowed rate freq velb force gate_ pos release c1 c3 impZ fB = mkUGen Nothing [AR] (Left rate) "DWGBowed" [freq,velb,force,gate_,pos,release,c1,c3,impZ,fB] Nothing 1 (Special 0) NoId
+dwgBowed :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dwgBowed rate freq velb force gate_ pos release c1 c3 impZ fB = mkUGen Nothing [AR] (Left rate) "DWGBowed" [freq,velb,force,gate_,pos,release,c1,c3,impZ,fB] Nothing 1 (Special 0) NoId
 
 -- | Plucked physical model.
 --
 --  DWGBowedSimple [AR] freq=440.0 velb=0.5 force=1.0 gate=1.0 pos=0.14 release=0.1 c1=1.0 c3=30.0
-dWGBowedSimple :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-dWGBowedSimple rate freq velb force gate_ pos release c1 c3 = mkUGen Nothing [AR] (Left rate) "DWGBowedSimple" [freq,velb,force,gate_,pos,release,c1,c3] Nothing 1 (Special 0) NoId
+dwgBowedSimple :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dwgBowedSimple rate freq velb force gate_ pos release c1 c3 = mkUGen Nothing [AR] (Left rate) "DWGBowedSimple" [freq,velb,force,gate_,pos,release,c1,c3] Nothing 1 (Special 0) NoId
 
 -- | Plucked physical model.
 --
 --  DWGBowedTor [AR] freq=440.0 velb=0.5 force=1.0 gate=1.0 pos=0.14 release=0.1 c1=1.0 c3=3.0 impZ=0.55 fB=2.0 mistune=5.2 c1tor=1.0 c3tor=3000.0 iZtor=1.8
-dWGBowedTor :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-dWGBowedTor rate freq velb force gate_ pos release c1 c3 impZ fB mistune c1tor c3tor iZtor = mkUGen Nothing [AR] (Left rate) "DWGBowedTor" [freq,velb,force,gate_,pos,release,c1,c3,impZ,fB,mistune,c1tor,c3tor,iZtor] Nothing 1 (Special 0) NoId
+dwgBowedTor :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dwgBowedTor rate freq velb force gate_ pos release c1 c3 impZ fB mistune c1tor c3tor iZtor = mkUGen Nothing [AR] (Left rate) "DWGBowedTor" [freq,velb,force,gate_,pos,release,c1,c3,impZ,fB,mistune,c1tor,c3tor,iZtor] Nothing 1 (Special 0) NoId
 
 -- | Plucked physical model.
 --
 --  DWGPlucked [AR] freq=440.0 amp=0.5 gate=1.0 pos=0.14 c1=1.0 c3=30.0 inp=0.0 release=0.1
-dWGPlucked :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-dWGPlucked rate freq amp gate_ pos c1 c3 inp release = mkUGen Nothing [AR] (Left rate) "DWGPlucked" [freq,amp,gate_,pos,c1,c3,inp,release] Nothing 1 (Special 0) NoId
+dwgPlucked :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dwgPlucked rate freq amp gate_ pos c1 c3 inp release = mkUGen Nothing [AR] (Left rate) "DWGPlucked" [freq,amp,gate_,pos,c1,c3,inp,release] Nothing 1 (Special 0) NoId
 
 -- | Plucked physical model.
 --
 --  DWGPlucked2 [AR] freq=440.0 amp=0.5 gate=1.0 pos=0.14 c1=1.0 c3=30.0 inp=0.0 release=0.1 mistune=1.008 mp=0.55 gc=1.0e-2
-dWGPlucked2 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-dWGPlucked2 rate freq amp gate_ pos c1 c3 inp release mistune mp gc = mkUGen Nothing [AR] (Left rate) "DWGPlucked2" [freq,amp,gate_,pos,c1,c3,inp,release,mistune,mp,gc] Nothing 1 (Special 0) NoId
+dwgPlucked2 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dwgPlucked2 rate freq amp gate_ pos c1 c3 inp release mistune mp gc = mkUGen Nothing [AR] (Left rate) "DWGPlucked2" [freq,amp,gate_,pos,c1,c3,inp,release,mistune,mp,gc] Nothing 1 (Special 0) NoId
 
 -- | Plucked physical model.
 --
 --  DWGPluckedStiff [AR] freq=440.0 amp=0.5 gate=1.0 pos=0.14 c1=1.0 c3=30.0 inp=0.0 release=0.1 fB=2.0
-dWGPluckedStiff :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-dWGPluckedStiff rate freq amp gate_ pos c1 c3 inp release fB = mkUGen Nothing [AR] (Left rate) "DWGPluckedStiff" [freq,amp,gate_,pos,c1,c3,inp,release,fB] Nothing 1 (Special 0) NoId
+dwgPluckedStiff :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dwgPluckedStiff rate freq amp gate_ pos c1 c3 inp release fB = mkUGen Nothing [AR] (Left rate) "DWGPluckedStiff" [freq,amp,gate_,pos,c1,c3,inp,release,fB] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  DWGSoundBoard [AR] inp=0.0 c1=20.0 c3=20.0 mix=0.8 d1=199.0 d2=211.0 d3=223.0 d4=227.0 d5=229.0 d6=233.0 d7=239.0 d8=241.0
-dWGSoundBoard :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-dWGSoundBoard rate inp c1 c3 mix d1 d2 d3 d4 d5 d6 d7 d8 = mkUGen Nothing [AR] (Left rate) "DWGSoundBoard" [inp,c1,c3,mix,d1,d2,d3,d4,d5,d6,d7,d8] Nothing 1 (Special 0) NoId
+dwgSoundBoard :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dwgSoundBoard rate inp c1 c3 mix d1 d2 d3 d4 d5 d6 d7 d8 = mkUGen Nothing [AR] (Left rate) "DWGSoundBoard" [inp,c1,c3,mix,d1,d2,d3,d4,d5,d6,d7,d8] Nothing 1 (Special 0) NoId
 
 -- | demand rate brownian movement with Gendyn distributions
 --

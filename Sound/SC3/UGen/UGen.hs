@@ -119,6 +119,10 @@ unmce2 = B.t2_from_list . mceChannels
 mce3 :: UGen -> UGen -> UGen -> UGen
 mce3 x y z = mce [x,y,z]
 
+-- | Variant of 'mce2c' that requires input to have two channels.
+unmce3 :: UGen -> (UGen, UGen, UGen)
+unmce3 = B.t3_from_list . mceChannels
+
 -- | Apply a function to each channel at a unit generator.
 mceMap :: (UGen -> UGen) -> UGen -> UGen
 mceMap f u = mce (map f (mceChannels u))
