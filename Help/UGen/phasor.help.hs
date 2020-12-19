@@ -4,19 +4,19 @@ let rate = mouseX KR 0.2 2 Exponential 0.1
     sr = sampleRate
     x = phasor AR tr (rate / sr) 0 1 0
     f = mce [linLin x 0 1 600 1000, 1000]
-in sinOsc AR f 0 * 0.2
+in sinOsc AR f 0 * 0.1
 
 -- phasor ; control two sine frequencies, mouse y controls resetPos of the second
 let rate = mouseX KR 1 200 Linear 0.1
     tr = impulse AR rate 0
     sr = sampleRate
     x = phasor AR tr (rate / sr) 0 1 (mce2 0 (mouseY KR 0 1 Linear 0.2))
-in sinOsc AR (x * 500 + 500) 0 * 0.2
+in sinOsc AR (x * 500 + 500) 0 * 0.1
 
 -- phasor ; as phase input to bufRd
 let b = control KR "buf" 0
     ph = phasor AR 0 (bufRateScale KR b) 0 (bufFrames KR b) 0
-in bufRdN 1 AR b ph Loop
+in bufRd 1 AR b ph Loop NoInterpolation
 
 -- phasor ; audio rate oscillator as phase input to bufRd
 let b = control KR "buf" 0
@@ -45,7 +45,7 @@ let f = mouseX KR 220 880 Exponential 0.1
 in sin x * 0.1
 
 -- phasor ; as lfSaw, but with precision issues
-phasor AR (impulse AR 440 0) (2 * 440 / sampleRate) (-1) 1 0 * 0.2
+phasor AR (impulse AR 440 0) (2 * 440 / sampleRate) (-1) 1 0 * 0.1
 
 -- phasor ; as sinOsc, but with precision issues
 let f0 = 220

@@ -51,14 +51,14 @@ arneodoCoulletTresser rate freq alpha h xi yi zi = mkUGen Nothing [AR] (Left rat
 -- | detect the largest value (and its position) in an array of UGens
 --
 --  ArrayMax [KR,AR] array=0.0
-arrayMax :: Rate -> UGen -> UGen
-arrayMax rate array = mkUGen Nothing [KR,AR] (Left rate) "ArrayMax" [array] Nothing 2 (Special 0) NoId
+arrayMax :: UGen -> UGen
+arrayMax array = mkUGen Nothing [KR,AR] (Right [0]) "ArrayMax" [] (Just [array]) 2 (Special 0) NoId
 
 -- | detect the smallest value (and its position) in an array of UGens
 --
 --  ArrayMin [KR,AR] array=0.0
-arrayMin :: Rate -> UGen -> UGen
-arrayMin rate array = mkUGen Nothing [KR,AR] (Left rate) "ArrayMin" [array] Nothing 2 (Special 0) NoId
+arrayMin :: UGen -> UGen
+arrayMin array = mkUGen Nothing [KR,AR] (Right [0]) "ArrayMin" [] (Just [array]) 2 (Special 0) NoId
 
 -- | (Undocumented class)
 --
@@ -530,9 +530,9 @@ disintegrator z in_ probability multiplier = mkUGen Nothing [AR] (Right [0]) "Di
 
 -- | discrete time neurodynamics
 --
---  Dneuromodule [KR,AR] dt=0.0 numChannels=0.0 theta=0.0 x=0.0 weights=0.0
-dneuromodule :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-dneuromodule rate dt numChannels theta x weights = mkUGen Nothing [KR,AR] (Left rate) "Dneuromodule" [dt,numChannels,theta,x,weights] Nothing 1 (Special 0) NoId
+--  Dneuromodule [DR] numChannels=0.0 theta=0.0 x=0.0 weights=0.0
+dneuromodule :: ID a => Int -> a -> UGen -> UGen -> UGen -> UGen -> UGen
+dneuromodule numChannels_ z numChannels theta x weights = mkUGen Nothing [DR] (Left DR) "Dneuromodule" [numChannels] (Just [theta,x,weights]) numChannels_ (Special 0) (toUId z)
 
 -- | Nested Allpass filters as proposed by Vercoe and Pluckett
 --
@@ -988,8 +988,8 @@ friction rate in_ friction_ spring_ damp mass beltmass = mkUGen Nothing [KR,AR] 
 -- | Single gammatone filter
 --
 --  Gammatone [AR] input=0.0 centrefrequency=440.0 bandwidth=200.0
-gammatone :: Rate -> UGen -> UGen -> UGen -> UGen
-gammatone rate input centrefrequency bandwidth = mkUGen Nothing [AR] (Left rate) "Gammatone" [input,centrefrequency,bandwidth] Nothing 1 (Special 0) NoId
+gammatone :: UGen -> UGen -> UGen -> UGen
+gammatone input centrefrequency bandwidth = mkUGen Nothing [AR] (Right [0]) "Gammatone" [input,centrefrequency,bandwidth] Nothing 1 (Special 0) NoId
 
 -- | Gaussian classifier
 --
@@ -1120,8 +1120,8 @@ greyholeRaw in1 in2 damping delaytime diffusion feedback moddepth modfreq size =
 -- | Simple cochlear hair cell model
 --
 --  HairCell [KR,AR] input=0.0 spontaneousrate=0.0 boostrate=200.0 restorerate=1000.0 loss=0.99
-hairCell :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-hairCell rate input spontaneousrate boostrate restorerate loss = mkUGen Nothing [KR,AR] (Left rate) "HairCell" [input,spontaneousrate,boostrate,restorerate,loss] Nothing 1 (Special 0) NoId
+hairCell :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+hairCell input spontaneousrate boostrate restorerate loss = mkUGen Nothing [KR,AR] (Right [0]) "HairCell" [input,spontaneousrate,boostrate,restorerate,loss] Nothing 1 (Special 0) NoId
 
 -- | henon map 2D chaotic generator
 --
@@ -1438,8 +1438,8 @@ meanTriggered rate in_ trig_ length_ = mkUGen Nothing [KR,AR] (Left rate) "MeanT
 -- | Meddis cochlear hair cell model
 --
 --  Meddis [KR,AR] input=0.0
-meddis :: Rate -> UGen -> UGen
-meddis rate input = mkUGen Nothing [KR,AR] (Left rate) "Meddis" [input] Nothing 1 (Special 0) NoId
+meddis :: UGen -> UGen
+meddis input = mkUGen Nothing [KR,AR] (Right [0]) "Meddis" [input] Nothing 1 (Special 0) NoId
 
 -- | Separate harmonic and percussive parts of a signal
 --
@@ -2224,8 +2224,8 @@ sortBuf rate bufnum sortrate reset = mkUGen Nothing [AR] (Left rate) "SortBuf" [
 -- | Spectral feature extraction
 --
 --  SpectralEntropy [KR] fft=0.0 fftsize=2048.0 numbands=1.0
-spectralEntropy :: Rate -> UGen -> UGen -> UGen -> UGen
-spectralEntropy rate fft_ fftsize numbands = mkUGen Nothing [KR] (Left rate) "SpectralEntropy" [fft_,fftsize,numbands] Nothing 1 (Special 0) NoId
+spectralEntropy :: Int -> Rate -> UGen -> UGen -> UGen -> UGen
+spectralEntropy numChannels rate fft_ fftsize numbands = mkUGen Nothing [KR] (Left rate) "SpectralEntropy" [fft_,fftsize,numbands] Nothing numChannels (Special 0) NoId
 
 -- | (Undocumented class)
 --

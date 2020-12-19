@@ -31,7 +31,7 @@ Create table.
 
 Confirm table
 
-    plotTable [tbl']
+    plot_p1_ln [tbl']
 
 Send table to scsynth
 
