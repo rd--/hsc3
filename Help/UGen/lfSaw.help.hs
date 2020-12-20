@@ -31,6 +31,10 @@ let f = xLine KR 220 440 10 DoNothing
     o4 = cubed (distort (log (distort o3)))
 in o4 * 0.05
 
+-- lfSaw
+let f = sinOsc KR (mce [0.16,0.33,0.41]) 0 * 10 + mce [1,1.1,1.5,1.78,2.45,6.7,8] * 220
+in mix (lfSaw AR f 0) * 0.1
+
 ---- ; drawings
 Sound.SC3.Plot.plot_ugen1 0.1 (lfSaw AR 50 0) -- ascending
 Sound.SC3.Plot.plot_ugen1 0.002 (lfSaw AR 5000 0)

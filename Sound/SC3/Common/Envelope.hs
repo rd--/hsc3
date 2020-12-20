@@ -213,16 +213,19 @@ envelope_curves e =
        then replicate n EnvLin
        else take n (cycle c)
 
--- | Linear SC3 form of 'Envelope' data.
---
--- Form is: l0 #t reset loop l1 t0 c0 c0' ...
---
--- > let {l = [0,0.6,0.3,1.0,0]
--- >     ;t = [0.1,0.02,0.4,1.1]
--- >     ;c = [EnvLin,EnvExp,EnvNum (-6),EnvSin]
--- >     ;e = Envelope l t c Nothing Nothing
--- >     ;r = [0,4,-99,-99,0.6,0.1,1,0,0.3,0.02,2,0,1,0.4,5,-6,0,1.1,3,0]}
--- > in envelope_sc3_array e == Just r
+{- | Linear SC3 form of 'Envelope' data.
+
+Form is: l0 #t reset loop l1 t0 c0 c0' ...
+
+envelope_sc3_array (envelope [0,1] [0.1] [EnvLin]) == Just [0,1,-99,-99,1,0.1,1,0]
+
+> let {l = [0,0.6,0.3,1.0,0]
+>     ;t = [0.1,0.02,0.4,1.1]
+>     ;c = [EnvLin,EnvExp,EnvNum (-6),EnvSin]
+>     ;e = Envelope l t c Nothing Nothing
+>     ;r = [0,4,-99,-99,0.6,0.1,1,0,0.3,0.02,2,0,1,0.4,5,-6,0,1.1,3,0]}
+> in envelope_sc3_array e == Just r
+-}
 envelope_sc3_array :: Num a => Envelope a -> Maybe [a]
 envelope_sc3_array e =
     let Envelope l t _ rn ln _ = e

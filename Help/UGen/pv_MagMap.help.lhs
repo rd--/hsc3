@@ -20,7 +20,7 @@ the curve to map the sound onto
 > t_01 = f_02 [0,1,0] [0.05,0.95] EnvWelch
 
     import Sound.SC3.Plot {- hsc3-plot -}
-    plotTable1 t_01
+    plot_p1_ln [t_01]
 
 > f_03 t l c = withSC3 (sendMessage (b_setn1 10 0 (f_02 t l c)))
 
@@ -30,7 +30,7 @@ the curve to map the sound onto
 
 > g_03 = f_01 g_01 10
 
-loclBuf fails...
+localBuf fails...
 
 > g_09 = f_01 g_01 (asLocalBuf 'γ' t_01)
 
