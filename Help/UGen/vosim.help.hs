@@ -24,3 +24,10 @@ let p = tRand 'α' 0 1 (impulse AR 6 0)
     yn = mk_n 'ι'
     v = X.vosim AR t (f * x * xn) n (d * y * yn) * a
 in pan2 (mix v) l 1
+
+-- vosim ; event control
+let f _ (g,x,y,z,o,rx,_) =
+      let trg = impulse AR (midiCPS (x * 24 + 60)) 0
+          frq = linExp y 0 1 440 880
+      in pan2 (X.vosim AR trg frq 1 (rx * 2)) (o * 2 - 1) (g * z)
+in mix (rEventVoicer 10 f) * control KR "gain" 2

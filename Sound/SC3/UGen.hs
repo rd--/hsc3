@@ -4,6 +4,7 @@ module Sound.SC3.UGen (module U) where
 import Sound.SC3.UGen.Analysis as U
 import Sound.SC3.UGen.Envelope as U
 import Sound.SC3.UGen.Enum as U
+import Sound.SC3.UGen.Event as U
 import Sound.SC3.UGen.Help.Graph as U
 import Sound.SC3.UGen.Math as U
 import Sound.SC3.UGen.Math.Composite as U

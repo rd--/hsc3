@@ -104,6 +104,7 @@ Library
                    Sound.SC3.UGen.Bindings.HW.External.Zita
                    Sound.SC3.UGen.Enum
                    Sound.SC3.UGen.Envelope
+                   Sound.SC3.UGen.Event
                    Sound.SC3.UGen.Graph
                    Sound.SC3.UGen.Graph.Reconstruct
                    Sound.SC3.UGen.Graph.Transform

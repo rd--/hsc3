@@ -12,6 +12,10 @@ let fr = blip KR 0.25 3 * 300 + 500
     nh = blip KR 0.15 2 * 20 + 21
 in blip AR fr nh * 0.2
 
+-- blip ; event control
+let f _ (g,x,y,z,o,_,_) = pan2 (blip AR (midiCPS (x * 24 + 48)) (y * 10 + 1)) (o * 2 - 1) (g * z)
+in mix (rEventVoicer 10 f) * control KR "gain" 1
+
 ---- ; drawings
 Sound.SC3.Plot.plot_ugen1 0.1 (blip AR 1000 20)
 Sound.SC3.Plot.FFT.plot_ugen_fft1 0.1 (blip AR 1000 20)

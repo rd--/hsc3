@@ -20,3 +20,11 @@ let n = 50
     i = impulse KR fi 0
     ks = pluck (w * 0.1) i 0.01 (1 / o) 2 coef
 in leakDC (mix (pan2 ks l 1)) 0.995
+
+-- pluck ; event control
+let f _ (g,x,y,z,o,rx,_) =
+      let n = whiteNoise 'α' AR * z
+          dl_max = 1 / 220
+          dl = dl_max * (1 - x * 0.9)
+      in pan2 (pluck n g dl_max dl 10 (y / 3)) (o * 2 - 1) 1
+in mix (rEventVoicer 10 f) * control KR "gain" 2
