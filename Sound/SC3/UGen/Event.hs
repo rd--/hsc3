@@ -5,14 +5,14 @@ import Sound.SC3.UGen.Bindings.DB {- hsc3 -}
 import Sound.SC3.UGen.Type {- hsc3 -}
 import Sound.SC3.UGen.UGen {- hsc3 -}
 
--- | (gate,x,y,z/force,orientation,radius-x,radius-y)
-type REvent = (UGen,UGen,UGen,UGen,UGen,UGen,UGen)
+-- | (gate,x,y,z/force,orientation,radius-x,radius-y,pitch)
+type REvent = (UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen)
 
 rEventAddr :: UGen -> UGen -> REvent
 rEventAddr k0 c =
-  let u = in' 7 KR (k0 + (c * 10))
+  let u = in' 8 KR (k0 + (c * 10))
   in case mceChannels u of
-       [g,x,y,z,o,rx,ry] -> (g,x,y,z,o,rx,ry)
+       [g,x,y,z,o,rx,ry,p] -> (g,x,y,z,o,rx,ry,p)
        _ -> error "rEventAddr?"
 
 rEventVoicerAddr :: UGen -> UGen -> Int -> (Int -> REvent -> UGen) -> UGen

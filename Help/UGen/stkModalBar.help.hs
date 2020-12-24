@@ -26,9 +26,9 @@ let x = mouseX KR 1 12 Linear 0.2
 in X.stkModalBar AR freq instrument stickhardness stickposition vibratogain vibratofreq directstickmix volume tr
 
 -- stkModalBar ; event control
-let f _ (g,x,y,_,o,rx,_) =
+let f _ (g,_,y,_,o,rx,_,p) =
       let tr = g - 0.5
-          freq = midiCPS (x * 24 + 48)
+          freq = midiCPS p
           instr = control KR "instrument" 4
           sig = X.stkModalBar AR freq instr ((1 - y) * 127) (y * 127) 64 64 (rx * 127) 64 tr
       in pan2 sig (o * 2 - 1) 1

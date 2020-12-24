@@ -22,7 +22,7 @@ let n = 50
 in leakDC (mix (pan2 ks l 1)) 0.995
 
 -- pluck ; event control
-let f _ (g,x,y,z,o,rx,_) =
+let f _ (g,x,y,z,o,rx,_,_) =
       let n = whiteNoise 'α' AR * z
           dl_max = 1 / 220
           dl = dl_max * (1 - x * 0.9)
