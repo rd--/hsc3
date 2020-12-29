@@ -32,4 +32,4 @@ let f _ (g,_,y,_,o,rx,_,p) =
           instr = control KR "instrument" 4
           sig = X.stkModalBar AR freq instr ((1 - y) * 127) (y * 127) 64 64 (rx * 127) 64 tr
       in pan2 sig (o * 2 - 1) 1
-in mix (rEventVoicer 10 f) * control KR "gain" 0.5
+in mix (rEventVoicer 16 f) * control KR "gain" 0.5

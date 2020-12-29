@@ -86,7 +86,7 @@ length bnk == 32
 
 ---- ; send external control messages
 import Sound.OSC {- hosc -}
-withSC3 (sendMessage (n_set1 1 "vc" 107))
+withSC3 (sendMessage (n_set1 1 "vc" 0))
 withSC3 (sendMessage (n_set1 1 "gate" 1.0))
 withSC3 (sendMessage (n_set1 1 "gate" 0.0))
 withSC3 (sendMessage (n_set1 1 "data" 0.0))

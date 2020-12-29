@@ -18,4 +18,4 @@ let f _ (g,x,y,z,o,_,_,_) =
       let f0 = mce [200, 300, 400, 500] * x
           ff = linExp y 0 1 400 4000
       in pan2 (formant AR f0 ff 200) (o * 2 - 1) (g * z)
-in mix (rEventVoicer 10 f) * control KR "gain" 0.75
+in mix (rEventVoicer 16 f) * control KR "gain" 0.5
