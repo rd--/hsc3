@@ -14,7 +14,7 @@ uid_st_eval (do
   return (klank s 1 0 1 (mceTranspose z)))
 
 -- cymbalism (jmcc) #2 ; event control
-let f c (g,x,y,z,_,_,_,p) =
+let f c (g,x,y,z,_,_,_,_) =
       let enumFromN e i = let j = fromEnum e in [j .. j + i]
           mk_spc n =
             let f1 = x * 2000 + 500
