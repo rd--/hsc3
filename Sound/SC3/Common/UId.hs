@@ -98,6 +98,7 @@ liftUId4 f a b c d = do
 -- > map resolveID ['α','β'] == [1439603815,4131151318]
 -- > map resolveID [('α','β'),('β','α')] == [3538183581,3750624898]
 -- > map resolveID [('α',('α','β')),('β',('α','β'))] == [0020082907,2688286317]
+-- > map resolveID [('α','α','β'),('β','α','β')] == [0020082907,2688286317]
 class Murmur32.Hashable32 a => ID a where
     resolveID :: a -> Id
     resolveID = fromIntegral . Murmur32.asWord32 . Murmur32.hash32
@@ -105,6 +106,7 @@ class Murmur32.Hashable32 a => ID a where
 instance ID Char where
 instance ID Int where
 instance (ID p,ID q) => ID (p,q) where
+instance (ID p,ID q,ID r) => ID (p,q,r) where
 
 -- | /n/ identifiers from /x/.
 --
