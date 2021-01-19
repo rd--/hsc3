@@ -26,12 +26,11 @@ pull-gl:
 update-rd:
 	ssh rd@rohandrape.net "(cd sw/hsc3;git pull $(GL_HTTP))"
 
-push-rd:
-	make push-gl update-rd
-
 push-gh:
 	git push $(GH_GIT)
 
 pull-gh:
 	git pull $(GH_HTTP)
 
+push-all:
+	make push-gl push-gh update-rd
