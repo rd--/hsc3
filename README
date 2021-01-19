@@ -39,6 +39,7 @@ There are a number of related projects:
 - [hsc3-lisp](http://rohandrape.net/?t=hsc3-lisp): LISP SuperCollider (2014)
 - [hsc3-m](http://rohandrape.net/?t=hsc3-m): UGen variants (2018)
 - [stsc3](http://rohandrape.net/?t=stsc3): Smalltalk SuperCollider (2019)
+- [hsc3-util](http://rohandrape.net/?t=hsc3-util): hsc3 & related utilities (2020)
 
 The hsc3 interaction environment ([hsc3.el](http://rohandrape.net/?t=hsc3&e=emacs/hsc3.el))
 is written for
@@ -61,7 +62,7 @@ There is also, more obliquely related:
 
 ©
 [rohan drape](http://rohandrape.net/)
-and others, 2005-2020,
+and others, 2005-2021,
 [gpl](http://gnu.org/copyleft/)
 
 with contributions by:
