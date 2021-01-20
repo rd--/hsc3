@@ -1,7 +1,7 @@
 -- tGrains ; mouse control ; requires=buf
 let b = control KR "buf" 0
     tRate = mouseY KR 2 200 Exponential 0.1
-    ctr = mouseX KR 0 (bufDur KR 0) Linear 0.1
+    ctr = mouseX KR 0 (bufDur KR b) Linear 0.1
     tr = impulse AR tRate 0
 in tGrains 2 tr b 1 ctr (4 / tRate) 0 0.25 2
 
@@ -55,5 +55,17 @@ let b = control KR "buf" 0
     x = mouseX KR 0.5 16 Exponential 0.2
 in tGrains 2 clk b x (0.3 * bufDur KR b) dur 0 0.1 2
 
+-- tGrains ; requires=buf ; event control
+let f _ (g,x,y,z,o,rx,ry,_) =
+      let b = control KR "buf" 0
+          tRate = linExp y 0 1 2 200
+          ctr = x * bufDur KR b
+          du = (ry * 8) / tRate
+          tr = impulse AR (y * 60 + 10) 0
+      in tGrains 2 tr b (1 + (rx * 0.5)) ctr du o (z * g) 4
+in mix (rEventVoicer 16 f) * control KR "gain" 2
+
 ---- ; setup
-withSC3 (async (b_allocRead 0 "/home/rohan/data/audio/metal.wav" 0 0))
+fn = "/home/rohan/data/audio/metal.wav"
+fn = "/home/rohan/data/audio/instr/celeste/long/37-C6-long.wav"
+withSC3 (async (b_allocRead 0 fn 0 0))
