@@ -1,4 +1,4 @@
-;; Indentation and font locking is courtesy `haskell' mode.
+;; Indentation and font locking is courtesy `haskell' mode (debian=haskell-mode).
 ;; Inter-process communication is courtesy `comint'.
 ;; Symbol at point acquisition is courtesy `thingatpt'.
 ;; Directory search facilities are courtesy `find-lisp'.

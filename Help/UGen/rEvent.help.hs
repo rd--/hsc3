@@ -42,5 +42,15 @@ in mix (rEventVoicer 16 f) * control KR "gain" 0.2
 let f _ (g,x,_,z,_,_,_,_) = sinOsc AR (midiCPS ((x * 12 + 48) `roundTo` 0.5)) 0 * z * g
 in mix (rEventVoicer 16 f) * control KR "gain" 0.5
 
+-- rEvent ; x=freq y=pan z=amp ; 0-1 = partial range ; 24ET
+let f _ (g,x,y,z,_,_,_,_) =
+      pan2 (sinOsc AR (midiCPS ((x * 12 + 48) `roundTo` 0.5)) 0) (y * 2 - 1) (z * g)
+in mix (rEventVoicer 16 f) * control KR "gain" 0.5
+
+-- rEvent ; p=freq y=pan z=amp ; 0-1 = partial range ; 24ET
+let f _ (g,_,y,z,_,_,_,p) =
+      pan2 (sinOsc AR (midiCPS p) 0) (y * 2 - 1) (z * g)
+in mix (rEventVoicer 16 f) * control KR "gain" 0.5
+
 ---- ; reference tones
 mix (sinOsc AR (midiCPS (mce [48,60,72])) 0 * mce [0.1,0.01,0.1])
