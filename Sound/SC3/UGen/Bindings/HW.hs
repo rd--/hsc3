@@ -38,9 +38,8 @@ packFFT b sz from to z mp =
 -- | Poll value of input UGen when triggered.
 poll :: UGen -> UGen -> UGen -> UGen -> UGen
 poll trig_ in_ trigid label_ =
-  let q = U.unpackLabel label_
-      n = fromIntegral (length q)
-  in C.mkFilter "Poll" ([trig_,in_,trigid,n] ++ q) 0
+  let q = U.unpackLabel True label_
+  in C.mkFilter "Poll" ([trig_,in_,trigid] ++ q) 0
 
 -- | FFT onset detector.
 pv_HainsworthFoote :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen

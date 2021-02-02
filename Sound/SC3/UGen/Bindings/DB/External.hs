@@ -2301,15 +2301,9 @@ stkFlute rate freq jetDelay noisegain jetRatio = mkUGen Nothing [KR,AR] (Left ra
 
 -- | Wrapping Synthesis toolkit.
 --
---  StkGlobals [AR] showWarnings=0.0 printErrors=0.0 rawfilepath=0.0
-stkGlobals :: Rate -> UGen -> UGen -> UGen -> UGen
-stkGlobals rate showWarnings printErrors rawfilepath = mkUGen Nothing [AR] (Left rate) "StkGlobals" [showWarnings,printErrors,rawfilepath] Nothing 1 (Special 0) NoId
-
--- | Wrapping Synthesis toolkit.
---
---  StkInst [AR] instNumber=6.0 freq=220.0 gate=1.0 onamp=1.0 offamp=0.5 args=0.0
+--  StkInst [AR] freq=220.0 gate=1.0 onamp=1.0 offamp=0.5 instNumber=6.0 args=0.0
 stkInst :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-stkInst rate instNumber freq gate_ onamp offamp args = mkUGen Nothing [AR] (Left rate) "StkInst" [instNumber,freq,gate_,onamp,offamp,args] Nothing 1 (Special 0) NoId
+stkInst rate freq gate_ onamp offamp instNumber args = mkUGen Nothing [AR] (Left rate) "StkInst" [freq,gate_,onamp,offamp,instNumber] (Just [args]) 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --

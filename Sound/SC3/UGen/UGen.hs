@@ -187,21 +187,24 @@ prepare_root u =
 label :: String -> UGen
 label = Label_U . Label
 
--- | Unpack a label to a length prefixed list of 'Constant's.  There
--- is a special case for mce nodes, but it requires labels to be equal
--- length.  Properly, 'poll' would not unpack the label, it would be
--- done by the synthdef builder.
-unpackLabel :: UGen -> [UGen]
-unpackLabel u =
+{- | Unpack a label to a length prefixed list of 'Constant's.  There
+is a special case for mce nodes, but it requires labels to be equal
+length.  Properly, 'poll' would not unpack the label, it would be
+done by the synthdef builder.
+
+> unpackLabel False (label "/tmp")
+
+-}
+unpackLabel :: Bool -> UGen -> [UGen]
+unpackLabel length_prefix u =
     case u of
       Label_U (Label s) ->
           let q = fromEnum '?'
               f c = if C.isAscii c then fromEnum c else q
               s' = map (fromIntegral . f) s
-              n = fromIntegral (length s)
-          in n : s'
+          in if length_prefix then fromIntegral (length s) : s' else s'
       MCE_U m ->
-          let x = map unpackLabel (mceProxies m)
+          let x = map (unpackLabel length_prefix) (mceProxies m)
           in if B.equal_length_p x
              then map mce (transpose x)
              else error (show ("unpackLabel: mce length /=",x))
