@@ -57,6 +57,7 @@ sc3_default_udp :: IO UDP
 sc3_default_udp = openUDP "127.0.0.1" Options.sc3_port_def
 
 -- | Maximum packet size, in bytes, that can be sent over UDP.
+--   However, see also <https://tools.ietf.org/html/rfc2675>
 sc3_udp_limit :: Num n => n
 sc3_udp_limit = 65507
 
@@ -75,6 +76,18 @@ withSC3_ = void . withSC3
 -- | 'timeout_r' of 'withSC3'
 withSC3_tm :: Double -> Connection UDP a -> IO (Maybe a)
 withSC3_tm tm = timeout_r tm . withSC3
+
+-- | Run /f/ at /k/ scsynth servers with sequential port numbers starting at 'Options.sc3_port_def'.
+--
+-- > withSC3_seq 2 (sendMessage status >> waitReply "/status.reply")
+withSC3_seq :: Int -> Connection UDP a -> IO [a]
+withSC3_seq k f = do
+  let mk_udp i = openUDP "127.0.0.1" (Options.sc3_port_def + i)
+  mapM (\i -> withTransport (mk_udp i) f) [0 .. k - 1]
+
+-- | 'void' of 'withSC3_seq'.
+withSC3_seq_ :: Int -> Connection UDP a -> IO ()
+withSC3_seq_ k = void . withSC3_seq k
 
 -- * Server control
 
@@ -190,11 +203,23 @@ instance Audible UGen where
 
 -- | 'withSC3' of 'play_at'.
 audition_at :: Audible e => Play_Opt -> e -> IO ()
-audition_at k = withSC3 . play_at k
+audition_at opt = withSC3 . play_at opt
 
--- | Variant where /id/ is @-1@.
+-- | 'withSC3_seq' of 'play_at'.
+audition_at_seq :: Audible e => Play_Opt -> Int -> e -> IO ()
+audition_at_seq opt k = withSC3_seq_ k . play_at opt
+
+-- | Default 'Play_Opt', ie. (-1,addToHead,1,[])
+def_play_opt :: Play_Opt
+def_play_opt = (-1,Enum.AddToHead,1,[])
+
+-- | 'audition_at' 'def_play_opt'
 audition :: Audible e => e -> IO ()
-audition = audition_at (-1,Enum.AddToHead,1,[])
+audition = audition_at def_play_opt
+
+-- | 'audition_at_seq' 'def_play_opt'
+audition_seq :: Audible e => Int -> e -> IO ()
+audition_seq = audition_at_seq def_play_opt
 
 -- * Notifications
 
