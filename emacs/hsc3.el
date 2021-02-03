@@ -125,13 +125,23 @@
   "Get current region as string."
   (buffer-substring-no-properties (region-beginning) (region-end)))
 
-(defun hsc3-play-region ()
-  "Play region, if region spans multiple lines send using using ghci layout quoting"
-  (interactive)
+(defun hsc3-play-region-opt (fn)
+  "Play region using given haskell function.
+   If region spans multiple lines send using using ghci layout quoting."
   (let ((str (hsc3-region-string)))
     (if (string-match "\n" str)
-        (hsc3-send-layout-block (concat "audition $\n" str))
-      (hsc3-send-string (concat "audition $ " str)))))
+        (hsc3-send-layout-block (concat fn " $\n" str))
+      (hsc3-send-string (concat fn " $ " str)))))
+
+(defun hsc3-play-region ()
+  "hsc3-play-region-opt with audition."
+  (interactive)
+  (hsc3-play-region-opt "audition"))
+
+(defun hsc3-play-region-seq ()
+  "hsc3-play-region-opt with audition_seq 2."
+  (interactive)
+  (hsc3-play-region-opt "audition_seq 2"))
 
 (defun hsc3-draw-region ()
   "Draw region, if region spans multiple lines send using using ghci layout quoting."
@@ -160,6 +170,11 @@
   "Send SC3 reset instruction to haskell."
   (interactive)
   (hsc3-send-string "Sound.SC3.withSC3 Sound.SC3.reset"))
+
+(defun hsc3-reset-scsynth-seq ()
+  "Send SC3 reset instruction to haskell."
+  (interactive)
+  (hsc3-send-string "Sound.SC3.withSC3_seq_ 2 Sound.SC3.reset"))
 
 (defun hsc3-start-haskell ()
   "Start the hsc3 haskell process.
@@ -194,8 +209,12 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
 (defun hsc3-server-status ()
   "Send serverStatus request to haskell."
   (interactive)
-  (hsc3-send-string
-   "Sound.SC3.withSC3 Sound.SC3.serverStatus >>= mapM putStrLn"))
+  (hsc3-send-string "Sound.SC3.withSC3 Sound.SC3.serverStatus >>= mapM putStrLn"))
+
+(defun hsc3-server-status-seq ()
+  "Send serverStatus request to haskell."
+  (interactive)
+  (hsc3-send-string "Sound.SC3.withSC3_seq 2 Sound.SC3.serverStatus >>= mapM putStrLn . concat"))
 
 (defun hsc3-quit-scsynth ()
   "Quit"
@@ -282,12 +301,15 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (define-key map (kbd "C-c C-c") 'hsc3-send-current-line)
   (define-key map (kbd "C-c C-h") 'hsc3-help)
   (define-key map (kbd "C-c C-a") 'hsc3-play-region)
+  (define-key map (kbd "C-c C-A") 'hsc3-play-region-seq)
   (define-key map (kbd "C-c C-g") 'hsc3-draw-region)
   (define-key map (kbd "C-c C-j") 'hsc3-sc3-help)
   (define-key map (kbd "C-c C-i") 'hsc3-interrupt-haskell)
   (define-key map (kbd "C-c C-k") 'hsc3-reset-scsynth)
+  (define-key map (kbd "C-c C-K") 'hsc3-reset-scsynth-seq)
   (define-key map (kbd "C-c C-m") 'hsc3-send-main)
   (define-key map (kbd "C-c C-p") 'hsc3-server-status)
+  (define-key map (kbd "C-c C-P") 'hsc3-server-status-seq)
   (define-key map (kbd "C-c C-q") 'hsc3-send-quit)
   (define-key map (kbd "C-c C-.") 'hsc3-stop)
   (define-key map (kbd "C-c C-u") 'hsc3-ugen-summary))
