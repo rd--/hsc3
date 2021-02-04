@@ -11,4 +11,4 @@ let f _ (g,x,y,z,o,rx,_,_) =
           tn = x * 0.1
           ls = linExp y 0 1 0.999999 0.9999
       in pan2 (X.membraneHexagon AR ex tn ls) (o * 2 - 1) 1
-in mix (rEventVoicer 6 f) * control KR "gain" 1
+in mix (rEventVoicer 8 f) * control KR "gain" 1

@@ -30,6 +30,10 @@
 
 (make-variable-buffer-local 'hsc3-literate-p)
 
+(defvar hsc3-seq-degree
+  2
+  "*Number of scsynth processes to address at -seq operations (default=2).")
+
 (defun hsc3-chunk-string (n s)
   "Split a string into chunks of 'n' characters."
   (let* ((l (length s))
@@ -139,9 +143,9 @@
   (hsc3-play-region-opt "audition"))
 
 (defun hsc3-play-region-seq ()
-  "hsc3-play-region-opt with audition_seq 2."
+  "hsc3-play-region-opt with audition_seq hsc3-seq-degree."
   (interactive)
-  (hsc3-play-region-opt "audition_seq 2"))
+  (hsc3-play-region-opt (format "audition_seq %d" hsc3-seq-degree)))
 
 (defun hsc3-draw-region ()
   "Draw region, if region spans multiple lines send using using ghci layout quoting."
@@ -174,7 +178,7 @@
 (defun hsc3-reset-scsynth-seq ()
   "Send SC3 reset instruction to haskell."
   (interactive)
-  (hsc3-send-string "Sound.SC3.withSC3_seq_ 2 Sound.SC3.reset"))
+  (hsc3-send-string (format "Sound.SC3.withSC3_seq_ %d Sound.SC3.reset" hsc3-seq-degree)))
 
 (defun hsc3-start-haskell ()
   "Start the hsc3 haskell process.
@@ -214,7 +218,8 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
 (defun hsc3-server-status-seq ()
   "Send serverStatus request to haskell."
   (interactive)
-  (hsc3-send-string "Sound.SC3.withSC3_seq 2 Sound.SC3.serverStatus >>= mapM putStrLn . concat"))
+  (hsc3-send-string
+   (format "Sound.SC3.withSC3_seq %d Sound.SC3.serverStatus >>= mapM putStrLn . concat" hsc3-seq-degree)))
 
 (defun hsc3-quit-scsynth ()
   "Quit"
