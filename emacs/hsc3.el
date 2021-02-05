@@ -30,10 +30,6 @@
 
 (make-variable-buffer-local 'hsc3-literate-p)
 
-(defvar hsc3-seq-degree
-  2
-  "*Number of scsynth processes to address at -seq operations (default=2).")
-
 (defun hsc3-chunk-string (n s)
   "Split a string into chunks of 'n' characters."
   (let* ((l (length s))
@@ -137,15 +133,13 @@
         (hsc3-send-layout-block (concat fn " $\n" str))
       (hsc3-send-string (concat fn " $ " str)))))
 
-(defun hsc3-play-region ()
-  "hsc3-play-region-opt with audition."
-  (interactive)
-  (hsc3-play-region-opt "audition"))
-
-(defun hsc3-play-region-seq ()
-  "hsc3-play-region-opt with audition_seq hsc3-seq-degree."
-  (interactive)
-  (hsc3-play-region-opt (format "audition_seq %d" hsc3-seq-degree)))
+(defun hsc3-play-region (k)
+  "Play region at scsynth.  The (one-indexed) prefix agument indicates which server to send to."
+  (interactive "p")
+  (hsc3-play-region-opt
+   (format
+    "audition_at (\"%s\",%d + %d) def_play_opt"
+    hsc3-server-host hsc3-server-port (- k 1))))
 
 (defun hsc3-draw-region ()
   "Draw region, if region spans multiple lines send using using ghci layout quoting."
@@ -170,15 +164,22 @@
   (interactive)
   (shell-command-on-region (point-min) (point-max) "hsc3-id-rewrite" nil t))
 
+(defvar hsc3-server-host
+  "127.0.0.1"
+  "The host that scsynth is listening at")
+
+(defvar hsc3-server-port
+  57110
+  "The port that scsynth is listening at")
+
+(defun hsc3-with-sc3 (txt)
+  ""
+  (hsc3-send-string (format "withSC3At (\"%s\",%d) %s" hsc3-server-host hsc3-server-port txt)))
+
 (defun hsc3-reset-scsynth ()
   "Send SC3 reset instruction to haskell."
   (interactive)
-  (hsc3-send-string "Sound.SC3.withSC3 Sound.SC3.reset"))
-
-(defun hsc3-reset-scsynth-seq ()
-  "Send SC3 reset instruction to haskell."
-  (interactive)
-  (hsc3-send-string (format "Sound.SC3.withSC3_seq_ %d Sound.SC3.reset" hsc3-seq-degree)))
+  (hsc3-with-sc3 "Sound.SC3.reset"))
 
 (defun hsc3-start-haskell ()
   "Start the hsc3 haskell process.
@@ -213,19 +214,40 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
 (defun hsc3-server-status ()
   "Send serverStatus request to haskell."
   (interactive)
-  (hsc3-send-string "Sound.SC3.withSC3 Sound.SC3.serverStatus >>= mapM putStrLn"))
+  (hsc3-with-sc3 "Sound.SC3.serverStatus >>= mapM putStrLn"))
+
+(defun hsc3-quit-scsynth ()
+  "Quit"
+  (interactive)
+  (hsc3-with-sc3 "(Sound.OSC.sendMessage Sound.SC3.quit)"))
+
+(defvar hsc3-seq-degree
+  2
+  "*Number of scsynth processes to address at -seq operations (default=2).")
 
 (defun hsc3-server-status-seq ()
   "Send serverStatus request to haskell."
   (interactive)
   (hsc3-send-string
-   (format "Sound.SC3.withSC3_seq %d Sound.SC3.serverStatus >>= mapM putStrLn . concat" hsc3-seq-degree)))
+   (format
+    "Sound.SC3.withSC3At_seq (\"%s\",%d) %d Sound.SC3.serverStatus >>= mapM putStrLn . concat"
+    hsc3-server-host hsc3-server-port hsc3-seq-degree)))
 
-(defun hsc3-quit-scsynth ()
-  "Quit"
+(defun hsc3-play-region-seq ()
+  "hsc3-play-region-opt with auditionAt_seq hsc3-seq-degree."
+  (interactive)
+  (hsc3-play-region-opt
+   (format
+    "audition_at_seq (\"%s\",%d) def_play_opt %d"
+    hsc3-server-host hsc3-server-port hsc3-seq-degree)))
+
+(defun hsc3-reset-scsynth-seq ()
+  "Send SC3 reset instruction to haskell."
   (interactive)
   (hsc3-send-string
-   "Sound.SC3.withSC3 (Sound.SC3.send Sound.SC3.quit)"))
+   (format
+    "Sound.SC3.withSC3At_seq_ (\"%s\",%d) %d Sound.SC3.reset"
+    hsc3-server-host hsc3-server-port hsc3-seq-degree)))
 
 (defun hsc3-dmenu-ugen-core ()
   "dmenu of categorised core SC3 UGens"
@@ -306,15 +328,15 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (define-key map (kbd "C-c C-c") 'hsc3-send-current-line)
   (define-key map (kbd "C-c C-h") 'hsc3-help)
   (define-key map (kbd "C-c C-a") 'hsc3-play-region)
-  (define-key map (kbd "C-c C-A") 'hsc3-play-region-seq)
+  (define-key map (kbd "C-c C-S-a") 'hsc3-play-region-seq)
   (define-key map (kbd "C-c C-g") 'hsc3-draw-region)
   (define-key map (kbd "C-c C-j") 'hsc3-sc3-help)
   (define-key map (kbd "C-c C-i") 'hsc3-interrupt-haskell)
   (define-key map (kbd "C-c C-k") 'hsc3-reset-scsynth)
-  (define-key map (kbd "C-c C-K") 'hsc3-reset-scsynth-seq)
+  (define-key map (kbd "C-c C-S-k") 'hsc3-reset-scsynth-seq)
   (define-key map (kbd "C-c C-m") 'hsc3-send-main)
   (define-key map (kbd "C-c C-p") 'hsc3-server-status)
-  (define-key map (kbd "C-c C-P") 'hsc3-server-status-seq)
+  (define-key map (kbd "C-c C-S-p") 'hsc3-server-status-seq)
   (define-key map (kbd "C-c C-q") 'hsc3-send-quit)
   (define-key map (kbd "C-c C-.") 'hsc3-stop)
   (define-key map (kbd "C-c C-u") 'hsc3-ugen-summary))

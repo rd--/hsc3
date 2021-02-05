@@ -10,6 +10,10 @@ type SC3_OPT i = (Char,String,i)
 sc3_opt_value :: SC3_OPT i -> i
 sc3_opt_value (_,_,v) = v
 
+-- | Default address string.
+sc3_addr_def :: String
+sc3_addr_def = "127.0.0.1"
+
 -- | Default port number, either a 'u' or a 't' option is required.
 sc3_port_def :: Num i => i
 sc3_port_def = 57110
@@ -30,6 +34,7 @@ sc3_opt_def p =
   sc3_opt_port_def p :
   [('a',"number-of-audio-bus-channels",1024)
   ,('b',"number-of-sample-buffers",1024)
+  --,('B',"bind-to-address","127.0.0.1")
   ,('c',"number-of-control-bus-channels",16384)
   ,('D',"load-synthdefs?",1)
   ,('d',"max-number-of-synth-defs",1024)
