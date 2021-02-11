@@ -260,7 +260,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (insert (shell-command-to-string "hsc3-db dmenu ugen external")))
 
 (defun hsc3-dmenu-ugen-all ()
-  "dmenu of categorised all SC3 UGens"
+  "dmenu of all categorised SC3 UGens"
   (interactive)
   (insert (shell-command-to-string "hsc3-db dmenu ugen all")))
 
@@ -339,6 +339,8 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (define-key map (kbd "C-c C-S-p") 'hsc3-server-status-seq)
   (define-key map (kbd "C-c C-q") 'hsc3-send-quit)
   (define-key map (kbd "C-c C-.") 'hsc3-stop)
+  (define-key map (kbd "C-c C-s") 'hsc3-dmenu-ugen-all)
+  (define-key map (kbd "C-c C-S-s") 'hsc3-xmenu-ugen-all)
   (define-key map (kbd "C-c C-u") 'hsc3-ugen-summary))
 
 (defun hsc3-mode-menu (map)
