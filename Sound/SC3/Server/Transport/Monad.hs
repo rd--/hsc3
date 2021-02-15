@@ -294,7 +294,7 @@ b_query1_unpack :: DuplexOSC m => Buffer_Id -> m (Int,Int,Int,Double)
 b_query1_unpack = b_query1_unpack_generic
 
 -- | Variant of 'c_getn1' that waits for the reply and unpacks the data.
-c_getn1_data :: DuplexOSC m => (Int,Int) -> m [Double]
+c_getn1_data :: (DuplexOSC m,Floating t) => (Int,Int) -> m [t]
 c_getn1_data s = do
   let f d = case d of
               Int32 _:Int32 _:x -> mapMaybe datum_floating x
