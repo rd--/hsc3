@@ -59,6 +59,7 @@ Library
                    Sound.SC3.Common.Math.Interpolate
                    Sound.SC3.Common.Math.Noise
                    Sound.SC3.Common.Math.Operator
+                   Sound.SC3.Common.Math.Warp
                    Sound.SC3.Common.Math.Window
                    Sound.SC3.Common.Monad
                    Sound.SC3.Common.Monad.Operators
