@@ -88,9 +88,9 @@ sc3_scdoc_help_class c = "Classes" </> c <.> "html"
 
 -- | Generate path to indicated SC3 operator help file.
 --
--- > sc3_scdoc_help_operator "+" == "Overviews/Operators.html#.+"
+-- > sc3_scdoc_help_operator "+" == "Overviews/Operators.html#+"
 sc3_scdoc_help_operator :: String -> FilePath
-sc3_scdoc_help_operator o = "Overviews/Operators.html#." ++ o
+sc3_scdoc_help_operator = (++) "Overviews/Operators.html#"
 
 -- | Generate path to indicated SC3 method help.
 --
@@ -112,6 +112,7 @@ sc3_scdoc_help_instance_method = sc3_scdoc_help_method '-'
 
 {- | SC3 help path documenting x.
 
+> sc3_scdoc_help_path "Operator.distort" == "Overviews/Operators.html#.distort"
 > sc3_scdoc_help_path "Collection.*fill" == "Classes/Collection.html#*fill"
 > sc3_scdoc_help_path "Collection.inject" == "Classes/Collection.html#-inject"
 > sc3_scdoc_help_path "SinOsc" == "Classes/SinOsc.html"

@@ -115,13 +115,6 @@
 ;;           (split-string (hsc3-region-string) "\n")))
 
 ;; (define-key map [?\C-c ?\C-/] 'hsc3-sc3-html-help)
-;;(defun hsc3-sc3-ugen-help ()
-;;  "Lookup up the UGen name at point in the SC3 (HTML) help files."
-;;  (interactive)
-;;  (hsc3-send-string
-;;   (format
-;;    "Sound.SC3.viewSC3Help (Sound.SC3.UGen.DB.ugenSC3Name \"%s\")"
-;;    (thing-at-point 'symbol))))
 
 ;;(defun hsc3-sc3-server-help ()
 ;;  "Lookup up the Server Command name at point in the SC3 help files."

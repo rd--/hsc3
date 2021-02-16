@@ -82,12 +82,19 @@
   (let ((rgx (concat "^" (thing-at-point 'symbol) "\\\(.help\\\)?.rtf$")))
     (hsc3-find-files sc3-help-directory rgx)))
 
+(defun hsc3-sc3-help-scdoc ()
+  "Lookup up the UGen name at point in the SC3 (SCDOC) help files."
+  (interactive)
+  (hsc3-send-string
+   (format
+    "Sound.SC3.Common.Help.sc3_scdoc_help_open False (Sound.SC3.Common.Help.sc3_scdoc_help_path (Sound.SC3.UGen.DB.ugen_sc3_name \"%s\"))"
+    (thing-at-point 'symbol))))
+
 (defun hsc3-ugen-summary ()
   "Lookup up the UGen at point in hsc3-db."
   (interactive)
   (hsc3-send-string
-      (format "Sound.SC3.UGen.DB.ugen_summary_wr \"%s\""
-              (thing-at-point 'symbol))))
+      (format "Sound.SC3.UGen.DB.ugen_summary_wr \"%s\"" (thing-at-point 'symbol))))
 
 (defun hsc3-remove-trailing-newline (s)
   "Delete trailing newlines from string."
