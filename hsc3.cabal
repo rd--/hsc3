@@ -53,6 +53,7 @@ Library
                    Sound.SC3.Common.Buffer.Vector
                    Sound.SC3.Common.Enum
                    Sound.SC3.Common.Envelope
+                   Sound.SC3.Common.Help
                    Sound.SC3.Common.Math
                    Sound.SC3.Common.Math.Filter
                    Sound.SC3.Common.Math.Filter.BEQ

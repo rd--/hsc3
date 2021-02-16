@@ -1,6 +1,6 @@
 import System.Environment {- base -}
 
-import qualified Sound.SC3.Lang.Help as Help {- hsc3-lang -}
+import qualified Sound.SC3.Common.Help as Help {- hsc3 -}
 
 import qualified Sound.SC3.UGen.DB as DB {- hsc3-db -}
 import qualified Sound.SC3.UGen.DB.Record as DB {- hsc3-db -}
