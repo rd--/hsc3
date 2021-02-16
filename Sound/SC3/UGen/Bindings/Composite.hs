@@ -130,6 +130,17 @@ freqShift_hilbert i f p =
         h = hilbert i
     in mix (h * o)
 
+{- | UGen function to re-trigger an EnvGen envelope.
+     Inputs are /gate/ (as set at EnvGen) and /reset/.
+     The four state logic is: (1,0)->1 (1,1)->-1 (0,1)->0 (0,0)->0.
+     If the gate input to EnvGen.kr is -1 the envelope ramps to zero in one control period.
+     The reset input sequence 0,1,0 when the gate is open produces (1,-1,1), which resets the envelope.
+
+> map (uncurry gateReset) [(1,0),(1,1),(0,1),(0,0)] == [1,-1,0,0]
+-}
+gateReset :: Num a => a -> a -> a
+gateReset gt tr = gt + negate (gt * tr * 2)
+
 -- | Variant of 'hilbert' using FFT (with a delay) for better results.
 -- Buffer should be 2048 or 1024.
 -- 2048 = better results, more delay.

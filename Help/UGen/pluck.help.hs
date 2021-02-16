@@ -28,3 +28,13 @@ let f _ (g,x,y,z,o,rx,_,_) =
           dl = dl_max * (1 - x * 0.9)
       in pan2 (pluck n g dl_max dl 10 (y / 3)) (o * 2 - 1) 1
 in mix (rEventVoicer 16 f) * control KR "gain" 2
+
+-- pluck ; event control ; gateReset
+let f _ (g,_,y,z,o,_,_,p) =
+      let n = whiteNoise 'α' AR * z
+          p0 = p `roundTo` 1
+          dl_max = 1 / 8
+          dl = 1 / midiCPS p0
+          gt = gateReset g (changed p0 0.01)
+      in pan2 (pluck n gt dl_max dl 10 (y / 3)) (o * 2 - 1) 1
+in mix (rEventVoicer 16 f) * control KR "gain" 2
