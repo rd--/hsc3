@@ -67,3 +67,83 @@ rCtl_to_rCtl8 (cc0,cc1,cc2,cc3,cc4,cc5,cc6,cc7,_,_,_,_,_,_,_,_) = (cc0,cc1,cc2,c
 -- | 'rCtlVoicer' of 'rCtl_to_rCtl8'
 rCtl8Voicer :: Int -> (Int -> RCtl8 -> UGen) -> UGen
 rCtl8Voicer k0 f = rCtlVoicer k0 (\n c -> f n (rCtl_to_rCtl8 c))
+
+-- * Names
+
+{- | See SCClassLibrary/Common/Control/Spec:ControlSpec.initClass
+
+"ControlSpec defines the range and curve of a control"
+-}
+sc3_control_spec :: Fractional t => [(String,(t,t,String))]
+sc3_control_spec =
+  [("amp",(0,1,"amp"))
+  ,("beats",(0,20,"lin"))
+  ,("bipolar",(-1,1,"lin"))
+  ,("boostcut",(-20,20,"lin"))
+  ,("db",(-180,0,"db"))
+  ,("delay",(0.0001,1,"exp"))
+  ,("detune",(-20,20,"lin"))
+  ,("freq",(20,20000,"exp"))
+  ,("lofreq",(0.1,100,"exp"))
+  ,("midfreq",(25,4200,"exp"))
+  ,("midi",(0,127,"lin"))
+  ,("midinote",(0,127,"lin"))
+  ,("midivelocity",(1,127,"lin"))
+  ,("pan",(-1,1,"lin"))
+  ,("phase",(0,6.28318,"lin"))
+  ,("rate",(0.125,8,"exp"))
+  ,("rq",(0.001,2,"exp"))
+  ,("unipolar",(0,1,"lin"))
+  ,("widefreq",(0.1,20000,"exp"))]
+
+{- | See Kyma X Revealed, p.403
+
+"The following EventValue names are associated with initial ranges
+other than (0,1). EventValue names are not case-sensitive."
+
+> let x = Data.List.intersect (map fst sc3_control_spec) (map fst kyma_event_value_ranges)
+> x == ["beats","boostcut","freq","rate"]
+> let f = filter (flip elem x . fst) in zip (f sc3_control_spec) (f kyma_event_value_ranges)
+-}
+kyma_event_value_ranges :: Fractional t => [(String,(t,t))]
+kyma_event_value_ranges =
+  [("angle",(-0.5,1.5))
+  ,("beats",(1,16))
+  ,("boostcut",(-12,12))
+  ,("bpm",(0,2000))
+  ,("centervalue",(-1,1))
+  ,("coef",(-1,1))
+  ,("cutoff",(0,10000))
+  ,("cycles",(0,100))
+  ,("dcoffset",(-1,1))
+  ,("direction",(-1,1))
+  ,("distance",(-2,2))
+  ,("fmntshift",(0.75,1.25))
+  ,("freq",(0,10000))
+  ,("freqhigh",(8000,24000))
+  ,("freqjitter",(0,1))
+  ,("freqlow",(0,1000))
+  ,("freqmid",(1000,8000))
+  ,("gain",(0,10))
+  ,("gaindb",(-128,128))
+  ,("interval",(-24,24))
+  ,("keynumber",(0,127))
+  ,("logfreq",(0,127))
+  ,("looplength",(-1,1))
+  ,("offset",(-1,1))
+  ,("onduration",(0,30))
+  ,("panner",(-0.5,1.5))
+  ,("pitch",(0,127))
+  ,("q",(0,10))
+  ,("radius",(-2,2))
+  ,("rate",(0,2))
+  ,("ratio",(0,100))
+  ,("scale",(-2,2))
+  ,("smallInterval",(0,12))
+  ,("steps",(1,128))
+  ,("swing",(0,0.5))
+  ,("threshdb",(-60,0))
+  ,("timeconstant",(0.0001,5))
+  ,("timeindex",(-1,1))
+  ,("tune",(-1,1))
+  ,("upinterval",(0,24))]
