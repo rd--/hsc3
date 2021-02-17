@@ -19,7 +19,7 @@ let vc = [[25,21,98,38,99, 0,99, 0,36,17,87,2,1,0,0,0,59,0, 1,1,8]
 in mrg [out 0 s,d]
 
 -- rdx7 ; event control ; data at local buffer
-let f _ (g,x,_,z,o,_,_,p) =
+let f _ (g,x,_,z,o,_,_,p,_,_) =
       let vc = [[25,21,98,38,99, 0,99, 0,36,17,87,2,1,0,0,0,59,0, 1,1,8]
                ,[66,69,60,35, 0, 0,98, 0, 0, 0, 4,0,0,0,0,1,90,0, 1,0,8]
                ,[25,21,98,38,99, 0,99, 2,35,15,79,3,1,1,0,0,91,1, 0,0,6]
@@ -60,7 +60,7 @@ let nv = 32 -- 221
 in pan2 (X.rdx7 AR buf gate_ reset_ data_ vc mnn vel 0x2000 0 0 0) loc 1
 
 -- rdx7 ; event control ; data at shared buffer
-let f _ (g,x,_,z,o,_,_,p) =
+let f _ (g,x,_,z,o,_,_,p,_,_) =
       let buf = control KR "buf" 100
           vc = control KR "vc" 0
           x0 = latch x g

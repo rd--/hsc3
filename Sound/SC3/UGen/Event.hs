@@ -3,33 +3,43 @@ module Sound.SC3.UGen.Event where
 
 import Sound.SC3.Common.Rate {- hsc3 -}
 import Sound.SC3.UGen.Bindings.DB {- hsc3 -}
+import Sound.SC3.UGen.Bindings.Composite {- hsc3 -}
 import Sound.SC3.UGen.Type {- hsc3 -}
 import Sound.SC3.UGen.UGen {- hsc3 -}
 
 -- * Event
 
--- | (gate,x,y,z/force,orientation,radius-x,radius-y,pitch)
-type REvent = (UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen)
+-- | (gate,x,y,z/force,orientation,radius-x,radius-y,pitch,pitch-x-distance,pitch-y-distance)
+type REvent = (UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen)
 
--- | k0 = index of control bus zero for event system, c = event channel or voice (zero indexed)
-rEventAddr :: UGen -> UGen -> REvent
-rEventAddr k0 c =
-  let u = in' 8 KR (k0 + (c * 10))
+{- | k0 = index of control bus zero for event system,
+    stp = voice index incremennt,
+      c = event channel or voice (zero indexed)
+-}
+rEventAddr :: UGen -> UGen -> UGen -> REvent
+rEventAddr k0 stp c =
+  let u = in' 10 KR (k0 + (c * stp))
   in case mceChannels u of
-       [g,x,y,z,o,rx,ry,p] -> (g,x,y,z,o,rx,ry,p)
+       [g,x,y,z,o,rx,ry,p,px,py] -> (g,x,y,z,o,rx,ry,p,px,py)
        _ -> error "rEventAddr?"
 
 -- | c0 = index of voice (channel) zero for event set, n = number of voices (channels)
-rEventVoicerAddr :: UGen -> UGen -> Int -> (Int -> REvent -> UGen) -> UGen
-rEventVoicerAddr k0 c0 n f = mce (map (\c -> f c (rEventAddr k0 (c0 + constant c))) [0 .. n - 1])
+rEventVoicerAddr :: UGen -> UGen -> UGen -> Int -> (Int -> REvent -> UGen) -> UGen
+rEventVoicerAddr k0 stp c0 n f = mce (map (\c -> f c (rEventAddr k0 stp (c0 + constant c))) [0 .. n - 1])
 
 -- | 'rEventAddr' with 'control' inputs for /EventAddr/ and /EventZero/.
 rEvent :: REvent
-rEvent = rEventAddr (control KR "EventAddr" 13000) (control KR "EventZero" 0)
+rEvent = rEventAddr (control KR "EventAddr" 13000) (control KR "EventIncr" 10) (control KR "EventZero" 0)
 
 -- | 'rEventVoicerAddr' with 'control' inputs for /EventAddr/ and /EventZero/.
 rEventVoicer :: Int -> (Int -> REvent -> UGen) -> UGen
-rEventVoicer = rEventVoicerAddr (control KR "EventAddr" 13000) (control KR "EventZero" 0)
+rEventVoicer = rEventVoicerAddr (control KR "EventAddr" 13000) (control KR "EventIncr" 10) (control KR "EventZero" 0)
+
+{- | Given /g/ and /p/ fields of an 'REvent' derive a 'gateReset' from g
+and a trigger derived from monitoring /g/ and /p/ for changed values.
+-}
+rEventGateReset :: UGen -> UGen -> (UGen, UGen)
+rEventGateReset g p = let tr = changed p 0.01 + changed g 0.01 in (gateReset g tr,tr)
 
 -- * Ctl
 

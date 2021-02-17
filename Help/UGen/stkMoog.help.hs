@@ -32,8 +32,8 @@ let nsig z l r f = range l r (lfNoise2 z KR f)
 in X.stkMoog AR freq filterQ sweeprate vibfreq vibgain gain 1
 
 -- stkMoog ; event control
-let f _ (g,_,y,z,o,rx,ry,p) =
-      let freq = midiCPS p
+let f _ (g,_,y,z,o,rx,ry,p,px,_) =
+      let freq = midiCPS (p + px)
           filterQ = y * 128
           sweeprate = rx * 16
           vibfreq = y * 64

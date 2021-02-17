@@ -15,7 +15,7 @@ let strummable_guitar_str (ix,z) =
 in rev (leakDC (lpf strs 12000) 0.995)
 
 -- strummable silk (jmcc) #11 ; event control
-let f c (g,_,y,z,o,_,_,p) =
+let f c (g,_,y,z,o,_,_,p,_,_) =
       let n = 15
           e = decay (impulse AR (linExp y 0 1 11 19) 0 * (z * 2 + lag (trig g 1) 0.2) * 0.04) 0.04
           plk = pinkNoise c AR * e

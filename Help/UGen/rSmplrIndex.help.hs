@@ -1,5 +1,5 @@
 -- rSmplrIndex ; event control ; stereo ; requires loaded bosendorfer (or equivalent) sample data
-let f _ (g,x,y,z,_,_,_,_) =
+let f _ (g,x,y,z,_,_,_,_,_,_) =
       let s_mnn = [21,23,24,26,28,29,31,33,35,36,38,40,41,43,45,47,48,50,52,53,55,57,59
                   ,60,62,64,65,67,69,71,72,74,76,77,79,81,83,84,86,88,89,91,93,95,96,98
                   ,100,101,103,105,107,108]
@@ -14,7 +14,7 @@ let f _ (g,x,y,z,_,_,_,_) =
 in mix (rEventVoicer 16 f) * control KR "gain" 1
 
 -- rSmplrIndex ; event control ; stereo ; requires data table and loaded sample data
-let f _ (g,x,y,z,_,_,_,_) =
+let f _ (g,x,y,z,_,_,_,_,_,_) =
       let tbl = control KR "tbl" 0
           lhs = bufRd 1 KR tbl 0 NoLoop NoInterpolation
           rhs = bufRd 1 KR tbl (bufFrames KR tbl - 1) NoLoop NoInterpolation
@@ -28,7 +28,7 @@ let f _ (g,x,y,z,_,_,_,_) =
 in mix (rEventVoicer 16 f) * control KR "gain" 1
 
 -- rSmplrIndex ; event control ; mono ; requires data table and loaded sample data
-let f _ (g,x,y,z,o,_,_,_) =
+let f _ (g,x,y,z,o,_,_,_,_,_) =
       let tbl = control KR "tbl" 0
           lhs = bufRd 1 KR tbl 0 NoLoop NoInterpolation
           rhs = bufRd 1 KR tbl (bufFrames KR tbl - 1) NoLoop NoInterpolation

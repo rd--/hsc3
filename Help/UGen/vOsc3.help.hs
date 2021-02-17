@@ -8,7 +8,7 @@ let n = 8
 in mce2 o1 o2 * y
 
 -- vOsc3 ; event control ; see vOsc help for setup
-let f _ (g,_,y,z,_,_,_,p) =
+let f _ (g,_,y,z,_,_,_,p,_,_) =
       let n = 8
           f0 = midiCPS p
           b = control KR "tbl" 0

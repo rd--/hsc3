@@ -8,7 +8,7 @@ let a e f = let fm = mce2 (rand 'α' 0.7 1.3) 1
 in pan2 (o * a1 * a2) (rand2 'κ' 1) 1
 
 -- zizle (jmcc) #SC3d1.5 ; event control
-let f c (g,x,y,z,o,_,_,_) =
+let f c (g,x,y,z,o,_,_,_,_,_) =
       let a e f0 = let fm = mce2 (tRand (e,'α') 0.7 1.3 g) 1
                        ph = mce2 (tRand (e,'β') 0 two_pi g) (tRand (e,'γ') 0 two_pi g)
                    in mix (sinOsc AR (f0 * fm) ph)

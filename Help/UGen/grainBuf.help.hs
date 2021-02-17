@@ -20,7 +20,7 @@ let b = control KR "buf" 0
 in grainBuf 2 i 0.1 b r p 2 x e 512 * control KR "gain" 0.25
 
 -- grainBuf ; requires=buf ; event control
-let f _ (g,x,y,z,o,rx,ry,_) =
+let f _ (g,x,y,z,o,rx,ry,_,_,_) =
       let b = control KR "buf" 0
           e = -1
           tr = impulse AR (y * 60 + 10) 0

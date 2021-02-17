@@ -12,7 +12,7 @@ let n = iRand 'α' 36 90
 in pan2 c_ l 1
 
 -- synthetic piano (jmcc) #3 ; event-control
-let f c (g,_,y,z,_,_,_,p) =
+let f c (g,_,y,z,_,_,_,p,_,_) =
       let e = decay2 (trig g controlDur) 0.008 (linLin y 0 1 0.02 0.06) * z * 2
           cmb k o = let n0 = lfNoise2 (c,k) AR 3000
                         dt = 1 / midiCPS (p + o)

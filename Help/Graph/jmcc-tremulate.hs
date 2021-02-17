@@ -7,7 +7,7 @@ let f = rand 'α' 500 900
 in mix (pan2 o l a)
 
 -- tremulate (jmcc) #1 ; event control
-let f _ (g,x,y,z,o,rx,ry,_) =
+let f _ (g,x,y,z,o,rx,ry,_,_,_) =
       let s = fSinOsc AR ((x * 400 + 500) * mce [1,1.2,1.5,1.8]) 0
           r = X.randN 4 'β' 30 90
           a = max 0 (lfNoise2 'γ' KR (r * (0.75 + rx))) * z

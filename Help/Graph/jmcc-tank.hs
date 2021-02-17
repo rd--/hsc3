@@ -25,7 +25,7 @@ in rev_f (Protect.useq_all 'λ' 4 r_allpass s3)
 
 -- tank (jmcc) ; event control
 let s1 =
-      let f _ (g,x,y,z,o,_,_,_) =
+      let f _ (g,x,y,z,o,_,_,_,_,_) =
             let tr = trig g controlDur
                 freq = linExp x 0 1 300 2200
             in pan2 (decay2 tr 0.1 (0.5 + y * 0.5) * 0.2 * cubed (fSinOsc AR freq 0)) (o * 2 - 1) z

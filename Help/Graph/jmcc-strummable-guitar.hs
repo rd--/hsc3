@@ -13,7 +13,7 @@ let strummable_guitar_str sc (ix,z) =
 in leakDC (lpf strs 12000) 0.995
 
 -- strummable guitar (jmcc) #11 ; event control
-let f c (g,_,y,z,o,_,_,p) =
+let f c (g,_,y,z,o,_,_,p,_,_) =
       let e = decay (trig g controlDur) 0.05
           n = pinkNoise c AR * e
           dt = 1 / midiCPS p

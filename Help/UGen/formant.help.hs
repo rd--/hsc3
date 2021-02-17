@@ -14,7 +14,7 @@ let bw = xLine KR 800 8000 8 RemoveSynth
 in formant AR 400 2000 bw * 0.1
 
 -- formant ; event control
-let f _ (g,x,y,z,o,_,_,_) =
+let f _ (g,x,y,z,o,_,_,_,_,_) =
       let f0 = mce [200, 300, 400, 500] * x
           ff = linExp y 0 1 400 1200
       in splay (formant AR f0 ff 200) 1 (g * z) (o * 2 - 1) True
