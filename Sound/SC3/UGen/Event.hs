@@ -9,7 +9,7 @@ import Sound.SC3.UGen.UGen {- hsc3 -}
 
 -- * Event
 
--- | (gate,x,y,z/force,orientation,radius-x,radius-y,pitch,pitch-x-distance,pitch-y-distance)
+-- | (gate,x,y,z/force,orientation,radius-x,radius-y,pitch,pitch-detune,unused)
 type REvent = (UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen)
 
 {- | k0 = index of control bus zero for event system,
@@ -18,9 +18,9 @@ type REvent = (UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen)
 -}
 rEventAddr :: UGen -> UGen -> UGen -> REvent
 rEventAddr k0 stp c =
-  let u = in' 10 KR (k0 + (c * stp))
+  let u = in' 9 KR (k0 + (c * stp))
   in case mceChannels u of
-       [g,x,y,z,o,rx,ry,p,px,py] -> (g,x,y,z,o,rx,ry,p,px,py)
+       [g,x,y,z,o,rx,ry,p,px] -> (g,x,y,z,o,rx,ry,p,px,0)
        _ -> error "rEventAddr?"
 
 -- | c0 = index of voice (channel) zero for event set, n = number of voices (channels)
