@@ -35,7 +35,15 @@ let f _ (g,x,y,z,o,_,_,p,_,_) =
           dl_max = 1 / 8
           (gt,tr) = rEventGateReset g p
           dx = x - latch x tr
-          dy = y - latch y tr
-          dl = 1 / midiCPS (p + dx * 4 + dy * 1.5)
+          dl = 1 / midiCPS (p + dx * 8)
       in pan2 (pluck n gt dl_max dl 10 (y / 3)) (o * 2 - 1) 1
+in mix (rEventVoicer 16 f) * control KR "gain" 2
+
+-- pluck ; event control ; gateReset
+let f _ (g,x,y,z,o,_,_,p,px,py) =
+      let n = whiteNoise 'α' AR * z
+          dl_max = 1 / 8
+          (gt,tr) = rEventGateReset g p
+          dl = 1 / midiCPS (p + leakDC px 0.985)
+      in pan2 (pluck n gt dl_max dl 10 (linLin py (-1) 1 0.01 0.5)) (o * 2 - 1) 1
 in mix (rEventVoicer 16 f) * control KR "gain" 2

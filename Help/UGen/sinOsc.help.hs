@@ -82,5 +82,17 @@ pan2 (sinOsc AR 15500 0) 0 0.75
 -- sinOsc ; 12 khz - 15.5 khz sweep
 pan2 (sinOsc AR (range_hs (12000,15500) (sinOsc KR (1/6) 0)) 0) 0 0.75
 
+let f0 = 220
+    cR = 1 -- carrier ratio
+    mR = 2 -- modulator ratio
+    mA = mouseY KR 0.01 4000 Exponential 0.2 -- moduluation amplitude
+in sinOsc AR ((f0 * cR) + (sinOsc AR (f0 * mR) 0 * mA)) 0 * 0.1
+
+let f0 = 220
+    cR = 1 -- carrier ratio
+    mR = 2 -- modulator ratio
+    mI = mouseY KR 0.01 10 Exponential 0.2 -- moduluation index
+in sinOsc AR ((f0 * cR) + (sinOsc AR (f0 * mR) 0 * mI * (f0 * mR))) 0 * 0.1
+
 ---- ; drawings
 Sound.SC3.Plot.plot_ugen_nrt (48000,64) 1.0 (sinOsc AR 1 0)
