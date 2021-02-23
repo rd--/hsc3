@@ -10,29 +10,35 @@ import Sound.SC3.UGen.UGen {- hsc3 -}
 -- * Event
 
 -- | (gate,x,y,z/force,orientation,radius-x,radius-y,pitch,pitch-detune,unused)
-type REvent = (UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen)
+type REvent t = (t,t,t,t,t,t,t,t,t,t)
+
+-- | Translate list to REvent.
+rEvent_from_list :: Num t => [t] -> REvent t
+rEvent_from_list l =
+  case l of
+    [w,x,y,z,o,rx,ry,p,px] -> (w,x,y,z,o,rx,ry,p,px,0)
+    [w,x,y,z,o,rx,ry,p,px,q] -> (w,x,y,z,o,rx,ry,p,px,q)
+    _ -> error "rEvent_from_list?"
 
 {- | k0 = index of control bus zero for event system,
     stp = voice index incremennt,
       c = event channel or voice (zero indexed)
 -}
-rEventAddr :: UGen -> UGen -> UGen -> REvent
+rEventAddr :: UGen -> UGen -> UGen -> REvent UGen
 rEventAddr k0 stp c =
   let u = in' 9 KR (k0 + (c * stp))
-  in case mceChannels u of
-       [g,x,y,z,o,rx,ry,p,px] -> (g,x,y,z,o,rx,ry,p,px,0)
-       _ -> error "rEventAddr?"
+  in rEvent_from_list (mceChannels u)
 
 -- | c0 = index of voice (channel) zero for event set, n = number of voices (channels)
-rEventVoicerAddr :: UGen -> UGen -> UGen -> Int -> (Int -> REvent -> UGen) -> UGen
+rEventVoicerAddr :: UGen -> UGen -> UGen -> Int -> (Int -> REvent UGen -> UGen) -> UGen
 rEventVoicerAddr k0 stp c0 n f = mce (map (\c -> f c (rEventAddr k0 stp (c0 + constant c))) [0 .. n - 1])
 
 -- | 'rEventAddr' with 'control' inputs for /EventAddr/ and /EventZero/.
-rEvent :: REvent
+rEvent :: REvent UGen
 rEvent = rEventAddr (control KR "EventAddr" 13000) (control KR "EventIncr" 10) (control KR "EventZero" 0)
 
 -- | 'rEventVoicerAddr' with 'control' inputs for /EventAddr/ and /EventZero/.
-rEventVoicer :: Int -> (Int -> REvent -> UGen) -> UGen
+rEventVoicer :: Int -> (Int -> REvent UGen -> UGen) -> UGen
 rEventVoicer = rEventVoicerAddr (control KR "EventAddr" 13000) (control KR "EventIncr" 10) (control KR "EventZero" 0)
 
 {- | Given /g/ and /p/ fields of an 'REvent' derive a 'gateReset' from g
