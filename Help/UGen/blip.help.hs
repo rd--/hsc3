@@ -13,7 +13,7 @@ let fr = blip KR 0.25 3 * 300 + 500
 in blip AR fr nh * 0.2
 
 -- blip ; event control
-let f _ (g,_,y,z,o,_,_,p,_,_) = pan2 (blip AR (midiCPS p) (y * 10 + 1)) (o * 2 - 1) (g * z)
+let f _ (g,_,y,z,o,_,_,p,px,_) = pan2 (blip AR (midiCPS (p + px)) (y * 10 + 1)) (o * 2 - 1) (g * z)
 in mix (rEventVoicer 16 f) * control KR "gain" 0.5
 
 ---- ; drawings
