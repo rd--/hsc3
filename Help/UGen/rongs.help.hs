@@ -9,4 +9,4 @@ let tr_freq = mouseX KR 2 24 Linear 0.1
               accent = 0.99
               loss = 0.1
           in X.rongs AR tr tr f0 structure brightness damping accent stretch 0.15 loss
-in splay (leakDC sig 0.995) 0.25 1 0 True
+in splay (leakDC sig 0.995) 0.25 1 (tRand 'ζ' (-1) 1 tr) True
