@@ -105,6 +105,10 @@ dynKlank i fs fo ds s =
 exprange :: UGen -> UGen -> UGen -> UGen
 exprange l r s = linExp s (-1) 1 l r
 
+-- | Variant of `exprange` with arguments to make writing post-fix nicer.
+in_exprange :: UGen -> (UGen, UGen) -> UGen
+in_exprange s (l,r) = exprange l r s
+
 -- | Variant FFT constructor with default values for hop size (0.5),
 -- window type (0), active status (1) and window size (0).
 fft' :: UGen -> UGen -> UGen

@@ -390,8 +390,8 @@ b_setn1_segmented = G.b_setn1_segmented
 -- * UGen commands.
 
 -- | Generate accumulation buffer given time-domain IR buffer and FFT size.
-pc_preparePartConv :: Int -> Int -> Int -> Message
-pc_preparePartConv = G.pc_preparePartConv
+partConv_preparePartConv :: Int -> Int -> Int -> Message
+partConv_preparePartConv = G.partConv_preparePartConv
 
 -- * Unpack
 

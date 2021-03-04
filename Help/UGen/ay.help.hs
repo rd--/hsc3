@@ -1,5 +1,5 @@
 -- ay ; default parameters
-X.ay 1777 1666 1555 1 7 15 15 15 4 1 0
+X.ay AR 1777 1666 1555 1 7 15 15 15 4 1 0
 
 -- ay ; mouse control
 let tonea = mouseY KR 10 3900 Exponential 0.2
@@ -8,7 +8,7 @@ let tonea = mouseY KR 10 3900 Exponential 0.2
     vola = 14
     volb = 14
     volc = 0
-    s = X.ay tonea toneb 1555 1 ctl vola volb volc 4 1 0
+    s = X.ay AR tonea toneb 1555 1 ctl vola volb volc 4 1 0
 in pan2 s 0 0.25
 
 -- ay ; auto-pilot
@@ -26,5 +26,5 @@ let rate = mouseX KR 0.1 10 Linear 0.2
     volc = mk_ctl 'θ' 0 15
     efreq = mk_ctl 'ι' 0 4095
     estyle = mk_ctl 'κ' 0 15
-    s = X.ay tonea toneb tonec n ctl vola volb volc efreq estyle 0
+    s = X.ay AR tonea toneb tonec n ctl vola volb volc efreq estyle 0
 in pan2 s 0 0.5

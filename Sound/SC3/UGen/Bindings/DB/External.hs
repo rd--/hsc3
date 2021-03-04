@@ -1,6 +1,8 @@
--- | SC3 external (sce3-plugins) UGen bindings (auto-generated).
+-- | SC3 External UGen bindings (auto-generated).
 module Sound.SC3.UGen.Bindings.DB.External where
 
+--import Sound.SC3.Common.Enum
+--import Sound.SC3.Common.Envelope
 import Sound.SC3.Common.Rate
 import Sound.SC3.Common.UId
 import Sound.SC3.UGen.Type
@@ -9,14 +11,14 @@ import Sound.SC3.UGen.UGen
 -- | (Undocumented class)
 --
 --  A2B [AR] a=0.0 b=0.0 c=0.0 d=0.0
-a2B :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-a2B rate a b c d = mkUGen Nothing [AR] (Left rate) "A2B" [a,b,c,d] Nothing 4 (Special 0) NoId
+a2b :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+a2b rate a b c d = mkUGen Nothing [AR] (Left rate) "A2B" [a,b,c,d] Nothing 4 (Special 0) NoId
 
 -- | Emulator of the AY (aka YM) soundchip, used in Spectrum/Atari
 --
 --  AY [AR] tonea=1777.0 toneb=1666.0 tonec=1555.0 noise=1.0 control=7.0 vola=15.0 volb=15.0 volc=15.0 envfreq=4.0 envstyle=1.0 chiptype=0.0
-ay :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-ay tonea toneb tonec noise control_ vola volb volc envfreq envstyle chiptype = mkUGen Nothing [AR] (Left AR) "AY" [tonea,toneb,tonec,noise,control_,vola,volb,volc,envfreq,envstyle,chiptype] Nothing 1 (Special 0) NoId
+ay :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+ay rate tonea toneb tonec noise control_ vola volb volc envfreq envstyle chiptype = mkUGen Nothing [AR] (Left rate) "AY" [tonea,toneb,tonec,noise,control_,vola,volb,volc,envfreq,envstyle,chiptype] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
@@ -30,7 +32,7 @@ allpass1 rate in_ freq = mkUGen Nothing [AR] (Left rate) "Allpass1" [in_,freq] N
 allpass2 :: Rate -> UGen -> UGen -> UGen -> UGen
 allpass2 rate in_ freq rq = mkUGen Nothing [AR] (Left rate) "Allpass2" [in_,freq,rq] Nothing 1 (Special 0) NoId
 
--- | amplitude follower
+-- | amplitude follower (deprecated)
 --
 --  AmplitudeMod [KR,AR] in=0.0 attackTime=1.0e-2 releaseTime=1.0e-2
 amplitudeMod :: Rate -> UGen -> UGen -> UGen -> UGen
@@ -50,35 +52,35 @@ arneodoCoulletTresser rate freq alpha h xi yi zi = mkUGen Nothing [AR] (Left rat
 
 -- | detect the largest value (and its position) in an array of UGens
 --
---  ArrayMax [KR,AR] array=0.0
+--  ArrayMax [KR,AR] *array=0.0;    MCE=1, FILTER: TRUE
 arrayMax :: UGen -> UGen
 arrayMax array = mkUGen Nothing [KR,AR] (Right [0]) "ArrayMax" [] (Just [array]) 2 (Special 0) NoId
 
 -- | detect the smallest value (and its position) in an array of UGens
 --
---  ArrayMin [KR,AR] array=0.0
+--  ArrayMin [KR,AR] *array=0.0;    MCE=1, FILTER: TRUE
 arrayMin :: UGen -> UGen
 arrayMin array = mkUGen Nothing [KR,AR] (Right [0]) "ArrayMin" [] (Just [array]) 2 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Use Amp data from a given partial
 --
 --  AtsAmp [KR,AR] atsbuffer=0.0 partialNum=0.0 filePointer=0.0
 atsAmp :: Rate -> UGen -> UGen -> UGen -> UGen
 atsAmp rate atsbuffer partialNum filePointer = mkUGen Nothing [KR,AR] (Left rate) "AtsAmp" [atsbuffer,partialNum,filePointer] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | (put short description here)
 --
 --  AtsBand [AR] atsbuffer=0.0 band=0.0 filePointer=0.0
 atsBand :: Rate -> UGen -> UGen -> UGen -> UGen
 atsBand rate atsbuffer band filePointer = mkUGen Nothing [AR] (Left rate) "AtsBand" [atsbuffer,band,filePointer] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Use Freq data from a given partial
 --
 --  AtsFreq [KR,AR] atsbuffer=0.0 partialNum=0.0 filePointer=0.0
 atsFreq :: Rate -> UGen -> UGen -> UGen -> UGen
 atsFreq rate atsbuffer partialNum filePointer = mkUGen Nothing [KR,AR] (Left rate) "AtsFreq" [atsbuffer,partialNum,filePointer] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Resynthesize sine and noise data from an ATS analysis file
 --
 --  AtsNoiSynth [AR] atsbuffer=0.0 numPartials=0.0 partialStart=0.0 partialSkip=1.0 filePointer=0.0 sinePct=1.0 noisePct=1.0 freqMul=1.0 freqAdd=0.0 numBands=25.0 bandStart=0.0 bandSkip=1.0
 atsNoiSynth :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -90,7 +92,7 @@ atsNoiSynth rate atsbuffer numPartials partialStart partialSkip filePointer sine
 atsNoise :: Rate -> UGen -> UGen -> UGen -> UGen
 atsNoise rate atsbuffer bandNum filePointer = mkUGen Nothing [KR,AR] (Left rate) "AtsNoise" [atsbuffer,bandNum,filePointer] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | One UGen to return both Amp and Freq info
 --
 --  AtsParInfo [KR,AR] atsbuffer=0.0 partialNum=0.0 filePointer=0.0
 atsParInfo :: Rate -> UGen -> UGen -> UGen -> UGen
@@ -102,7 +104,7 @@ atsParInfo rate atsbuffer partialNum filePointer = mkUGen Nothing [KR,AR] (Left 
 atsPartial :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 atsPartial rate atsbuffer partial filePointer freqMul freqAdd = mkUGen Nothing [AR] (Left rate) "AtsPartial" [atsbuffer,partial,filePointer,freqMul,freqAdd] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Resynthesize sine data from an ATS analysis file
 --
 --  AtsSynth [AR] atsbuffer=0.0 numPartials=0.0 partialStart=0.0 partialSkip=1.0 filePointer=0.0 freqMul=1.0 freqAdd=0.0
 atsSynth :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -122,21 +124,21 @@ attackSlope rate input windowsize peakpicksize leak energythreshold sumthreshold
 
 -- | (Undocumented class)
 --
---  AudioMSG [AR] in=0.0 index=0.0
-audioMSG :: Rate -> UGen -> UGen -> UGen
-audioMSG rate in_ index_ = mkUGen Nothing [AR] (Left rate) "AudioMSG" [in_,index_] Nothing 1 (Special 0) NoId
+--  AudioMSG [AR] in=0.0 index=0.0;    FILTER: TRUE
+audioMSG :: UGen -> UGen -> UGen
+audioMSG in_ index_ = mkUGen Nothing [AR] (Right [0]) "AudioMSG" [in_,index_] Nothing 1 (Special 0) NoId
 
 -- | calculates mean average of audio or control rate signal
 --
---  AverageOutput [KR,AR] in=0.0 trig=0.0
+--  AverageOutput [KR,AR] in=0.0 trig=0.0;    FILTER: TRUE
 averageOutput :: UGen -> UGen -> UGen
 averageOutput in_ trig_ = mkUGen Nothing [KR,AR] (Right [0]) "AverageOutput" [in_,trig_] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  B2A [AR] w=0.0 x=0.0 y=0.0 z=0.0
-b2A :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-b2A rate w x y z = mkUGen Nothing [AR] (Left rate) "B2A" [w,x,y,z] Nothing 4 (Special 0) NoId
+b2a :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+b2a rate w x y z = mkUGen Nothing [AR] (Left rate) "B2A" [w,x,y,z] Nothing 4 (Special 0) NoId
 
 -- | (Undocumented class)
 --
@@ -147,76 +149,76 @@ b2Ster rate w x y = mkUGen Nothing [AR] (Left rate) "B2Ster" [w,x,y] Nothing 2 (
 -- | (Undocumented class)
 --
 --  B2UHJ [AR] w=0.0 x=0.0 y=0.0
-b2UHJ :: Rate -> UGen -> UGen -> UGen -> UGen
-b2UHJ rate w x y = mkUGen Nothing [AR] (Left rate) "B2UHJ" [w,x,y] Nothing 2 (Special 0) NoId
+b2uhj :: Rate -> UGen -> UGen -> UGen -> UGen
+b2uhj rate w x y = mkUGen Nothing [AR] (Left rate) "B2UHJ" [w,x,y] Nothing 2 (Special 0) NoId
 
--- | (Undocumented class)
+-- | MultiOut BetaBlocker VChip
 --
 --  BBlockerBuf [AR] freq=0.0 bufnum=0.0 startpoint=0.0
 bBlockerBuf :: Rate -> UGen -> UGen -> UGen -> UGen
 bBlockerBuf rate freq bufnum startpoint = mkUGen Nothing [AR] (Left rate) "BBlockerBuf" [freq,bufnum,startpoint] Nothing 9 (Special 0) NoId
 
--- | (Undocumented class)
+-- | 3D Ambisonic decoder
 --
 --  BFDecode1 [AR] w=0.0 x=0.0 y=0.0 z=0.0 azimuth=0.0 elevation=0.0 wComp=0.0
-bFDecode1 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-bFDecode1 rate w x y z azimuth elevation wComp = mkUGen Nothing [AR] (Left rate) "BFDecode1" [w,x,y,z,azimuth,elevation,wComp] Nothing 1 (Special 0) NoId
+bfDecode1 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+bfDecode1 rate w x y z azimuth elevation wComp = mkUGen Nothing [AR] (Left rate) "BFDecode1" [w,x,y,z,azimuth,elevation,wComp] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  BFDecoder [] maxSize=0.0
-bFDecoder :: Rate -> UGen -> UGen
-bFDecoder rate maxSize = mkUGen Nothing [IR,KR,AR,DR] (Left rate) "BFDecoder" [maxSize] Nothing 1 (Special 0) NoId
+bfDecoder :: Rate -> UGen -> UGen
+bfDecoder rate maxSize = mkUGen Nothing [IR,KR,AR,DR] (Left rate) "BFDecoder" [maxSize] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Ambisonic B format encoder
 --
 --  BFEncode1 [AR] in=0.0 azimuth=0.0 elevation=0.0 rho=1.0 gain=1.0 wComp=0.0
-bFEncode1 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-bFEncode1 rate in_ azimuth elevation rho gain wComp = mkUGen Nothing [AR] (Left rate) "BFEncode1" [in_,azimuth,elevation,rho,gain,wComp] Nothing 4 (Special 0) NoId
+bfEncode1 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+bfEncode1 rate in_ azimuth elevation rho gain wComp = mkUGen Nothing [AR] (Left rate) "BFEncode1" [in_,azimuth,elevation,rho,gain,wComp] Nothing 4 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Ambisonic B format encoder
 --
 --  BFEncode2 [AR] in=0.0 point_x=1.0 point_y=1.0 elevation=0.0 gain=1.0 wComp=0.0
-bFEncode2 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-bFEncode2 rate in_ point_x point_y elevation gain wComp = mkUGen Nothing [AR] (Left rate) "BFEncode2" [in_,point_x,point_y,elevation,gain,wComp] Nothing 4 (Special 0) NoId
+bfEncode2 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+bfEncode2 rate in_ point_x point_y elevation gain wComp = mkUGen Nothing [AR] (Left rate) "BFEncode2" [in_,point_x,point_y,elevation,gain,wComp] Nothing 4 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Ambisonic B format encoder for stereo signals
 --
 --  BFEncodeSter [AR] l=0.0 r=0.0 azimuth=0.0 width=1.5707963267949 elevation=0.0 rho=1.0 gain=1.0 wComp=0.0
-bFEncodeSter :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-bFEncodeSter rate l r azimuth width elevation rho gain wComp = mkUGen Nothing [AR] (Left rate) "BFEncodeSter" [l,r,azimuth,width,elevation,rho,gain,wComp] Nothing 4 (Special 0) NoId
+bfEncodeSter :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+bfEncodeSter rate l r azimuth width elevation rho gain wComp = mkUGen Nothing [AR] (Left rate) "BFEncodeSter" [l,r,azimuth,width,elevation,rho,gain,wComp] Nothing 4 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  BFGrainPanner [] maxSize=0.0
-bFGrainPanner :: Rate -> UGen -> UGen
-bFGrainPanner rate maxSize = mkUGen Nothing [IR,KR,AR,DR] (Left rate) "BFGrainPanner" [maxSize] Nothing 1 (Special 0) NoId
+bfGrainPanner :: Rate -> UGen -> UGen
+bfGrainPanner rate maxSize = mkUGen Nothing [IR,KR,AR,DR] (Left rate) "BFGrainPanner" [maxSize] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | BFormat sound manipulation
 --
 --  BFManipulate [AR] w=0.0 x=0.0 y=0.0 z=0.0 rotate=0.0 tilt=0.0 tumble=0.0
-bFManipulate :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-bFManipulate rate w x y z rotate_ tilt_ tumble_ = mkUGen Nothing [AR] (Left rate) "BFManipulate" [w,x,y,z,rotate_,tilt_,tumble_] Nothing 4 (Special 0) NoId
+bfManipulate :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+bfManipulate rate w x y z rotate_ tilt_ tumble_ = mkUGen Nothing [AR] (Left rate) "BFManipulate" [w,x,y,z,rotate_,tilt_,tumble_] Nothing 4 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  BFPanner [] maxSize=0.0
-bFPanner :: Rate -> UGen -> UGen
-bFPanner rate maxSize = mkUGen Nothing [IR,KR,AR,DR] (Left rate) "BFPanner" [maxSize] Nothing 1 (Special 0) NoId
+bfPanner :: Rate -> UGen -> UGen
+bfPanner rate maxSize = mkUGen Nothing [IR,KR,AR,DR] (Left rate) "BFPanner" [maxSize] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  BLBufRd [KR,AR] bufnum=0.0 phase=0.0 ratio=1.0
-bLBufRd :: Rate -> UGen -> UGen -> UGen -> UGen
-bLBufRd rate bufnum phase ratio = mkUGen Nothing [KR,AR] (Left rate) "BLBufRd" [bufnum,phase,ratio] Nothing 1 (Special 0) NoId
+blBufRd :: Rate -> UGen -> UGen -> UGen -> UGen
+blBufRd rate bufnum phase ratio = mkUGen Nothing [KR,AR] (Left rate) "BLBufRd" [bufnum,phase,ratio] Nothing 1 (Special 0) NoId
 
 -- | 24db/oct rolloff - 4nd order resonant Low/High/Band Pass Filter
 --
---  BMoog [AR] in=0.0 freq=440.0 q=0.2 mode=0.0 saturation=0.95
+--  BMoog [AR] in=0.0 freq=440.0 q=0.2 mode=0.0 saturation=0.95;    FILTER: TRUE
 bMoog :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 bMoog in_ freq q mode saturation = mkUGen Nothing [AR] (Right [0]) "BMoog" [in_,freq,q,mode,saturation] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Balances two signals with each other
 --
 --  Balance [AR] in=0.0 test=0.0 hp=10.0 stor=0.0
 balance :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -239,6 +241,12 @@ binData rate buffer bin overlaps = mkUGen Nothing [KR,AR] (Left rate) "BinData" 
 --  BlitB3 [AR] freq=440.0
 blitB3 :: Rate -> UGen -> UGen
 blitB3 rate freq = mkUGen Nothing [AR] (Left rate) "BlitB3" [freq] Nothing 1 (Special 0) NoId
+
+-- | (Undocumented class)
+--
+--  BlitB3D [AR] freq=440.0
+blitB3D :: Rate -> UGen -> UGen
+blitB3D rate freq = mkUGen Nothing [AR] (Left rate) "BlitB3D" [freq] Nothing 1 (Special 0) NoId
 
 -- | BLIT derived sawtooth
 --
@@ -270,13 +278,13 @@ breakcore rate bufnum capturein capturetrigger duration ampdropout = mkUGen Noth
 brusselator :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 brusselator rate reset rate_ mu gamma initx inity = mkUGen Nothing [AR] (Left rate) "Brusselator" [reset,rate_,mu,gamma,initx,inity] Nothing 2 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Granular synthesis with sound sampled in a buffer
 --
 --  BufGrain [AR] trigger=0.0 dur=1.0 sndbuf=0.0 rate=1.0 pos=0.0 interp=2.0
 bufGrain :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 bufGrain rate trigger dur sndbuf rate_ pos interp = mkUGen Nothing [AR] (Left rate) "BufGrain" [trigger,dur,sndbuf,rate_,pos,interp] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Granular synthesis with sound sampled in a buffer and user supplied envelope
 --
 --  BufGrainB [AR] trigger=0.0 dur=1.0 sndbuf=0.0 rate=1.0 pos=0.0 envbuf=0.0 interp=2.0
 bufGrainB :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -294,7 +302,7 @@ bufGrainBBF rate trigger dur sndbuf rate_ pos envbuf azimuth elevation rho inter
 bufGrainBF :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 bufGrainBF rate trigger dur sndbuf rate_ pos azimuth elevation rho interp wComp = mkUGen Nothing [AR] (Left rate) "BufGrainBF" [trigger,dur,sndbuf,rate_,pos,azimuth,elevation,rho,interp,wComp] Nothing 4 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Granular synthesis with sound sampled in a buffer and user supplied envelopes
 --
 --  BufGrainI [AR] trigger=0.0 dur=1.0 sndbuf=0.0 rate=1.0 pos=0.0 envbuf1=0.0 envbuf2=0.0 ifac=0.5 interp=2.0
 bufGrainI :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -321,8 +329,8 @@ bufMin rate bufnum gate_ = mkUGen Nothing [KR] (Left rate) "BufMin" [bufnum,gate
 -- | (Undocumented class)
 --
 --  CQ_Diff [KR] in1=0.0 in2=0.0 databufnum=0.0
-cQ_Diff :: Rate -> UGen -> UGen -> UGen -> UGen
-cQ_Diff rate in1 in2 databufnum = mkUGen Nothing [KR] (Left rate) "CQ_Diff" [in1,in2,databufnum] Nothing 1 (Special 0) NoId
+cq_Diff :: Rate -> UGen -> UGen -> UGen -> UGen
+cq_Diff rate in1 in2 databufnum = mkUGen Nothing [KR] (Left rate) "CQ_Diff" [in1,in2,databufnum] Nothing 1 (Special 0) NoId
 
 -- | Quefrency analysis and liftering
 --
@@ -330,17 +338,17 @@ cQ_Diff rate in1 in2 databufnum = mkUGen Nothing [KR] (Left rate) "CQ_Diff" [in1
 cepstrum :: Rate -> UGen -> UGen -> UGen
 cepstrum rate cepbuf fftchain = mkUGen Nothing [IR,KR,AR,DR] (Left rate) "Cepstrum" [cepbuf,fftchain] Nothing 1 (Special 0) NoId
 
+-- | Chen's chaotic double scroll attractor
+--
+--  Chen [KR,AR] speed=0.5 a=0.5 b=0.3 c=0.28
+chen :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+chen rate speed a b c = mkUGen Nothing [KR,AR] (Left rate) "Chen" [speed,a,b,c] Nothing 3 (Special 0) NoId
+
 -- | Octave chroma band based representation of energy in a signal; Chromagram for nTET tuning systems with any base reference
 --
 --  Chromagram [KR] fft=0.0 fftsize=2048.0 n=12.0 tuningbase=32.703195662575 octaves=8.0 integrationflag=0.0 coeff=0.9 octaveratio=2.0 perframenormalize=0.0
 chromagram :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 chromagram rate fft_ fftsize n tuningbase octaves integrationflag coeff octaveratio perframenormalize = mkUGen Nothing [KR] (Left rate) "Chromagram" [fft_,fftsize,n,tuningbase,octaves,integrationflag,coeff,octaveratio,perframenormalize] Nothing 12 (Special 0) NoId
-
--- | (Undocumented class)
---
---  ChuaL [AR] freq=22050.0 a=0.3286 b=0.9336 c=-0.8126 d=0.399 rr=0.0 h=5.0e-2 xi=0.1 yi=0.0 zi=0.0
-chuaL :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-chuaL rate freq a b c d rr h xi yi zi = mkUGen Nothing [AR] (Left rate) "ChuaL" [freq,a,b,c,d,rr,h,xi,yi,zi] Nothing 1 (Special 0) NoId
 
 -- | circular linear lag
 --
@@ -368,7 +376,7 @@ clipper8 rate in_ lo hi = mkUGen Nothing [AR] (Left rate) "Clipper8" [in_,lo,hi]
 
 -- | (Undocumented class)
 --
---  Clockmus [KR] 
+--  Clockmus [KR]
 clockmus :: Rate -> UGen
 clockmus rate = mkUGen Nothing [KR] (Left rate) "Clockmus" [] Nothing 1 (Special 0) NoId
 
@@ -408,23 +416,23 @@ coyote rate in_ trackFall slowLag fastLag fastMul thresh minDur = mkUGen Nothing
 crest :: Rate -> UGen -> UGen -> UGen -> UGen
 crest rate in_ numsamps gate_ = mkUGen Nothing [KR] (Left rate) "Crest" [in_,numsamps,gate_] Nothing 1 (Special 0) NoId
 
--- | port of some ladspa plugins
+-- | class B/AB power amp distortion simulation
 --
---  CrossoverDistortion [AR] in=0.0 amp=0.5 smooth=0.5
+--  CrossoverDistortion [AR] in=0.0 amp=0.5 smooth=0.5;    FILTER: TRUE
 crossoverDistortion :: UGen -> UGen -> UGen -> UGen
 crossoverDistortion in_ amp smooth = mkUGen Nothing [AR] (Right [0]) "CrossoverDistortion" [in_,amp,smooth] Nothing 1 (Special 0) NoId
 
 -- | Digitally modelled analog filter
 --
---  DFM1 [AR] in=0.0 freq=1000.0 res=0.1 inputgain=1.0 type=0.0 noiselevel=3.0e-4
+--  DFM1 [AR] in=0.0 freq=1000.0 res=0.1 inputgain=1.0 type=0.0 noiselevel=3.0e-4;    FILTER: TRUE
 dfm1 :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 dfm1 in_ freq res inputgain type_ noiselevel = mkUGen Nothing [AR] (Right [0]) "DFM1" [in_,freq,res,inputgain,type_,noiselevel] Nothing 1 (Special 0) NoId
 
 -- | Demand rate implementation of a Wiard noise ring
 --
 --  DNoiseRing [DR] change=0.5 chance=0.5 shift=1.0 numBits=8.0 resetval=0.0;    DEMAND/NONDET
-dNoiseRing :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-dNoiseRing change chance shift numBits resetval = mkUGen Nothing [DR] (Left DR) "DNoiseRing" [change,chance,shift,numBits,resetval] Nothing 1 (Special 0) NoId
+dNoiseRing :: ID a => a -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dNoiseRing z change chance shift numBits resetval = mkUGen Nothing [DR] (Left DR) "DNoiseRing" [change,chance,shift,numBits,resetval] Nothing 1 (Special 0) (toUId z)
 
 -- | Triangle via 3rd order differerentiated polynomial waveform
 --
@@ -489,10 +497,10 @@ dbrown2 rate lo hi step dist length_ = mkUGen Nothing [IR,KR,AR,DR] (Left rate) 
 -- | demand rate tag system on a buffer
 --
 --  DbufTag [DR] bufnum=0.0 v=0.0 axiom=0.0 rules=0.0 recycle=0.0 mode=0.0;    DEMAND/NONDET
-dbufTag :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-dbufTag rate bufnum v axiom rules recycle mode = mkUGen Nothing [DR] (Left rate) "DbufTag" [bufnum,v,axiom,rules,recycle,mode] Nothing 1 (Special 0) NoId
+dbufTag :: ID a => a -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dbufTag z bufnum v axiom rules recycle mode = mkUGen Nothing [DR] (Left DR) "DbufTag" [bufnum,v,axiom,rules,recycle,mode] Nothing 1 (Special 0) (toUId z)
 
--- | port of some ladspa plugins
+-- | Samplerate and bitrate reduction
 --
 --  Decimator [AR] in=0.0 rate=44100.0 bits=24.0
 decimator :: Rate -> UGen -> UGen -> UGen -> UGen
@@ -501,14 +509,14 @@ decimator rate in_ rate_ bits = mkUGen Nothing [AR] (Left rate) "Decimator" [in_
 -- | Demand version of the BetaBlocker VChip
 --
 --  DetaBlockerBuf [DR] bufnum=0.0 startpoint=0.0;    DEMAND/NONDET
-detaBlockerBuf :: Rate -> UGen -> UGen -> UGen
-detaBlockerBuf rate bufnum startpoint = mkUGen Nothing [DR] (Left rate) "DetaBlockerBuf" [bufnum,startpoint] Nothing 1 (Special 0) NoId
+detaBlockerBuf :: ID a => a -> UGen -> UGen -> UGen
+detaBlockerBuf z bufnum startpoint = mkUGen Nothing [DR] (Left DR) "DetaBlockerBuf" [bufnum,startpoint] Nothing 1 (Special 0) (toUId z)
 
 -- | demand rate finite state machine
 --
 --  Dfsm [DR] rules=0.0 n=1.0 rgen=0.0;    DEMAND/NONDET
-dfsm :: Rate -> UGen -> UGen -> UGen -> UGen
-dfsm rate rules n rgen = mkUGen Nothing [DR] (Left rate) "Dfsm" [rules,n,rgen] Nothing 1 (Special 0) NoId
+dfsm :: ID a => a -> UGen -> UGen -> UGen -> UGen
+dfsm z rules n rgen = mkUGen Nothing [DR] (Left DR) "Dfsm" [rules,n,rgen] Nothing 1 (Special 0) (toUId z)
 
 -- | (Undocumented class)
 --
@@ -530,9 +538,9 @@ disintegrator z in_ probability multiplier = mkUGen Nothing [AR] (Right [0]) "Di
 
 -- | discrete time neurodynamics
 --
---  Dneuromodule [DR] numChannels=0.0 theta=0.0 x=0.0 weights=0.0
+--  Dneuromodule [KR,AR,DR] dt=0.0 *theta=0.0 *x=0.0 *weights=0.0;    MCE=3, NC INPUT: True, NONDET
 dneuromodule :: ID a => Int -> a -> UGen -> UGen -> UGen -> UGen -> UGen
-dneuromodule numChannels_ z numChannels theta x weights = mkUGen Nothing [DR] (Left DR) "Dneuromodule" [numChannels] (Just [theta,x,weights]) numChannels_ (Special 0) (toUId z)
+dneuromodule numChannels z dt theta x weights = mkUGen Nothing [KR,AR,DR] (Left DR) "Dneuromodule" [dt] (Just [theta,x,weights]) numChannels (Special 0) (toUId z)
 
 -- | Nested Allpass filters as proposed by Vercoe and Pluckett
 --
@@ -551,7 +559,6 @@ doubleNestedAllpassL in_ maxdelay1 delay1_ gain1 maxdelay2 delay2_ gain2 maxdela
 --  DoubleNestedAllpassN [AR] in=0.0 maxdelay1=4.7e-3 delay1=4.7e-3 gain1=0.15 maxdelay2=2.2e-2 delay2=2.2e-2 gain2=0.25 maxdelay3=8.3e-3 delay3=8.3e-3 gain3=0.3;    FILTER: TRUE
 doubleNestedAllpassN :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 doubleNestedAllpassN in_ maxdelay1 delay1_ gain1 maxdelay2 delay2_ gain2 maxdelay3 delay3 gain3 = mkUGen Nothing [AR] (Right [0]) "DoubleNestedAllpassN" [in_,maxdelay1,delay1_,gain1,maxdelay2,delay2_,gain2,maxdelay3,delay3,gain3] Nothing 1 (Special 0) NoId
-
 
 -- | Forced DoubleWell Oscillator
 --
@@ -604,102 +611,102 @@ envFollow rate input decaycoeff = mkUGen Nothing [KR,AR] (Left rate) "EnvFollow"
 -- | (Undocumented class)
 --
 --  FFTComplexDev [KR] buffer=0.0 rectify=0.0 powthresh=0.1
-fFTComplexDev :: Rate -> UGen -> UGen -> UGen -> UGen
-fFTComplexDev rate buffer rectify powthresh = mkUGen Nothing [KR] (Left rate) "FFTComplexDev" [buffer,rectify,powthresh] Nothing 1 (Special 0) NoId
+fftComplexDev :: Rate -> UGen -> UGen -> UGen -> UGen
+fftComplexDev rate buffer rectify powthresh = mkUGen Nothing [KR] (Left rate) "FFTComplexDev" [buffer,rectify,powthresh] Nothing 1 (Special 0) NoId
 
 -- | Spectral crest measure
 --
 --  FFTCrest [KR] buffer=0.0 freqlo=0.0 freqhi=50000.0
-fFTCrest :: Rate -> UGen -> UGen -> UGen -> UGen
-fFTCrest rate buffer freqlo freqhi = mkUGen Nothing [KR] (Left rate) "FFTCrest" [buffer,freqlo,freqhi] Nothing 1 (Special 0) NoId
+fftCrest :: Rate -> UGen -> UGen -> UGen -> UGen
+fftCrest rate buffer freqlo freqhi = mkUGen Nothing [KR] (Left rate) "FFTCrest" [buffer,freqlo,freqhi] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  FFTDiffMags [KR] bufferA=0.0 bufferB=0.0
-fFTDiffMags :: Rate -> UGen -> UGen -> UGen
-fFTDiffMags rate bufferA bufferB = mkUGen Nothing [KR] (Left rate) "FFTDiffMags" [bufferA,bufferB] Nothing 1 (Special 0) NoId
+fftDiffMags :: Rate -> UGen -> UGen -> UGen
+fftDiffMags rate bufferA bufferB = mkUGen Nothing [KR] (Left rate) "FFTDiffMags" [bufferA,bufferB] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  FFTFlux [KR] buffer=0.0 normalise=1.0
-fFTFlux :: Rate -> UGen -> UGen -> UGen
-fFTFlux rate buffer normalise = mkUGen Nothing [KR] (Left rate) "FFTFlux" [buffer,normalise] Nothing 1 (Special 0) NoId
+fftFlux :: Rate -> UGen -> UGen -> UGen
+fftFlux rate buffer normalise = mkUGen Nothing [KR] (Left rate) "FFTFlux" [buffer,normalise] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  FFTFluxPos [KR] buffer=0.0 normalise=1.0
-fFTFluxPos :: Rate -> UGen -> UGen -> UGen
-fFTFluxPos rate buffer normalise = mkUGen Nothing [KR] (Left rate) "FFTFluxPos" [buffer,normalise] Nothing 1 (Special 0) NoId
+fftFluxPos :: Rate -> UGen -> UGen -> UGen
+fftFluxPos rate buffer normalise = mkUGen Nothing [KR] (Left rate) "FFTFluxPos" [buffer,normalise] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  FFTMKL [KR] buffer=0.0 epsilon=1.0e-6
-fFTMKL :: Rate -> UGen -> UGen -> UGen
-fFTMKL rate buffer epsilon = mkUGen Nothing [KR] (Left rate) "FFTMKL" [buffer,epsilon] Nothing 1 (Special 0) NoId
+fftmkl :: Rate -> UGen -> UGen -> UGen
+fftmkl rate buffer epsilon = mkUGen Nothing [KR] (Left rate) "FFTMKL" [buffer,epsilon] Nothing 1 (Special 0) NoId
 
 -- | Find peak value in an FFT frame
 --
 --  FFTPeak [KR] buffer=0.0 freqlo=0.0 freqhi=50000.0
-fFTPeak :: Rate -> UGen -> UGen -> UGen -> UGen
-fFTPeak rate buffer freqlo freqhi = mkUGen Nothing [KR] (Left rate) "FFTPeak" [buffer,freqlo,freqhi] Nothing 2 (Special 0) NoId
+fftPeak :: Rate -> UGen -> UGen -> UGen -> UGen
+fftPeak rate buffer freqlo freqhi = mkUGen Nothing [KR] (Left rate) "FFTPeak" [buffer,freqlo,freqhi] Nothing 2 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  FFTPhaseDev [KR] buffer=0.0 weight=0.0 powthresh=0.1
-fFTPhaseDev :: Rate -> UGen -> UGen -> UGen -> UGen
-fFTPhaseDev rate buffer weight powthresh = mkUGen Nothing [KR] (Left rate) "FFTPhaseDev" [buffer,weight,powthresh] Nothing 1 (Special 0) NoId
+fftPhaseDev :: Rate -> UGen -> UGen -> UGen -> UGen
+fftPhaseDev rate buffer weight powthresh = mkUGen Nothing [KR] (Left rate) "FFTPhaseDev" [buffer,weight,powthresh] Nothing 1 (Special 0) NoId
 
 -- | Instantaneous spectral power
 --
 --  FFTPower [KR] buffer=0.0 square=1.0
-fFTPower :: Rate -> UGen -> UGen -> UGen
-fFTPower rate buffer square = mkUGen Nothing [KR] (Left rate) "FFTPower" [buffer,square] Nothing 1 (Special 0) NoId
+fftPower :: Rate -> UGen -> UGen -> UGen
+fftPower rate buffer square = mkUGen Nothing [KR] (Left rate) "FFTPower" [buffer,square] Nothing 1 (Special 0) NoId
 
 -- | Spectral slope
 --
 --  FFTSlope [KR] buffer=0.0
-fFTSlope :: Rate -> UGen -> UGen
-fFTSlope rate buffer = mkUGen Nothing [KR] (Left rate) "FFTSlope" [buffer] Nothing 1 (Special 0) NoId
+fftSlope :: Rate -> UGen -> UGen
+fftSlope rate buffer = mkUGen Nothing [KR] (Left rate) "FFTSlope" [buffer] Nothing 1 (Special 0) NoId
 
 -- | Spectral spread
 --
 --  FFTSpread [KR] buffer=0.0 centroid=0.0
-fFTSpread :: Rate -> UGen -> UGen -> UGen
-fFTSpread rate buffer centroid = mkUGen Nothing [KR] (Left rate) "FFTSpread" [buffer,centroid] Nothing 1 (Special 0) NoId
+fftSpread :: Rate -> UGen -> UGen -> UGen
+fftSpread rate buffer centroid = mkUGen Nothing [KR] (Left rate) "FFTSpread" [buffer,centroid] Nothing 1 (Special 0) NoId
 
 -- | Spectral flatness, divided into subbands
 --
 --  FFTSubbandFlatness [KR] chain=0.0 cutfreqs=0.0
-fFTSubbandFlatness :: Rate -> UGen -> UGen -> UGen
-fFTSubbandFlatness rate chain cutfreqs = mkUGen Nothing [KR] (Left rate) "FFTSubbandFlatness" [chain,cutfreqs] Nothing 1 (Special 0) NoId
+fftSubbandFlatness :: Rate -> UGen -> UGen -> UGen
+fftSubbandFlatness rate chain cutfreqs = mkUGen Nothing [KR] (Left rate) "FFTSubbandFlatness" [chain,cutfreqs] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  FFTSubbandFlux [KR] chain=0.0 cutfreqs=0.0 posonly=0.0
-fFTSubbandFlux :: Rate -> UGen -> UGen -> UGen -> UGen
-fFTSubbandFlux rate chain cutfreqs posonly = mkUGen Nothing [KR] (Left rate) "FFTSubbandFlux" [chain,cutfreqs,posonly] Nothing 1 (Special 0) NoId
+fftSubbandFlux :: Rate -> UGen -> UGen -> UGen -> UGen
+fftSubbandFlux rate chain cutfreqs posonly = mkUGen Nothing [KR] (Left rate) "FFTSubbandFlux" [chain,cutfreqs,posonly] Nothing 1 (Special 0) NoId
 
 -- | Spectral power, divided into subbands
 --
 --  FFTSubbandPower [KR] chain=0.0 cutfreqs=0.0 square=1.0 scalemode=1.0
-fFTSubbandPower :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-fFTSubbandPower rate chain cutfreqs square scalemode = mkUGen Nothing [KR] (Left rate) "FFTSubbandPower" [chain,cutfreqs,square,scalemode] Nothing 1 (Special 0) NoId
+fftSubbandPower :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+fftSubbandPower rate chain cutfreqs square scalemode = mkUGen Nothing [KR] (Left rate) "FFTSubbandPower" [chain,cutfreqs,square,scalemode] Nothing 1 (Special 0) NoId
 
 -- | Phase modulation oscillator matrix.
 --
---  FM7 [AR] *ctlMatrix=0.0 *modMatrix=0.0
+--  FM7 [AR] *ctlMatrix=0.0 *modMatrix=0.0;    MCE=2
 fm7 :: Rate -> UGen -> UGen -> UGen
 fm7 rate ctlMatrix modMatrix = mkUGen Nothing [AR] (Left rate) "FM7" [] (Just [ctlMatrix,modMatrix]) 6 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Granular synthesis with FM grains
 --
---  FMGrain [AR] trigger=0.0 dur=1.0 carfreq=440.0 modfreq=200.0 index=1.0
+--  FMGrain [AR] trigger=0.0 dur=1.0 carfreq=440.0 modfreq=200.0 index=1.0;    FILTER: TRUE
 fmGrain :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 fmGrain trigger dur carfreq modfreq index_ = mkUGen Nothing [AR] (Right [0]) "FMGrain" [trigger,dur,carfreq,modfreq,index_] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Granular synthesis with FM grains and user supplied envelope
 --
---  FMGrainB [AR] trigger=0.0 dur=1.0 carfreq=440.0 modfreq=200.0 index=1.0 envbuf=0.0
+--  FMGrainB [AR] trigger=0.0 dur=1.0 carfreq=440.0 modfreq=200.0 index=1.0 envbuf=0.0;    FILTER: TRUE
 fmGrainB :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 fmGrainB trigger dur carfreq modfreq index_ envbuf = mkUGen Nothing [AR] (Right [0]) "FMGrainB" [trigger,dur,carfreq,modfreq,index_,envbuf] Nothing 1 (Special 0) NoId
 
@@ -715,7 +722,7 @@ fmGrainBBF rate trigger dur carfreq modfreq index_ envbuf azimuth elevation rho 
 fmGrainBF :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 fmGrainBF rate trigger dur carfreq modfreq index_ azimuth elevation rho wComp = mkUGen Nothing [AR] (Left rate) "FMGrainBF" [trigger,dur,carfreq,modfreq,index_,azimuth,elevation,rho,wComp] Nothing 4 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Granular synthesis with FM grains and user supplied envelopes
 --
 --  FMGrainI [AR] trigger=0.0 dur=1.0 carfreq=440.0 modfreq=200.0 index=1.0 envbuf1=0.0 envbuf2=0.0 ifac=0.5
 fmGrainI :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -727,29 +734,29 @@ fmGrainI rate trigger dur carfreq modfreq index_ envbuf1 envbuf2 ifac = mkUGen N
 fmGrainIBF :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 fmGrainIBF rate trigger dur carfreq modfreq index_ envbuf1 envbuf2 ifac azimuth elevation rho wComp = mkUGen Nothing [AR] (Left rate) "FMGrainIBF" [trigger,dur,carfreq,modfreq,index_,envbuf1,envbuf2,ifac,azimuth,elevation,rho,wComp] Nothing 4 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Decode an FMH signal for a specific speaker
 --
 --  FMHDecode1 [AR] w=0.0 x=0.0 y=0.0 z=0.0 r=0.0 s=0.0 t=0.0 u=0.0 v=0.0 azimuth=0.0 elevation=0.0
-fMHDecode1 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-fMHDecode1 rate w x y z r s t u v azimuth elevation = mkUGen Nothing [AR] (Left rate) "FMHDecode1" [w,x,y,z,r,s,t,u,v,azimuth,elevation] Nothing 1 (Special 0) NoId
+fmhDecode1 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+fmhDecode1 rate w x y z r s t u v azimuth elevation = mkUGen Nothing [AR] (Left rate) "FMHDecode1" [w,x,y,z,r,s,t,u,v,azimuth,elevation] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  FMHEncode0 [AR] in=0.0 azimuth=0.0 elevation=0.0 gain=1.0
-fMHEncode0 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-fMHEncode0 rate in_ azimuth elevation gain = mkUGen Nothing [AR] (Left rate) "FMHEncode0" [in_,azimuth,elevation,gain] Nothing 9 (Special 0) NoId
+fmhEncode0 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+fmhEncode0 rate in_ azimuth elevation gain = mkUGen Nothing [AR] (Left rate) "FMHEncode0" [in_,azimuth,elevation,gain] Nothing 9 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Second Order Ambisonic encoder
 --
 --  FMHEncode1 [AR] in=0.0 azimuth=0.0 elevation=0.0 rho=1.0 gain=1.0 wComp=0.0
-fMHEncode1 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-fMHEncode1 rate in_ azimuth elevation rho gain wComp = mkUGen Nothing [AR] (Left rate) "FMHEncode1" [in_,azimuth,elevation,rho,gain,wComp] Nothing 9 (Special 0) NoId
+fmhEncode1 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+fmhEncode1 rate in_ azimuth elevation rho gain wComp = mkUGen Nothing [AR] (Left rate) "FMHEncode1" [in_,azimuth,elevation,rho,gain,wComp] Nothing 9 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Second Order Ambisonic encoder
 --
 --  FMHEncode2 [AR] in=0.0 point_x=0.0 point_y=0.0 elevation=0.0 gain=1.0 wComp=0.0
-fMHEncode2 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-fMHEncode2 rate in_ point_x point_y elevation gain wComp = mkUGen Nothing [AR] (Left rate) "FMHEncode2" [in_,point_x,point_y,elevation,gain,wComp] Nothing 9 (Special 0) NoId
+fmhEncode2 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+fmhEncode2 rate in_ point_x point_y elevation gain wComp = mkUGen Nothing [AR] (Left rate) "FMHEncode2" [in_,point_x,point_y,elevation,gain,wComp] Nothing 9 (Special 0) NoId
 
 -- | Storing feature data from UGens in NRT mode
 --
@@ -805,174 +812,6 @@ fincoSprottS rate freq a b h xi yi zi = mkUGen Nothing [AR] (Left rate) "FincoSp
 fitzHughNagumo :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 fitzHughNagumo rate reset rateu ratew b0 b1 initu initw = mkUGen Nothing [AR] (Left rate) "FitzHughNagumo" [reset,rateu,ratew,b0,b1,initu,initw] Nothing 1 (Special 0) NoId
 
--- | First Order Ambisonic (FOA) UGen superclass
---
---  Foa [] maxSize=0.0
-foa :: Rate -> UGen -> UGen
-foa rate maxSize = mkUGen Nothing [IR,KR,AR,DR] (Left rate) "Foa" [maxSize] Nothing 1 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) asymmetry transformer
---
---  FoaAsymmetry [AR] in=0.0 angle=0.0
-foaAsymmetry :: Rate -> UGen -> UGen -> UGen
-foaAsymmetry rate in_ angle = mkUGen Nothing [AR] (Left rate) "FoaAsymmetry" [in_,angle] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) directivity transformer
---
---  FoaDirectO [AR] in=0.0 angle=0.0
-foaDirectO :: Rate -> UGen -> UGen -> UGen
-foaDirectO rate in_ angle = mkUGen Nothing [AR] (Left rate) "FoaDirectO" [in_,angle] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) directivity transformer
---
---  FoaDirectX [AR] in=0.0 angle=0.0
-foaDirectX :: Rate -> UGen -> UGen -> UGen
-foaDirectX rate in_ angle = mkUGen Nothing [AR] (Left rate) "FoaDirectX" [in_,angle] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) directivity transformer
---
---  FoaDirectY [AR] in=0.0 angle=0.0
-foaDirectY :: Rate -> UGen -> UGen -> UGen
-foaDirectY rate in_ angle = mkUGen Nothing [AR] (Left rate) "FoaDirectY" [in_,angle] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) directivity transformer
---
---  FoaDirectZ [AR] in=0.0 angle=0.0
-foaDirectZ :: Rate -> UGen -> UGen -> UGen
-foaDirectZ rate in_ angle = mkUGen Nothing [AR] (Left rate) "FoaDirectZ" [in_,angle] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) dominance transformer
---
---  FoaDominateX [AR] in=0.0 gain=0.0
-foaDominateX :: Rate -> UGen -> UGen -> UGen
-foaDominateX rate in_ gain = mkUGen Nothing [AR] (Left rate) "FoaDominateX" [in_,gain] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) dominance transformer
---
---  FoaDominateY [AR] in=0.0 gain=0.0
-foaDominateY :: Rate -> UGen -> UGen -> UGen
-foaDominateY rate in_ gain = mkUGen Nothing [AR] (Left rate) "FoaDominateY" [in_,gain] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) dominance transformer
---
---  FoaDominateZ [AR] in=0.0 gain=0.0
-foaDominateZ :: Rate -> UGen -> UGen -> UGen
-foaDominateZ rate in_ gain = mkUGen Nothing [AR] (Left rate) "FoaDominateZ" [in_,gain] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) focus transformer
---
---  FoaFocusX [AR] in=0.0 angle=0.0
-foaFocusX :: Rate -> UGen -> UGen -> UGen
-foaFocusX rate in_ angle = mkUGen Nothing [AR] (Left rate) "FoaFocusX" [in_,angle] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) focus transformer
---
---  FoaFocusY [AR] in=0.0 angle=0.0
-foaFocusY :: Rate -> UGen -> UGen -> UGen
-foaFocusY rate in_ angle = mkUGen Nothing [AR] (Left rate) "FoaFocusY" [in_,angle] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) focus transformer
---
---  FoaFocusZ [AR] in=0.0 angle=0.0
-foaFocusZ :: Rate -> UGen -> UGen -> UGen
-foaFocusZ rate in_ angle = mkUGen Nothing [AR] (Left rate) "FoaFocusZ" [in_,angle] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) nearfield compensation filter
---
---  FoaNFC [AR] in=0.0 distance=1.0
-foaNFC :: Rate -> UGen -> UGen -> UGen
-foaNFC rate in_ distance = mkUGen Nothing [AR] (Left rate) "FoaNFC" [in_,distance] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) panner
---
---  FoaPanB [AR] in=0.0 azimuth=0.0 elevation=0.0
-foaPanB :: Rate -> UGen -> UGen -> UGen -> UGen
-foaPanB rate in_ azimuth elevation = mkUGen Nothing [AR] (Left rate) "FoaPanB" [in_,azimuth,elevation] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) press transformer
---
---  FoaPressX [AR] in=0.0 angle=0.0
-foaPressX :: Rate -> UGen -> UGen -> UGen
-foaPressX rate in_ angle = mkUGen Nothing [AR] (Left rate) "FoaPressX" [in_,angle] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) press transformer
---
---  FoaPressY [AR] in=0.0 angle=0.0
-foaPressY :: Rate -> UGen -> UGen -> UGen
-foaPressY rate in_ angle = mkUGen Nothing [AR] (Left rate) "FoaPressY" [in_,angle] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) press transformer
---
---  FoaPressZ [AR] in=0.0 angle=0.0
-foaPressZ :: Rate -> UGen -> UGen -> UGen
-foaPressZ rate in_ angle = mkUGen Nothing [AR] (Left rate) "FoaPressZ" [in_,angle] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) proximity effect filter
---
---  FoaProximity [AR] in=0.0 distance=1.0
-foaProximity :: Rate -> UGen -> UGen -> UGen
-foaProximity rate in_ distance = mkUGen Nothing [AR] (Left rate) "FoaProximity" [in_,distance] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) psychoacoustic shelf filter
---
---  FoaPsychoShelf [AR] in=0.0 freq=400.0 k0=0.0 k1=0.0
-foaPsychoShelf :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-foaPsychoShelf rate in_ freq k0 k1 = mkUGen Nothing [AR] (Left rate) "FoaPsychoShelf" [in_,freq,k0,k1] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) push transformer
---
---  FoaPushX [AR] in=0.0 angle=0.0
-foaPushX :: Rate -> UGen -> UGen -> UGen
-foaPushX rate in_ angle = mkUGen Nothing [AR] (Left rate) "FoaPushX" [in_,angle] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) push transformer
---
---  FoaPushY [AR] in=0.0 angle=0.0
-foaPushY :: Rate -> UGen -> UGen -> UGen
-foaPushY rate in_ angle = mkUGen Nothing [AR] (Left rate) "FoaPushY" [in_,angle] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) push transformer
---
---  FoaPushZ [AR] in=0.0 angle=0.0
-foaPushZ :: Rate -> UGen -> UGen -> UGen
-foaPushZ rate in_ angle = mkUGen Nothing [AR] (Left rate) "FoaPushZ" [in_,angle] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) rotation transformer
---
---  FoaRotate [AR] in=0.0 angle=0.0
-foaRotate :: Rate -> UGen -> UGen -> UGen
-foaRotate rate in_ angle = mkUGen Nothing [AR] (Left rate) "FoaRotate" [in_,angle] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) rotation transformer
---
---  FoaTilt [AR] in=0.0 angle=0.0
-foaTilt :: Rate -> UGen -> UGen -> UGen
-foaTilt rate in_ angle = mkUGen Nothing [AR] (Left rate) "FoaTilt" [in_,angle] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) rotation transformer
---
---  FoaTumble [AR] in=0.0 angle=0.0
-foaTumble :: Rate -> UGen -> UGen -> UGen
-foaTumble rate in_ angle = mkUGen Nothing [AR] (Left rate) "FoaTumble" [in_,angle] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) zoom transformer
---
---  FoaZoomX [AR] in=0.0 angle=0.0
-foaZoomX :: Rate -> UGen -> UGen -> UGen
-foaZoomX rate in_ angle = mkUGen Nothing [AR] (Left rate) "FoaZoomX" [in_,angle] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) zoom transformer
---
---  FoaZoomY [AR] in=0.0 angle=0.0
-foaZoomY :: Rate -> UGen -> UGen -> UGen
-foaZoomY rate in_ angle = mkUGen Nothing [AR] (Left rate) "FoaZoomY" [in_,angle] Nothing 4 (Special 0) NoId
-
--- | First Order Ambisonic (FOA) zoom transformer
---
---  FoaZoomZ [AR] in=0.0 angle=0.0
-foaZoomZ :: Rate -> UGen -> UGen -> UGen
-foaZoomZ rate in_ angle = mkUGen Nothing [AR] (Left rate) "FoaZoomZ" [in_,angle] Nothing 4 (Special 0) NoId
-
 -- | calculates spectral MSE distance of two fft chains
 --
 --  FrameCompare [KR] buffer1=0.0 buffer2=0.0 wAmount=0.5
@@ -987,7 +826,7 @@ friction rate in_ friction_ spring_ damp mass beltmass = mkUGen Nothing [KR,AR] 
 
 -- | Single gammatone filter
 --
---  Gammatone [AR] input=0.0 centrefrequency=440.0 bandwidth=200.0
+--  Gammatone [AR] input=0.0 centrefrequency=440.0 bandwidth=200.0;    FILTER: TRUE
 gammatone :: UGen -> UGen -> UGen -> UGen
 gammatone input centrefrequency bandwidth = mkUGen Nothing [AR] (Right [0]) "Gammatone" [input,centrefrequency,bandwidth] Nothing 1 (Special 0) NoId
 
@@ -1113,13 +952,13 @@ gravityGrid2 rate reset rate_ newx newy bufnum = mkUGen Nothing [AR] (Left rate)
 
 -- | algorithmic delay
 --
---  GreyholeRaw [AR] in1=0.0 in2=0.0 damping=0.0 delaytime=2.0 diffusion=0.5 feedback=0.9 moddepth=0.1 modfreq=2.0 size=1.0
+--  GreyholeRaw [AR] in1=0.0 in2=0.0 damping=0.0 delaytime=2.0 diffusion=0.5 feedback=0.9 moddepth=0.1 modfreq=2.0 size=1.0;    FILTER: TRUE
 greyholeRaw :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 greyholeRaw in1 in2 damping delaytime diffusion feedback moddepth modfreq size = mkUGen Nothing [AR] (Right [0,1]) "GreyholeRaw" [in1,in2,damping,delaytime,diffusion,feedback,moddepth,modfreq,size] Nothing 2 (Special 0) NoId
 
 -- | Simple cochlear hair cell model
 --
---  HairCell [KR,AR] input=0.0 spontaneousrate=0.0 boostrate=200.0 restorerate=1000.0 loss=0.99
+--  HairCell [KR,AR] input=0.0 spontaneousrate=0.0 boostrate=200.0 restorerate=1000.0 loss=0.99;    FILTER: TRUE
 hairCell :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 hairCell input spontaneousrate boostrate restorerate loss = mkUGen Nothing [KR,AR] (Right [0]) "HairCell" [input,spontaneousrate,boostrate,restorerate,loss] Nothing 1 (Special 0) NoId
 
@@ -1155,7 +994,7 @@ iCepstrum rate cepchain fftbuf = mkUGen Nothing [IR,KR,AR,DR] (Left rate) "ICeps
 
 -- | 24db/oct rolloff, 4nd order resonant Low Pass Filter
 --
---  IIRFilter [AR] in=0.0 freq=440.0 rq=1.0
+--  IIRFilter [AR] in=0.0 freq=440.0 rq=1.0;    FILTER: TRUE
 iirFilter :: UGen -> UGen -> UGen -> UGen
 iirFilter in_ freq rq = mkUGen Nothing [AR] (Right [0]) "IIRFilter" [in_,freq,rq] Nothing 1 (Special 0) NoId
 
@@ -1213,24 +1052,6 @@ instruction rate bufnum = mkUGen Nothing [AR] (Left rate) "Instruction" [bufnum]
 jPverbRaw :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 jPverbRaw in1 in2 damp earlydiff highband highx lowband lowx mdepth mfreq midx size t60 = mkUGen Nothing [KR,AR] (Right [0]) "JPverbRaw" [in1,in2,damp,earlydiff,highband,highx,lowband,lowx,mdepth,mfreq,midx,size,t60] Nothing 2 (Special 0) NoId
 
--- | (Undocumented class)
---
---  JoshGrain [] maxSize=0.0
-joshGrain :: Rate -> UGen -> UGen
-joshGrain rate maxSize = mkUGen Nothing [IR,KR,AR,DR] (Left rate) "JoshGrain" [maxSize] Nothing 1 (Special 0) NoId
-
--- | (Undocumented class)
---
---  JoshMultiChannelGrain [] maxSize=0.0
-joshMultiChannelGrain :: Rate -> UGen -> UGen
-joshMultiChannelGrain rate maxSize = mkUGen Nothing [IR,KR,AR,DR] (Left rate) "JoshMultiChannelGrain" [maxSize] Nothing 1 (Special 0) NoId
-
--- | (Undocumented class)
---
---  JoshMultiOutGrain [] maxSize=0.0
-joshMultiOutGrain :: Rate -> UGen -> UGen
-joshMultiOutGrain rate maxSize = mkUGen Nothing [IR,KR,AR,DR] (Left rate) "JoshMultiOutGrain" [maxSize] Nothing 1 (Special 0) NoId
-
 -- | k-means classification in real time
 --
 --  KMeansRT [KR] bufnum=0.0 inputdata=0.0 k=5.0 gate=1.0 reset=0.0 learn=1.0
@@ -1285,35 +1106,41 @@ lpcAnalyzer input source n p testE delta windowtype = mkUGen Nothing [AR] (Right
 lpcError :: Rate -> UGen -> UGen -> UGen
 lpcError rate input p = mkUGen Nothing [AR] (Left rate) "LPCError" [input,p] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Utilize LPC data
 --
 --  LPCSynth [AR] buffer=0.0 signal=0.0 pointer=0.0
 lpcSynth :: UGen -> UGen -> UGen -> UGen
 lpcSynth buffer signal pointer = mkUGen Nothing [AR] (Left AR) "LPCSynth" [buffer,signal,pointer] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Utilize LPC data
 --
 --  LPCVals [KR,AR] buffer=0.0 pointer=0.0
-lpcVals :: Rate -> UGen -> UGen -> UGen
-lpcVals rate buffer pointer = mkUGen Nothing [KR,AR] (Left rate) "LPCVals" [buffer,pointer] Nothing 3 (Special 0) NoId
+lpcVals :: UGen -> UGen -> UGen
+lpcVals buffer pointer = mkUGen Nothing [KR,AR] (Left AR) "LPCVals" [buffer,pointer] Nothing 3 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  LPF1 [KR,AR] in=0.0 freq=1000.0
-lPF1 :: Rate -> UGen -> UGen -> UGen
-lPF1 rate in_ freq = mkUGen Nothing [KR,AR] (Left rate) "LPF1" [in_,freq] Nothing 1 (Special 0) NoId
+lpf1 :: Rate -> UGen -> UGen -> UGen
+lpf1 rate in_ freq = mkUGen Nothing [KR,AR] (Left rate) "LPF1" [in_,freq] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  LPF18 [AR] in=0.0 freq=100.0 res=1.0 dist=0.4
-lPF18 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-lPF18 rate in_ freq res dist = mkUGen Nothing [AR] (Left rate) "LPF18" [in_,freq,res,dist] Nothing 1 (Special 0) NoId
+lpf18 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+lpf18 rate in_ freq res dist = mkUGen Nothing [AR] (Left rate) "LPF18" [in_,freq,res,dist] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  LPFVS6 [KR,AR] in=0.0 freq=1000.0 slope=0.5
-lPFVS6 :: Rate -> UGen -> UGen -> UGen -> UGen
-lPFVS6 rate in_ freq slope_ = mkUGen Nothing [KR,AR] (Left rate) "LPFVS6" [in_,freq,slope_] Nothing 1 (Special 0) NoId
+lpfvs6 :: Rate -> UGen -> UGen -> UGen -> UGen
+lpfvs6 rate in_ freq slope_ = mkUGen Nothing [KR,AR] (Left rate) "LPFVS6" [in_,freq,slope_] Nothing 1 (Special 0) NoId
+
+-- | A digital model of the Buchla Lowpass-Gate
+--
+--  LPG [AR] input=0.0 controlinput=0.0 controloffset=0.0 controlscale=1.0 vca=1.0 resonance=1.5 lowpassmode=1.0 linearity=1.0
+lpg :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+lpg input controlinput controloffset controlscale vca resonance lowpassmode linearity = mkUGen Nothing [AR] (Right [0]) "LPG" [input,controlinput,controloffset,controlscale,vca,resonance,lowpassmode,linearity] Nothing 1 (Special 0) NoId
 
 -- | Linear Time Invariant General Filter Equation
 --
@@ -1393,11 +1220,17 @@ lorenz2DN rate minfreq maxfreq s r b h x0 y0 z0 = mkUGen Nothing [KR,AR] (Left r
 lorenzTrig :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 lorenzTrig rate minfreq maxfreq s r b h x0 y0 z0 = mkUGen Nothing [KR,AR] (Left rate) "LorenzTrig" [minfreq,maxfreq,s,r,b,h,x0,y0,z0] Nothing 1 (Special 0) NoId
 
+-- | 2-species Predator-Prey model
+--
+--  LotkaVolterra [AR] freq=22050.0 a=1.5 b=1.5 c=0.5 d=1.5 h=5.0e-2 xi=1.0 yi=0.2
+lotkaVolterra :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+lotkaVolterra rate freq a b c d h xi yi = mkUGen Nothing [AR] (Left rate) "LotkaVolterra" [freq,a,b,c,d,h,xi,yi] Nothing 2 (Special 0) NoId
+
 -- | (Undocumented class)
 --
 --  MCLDChaosGen [] maxSize=0.0
-mCLDChaosGen :: Rate -> UGen -> UGen
-mCLDChaosGen rate maxSize = mkUGen Nothing [IR,KR,AR,DR] (Left rate) "MCLDChaosGen" [maxSize] Nothing 1 (Special 0) NoId
+mcldChaosGen :: Rate -> UGen -> UGen
+mcldChaosGen rate maxSize = mkUGen Nothing [IR,KR,AR,DR] (Left rate) "MCLDChaosGen" [maxSize] Nothing 1 (Special 0) NoId
 
 -- | First order Markov Chain implementation for audio signals
 --
@@ -1411,13 +1244,19 @@ markovSynth rate in_ isRecording waitTime tableSize = mkUGen Nothing [AR] (Left 
 matchingP :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 matchingP rate dict in_ dictsize ntofind hop method = mkUGen Nothing [KR,AR] (Left rate) "MatchingP" [dict,in_,dictsize,ntofind,hop,method] Nothing 4 (Special 0) NoId
 
+-- | (Undocumented class)
+--
+--  MatchingPResynth [KR,AR] dict=0.0 method=0.0 trigger=0.0 residual=0.0 activs=0.0
+matchingPResynth :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+matchingPResynth rate dict method trigger residual activs = mkUGen Nothing [KR,AR] (Left rate) "MatchingPResynth" [dict,method,trigger,residual,activs] Nothing 1 (Special 0) NoId
+
 -- | maximum within last x samples
 --
 --  Max [KR] in=0.0 numsamp=64.0
 max :: Rate -> UGen -> UGen -> UGen
 max rate in_ numsamp = mkUGen Nothing [KR] (Left rate) "Max" [in_,numsamp] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Tracks and prints amplitudes
 --
 --  Maxamp [AR] in=0.0 numSamps=1000.0
 maxamp :: Rate -> UGen -> UGen -> UGen
@@ -1437,7 +1276,7 @@ meanTriggered rate in_ trig_ length_ = mkUGen Nothing [KR,AR] (Left rate) "MeanT
 
 -- | Meddis cochlear hair cell model
 --
---  Meddis [KR,AR] input=0.0
+--  Meddis [KR,AR] input=0.0;    FILTER: TRUE
 meddis :: UGen -> UGen
 meddis input = mkUGen Nothing [KR,AR] (Right [0]) "Meddis" [input] Nothing 1 (Special 0) NoId
 
@@ -1465,7 +1304,7 @@ membraneCircle rate excitation tension loss = mkUGen Nothing [AR] (Left rate) "M
 membraneHexagon :: Rate -> UGen -> UGen -> UGen -> UGen
 membraneHexagon rate excitation tension loss = mkUGen Nothing [AR] (Left rate) "MembraneHexagon" [excitation,tension,loss] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Metronome
 --
 --  Metro [KR,AR] bpm=0.0 numBeats=0.0
 metro :: Rate -> UGen -> UGen -> UGen
@@ -1515,7 +1354,7 @@ miRings rate in_ trig_ pit struct bright damp pos model poly intern_exciter east
 
 -- | Classic resonant LP filter
 --
---  MiRipples [AR] in=0.0 cf=0.3 reson=0.2 drive=1.0
+--  MiRipples [AR] in=0.0 cf=0.3 reson=0.2 drive=1.0;    FILTER: TRUE
 miRipples :: UGen -> UGen -> UGen -> UGen -> UGen
 miRipples in_ cf reson drive = mkUGen Nothing [AR] (Right [0]) "MiRipples" [in_,cf,reson,drive] Nothing 1 (Special 0) NoId
 
@@ -1527,7 +1366,7 @@ miTides rate freq shape slope_ smooth shift trig_ clock output_mode ramp_mode ra
 
 -- | stereo reverb
 --
---  MiVerb [AR] inputArray=0.0 time=0.7 drywet=0.5 damp=0.5 hp=5.0e-2 freeze=0.0 diff=0.625
+--  MiVerb [AR] time=0.7 drywet=0.5 damp=0.5 hp=5.0e-2 freeze=0.0 diff=0.625 *inputArray=0.0;    MCE=1, FILTER: TRUE, REORDERS INPUTS: [6,0,1,2,3,4,5]
 miVerb :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 miVerb time drywet damp hp freeze diff inputArray = mkUGen Nothing [AR] (Right [6]) "MiVerb" [time,drywet,damp,hp,freeze,diff] (Just [inputArray]) 2 (Special 0) NoId
 
@@ -1537,13 +1376,13 @@ miVerb time drywet damp hp freeze diff inputArray = mkUGen Nothing [AR] (Right [
 miWarps :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 miWarps rate carrier modulator lev1 lev2 algo timb osc_ pit easteregg = mkUGen Nothing [AR] (Left rate) "MiWarps" [carrier,modulator,lev1,lev2,algo,timb,osc_,pit,easteregg] Nothing 2 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Granulates real-time input
 --
 --  MonoGrain [AR] in=0.0 winsize=0.1 grainrate=10.0 winrandpct=0.0
 monoGrain :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
 monoGrain rate in_ winsize grainrate winrandpct = mkUGen Nothing [AR] (Left rate) "MonoGrain" [in_,winsize,grainrate,winrandpct] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Granulates real-time input with Ambisonic panning
 --
 --  MonoGrainBF [AR] in=0.0 winsize=0.1 grainrate=10.0 winrandpct=0.0 azimuth=0.0 azrand=0.0 elevation=0.0 elrand=0.0 rho=1.0
 monoGrainBF :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -1551,27 +1390,15 @@ monoGrainBF rate in_ winsize grainrate winrandpct azimuth azrand elevation elran
 
 -- | Moog Filter Emulation
 --
---  MoogLadder [KR,AR] in=0.0 ffreq=440.0 res=0.0
+--  MoogLadder [KR,AR] in=0.0 ffreq=440.0 res=0.0;    FILTER: TRUE
 moogLadder :: UGen -> UGen -> UGen -> UGen
 moogLadder in_ ffreq res = mkUGen Nothing [KR,AR] (Right [0]) "MoogLadder" [in_,ffreq,res] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Moog  filter emulation
 --
 --  MoogVCF [AR] in=0.0 fco=0.0 res=0.0
-moogVCF :: UGen -> UGen -> UGen -> UGen
-moogVCF in_ fco res = mkUGen Nothing [AR] (Right [0]) "MoogVCF" [in_,fco,res] Nothing 1 (Special 0) NoId
-
--- | (Undocumented class)
---
---  MultiOutDemandUGen [DR] maxSize=0.0;    DEMAND/NONDET
-multiOutDemandUGen :: Rate -> UGen -> UGen
-multiOutDemandUGen rate maxSize = mkUGen Nothing [DR] (Left rate) "MultiOutDemandUGen" [maxSize] Nothing 1 (Special 0) NoId
-
--- | Stereo reverb
---
---  NHHall [AR] in1=0.0 in2=0.0 rt60=1.0 stereo=0.5 lowFreq=200.0 lowRatio=0.5 hiFreq=4000.0 hiRatio=0.5 earlyDiffusion=0.5 lateDiffusion=0.5 modRate=0.2 modDepth=0.3
-nhHall :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-nhHall in1 in2 rt60 stereo lowFreq lowRatio hiFreq hiRatio earlyDiffusion lateDiffusion modRate modDepth = mkUGen Nothing [AR] (Right [0,1]) "NHHall" [in1,in2,rt60,stereo,lowFreq,lowRatio,hiFreq,hiRatio,earlyDiffusion,lateDiffusion,modRate,modDepth] Nothing 2 (Special 0) NoId
+moogVCF :: Rate -> UGen -> UGen -> UGen -> UGen
+moogVCF rate in_ fco res = mkUGen Nothing [AR] (Left rate) "MoogVCF" [in_,fco,res] Nothing 1 (Special 0) NoId
 
 -- | Non Linear Filter Equation
 --
@@ -1582,26 +1409,26 @@ nl rate input bufnuma bufnumb guard1 guard2 = mkUGen Nothing [AR] (Left rate) "N
 -- | Arbitrary Non Linear Filter Equation
 --
 --  NL2 [AR] input=0.0 bufnum=0.0 maxsizea=10.0 maxsizeb=10.0 guard1=1000.0 guard2=100.0
-nL2 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-nL2 rate input bufnum maxsizea maxsizeb guard1 guard2 = mkUGen Nothing [AR] (Left rate) "NL2" [input,bufnum,maxsizea,maxsizeb,guard1,guard2] Nothing 1 (Special 0) NoId
+nl2 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+nl2 rate input bufnum maxsizea maxsizeb guard1 guard2 = mkUGen Nothing [AR] (Left rate) "NL2" [input,bufnum,maxsizea,maxsizeb,guard1,guard2] Nothing 1 (Special 0) NoId
 
 -- | Non-linear Filter
 --
 --  NLFiltC [KR,AR] input=0.0 a=0.0 b=0.0 d=0.0 c=0.0 l=0.0
-nLFiltC :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-nLFiltC rate input a b d c l = mkUGen Nothing [KR,AR] (Left rate) "NLFiltC" [input,a,b,d,c,l] Nothing 1 (Special 0) NoId
+nlFiltC :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+nlFiltC rate input a b d c l = mkUGen Nothing [KR,AR] (Left rate) "NLFiltC" [input,a,b,d,c,l] Nothing 1 (Special 0) NoId
 
 -- | Non-linear Filter
 --
 --  NLFiltL [KR,AR] input=0.0 a=0.0 b=0.0 d=0.0 c=0.0 l=0.0
-nLFiltL :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-nLFiltL rate input a b d c l = mkUGen Nothing [KR,AR] (Left rate) "NLFiltL" [input,a,b,d,c,l] Nothing 1 (Special 0) NoId
+nlFiltL :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+nlFiltL rate input a b d c l = mkUGen Nothing [KR,AR] (Left rate) "NLFiltL" [input,a,b,d,c,l] Nothing 1 (Special 0) NoId
 
 -- | Non-linear Filter
 --
 --  NLFiltN [KR,AR] input=0.0 a=0.0 b=0.0 d=0.0 c=0.0 l=0.0
-nLFiltN :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-nLFiltN rate input a b d c l = mkUGen Nothing [KR,AR] (Left rate) "NLFiltN" [input,a,b,d,c,l] Nothing 1 (Special 0) NoId
+nlFiltN :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+nlFiltN rate input a b d c l = mkUGen Nothing [KR,AR] (Left rate) "NLFiltN" [input,a,b,d,c,l] Nothing 1 (Special 0) NoId
 
 -- | physical modeling simulation; N tubes
 --
@@ -1642,38 +1469,38 @@ nestedAllpassN in_ maxdelay1 delay1_ gain1 maxdelay2 delay2_ gain2 = mkUGen Noth
 -- | (Undocumented class)
 --
 --  OSFold4 [AR] in=0.0 lo=0.0 hi=0.0
-oSFold4 :: Rate -> UGen -> UGen -> UGen -> UGen
-oSFold4 rate in_ lo hi = mkUGen Nothing [AR] (Left rate) "OSFold4" [in_,lo,hi] Nothing 1 (Special 0) NoId
+osFold4 :: Rate -> UGen -> UGen -> UGen -> UGen
+osFold4 rate in_ lo hi = mkUGen Nothing [AR] (Left rate) "OSFold4" [in_,lo,hi] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  OSFold8 [AR] in=0.0 lo=0.0 hi=0.0
-oSFold8 :: Rate -> UGen -> UGen -> UGen -> UGen
-oSFold8 rate in_ lo hi = mkUGen Nothing [AR] (Left rate) "OSFold8" [in_,lo,hi] Nothing 1 (Special 0) NoId
+osFold8 :: Rate -> UGen -> UGen -> UGen -> UGen
+osFold8 rate in_ lo hi = mkUGen Nothing [AR] (Left rate) "OSFold8" [in_,lo,hi] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  OSTrunc4 [AR] in=0.0 quant=0.5
-oSTrunc4 :: Rate -> UGen -> UGen -> UGen
-oSTrunc4 rate in_ quant = mkUGen Nothing [AR] (Left rate) "OSTrunc4" [in_,quant] Nothing 1 (Special 0) NoId
+osTrunc4 :: Rate -> UGen -> UGen -> UGen
+osTrunc4 rate in_ quant = mkUGen Nothing [AR] (Left rate) "OSTrunc4" [in_,quant] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  OSTrunc8 [AR] in=0.0 quant=0.5
-oSTrunc8 :: Rate -> UGen -> UGen -> UGen
-oSTrunc8 rate in_ quant = mkUGen Nothing [AR] (Left rate) "OSTrunc8" [in_,quant] Nothing 1 (Special 0) NoId
+osTrunc8 :: Rate -> UGen -> UGen -> UGen
+osTrunc8 rate in_ quant = mkUGen Nothing [AR] (Left rate) "OSTrunc8" [in_,quant] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  OSWrap4 [AR] in=0.0 lo=0.0 hi=0.0
-oSWrap4 :: Rate -> UGen -> UGen -> UGen -> UGen
-oSWrap4 rate in_ lo hi = mkUGen Nothing [AR] (Left rate) "OSWrap4" [in_,lo,hi] Nothing 1 (Special 0) NoId
+osWrap4 :: Rate -> UGen -> UGen -> UGen -> UGen
+osWrap4 rate in_ lo hi = mkUGen Nothing [AR] (Left rate) "OSWrap4" [in_,lo,hi] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  OSWrap8 [AR] in=0.0 lo=0.0 hi=0.0
-oSWrap8 :: Rate -> UGen -> UGen -> UGen -> UGen
-oSWrap8 rate in_ lo hi = mkUGen Nothing [AR] (Left rate) "OSWrap8" [in_,lo,hi] Nothing 1 (Special 0) NoId
+osWrap8 :: Rate -> UGen -> UGen -> UGen -> UGen
+osWrap8 rate in_ lo hi = mkUGen Nothing [AR] (Left rate) "OSWrap8" [in_,lo,hi] Nothing 1 (Special 0) NoId
 
 -- | Extract basic statistics from a series of onset triggers
 --
@@ -1705,25 +1532,25 @@ oteyPianoStrings rate freq vel t_gate rmin rmax rampl rampr rcore lmin lmax lamp
 oteySoundBoard :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
 oteySoundBoard rate inp c1 c3 mix = mkUGen Nothing [AR] (Left rate) "OteySoundBoard" [inp,c1,c3,mix] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Return mag and freq data from a CSound pv
 --
 --  PVInfo [KR,AR] pvbuffer=0.0 binNum=0.0 filePointer=0.0
-pVInfo :: Rate -> UGen -> UGen -> UGen -> UGen
-pVInfo rate pvbuffer binNum filePointer = mkUGen Nothing [KR,AR] (Left rate) "PVInfo" [pvbuffer,binNum,filePointer] Nothing 2 (Special 0) NoId
+pvInfo :: Rate -> UGen -> UGen -> UGen -> UGen
+pvInfo rate pvbuffer binNum filePointer = mkUGen Nothing [KR,AR] (Left rate) "PVInfo" [pvbuffer,binNum,filePointer] Nothing 2 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Resynthesize Csound PV data
 --
 --  PVSynth [AR] pvbuffer=0.0 numBins=0.0 binStart=0.0 binSkip=1.0 filePointer=0.0 freqMul=1.0 freqAdd=0.0
-pVSynth :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-pVSynth rate pvbuffer numBins binStart binSkip filePointer freqMul freqAdd = mkUGen Nothing [AR] (Left rate) "PVSynth" [pvbuffer,numBins,binStart,binSkip,filePointer,freqMul,freqAdd] Nothing 1 (Special 0) NoId
+pvSynth :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+pvSynth rate pvbuffer numBins binStart binSkip filePointer freqMul freqAdd = mkUGen Nothing [AR] (Left rate) "PVSynth" [pvbuffer,numBins,binStart,binSkip,filePointer,freqMul,freqAdd] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Plays FFT data to a memory buffer
 --
 --  PV_BinBufRd [KR] buffer=0.0 playbuf=0.0 point=1.0 binStart=0.0 binSkip=1.0 numBins=1.0 clear=0.0
 pv_BinBufRd :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 pv_BinBufRd buffer playbuf_ point binStart binSkip numBins clear = mkUGen Nothing [KR] (Left KR) "PV_BinBufRd" [buffer,playbuf_,point,binStart,binSkip,numBins,clear] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Delay and Feedback on a bin by bin basis.
 --
 --  PV_BinDelay [KR] buffer=0.0 maxdelay=0.0 delaybuf=0.0 fbbuf=0.0 hop=0.5
 pv_BinDelay :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -1735,13 +1562,13 @@ pv_BinDelay buffer maxdelay delaybuf fbbuf hop = mkUGen Nothing [KR] (Left KR) "
 pv_BinFilter :: UGen -> UGen -> UGen -> UGen
 pv_BinFilter buffer start end = mkUGen Nothing [KR] (Left KR) "PV_BinFilter" [buffer,start,end] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Plays FFT data to a memory buffer
 --
 --  PV_BinPlayBuf [KR] buffer=0.0 playbuf=0.0 rate=1.0 offset=0.0 binStart=0.0 binSkip=1.0 numBins=1.0 loop=0.0 clear=0.0
 pv_BinPlayBuf :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 pv_BinPlayBuf buffer playbuf_ rate_ offset binStart binSkip numBins loop clear = mkUGen Nothing [KR] (Left KR) "PV_BinPlayBuf" [buffer,playbuf_,rate_,offset,binStart,binSkip,numBins,loop,clear] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Plays FFT data from a memory buffer
 --
 --  PV_BufRd [KR] buffer=0.0 playbuf=0.0 point=1.0
 pv_BufRd :: UGen -> UGen -> UGen -> UGen
@@ -1771,7 +1598,7 @@ pv_Compander buffer thresh slopeBelow slopeAbove = mkUGen Nothing [KR] (Left KR)
 pv_Cutoff :: UGen -> UGen -> UGen -> UGen
 pv_Cutoff bufferA bufferB wipe = mkUGen Nothing [KR] (Left KR) "PV_Cutoff" [bufferA,bufferB,wipe] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Return the even numbered bins in an FFT buffer
 --
 --  PV_EvenBin [KR] buffer=0.0
 pv_EvenBin :: UGen -> UGen
@@ -1781,27 +1608,27 @@ pv_EvenBin buffer = mkUGen Nothing [KR] (Left KR) "PV_EvenBin" [buffer] Nothing 
 --
 --  PV_ExtractRepeat [KR] buffer=0.0 loopbuf=0.0 loopdur=0.0 memorytime=30.0 which=0.0 ffthop=0.5 thresh=1.0
 pv_ExtractRepeat :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-pv_ExtractRepeat buffer loopbuf loopdur memorytime which ffthop thresh = mkUGen Nothing [KR] (Left KR) "PV_ExtractRepeat" [buffer,loopbuf,loopdur,memorytime,which,ffthop,thresh] Nothing 1 (Special 0) NoId
+pv_ExtractRepeat buffer loopbuf_ loopdur memorytime which ffthop thresh = mkUGen Nothing [KR] (Left KR) "PV_ExtractRepeat" [buffer,loopbuf_,loopdur,memorytime,which,ffthop,thresh] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Freeze FFT frames
 --
 --  PV_Freeze [KR] buffer=0.0 freeze=0.0
 pv_Freeze :: UGen -> UGen -> UGen
 pv_Freeze buffer freeze = mkUGen Nothing [KR] (Left KR) "PV_Freeze" [buffer,freeze] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Store FFT data in another buffer for other use
 --
 --  PV_FreqBuffer [KR] buffer=0.0 databuffer=0.0
 pv_FreqBuffer :: UGen -> UGen -> UGen
 pv_FreqBuffer buffer databuffer = mkUGen Nothing [KR] (Left KR) "PV_FreqBuffer" [buffer,databuffer] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Invert FFT frames
 --
 --  PV_Invert [KR] buffer=0.0
 pv_Invert :: UGen -> UGen
 pv_Invert buffer = mkUGen Nothing [KR] (Left KR) "PV_Invert" [buffer] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Store FFT data in another buffer for other use
 --
 --  PV_MagBuffer [KR] buffer=0.0 databuffer=0.0
 pv_MagBuffer :: UGen -> UGen -> UGen
@@ -1825,7 +1652,7 @@ pv_MagGate buffer thresh remove = mkUGen Nothing [KR] (Left KR) "PV_MagGate" [bu
 pv_MagLog :: UGen -> UGen
 pv_MagLog buffer = mkUGen Nothing [KR] (Left KR) "PV_MagLog" [buffer] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Remap magnitudes to a new mag curve
 --
 --  PV_MagMap [KR] buffer=0.0 mapbuf=0.0
 pv_MagMap :: UGen -> UGen -> UGen
@@ -1861,13 +1688,13 @@ pv_MagSmooth buffer factor = mkUGen Nothing [KR] (Left KR) "PV_MagSmooth" [buffe
 pv_MagSubtract :: UGen -> UGen -> UGen -> UGen
 pv_MagSubtract bufferA bufferB zerolimit = mkUGen Nothing [KR] (Left KR) "PV_MagSubtract" [bufferA,bufferB,zerolimit] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Return the N strongest bins
 --
 --  PV_MaxMagN [KR] buffer=0.0 numbins=0.0
 pv_MaxMagN :: UGen -> UGen -> UGen
 pv_MaxMagN buffer numbins = mkUGen Nothing [KR] (Left KR) "PV_MaxMagN" [buffer,numbins] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Return the N weakest bins
 --
 --  PV_MinMagN [KR] buffer=0.0 numbins=0.0
 pv_MinMagN :: UGen -> UGen -> UGen
@@ -1879,31 +1706,31 @@ pv_MinMagN buffer numbins = mkUGen Nothing [KR] (Left KR) "PV_MinMagN" [buffer,n
 pv_Morph :: UGen -> UGen -> UGen -> UGen
 pv_Morph bufferA bufferB morph = mkUGen Nothing [KR] (Left KR) "PV_Morph" [bufferA,bufferB,morph] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Return only bins that are unstable
 --
 --  PV_NoiseSynthF [KR] buffer=0.0 threshold=0.1 numFrames=2.0 initflag=0.0
 pv_NoiseSynthF :: UGen -> UGen -> UGen -> UGen -> UGen
 pv_NoiseSynthF buffer threshold numFrames initflag = mkUGen Nothing [KR] (Left KR) "PV_NoiseSynthF" [buffer,threshold,numFrames,initflag] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Return only bins that are unstable
 --
 --  PV_NoiseSynthP [KR] buffer=0.0 threshold=0.1 numFrames=2.0 initflag=0.0
 pv_NoiseSynthP :: UGen -> UGen -> UGen -> UGen -> UGen
 pv_NoiseSynthP buffer threshold numFrames initflag = mkUGen Nothing [KR] (Left KR) "PV_NoiseSynthP" [buffer,threshold,numFrames,initflag] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Return the odd numbered bins in an FFT buffer
 --
 --  PV_OddBin [KR] buffer=0.0
 pv_OddBin :: UGen -> UGen
 pv_OddBin buffer = mkUGen Nothing [KR] (Left KR) "PV_OddBin" [buffer] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Return only bins that are stable
 --
 --  PV_PartialSynthF [KR] buffer=0.0 threshold=0.1 numFrames=2.0 initflag=0.0
 pv_PartialSynthF :: UGen -> UGen -> UGen -> UGen -> UGen
 pv_PartialSynthF buffer threshold numFrames initflag = mkUGen Nothing [KR] (Left KR) "PV_PartialSynthF" [buffer,threshold,numFrames,initflag] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Return only bins that are stable
 --
 --  PV_PartialSynthP [KR] buffer=0.0 threshold=0.1 numFrames=2.0 initflag=0.0
 pv_PartialSynthP :: UGen -> UGen -> UGen -> UGen -> UGen
@@ -1915,13 +1742,13 @@ pv_PartialSynthP buffer threshold numFrames initflag = mkUGen Nothing [KR] (Left
 pv_PitchShift :: UGen -> UGen -> UGen
 pv_PitchShift buffer ratio = mkUGen Nothing [KR] (Left KR) "PV_PitchShift" [buffer,ratio] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Plays FFT data to a memory buffer
 --
 --  PV_PlayBuf [KR] buffer=0.0 playbuf=0.0 rate=1.0 offset=0.0 loop=0.0
 pv_PlayBuf :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 pv_PlayBuf buffer playbuf_ rate_ offset loop = mkUGen Nothing [KR] (Left KR) "PV_PlayBuf" [buffer,playbuf_,rate_,offset,loop] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Records FFT data to a memory buffer
 --
 --  PV_RecordBuf [KR] buffer=0.0 recbuf=0.0 offset=0.0 run=0.0 loop=0.0 hop=0.5 wintype=0.0
 pv_RecordBuf :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -1933,13 +1760,13 @@ pv_RecordBuf buffer recbuf offset run loop hop wintype = mkUGen Nothing [KR] (Le
 pv_SoftWipe :: UGen -> UGen -> UGen -> UGen
 pv_SoftWipe bufferA bufferB wipe = mkUGen Nothing [KR] (Left KR) "PV_SoftWipe" [bufferA,bufferB,wipe] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | A harmonic enhancer
 --
 --  PV_SpectralEnhance [KR] buffer=0.0 numPartials=8.0 ratio=2.0 strength=0.1
 pv_SpectralEnhance :: UGen -> UGen -> UGen -> UGen -> UGen
 pv_SpectralEnhance buffer numPartials ratio strength = mkUGen Nothing [KR] (Left KR) "PV_SpectralEnhance" [buffer,numPartials,ratio,strength] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Maps the spectral envelope of one FFT process onto another
 --
 --  PV_SpectralMap [KR] buffer=0.0 specBuffer=0.0 floor=0.0 freeze=0.0 mode=0.0 norm=0.0 window=0.0
 pv_SpectralMap :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -1954,10 +1781,10 @@ pv_Whiten chain trackbufnum relaxtime floor_ smear bindownsample = mkUGen Nothin
 -- | one kind of spectral morphing
 --
 --  PV_XFade [KR] bufferA=0.0 bufferB=0.0 fade=0.0
-pv_XFade :: UGen -> UGen -> UGen -> UGen
-pv_XFade bufferA bufferB fade = mkUGen Nothing [KR] (Left KR) "PV_XFade" [bufferA,bufferB,fade] Nothing 1 (Special 0) NoId
+pv_xFade :: UGen -> UGen -> UGen -> UGen
+pv_xFade bufferA bufferB fade = mkUGen Nothing [KR] (Left KR) "PV_XFade" [bufferA,bufferB,fade] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Equal power pan across an array of speakers
 --
 --  PanX [KR,AR] numChans=0.0 in=0.0 pos=0.0 level=1.0 width=2.0
 panX :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -1987,6 +1814,24 @@ peakEQ4 rate in_ freq rs db = mkUGen Nothing [AR] (Left rate) "PeakEQ4" [in_,fre
 perlin3 :: Rate -> UGen -> UGen -> UGen -> UGen
 perlin3 rate x y z = mkUGen Nothing [KR,AR] (Left rate) "Perlin3" [x,y,z] Nothing 1 (Special 0) NoId
 
+-- | Sample permutation UGen.
+--
+--  PermMod [AR] in=0.0 freq=100.0
+permMod :: Rate -> UGen -> UGen -> UGen
+permMod rate in_ freq = mkUGen Nothing [AR] (Left rate) "PermMod" [in_,freq] Nothing 1 (Special 0) NoId
+
+-- | Sample permutation UGen with programmable pattern.
+--
+--  PermModArray [AR] in=0.0 freq=50.0 pattern=0.0
+permModArray :: Rate -> UGen -> UGen -> UGen -> UGen
+permModArray rate in_ freq pattern = mkUGen Nothing [AR] (Left rate) "PermModArray" [in_,freq,pattern] Nothing 1 (Special 0) NoId
+
+-- | Sample permutation UGen with tail.
+--
+--  PermModT [AR] in=0.0 outfreq=440.0 infreq=5000.0
+permModT :: Rate -> UGen -> UGen -> UGen -> UGen
+permModT rate in_ outfreq infreq = mkUGen Nothing [AR] (Left rate) "PermModT" [in_,outfreq,infreq] Nothing 1 (Special 0) NoId
+
 -- | Tree classifier using (hyper)planes – UGen or language-side
 --
 --  PlaneTree [KR] treebuf=0.0 in=0.0 gate=1.0
@@ -2013,45 +1858,57 @@ qitch rate in_ databufnum ampThreshold algoflag ampbufnum minfreq maxfreq = mkUG
 
 -- | TB303 Filter Emulation
 --
---  RLPFD [KR,AR] in=0.0 ffreq=440.0 res=0.0 dist=0.0
+--  RLPFD [KR,AR] in=0.0 ffreq=440.0 res=0.0 dist=0.0;    FILTER: TRUE
 rlpfd :: UGen -> UGen -> UGen -> UGen -> UGen
 rlpfd in_ ffreq res dist = mkUGen Nothing [KR,AR] (Right [0]) "RLPFD" [in_,ffreq,res,dist] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  RMAFoodChainL [AR] freq=22050.0 a1=5.0 b1=3.0 d1=0.4 a2=0.1 b2=2.0 d2=1.0e-2 k=1.0943 r=0.8904 h=5.0e-2 xi=0.1 yi=0.0 zi=0.0
-rMAFoodChainL :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-rMAFoodChainL rate freq a1 b1 d1 a2 b2 d2 k r h xi yi zi = mkUGen Nothing [AR] (Left rate) "RMAFoodChainL" [freq,a1,b1,d1,a2,b2,d2,k,r,h,xi,yi,zi] Nothing 3 (Special 0) NoId
+rmaFoodChainL :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+rmaFoodChainL rate freq a1 b1 d1 a2 b2 d2 k r h xi yi zi = mkUGen Nothing [AR] (Left rate) "RMAFoodChainL" [freq,a1,b1,d1,a2,b2,d2,k,r,h,xi,yi,zi] Nothing 3 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  RMEQ [AR] in=0.0 freq=440.0 rq=0.1 k=0.0
-rMEQ :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-rMEQ rate in_ freq rq k = mkUGen Nothing [AR] (Left rate) "RMEQ" [in_,freq,rq,k] Nothing 1 (Special 0) NoId
+rmeq :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+rmeq rate in_ freq rq k = mkUGen Nothing [AR] (Left rate) "RMEQ" [in_,freq,rq,k] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  RMEQSuite [] maxSize=0.0
-rMEQSuite :: Rate -> UGen -> UGen
-rMEQSuite rate maxSize = mkUGen Nothing [IR,KR,AR,DR] (Left rate) "RMEQSuite" [maxSize] Nothing 1 (Special 0) NoId
+rmeqSuite :: Rate -> UGen -> UGen
+rmeqSuite rate maxSize = mkUGen Nothing [IR,KR,AR,DR] (Left rate) "RMEQSuite" [maxSize] Nothing 1 (Special 0) NoId
+
+-- | root mean square
+--
+--  RMS [KR,AR] in=0.0 lpFreq=10.0
+rms :: Rate -> UGen -> UGen -> UGen
+rms rate in_ lpFreq = mkUGen Nothing [KR,AR] (Left rate) "RMS" [in_,lpFreq] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  RMShelf [AR] in=0.0 freq=440.0 k=0.0
-rMShelf :: Rate -> UGen -> UGen -> UGen -> UGen
-rMShelf rate in_ freq k = mkUGen Nothing [AR] (Left rate) "RMShelf" [in_,freq,k] Nothing 1 (Special 0) NoId
+rmShelf :: Rate -> UGen -> UGen -> UGen -> UGen
+rmShelf rate in_ freq k = mkUGen Nothing [AR] (Left rate) "RMShelf" [in_,freq,k] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  RMShelf2 [AR] in=0.0 freq=440.0 k=0.0
-rMShelf2 :: Rate -> UGen -> UGen -> UGen -> UGen
-rMShelf2 rate in_ freq k = mkUGen Nothing [AR] (Left rate) "RMShelf2" [in_,freq,k] Nothing 1 (Special 0) NoId
+rmShelf2 :: Rate -> UGen -> UGen -> UGen -> UGen
+rmShelf2 rate in_ freq k = mkUGen Nothing [AR] (Left rate) "RMShelf2" [in_,freq,k] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  RegaliaMitraEQ [AR] in=0.0 freq=440.0 rq=0.1 k=0.0
 regaliaMitraEQ :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
 regaliaMitraEQ rate in_ freq rq k = mkUGen Nothing [AR] (Left rate) "RegaliaMitraEQ" [in_,freq,rq,k] Nothing 1 (Special 0) NoId
+
+-- | A modal synthesis voice
+--
+--  Rongs [AR] trigger=0.0 sustain=1.0 f0=1.0e-2 structure=0.5 brightness=0.5 damping=0.75 accent=0.9 stretch=0.5 position=0.15 loss=0.15
+rongs :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+rongs rate trigger sustain f0 structure brightness damping accent stretch position loss = mkUGen Nothing [AR] (Left rate) "Rongs" [trigger,sustain,f0,structure,brightness,damping,accent,stretch,position,loss] Nothing 1 (Special 0) NoId
 
 -- | Rossler chaotic generator
 --
@@ -2074,8 +1931,8 @@ rotate rate w x y z rotate_ = mkUGen Nothing [AR] (Left rate) "Rotate" [w,x,y,z,
 -- | experimental time domain onset detector
 --
 --  SLOnset [KR] input=0.0 memorysize1=20.0 before=5.0 after=5.0 threshold=10.0 hysteresis=10.0
-sLOnset :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-sLOnset rate input memorysize1 before after threshold hysteresis = mkUGen Nothing [KR] (Left rate) "SLOnset" [input,memorysize1,before,after,threshold,hysteresis] Nothing 1 (Special 0) NoId
+slOnset :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+slOnset rate input memorysize1 before after threshold hysteresis = mkUGen Nothing [KR] (Left rate) "SLOnset" [input,memorysize1,before,after,threshold,hysteresis] Nothing 1 (Special 0) NoId
 
 -- | Spectral Modeling Synthesis
 --
@@ -2086,24 +1943,24 @@ sms input maxpeaks currentpeaks tolerance noisefloor freqmult freqadd formantpre
 -- | (Undocumented class)
 --
 --  SOMAreaWr [KR] bufnum=0.0 inputdata=0.0 coords=0.0 netsize=10.0 numdims=2.0 nhood=0.5 gate=1.0
-sOMAreaWr :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-sOMAreaWr rate bufnum inputdata coords netsize numdims nhood gate_ = mkUGen Nothing [KR] (Left rate) "SOMAreaWr" [bufnum,inputdata,coords,netsize,numdims,nhood,gate_] Nothing 1 (Special 0) NoId
+somAreaWr :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+somAreaWr rate bufnum inputdata coords netsize numdims nhood gate_ = mkUGen Nothing [KR] (Left rate) "SOMAreaWr" [bufnum,inputdata,coords,netsize,numdims,nhood,gate_] Nothing 1 (Special 0) NoId
 
 -- | Map an input using a Self-Organising Map
 --
 --  SOMRd [KR,AR] bufnum=0.0 inputdata=0.0 netsize=10.0 numdims=2.0 gate=1.0
-sOMRd :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-sOMRd rate bufnum inputdata netsize numdims gate_ = mkUGen Nothing [KR,AR] (Left rate) "SOMRd" [bufnum,inputdata,netsize,numdims,gate_] Nothing 2 (Special 0) NoId
+somRd :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+somRd rate bufnum inputdata netsize numdims gate_ = mkUGen Nothing [KR,AR] (Left rate) "SOMRd" [bufnum,inputdata,netsize,numdims,gate_] Nothing 2 (Special 0) NoId
 
 -- | Create (train) a Self-Organising Map
 --
 --  SOMTrain [KR] bufnum=0.0 inputdata=0.0 netsize=10.0 numdims=2.0 traindur=5000.0 nhood=0.5 gate=1.0 initweight=1.0
-sOMTrain :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-sOMTrain rate bufnum inputdata netsize numdims traindur nhood gate_ initweight = mkUGen Nothing [KR] (Left rate) "SOMTrain" [bufnum,inputdata,netsize,numdims,traindur,nhood,gate_,initweight] Nothing 3 (Special 0) NoId
+somTrain :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+somTrain rate bufnum inputdata netsize numdims traindur nhood gate_ initweight = mkUGen Nothing [KR] (Left rate) "SOMTrain" [bufnum,inputdata,netsize,numdims,traindur,nhood,gate_,initweight] Nothing 3 (Special 0) NoId
 
 -- | 12db/Oct State Variable Filter
 --
---  SVF [KR,AR] signal=0.0 cutoff=2200.0 res=0.1 lowpass=1.0 bandpass=0.0 highpass=0.0 notch=0.0 peak=0.0
+--  SVF [KR,AR] signal=0.0 cutoff=2200.0 res=0.1 lowpass=1.0 bandpass=0.0 highpass=0.0 notch=0.0 peak=0.0;    FILTER: TRUE
 svf :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 svf signal cutoff res lowpass bandpass highpass notch peak_ = mkUGen Nothing [KR,AR] (Right [0]) "SVF" [signal,cutoff,res,lowpass,bandpass,highpass,notch,peak_] Nothing 1 (Special 0) NoId
 
@@ -2125,37 +1982,37 @@ sensoryDissonance rate fft_ maxpeaks peakthreshold norm clamp = mkUGen Nothing [
 sieve1 :: Rate -> UGen -> UGen -> UGen -> UGen
 sieve1 rate bufnum gap alternate = mkUGen Nothing [KR,AR] (Left rate) "Sieve1" [bufnum,gap,alternate] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Granular synthesis with sinusoidal grains
 --
 --  SinGrain [AR] trigger=0.0 dur=1.0 freq=440.0
 sinGrain :: Rate -> UGen -> UGen -> UGen -> UGen
 sinGrain rate trigger dur freq = mkUGen Nothing [AR] (Left rate) "SinGrain" [trigger,dur,freq] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Granular synthesis with sinusoidal grains and user supplied envelope
 --
 --  SinGrainB [AR] trigger=0.0 dur=1.0 freq=440.0 envbuf=0.0
 sinGrainB :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
 sinGrainB rate trigger dur freq envbuf = mkUGen Nothing [AR] (Left rate) "SinGrainB" [trigger,dur,freq,envbuf] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Granular synthesis with sinusoidal grains with Ambisonic panning and user supplied envelope
 --
 --  SinGrainBBF [AR] trigger=0.0 dur=1.0 freq=440.0 envbuf=0.0 azimuth=0.0 elevation=0.0 rho=1.0 wComp=0.0
 sinGrainBBF :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 sinGrainBBF rate trigger dur freq envbuf azimuth elevation rho wComp = mkUGen Nothing [AR] (Left rate) "SinGrainBBF" [trigger,dur,freq,envbuf,azimuth,elevation,rho,wComp] Nothing 4 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Granular synthesis with sinusoidal grains with Ambisonic panning
 --
 --  SinGrainBF [AR] trigger=0.0 dur=1.0 freq=440.0 azimuth=0.0 elevation=0.0 rho=1.0 wComp=0.0
 sinGrainBF :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 sinGrainBF rate trigger dur freq azimuth elevation rho wComp = mkUGen Nothing [AR] (Left rate) "SinGrainBF" [trigger,dur,freq,azimuth,elevation,rho,wComp] Nothing 4 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Granular synthesis with sinusoidal grains and user supplied envelopes
 --
 --  SinGrainI [AR] trigger=0.0 dur=1.0 freq=440.0 envbuf1=0.0 envbuf2=0.0 ifac=0.5
 sinGrainI :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 sinGrainI rate trigger dur freq envbuf1 envbuf2 ifac = mkUGen Nothing [AR] (Left rate) "SinGrainI" [trigger,dur,freq,envbuf1,envbuf2,ifac] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Granular synthesis with sinusoidal grains with Ambisonic panning and user supplied envelopes
 --
 --  SinGrainIBF [AR] trigger=0.0 dur=1.0 freq=440.0 envbuf1=0.0 envbuf2=0.0 ifac=0.5 azimuth=0.0 elevation=0.0 rho=1.0 wComp=0.0
 sinGrainIBF :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -2169,7 +2026,7 @@ sinTone rate freq phase = mkUGen Nothing [AR] (Left rate) "SinTone" [freq,phase]
 
 -- | port of some ladspa plugins
 --
---  SineShaper [AR] in=0.0 limit=1.0
+--  SineShaper [AR] in=0.0 limit=1.0;    FILTER: TRUE
 sineShaper :: UGen -> UGen -> UGen
 sineShaper in_ limit = mkUGen Nothing [AR] (Right [0]) "SineShaper" [in_,limit] Nothing 1 (Special 0) NoId
 
@@ -2179,7 +2036,7 @@ sineShaper in_ limit = mkUGen Nothing [AR] (Right [0]) "SineShaper" [in_,limit] 
 skipNeedle :: Rate -> UGen -> UGen -> UGen -> UGen
 skipNeedle rate range rate_ offset = mkUGen Nothing [AR] (Left rate) "SkipNeedle" [range,rate_,offset] Nothing 1 (Special 0) NoId
 
--- | port of some ladspa plugins
+-- | Smooth samplerate and bitrate reduction
 --
 --  SmoothDecimator [AR] in=0.0 rate=44100.0 smoothing=0.5
 smoothDecimator :: Rate -> UGen -> UGen -> UGen -> UGen
@@ -2187,21 +2044,21 @@ smoothDecimator rate in_ rate_ smoothing = mkUGen Nothing [AR] (Left rate) "Smoo
 
 -- | (Undocumented class)
 --
---  SoftClipAmp [AR] in=0.0 pregain=1.0
-softClipAmp :: Rate -> UGen -> UGen -> UGen
-softClipAmp rate in_ pregain = mkUGen Nothing [AR] (Left rate) "SoftClipAmp" [in_,pregain] Nothing 1 (Special 0) NoId
+--  SoftClipAmp [AR] in=0.0 pregain=1.0;    FILTER: TRUE
+softClipAmp :: UGen -> UGen -> UGen
+softClipAmp in_ pregain = mkUGen Nothing [AR] (Right [0]) "SoftClipAmp" [in_,pregain] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
---  SoftClipAmp4 [AR] in=0.0 pregain=1.0
-softClipAmp4 :: Rate -> UGen -> UGen -> UGen
-softClipAmp4 rate in_ pregain = mkUGen Nothing [AR] (Left rate) "SoftClipAmp4" [in_,pregain] Nothing 1 (Special 0) NoId
+--  SoftClipAmp4 [AR] in=0.0 pregain=1.0;    FILTER: TRUE
+softClipAmp4 :: UGen -> UGen -> UGen
+softClipAmp4 in_ pregain = mkUGen Nothing [AR] (Right [0]) "SoftClipAmp4" [in_,pregain] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
---  SoftClipAmp8 [AR] in=0.0 pregain=1.0
-softClipAmp8 :: Rate -> UGen -> UGen -> UGen
-softClipAmp8 rate in_ pregain = mkUGen Nothing [AR] (Left rate) "SoftClipAmp8" [in_,pregain] Nothing 1 (Special 0) NoId
+--  SoftClipAmp8 [AR] in=0.0 pregain=1.0;    FILTER: TRUE
+softClipAmp8 :: UGen -> UGen -> UGen
+softClipAmp8 in_ pregain = mkUGen Nothing [AR] (Right [0]) "SoftClipAmp8" [in_,pregain] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
@@ -2223,7 +2080,7 @@ sortBuf rate bufnum sortrate reset = mkUGen Nothing [AR] (Left rate) "SortBuf" [
 
 -- | Spectral feature extraction
 --
---  SpectralEntropy [KR] fft=0.0 fftsize=2048.0 numbands=1.0
+--  SpectralEntropy [KR] fft=0.0 fftsize=2048.0 numbands=1.0;    NC INPUT: True
 spectralEntropy :: Int -> Rate -> UGen -> UGen -> UGen -> UGen
 spectralEntropy numChannels rate fft_ fftsize numbands = mkUGen Nothing [KR] (Left rate) "SpectralEntropy" [fft_,fftsize,numbands] Nothing numChannels (Special 0) NoId
 
@@ -2265,6 +2122,12 @@ standard2DN rate minfreq maxfreq k x0 y0 = mkUGen Nothing [KR,AR] (Left rate) "S
 
 -- | (Undocumented class)
 --
+--  StandardTrig [KR,AR] minfreq=5.0 maxfreq=10.0 k=1.4 x0=4.9789799812499 y0=5.7473416156381
+standardTrig :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+standardTrig rate minfreq maxfreq k x0 y0 = mkUGen Nothing [KR,AR] (Left rate) "StandardTrig" [minfreq,maxfreq,k,x0,y0] Nothing 1 (Special 0) NoId
+
+-- | (Undocumented class)
+--
 --  StkBandedWG [KR,AR] freq=440.0 instr=0.0 bowpressure=0.0 bowmotion=0.0 integration=0.0 modalresonance=64.0 bowvelocity=0.0 setstriking=0.0 trig=1.0
 stkBandedWG :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 stkBandedWG rate freq instr bowpressure bowmotion integration modalresonance bowvelocity setstriking trig_ = mkUGen Nothing [KR,AR] (Left rate) "StkBandedWG" [freq,instr,bowpressure,bowmotion,integration,modalresonance,bowvelocity,setstriking,trig_] Nothing 1 (Special 0) NoId
@@ -2301,7 +2164,13 @@ stkFlute rate freq jetDelay noisegain jetRatio = mkUGen Nothing [KR,AR] (Left ra
 
 -- | Wrapping Synthesis toolkit.
 --
---  StkInst [AR] freq=220.0 gate=1.0 onamp=1.0 offamp=0.5 instNumber=6.0 args=0.0
+--  StkGlobals [AR] showWarnings=0.0 printErrors=0.0 rawfilepath=0.0
+stkGlobals :: Rate -> UGen -> UGen -> UGen -> UGen
+stkGlobals rate showWarnings printErrors rawfilepath = mkUGen Nothing [AR] (Left rate) "StkGlobals" [showWarnings,printErrors,rawfilepath] Nothing 1 (Special 0) NoId
+
+-- | Wrapping Synthesis toolkit.
+--
+--  StkInst [AR] freq=220.0 gate=1.0 onamp=1.0 offamp=0.5 instNumber=6.0 *args=0.0;    MCE=1, REORDERS INPUTS: [4,0,1,2,3,5]
 stkInst :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 stkInst rate freq gate_ onamp offamp instNumber args = mkUGen Nothing [AR] (Left rate) "StkInst" [freq,gate_,onamp,offamp,instNumber] (Just [args]) 1 (Special 0) NoId
 
@@ -2349,19 +2218,19 @@ stkVoicForm rate freq vuvmix vowelphon vibfreq vibgain loudness_ trig_ = mkUGen 
 
 -- | String resonance filter
 --
---  Streson [KR,AR] input=0.0 delayTime=3.0e-3 res=0.9
+--  Streson [KR,AR] input=0.0 delayTime=3.0e-3 res=0.9;    FILTER: TRUE
 streson :: UGen -> UGen -> UGen -> UGen
 streson input delayTime res = mkUGen Nothing [KR,AR] (Right [0]) "Streson" [input,delayTime,res] Nothing 1 (Special 0) NoId
 
 -- | Pulse counter with floating point steps
 --
---  Summer [KR,AR] trig=0.0 step=1.0 reset=0.0 resetval=0.0
-summer :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-summer rate trig_ step reset resetval = mkUGen Nothing [KR,AR] (Left rate) "Summer" [trig_,step,reset,resetval] Nothing 1 (Special 0) NoId
+--  Summer [KR,AR] trig=0.0 step=1.0 reset=0.0 resetval=0.0;    FILTER: TRUE
+summer :: UGen -> UGen -> UGen -> UGen -> UGen
+summer trig_ step reset resetval = mkUGen Nothing [KR,AR] (Right [0]) "Summer" [trig_,step,reset,resetval] Nothing 1 (Special 0) NoId
 
 -- | feedback delay line implementing switch-and-ramp buffer jumping
 --
---  SwitchDelay [AR] in=0.0 drylevel=1.0 wetlevel=1.0 delaytime=1.0 delayfactor=0.7 maxdelaytime=20.0
+--  SwitchDelay [AR] in=0.0 drylevel=1.0 wetlevel=1.0 delaytime=1.0 delayfactor=0.7 maxdelaytime=20.0;    FILTER: TRUE
 switchDelay :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 switchDelay in_ drylevel wetlevel delaytime delayfactor maxdelaytime = mkUGen Nothing [AR] (Right [0]) "SwitchDelay" [in_,drylevel,wetlevel,delaytime,delayfactor,maxdelaytime] Nothing 1 (Special 0) NoId
 
@@ -2452,20 +2321,20 @@ twoTube rate input k loss d1length d2length = mkUGen Nothing [AR] (Left rate) "T
 -- | (Undocumented class)
 --
 --  UHJ2B [AR] ls=0.0 rs=0.0
-uHJ2B :: Rate -> UGen -> UGen -> UGen
-uHJ2B rate ls rs = mkUGen Nothing [AR] (Left rate) "UHJ2B" [ls,rs] Nothing 3 (Special 0) NoId
+uhj2b :: Rate -> UGen -> UGen -> UGen
+uhj2b rate ls rs = mkUGen Nothing [AR] (Left rate) "UHJ2B" [ls,rs] Nothing 3 (Special 0) NoId
 
 -- | Vector Base Amplitude Panner
 --
 --  VBAP [KR,AR] in=0.0 bufnum=0.0 azimuth=0.0 elevation=1.0 spread=0.0;    NC INPUT: True
-vBAP :: Int -> Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-vBAP numChannels rate in_ bufnum azimuth elevation spread = mkUGen Nothing [KR,AR] (Left rate) "VBAP" [in_,bufnum,azimuth,elevation,spread] Nothing numChannels (Special 0) NoId
+vbap :: Int -> Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+vbap numChannels rate in_ bufnum azimuth elevation spread = mkUGen Nothing [KR,AR] (Left rate) "VBAP" [in_,bufnum,azimuth,elevation,spread] Nothing numChannels (Special 0) NoId
 
 -- | 2D scanning pattern virtual machine
 --
 --  VMScan2D [AR] bufnum=0.0
-vMScan2D :: Rate -> UGen -> UGen
-vMScan2D rate bufnum = mkUGen Nothing [AR] (Left rate) "VMScan2D" [bufnum] Nothing 2 (Special 0) NoId
+vmScan2D :: Rate -> UGen -> UGen
+vmScan2D rate bufnum = mkUGen Nothing [AR] (Left rate) "VMScan2D" [bufnum] Nothing 2 (Special 0) NoId
 
 -- | vosim pulse generator
 --
@@ -2485,7 +2354,7 @@ wAmp rate in_ winSize = mkUGen Nothing [KR] (Left rate) "WAmp" [in_,winSize] Not
 walshHadamard :: Rate -> UGen -> UGen -> UGen
 walshHadamard rate input which = mkUGen Nothing [AR] (Left rate) "WalshHadamard" [input,which] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
+-- | Warp a buffer with a time pointer
 --
 --  WarpZ [AR] bufnum=0.0 pointer=0.0 freqScale=1.0 windowSize=0.2 envbufnum=-1.0 overlaps=8.0 windowRandRatio=0.0 interp=1.0 zeroSearch=0.0 zeroStart=0.0;    NC INPUT: True
 warpZ :: Int -> Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
