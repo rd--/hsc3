@@ -51,8 +51,8 @@ let f _ (g,x,_,z,_,_,_,_,_,_) = sinOsc AR (midiCPS ((x * 12 + 48) `roundTo` 0.5)
 in mix (rEventVoicer 16 f) * control KR "gain" 0.5
 
 -- rEvent ; p=freq z=amp
-let f _ (g,_,_,z,_,_,_,p,_,_) = sinOsc AR (midiCPS p) 0 * g * z
-in mix (rEventVoicer 16 f) * control KR "gain" 0.1
+let f _ (g,_,_,z,_,_,_,p,_,_) = sinOsc AR (midiCPS (p + 12)) 0 * g * z
+in mix (rEventVoicer 16 f) * control KR "gain" 1.0
 
 -- rEvent ; x=freq y=pan z=amp ; 0-1 = partial range ; 24ET
 let f _ (g,x,y,z,_,_,_,_,_,_) =

@@ -13,12 +13,12 @@
 >   let fft_size = 2048
 >       ir_file = "/home/rohan/data/audio/reverbs/chapel.wav"
 >       ir_length = 62494 {- frame count of ir_file -}
->       accum_size = pc_calcAccumSize fft_size ir_length
+>       accum_size = partConv_calcAccumSize fft_size ir_length
 >       ir_td_b = 10 {- time domain -}
 >       ir_fd_b = 11 {- frequency domain -}
 >   _ <- async (b_allocRead ir_td_b ir_file 0 ir_length)
 >   _ <- async (b_alloc ir_fd_b accum_size 1)
->   sendMessage (pc_preparePartConv ir_fd_b ir_td_b fft_size)
+>   sendMessage (partConv_preparePartConv ir_fd_b ir_td_b fft_size)
 >   return (partConv s (constant fft_size) (constant ir_fd_b))
 
     g_01 <- withSC3 f_01

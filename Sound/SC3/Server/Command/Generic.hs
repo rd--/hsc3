@@ -465,9 +465,8 @@ b_indices n m k =
 -- * UGen commands.
 
 -- | Generate accumulation buffer given time-domain IR buffer and FFT size.
-pc_preparePartConv :: Integral i => i -> i -> i -> Message
-pc_preparePartConv b irb fft_size =
-    b_gen b "PreparePartConv" (map int32 [irb, fft_size])
+partConv_preparePartConv :: Integral i => i -> i -> i -> Message
+partConv_preparePartConv b irb fft_size = b_gen b "PreparePartConv" (map int32 [irb, fft_size])
 
 -- * Unpack
 

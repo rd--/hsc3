@@ -315,8 +315,8 @@ packFFTSpec m p =
     in mce (interleave m p)
 
 -- | Calculate size of accumulation buffer given FFT and IR sizes.
-pc_calcAccumSize :: Int -> Int -> Int
-pc_calcAccumSize fft_size ir_length =
+partConv_calcAccumSize :: Int -> Int -> Int
+partConv_calcAccumSize fft_size ir_length =
     let partition_size = fft_size `div` 2
         num_partitions = (ir_length `div` partition_size) + 1
     in fft_size * num_partitions
