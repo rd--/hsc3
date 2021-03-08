@@ -313,6 +313,7 @@ import Sound.SC3.Plot {- hsc3-plot -}
 import Sound.SC3.Plot.FFT {- hsc3-plot -}
 
 let n = take 4096 (l_white_noise 'α')
+let plotTable1 = plot_p1_ln . return
 
 plotTable1 n
 plotTable1 (take 4096 (l_brown_noise 'α'))
@@ -334,7 +335,7 @@ plotTable1 (rfft_pure (l_bw_hpf (44100,9000) n))
 plotTable1 (rfft_pure (l_resonz_ir (sr_to_rps 44100,440,0.1) n))
 plotTable1 (rfft_pure (l_rlpf_ir (sr_to_rps 44100,1200,0.1) n))
 
-import Sound.SC3.Common.Math
+import Sound.SC3.Common.Math {- hsc3 -}
 
 plot_fft1_mnn 44100 (rfft_pure (l_bw_lpf (44100,midi_to_cps 60) n))
 plot_fft1_mnn 44100 (rfft_pure (l_resonz_ir (sr_to_rps 44100,midi_to_cps 69,0.1) n))
@@ -348,4 +349,5 @@ plotTable1 (l_mavg9 (l_mavg9 (l_mavg9 (l_mavg9 (rfft_pure (l_brz2 n))))))
 
 plotTable1 (take 512 (l_sin_osc 48000 (repeat 440)))
 plotTable1 (take 512 (l_cos_osc 48000 (repeat 440)))
+
 -}

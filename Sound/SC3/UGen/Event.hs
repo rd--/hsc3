@@ -9,15 +9,14 @@ import Sound.SC3.UGen.UGen {- hsc3 -}
 
 -- * Event
 
--- | (gate,x,y,z/force,orientation,radius-x,radius-y,pitch,pitch-detune,unused)
+-- | (gate,x,y,z/force,orientation,radius-x,radius-y,pitch,pitch-x,pitch-y)
 type REvent t = (t,t,t,t,t,t,t,t,t,t)
 
 -- | Translate list to REvent.
 rEvent_from_list :: Num t => [t] -> REvent t
 rEvent_from_list l =
   case l of
-    [w,x,y,z,o,rx,ry,p,px] -> (w,x,y,z,o,rx,ry,p,px,0)
-    [w,x,y,z,o,rx,ry,p,px,q] -> (w,x,y,z,o,rx,ry,p,px,q)
+    [w,x,y,z,o,rx,ry,p,px,py] -> (w,x,y,z,o,rx,ry,p,px,py)
     _ -> error "rEvent_from_list?"
 
 {- | k0 = index of control bus zero for event system,
@@ -26,7 +25,7 @@ rEvent_from_list l =
 -}
 rEventAddr :: UGen -> UGen -> UGen -> REvent UGen
 rEventAddr k0 stp c =
-  let u = in' 9 KR (k0 + (c * stp))
+  let u = in' 10 KR (k0 + (c * stp))
   in rEvent_from_list (mceChannels u)
 
 -- | c0 = index of voice (channel) zero for event set, n = number of voices (channels)
