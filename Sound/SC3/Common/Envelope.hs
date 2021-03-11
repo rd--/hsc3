@@ -239,14 +239,15 @@ envelope_sc3_array e =
          l0:l' -> Just (l0 : n' : rn' : ln' : concat (zipWith3 f l' t c))
          _ -> Nothing
 
--- | @IEnvGen@ SC3 form of 'Envelope' data.
---
--- > let {l = [0,0.6,0.3,1.0,0]
--- >     ;t = [0.1,0.02,0.4,1.1]
--- >     ;c = [EnvLin,EnvExp,EnvNum (-6),EnvSin]
--- >     ;e = Envelope l t c Nothing Nothing
--- >     ;r = [0,0,4,1.62,0.1,1,0,0.6,0.02,2,0,0.3,0.4,5,-6,1,1.1,3,0,0]}
--- > in envelope_sc3_ienvgen_array e == Just r
+{- | @IEnvGen@ SC3 form of 'Envelope' data.
+
+> l = [0,0.6,0.3,1.0,0]
+> t = [0.1,0.02,0.4,1.1]
+> c = [EnvLin,EnvExp,EnvNum (-6),EnvSin]
+> e = Envelope l t c Nothing Nothing 0
+> r = [0,0,4,1.62,0.1,1,0,0.6,0.02,2,0,0.3,0.4,5,-6,1,1.1,3,0,0]
+> envelope_sc3_ienvgen_array e == Just r
+-}
 envelope_sc3_ienvgen_array :: Num a => Envelope a -> Maybe [a]
 envelope_sc3_ienvgen_array e =
     let Envelope l t _ _ _ os = e
@@ -328,13 +329,7 @@ envTrapezoid_f (lte_f,gte_f) shape skew dur amp =
 
 -}
 envCoord :: Num n => [(n,n)] -> n -> n -> Envelope_Curve n -> Envelope n
-envCoord xy dur amp c =
-    let n = length xy
-        (times,levels) = unzip xy
-        times' = map (* dur) (Base.d_dx' times)
-        levels' = map (* amp) levels
-        offset = times' !! 0
-    in Envelope levels' times' (replicate (n - 1) c) Nothing Nothing offset
+envCoord xy dur amp c = envXYC (map (\(x,y) -> (x * dur,y * amp,c)) xy)
 
 -- | Segments given as pairs of (time,level).
 --   The input is sorted by time before processing.
@@ -399,12 +394,13 @@ envLinen_r (LINEN aT sT rT lv (c0,c1,c2)) =
 envLinen_c :: Num a => a -> a -> a -> a -> Envelope_Curve_3 a -> Envelope a
 envLinen_c aT sT rT lv c = envLinen_r (LINEN aT sT rT lv c)
 
--- | Linear envelope parameter constructor.
---
--- > let {e = envLinen 0 1 0 1
--- >     ;s = envelope_segments e
--- >     ;p = pack_envelope_segments s}
--- > in p == (env_levels e,env_times e,env_curves e)
+{- | Linear envelope parameter constructor.
+
+> e = envLinen 0 1 0 1
+> s = envelope_segments e
+> p = pack_envelope_segments s
+> p == (env_levels e,env_times e,env_curves e)
+-}
 envLinen :: Num a => a -> a -> a -> a -> Envelope a
 envLinen aT sT rT lv =
     let c = (EnvLin,EnvLin,EnvLin)
@@ -477,11 +473,12 @@ asr_def = let c = EnvNum (-4) in ASR 0.01 1 1 (c,c)
 envASR_c :: Num a => a -> a -> a -> Envelope_Curve_2 a -> Envelope a
 envASR_c aT sL rT c = envASR_r (ASR aT sL rT c)
 
--- | Attack, sustain, release envelope parameter constructor.
---
--- > let {c = 3
--- >     ;r = Just [0,2,1,-99,0.1,3,c,0,0,2,c,0]}
--- > in envelope_sc3_array (envASR 3 0.1 2 EnvSin) == r
+{- | Attack, sustain, release envelope parameter constructor.
+
+> c = 3
+> r = Just [0,2,1,-99,0.1,3,c,0,0,2,c,0]
+> envelope_sc3_array (envASR 3 0.1 2 EnvSin) == r
+-}
 envASR :: Num a => a -> a -> a -> Envelope_Curve a -> Envelope a
 envASR aT sL rT c = envASR_c aT sL rT (c,c)
 
@@ -501,14 +498,18 @@ envStep levels times releaseNode loopNode =
     else let levels' = head levels : levels
          in Envelope levels' times [EnvStep] releaseNode loopNode 0
 
--- | Segments given as triples of (time,level,curve).  The final curve
--- is ignored. The input is sorted by time before processing.
+-- | Segments given as triples of (time,level,curve).  The final curve is ignored.
 --
--- > envXYC [(0, 1, EnvSin), (3, 1.4, EnvLin), (2.1, 0.5, EnvLin)]
-envXYC :: (Num n,Ord n) => [(n,n,Envelope_Curve n)] -> Envelope n
+-- > envXYC [(0, 1, EnvSin), (2.1, 0.5, EnvLin), (3, 1.4, EnvLin)]
+envXYC :: Num n => [(n,n,Envelope_Curve n)] -> Envelope n
 envXYC xyc =
   let n = length xyc
-      xyc_asc = sortOn (\(x,_,_) -> x) xyc
-      (times,levels,curves) = unzip3 xyc_asc
+      (times,levels,curves) = unzip3 xyc
       offset = times !! 0
   in Envelope levels (Base.d_dx' times) (take (n - 1) curves) Nothing Nothing offset
+
+-- | Variant where the input is sorted by time before processing.
+--
+-- > envXYC_sort [(0, 1, EnvSin), (3, 1.4, EnvLin), (2.1, 0.5, EnvLin)]
+envXYC_sort :: (Num n,Ord n) => [(n,n,Envelope_Curve n)] -> Envelope n
+envXYC_sort = envXYC . sortOn (\(x,_,_) -> x)

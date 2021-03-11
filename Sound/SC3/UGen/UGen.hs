@@ -92,7 +92,7 @@ control_set =
                    _ -> error "control_set: non control input?"
     in zipWith f [0..]
 
--- | Multiple root graph node constructor.
+-- | Multiple root graph node constructor (left input is output)
 mrg2 :: UGen -> UGen -> UGen
 mrg2 u = MRG_U . MRG u
 
@@ -102,8 +102,7 @@ mrg2 u = MRG_U . MRG u
 mce2 :: UGen -> UGen -> UGen
 mce2 x y = mce [x,y]
 
--- | Extract two channels from possible MCE, if there is only one
--- channel it is duplicated.
+-- | Extract two channels from possible MCE, if there is only one channel it is duplicated.
 mce2c :: UGen -> (UGen,UGen)
 mce2c u =
     case mceChannels u of

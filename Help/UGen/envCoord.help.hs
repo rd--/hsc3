@@ -32,3 +32,4 @@ Sound.SC3.Plot.plotEnvelope [envCoord [(0,0),(0.35,0.1),(0.55,1),(1,0)] 9 0.1 En
 Sound.SC3.Plot.plotEnvelope [envCoord [(0,0),(0.15,0.6),(0.35,0.2),(1,0)] 6 0.1 EnvSin]
 Sound.SC3.Plot.plotEnvelope [envCoord [(0,0),(0.65,0.3),(0.85,0.7),(1,0)] 5 0.1 EnvCub]
 Sound.SC3.Plot.plotEnvelope [envCoord [(0,0.1),(0.25,0.6),(0.5,0.4),(1,0.4)] 7 0.1 EnvStep]
+Sound.SC3.Plot.plotEnvelope [envCoord (zip [-1,-0.7,0.7,1] [0,0.45,0.55,1]) 1 1 EnvLin]
