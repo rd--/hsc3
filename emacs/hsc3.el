@@ -156,6 +156,14 @@
         (hsc3-send-layout-block (concat "Sound.SC3.UGen.Dot.draw $\n" str))
     (hsc3-send-string (concat "Sound.SC3.UGen.Dot.draw $ " str)))))
 
+(defun hsc3-ui-region ()
+  "UI for region, if region spans multiple lines send using using ghci layout quoting."
+  (interactive)
+  (let ((str (hsc3-region-string)))
+    (if (string-match "\n" str)
+        (hsc3-send-layout-block (concat "Sound.SC3.UI.ugen_ui_run \"ui\" 1 $\n" str))
+    (hsc3-send-string (concat "Sound.SC3.UI.ugen_ui_run \"ui\" 1 $ " str)))))
+
 (defun hsc3-id-rewrite-region ()
   "Run hsc3-id-rewrite on region."
   (interactive)
@@ -337,6 +345,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (define-key map (kbd "C-c C-a") 'hsc3-play-region)
   (define-key map (kbd "C-c C-S-a") 'hsc3-play-region-seq)
   (define-key map (kbd "C-c C-g") 'hsc3-draw-region)
+  (define-key map (kbd "C-c C-v") 'hsc3-ui-region)
   (define-key map (kbd "C-c C-j") 'hsc3-sc3-help)
   (define-key map (kbd "C-c C-i") 'hsc3-interrupt-haskell)
   (define-key map (kbd "C-c C-k") 'hsc3-reset-scsynth)
