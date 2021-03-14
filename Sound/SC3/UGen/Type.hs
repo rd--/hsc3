@@ -47,6 +47,7 @@ data Control_Meta n =
                  ,ctl_warp :: String -- ^ @(0,1)@ @(min,max)@ transfer function.
                  ,ctl_step :: n -- ^ The step to increment & decrement by.
                  ,ctl_units :: String -- ^ Unit of measure (ie hz, ms etc.).
+                 ,controlGroup :: Maybe Control_Group -- ^ Control group.
                  }
     deriving (Eq,Read,Show)
 
@@ -55,7 +56,20 @@ type Control_Meta_T5 n = (n,n,String,n,String)
 
 -- | Lift 'Control_Meta_5' to 'Control_Meta' allowing type coercion.
 control_meta_t5 :: (n -> m) -> Control_Meta_T5 n -> Control_Meta m
-control_meta_t5 f (l,r,w,stp,u) = Control_Meta (f l) (f r) w (f stp) u
+control_meta_t5 f (l,r,w,stp,u) = Control_Meta (f l) (f r) w (f stp) u Nothing
+
+{- | Controls may form part of a control group. -}
+data Control_Group = Control_Range | Control_XY deriving (Eq,Enum,Bounded,Read,Show)
+
+{- | Grouped controls have names that have equal preffixes and single character suffixes.
+     Range controls have two elements, minima and maxima, suffixes are - and +.
+     XY controls have two elements, X and Y coordinates, suffixes are X and Y.
+-}
+control_group_suffixes :: Control_Group -> (Char,Char)
+control_group_suffixes grp =
+  case grp of
+    Control_Range -> ('-','+')
+    Control_XY -> ('X','Y')
 
 -- | Control inputs.  It is an invariant that controls with equal
 -- names within a UGen graph must be equal in all other respects.
