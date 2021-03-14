@@ -1220,6 +1220,12 @@ lorenz2DN rate minfreq maxfreq s r b h x0 y0 z0 = mkUGen Nothing [KR,AR] (Left r
 lorenzTrig :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 lorenzTrig rate minfreq maxfreq s r b h x0 y0 z0 = mkUGen Nothing [KR,AR] (Left rate) "LorenzTrig" [minfreq,maxfreq,s,r,b,h,x0,y0,z0] Nothing 1 (Special 0) NoId
 
+-- | simple resonating lowpass filter
+--
+--  Lores [AR] in=0.0 freq=880.0 res=0.5
+lores :: UGen -> UGen -> UGen -> UGen
+lores in_ freq res = mkUGen Nothing [AR] (Right [0]) "Lores" [in_,freq,res] Nothing 1 (Special 0) NoId
+
 -- | 2-species Predator-Prey model
 --
 --  LotkaVolterra [AR] freq=22050.0 a=1.5 b=1.5 c=0.5 d=1.5 h=5.0e-2 xi=1.0 yi=0.2
@@ -2329,6 +2335,30 @@ uhj2b rate ls rs = mkUGen Nothing [AR] (Left rate) "UHJ2B" [ls,rs] Nothing 3 (Sp
 --  VBAP [KR,AR] in=0.0 bufnum=0.0 azimuth=0.0 elevation=1.0 spread=0.0;    NC INPUT: True
 vbap :: Int -> Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 vbap numChannels rate in_ bufnum azimuth elevation spread = mkUGen Nothing [KR,AR] (Left rate) "VBAP" [in_,bufnum,azimuth,elevation,spread] Nothing numChannels (Special 0) NoId
+
+-- | a chaotic oscillator network
+--
+--  VBFourses [AR] smoother=0.5 *freqarray=0.0;    MCE=1, REORDERS INPUTS: [1,0]
+vbFourses :: Rate -> UGen -> UGen -> UGen
+vbFourses rate smoother freqarray = mkUGen Nothing [AR] (Left rate) "VBFourses" [smoother] (Just [freqarray]) 4 (Special 0) NoId
+
+-- | artifical reverberator
+--
+--  VBJonVerb [AR] in=0.0 decay=0.6 damping=0.3 inputbw=0.8 erfl=0.5 tail=0.5;    FILTER: TRUE
+vbJonVerb :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+vbJonVerb in_ decay_ damping inputbw erfl tail_ = mkUGen Nothing [AR] (Right [0]) "VBJonVerb" [in_,decay_,damping,inputbw,erfl,tail_] Nothing 2 (Special 0) NoId
+
+-- | a simple phase vocoder for time-stretching
+--
+--  VBPVoc [AR] numChannels=0.0 bufnum=0.0 playpos=0.0 fftsize=2048.0
+vbpVoc :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+vbpVoc rate numChannels bufnum playpos fftsize = mkUGen Nothing [AR] (Left rate) "VBPVoc" [numChannels,bufnum,playpos,fftsize] Nothing 1 (Special 0) NoId
+
+-- | lowpass filter for envelope following
+--
+--  VBSlide [KR,AR] in=0.0 slideup=50.0 slidedown=3000.0;    FILTER: TRUE
+vbSlide :: UGen -> UGen -> UGen -> UGen
+vbSlide in_ slideup slidedown = mkUGen Nothing [KR,AR] (Right [0]) "VBSlide" [in_,slideup,slidedown] Nothing 1 (Special 0) NoId
 
 -- | 2D scanning pattern virtual machine
 --
