@@ -62,13 +62,13 @@ control_meta_t5 f (l,r,w,stp,u) = Control_Meta (f l) (f r) w (f stp) u Nothing
 data Control_Group = Control_Range | Control_XY deriving (Eq,Enum,Bounded,Read,Show)
 
 {- | Grouped controls have names that have equal preffixes and single character suffixes.
-     Range controls have two elements, minima and maxima, suffixes are - and +.
+     Range controls have two elements, minima and maxima, suffixes are [ and ].
      XY controls have two elements, X and Y coordinates, suffixes are X and Y.
 -}
 control_group_suffixes :: Control_Group -> (Char,Char)
 control_group_suffixes grp =
   case grp of
-    Control_Range -> ('-','+')
+    Control_Range -> ('[',']')
     Control_XY -> ('X','Y')
 
 -- | Control inputs.  It is an invariant that controls with equal
