@@ -31,6 +31,16 @@ let b = control KR "buf" 0
     n z i j = linLin (lfNoise2 z KR 0.1) (-1) 1 i j
 in X.rFreezer b (n 'α' 0.3 0.4) (n 'β' 0.5 0.6) (n 'γ' 0.3 0.6) (n 'δ' 0.95 1.05) (n 'ε' 0.05 0.15) (n 'ζ' 0.05 0.15) (n 'η' 0.05 0.15) 0 0 36
 
+-- rFreezer ; controls
+let b = control_md KR "buf" 0 (0,0,"lin",1,"")
+    (lhs,rhs) = control_rng KR "wnd" (0,1) (0,1,"lin",0,"")
+    amp = control_md KR "amp" 0.1 (0,1,"amp",0,"")
+    incr = control_md KR "incr" 1 (0,4,"lin",0,"")
+    incrR = control_md KR "incrR" 0 (0,1,"lin",0,"")
+    wndR = control_md KR "wndR" 0 (0,1,"lin",0,"")
+    dgr = control_md KR "dgr" 24 (1,64,"lin",1,"")
+in X.rFreezer b lhs rhs amp incr 0 incrR wndR 0 0 dgr
+
 ---- ; allocate buffer 0, required for examples
 ld fn = withSC3 (async (b_allocRead 0 fn 0 0))
 ld "/home/rohan/data/audio/instr/crotales/crotale05(D).wav"
