@@ -5,7 +5,7 @@ X.dpw3Tri AR (xLine KR 2000 20 10 DoNothing) * 0.1
 X.dpw3Tri AR (mouseX KR 200 12000 Exponential 0.2) * 0.1
 
 -- dpw3Tri ; less efficient than LFTri
-let f = X.randN 50 'α' 50 5000
+let f = X.rRandN 50 'α' 50 5000
 in splay (X.dpw3Tri AR f) 1 0.1 0 True
 
 -- dpw3Tri ; differentiation of triangle is square

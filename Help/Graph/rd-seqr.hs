@@ -1,5 +1,5 @@
 -- seqr (rd)
-let nrand n e l = mceChannels . X.randN n e l
+let nrand n e l = mceChannels . X.rRandN n e l
     nfreq z n l r = map (midiCPS . floorE) (nrand n z l r)
     seqr_f f e =
       let n = constant (length e `div` 2)

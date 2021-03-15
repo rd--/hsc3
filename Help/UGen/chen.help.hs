@@ -17,5 +17,5 @@ let tr = control KR "scramble" 1
     minfreq = 40
     maxfreq = 500
     sig1 = varSaw AR (linExp chen_sig 0 1 minfreq maxfreq) 0 (lag (mceReverse chen_sig) 0.1)
-    sig2 = freqShift sig1 (lag3 (X.rTScramble 'β' tr chen_sig) 0.1) 0 * 0.5
+    sig2 = freqShift sig1 (lag3 (X.rtScramble 'β' tr chen_sig) 0.1) 0 * 0.5
 in splay (sig1 + sig2) (sum (mceChannels chen_sig) / 4) amp 0 True

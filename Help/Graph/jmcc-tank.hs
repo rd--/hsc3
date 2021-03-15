@@ -13,13 +13,13 @@ let s1 =
           l1 = onePole l0 0.33
           (l1l,l1r) = unmce2 l1
           l2 = rotate2 l1l l1r 0.23
-          l3 = allpassN l2 0.05 (X.randN 2 'θ' 0.01 0.05) 2
+          l3 = allpassN l2 0.05 (X.rRandN 2 'θ' 0.01 0.05) 2
           l4 = delayN l3 0.3 (mce2 0.17 0.23)
-          l5 = allpassN l4 0.05 (X.randN 2 'ι' 0.03 0.15) 2
+          l5 = allpassN l4 0.05 (X.rRandN 2 'ι' 0.03 0.15) 2
           l6 = leakDC l5 0.995
           l7 = l6 + i
       in mrg [l7,localOut l7]
-    r_allpass i = allpassN i 0.03 (X.randN 2 'ζ' 0.005 0.02) 1
+    r_allpass i = allpassN i 0.03 (X.rRandN 2 'ζ' 0.005 0.02) 1
     s3 = s2 + mix (Protect.uclone_all 'κ' 8 s1)
 in rev_f (Protect.useq_all 'λ' 4 r_allpass s3)
 
@@ -35,11 +35,11 @@ let s1 =
           l1 = onePole l0 0.33
           (l1l,l1r) = unmce2 l1
           l2 = rotate2 l1l l1r 0.23
-          l3 = allpassN l2 0.05 (X.randN 2 'θ' 0.01 0.05) 2
+          l3 = allpassN l2 0.05 (X.rRandN 2 'θ' 0.01 0.05) 2
           l4 = delayN l3 0.3 (mce2 0.17 0.23)
-          l5 = allpassN l4 0.05 (X.randN 2 'ι' 0.03 0.15) 2
+          l5 = allpassN l4 0.05 (X.rRandN 2 'ι' 0.03 0.15) 2
           l6 = leakDC l5 0.995
           l7 = l6 + i
       in mrg [l7,localOut l7]
-    r_allpass i = allpassN i 0.03 (X.randN 2 'ζ' 0.005 0.02) 1
+    r_allpass i = allpassN i 0.03 (X.rRandN 2 'ζ' 0.005 0.02) 1
 in rev_f (Protect.useq_all 'λ' 4 r_allpass s1)

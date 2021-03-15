@@ -19,7 +19,7 @@ in mce2 o1 o2 * 0.1
 lfTri AR (mouseX KR 200 12000 Exponential 0.2) 0 * 0.1
 
 -- lfTri ; c.f. dpw3Tri efficiency
-let f = X.randN 50 'α' 50 5000
+let f = X.rRandN 50 'α' 50 5000
 in splay (lfTri AR f 0) 1 0.1 0 True
 
 ---- ; drawings
