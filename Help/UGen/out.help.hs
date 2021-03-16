@@ -8,5 +8,11 @@ sinOsc AR (mce2 330 331) 0 * 0.1
 mrg [out 0 (sinOsc AR (mce2 330 990) 0 * 0.05)
     ,out 0 (sinOsc AR (mce2 331 991) 0 * 0.05)]
 
--- out ; out is a summing output, see replaceOut for over-writing output
-mix (mce [sinOsc AR (mce2 330 990) 0 * 0.05,sinOsc AR (mce2 331 991) 0 * 0.05])
+-- out ; summing (phase cancellation)
+mrg [out 0 (sinOsc AR 440 0),out 0 (sinOsc AR 440 pi)]
+
+-- out ; summing ; non phase cancellation
+mce [sinOsc AR (mce [440,441]) (mce [0,pi]),sinOsc AR (mce [440,441]) (mce [pi,0])]
+
+-- out ; summing / transpose ; phase cancellation
+mce (transpose [sinOsc AR (mce [440,441]) (mce [0,pi]),sinOsc AR (mce [440,441]) (mce [pi,0])])
