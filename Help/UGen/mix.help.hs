@@ -15,3 +15,7 @@ mix (mce2 (pan2 (sinOsc AR 440 0) (-1) 0.1) (pan2 (sinOsc AR 441 0) 1 0.1))
 
 -- mix ; phase cancellation
 mix (mce2 (sinOsc AR 440 0) (sinOsc AR 440 pi))
+
+-- mix ; channel layout is L=440,441 and R=660,661
+let f = mce2 (mce2 440 660) (mce2 441 661)
+in mix (sinOsc AR f 0 * 0.1)
