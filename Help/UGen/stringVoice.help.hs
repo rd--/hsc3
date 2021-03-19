@@ -9,3 +9,11 @@ let pan = 0
     damping = tRand 'ε' 0.1 0.5 trig
     sig = X.stringVoice AR trig infsustain freq accent structure brightness damping
 in pan2 sig pan 1
+
+-- stringVoice ; event control
+let f _ (g,x,y,z,o,rx,ry,_,_,_) =
+      let freq = midiCPS (x * 25 + 36)
+          tr = trig g controlDur
+          sig = X.stringVoice AR tr 0 freq z y rx (ry * 2)
+      in pan2 sig (o * 2 - 1) 1
+in mix (rEventVoicer 16 f) * control KR "gain" 1
