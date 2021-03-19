@@ -38,6 +38,18 @@ allpass2 rate in_ freq rq = mkUGen Nothing [AR] (Left rate) "Allpass2" [in_,freq
 amplitudeMod :: Rate -> UGen -> UGen -> UGen -> UGen
 amplitudeMod rate in_ attackTime releaseTime = mkUGen Nothing [KR,AR] (Left rate) "AmplitudeMod" [in_,attackTime,releaseTime] Nothing 1 (Special 0) NoId
 
+-- | Virtual analog 808 bass drum model
+--
+--  AnalogBassDrum [AR] trig=0.0 infsustain=0.0 accent=0.5 freq=50.0 tone=0.5 decay=0.5 attackfm=0.5 selffm=0.25
+analogBassDrum :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+analogBassDrum rate trig_ infsustain accent freq tone decay_ attackfm selffm = mkUGen Nothing [AR] (Left rate) "AnalogBassDrum" [trig_,infsustain,accent,freq,tone,decay_,attackfm,selffm] Nothing 1 (Special 0) NoId
+
+-- | Virtual analog 808 snare drum model.
+--
+--  AnalogSnareDrum [AR] trig=0.0 infsustain=0.0 accent=0.1 freq=200.0 tone=0.5 decay=0.5 snappy=0.5
+analogSnareDrum :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+analogSnareDrum rate trig_ infsustain accent freq tone decay_ snappy = mkUGen Nothing [AR] (Left rate) "AnalogSnareDrum" [trig_,infsustain,accent,freq,tone,decay_,snappy] Nothing 1 (Special 0) NoId
+
 -- | event analyser (BBCut)
 --
 --  AnalyseEvents2 [AR] in=0.0 bufnum=0.0 threshold=0.34 triggerid=101.0 circular=0.0 pitch=0.0
@@ -211,6 +223,12 @@ bfPanner rate maxSize = mkUGen Nothing [IR,KR,AR,DR] (Left rate) "BFPanner" [max
 --  BLBufRd [KR,AR] bufnum=0.0 phase=0.0 ratio=1.0
 blBufRd :: Rate -> UGen -> UGen -> UGen -> UGen
 blBufRd rate bufnum phase ratio = mkUGen Nothing [KR,AR] (Left rate) "BLBufRd" [bufnum,phase,ratio] Nothing 1 (Special 0) NoId
+
+-- | Band limited oscillator
+--
+--  BLOsc [KR,AR] freq=100.0 pulsewidth=0.5 waveform=0.0
+blOsc :: Rate -> UGen -> UGen -> UGen -> UGen
+blOsc rate freq pulsewidth waveform = mkUGen Nothing [KR,AR] (Left rate) "BLOsc" [freq,pulsewidth,waveform] Nothing 1 (Special 0) NoId
 
 -- | 24db/oct rolloff - 4nd order resonant Low/High/Band Pass Filter
 --
@@ -421,6 +439,12 @@ crest rate in_ numsamps gate_ = mkUGen Nothing [KR] (Left rate) "Crest" [in_,num
 --  CrossoverDistortion [AR] in=0.0 amp=0.5 smooth=0.5;    FILTER: TRUE
 crossoverDistortion :: UGen -> UGen -> UGen -> UGen
 crossoverDistortion in_ amp smooth = mkUGen Nothing [AR] (Right [0]) "CrossoverDistortion" [in_,amp,smooth] Nothing 1 (Special 0) NoId
+
+-- | Simple compressor
+--
+--  DCompressor [AR] input=0.0 sidechainIn=0.0 sidechain=0.0 ratio=4.0 threshold=-40.0 attack=0.1 release=100.1 makeup=0.5 automakeup=1.0;    FILTER: TRUE
+dCompressor :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dCompressor input sidechainIn sidechain ratio threshold attack release makeup automakeup = mkUGen Nothing [AR] (Right [0]) "DCompressor" [input,sidechainIn,sidechain,ratio,threshold,attack,release,makeup,automakeup] Nothing 1 (Special 0) NoId
 
 -- | Digitally modelled analog filter
 --
@@ -962,6 +986,13 @@ greyholeRaw in1 in2 damping delaytime diffusion feedback moddepth modfreq size =
 hairCell :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 hairCell input spontaneousrate boostrate restorerate loss = mkUGen Nothing [KR,AR] (Right [0]) "HairCell" [input,spontaneousrate,boostrate,restorerate,loss] Nothing 1 (Special 0) NoId
 
+
+-- | 16 voice harmonic oscillator
+--
+--  HarmonicOsc [KR,AR] freq=100.0 firstharmonic=1.0 *amplitudes=0.0
+harmonicOsc :: Rate -> UGen -> UGen -> UGen -> UGen
+harmonicOsc rate freq firstharmonic amplitudes = mkUGen Nothing [KR,AR] (Left rate) "HarmonicOsc" [freq,firstharmonic] (Just [amplitudes]) 1 (Special 0) NoId
+
 -- | henon map 2D chaotic generator
 --
 --  Henon2DC [KR,AR] minfreq=11025.0 maxfreq=22050.0 a=1.4 b=0.3 x0=0.30501993062401 y0=0.20938865431933
@@ -1454,6 +1485,19 @@ nearestN rate treebuf in_ gate_ num = mkUGen Nothing [KR] (Left rate) "NearestN"
 needleRect :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 needleRect rate rate_ imgWidth imgHeight rectX rectY rectW rectH = mkUGen Nothing [AR] (Left rate) "NeedleRect" [rate_,imgWidth,imgHeight,rectX,rectY,rectW,rectH] Nothing 1 (Special 0) NoId
 
+
+-- | Formant oscillator with aliasing-free phase reset
+--
+--  NeoFormant [KR,AR] formantfreq=100.0 carrierfreq=200.0 phaseshift=0.5
+neoFormant :: Rate -> UGen -> UGen -> UGen -> UGen
+neoFormant rate formantfreq carrierfreq phaseshift = mkUGen Nothing [KR,AR] (Left rate) "NeoFormant" [formantfreq,carrierfreq,phaseshift] Nothing 1 (Special 0) NoId
+
+-- | Variable saw oscillator
+--
+--  NeoVarSawOsc [KR,AR] freq=100.0 pw=0.5 waveshape=0.5
+neoVarSawOsc :: Rate -> UGen -> UGen -> UGen -> UGen
+neoVarSawOsc rate freq pw waveshape = mkUGen Nothing [KR,AR] (Left rate) "NeoVarSawOsc" [freq,pw,waveshape] Nothing 1 (Special 0) NoId
+
 -- | Nested Allpass filters as proposed by Vercoe and Pluckett
 --
 --  NestedAllpassC [AR] in=0.0 maxdelay1=3.6e-2 delay1=3.6e-2 gain1=8.0e-2 maxdelay2=3.0e-2 delay2=3.0e-2 gain2=0.3;    FILTER: TRUE
@@ -1519,6 +1563,12 @@ onsetStatistics rate input windowsize hopsize = mkUGen Nothing [KR] (Left rate) 
 --  Oregonator [AR] reset=0.0 rate=1.0e-2 epsilon=1.0 mu=1.0 q=1.0 initx=0.5 inity=0.5 initz=0.5
 oregonator :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 oregonator rate reset rate_ epsilon mu q initx inity initz = mkUGen Nothing [AR] (Left rate) "Oregonator" [reset,rate_,epsilon,mu,q,initx,inity,initz] Nothing 3 (Special 0) NoId
+
+-- | An oscillator bank in the style of divide-down organs
+--
+--  OscBank [KR,AR] freq=100.0 gain=1.0 saw8=0.5 square8=0.5 saw4=0.5 square4=0.5 saw2=0.5 square2=0.5 saw1=0.5
+oscBank :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+oscBank rate freq gain saw8 square8 saw4 square4 saw2 square2 saw1 = mkUGen Nothing [KR,AR] (Left rate) "OscBank" [freq,gain,saw8,square8,saw4,square4,saw2,square2,saw1] Nothing 1 (Special 0) NoId
 
 -- | Piano physical model.
 --
@@ -1910,6 +1960,12 @@ rmShelf2 rate in_ freq k = mkUGen Nothing [AR] (Left rate) "RMShelf2" [in_,freq,
 regaliaMitraEQ :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
 regaliaMitraEQ rate in_ freq rq k = mkUGen Nothing [AR] (Left rate) "RegaliaMitraEQ" [in_,freq,rq,k] Nothing 1 (Special 0) NoId
 
+-- | A resonant body simulation.
+--
+--  Resonator [AR] input=0.0 freq=100.0 position=1.0e-3 resolution=24.0 structure=0.5 brightness=0.5 damping=0.5;    FILTER: TRUE
+resonator :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+resonator input freq position resolution structure brightness damping = mkUGen Nothing [AR] (Right [0]) "Resonator" [input,freq,position,resolution,structure,brightness,damping] Nothing 1 (Special 0) NoId
+
 -- | A modal synthesis voice
 --
 --  Rongs [AR] trigger=0.0 sustain=1.0 f0=1.0e-2 structure=0.5 brightness=0.5 damping=0.75 accent=0.9 stretch=0.5 position=0.15 loss=0.15
@@ -2228,6 +2284,12 @@ stkVoicForm rate freq vuvmix vowelphon vibfreq vibgain loudness_ trig_ = mkUGen 
 streson :: UGen -> UGen -> UGen -> UGen
 streson input delayTime res = mkUGen Nothing [KR,AR] (Right [0]) "Streson" [input,delayTime,res] Nothing 1 (Special 0) NoId
 
+-- | Extended Karplus-Strong
+--
+--  StringVoice [AR] trig=0.0 infsustain=0.0 freq=100.0 accent=0.5 structure=0.5 brightness=0.5 damping=0.5
+stringVoice :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+stringVoice rate trig_ infsustain freq accent structure brightness damping = mkUGen Nothing [AR] (Left rate) "StringVoice" [trig_,infsustain,freq,accent,structure,brightness,damping] Nothing 1 (Special 0) NoId
+
 -- | Pulse counter with floating point steps
 --
 --  Summer [KR,AR] trig=0.0 step=1.0 reset=0.0 resetval=0.0;    FILTER: TRUE
@@ -2372,6 +2434,18 @@ vmScan2D rate bufnum = mkUGen Nothing [AR] (Left rate) "VMScan2D" [bufnum] Nothi
 vosim :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
 vosim rate trig_ freq nCycles decay_ = mkUGen Nothing [AR] (Left rate) "VOSIM" [trig_,freq,nCycles,decay_] Nothing 1 (Special 0) NoId
 
+-- | Variable Waveshape Oscillator
+--
+--  VarShapeOsc [KR,AR] freq=100.0 pw=0.5 waveshape=0.5 sync=1.0 syncfreq=105.0
+varShapeOsc :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+varShapeOsc rate freq pw waveshape sync syncfreq = mkUGen Nothing [KR,AR] (Left rate) "VarShapeOsc" [freq,pw,waveshape,sync,syncfreq] Nothing 1 (Special 0) NoId
+
+-- | Vosim oscillator
+--
+--  VosimOsc [KR,AR] freq=100.0 form1freq=951.0 form2freq=919.0 shape=0.0
+vosimOsc :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+vosimOsc rate freq form1freq form2freq shape = mkUGen Nothing [KR,AR] (Left rate) "VosimOsc" [freq,form1freq,form2freq,shape] Nothing 1 (Special 0) NoId
+
 -- | windowed amplitude follower
 --
 --  WAmp [KR] in=0.0 winSize=0.1
@@ -2425,3 +2499,10 @@ weaklyNonlinear2 rate input reset ratex ratey freq initx inity alpha xexponent b
 --  WrapSummer [KR,AR] trig=0.0 step=1.0 min=0.0 max=1.0 reset=0.0 resetval=0.0
 wrapSummer :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 wrapSummer rate trig_ step min_ max_ reset resetval = mkUGen Nothing [KR,AR] (Left rate) "WrapSummer" [trig_,step,min_,max_,reset,resetval] Nothing 1 (Special 0) NoId
+
+
+-- | Sinewave multiplied by and sync'ed to a carrier
+--
+--  ZOsc [KR,AR] freq=100.0 formantfreq=91.0 shape=0.5 mode=0.5
+zOsc :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+zOsc rate freq formantfreq shape mode = mkUGen Nothing [KR,AR] (Left rate) "ZOsc" [freq,formantfreq,shape,mode] Nothing 1 (Special 0) NoId
