@@ -70,20 +70,20 @@ control :: R.Rate -> String -> Double -> UGen
 control r = control_f64 r Nothing
 
 -- | Variant of 'control' with meta data.
-control_md :: R.Rate -> String -> Double -> Control_Meta_T5 Double -> UGen
-control_md rt nm df meta =
-    let m = control_meta_t5 id meta
+control_m :: R.Rate -> String -> Double -> Control_Meta_T3 Double -> UGen
+control_m rt nm df meta =
+    let m = control_meta_t3 id meta
     in Control_U (Control rt Nothing nm df False (Just m))
 
-control_grp :: Control_Group -> R.Rate -> String -> (Double,Double) -> Control_Meta_T5 Double -> (UGen,UGen)
+control_grp :: Control_Group -> R.Rate -> String -> (Double,Double) -> Control_Meta_T3 Double -> (UGen,UGen)
 control_grp grp rt nm (df1,df2) meta =
-    let m = (control_meta_t5 id meta) {controlGroup = Just grp}
+    let m = (control_meta_t3 id meta) {controlGroup = Just grp}
         (lhs,rhs) = control_group_suffixes grp
     in (Control_U (Control rt Nothing (nm ++ [lhs]) df1 False (Just m))
        ,Control_U (Control rt Nothing (nm ++ [rhs]) df2 False (Just m)))
 
 -- | Generate range controls.  Names are generated according to 'control_group_suffixes'
-control_rng :: R.Rate -> String -> (Double,Double) -> Control_Meta_T5 Double -> (UGen,UGen)
+control_rng :: R.Rate -> String -> (Double,Double) -> Control_Meta_T3 Double -> (UGen,UGen)
 control_rng = control_grp Control_Range
 
 -- | Triggered (kr) control input node constructor.

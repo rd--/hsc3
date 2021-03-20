@@ -105,9 +105,9 @@ let f c (g,_,_,z,o,rx,_,p,_,_) =
       in pan2 s l (lagUD g 0 1 * z * amp_mod)
 in mix (rEventVoicer 16 f) * control KR "gain" 1.5
 
--- sinOsc ; control_md inputs
-let f = control_md KR "mnn" 69 (0,127,"lin",1,"")
-    a = control_md KR "amp" 0.25 (0,4,"amp",0,"*")
+-- sinOsc ; control_m inputs
+let f = control_m KR "mnn" 69 (0,127,"lin")
+    a = control_m KR "amp" 0.25 (0,1,"amp")
 in sinOsc AR (midiCPS f) 0 * a
 
 ---- ; drawings

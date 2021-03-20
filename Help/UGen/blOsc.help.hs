@@ -12,7 +12,7 @@ let tr = dust 'α' KR 2
 in pan2 (X.blOsc AR freq width waveform) (tRand 'ε' (-1) 1 tr) (tRand 'ζ' 0.02 0.1 tr)
 
 -- blOsc ; k-rate (not implemented for width/waveform)
-let freq = control_md KR "freq" 110 (55,880,"exp",0,"")
-    width = control_md KR "width" 0.5 (0,1,"lin",0,"")
-    waveform = control_md KR "waveform" 0 (0,2,"lin",1,"")
+let freq = control_m KR "freq" 110 (55,880,"exp")
+    width = control_m KR "width" 0.5 (0,1,"lin")
+    waveform = control_m KR "waveform" 0 (0,2,"lin")
 in X.blOsc AR freq width waveform * 0.1

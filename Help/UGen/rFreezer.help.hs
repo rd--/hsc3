@@ -32,16 +32,16 @@ let b = control KR "buf" 0
 in X.rFreezer b (n 'α' 0.3 0.4) (n 'β' 0.5 0.6) (n 'γ' 0.3 0.6) (n 'δ' 0.95 1.05) (n 'ε' 0.05 0.15) (n 'ζ' 0.05 0.15) (n 'η' 0.05 0.15) 0 0 36
 
 -- rFreezer ; controls
-let b = control_md KR "buf" 0 (0,0,"lin",1,"")
-    (lhs,rhs) = control_rng KR "wnd" (0,1) (0,1,"lin",0,"")
-    amp = control_md KR "amp" 0.1 (0,1,"amp",0,"")
-    incr = control_md KR "incr" 1 (0,4,"lin",0,"")
-    incrO = control_md KR "incrO" 0 (0,1,"lin",0,"")
-    incrR = control_md KR "incrR" 0 (0,1,"lin",0,"")
-    wndR = control_md KR "wndR" 0 (0,1,"lin",0,"")
-    syncPh = control_md KR "syncPh" 0 (0,1,"tr",1,"")
-    randPh = control_md KR "randPh" 0 (0,1,"tr",1,"")
-    dgr = control_md KR "numLp" 24 (1,64,"lin",1,"")
+let b = control_m KR "buf" 0 (0,0,"lin")
+    (lhs,rhs) = control_rng KR "wnd" (0,1) (0,1,"lin")
+    amp = control_m KR "amp" 0.1 (0,1,"amp")
+    incr = control_m KR "incr" 1 (0,4,"lin")
+    incrO = control_m KR "incrO" 0 (0,1,"lin")
+    incrR = control_m KR "incrR" 0 (0,1,"lin")
+    wndR = control_m KR "wndR" 0 (0,1,"lin")
+    syncPh = control_m KR "syncPh" 0 (0,1,"trigger")
+    randPh = control_m KR "randPh" 0 (0,1,"trigger")
+    dgr = control_m KR "numLp" 24 (1,64,"lin")
 in X.rFreezer b lhs rhs amp incr incrO incrR wndR syncPh randPh dgr
 
 ---- ; allocate buffer 0, required for examples

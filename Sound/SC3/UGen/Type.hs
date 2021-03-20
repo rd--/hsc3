@@ -51,10 +51,17 @@ data Control_Meta n =
                  }
     deriving (Eq,Read,Show)
 
+-- | 3-tuple form of 'Control_Meta' data.
+type Control_Meta_T3 n = (n,n,String)
+
+-- | Lift 'Control_Meta_T3' to 'Control_Meta' allowing type coercion.
+control_meta_t3 :: Num m => (n -> m) -> Control_Meta_T3 n -> Control_Meta m
+control_meta_t3 f (l,r,w) = Control_Meta (f l) (f r) w 0 "" Nothing
+
 -- | 5-tuple form of 'Control_Meta' data.
 type Control_Meta_T5 n = (n,n,String,n,String)
 
--- | Lift 'Control_Meta_5' to 'Control_Meta' allowing type coercion.
+-- | Lift 'Control_Meta_T5' to 'Control_Meta' allowing type coercion.
 control_meta_t5 :: (n -> m) -> Control_Meta_T5 n -> Control_Meta m
 control_meta_t5 f (l,r,w,stp,u) = Control_Meta (f l) (f r) w (f stp) u Nothing
 

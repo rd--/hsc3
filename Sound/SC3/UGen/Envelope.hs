@@ -40,8 +40,8 @@ envGate level gate_ fadeTime doneAction curve =
 envGate_def :: UGen
 envGate_def =
     let level = 1
-        gate_ = control_md KR "gate" 1 (0,1,"lin",1,"b") -- b = boolean
-        fadeTime = control_md KR "fadeTime" 0.02 (0,10,"lin",0,"s") -- s = seconds
+        gate_ = control_m KR "gate" 1 (0,1,"gate")
+        fadeTime = control_m KR "fadeTime" 0.02 (0,10,"lin")
         doneAction = RemoveSynth
         curve = EnvSin
     in envGate level gate_ fadeTime doneAction curve

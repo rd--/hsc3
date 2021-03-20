@@ -62,12 +62,12 @@ in pan2 (X.rdx7 AR buf gate_ reset_ data_ vc mnn vel 0x2000 0 0 0) loc 1
 -- rdx7 ; event control ; data at shared buffer
 let f _ (g,x,_,z,o,_,_,p,_,_) =
       let buf = control KR "buf" 100
-          vc = control_md KR "vc" 0 (0,31,"lin",1,"ix")
+          vc = control_m KR "vc" 0 (0,31,"lin")
           x0 = latch x g
           pw = 0x2000 * (1 + (x - x0) * 2)
           s = X.rdx7 AR buf g 0 0 vc p (z * 99) pw 0 0 0
       in pan2 s (o * 2 - 1) 1
-in mix (rEventVoicer 16 f) * control_md KR "gain" 1 (0,4,"amp",0.01,"*")
+in mix (rEventVoicer 16 f) * control_m KR "gain" 1 (0,4,"amp")
 
 ---- ; send init voice
 import qualified Sound.SC3.Data.Yamaha.DX7 as DX7 {- hsc3-data -}
