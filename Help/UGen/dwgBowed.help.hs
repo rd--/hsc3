@@ -10,7 +10,7 @@ let k = control KR
     pan = k "pan" 0
     vib = gendy1 'α' KR 1 1 1 1 0.1 4 0.5 0.5 12 0 * 0.003 + 1
     s1 = X.dwgBowed AR (freq * vib) amp force gate_ pos 0.1 c1 c3 0.55 2
-    s2 = X.dwgSoundBoard AR s1 20 20 0.8 199 211 223 227 229 233 239 241
+    s2 = X.dwgSoundBoard s1 20 20 0.8 199 211 223 227 229 233 239 241
     s3 = bpf s2 118 1 + s2
     s4 = bpf s3 430 1 + s3
     s5 = bpf s4 490 1 + s4
@@ -21,7 +21,7 @@ in pan2 (s6 * 0.1) pan 1
 let f _c (g,_,y,z,o,rx,ry,p,_,_) =
       let freq = midiCPS p
           s1 = X.dwgBowed AR freq z (0.5 + rx) 1 y 0.1 0.25 31 (0.55 + ry) 2 * g * z
-          s2 = X.dwgSoundBoard AR s1 20 20 0.8 199 211 223 227 229 233 239 241
+          s2 = X.dwgSoundBoard s1 20 20 0.8 199 211 223 227 229 233 239 241
           s3 = bpf s2 118 1 + s2
           s4 = bpf s3 430 1 + s3
           s5 = bpf s4 490 1 + s4

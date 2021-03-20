@@ -8,24 +8,20 @@
 (require 'thingatpt)
 (require 'find-lisp)
 
-(defvar hsc3-buffer
-  "*hsc3*"
-  "*The name of the hsc3 haskell process buffer.")
+(defcustom hsc3-buffer "*hsc3*"
+  "*The name of the hsc3 haskell process buffer."
+  :type 'string)
 
-(defvar hsc3-interpreter
-  (list "ghci")
+(defvar hsc3-interpreter (list "ghci")
   "*The name of the haskell interpreter (default=\"ghci\").")
 
-(defvar hsc3-directory
-  nil
+(defvar hsc3-directory nil
   "*The hsc3 directory (default=nil).")
 
-(defvar sc3-help-directory
-  nil
+(defvar sc3-help-directory nil
   "*The directory containing the SC3 RTF help files (default=nil).")
 
-(defvar hsc3-literate-p
-  nil
+(defvar hsc3-literate-p nil
   "*Flag to indicate if we are in literate mode (default=nil).")
 
 (make-variable-buffer-local 'hsc3-literate-p)
@@ -179,13 +175,13 @@
   (interactive)
   (shell-command-on-region (point-min) (point-max) "hsc3-id-rewrite" nil t))
 
-(defvar hsc3-server-host
-  "127.0.0.1"
-  "The host that scsynth is listening at")
+(defcustom hsc3-server-host "127.0.0.1"
+  "The host that scsynth is listening at"
+  :type 'string)
 
-(defvar hsc3-server-port
-  57110
-  "The port that scsynth is listening at")
+(defcustom hsc3-server-port 57110
+  "The port that scsynth is listening at"
+  :type 'integer)
 
 (defun hsc3-with-sc3 (txt)
   ""
@@ -236,9 +232,9 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (interactive)
   (hsc3-with-sc3 "(Sound.OSC.sendMessage Sound.SC3.quit)"))
 
-(defvar hsc3-seq-degree
-  2
-  "*Number of scsynth processes to address at -seq operations (default=2).")
+(defcustom hsc3-seq-degree 2
+  "*Number of scsynth processes to address at -seq operations (default=2)."
+  :type 'integer)
 
 (defun hsc3-server-status-seq ()
   "Send serverStatus request to haskell."

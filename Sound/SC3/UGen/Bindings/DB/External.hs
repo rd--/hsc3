@@ -488,6 +488,18 @@ dwgBowedSimple rate freq velb force gate_ pos release c1 c3 = mkUGen Nothing [AR
 dwgBowedTor :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 dwgBowedTor rate freq velb force gate_ pos release c1 c3 impZ fB mistune c1tor c3tor iZtor = mkUGen Nothing [AR] (Left rate) "DWGBowedTor" [freq,velb,force,gate_,pos,release,c1,c3,impZ,fB,mistune,c1tor,c3tor,iZtor] Nothing 1 (Special 0) NoId
 
+-- | Clarinet physical model.
+--
+--  DWGClarinet3 [AR] freq=440.0 pm=1.0 pc=1.0 m=0.8 gate=1.0 release=1.0e-2 c1=0.25 c3=7.0
+dwgClarinet3 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dwgClarinet3 rate freq pm pc m gate_ release c1 c3 = mkUGen Nothing [AR] (Left rate) "DWGClarinet3" [freq,pm,pc,m,gate_,release,c1,c3] Nothing 1 (Special 0) NoId
+
+-- | Reimplementation of STK flute model.
+--
+--  DWGFlute [AR] freq=400.0 pm=1.0 endr=0.5 jetr=0.25 jetRa=0.33 gate=1.0 release=0.1
+dwgFlute :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dwgFlute rate freq pm endr jetr jetRa gate_ release = mkUGen Nothing [AR] (Left rate) "DWGFlute" [freq,pm,endr,jetr,jetRa,gate_,release] Nothing 1 (Special 0) NoId
+
 -- | Plucked physical model.
 --
 --  DWGPlucked [AR] freq=440.0 amp=0.5 gate=1.0 pos=0.14 c1=1.0 c3=30.0 inp=0.0 release=0.1
@@ -509,8 +521,8 @@ dwgPluckedStiff rate freq amp gate_ pos c1 c3 inp release fB = mkUGen Nothing [A
 -- | (Undocumented class)
 --
 --  DWGSoundBoard [AR] inp=0.0 c1=20.0 c3=20.0 mix=0.8 d1=199.0 d2=211.0 d3=223.0 d4=227.0 d5=229.0 d6=233.0 d7=239.0 d8=241.0
-dwgSoundBoard :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-dwgSoundBoard rate inp c1 c3 mix d1 d2 d3 d4 d5 d6 d7 d8 = mkUGen Nothing [AR] (Left rate) "DWGSoundBoard" [inp,c1,c3,mix,d1,d2,d3,d4,d5,d6,d7,d8] Nothing 1 (Special 0) NoId
+dwgSoundBoard :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dwgSoundBoard inp c1 c3 mix d1 d2 d3 d4 d5 d6 d7 d8 = mkUGen Nothing [AR] (Right [0]) "DWGSoundBoard" [inp,c1,c3,mix,d1,d2,d3,d4,d5,d6,d7,d8] Nothing 1 (Special 0) NoId
 
 -- | demand rate brownian movement with Gendyn distributions
 --
@@ -1585,8 +1597,8 @@ oteyPianoStrings rate freq vel t_gate rmin rmax rampl rampr rcore lmin lmax lamp
 -- | (Undocumented class)
 --
 --  OteySoundBoard [AR] inp=0.0 c1=20.0 c3=20.0 mix=0.8
-oteySoundBoard :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-oteySoundBoard rate inp c1 c3 mix = mkUGen Nothing [AR] (Left rate) "OteySoundBoard" [inp,c1,c3,mix] Nothing 1 (Special 0) NoId
+oteySoundBoard :: UGen -> UGen -> UGen -> UGen -> UGen
+oteySoundBoard inp c1 c3 mix = mkUGen Nothing [AR] (Right [0]) "OteySoundBoard" [inp,c1,c3,mix] Nothing 1 (Special 0) NoId
 
 -- | Return mag and freq data from a CSound pv
 --
@@ -1894,6 +1906,12 @@ permModT rate in_ outfreq infreq = mkUGen Nothing [AR] (Left rate) "PermModT" [i
 planeTree :: Rate -> UGen -> UGen -> UGen -> UGen
 planeTree rate treebuf in_ gate_ = mkUGen Nothing [KR] (Left rate) "PlaneTree" [treebuf,in_,gate_] Nothing 1 (Special 0) NoId
 
+-- | Plucked physical model by Fredrik Eckerholm.
+--
+--  PluckSynth [AR] freq=440.0 amp=1.0 gate=1.0 pos=0.0 c1=0.25 c3=5.0 release=0.1 f=0.0 m=0.0 k=0.0 r=0.0 l=0.65 ra=1.0e-3 rho=7850.0
+pluckSynth :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+pluckSynth rate freq amp gate_ pos c1 c3 release f m k r l ra rho = mkUGen Nothing [AR] (Left rate) "PluckSynth" [freq,amp,gate_,pos,c1,c3,release,f,m,k,r,l,ra,rho] Nothing 1 (Special 0) NoId
+
 -- | (Undocumented class)
 --
 --  PosRatio [AR] in=0.0 period=100.0 thresh=0.1
@@ -2133,6 +2151,24 @@ softClipper4 rate in_ = mkUGen Nothing [AR] (Left rate) "SoftClipper4" [in_] Not
 --  SoftClipper8 [AR] in=0.0
 softClipper8 :: Rate -> UGen -> UGen
 softClipper8 rate in_ = mkUGen Nothing [AR] (Left rate) "SoftClipper8" [in_] Nothing 1 (Special 0) NoId
+
+-- | LPC analizer.
+--
+--  SonLPC [AR] buff=-1.0 in=0.0 hop=0.5 poles=10.0
+sonLPC :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+sonLPC rate buff in_ hop poles = mkUGen Nothing [AR] (Left rate) "SonLPC" [buff,in_,hop,poles] Nothing 1 (Special 0) NoId
+
+-- | (Undocumented class)
+--
+--  SonLPCSynth [AR] chain=-1.0
+sonLPCSynth :: Rate -> UGen -> UGen
+sonLPCSynth rate chain = mkUGen Nothing [AR] (Left rate) "SonLPCSynth" [chain] Nothing 1 (Special 0) NoId
+
+-- | (Undocumented class)
+--
+--  SonLPCSynthIn [AR] chain=-1.0 in=0.0
+sonLPCSynthIn :: Rate -> UGen -> UGen -> UGen
+sonLPCSynthIn rate chain in_ = mkUGen Nothing [AR] (Left rate) "SonLPCSynthIn" [chain,in_] Nothing 1 (Special 0) NoId
 
 -- | Karplus-Strong via a sorting algorithm
 --
