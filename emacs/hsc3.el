@@ -166,14 +166,14 @@
   (shell-command-on-region
    (region-beginning)
    (region-end)
-   "hsc3-id-rewrite"
+   "hsc3-rw id-rewrite"
    nil
    t))
 
 (defun hsc3-id-rewrite-buffer ()
   "Run hsc3-id-rewrite on buffer."
   (interactive)
-  (shell-command-on-region (point-min) (point-max) "hsc3-id-rewrite" nil t))
+  (shell-command-on-region (point-min) (point-max) "hsc3-rw id-rewrite" nil t))
 
 (defcustom hsc3-server-host "127.0.0.1"
   "The host that scsynth is listening at"
