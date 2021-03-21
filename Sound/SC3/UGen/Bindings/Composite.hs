@@ -486,11 +486,12 @@ tWChooseM t a w n = do
 unpackFFT :: UGen -> Int -> Int -> Int -> UGen -> [UGen]
 unpackFFT c nf from to w = map (\i -> unpack1FFT c (constant nf) (constant i) w) [from .. to]
 
--- | VarLag in terms of envGen
-varLag_env :: UGen -> UGen -> Envelope_Curve UGen -> UGen -> UGen
-varLag_env in_ time curve start =
+-- | VarLag in terms of envGen.  Note: in SC3 curvature and warp are separate arguments.
+varLag_env :: UGen -> UGen -> Envelope_Curve UGen -> Maybe UGen -> UGen
+varLag_env in_ time warp start =
   let rt = rateOf in_
-      e = Envelope [start,in_] [time] [curve] Nothing Nothing 0
+      start_ = maybe in_ id start
+      e = Envelope [start_,in_] [time] [warp] Nothing Nothing 0
       -- e[6] = curve; e[7] = curvature;
       time_ch = if rateOf time == IR then 0 else changed time 0
       tr = changed in_ 0 + time_ch + impulse rt 0 0
