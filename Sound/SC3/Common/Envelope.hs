@@ -318,7 +318,7 @@ envTrapezoid_f (lte_f,gte_f) shape skew dur amp =
              ,(1,gte_f skew 1)]
     in envCoord bp dur amp EnvLin
 
-{- | Co-ordinate based static envelope generator.  Points are (time,value) pairs.
+{- | Coordinate based static envelope generator.  Points are (time,value) pairs.
 
 > let e = envCoord [(0,0),(1/4,1),(1,0)] 1 1 EnvLin
 > envelope_sc3_array e == Just [0,2,-99,-99,1,1/4,1,0,0,3/4,1,0]

@@ -128,9 +128,8 @@
   "Get current region as string."
   (buffer-substring-no-properties (region-beginning) (region-end)))
 
-(defun hsc3-play-region-opt (fn)
-  "Play region using given haskell function.
-   If region spans multiple lines send using using ghci layout quoting."
+(defun hsc3-send-region (fn)
+  "If region spans multiple lines send using using ghci layout quoting."
   (let ((str (hsc3-region-string)))
     (if (string-match "\n" str)
         (hsc3-send-layout-block (concat fn " $\n" str))
@@ -139,7 +138,7 @@
 (defun hsc3-play-region (k)
   "Play region at scsynth.  The (one-indexed) prefix agument indicates which server to send to."
   (interactive "p")
-  (hsc3-play-region-opt
+  (hsc3-send-region
    (format
     "audition_at (\"%s\",%d + %d) def_play_opt"
     hsc3-server-host hsc3-server-port (- k 1))))
@@ -147,18 +146,18 @@
 (defun hsc3-draw-region ()
   "Draw region, if region spans multiple lines send using using ghci layout quoting."
   (interactive)
-  (let ((str (hsc3-region-string)))
-    (if (string-match "\n" str)
-        (hsc3-send-layout-block (concat "Sound.SC3.UGen.Dot.draw $\n" str))
-    (hsc3-send-string (concat "Sound.SC3.UGen.Dot.draw $ " str)))))
+  (hsc3-send-region "Sound.SC3.UGen.Dot.draw"))
 
 (defun hsc3-ui-region ()
   "UI for region, if region spans multiple lines send using using ghci layout quoting."
   (interactive)
   (let ((str (hsc3-region-string)))
-    (if (string-match "\n" str)
-        (hsc3-send-layout-block (concat "Sound.SC3.UI.ugen_ui_run \"ui\" 1 $\n" str))
-    (hsc3-send-string (concat "Sound.SC3.UI.ugen_ui_run \"ui\" 1 $ " str)))))
+    (hsc3-send-region "Sound.SC3.UI.ugen_ui_run \"ui\" 1")))
+
+(defun hsc3-pp-smalltalk ()
+  "Pretty print UGen as Smalltalk"
+  (interactive)
+  (hsc3-send-region "Sound.SC3.UGen.DB.PP.ugen_graph_smalltalk_pp"))
 
 (defun hsc3-id-rewrite-region ()
   "Run hsc3-id-rewrite on region."
@@ -247,7 +246,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
 (defun hsc3-play-region-seq ()
   "hsc3-play-region-opt with auditionAt_seq hsc3-seq-degree."
   (interactive)
-  (hsc3-play-region-opt
+  (hsc3-send-region
    (format
     "audition_at_seq (\"%s\",%d) def_play_opt %d"
     hsc3-server-host hsc3-server-port hsc3-seq-degree)))
