@@ -1446,8 +1446,14 @@ moogLadder in_ ffreq res = mkUGen Nothing [KR,AR] (Right [0]) "MoogLadder" [in_,
 -- | Moog  filter emulation
 --
 --  MoogVCF [AR] in=0.0 fco=0.0 res=0.0
-moogVCF :: Rate -> UGen -> UGen -> UGen -> UGen
-moogVCF rate in_ fco res = mkUGen Nothing [AR] (Left rate) "MoogVCF" [in_,fco,res] Nothing 1 (Special 0) NoId
+moogVCF :: UGen -> UGen -> UGen -> UGen
+moogVCF in_ fco res = mkUGen Nothing [AR] (Right [0]) "MoogVCF" [in_,fco,res] Nothing 1 (Special 0) NoId
+
+-- | Stereo reverb
+--
+--  NHHall [AR] in1=0.0 in2=0.0 rt60=1.0 stereo=0.5 lowFreq=200.0 lowRatio=0.5 hiFreq=4000.0 hiRatio=0.5 earlyDiffusion=0.5 lateDiffusion=0.5 modRate=0.2 modDepth=0.3
+nhHall :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+nhHall in1 in2 rt60 stereo lowFreq lowRatio hiFreq hiRatio earlyDiffusion lateDiffusion modRate modDepth = mkUGen Nothing [AR] (Right [0,1]) "NHHall" [in1,in2,rt60,stereo,lowFreq,lowRatio,hiFreq,hiRatio,earlyDiffusion,lateDiffusion,modRate,modDepth] Nothing 2 (Special 0) NoId
 
 -- | Non Linear Filter Equation
 --

@@ -12,10 +12,10 @@ mrg [out 0 (sinOsc AR (mce2 330 990) 0 * 0.05)
 mrg [out 0 (sinOsc AR 440 0),out 0 (sinOsc AR 440 pi)]
 
 -- out ; summing ; non phase cancellation
-mce [sinOsc AR (mce [440,441]) (mce [0,pi]),sinOsc AR (mce [440,441]) (mce [pi,0])]
+mce [sinOsc AR (mce [440,441]) (mce [0,pi]),sinOsc AR (mce [440,441]) (mce [pi,0])] * 0.1
 
 -- out ; summing / transpose ; phase cancellation
-mce (transpose [sinOsc AR (mce [440,441]) (mce [0,pi]),sinOsc AR (mce [440,441]) (mce [pi,0])])
+mceTranspose (mce [sinOsc AR (mce [440,441]) (mce [0,pi]),sinOsc AR (mce [440,441]) (mce [pi,0])])
 
 -- out ; multiple out ; channel layout is L=440,660 and R=441,661
 let f = mce2 (mce2 440 660) (mce2 441 661)
