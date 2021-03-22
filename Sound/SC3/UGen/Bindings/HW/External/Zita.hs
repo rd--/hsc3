@@ -8,23 +8,19 @@ import Sound.SC3.UGen.Bindings.HW.Construct
 import Sound.SC3.UGen.Type
 
 -- | Parameter (name,value) pairs.
---
--- > unwords $ map fst zitaRev_param
-zitaRev_param :: [(String, Double)]
+zitaRev_param :: Num n => [(String,n,(n,n,String))]
 zitaRev_param =
-  [("in1",0.0)
-  ,("in2",0.0)
-  ,("in_delay",60.0)
-  ,("lf_x",200) -- log, 50, 1000
-  ,("low_rt60",3) -- log, 1, 8
-  ,("mid_rt60",2) -- log, 1, 8
-  ,("hf_damping",6000) -- log, 1500, 24000
-  ,("eq1_freq",315) -- log, 40, 2500
-  ,("eq1_level",0) -- lin, -15, 15
-  ,("eq2_freq",1500) -- log, 160, 10000
-  ,("eq2_level",0) -- lin, -15, 15
-  ,("dry_wet_mix",0) -- lin, 0, 1
-  ,("level",-20) -- lin, -9, 9
+  [("in_delay",60,(20,100,"lin")) -- ms
+  ,("lf_x",200,(50,1000,"exp"))
+  ,("low_rt60",3,(1,8,"exp"))
+  ,("mid_rt60",2,(1,8,"exp"))
+  ,("hf_damping",6000,(1500,24000,"exp"))
+  ,("eq1_freq",315,(40,2500,"exp"))
+  ,("eq1_level",0,(-15,15,"lin"))
+  ,("eq2_freq",1500,(160,10000,"exp"))
+  ,("eq2_level",0,(-15,15,"lin"))
+  ,("dry_wet_mix",0,(0,1,"lin"))
+  ,("level",-20,(-9,9,"lin"))
   ]
 
 -- | ZitaRev binding.
