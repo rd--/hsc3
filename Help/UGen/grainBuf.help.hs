@@ -34,3 +34,6 @@ fn = "/home/rohan/data/audio/instr/celeste/long/25-C5-long.wav"
 fn = "/home/rohan/data/audio/instr/celeste/long/37-C6-long.wav"
 fn = "/home/rohan/data/audio/instr/celeste/long/49-C7-long.wav"
 withSC3 (async (b_allocRead 0 fn 0 0))
+
+fn = "/home/rohan/uc/the-center-is-between-us/visitants/flac/f/y.flac"
+withSC3 (async (b_allocRead 0 fn (48000 * 45) (48000 * 1)))

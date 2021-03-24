@@ -44,6 +44,18 @@ amplitudeMod rate in_ attackTime releaseTime = mkUGen Nothing [KR,AR] (Left rate
 analogBassDrum :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 analogBassDrum rate trig_ infsustain accent freq tone decay_ attackfm selffm = mkUGen Nothing [AR] (Left rate) "AnalogBassDrum" [trig_,infsustain,accent,freq,tone,decay_,attackfm,selffm] Nothing 1 (Special 0) NoId
 
+-- | A virtual-analog feedback phaser
+--
+--  AnalogPhaser [AR] input=0.0 lfoinput=0.0 skew=0.0 feedback=0.25 modulation=0.5 stages=8.0
+analogPhaser :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+analogPhaser input lfoinput skew feedback modulation stages = mkUGen Nothing [AR] (Right [0]) "AnalogPhaser" [input,lfoinput,skew,feedback,modulation,stages] Nothing 1 (Special 0) NoId
+
+-- | Virtual Analog allpass phaser modulation section
+--
+--  AnalogPhaserMod [KR,AR] input=0.0 skew=0.0 modulation=0.5 stages=8.0;    FILTER: TRUE
+analogPhaserMod :: UGen -> UGen -> UGen -> UGen -> UGen
+analogPhaserMod input skew modulation stages = mkUGen Nothing [KR,AR] (Right [0]) "AnalogPhaserMod" [input,skew,modulation,stages] Nothing 1 (Special 0) NoId
+
 -- | Virtual analog 808 snare drum model.
 --
 --  AnalogSnareDrum [AR] trig=0.0 infsustain=0.0 accent=0.1 freq=200.0 tone=0.5 decay=0.5 snappy=0.5
