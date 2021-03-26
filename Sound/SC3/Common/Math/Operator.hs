@@ -209,7 +209,7 @@ binary_sym_tbl =
 -- > map fst sc3_binary_op_sym_tbl
 sc3_binary_op_sym_tbl :: [(String,Int)]
 sc3_binary_op_sym_tbl =
-  let f x = maybe (show x) id (lookup x binary_sym_tbl)
+  let f x = fromMaybe (show x) (lookup x binary_sym_tbl)
   in zip (map f [Add .. ExpRandRange]) [0..]
 
 -- | Lookup possibly symbolic name for standard binary operators.

@@ -163,7 +163,7 @@ pack_envelope_segments s =
 
 -- | An envelope is /normal/ if it has no segments with zero duration.
 envelope_is_normal :: (Eq n,Num n) => Envelope n -> Bool
-envelope_is_normal = not . any (== 0) . env_times
+envelope_is_normal = notElem 0 . env_times
 
 -- | Normalise envelope by deleting segments of zero duration.
 envelope_normalise :: (Num a, Ord a) => Envelope a -> Envelope a
@@ -336,7 +336,7 @@ envCoord xy dur amp c = envXYC (map (\(x,y) -> (x * dur,y * amp,c)) xy)
 --
 -- > envPairs [(0, 1), (3, 1.4), (2.1, 0.5)] EnvSin
 envPairs :: (Num n,Ord n) => [(n,n)] -> Envelope_Curve n -> Envelope n
-envPairs xy c = envCoord (sortOn fst xy) 1 1 c
+envPairs xy = envCoord (sortOn fst xy) 1 1
 
 -- | Variant 'envPerc' with user specified 'Envelope_Curve a'.
 envPerc_c :: Num a => a -> a -> a -> Envelope_Curve_2 a -> Envelope a

@@ -4,12 +4,10 @@
 --   Used by non-deterministic (noise) and non-sharable (demand) unit generators.
 module Sound.SC3.Common.UId where
 
-import Control.Monad {- base -}
 import Data.Functor.Identity {- base -}
 import Data.List {- base -}
 import qualified Data.Unique as Unique {- base -}
 
---import qualified Control.Monad.Trans.Identity as Identity {- transformers -}
 import qualified Control.Monad.Trans.Reader as Reader {- transformers -}
 import qualified Control.Monad.Trans.State as State {- transformers -}
 import qualified Data.Digest.Murmur32 as Murmur32 {- hashable -}
@@ -31,7 +29,7 @@ instance UId (State.StateT Int Identity) where
     generateUId = State.get >>= \n -> State.put (n + 1) >> return n
 
 instance UId IO where
-    generateUId = liftM Unique.hashUnique Unique.newUnique
+    generateUId = fmap Unique.hashUnique Unique.newUnique
 
 instance UId m => UId (Reader.ReaderT t m) where
    generateUId = Reader.ReaderT (const generateUId)

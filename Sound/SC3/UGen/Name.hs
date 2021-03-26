@@ -54,7 +54,7 @@ sc3_name_edges s =
 sc3_name_to_hs_name :: String -> String
 sc3_name_to_hs_name s =
     let f (c,e) = if e then toUpper c else c
-    in map f (zip (map toLower s) (sc3_name_edges s))
+    in zipWith (curry f) (map toLower s) (sc3_name_edges s)
 
 {- | Convert from SC3 name to Lisp style name.
 

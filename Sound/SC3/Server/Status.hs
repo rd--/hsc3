@@ -77,7 +77,7 @@ query_node_pp n =
     case n of
       Query_Group k _ -> show k
       Query_Synth k nm c ->
-          let c' = unwords (map query_ctl_pp (fromMaybe [] c))
+          let c' = unwords (maybe [] (map query_ctl_pp) c)
           in show (k,nm,c')
 
 -- | Control (parameter) data may be given as names or indices and as

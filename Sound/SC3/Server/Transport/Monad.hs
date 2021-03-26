@@ -244,7 +244,7 @@ b_getn1_data :: DuplexOSC m => Int -> (Int,Int) -> m [Double]
 b_getn1_data b s = do
   let f m = let (_,_,_,r) = unpack_b_setn_err m in r
   sendMessage (b_getn1 b s)
-  liftM f (waitReply "/b_setn")
+  fmap f (waitReply "/b_setn")
 
 -- | Variant of 'b_getn1_data' that segments individual 'b_getn'
 -- messages to /n/ elements.
@@ -263,7 +263,7 @@ b_fetch n b = do
   let f m = let (_,nf,nc,_) = unpack_b_info_err m
                 ix = (0,nf * nc)
                 deinterleave = transpose . Split.chunksOf nc
-            in liftM deinterleave (b_getn1_data_segment n b ix)
+            in fmap deinterleave (b_getn1_data_segment n b ix)
   sendMessage (b_query1 b)
   waitReply "/b_info" >>= f
 
@@ -271,7 +271,7 @@ b_fetch n b = do
 --
 -- > withSC3 (b_fetch1 512 123456789)
 b_fetch1 :: DuplexOSC m => Int -> Int -> m [Double]
-b_fetch1 n b = liftM (Safe.headNote "b_fetch1: no data") (b_fetch n b)
+b_fetch1 n b = fmap (Safe.headNote "b_fetch1: no data") (b_fetch n b)
 
 -- | Combination of 'b_query1_unpack' and 'b_fetch'.
 b_fetch_hdr :: Transport m => Int -> Int -> m ((Int,Int,Int,Double),[[Double]])
@@ -300,7 +300,7 @@ c_getn1_data s = do
               Int32 _:Int32 _:x -> mapMaybe datum_floating x
               _ -> error "c_getn1_data"
   sendMessage (c_getn1 s)
-  liftM f (waitDatum "/c_setn")
+  fmap f (waitDatum "/c_setn")
 
 -- | Apply /f/ to result of 'n_query'.
 n_query1_unpack_f :: DuplexOSC m => (Message -> t) -> Node_Id -> m t
@@ -330,25 +330,25 @@ g_queryTree1_unpack n = do
 --
 -- > withSC3 serverStatus >>= mapM putStrLn
 serverStatus :: DuplexOSC m => m [String]
-serverStatus = liftM Status.statusFormat serverStatusData
+serverStatus = fmap Status.statusFormat serverStatusData
 
 -- | Collect server status information.
 --
 -- > withSC3 server_status_concise >>= putStrLn
 server_status_concise :: DuplexOSC m => m String
-server_status_concise = liftM Status.status_format_concise serverStatusData
+server_status_concise = fmap Status.status_format_concise serverStatusData
 
 -- | Read nominal sample rate of server.
 --
 -- > withSC3 serverSampleRateNominal
 serverSampleRateNominal :: DuplexOSC m => m Double
-serverSampleRateNominal = liftM (Status.extractStatusField 7) serverStatusData
+serverSampleRateNominal = fmap (Status.extractStatusField 7) serverStatusData
 
 -- | Read actual sample rate of server.
 --
 -- > withSC3 serverSampleRateActual
 serverSampleRateActual :: DuplexOSC m => m Double
-serverSampleRateActual = liftM (Status.extractStatusField 8) serverStatusData
+serverSampleRateActual = fmap (Status.extractStatusField 8) serverStatusData
 
 -- | Retrieve status data from server.
 serverStatusData :: DuplexOSC m => m [Datum]
@@ -365,4 +365,4 @@ serverTree :: DuplexOSC m => m [String]
 serverTree = do
   qt <- g_queryTree1_unpack 0
   let tr = Status.queryTree_rt qt
-  return (["***** SuperCollider Server Tree *****",Tree.drawTree (fmap Status.query_node_pp tr)])
+  return ["***** SuperCollider Server Tree *****",Tree.drawTree (fmap Status.query_node_pp tr)]

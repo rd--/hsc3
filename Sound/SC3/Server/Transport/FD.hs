@@ -92,7 +92,7 @@ nrt_play fd sc = time >>= \t0 -> mapM_ (run_bundle fd t0) (nrt_bundles sc)
 
 -- | 'withSC3' of 'nrt_play'
 nrt_audition :: NRT -> IO ()
-nrt_audition sc = withSC3 (\fd -> nrt_play fd sc)
+nrt_audition sc = withSC3 (`nrt_play` sc)
 
 -- * Audible
 
@@ -157,27 +157,27 @@ b_fetch fd n b = do
   let f m = let (_,nf,nc,_) = unpack_b_info_err m
                 ix = (0,nf * nc)
                 deinterleave = transpose . Split.chunksOf nc
-            in liftM deinterleave (b_getn1_data_segment fd n b ix)
+            in fmap deinterleave (b_getn1_data_segment fd n b ix)
   sendMessage fd (b_query1 b)
   waitReply fd "/b_info" >>= f
 
 -- | 'head' of 'b_fetch'.
 b_fetch1 :: Transport t => t -> Int -> Int -> IO [Double]
-b_fetch1 fd n b = liftM head (b_fetch fd n b)
+b_fetch1 fd n b = fmap head (b_fetch fd n b)
 
 -- * Status
 
 -- | Collect server status information.
 serverStatus :: Transport t => t -> IO [String]
-serverStatus = liftM statusFormat . serverStatusData
+serverStatus = fmap statusFormat . serverStatusData
 
 -- | Read nominal sample rate of server.
 serverSampleRateNominal :: Transport t => t -> IO Double
-serverSampleRateNominal = liftM (extractStatusField 7) . serverStatusData
+serverSampleRateNominal = fmap (extractStatusField 7) . serverStatusData
 
 -- | Read actual sample rate of server.
 serverSampleRateActual :: Transport t => t -> IO Double
-serverSampleRateActual = liftM (extractStatusField 8) . serverStatusData
+serverSampleRateActual = fmap (extractStatusField 8) . serverStatusData
 
 -- | Retrieve status data from server.
 serverStatusData :: Transport t => t -> IO [Datum]

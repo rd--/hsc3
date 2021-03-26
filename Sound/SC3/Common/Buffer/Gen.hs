@@ -81,8 +81,7 @@ sine3 n = sum_l . sine3_l n
 
 {- | Generate Chebyshev waveshaping table, see b_gen_cheby.
 
-> plot_p1_ln [gen_cheby 256 [1,0,1,1,0,1]]
-
+> Sound.SC3.Plot.plot_p1_ln [gen_cheby 256 [1,0,1,1,0,1]]
 -}
 gen_cheby :: (Enum n, Floating n, Ord n, Integral i) => i -> [n] -> [n]
 gen_cheby n =
@@ -91,7 +90,7 @@ gen_cheby n =
         ix = [-1,-1 + (2 / (fromIntegral n - 1)) .. 1]
         mix = map sum . transpose
         c_normalize x = let m = maximum (map abs x) in map (* (recip m)) x
-    in c_normalize . mix . map (\(k,a) -> map ((* a) . (c k)) ix) . zip [1..]
+    in c_normalize . mix . zipWith (\k a -> map ((* a) . c k) ix) [1..]
 
 -- | Type specialised 'gen_cheby'.
 cheby :: (Enum n, Floating n, Ord n) => Int -> [n] -> [n]

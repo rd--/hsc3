@@ -5,6 +5,7 @@ module Sound.SC3.Server.Graphdef where
 import Control.Monad {- base -}
 import Data.Char {- base -}
 import Data.List {- base -}
+import Data.Maybe {- base -}
 import System.FilePath {- filepath -}
 
 import qualified Data.Binary.Get as G {- binary -}
@@ -56,7 +57,7 @@ ugen_name_str (nm,_,_,_,_) = Datum.ascii_to_string nm
 
 -- | 'UGen' name, using operator name if appropriate.
 ugen_name_op :: UGen -> String
-ugen_name_op (nm,_,_,_,k) = let s = Datum.ascii_to_string nm in maybe s id (O.ugen_operator_name s k)
+ugen_name_op (nm,_,_,_,k) = let s = Datum.ascii_to_string nm in fromMaybe s (O.ugen_operator_name s k)
 
 -- | 'UGen' 'Rate'.
 ugen_rate :: UGen -> Rate
@@ -78,10 +79,7 @@ ugen_is_control =
 
 -- | Input is a UGen and the UGen is a control.
 input_is_control :: Graphdef -> Input -> Bool
-input_is_control g (Input u _) =
-    if u == -1
-    then False
-    else ugen_is_control (graphdef_ugen g u)
+input_is_control g (Input u _) = (u /= -1) && ugen_is_control (graphdef_ugen g u)
 
 -- | Graph definition type.
 data Graphdef = Graphdef {graphdef_name :: Name
@@ -237,7 +235,7 @@ type ENCODE_F t = ([t] -> t,Name -> t,Int -> t,Int -> t,Int -> t,Double -> t,Str
 enc_bytestring :: ENCODE_F L.ByteString
 enc_bytestring =
   (L.concat,encode_pstr,Byte.encode_i8,Byte.encode_i16,Byte.encode_i32,encode_sample
-  ,\_ -> L.empty)
+  ,const L.empty)
 
 -- | Pascal (length prefixed) encoding of 'Name'.
 encode_pstr :: Name -> L.ByteString

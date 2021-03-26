@@ -2,6 +2,7 @@
 module Sound.SC3.UGen.Bindings.Composite.External where
 
 import Data.List {- base -}
+import Data.Maybe {- base -}
 
 import Sound.SC3.Common.Math {- hsc3 -}
 import Sound.SC3.Common.Rate {- hsc3 -}
@@ -82,7 +83,7 @@ miBraids_mode_maybe x = fmap fst (find ((== x) . snd) miBraids_mode_dict)
 
 -- | 'error' of 'miBraids_mode_maybe'
 miBraids_mode :: Num n => String -> n
-miBraids_mode = maybe (error "miBraids_mode?") id . miBraids_mode_maybe
+miBraids_mode = fromMaybe (error "miBraids_mode?") . miBraids_mode_maybe
 
 -- | Association list giving names for MiClouds modes.
 miClouds_mode_dict :: Num n => [(n,String)]
@@ -98,7 +99,7 @@ miClouds_mode_maybe x = fmap fst (find ((== x) . snd) miClouds_mode_dict)
 
 -- | 'error' of 'miClouds_mode_maybe'
 miClouds_mode :: Num n => String -> n
-miClouds_mode = maybe (error "miClouds_mode?") id . miClouds_mode_maybe
+miClouds_mode = fromMaybe (error "miClouds_mode?") . miClouds_mode_maybe
 
 -- | Association list giving names for MiPlaits modes.
 miPlaits_mode_dict :: Num n => [(n,String)]
@@ -126,7 +127,7 @@ miPlaits_mode_maybe x = fmap fst (find ((== x) . snd) miPlaits_mode_dict)
 
 -- | 'error' of 'miPlaits_mode_maybe'
 miPlaits_mode :: Num n => String -> n
-miPlaits_mode = maybe (error "miPlaits_mode?") id . miPlaits_mode_maybe
+miPlaits_mode = fromMaybe (error "miPlaits_mode?") . miPlaits_mode_maybe
 
 -- | Association list giving names for MiPlaits modes.
 miRings_mode_dict :: Num n => [(n,String)]
@@ -144,7 +145,7 @@ miRings_mode_maybe x = fmap fst (find ((== x) . snd) miRings_mode_dict)
 
 -- | 'error' of 'miRings_mode_maybe'
 miRings_mode :: Num n => String -> n
-miRings_mode = maybe (error "miRings_mode?") id . miRings_mode_maybe
+miRings_mode = fromMaybe (error "miRings_mode?") . miRings_mode_maybe
 
 -- | pulse signal as difference of two 'sawDPW' signals.
 pulseDPW :: Rate -> UGen -> UGen -> UGen

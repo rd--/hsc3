@@ -3,6 +3,7 @@ module Sound.SC3.Common.Help where
 
 import Control.Monad {- base -}
 import Data.Char {- base -}
+import Data.Maybe {- base -}
 import System.Environment {- base -}
 import System.FilePath {- filepath -}
 import System.Process {- process -}
@@ -35,7 +36,7 @@ sc3_rtf_find_file fn = do
 
 -- | 'error' variant.
 sc3_rtf_find_file_err :: FilePath -> IO FilePath
-sc3_rtf_find_file_err = fmap (maybe (error "sc3_rtf_find_file") id) . sc3_rtf_find_file
+sc3_rtf_find_file_err = fmap (fromMaybe (error "sc3_rtf_find_file")) . sc3_rtf_find_file
 
 -- | Run the command unrtf (so UNIX only) to convert an RTF file to a TEXT (.scd) file.
 sc3_rtf_to_scd :: FilePath -> FilePath -> IO ()

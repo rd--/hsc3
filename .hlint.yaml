@@ -1,0 +1,6 @@
+- ignore: {name: Use camelCase}
+- ignore: {name: Use guards}
+- ignore: {name: Use tuple-section}
+- ignore: {name: Use head}
+- ignore: {name: Use record patterns}
+- ignore: {name: Use list comprehension}

@@ -193,7 +193,7 @@ u_node_sort_controls c =
         cmp = compare `on` u_node_k_ix
         c' = sortBy cmp c
         coheres z = maybe True (== z) . u_node_k_index
-        coherent = all id (zipWith coheres [0..] c')
+        coherent = and (zipWith coheres [0..] c')
     in if coherent then c' else error (show ("u_node_sort_controls: incoherent",c))
 
 -- | Determine 'K_Type' of a /control/ UGen at 'U_Node_U', or not.
@@ -481,10 +481,7 @@ ug_pv_check g =
 
 -- | Variant that runs 'error' as required.
 ug_pv_validate :: U_Graph -> U_Graph
-ug_pv_validate g =
-    case ug_pv_check g of
-      Nothing -> g
-      Just err -> error err
+ug_pv_validate g = maybe g error (ug_pv_check g)
 
 -- * UGen to U_Graph
 
@@ -516,7 +513,7 @@ ug_stat_ln s =
         hist pp_f =
           let h (x:xs) = (x,length (x:xs))
               h [] = error "graph_stat_ln"
-          in unwords . map (\(p,q) -> pp_f p ++ "×" ++ show q) . map h . group . sort
+          in unwords . map ((\(p,q) -> pp_f p ++ "×" ++ show q) . h) . group . sort
     in ["number of constants       : " ++ show (length cs)
        ,"number of controls        : " ++ show (length ks)
        ,"control rates             : " ++ hist show (map u_node_k_rate ks)

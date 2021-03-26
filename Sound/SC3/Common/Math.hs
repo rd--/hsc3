@@ -276,7 +276,7 @@ degree_to_key s n d =
     let l = length s
         d' = round d
         a = (d - fromIntegral d') * 10.0 * (n / 12.0)
-    in (n * fromIntegral (d' `div` l)) + (Safe.atNote "degree_to_key" s (d' `mod` l)) + a
+    in (n * fromIntegral (d' `div` l)) + Safe.atNote "degree_to_key" s (d' `mod` l) + a
 
 -- | Linear amplitude to decibels.
 --
@@ -400,7 +400,7 @@ sc3_false = 0
 -- > sc3_not sc3_true == sc3_false
 -- > sc3_not sc3_false == sc3_true
 sc3_not :: (Ord n,Num n) => n -> n
-sc3_not = sc3_bool . not . (> 0)
+sc3_not = sc3_bool . (<= 0)
 
 -- | Translate 'Bool' to 'sc3_true' and 'sc3_false'.
 sc3_bool :: Num n => Bool -> n
@@ -618,20 +618,20 @@ sc3_linexp src_l src_r dst_l dst_r x =
 -- > map (sc3_explin 10 100 1 2) [10,10,31,100,100]
 sc3_explin :: (Ord a, Floating a) => a -> a -> a -> a -> a -> a
 sc3_explin src_l src_r dst_l dst_r x =
-    case apply_clip_rule Clip_Both src_l src_r dst_l dst_r x of
-      Just r -> r
-      Nothing -> (log (x / src_l)) / (log (src_r / src_l)) * (dst_r - dst_l) + dst_l
+  fromMaybe
+  (logBase (src_r / src_l) (x / src_l) * (dst_r - dst_l) + dst_l)
+  (apply_clip_rule Clip_Both src_l src_r dst_l dst_r x)
 
 -- * ExpExp
 
 -- | Translate from one exponential range to another.
 --
--- > map (sc3_expexp 0.1 10 4.3 100) [1.. 10]
+-- > map (sc3_expexp 0.1 10 4.3 100) [1 .. 10]
 sc3_expexp :: (Ord a, Floating a) => a -> a -> a -> a -> a -> a
 sc3_expexp src_l src_r dst_l dst_r x =
-    case apply_clip_rule Clip_Both src_l src_r dst_l dst_r x of
-      Just r -> r
-      Nothing -> ((dst_r / dst_l) ** (log (x / src_l) / log (src_r / src_l))) * dst_l
+  fromMaybe
+  ((dst_r / dst_l) ** logBase (src_r / src_l) (x / src_l) * dst_l)
+  (apply_clip_rule Clip_Both src_l src_r dst_l dst_r x)
 
 -- * LinCurve
 

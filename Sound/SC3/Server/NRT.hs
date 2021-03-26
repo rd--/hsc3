@@ -22,7 +22,7 @@ oscWithSize o =
     in B.append l b
 
 -- | An 'NRT' score is a sequence of 'Bundle's.
-data NRT = NRT {nrt_bundles :: [Bundle]} deriving (Show)
+newtype NRT = NRT {nrt_bundles :: [Bundle]} deriving (Show)
 
 -- | Trivial NRT statistics.
 type NRT_STAT =

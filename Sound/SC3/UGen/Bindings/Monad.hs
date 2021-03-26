@@ -12,7 +12,7 @@ import Sound.SC3.UGen.Type
 
 -- | Clone a unit generator (mce . replicateM).
 clone :: UId m => Int -> m UGen -> m UGen
-clone n = liftM mce . replicateM n
+clone n = fmap mce . replicateM n
 
 -- * Demand
 

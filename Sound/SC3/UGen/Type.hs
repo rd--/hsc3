@@ -39,8 +39,7 @@ type Sample = Double
 --
 -- > Constant 3 == Constant 3
 -- > (Constant 3 > Constant 1) == True
-data Constant = Constant {constantValue :: Sample}
-                deriving (Eq,Ord,Read,Show)
+newtype Constant = Constant {constantValue :: Sample} deriving (Eq,Ord,Read,Show)
 
 -- | Control meta-data.
 data Control_Meta n =
@@ -105,8 +104,7 @@ data Control = Control {controlOperatingRate :: Rate
                deriving (Eq,Read,Show)
 
 -- | Labels.
-data Label = Label {ugenLabel :: String}
-             deriving (Eq,Read,Show)
+newtype Label = Label {ugenLabel :: String} deriving (Eq,Read,Show)
 
 -- | Unit generator output descriptor.
 type Output = Rate

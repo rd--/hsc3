@@ -143,7 +143,7 @@ freqShift_hilbert i f p =
 > map (uncurry gateReset) [(1,0),(1,1),(0,1),(0,0)] == [1,-1,0,0]
 -}
 gateReset :: Num a => a -> a -> a
-gateReset gt tr = gt + negate (gt * tr * 2)
+gateReset gt tr = gt - (gt * tr * 2)
 
 -- | Variant of 'hilbert' using FFT (with a delay) for better results.
 -- Buffer should be 2048 or 1024.
@@ -281,7 +281,7 @@ mixFill n = mix . mceFill n
 
 -- | Monad variant on mixFill.
 mixFillM :: (Integral n,Monad m) => Int -> (n -> m UGen) -> m UGen
-mixFillM n f = liftM sum_opt (mapM f [0 .. fromIntegral n - 1])
+mixFillM n f = fmap sum_opt (mapM f [0 .. fromIntegral n - 1])
 
 -- | Variant that is randomly pressed.
 mouseButton' :: Rate -> UGen -> UGen -> UGen -> UGen
@@ -490,7 +490,7 @@ unpackFFT c nf from to w = map (\i -> unpack1FFT c (constant nf) (constant i) w)
 varLag_env :: UGen -> UGen -> Envelope_Curve UGen -> Maybe UGen -> UGen
 varLag_env in_ time warp start =
   let rt = rateOf in_
-      start_ = maybe in_ id start
+      start_ = fromMaybe in_ start
       e = Envelope [start_,in_] [time] [warp] Nothing Nothing 0
       -- e[6] = curve; e[7] = curvature;
       time_ch = if rateOf time == IR then 0 else changed time 0
@@ -533,10 +533,10 @@ playBufCF nc bufnum rate trigger startPos loop lag' n =
                     then demand trigger' 0 startPos
                     else startPos
         lag'' = 1 / lag'
-        s = map
-            (\(on',r) -> let p = playBuf nc AR bufnum r on' startPos' loop DoNothing
-                         in p * sqrt (slew on' lag'' lag''))
-            (zip on rate')
+        s = zipWith
+            (\on' r -> let p = playBuf nc AR bufnum r on' startPos' loop DoNothing
+                       in p * sqrt (slew on' lag'' lag''))
+            on rate'
     in sum_opt s
 
 -- * adc
