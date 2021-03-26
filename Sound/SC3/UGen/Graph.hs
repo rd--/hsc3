@@ -23,7 +23,7 @@ import Sound.SC3.Common.Rate {- hsc3 -}
 import Sound.SC3.UGen.Type {- hsc3 -}
 import Sound.SC3.UGen.UGen {- hsc3 -}
 
-import qualified Sound.SC3.UGen.Analysis as Analysis
+import qualified Sound.SC3.UGen.Analysis as Analysis {- hsc3 -}
 
 -- * Types
 
@@ -65,6 +65,13 @@ data U_Node = U_Node_C {u_node_id :: UID_t
                        ,u_node_p_node :: U_Node
                        ,u_node_p_index :: Port_Index}
             deriving (Eq,Show)
+
+-- | Convert from U_Node_K to Control (ie. discard index).
+u_node_k_to_control :: U_Node -> Control
+u_node_k_to_control nd =
+  case nd of
+    U_Node_K _ rt ix nm df ty mt -> Control rt ix nm df (ty == K_TR) mt
+    _ -> error "u_node_k_to_control?"
 
 -- | Type to represent a unit generator graph.
 data U_Graph = U_Graph {ug_next_id :: UID_t
