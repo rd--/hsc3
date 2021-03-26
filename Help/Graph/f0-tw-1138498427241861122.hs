@@ -11,4 +11,4 @@ let f = sqrt 9
     c = e s1 (9 / b) (9 / sqrt b) (b / 999) (b / 99)
     s2 = gVerb (c * d * d * d) 99 9 (9/999) 0.5 15 1 0.7 0.5 300
     s3 = s2 / 9 + e c (f/9) (f/9) 0 0
-in hpf (splay s3 1 1 0 True) 9 / 9
+in mix (mceTranspose (hpf (splay s3 1 1 0 True) 9 / 9))
