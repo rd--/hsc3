@@ -92,6 +92,12 @@
   (hsc3-send-string
       (format "Sound.SC3.UGen.DB.ugen_summary_wr \"%s\"" (thing-at-point 'symbol))))
 
+(defun hsc3-ugen-control-param ()
+  "Lookup up the UGen at point in hsc3-db."
+  (interactive)
+  (hsc3-send-string
+      (format "Sound.SC3.UGen.DB.ugen_control_param_wr \"%s\"" (thing-at-point 'symbol))))
+
 (defun hsc3-remove-trailing-newline (s)
   "Delete trailing newlines from string."
   (replace-regexp-in-string "\n\\'" "" s))

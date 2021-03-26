@@ -75,16 +75,18 @@ control_m rt nm df meta =
     let m = control_meta_t3 id meta
     in Control_U (Control rt Nothing nm df False (Just m))
 
-control_grp :: Control_Group -> R.Rate -> String -> (Double,Double) -> Control_Meta_T3 Double -> (UGen,UGen)
-control_grp grp rt nm (df1,df2) meta =
+control_pair :: Control_Group -> R.Rate -> String -> (Double,Double) -> Control_Meta_T3 Double -> (UGen,UGen)
+control_pair grp rt nm (df1,df2) meta =
     let m = (control_meta_t3 id meta) {controlGroup = Just grp}
-        (lhs,rhs) = control_group_suffixes grp
-    in (Control_U (Control rt Nothing (nm ++ [lhs]) df1 False (Just m))
-       ,Control_U (Control rt Nothing (nm ++ [rhs]) df2 False (Just m)))
+    in case control_group_suffixes grp of
+         [lhs,rhs] ->
+           (Control_U (Control rt Nothing (nm ++ lhs) df1 False (Just m))
+           ,Control_U (Control rt Nothing (nm ++ rhs) df2 False (Just m)))
+         _ -> error "control_pair"
 
 -- | Generate range controls.  Names are generated according to 'control_group_suffixes'
 control_rng :: R.Rate -> String -> (Double,Double) -> Control_Meta_T3 Double -> (UGen,UGen)
-control_rng = control_grp Control_Range
+control_rng = control_pair Control_Range
 
 -- | Triggered (kr) control input node constructor.
 tr_control_f64 :: Maybe Int -> String -> Sample -> UGen

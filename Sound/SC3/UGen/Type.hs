@@ -6,8 +6,10 @@ import Data.Either {- base -}
 import qualified Data.Fixed as F {- base -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
+import Text.Printf {- base -}
+
 import qualified Safe {- safe -}
-import System.Random {- random -}
+import qualified System.Random as Random {- random -}
 
 import qualified Sound.SC3.Common.Math as Math
 import Sound.SC3.Common.Math.Operator
@@ -66,17 +68,31 @@ control_meta_t5 :: (n -> m) -> Control_Meta_T5 n -> Control_Meta m
 control_meta_t5 f (l,r,w,stp,u) = Control_Meta (f l) (f r) w (f stp) u Nothing
 
 {- | Controls may form part of a control group. -}
-data Control_Group = Control_Range | Control_XY deriving (Eq,Enum,Bounded,Read,Show)
+data Control_Group
+  = Control_Range
+  | Control_Array Int
+  | Control_XY
+  deriving (Eq,Read,Show)
 
-{- | Grouped controls have names that have equal preffixes and single character suffixes.
+-- | The number of elements in a control group.
+control_group_degree :: Control_Group -> Int
+control_group_degree grp =
+  case grp of
+    Control_Range -> 2
+    Control_Array n -> n
+    Control_XY -> 2
+
+{- | Grouped controls have names that have equal prefixes and identifying suffixes.
      Range controls have two elements, minima and maxima, suffixes are [ and ].
+     Array controls have N elements and have IX suffixes.
      XY controls have two elements, X and Y coordinates, suffixes are X and Y.
 -}
-control_group_suffixes :: Control_Group -> (Char,Char)
+control_group_suffixes :: Control_Group -> [String]
 control_group_suffixes grp =
   case grp of
-    Control_Range -> ('[',']')
-    Control_XY -> ('X','Y')
+    Control_Range -> ["[","]"]
+    Control_Array n -> map (printf "%02d") [0 .. n - 1]
+    Control_XY -> ["X","Y"]
 
 -- | Control inputs.  It is an invariant that controls with equal
 -- names within a UGen graph must be equal in all other respects.
@@ -654,12 +670,12 @@ instance Enum UGen where
         in takeWhile (p (m + (n'-n)/2)) (enumFromThen n n')
 
 -- | Unit generators are stochastic.
-instance Random UGen where
+instance Random.Random UGen where
     randomR (Constant_U (Constant l),Constant_U (Constant r)) g =
-        let (n, g') = randomR (l,r) g
+        let (n, g') = Random.randomR (l,r) g
         in (Constant_U (Constant n), g')
     randomR _ _ = error "UGen.randomR: non constant (l,r)"
-    random = randomR (-1.0, 1.0)
+    random = Random.randomR (-1.0, 1.0)
 
 -- | UGens are bit patterns.
 instance Bits UGen where

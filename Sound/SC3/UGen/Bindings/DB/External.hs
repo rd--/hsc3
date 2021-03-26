@@ -62,6 +62,18 @@ analogPhaserMod input skew modulation stages = mkUGen Nothing [KR,AR] (Right [0]
 analogSnareDrum :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 analogSnareDrum rate trig_ infsustain accent freq tone decay_ snappy = mkUGen Nothing [AR] (Left rate) "AnalogSnareDrum" [trig_,infsustain,accent,freq,tone,decay_,snappy] Nothing 1 (Special 0) NoId
 
+-- | Analog tape emulation
+--
+--  AnalogTape [AR] input=0.0 bias=0.5 saturation=0.5 drive=0.5 oversample=1.0 mode=0.0;    FILTER: TRUE
+analogTape :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+analogTape input bias saturation drive oversample mode = mkUGen Nothing [AR] (Right [0]) "AnalogTape" [input,bias,saturation,drive,oversample,mode] Nothing 1 (Special 0) NoId
+
+-- | A virtual analog vintage EQ and distortion
+--
+--  AnalogVintageDistortion [AR] input=0.0 drivegain=0.5 bias=0.0 lowgain=0.1 highgain=0.1 shelvingfreq=600.0 oversample=0.0;    FILTER: TRUE
+analogVintageDistortion :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+analogVintageDistortion input drivegain bias lowgain highgain shelvingfreq oversample = mkUGen Nothing [AR] (Right [0]) "AnalogVintageDistortion" [input,drivegain,bias,lowgain,highgain,shelvingfreq,oversample] Nothing 1 (Special 0) NoId
+
 -- | event analyser (BBCut)
 --
 --  AnalyseEvents2 [AR] in=0.0 bufnum=0.0 threshold=0.34 triggerid=101.0 circular=0.0 pitch=0.0
@@ -1917,6 +1929,12 @@ permModArray rate in_ freq pattern = mkUGen Nothing [AR] (Left rate) "PermModArr
 --  PermModT [AR] in=0.0 outfreq=440.0 infreq=5000.0
 permModT :: Rate -> UGen -> UGen -> UGen -> UGen
 permModT rate in_ outfreq infreq = mkUGen Nothing [AR] (Left rate) "PermModT" [in_,outfreq,infreq] Nothing 1 (Special 0) NoId
+
+-- | A plugin...
+--
+--  PhasorModal [AR] input=0.0 freq=100.0 decay=0.25 damp=1.0 amp=0.5 phase=0.0;    FILTER: TRUE
+phasorModal :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+phasorModal input freq decay_ damp amp phase = mkUGen Nothing [AR] (Right [0]) "PhasorModal" [input,freq,decay_,damp,amp,phase] Nothing 1 (Special 0) NoId
 
 -- | Tree classifier using (hyper)planes – UGen or language-side
 --
