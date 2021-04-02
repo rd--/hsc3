@@ -1,5 +1,6 @@
 -- f0 <https://twitter.com/redFrik/status/1367808902457397250>
--- there is a subtle error in this translation i cannot see, the only difference appears to be the shared (impulse AR 0 0) node
+-- there is a subtle error in this translation i cannot see
+-- the only differences appears to be the shared (impulse AR 0 0) node and the ordering at sum3
 let rat = [76.1, 76.1, 64, 57, 38.1, 85.4, 32, 114, 42.7, 47.9, 95.9]
     f i =
       let i_ = constant i
