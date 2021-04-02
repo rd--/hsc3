@@ -111,7 +111,7 @@ scsyndef_ug_stat sy_nm st_nm = do
   str <- Read.scsyndef_ug_stat sy_nm
   writeFile st_nm str
 
--- > let sy = "/home/rohan/sw/hsc3-graphs/scsyndef/why-supercollider.scsyndef"
+-- > Just sy <- UI.ui_choose_file "/home/rohan/sw/hsc3-graphs/db/"
 -- > scsyndef_to_hs sy "/dev/stdout"
 scsyndef_to_hs :: FilePath -> FilePath -> IO ()
 scsyndef_to_hs sy_nm hs_nm = do
@@ -121,13 +121,13 @@ scsyndef_to_hs sy_nm hs_nm = do
       hs = Reconstruct.reconstruct_graph_module nm gr'
   writeFile hs_nm (unlines hs)
 
--- > scsyndef_play "/home/rohan/sw/hsc3-graphs/db/cc9cd860f859576d.scsyndef"
+-- > UI.ui_choose_file "/home/rohan/sw/hsc3-graphs/db/" >>= maybe (return ()) scsyndef_play
 scsyndef_play :: FilePath -> IO ()
 scsyndef_play sy_nm = do
   gr <- Graphdef.read_graphdef_file sy_nm
   audition gr
 
--- > scsyndef_dump_ugens "/home/rohan/sw/hsc3-graphs/db/cc9cd860f859576d.scsyndef"
+-- > UI.ui_choose_file "/home/rohan/sw/hsc3-graphs/db/" >>= maybe (return ()) scsyndef_dump_ugens
 scsyndef_dump_ugens :: FilePath -> IO ()
 scsyndef_dump_ugens sy_nm = do
   gr <- Graphdef.read_graphdef_file sy_nm
