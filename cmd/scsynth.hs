@@ -160,6 +160,7 @@ help =
     ,"group query-tree id:int"
     ,"node query id:int"
     ,"reset"
+    ,"scsyndef dump-ugens scyndef-file"
     ,"scsyndef play scyndef-file"
     ,"scsyndef stat [scyndef-file] [stat-file]"
     ,"scsyndef to-hs [scyndef-file] [hs-file]"
