@@ -7,9 +7,10 @@ import Data.Char {- base -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
 import System.FilePath {- filepath -}
+import Text.Printf {- base -}
 
-import qualified Data.Binary.Get as G {- binary -}
-import qualified Data.Binary.IEEE754 as I {- data-binary-ieee754 -}
+import qualified Data.Binary.Get as Get {- binary -}
+import qualified Data.Binary.IEEE754 as IEEE754 {- data-binary-ieee754 -}
 import qualified Data.ByteString.Lazy as L {- bytestring -}
 import qualified Numeric {- base -}
 import qualified Safe {- safe -}
@@ -18,7 +19,8 @@ import qualified Sound.OSC.Coding.Byte as Byte {- hosc -}
 import qualified Sound.OSC.Coding.Cast as Cast {- hosc -}
 import qualified Sound.OSC.Datum as Datum {- hosc -}
 
-import qualified Sound.SC3.Common.Math.Operator as O {- hsc3 -}
+import qualified Sound.SC3.Common.Math.Operator as Operator {- hsc3 -}
+import qualified Sound.SC3.Common.Rate as Rate {- hsc3 -}
 
 -- * Type
 
@@ -57,11 +59,16 @@ ugen_name_str (nm,_,_,_,_) = Datum.ascii_to_string nm
 
 -- | 'UGen' name, using operator name if appropriate.
 ugen_name_op :: UGen -> String
-ugen_name_op (nm,_,_,_,k) = let s = Datum.ascii_to_string nm in fromMaybe s (O.ugen_operator_name s k)
+ugen_name_op (nm,_,_,_,k) =
+  let s = Datum.ascii_to_string nm
+  in fromMaybe s (Operator.ugen_operator_name s k)
 
 -- | 'UGen' 'Rate'.
 ugen_rate :: UGen -> Rate
 ugen_rate (_,r,_,_,_) = r
+
+ugen_rate_enum :: UGen -> Rate.Rate
+ugen_rate_enum = toEnum . ugen_rate
 
 -- | 'UGen' 'Input's.
 ugen_inputs :: UGen -> [Input]
@@ -111,41 +118,41 @@ graphdef_ugen_nid g n = graphdef_control_nid g 0 + length (graphdef_controls g) 
 -- * BINARY GET (version 0 or 2)
 
 -- | Get a 'Sample'
-get_sample :: G.Get Sample
-get_sample = fmap realToFrac I.getFloat32be
+get_sample :: Get.Get Sample
+get_sample = fmap realToFrac IEEE754.getFloat32be
 
 -- | Get a 'Name' (Pascal string).
-get_pstr :: G.Get Name
+get_pstr :: Get.Get Name
 get_pstr = do
-  n <- fmap fromIntegral G.getWord8
-  fmap Byte.decode_ascii (G.getLazyByteString n)
+  n <- fmap fromIntegral Get.getWord8
+  fmap Byte.decode_ascii (Get.getLazyByteString n)
 
 -- | Get a 'Control'.
-get_control :: G.Get Int -> G.Get Control
+get_control :: Get.Get Int -> Get.Get Control
 get_control get_i = do
   nm <- get_pstr
   ix <- get_i
   return (nm,ix)
 
 -- | Get an 'Input'.
-get_input :: G.Get Int -> G.Get Input
+get_input :: Get.Get Int -> Get.Get Input
 get_input get_i = do
   u <- get_i
   p <- get_i
   return (Input u p)
 
 -- | Get an 'Output'
-get_output :: G.Get Output
-get_output = fmap fromIntegral G.getInt8
+get_output :: Get.Get Output
+get_output = fmap fromIntegral Get.getInt8
 
 -- | Get a 'UGen'
-get_ugen :: G.Get Int -> G.Get UGen
+get_ugen :: Get.Get Int -> Get.Get UGen
 get_ugen get_i = do
   name <- get_pstr
-  rate <- fmap fromIntegral G.getInt8
+  rate <- fmap fromIntegral Get.getInt8
   number_of_inputs <- get_i
   number_of_outputs <- get_i
-  special <- fmap fromIntegral G.getInt16be
+  special <- fmap fromIntegral Get.getInt16be
   inputs <- replicateM number_of_inputs (get_input get_i)
   outputs <- replicateM number_of_outputs get_output
   return (name
@@ -155,16 +162,16 @@ get_ugen get_i = do
          ,special)
 
 -- | Get a 'Graphdef'.  Ignores variants.
-get_graphdef :: G.Get Graphdef
+get_graphdef :: Get.Get Graphdef
 get_graphdef = do
-  magic <- G.getInt32be
-  version <- G.getInt32be
+  magic <- Get.getInt32be
+  version <- Get.getInt32be
   let get_i =
           case version of
-            0 -> fmap fromIntegral G.getInt16be
-            2 -> fmap fromIntegral G.getInt32be
+            0 -> fmap fromIntegral Get.getInt16be
+            2 -> fmap fromIntegral Get.getInt32be
             _ -> error ("get_graphdef: version not at {zero | two}: " ++ show version)
-  number_of_definitions <- G.getInt16be
+  number_of_definitions <- Get.getInt16be
   when (magic /= scgf_i32)
        (error "get_graphdef: illegal magic string")
   when (number_of_definitions /= 1)
@@ -193,12 +200,11 @@ get_graphdef = do
 > pp "with-ctl.scsyndef"
 > pp "mce.scsyndef"
 > pp "mrg.scsyndef"
-
 -}
 read_graphdef_file :: FilePath -> IO Graphdef
 read_graphdef_file nm = do
   b <- L.readFile nm
-  return (G.runGet get_graphdef b)
+  return (Get.runGet get_graphdef b)
 
 -- * STAT
 
@@ -318,7 +324,7 @@ enc_text com_f =
 {- | 'encode_graphdef_f' of 'enc_text'
 
 > dir = "/home/rohan/sw/rsc3-disassembler/scsyndef/"
-> pp nm = read_graphdef_file (dir ++ nm) >>= putStrLn . print_graphdef False
+> pp nm = read_graphdef_file (dir ++ nm) >>= putStrLn . print_graphdef True
 > pp "simple.scsyndef"
 > pp "with-ctl.scsyndef"
 > pp "mce.scsyndef"
@@ -359,3 +365,34 @@ graphdef_stat (Graphdef nm cs ks us) =
                ,"unit generator set        : " ++ sq (nub . sort)
                ,"unit generator sequence   : " ++ sq id]
 
+-- * Dump UGens
+
+ugen_dump_ugen_str :: [Sample] -> [UGen] -> Int -> UGen -> String
+ugen_dump_ugen_str c_sq u_sq ix u =
+  let in_brackets :: String -> String
+      in_brackets x = printf "[%s]" x
+      input_pp (Input i j) =
+        let ui = u_sq !! i
+        in if i >= 0
+           then if length (ugen_outputs ui) > 1
+                then printf "%d_%s:%d" i (ugen_name_op ui) j
+                else printf "%d_%s" i (ugen_name_op ui)
+           else printf "%f" (c_sq !! j)
+      inputs_pp = in_brackets . intercalate "," . map input_pp
+  in printf "%d_%s, %s, %s" ix (ugen_name_op u) (show (ugen_rate_enum u)) (inputs_pp (ugen_inputs u))
+
+-- | Print graphdef in format equivalent to SynthDef>>dumpUGens in SuperCollider
+graphdef_dump_ugens_str :: Graphdef -> [String]
+graphdef_dump_ugens_str (Graphdef _nm cs _ks us) = zipWith (ugen_dump_ugen_str cs us) [0..] us
+
+{- | 'putStrLn' of 'unlines' of 'graphdef_dump_ugens_str'
+
+> dir = "/home/rohan/sw/rsc3-disassembler/scsyndef/"
+> pp nm = read_graphdef_file (dir ++ nm) >>= graphdef_dump_ugens
+> pp "simple.scsyndef"
+> pp "with-ctl.scsyndef"
+> pp "mce.scsyndef"
+> pp "mrg.scsyndef"
+-}
+graphdef_dump_ugens :: Graphdef -> IO ()
+graphdef_dump_ugens = putStrLn . unlines . graphdef_dump_ugens_str

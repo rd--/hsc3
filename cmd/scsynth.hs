@@ -127,6 +127,12 @@ scsyndef_play sy_nm = do
   gr <- Graphdef.read_graphdef_file sy_nm
   audition gr
 
+-- > scsyndef_dump_ugens "/home/rohan/sw/hsc3-graphs/db/cc9cd860f859576d.scsyndef"
+scsyndef_dump_ugens :: FilePath -> IO ()
+scsyndef_dump_ugens sy_nm = do
+  gr <- Graphdef.read_graphdef_file sy_nm
+  Graphdef.graphdef_dump_ugens gr
+
 -- * STATUS
 
 message_print :: String -> IO ()
@@ -176,6 +182,7 @@ main = do
     ["group","query-tree",n] -> group_query_tree (read n)
     ["node","query",n] -> node_query (read n)
     ["reset"] -> withSC3 reset
+    ["scsyndef","dump-ugens",sy] -> scsyndef_dump_ugens sy
     ["scsyndef","play",sy] -> scsyndef_play sy
     ["scsyndef","stat"] -> scsyndef_ug_stat "/dev/stdin" "/dev/stdout"
     ["scsyndef","stat",sy] -> scsyndef_ug_stat sy "/dev/stdout"

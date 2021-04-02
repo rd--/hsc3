@@ -1,6 +1,6 @@
 -- f0 <https://twitter.com/redFrik/status/1367808902457397250>
--- there is a subtle error in this translation...
-let rat = [76,76,64,57,38,85,32,114,43,48,96]
+-- there is a subtle error in this translation i cannot see, the only difference appears to be the shared (impulse AR 0 0) node
+let rat = [76.1, 76.1, 64, 57, 38.1, 85.4, 32, 114, 42.7, 47.9, 95.9]
     f i =
       let i_ = constant i
           f0 = (rat !! i) * (sinOsc AR (1/16) 0 `greater_than` 0 * 2 + 6 - (sinOsc AR (sinOsc AR (1/32) i_) 0 / 20))

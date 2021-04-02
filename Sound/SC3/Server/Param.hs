@@ -1,4 +1,4 @@
--- * Synthesis parameters
+-- | Synthesis parameters
 module Sound.SC3.Server.Param where
 
 import Data.Function {- base -}

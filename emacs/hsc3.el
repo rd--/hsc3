@@ -146,13 +146,18 @@
   (interactive "p")
   (hsc3-send-region
    (format
-    "audition_at (\"%s\",%d + %d) def_play_opt"
+    "Sound.SC3.audition_at (\"%s\",%d + %d) def_play_opt"
     hsc3-server-host hsc3-server-port (- k 1))))
 
 (defun hsc3-draw-region ()
   "Draw region, if region spans multiple lines send using using ghci layout quoting."
   (interactive)
   (hsc3-send-region "Sound.SC3.UGen.Dot.draw"))
+
+(defun hsc3-dump-ugens-region ()
+  "Draw region, if region spans multiple lines send using using ghci layout quoting."
+  (interactive)
+  (hsc3-send-region "Sound.SC3.ugen_dump_ugens"))
 
 (defun hsc3-ui-region ()
   "UI for region, if region spans multiple lines send using using ghci layout quoting."
@@ -190,7 +195,8 @@
 
 (defun hsc3-with-sc3 (txt)
   ""
-  (hsc3-send-string (format "withSC3At (\"%s\",%d) %s" hsc3-server-host hsc3-server-port txt)))
+  (hsc3-send-string
+   (format "Sound.SC3.withSC3At (\"%s\",%d) %s" hsc3-server-host hsc3-server-port txt)))
 
 (defun hsc3-reset-scsynth ()
   "Send SC3 reset instruction to haskell."
@@ -254,7 +260,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (interactive)
   (hsc3-send-region
    (format
-    "audition_at_seq (\"%s\",%d) def_play_opt %d"
+    "Sound.SC3.audition_at_seq (\"%s\",%d) def_play_opt %d"
     hsc3-server-host hsc3-server-port hsc3-seq-degree)))
 
 (defun hsc3-reset-scsynth-seq ()
@@ -346,6 +352,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (define-key map (kbd "C-c C-a") 'hsc3-play-region)
   (define-key map (kbd "C-c C-S-a") 'hsc3-play-region-seq)
   (define-key map (kbd "C-c C-g") 'hsc3-draw-region)
+  (define-key map (kbd "C-c C-d") 'hsc3-dump-ugens-region)
   (define-key map (kbd "C-c C-v") 'hsc3-ui-region)
   (define-key map (kbd "C-c C-j") 'hsc3-sc3-help)
   (define-key map (kbd "C-c C-i") 'hsc3-interrupt-haskell)
