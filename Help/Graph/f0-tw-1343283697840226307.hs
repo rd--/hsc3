@@ -6,3 +6,6 @@ let b = mce [2..12] / 12
     d = (lag2 ((1 / 212) `greater_than` lfTri AR (1/212.1) 0) (2 / b) / 12 * 1.2 + 1.2) / f
     p = pluck z t (2 / 121) d (1 / 2 * 12 / 1.2) ((lfTri AR (b/12) 0 + 1) / 2)
 in splay (hpf p 12) 1 (1 / 2.1 / 2) 0 True
+
+---- ; drawings
+UI.ui_sc3_scope 2 0 (2 ^ 14) 0 AR
