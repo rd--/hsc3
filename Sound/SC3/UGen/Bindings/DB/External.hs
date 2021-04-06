@@ -1981,8 +1981,8 @@ rmaFoodChainL rate freq a1 b1 d1 a2 b2 d2 k r h xi yi zi = mkUGen Nothing [AR] (
 -- | (Undocumented class)
 --
 --  RMEQ [AR] in=0.0 freq=440.0 rq=0.1 k=0.0
-rmeq :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
-rmeq rate in_ freq rq k = mkUGen Nothing [AR] (Left rate) "RMEQ" [in_,freq,rq,k] Nothing 1 (Special 0) NoId
+rmeq :: UGen -> UGen -> UGen -> UGen -> UGen
+rmeq in_ freq rq k = mkUGen Nothing [AR] (Right [0]) "RMEQ" [in_,freq,rq,k] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --

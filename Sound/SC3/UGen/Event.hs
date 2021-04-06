@@ -120,7 +120,11 @@ This list adds curve specifiers as strings.
 
 > let x = Data.List.intersect (map fst sc3_control_spec) (map fst kyma_event_value_ranges)
 > x == ["beats","boostcut","freq","rate"]
-> let f = filter (flip elem x . fst) in zip (f sc3_control_spec) (f kyma_event_value_ranges)
+> let c z = let (p,q) = unzip z in let f i = filter (flip elem i . fst) in zip (f p sc3_control_spec) (f q kyma_event_value_ranges)
+> c (zip x x)
+
+> c [("lofreq","freqlow"),("midfreq","freqmid")]
+> lookup "freqhigh" kyma_event_value_ranges
 -}
 kyma_event_value_ranges :: Fractional t => [(String,(t,t,String))]
 kyma_event_value_ranges =
@@ -137,7 +141,7 @@ kyma_event_value_ranges =
   ,("distance",(-2,2,"lin"))
   ,("fmntshift",(0.75,1.25,"lin"))
   ,("freq",(0,10000,"exp"))
-  ,("freqhigh",(8000,24000,"exp"))
+  ,("freqhigh",(8000,24000,"exp")) -- sampleRate / 2
   ,("freqjitter",(0,1,"lin"))
   ,("freqlow",(0,1000,"exp"))
   ,("freqmid",(1000,8000,"exp"))

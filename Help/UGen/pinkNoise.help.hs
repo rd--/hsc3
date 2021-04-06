@@ -1,3 +1,6 @@
+-- pinkNoise ; plain
+pinkNoise 'α' AR * 0.1
+
 -- pinkNoise ; monadic constructor
 uid_st_eval (fmap (* 0.05) (pinkNoiseM AR))
 

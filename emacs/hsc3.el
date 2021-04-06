@@ -163,7 +163,7 @@
   "UI for region, if region spans multiple lines send using using ghci layout quoting."
   (interactive)
   (let ((str (hsc3-region-string)))
-    (hsc3-send-region "Sound.SC3.UI.ugen_ui_run \"ui\" 1")))
+    (hsc3-send-region "Sound.SC3.UI.SCLang.Control.ugen_ui_run \"ui\" 1")))
 
 (defun hsc3-pp-smalltalk ()
   "Pretty print UGen as Smalltalk"
