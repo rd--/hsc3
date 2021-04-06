@@ -19,4 +19,5 @@ let f = mouseX KR 440 8800 Exponential 0.2
 in integrator o 0.99 * 0.05
 
 ---- ; drawings
+UI.ui_sc3_scope 2 0 (2 ^ 14) 0 "audio" 0
 Sound.SC3.Plot.plot_ugen 0.006 (integrator (lfPulse AR (1500 / 4) 0.2 0.1) (mce [0.1,0.4,0.7]))

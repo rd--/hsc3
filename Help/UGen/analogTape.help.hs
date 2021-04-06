@@ -8,5 +8,4 @@ let freq = control KR "freq" 110
 in mce2 (sig * 0.05) (X.analogTape sig bias saturation drive 1 0 * 0.1)
 
 ---- ; drawings
-UI.ui_sc3_scope 2 0 (2 ^ 14) 0 AR
-
+UI.ui_sc3_scope 2 0 (2 ^ 14) 0 "audio" 0

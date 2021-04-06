@@ -8,4 +8,4 @@ let b = mce [2..12] / 12
 in splay (hpf p 12) 1 (1 / 2.1 / 2) 0 True
 
 ---- ; drawings
-UI.ui_sc3_scope 2 0 (2 ^ 14) 0 AR
+UI.ui_sc3_scope 2 0 (2 ^ 14) 0 "audio" 0
