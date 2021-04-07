@@ -11,4 +11,4 @@ let amp = control KR "amp" 0.025
 in mce2 (sig * 0.5) flt * amp
 
 ---- ; drawings
-UI.ui_sc3_scope 2 0 (2 ^ 14) 0
+UI.ui_sc3_scope 2 0 (2 ^ 14) 0 "audio" 0

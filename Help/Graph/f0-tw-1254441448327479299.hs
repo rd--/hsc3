@@ -24,5 +24,5 @@ let b = [1,3,5,8,10]
 in mrg2 r p
 
 ---- ; drawings
-UI.ui_sc3_scope 2 0 (2 ^ 14) 0 0
+UI.ui_sc3_scope 2 0 (2 ^ 14) 0 "audio" 0
 UI.ui_sc3_ctl_plot 1200 5 90 1200 (1/25) 10
