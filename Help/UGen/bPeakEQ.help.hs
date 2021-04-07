@@ -1,7 +1,7 @@
 -- bPeakEQ
 let i = pinkNoise 'α' AR * 0.1
     freq = mouseX KR 2200 18000 Exponential 0.2
-    db = mouseY KR 12 (-12) Linear 0.2
+    db = mouseY KR (-12) 12 Linear 0.2
 in bPeakEQ i freq 0.8 db * 0.5
 
 -- bPeakEQ
@@ -35,3 +35,6 @@ let hf z = bPeakEQ
            (control_m KR "lfGain" 0 (-15,15,"lin"))
     sig = pinkNoise 'α' AR * 0.1
 in hf (mf (lf sig))
+
+---- ; drawings
+UI.ui_sc3_scope_freq (600,400) 0

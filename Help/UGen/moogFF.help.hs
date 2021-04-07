@@ -1,8 +1,8 @@
 -- moogFF
 let n = whiteNoise 'α' AR * 0.05
-    y = mouseY KR 100 10000 Exponential 0.1
-    x = mouseX KR 0 4 Linear 0.1
-in moogFF n y x 0
+    freq = mouseX KR 100 10000 Exponential 0.1
+    gain = mouseY KR 0 4 Linear 0.1
+in moogFF n freq gain 0
 
 -- moogFF ; note distortion at high gain
 let x = mouseX KR 100 20000 Exponential 0.1
@@ -17,3 +17,6 @@ let n = lfNoise0 'α' KR 0.43
     f = linLin (sinOsc KR f0 0) (-1) 1 30 4200
     y = mouseY KR 1 4 Linear 0.1
 in moogFF p f (0.83 * y) 0
+
+---- ; drawings
+UI.ui_sc3_scope_freq (600,400) 0

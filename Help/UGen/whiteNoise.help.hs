@@ -50,3 +50,4 @@ sinOsc AR (whiteNoise 'α' KR * 300 + 500) 0 * 0.1
 Sound.SC3.Plot.plot_ugen1 0.01 (whiteNoise 'γ' AR)
 Sound.SC3.Plot.plot_ugen1 0.05 (lpf (whiteNoise 'γ' AR) 500)
 Sound.SC3.Plot.FFT.plot_ugen_fft1 0.1 (whiteNoise 'α' AR)
+UI.ui_sc3_scope_freq (600,400) 0
