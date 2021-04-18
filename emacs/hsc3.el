@@ -35,8 +35,8 @@
         (list c)
       (cons c (hsc3-chunk-string n (substring s n))))))
 
-(defun hsc3-send-string (s)
-  "Send string and newline to haskell."
+(defun hsc3-send-line (s)
+  "Send string, with newline appended, to haskell."
   (if (comint-check-proc hsc3-buffer)
       (let ((cs (hsc3-chunk-string 64 (concat s "\n"))))
         (mapcar
@@ -46,12 +46,22 @@
 
 (defun hsc3-send-layout-block (s)
   "Send string to haskell using ghci layout block notation."
-  (hsc3-send-string (mapconcat 'identity (list ":{" s ":}") "\n")))
+  (hsc3-send-line (mapconcat 'identity (list ":{" s ":}") "\n")))
+
+(defun hsc3-send-text (str)
+  "If text spans multiple lines `hsc3-send-layout-block' else `hsc3-send-line'."
+  (if (string-match "\n" str)
+      (hsc3-send-layout-block str)
+    (hsc3-send-line str)))
+
+(defun hsc3-send-text-fn (fn str)
+  "Send text with fn prefixed."
+  (hsc3-send-text (if (string-match "\n" str) (concat fn " $\n" str) (concat fn " $ " str))))
 
 (defun hsc3-send-quit ()
   "Send :quit instruction to haskell."
   (interactive)
-  (hsc3-send-string ":quit"))
+  (hsc3-send-line ":quit"))
 
 (defun hsc3-unlit (s)
   "Remove Bird-literate marks."
@@ -81,7 +91,7 @@
 (defun hsc3-sc3-help-scdoc ()
   "Lookup up the UGen name at point in the SC3 (SCDOC) help files."
   (interactive)
-  (hsc3-send-string
+  (hsc3-send-line
    (format
     "Sound.SC3.Common.Help.sc3_scdoc_help_open False (Sound.SC3.Common.Help.sc3_scdoc_help_path (Sound.SC3.UGen.DB.ugen_sc3_name \"%s\"))"
     (thing-at-point 'symbol))))
@@ -89,14 +99,14 @@
 (defun hsc3-ugen-summary ()
   "Lookup up the UGen at point in hsc3-db."
   (interactive)
-  (hsc3-send-string
-      (format "Sound.SC3.UGen.DB.ugen_summary_wr \"%s\"" (thing-at-point 'symbol))))
+  (hsc3-send-line
+   (format "Sound.SC3.UGen.DB.ugen_summary_wr \"%s\"" (thing-at-point 'symbol))))
 
 (defun hsc3-ugen-control-param ()
   "Lookup up the UGen at point in hsc3-db."
   (interactive)
-  (hsc3-send-string
-      (format "Sound.SC3.UGen.DB.ugen_control_param_wr \"%s\"" (thing-at-point 'symbol))))
+  (hsc3-send-line
+   (format "Sound.SC3.UGen.DB.ugen_control_param_wr \"%s\"" (thing-at-point 'symbol))))
 
 (defun hsc3-remove-trailing-newline (s)
   "Delete trailing newlines from string."
@@ -105,14 +115,14 @@
 (defun hsc3-cd ()
   "Change directory at ghci to current value of 'default-directory'."
   (interactive)
-  (hsc3-send-string (format ":cd %s" default-directory)))
+  (hsc3-send-line (format ":cd %s" default-directory)))
 
 (defun hsc3-load-current-file ()
   "Send :load and the current buffer file name to haskell."
   (interactive)
   (save-buffer)
   (hsc3-see-haskell)
-  (hsc3-send-string (format ":load \"%s\"" buffer-file-name)))
+  (hsc3-send-line (format ":load \"%s\"" buffer-file-name)))
 
 (defun hsc3-send-current-line ()
   "Send the current line to haskell."
@@ -123,28 +133,30 @@
 	 (s* (if hsc3-literate-p
 		 (hsc3-unlit s)
 	       (hsc3-uncomment s))))
-    (hsc3-send-string s*)))
+    (hsc3-send-line s*)))
 
 (defun hsc3-send-main ()
   "Send main to haskell."
   (interactive)
-  (hsc3-send-string "main"))
+  (hsc3-send-line "main"))
 
 (defun hsc3-region-string ()
   "Get current region as string."
   (buffer-substring-no-properties (region-beginning) (region-end)))
 
-(defun hsc3-send-region (fn)
+(defun hsc3-send-region ()
   "If region spans multiple lines send using using ghci layout quoting."
-  (let ((str (hsc3-region-string)))
-    (if (string-match "\n" str)
-        (hsc3-send-layout-block (concat fn " $\n" str))
-      (hsc3-send-string (concat fn " $ " str)))))
+  (interactive)
+  (hsc3-send-text (hsc3-region-string)))
+
+(defun hsc3-send-region-fn (fn)
+  "If region spans multiple lines send using using ghci layout quoting."
+  (hsc3-send-text-fn fn (hsc3-region-string)))
 
 (defun hsc3-play-region (k)
   "Play region at scsynth.  The (one-indexed) prefix agument indicates which server to send to."
   (interactive "p")
-  (hsc3-send-region
+  (hsc3-send-region-fn
    (format
     "Sound.SC3.audition_at (\"%s\",%d + %d) def_play_opt"
     hsc3-server-host hsc3-server-port (- k 1))))
@@ -152,23 +164,23 @@
 (defun hsc3-draw-region ()
   "Draw region, if region spans multiple lines send using using ghci layout quoting."
   (interactive)
-  (hsc3-send-region "Sound.SC3.UGen.Dot.draw"))
+  (hsc3-send-region-fn "Sound.SC3.UGen.Dot.draw"))
 
 (defun hsc3-dump-ugens-region ()
   "Draw region, if region spans multiple lines send using using ghci layout quoting."
   (interactive)
-  (hsc3-send-region "Sound.SC3.ugen_dump_ugens"))
+  (hsc3-send-region-fn "Sound.SC3.ugen_dump_ugens"))
 
 (defun hsc3-ui-region ()
   "UI for region, if region spans multiple lines send using using ghci layout quoting."
   (interactive)
   (let ((str (hsc3-region-string)))
-    (hsc3-send-region "Sound.SC3.UI.SCLang.Control.ugen_ui_run \"ui\" 1")))
+    (hsc3-send-region-fn "Sound.SC3.UI.SCLang.Control.ugen_ui_run \"ui\" 1")))
 
 (defun hsc3-pp-smalltalk ()
   "Pretty print UGen as Smalltalk"
   (interactive)
-  (hsc3-send-region "Sound.SC3.UGen.DB.PP.ugen_graph_smalltalk_pp"))
+  (hsc3-send-region-fn "Sound.SC3.UGen.DB.PP.ugen_graph_smalltalk_pp"))
 
 (defun hsc3-id-rewrite-region ()
   "Run hsc3-id-rewrite on region."
@@ -194,8 +206,8 @@
   :type 'integer)
 
 (defun hsc3-with-sc3 (txt)
-  ""
-  (hsc3-send-string
+  "withSC3 at `hsc3-server-host' and `hsc3-server-port'"
+  (hsc3-send-line
    (format "Sound.SC3.withSC3At (\"%s\",%d) %s" hsc3-server-host hsc3-server-port txt)))
 
 (defun hsc3-reset-scsynth ()
@@ -250,7 +262,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
 (defun hsc3-server-status-seq ()
   "Send serverStatus request to haskell."
   (interactive)
-  (hsc3-send-string
+  (hsc3-send-line
    (format
     "Sound.SC3.withSC3At_seq (\"%s\",%d) %d Sound.SC3.serverStatus >>= mapM putStrLn . concat"
     hsc3-server-host hsc3-server-port hsc3-seq-degree)))
@@ -258,7 +270,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
 (defun hsc3-play-region-seq ()
   "hsc3-play-region-opt with auditionAt_seq hsc3-seq-degree."
   (interactive)
-  (hsc3-send-region
+  (hsc3-send-region-fn
    (format
     "Sound.SC3.audition_at_seq (\"%s\",%d) def_play_opt %d"
     hsc3-server-host hsc3-server-port hsc3-seq-degree)))
@@ -266,7 +278,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
 (defun hsc3-reset-scsynth-seq ()
   "Send SC3 reset instruction to haskell."
   (interactive)
-  (hsc3-send-string
+  (hsc3-send-line
    (format
     "Sound.SC3.withSC3At_seq_ (\"%s\",%d) %d Sound.SC3.reset"
     hsc3-server-host hsc3-server-port hsc3-seq-degree)))
@@ -313,13 +325,13 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   "Send standard set of hsc3 and related module imports to haskell."
   (interactive)
   (mapc
-   'hsc3-send-string
+   'hsc3-send-line
    (split-string (hsc3-load-file (concat hsc3-directory "lib/hsc3-std-imports.hs")) "\n")))
 
 (defun hsc3-set-prompt ()
   "Set ghci prompt to hsc3."
   (interactive)
-  (hsc3-send-string ":set prompt \"hsc3> \""))
+  (hsc3-send-line ":set prompt \"hsc3> \""))
 
 (defun hsc3-see-haskell ()
  "Show haskell output."
