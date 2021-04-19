@@ -73,6 +73,10 @@ u_node_k_to_control nd =
     U_Node_K _ rt ix nm df ty mt -> Control rt ix nm df (ty == K_TR) mt
     _ -> error "u_node_k_to_control?"
 
+-- | Derive "user" name for U_Node
+u_node_user_name :: U_Node -> String
+u_node_user_name n = ugen_user_name (u_node_u_name n) (u_node_u_special n)
+
 -- | Type to represent a unit generator graph.
 data U_Graph = U_Graph {ug_next_id :: UID_t
                        ,ug_constants :: [U_Node]
@@ -509,7 +513,6 @@ ug_stat_ln s =
     let cs = ug_constants s
         ks = ug_controls s
         us = ug_ugens s
-        u_nm z = ugen_user_name (u_node_u_name z) (u_node_u_special z)
         hist pp_f =
           let h (x:xs) = (x,length (x:xs))
               h [] = error "graph_stat_ln"
@@ -520,8 +523,8 @@ ug_stat_ln s =
        ,"control names             : " ++ unwords (map u_node_k_name ks)
        ,"number of unit generators : " ++ show (length us)
        ,"unit generator rates      : " ++ hist show (map u_node_u_rate us)
-       ,"unit generator set        : " ++ hist id (map u_nm us)
-       ,"unit generator sequence   : " ++ unwords (map u_nm us)]
+       ,"unit generator set        : " ++ hist id (map u_node_user_name us)
+       ,"unit generator sequence   : " ++ unwords (map u_node_user_name us)]
 
 -- | 'unlines' of 'ug_stat_ln'.
 ug_stat :: U_Graph -> String
