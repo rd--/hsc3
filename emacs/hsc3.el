@@ -161,10 +161,14 @@
     "Sound.SC3.audition_at (\"%s\",%d + %d) def_play_opt"
     hsc3-server-host hsc3-server-port (- k 1))))
 
+(defcustom hsc3-draw-command "draw"
+  "*The un-qualified name of the draw function to use at `hsc3-draw-region'."
+  :type 'string)
+
 (defun hsc3-draw-region ()
   "Draw region, if region spans multiple lines send using using ghci layout quoting."
   (interactive)
-  (hsc3-send-region-fn "Sound.SC3.UGen.Dot.draw"))
+  (hsc3-send-region-fn (format "Sound.SC3.UGen.Dot.%s" hsc3-draw-command)))
 
 (defun hsc3-dump-ugens-region ()
   "Draw region, if region spans multiple lines send using using ghci layout quoting."
