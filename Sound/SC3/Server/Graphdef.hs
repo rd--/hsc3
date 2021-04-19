@@ -78,7 +78,7 @@ ugen_inputs (_,_,i,_,_) = i
 ugen_outputs :: UGen -> [Output]
 ugen_outputs (_,_,_,o,_) = o
 
--- | Predicate to examine Ugen name and decide if it is a control.
+-- | Predicate to examine UGen name and decide if it is a control.
 ugen_is_control :: UGen -> Bool
 ugen_is_control =
   (`elem` ["Control","LagControl","TrigControl"]) .

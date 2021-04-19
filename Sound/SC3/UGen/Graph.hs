@@ -210,13 +210,17 @@ u_node_ktype n =
       ("AudioControl",AR) -> Just K_AR
       _ -> Nothing
 
--- | Is 'U_Node' an /implicit/ control UGen?
-u_node_is_implicit_control :: U_Node -> Bool
-u_node_is_implicit_control n =
+-- | Is 'U_Node' a control UGen?
+u_node_is_control :: U_Node -> Bool
+u_node_is_control n =
     let cs = ["AudioControl","Control","TrigControl"]
     in case n of
-        U_Node_U x _ s _ _ _ _ -> x == -1 && s `elem` cs
+        U_Node_U _ _ s _ _ _ _ -> s `elem` cs
         _ -> False
+
+-- | Is 'U_Node' an /implicit/ control UGen?
+u_node_is_implicit_control :: U_Node -> Bool
+u_node_is_implicit_control n = u_node_is_control n && u_node_id n == -1
 
 -- | Is U_Node implicit?
 u_node_is_implicit :: U_Node -> Bool

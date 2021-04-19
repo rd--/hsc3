@@ -507,10 +507,9 @@ varLag_env in_ time warp start =
 -}
 wrapOut :: Maybe Double -> UGen -> UGen
 wrapOut fadeTime z =
-    let bus = control KR "out" 0
-    in if isSink z
-       then z
-       else out bus (maybe z ((* z) . makeFadeEnv) fadeTime)
+  if isSink z
+  then z
+  else out (control KR "out" 0) (maybe z ((* z) . makeFadeEnv) fadeTime)
 
 -- * wslib
 
