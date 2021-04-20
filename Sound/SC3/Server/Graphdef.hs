@@ -33,13 +33,19 @@ type Control = (Name,Int)
 -- | Constants are floating point.
 type Sample = Double
 
--- | Inputs are a ugen-index and a port-index.
---   If the ugen-index is -1 it indicates a constant.
-data Input = Input Int Int deriving (Eq,Show)
+-- | UGen indices are Int.
+type UGen_Index = Int
 
--- | Read ugen-index of input, else Nothing.
-input_ugen_ix :: Input -> Maybe Int
-input_ugen_ix (Input u p) = if p == -1 then Nothing else Just u
+-- | Port indices are Int.
+type Port_Index = Int
+
+-- | Index used to indicate constants at UGen inputs.
+--   Ie. if the ugen-index is this value (-1) it indicates a constant.
+constant_index :: UGen_Index
+constant_index = -1
+
+-- | Inputs are a ugen-index and a port-index.
+data Input = Input UGen_Index Port_Index deriving (Eq,Show)
 
 -- | Rates are encoded as integers (IR = 0, KR = 1, AR = 2, DR = 3).
 type Rate = Int
@@ -84,9 +90,9 @@ ugen_is_control =
   (`elem` ["Control","LagControl","TrigControl"]) .
   ugen_name_str
 
--- | Input is a UGen and the UGen is a control.
+-- | Input is a UGen (ie. not a constant, indicated by a ugen-index of -1) and the UGen is a control.
 input_is_control :: Graphdef -> Input -> Bool
-input_is_control g (Input u _) = (u /= -1) && ugen_is_control (graphdef_ugen g u)
+input_is_control g (Input u _) = (u /= constant_index) && ugen_is_control (graphdef_ugen g u)
 
 -- | Graph definition type.
 data Graphdef = Graphdef {graphdef_name :: Name
@@ -96,7 +102,7 @@ data Graphdef = Graphdef {graphdef_name :: Name
                 deriving (Eq,Show)
 
 -- | Lookup UGen by index.
-graphdef_ugen :: Graphdef -> Int -> UGen
+graphdef_ugen :: Graphdef -> UGen_Index -> UGen
 graphdef_ugen g = Safe.atNote "graphdef_ugen" (graphdef_ugens g)
 
 -- | Lookup Control and default value by index.
@@ -367,7 +373,8 @@ graphdef_stat (Graphdef nm cs ks us) =
 
 -- * Dump UGens
 
-ugen_dump_ugen_str :: [Sample] -> [UGen] -> Int -> UGen -> String
+-- | Pretty print UGen in the manner of SynthDef>>dumpUGens.
+ugen_dump_ugen_str :: [Sample] -> [UGen] -> UGen_Index -> UGen -> String
 ugen_dump_ugen_str c_sq u_sq ix u =
   let in_brackets :: String -> String
       in_brackets x = printf "[%s]" x

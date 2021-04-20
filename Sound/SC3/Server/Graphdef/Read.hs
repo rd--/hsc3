@@ -14,14 +14,13 @@ control_to_node g z ((nm,ix),v) =
         nm' = ascii_to_string nm
     in Graph.U_Node_K z' Rate.KR (Just ix) nm' v Rate.K_KR Nothing
 
+-- | Note: Graphs with multiple Control UGens are not accounted for.
 input_to_from_port :: Graphdef.Graphdef -> Graphdef.Input -> Graph.From_Port
 input_to_from_port g (Graphdef.Input u p) =
     if u == -1
     then Graph.From_Port_C (Graphdef.graphdef_constant_nid g p)
     else if Graphdef.input_is_control g (Graphdef.Input u p)
-         then if u /= 0
-              then error "multiple control UGens..."
-              else Graph.From_Port_K (Graphdef.graphdef_control_nid g p) Rate.K_KR
+         then Graph.From_Port_K (Graphdef.graphdef_control_nid g p) Rate.K_KR
          else let ugen = Graphdef.graphdef_ugens g !! u
                   port = if length (Graphdef.ugen_outputs ugen) > 1
                          then Just p
