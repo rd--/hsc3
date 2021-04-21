@@ -61,7 +61,7 @@ data SC3_Unary_Op
             | ArcTan
             | SinH
             | CosH -- 35
-            | TanH
+            | TanH -- 36
             | Rand_ -- UGen
             | Rand2
             | LinRand_ -- UGen

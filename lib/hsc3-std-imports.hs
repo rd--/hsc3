@@ -6,6 +6,7 @@ import Data.List {- base -}
 import System.Random {- random -}
 
 import Sound.SC3 {- hsc3 -}
+import qualified Sound.SC3.Common.Base {- hsc3 -}
 import qualified Sound.SC3.Common.Buffer.Gen as Gen {- hsc3 -}
 import qualified Sound.SC3.Common.Math.Filter.BEQ {- hsc3 -}
 import qualified Sound.SC3.UGen.Bindings.DB.External as X {- hsc3 -}

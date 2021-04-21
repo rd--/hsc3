@@ -27,4 +27,4 @@ in mrg2 r p
 
 ---- ; drawings
 UI.ui_sc3_scope 2 0 (2 ^ 14) 0 "audio" 0
-UI.ui_sc3_ctl_plot 1200 5 90 1200 (1/25) 10
+UI.ui_sc3_ctl_plot 1200 5 90 1200 (1/25) 5
