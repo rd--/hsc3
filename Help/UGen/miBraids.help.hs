@@ -11,6 +11,13 @@ let pit = roundE (range 33 66 (lfNoise0 'α' KR 4))
     color = lfNoise1 'α' KR 0.3 * 0.5 + 0.5
 in X.miBraids AR pit timb color (X.miBraids_mode "VOSIM") 0 0 0 0 0 * 0.1
 
+-- MiBraids ; 21:VOSIM ; event control
+let f _ (g,x,y,z,o,rx,_,_,_,_) =
+      let md = X.miBraids_mode "VOSIM"
+          mnn = x * 24 + 36 -- x * 12 + 78
+      in pan2 (X.miBraids AR mnn (y * 0.75) rx md 0 0 0 0 0) (o * 2 - 1) (g * z)
+in mix (rEventVoicer 16 f) * control KR "gain" 1
+
 -- MiBraids ; 31:FLUTED
 let pit = 38;
     timb = mouseX KR 0.7 1 Linear 0.2
@@ -35,6 +42,16 @@ let tr = dust 'α' KR 0.6
     timb = 0.5
     color = lfNoise1 'γ' KR 0.3 * 0.5 + 0.5
 in X.miBraids AR pit timb color (X.miBraids_mode "PLUCKED") tr 0 0 0 0 * 0.1
+
+-- MiBraids ; 28:PLUCKED ; event control
+let f _ (g,x,y,z,o,rx,_,_,_,_) =
+      let tr = trig1 g controlDur
+          pit = x * 24 + 45
+          timb = latch y tr * 0.5 + 0.25
+          color = latch rx tr * 0.25 + 0.65
+          md = X.miBraids_mode "PLUCKED"
+      in pan2 (X.miBraids AR pit timb color md tr 0 0 0 0) (o * 2 - 1) (trig1 g 16 * 0.1)
+in mix (rEventVoicer 16 f) * control KR "gain" 1
 
 -- MiBraids ; 34:KICK
 let tr = impulse KR 4 0

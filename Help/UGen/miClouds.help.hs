@@ -2,7 +2,7 @@
 let buf = control KR "buf" 0
     nc = 2
     input = playBuf nc AR buf 1 1 0 Loop DoNothing
-    dens = range 0.3 0.45 (lfNoise1 'α' KR 0.3)
+    dens = lfNoise1 'α' KR 0.3 `in_range` (0.3,0.45)
 in X.miClouds AR 0 0 0 dens 0.5 1 1 0.5 0 0 0 (X.miClouds_mode "GRANULAR") 0 0 input
 
 -- MiClouds
@@ -17,7 +17,7 @@ let imp = dust 'α' AR (mce2 0.8 1.1)
     frez = lfClipNoise 'θ' KR 0.3
 in X.miClouds AR pit pos size dens tex 0.5 2 0.5 0.3 0.8 frez (X.miClouds_mode "GRANULAR") 1 0 input
 
--- MiClouds ; using external grain trigger
+-- MiClouds ; using external grain trigger ; requires=buf (stereo)
 let buf = control KR "buf" 0
     nc = 2
     input = playBuf nc AR buf 1 1 0 Loop DoNothing
@@ -42,3 +42,8 @@ let buf = control KR "buf" 0
     dens = lfNoise1 'β' KR 0.3 * 0.5 + 0.5
     tex = lfNoise1 'γ' KR 0.3 * 0.5 + 0.5
 in X.miClouds AR 0 0 size dens tex 1 1 0.5 0.6 0.6 0 (X.miClouds_mode "SPECTRAL") 1 0 input * 0.25
+
+---- ; allocate buffer 0, required for examples
+ld fn = withSC3 (async (b_allocRead 0 fn 0 0))
+ld "/home/rohan/data/audio/instr/crotales/crotale05(D).wav"
+ld "/home/rohan/uc/sp-id/flac/gamelan/suhirdjan/saron-panerus-S-0-5.flac"

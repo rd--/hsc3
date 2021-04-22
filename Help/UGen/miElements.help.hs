@@ -19,15 +19,31 @@ in X.miElements AR 0 0 1 pit 0.5 0.5 1 0 0 0.5 0.5 bow_timb 0.5 0.5 0.25 0.5 0.7
 -- miElements ; blow
 let mod1 = lfNoise1 'α' KR 0.4 * 0.5 + 0.5
     mod2 = lfNoise1 'β' KR 0.2 * 0.5 + 0.5
-    pit = range 32 44 (lfNoise0 'γ' KR 0.1)
+    pit = lfNoise0 'γ' KR 0.1 `in_range` (32,44)
 in X.miElements AR 0 0 1 pit 0.5 0.5 0 0.6 0 mod1 0.5 0.5 mod2 0.5 0.25 0.5 0.7 0.2 0.3 0 0 * 0.2
 
 -- miElements ; blow ; contour
 let gat = lfPulse KR 1 0.01 0.5
     pit = sinOsc KR 5 0 * 0.1 + 53
-    cont = range 0 1 (sinOsc KR 0.8 0)
-    flow = range 0 1 (lfNoise1 'α' KR 0.1)
+    cont = sinOsc KR 0.8 0 `in_range` (0,1)
+    flow = lfNoise1 'α' KR 0.1 `in_range` (0,1)
 in X.miElements AR 0 0 gat pit 0.5 cont 0 0.5 0 flow 0.5 0.5 0.3 0.5 0.25 0.3 0.8 0.2 0.3 0 0 * 0.25
+
+-- miElements ; model=0=MODAL ; event control
+let f _ (g,x,y,z,o,rx,ry,_,_,_) =
+      let tr = trig1 g controlDur
+          pit = x * 24 + 56
+          stre = ry * 0.5 + 0.25
+          cont = y
+          flo = o
+          geo = 0.15 + (latch y tr * 0.35)
+          bri = 0.5 - y * 0.35
+          dmp = 1 - x * 0.25
+          pos = o * 0.5
+          spc = 0.5 - y * 0.5
+          md = 0
+      in X.miElements AR 0 0 g pit stre cont 0 z 0 flo 0.5 0.5 (0.25 + rx * 0.5) 0.5 geo bri dmp pos spc md 0 * 0.25
+in mix (rEventVoicer 6 f) * control KR "gain" 1
 
 -- miElements ; metal, bells
 let tr = dust 'α' AR 2.5
@@ -36,12 +52,34 @@ let tr = dust 'α' AR 2.5
     space = range 0.5 1 (lfNoise1 'δ' KR 0.1)
 in X.miElements AR 0 inp 0 40 0.5 0.2 0 0 0 0.5 0.5 0.5 0.5 0.5 g 0.4 0.9 0.2 space 0 0 * 0.35
 
+-- miElements ; metal, bells ; event control
+let f _ (g,x,y,z,o,_,_,_,_,_) =
+      let tr = trig1 (k2a g) sampleDur
+          inp = decay (tr * z * 4) 0.01
+          pit = latch x g * 12 + 36
+          geo = latch y g * 0.4 + 0.5
+          spc = o * 0.5 + 0.5
+      in X.miElements AR 0 inp 0 pit 0.5 0.2 0 0 0 0.5 0.5 0.5 0.5 0.5 geo 0.4 0.9 0.2 spc 0 0
+in mix (rEventVoicer 6 f) * control KR "gain" 1
+
 -- miElements ; strike input ; playing chords ; model=2=Strings
 let inp = decay (dust 'α' AR 1) 0.01
     g = lfNoise1 'β' KR 0.1 * 0.5 + 0.5
 in X.miElements AR 0 inp 0 {-pit-} 53 0.5 0.2 0 0 0 0.5 0.5 0.5 0.5 0.5 {-geom-} g {-bright-} 0.5 {-damp-} 0.9 0.2 0.3 {-model-} 2 0
 
--- miElements ; mallets  strength
+-- miElements ; metal, bells ; event control
+let f _ (g,x,y,z,o,rx,_,_,_,_) =
+      let tr = trig1 (k2a g) sampleDur
+          inp = decay tr 0.01
+          pit = x * 12 + 48
+          geo = latch o g -- lfNoise1 'β' KR 0.1 * 0.5 + 0.5
+          bri = latch y g
+          dam = latch (0.9 - z) g
+          md = 2
+      in X.miElements AR 0 inp 0 pit 0.5 0.2 0 0 0 0.5 0.5 0.5 0.5 0.5 geo bri dam 0.2 0.3 md 0
+in mix (rEventVoicer 6 f) * control KR "gain" 1
+
+-- miElements ; mallets, strength
 let gat = coinGate 'α' 0.4 (impulse KR 6 0)
     stren = tRand 'β' 0 1 gat
     strike_timbre = lfNoise1 'γ' KR 0.3 * 0.5 + 0.5
