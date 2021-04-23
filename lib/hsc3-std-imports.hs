@@ -21,6 +21,7 @@ import qualified Sound.SC3.UGen.Bindings.DB.RDU as X {- sc3-rdu -}
 
 import qualified Sound.SC3.UGen.Protect as Protect {- hsc3-rw -}
 
+import qualified Sound.SC3.UI.Plot as UI {- hsc3-ui -}
 import qualified Sound.SC3.UI.Qarma as UI {- hsc3-ui -}
 import qualified Sound.SC3.UI.SCLang as UI {- hsc3-ui -}
 import qualified Sound.SC3.UI.SCLang.Control as UI {- hsc3-ui -}

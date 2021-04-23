@@ -110,5 +110,12 @@ let f = control_m KR "mnn" 69 (0,127,"lin")
     a = control_m KR "amp" 0.25 (0,1,"amp")
 in sinOsc AR (midiCPS f) 0 * a
 
+-- sinOsc ; ln 2021-04-05 https://lukasnowok.github.io/spectrology/
+let geom k z m = mce (take k (iterate (* m) z))
+    o1 = sinOsc AR 10000 0 * geom 4 0.01 8
+    o2 = sinOsc AR (lfSaw AR (geom 4 0.05 2) 0 * geom 4 1000 2) 0
+in mix (o1 * o2) * 1/4 * 0.1
+
 ---- ; drawings
+UI.ui_baudline 4096 50 "linear" 2
 Sound.SC3.Plot.plot_ugen_nrt (48000,64) 1.0 (sinOsc AR 1 0)

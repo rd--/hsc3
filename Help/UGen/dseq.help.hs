@@ -25,3 +25,12 @@ let tr = impulse KR (mce [2,3,5]) 0
     m = mce_map_ix f tr
     o = sinOsc AR (midiCPS m) 0 * 0.1
 in splay o 1 1 0 True
+
+-- dseq ; ln 2021-04-06 https://lukasnowok.github.io/spectrology/
+let geom k z m = mce (take k (iterate (* m) z))
+    d = demand (impulse AR 8 0) 0 (dseq 'a' dinf (geom 9 1 1.25))
+    e = xLine AR 1 0.7 20 DoNothing
+in mix (sinOsc AR (geom 8 60 2 * d * e) 0) * 1/5 * 0.1
+
+---- ; drawings
+UI.ui_baudline 4096 50 "linear" 2

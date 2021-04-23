@@ -35,6 +35,11 @@ in o4 * 0.05
 let f = sinOsc KR (mce [0.16,0.33,0.41]) 0 * 10 + mce [1,1.1,1.5,1.78,2.45,6.7,8] * 220
 in mix (lfSaw AR f 0) * 0.1
 
+-- lfSaw ; ln 2021-04-08 https://lukasnowok.github.io/spectrology/ ; ~= [0.1,0.15,0.225,0.3375]
+let o = lfSaw AR (lfSaw AR (mce (take 4 (iterate (* 1.5) 0.1))) 0 * 5000) 0 * 500
+in mix (sinOsc AR (1000 + o) 0) * 1/4 * 0.1
+
 ---- ; drawings
+UI.ui_baudline 4096 50 "linear" 2
 Sound.SC3.Plot.plot_ugen1 0.1 (lfSaw AR 50 0) -- ascending
 Sound.SC3.Plot.plot_ugen1 0.002 (lfSaw AR 5000 0)
