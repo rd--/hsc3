@@ -4,6 +4,11 @@
 
 
 
+## Analisys
+[sonLPC](?t=hsc3&e=Help/UGen/sonLPC.help.hs)
+
+
+
 ## Analysis
 [beatTrack](?t=hsc3&e=Help/UGen/beatTrack.help.hs),
 beatTrack2,
@@ -80,6 +85,7 @@ ampCompA,
 [peakFollower](?t=hsc3&e=Help/UGen/peakFollower.help.hs),
 sendPeakRMS,
 amplitudeMod,
+rms,
 wAmp
 
 
@@ -89,6 +95,7 @@ wAmp
 [zeroCrossing](?t=hsc3&e=Help/UGen/zeroCrossing.help.hs),
 keyClarity,
 keyMode,
+pitchTracker,
 qitch,
 [tartini](?t=hsc3&e=Help/UGen/tartini.help.hs)
 
@@ -96,7 +103,6 @@ qitch,
 
 ## Analysis:Synthesis
 atsAmp,
-atsBand,
 atsFreq,
 atsNoiSynth,
 atsNoise,
@@ -104,8 +110,9 @@ atsParInfo,
 atsPartial,
 atsSynth,
 atsUGen,
-pvInfo,
-pvSynth
+lpcSynth,
+lpcVals,
+maxamp
 
 
 
@@ -127,11 +134,10 @@ diskOut,
 [phasor](?t=hsc3&e=Help/UGen/phasor.help.hs),
 [playBuf](?t=hsc3&e=Help/UGen/playBuf.help.hs),
 [recordBuf](?t=hsc3&e=Help/UGen/recordBuf.help.hs),
-scopeOut,
 [shaper](?t=hsc3&e=Help/UGen/shaper.help.hs),
 [tGrains](?t=hsc3&e=Help/UGen/tGrains.help.hs),
 [tap](?t=hsc3&e=Help/UGen/tap.help.hs),
-vDiskIn,
+[vDiskIn](?t=hsc3&e=Help/UGen/vDiskIn.help.hs),
 [warp1](?t=hsc3&e=Help/UGen/warp1.help.hs),
 [wrapIndex](?t=hsc3&e=Help/UGen/wrapIndex.help.hs),
 listTrig,
@@ -139,6 +145,7 @@ listTrig2,
 logger,
 [loopBuf](?t=hsc3&e=Help/UGen/loopBuf.help.hs),
 matchingPResynth,
+[miClouds](?t=hsc3&e=Help/UGen/miClouds.help.hs),
 sortBuf,
 tGrains2,
 tGrains3,
@@ -171,7 +178,8 @@ convolution2,
 convolution2L,
 convolution3,
 partConv,
-stereoConvolution2L
+stereoConvolution2L,
+partConvT
 
 
 
@@ -241,6 +249,8 @@ dunique,
 [dwrand](?t=hsc3&e=Help/UGen/dwrand.help.hs),
 [dxrand](?t=hsc3&e=Help/UGen/dxrand.help.hs),
 [tDuty](?t=hsc3&e=Help/UGen/tDuty.help.hs),
+unpack1FFT,
+unpackFFT,
 [dNoiseRing](?t=hsc3&e=Help/UGen/dNoiseRing.help.hs),
 dbrown2,
 dbufTag,
@@ -251,11 +261,23 @@ dtag
 
 
 
+## Drums
+[analogBassDrum](?t=hsc3&e=Help/UGen/analogBassDrum.help.hs),
+[analogSnareDrum](?t=hsc3&e=Help/UGen/analogSnareDrum.help.hs)
+
+
+
 ## Dynamics
 [compander](?t=hsc3&e=Help/UGen/compander.help.hs),
 companderD,
 [limiter](?t=hsc3&e=Help/UGen/limiter.help.hs),
-[normalizer](?t=hsc3&e=Help/UGen/normalizer.help.hs)
+[normalizer](?t=hsc3&e=Help/UGen/normalizer.help.hs),
+dCompressor
+
+
+
+## Env
+[miTides](?t=hsc3&e=Help/UGen/miTides.help.hs)
 
 
 
@@ -263,8 +285,8 @@ companderD,
 [decay](?t=hsc3&e=Help/UGen/decay.help.hs),
 [decay2](?t=hsc3&e=Help/UGen/decay2.help.hs),
 [demandEnvGen](?t=hsc3&e=Help/UGen/demandEnvGen.help.hs),
-envGen,
-iEnvGen,
+[envGen](?t=hsc3&e=Help/UGen/envGen.help.hs),
+[iEnvGen](?t=hsc3&e=Help/UGen/iEnvGen.help.hs),
 [line](?t=hsc3&e=Help/UGen/line.help.hs),
 [linen](?t=hsc3&e=Help/UGen/linen.help.hs),
 [xLine](?t=hsc3&e=Help/UGen/xLine.help.hs)
@@ -278,15 +300,15 @@ beatTrack2,
 convolution2,
 convolution2L,
 [fft](?t=hsc3&e=Help/UGen/fft.help.hs),
-fftTrigger,
-ifft,
+[fftTrigger](?t=hsc3&e=Help/UGen/fftTrigger.help.hs),
+[ifft](?t=hsc3&e=Help/UGen/ifft.help.hs),
 pv_Add,
 [pv_BinScramble](?t=hsc3&e=Help/UGen/pv_BinScramble.help.hs),
-pv_BinShift,
-pv_BinWipe,
-pv_BrickWall,
+[pv_BinShift](?t=hsc3&e=Help/UGen/pv_BinShift.help.hs),
+[pv_BinWipe](?t=hsc3&e=Help/UGen/pv_BinWipe.help.hs),
+[pv_BrickWall](?t=hsc3&e=Help/UGen/pv_BrickWall.help.hs),
 pv_ChainUGen,
-pv_ConformalMap,
+[pv_ConformalMap](?t=hsc3&e=Help/UGen/pv_ConformalMap.help.hs),
 pv_Conj,
 pv_Copy,
 pv_CopyPhase,
@@ -294,10 +316,10 @@ pv_CopyPhase,
 pv_Div,
 [pv_HainsworthFoote](?t=hsc3&e=Help/UGen/pv_HainsworthFoote.help.hs),
 [pv_JensenAndersen](?t=hsc3&e=Help/UGen/pv_JensenAndersen.help.hs),
-pv_LocalMax,
-pv_MagAbove,
-pv_MagBelow,
-pv_MagClip,
+[pv_LocalMax](?t=hsc3&e=Help/UGen/pv_LocalMax.help.hs),
+[pv_MagAbove](?t=hsc3&e=Help/UGen/pv_MagAbove.help.hs),
+[pv_MagBelow](?t=hsc3&e=Help/UGen/pv_MagBelow.help.hs),
+[pv_MagClip](?t=hsc3&e=Help/UGen/pv_MagClip.help.hs),
 pv_MagDiv,
 [pv_MagFreeze](?t=hsc3&e=Help/UGen/pv_MagFreeze.help.hs),
 [pv_MagMul](?t=hsc3&e=Help/UGen/pv_MagMul.help.hs),
@@ -315,7 +337,7 @@ pv_PhaseShift90,
 [pv_RandWipe](?t=hsc3&e=Help/UGen/pv_RandWipe.help.hs),
 [pv_RectComb](?t=hsc3&e=Help/UGen/pv_RectComb.help.hs),
 pv_RectComb2,
-packFFT,
+[packFFT](?t=hsc3&e=Help/UGen/packFFT.help.hs),
 partConv,
 [specCentroid](?t=hsc3&e=Help/UGen/specCentroid.help.hs),
 [specFlatness](?t=hsc3&e=Help/UGen/specFlatness.help.hs),
@@ -341,22 +363,55 @@ fftSubbandPower,
 frameCompare,
 iCepstrum,
 medianSeparation,
+pvInfo,
+pvSynth,
+[pv_BinBufRd](?t=hsc3&e=Help/UGen/pv_BinBufRd.help.hs),
+pv_BinDelay,
+pv_BinPlayBuf,
+[pv_BufRd](?t=hsc3&e=Help/UGen/pv_BufRd.help.hs),
 pv_CommonMag,
 pv_CommonMul,
-pv_Compander,
+[pv_Compander](?t=hsc3&e=Help/UGen/pv_Compander.help.hs),
 pv_Cutoff,
+pv_EvenBin,
 pv_ExtractRepeat,
+[pv_Freeze](?t=hsc3&e=Help/UGen/pv_Freeze.help.hs),
+pv_FreqBuffer,
+[pv_Invert](?t=hsc3&e=Help/UGen/pv_Invert.help.hs),
+pv_MagBuffer,
 pv_MagExp,
 [pv_MagGate](?t=hsc3&e=Help/UGen/pv_MagGate.help.hs),
 pv_MagLog,
+pv_MagMap,
 pv_MagMinus,
 pv_MagMulAdd,
 pv_MagSmooth,
+pv_MaxMagN,
+pv_MinMagN,
 [pv_Morph](?t=hsc3&e=Help/UGen/pv_Morph.help.hs),
+pv_NoiseSynthF,
+pv_NoiseSynthP,
+pv_OddBin,
+pv_PartialSynthF,
+pv_PartialSynthP,
+[pv_PlayBuf](?t=hsc3&e=Help/UGen/pv_PlayBuf.help.hs),
+[pv_RecordBuf](?t=hsc3&e=Help/UGen/pv_RecordBuf.help.hs),
 pv_SoftWipe,
+pv_SpectralEnhance,
+[pv_SpectralMap](?t=hsc3&e=Help/UGen/pv_SpectralMap.help.hs),
 pv_Whiten,
-pv_xFade,
-tpv
+[pv_xFade](?t=hsc3&e=Help/UGen/pv_xFade.help.hs),
+partConvT,
+tpv,
+vbpVoc
+
+
+
+## Filter
+[miElements](?t=hsc3&e=Help/UGen/miElements.help.hs),
+miMu,
+[miRings](?t=hsc3&e=Help/UGen/miRings.help.hs),
+[miRipples](?t=hsc3&e=Help/UGen/miRipples.help.hs)
 
 
 
@@ -373,26 +428,28 @@ allpass2,
 decimator,
 [diodeRingMod](?t=hsc3&e=Help/UGen/diodeRingMod.help.hs),
 [disintegrator](?t=hsc3&e=Help/UGen/disintegrator.help.hs),
-friction,
+[friction](?t=hsc3&e=Help/UGen/friction.help.hs),
 [gammatone](?t=hsc3&e=Help/UGen/gammatone.help.hs),
 goertzel,
 [hairCell](?t=hsc3&e=Help/UGen/hairCell.help.hs),
 [iirFilter](?t=hsc3&e=Help/UGen/iirFilter.help.hs),
 insideOut,
+[lpg](?t=hsc3&e=Help/UGen/lpg.help.hs),
 [lti](?t=hsc3&e=Help/UGen/lti.help.hs),
 meanTriggered,
 [meddis](?t=hsc3&e=Help/UGen/meddis.help.hs),
 medianTriggered,
 [moogLadder](?t=hsc3&e=Help/UGen/moogLadder.help.hs),
+[moogVCF](?t=hsc3&e=Help/UGen/moogVCF.help.hs),
 nl,
 nl2,
 nlFiltC,
 nlFiltL,
 nlFiltN,
 [rlpfd](?t=hsc3&e=Help/UGen/rlpfd.help.hs),
-rmeq,
+[rmeq](?t=hsc3&e=Help/UGen/rmeq.help.hs),
 rmeqSuite,
-rmShelf,
+[rmShelf](?t=hsc3&e=Help/UGen/rmShelf.help.hs),
 rmShelf2,
 regaliaMitraEQ,
 [svf](?t=hsc3&e=Help/UGen/svf.help.hs),
@@ -456,7 +513,7 @@ apf,
 [twoPole](?t=hsc3&e=Help/UGen/twoPole.help.hs),
 [twoZero](?t=hsc3&e=Help/UGen/twoZero.help.hs),
 [varLag](?t=hsc3&e=Help/UGen/varLag.help.hs),
-circleRamp,
+[circleRamp](?t=hsc3&e=Help/UGen/circleRamp.help.hs),
 [complexRes](?t=hsc3&e=Help/UGen/complexRes.help.hs),
 glitchBPF,
 glitchBRF,
@@ -476,7 +533,9 @@ ball,
 [spring](?t=hsc3&e=Help/UGen/spring.help.hs),
 [tBall](?t=hsc3&e=Help/UGen/tBall.help.hs),
 [membraneCircle](?t=hsc3&e=Help/UGen/membraneCircle.help.hs),
+membraneCircleV,
 [membraneHexagon](?t=hsc3&e=Help/UGen/membraneHexagon.help.hs),
+membraneHexagonV,
 [squiz](?t=hsc3&e=Help/UGen/squiz.help.hs),
 waveLoss
 
@@ -485,6 +544,10 @@ waveLoss
 [freqShift](?t=hsc3&e=Help/UGen/freqShift.help.hs),
 [pitchShift](?t=hsc3&e=Help/UGen/pitchShift.help.hs),
 [vibrato](?t=hsc3&e=Help/UGen/vibrato.help.hs)
+
+
+## Filters:linear
+[lores](?t=hsc3&e=Help/UGen/lores.help.hs)
 
 
 
@@ -517,14 +580,16 @@ latoocarfianN,
 [logistic](?t=hsc3&e=Help/UGen/logistic.help.hs),
 [lorenzL](?t=hsc3&e=Help/UGen/lorenzL.help.hs),
 [quadC](?t=hsc3&e=Help/UGen/quadC.help.hs),
-quadL,
-quadN,
+[quadL](?t=hsc3&e=Help/UGen/quadL.help.hs),
+[quadN](?t=hsc3&e=Help/UGen/quadN.help.hs),
 [sinOscFB](?t=hsc3&e=Help/UGen/sinOscFB.help.hs),
 [standardL](?t=hsc3&e=Help/UGen/standardL.help.hs),
 standardN,
+arneodoCoulletTresser,
 breakcore,
 brusselator,
-chuaL,
+[chen](?t=hsc3&e=Help/UGen/chen.help.hs),
+[dNoiseRing](?t=hsc3&e=Help/UGen/dNoiseRing.help.hs),
 doubleWell,
 doubleWell2,
 [doubleWell3](?t=hsc3&e=Help/UGen/doubleWell3.help.hs),
@@ -534,6 +599,7 @@ fincoSprottS,
 fitzHughNagumo,
 gravityGrid,
 gravityGrid2,
+lotkaVolterra,
 mcldChaosGen,
 oregonator,
 [perlin3](?t=hsc3&e=Help/UGen/perlin3.help.hs),
@@ -542,8 +608,9 @@ rosslerL,
 rosslerResL,
 spruceBudworm,
 termanWang,
+[vbFourses](?t=hsc3&e=Help/UGen/vbFourses.help.hs),
 weaklyNonlinear,
-weaklyNonlinear2
+[weaklyNonlinear2](?t=hsc3&e=Help/UGen/weaklyNonlinear2.help.hs)
 
 
 ## Generators:Deterministic
@@ -580,7 +647,9 @@ pSinGrain,
 [blitB3Tri](?t=hsc3&e=Help/UGen/blitB3Tri.help.hs),
 [dpw3Tri](?t=hsc3&e=Help/UGen/dpw3Tri.help.hs),
 [dpw4Saw](?t=hsc3&e=Help/UGen/dpw4Saw.help.hs),
-[fm7](?t=hsc3&e=Help/UGen/fm7.help.hs)
+[fm7](?t=hsc3&e=Help/UGen/fm7.help.hs),
+[miBraids](?t=hsc3&e=Help/UGen/miBraids.help.hs),
+[vbSlide](?t=hsc3&e=Help/UGen/vbSlide.help.hs)
 
 
 ## Generators:Granular
@@ -590,6 +659,7 @@ pSinGrain,
 [grainSin](?t=hsc3&e=Help/UGen/grainSin.help.hs),
 [tGrains](?t=hsc3&e=Help/UGen/tGrains.help.hs),
 [warp1](?t=hsc3&e=Help/UGen/warp1.help.hs),
+[miClouds](?t=hsc3&e=Help/UGen/miClouds.help.hs),
 tGrains2,
 tGrains3
 
@@ -599,7 +669,9 @@ ball,
 [spring](?t=hsc3&e=Help/UGen/spring.help.hs),
 [tBall](?t=hsc3&e=Help/UGen/tBall.help.hs),
 [membraneCircle](?t=hsc3&e=Help/UGen/membraneCircle.help.hs),
-[membraneHexagon](?t=hsc3&e=Help/UGen/membraneHexagon.help.hs)
+membraneCircleV,
+[membraneHexagon](?t=hsc3&e=Help/UGen/membraneHexagon.help.hs),
+membraneHexagonV
 
 
 ## Generators:Single-value
@@ -709,7 +781,7 @@ maxLocalBufs,
 [offsetOut](?t=hsc3&e=Help/UGen/offsetOut.help.hs),
 [out](?t=hsc3&e=Help/UGen/out.help.hs),
 [replaceOut](?t=hsc3&e=Help/UGen/replaceOut.help.hs),
-vDiskIn,
+[vDiskIn](?t=hsc3&e=Help/UGen/vDiskIn.help.hs),
 [xOut](?t=hsc3&e=Help/UGen/xOut.help.hs)
 
 
@@ -729,7 +801,8 @@ numOutputBuses,
 [radiansPerSample](?t=hsc3&e=Help/UGen/radiansPerSample.help.hs),
 [sampleDur](?t=hsc3&e=Help/UGen/sampleDur.help.hs),
 [sampleRate](?t=hsc3&e=Help/UGen/sampleRate.help.hs),
-subsampleOffset
+sanitize,
+[subsampleOffset](?t=hsc3&e=Help/UGen/subsampleOffset.help.hs)
 
 
 
@@ -754,7 +827,7 @@ leastChange,
 [runningSum](?t=hsc3&e=Help/UGen/runningSum.help.hs),
 [schmidt](?t=hsc3&e=Help/UGen/schmidt.help.hs),
 [slope](?t=hsc3&e=Help/UGen/slope.help.hs),
-wrap,
+[wrap](?t=hsc3&e=Help/UGen/wrap.help.hs),
 [trigAvg](?t=hsc3&e=Help/UGen/trigAvg.help.hs)
 
 
@@ -787,33 +860,6 @@ fmhDecode1,
 fmhEncode0,
 fmhEncode1,
 fmhEncode2,
-foaAsymmetry,
-foaDirectO,
-foaDirectX,
-foaDirectY,
-foaDirectZ,
-foaDominateX,
-foaDominateY,
-foaDominateZ,
-foaFocusX,
-foaFocusY,
-foaFocusZ,
-foaNFC,
-foaPanB,
-foaPressX,
-foaPressY,
-foaPressZ,
-foaProximity,
-foaPsychoShelf,
-foaPushX,
-foaPushY,
-foaPushZ,
-foaRotate,
-foaTilt,
-foaTumble,
-foaZoomX,
-foaZoomY,
-foaZoomZ,
 rotate,
 tilt,
 tumble,
@@ -829,32 +875,7 @@ pan4,
 [rotate2](?t=hsc3&e=Help/UGen/rotate2.help.hs),
 [splay](?t=hsc3&e=Help/UGen/splay.help.hs),
 splayAz,
-foaAsymmetry,
-foaDirectO,
-foaDirectX,
-foaDirectY,
-foaDirectZ,
-foaDominateX,
-foaDominateY,
-foaDominateZ,
-foaFocusX,
-foaFocusY,
-foaFocusZ,
-foaNFC,
-foaPanB,
-foaPressX,
-foaPressY,
-foaPressZ,
-foaProximity,
-foaPushX,
-foaPushY,
-foaPushZ,
-foaRotate,
-foaTilt,
-foaTumble,
-foaZoomX,
-foaZoomY,
-foaZoomZ,
+panX,
 vbap
 
 
@@ -865,19 +886,56 @@ vbap
 
 
 
+## Osc
+[miOmi](?t=hsc3&e=Help/UGen/miOmi.help.hs),
+[miPlaits](?t=hsc3&e=Help/UGen/miPlaits.help.hs)
+
+
+
+## Oscillator
+[blOsc](?t=hsc3&e=Help/UGen/blOsc.help.hs),
+[harmonicOsc](?t=hsc3&e=Help/UGen/harmonicOsc.help.hs),
+[neoFormant](?t=hsc3&e=Help/UGen/neoFormant.help.hs),
+neoVarSawOsc,
+oscBank,
+[varShapeOsc](?t=hsc3&e=Help/UGen/varShapeOsc.help.hs),
+[vosimOsc](?t=hsc3&e=Help/UGen/vosimOsc.help.hs),
+[zOsc](?t=hsc3&e=Help/UGen/zOsc.help.hs)
+
+
+
+## Oscillators
+[vbSlide](?t=hsc3&e=Help/UGen/vbSlide.help.hs)
+
+
+
+## PhysicalModelling
+[resonator](?t=hsc3&e=Help/UGen/resonator.help.hs),
+[rongs](?t=hsc3&e=Help/UGen/rongs.help.hs),
+[stringVoice](?t=hsc3&e=Help/UGen/stringVoice.help.hs)
+
+
+
 ## PhysicalModels
+adachiAyers,
 [dwgBowed](?t=hsc3&e=Help/UGen/dwgBowed.help.hs),
 dwgBowedSimple,
 [dwgBowedTor](?t=hsc3&e=Help/UGen/dwgBowedTor.help.hs),
+[dwgClarinet3](?t=hsc3&e=Help/UGen/dwgClarinet3.help.hs),
+[dwgFlute](?t=hsc3&e=Help/UGen/dwgFlute.help.hs),
 dwgPlucked,
 [dwgPlucked2](?t=hsc3&e=Help/UGen/dwgPlucked2.help.hs),
 [dwgPluckedStiff](?t=hsc3&e=Help/UGen/dwgPluckedStiff.help.hs),
 [diodeRingMod](?t=hsc3&e=Help/UGen/diodeRingMod.help.hs),
+myPlucked,
+myPlucked2,
+myPluckedStiff,
 nTube,
 oteyPiano,
 [oteyPianoStrings](?t=hsc3&e=Help/UGen/oteyPianoStrings.help.hs),
+pluckSynth,
 stkGlobals,
-stkInst,
+[stkInst](?t=hsc3&e=Help/UGen/stkInst.help.hs),
 [twoTube](?t=hsc3&e=Help/UGen/twoTube.help.hs)
 
 
@@ -907,7 +965,16 @@ randID,
 [freeVerb](?t=hsc3&e=Help/UGen/freeVerb.help.hs),
 freeVerb2,
 [gVerb](?t=hsc3&e=Help/UGen/gVerb.help.hs),
-[jPverbRaw](?t=hsc3&e=Help/UGen/jPverbRaw.help.hs)
+dwgReverb3Band,
+dwgReverb3Band_16,
+dwgReverbC1C3,
+dwgReverbC1C3_16,
+earlyRef,
+earlyRefAtkGen,
+earlyRefGen,
+[jPverbRaw](?t=hsc3&e=Help/UGen/jPverbRaw.help.hs),
+[miVerb](?t=hsc3&e=Help/UGen/miVerb.help.hs),
+[vbJonVerb](?t=hsc3&e=Help/UGen/vbJonVerb.help.hs)
 
 
 
@@ -921,8 +988,7 @@ control,
 lagControl,
 [pause](?t=hsc3&e=Help/UGen/pause.help.hs),
 [pauseSelf](?t=hsc3&e=Help/UGen/pauseSelf.help.hs),
-[pauseSelfWhenDone](?t=hsc3&e=Help/UGen/pauseSelfWhenDone.help.hs),
-[trigControl](?t=hsc3&e=Help/UGen/trigControl.help.hs)
+[pauseSelfWhenDone](?t=hsc3&e=Help/UGen/pauseSelfWhenDone.help.hs)
 
 
 
@@ -960,57 +1026,42 @@ wrapSummer
 
 
 ## Unclassified
+permMod,
+permModArray,
+permModT,
 printVal
 
 
 
 ## Undocumented
 apf,
-audioControl,
-[blockSize](?t=hsc3&e=Help/UGen/blockSize.help.hs),
-nodeID,
 [pauseSelfWhenDone](?t=hsc3&e=Help/UGen/pauseSelfWhenDone.help.hs),
-scopeOut,
-scopeOut2,
-[trigControl](?t=hsc3&e=Help/UGen/trigControl.help.hs),
 a2b,
 allpass1,
 allpass2,
-atsAmp,
-atsBand,
-atsFreq,
-atsNoiSynth,
 atsNoise,
-atsParInfo,
 atsPartial,
-atsSynth,
 [audioMSG](?t=hsc3&e=Help/UGen/audioMSG.help.hs),
 b2a,
 b2Ster,
 b2uhj,
-bBlockerBuf,
-bfDecode1,
-bfEncode1,
-bfEncode2,
-bfEncodeSter,
-bfManipulate,
+bHiCut,
 blBufRd,
-balance,
+bLowCut,
 binData,
-[bufGrain](?t=hsc3&e=Help/UGen/bufGrain.help.hs),
-bufGrainB,
+blitB3D,
 bufGrainBBF,
 bufGrainBF,
-bufGrainI,
 bufGrainIBF,
 cq_Diff,
-chuaL,
 clipper32,
 clipper4,
 clipper8,
 clockmus,
+combFormlet,
 combLP,
-dwgSoundBoard,
+dwgFlute2,
+[dwgSoundBoard](?t=hsc3&e=Help/UGen/dwgSoundBoard.help.hs),
 driveNoise,
 fftCentroid,
 fftComplexDev,
@@ -1020,16 +1071,10 @@ fftFluxPos,
 fftmkl,
 fftPhaseDev,
 fftSubbandFlux,
-[fmGrain](?t=hsc3&e=Help/UGen/fmGrain.help.hs),
-[fmGrainB](?t=hsc3&e=Help/UGen/fmGrainB.help.hs),
 fmGrainBBF,
 fmGrainBF,
-fmGrainI,
 fmGrainIBF,
-fmhDecode1,
 fmhEncode0,
-fmhEncode1,
-fmhEncode2,
 fhnTrig,
 fincoSprottL,
 fincoSprottM,
@@ -1046,18 +1091,14 @@ inGrainBBF,
 inGrainBF,
 inGrainI,
 inGrainIBF,
-lpcSynth,
-lpcVals,
 lpf1,
 lpf18,
 lpfvs6,
+lrHiCut,
+lrLowCut,
 latoocarfianTrig,
 matchingPResynth,
-maxamp,
-[metro](?t=hsc3&e=Help/UGen/metro.help.hs),
-[monoGrain](?t=hsc3&e=Help/UGen/monoGrain.help.hs),
-monoGrainBF,
-[moogVCF](?t=hsc3&e=Help/UGen/moogVCF.help.hs),
+miWarps,
 needleRect,
 osFold4,
 osFold8,
@@ -1067,27 +1108,38 @@ osWrap4,
 osWrap8,
 onsetsDS,
 [oteySoundBoard](?t=hsc3&e=Help/UGen/oteySoundBoard.help.hs),
-pvInfo,
-pvSynth,
-panX,
 panX2D,
 peakEQ2,
 peakEQ4,
+permMod,
+permModArray,
+permModT,
 posRatio,
+[rBezier](?t=hsc3&e=Help/UGen/rBezier.help.hs),
+[rdx7](?t=hsc3&e=Help/UGen/rdx7.help.hs),
+[rDelayMap](?t=hsc3&e=Help/UGen/rDelayMap.help.hs),
+[rDelaySet](?t=hsc3&e=Help/UGen/rDelaySet.help.hs),
+[rDelaySetB](?t=hsc3&e=Help/UGen/rDelaySetB.help.hs),
+[rDustR](?t=hsc3&e=Help/UGen/rDustR.help.hs),
+[rFreezer](?t=hsc3&e=Help/UGen/rFreezer.help.hs),
+[rLoopSet](?t=hsc3&e=Help/UGen/rLoopSet.help.hs),
 rmaFoodChainL,
-rmeq,
-rmShelf,
+[rmeq](?t=hsc3&e=Help/UGen/rmeq.help.hs),
+[rmShelf](?t=hsc3&e=Help/UGen/rmShelf.help.hs),
 rmShelf2,
+[rObxdFilter](?t=hsc3&e=Help/UGen/rObxdFilter.help.hs),
+[rPlayTrace](?t=hsc3&e=Help/UGen/rPlayTrace.help.hs),
+[rShufflerB](?t=hsc3&e=Help/UGen/rShufflerB.help.hs),
+[rShufflerL](?t=hsc3&e=Help/UGen/rShufflerL.help.hs),
+[rtExpRandN](?t=hsc3&e=Help/UGen/rtExpRandN.help.hs),
+[rtRandN](?t=hsc3&e=Help/UGen/rtRandN.help.hs),
+[rtScramble](?t=hsc3&e=Help/UGen/rtScramble.help.hs),
+[rTraceRd](?t=hsc3&e=Help/UGen/rTraceRd.help.hs),
 regaliaMitraEQ,
 rosslerResL,
 rotate,
 somAreaWr,
-[sinGrain](?t=hsc3&e=Help/UGen/sinGrain.help.hs),
-sinGrainB,
-sinGrainBBF,
-sinGrainBF,
-sinGrainI,
-sinGrainIBF,
+selectL,
 sinTone,
 skipNeedle,
 [softClipAmp](?t=hsc3&e=Help/UGen/softClipAmp.help.hs),
@@ -1095,6 +1147,8 @@ softClipAmp4,
 softClipAmp8,
 softClipper4,
 softClipper8,
+sonLPCSynth,
+sonLPCSynthIn,
 [spreader](?t=hsc3&e=Help/UGen/spreader.help.hs),
 standardTrig,
 [stkBandedWG](?t=hsc3&e=Help/UGen/stkBandedWG.help.hs),
@@ -1114,7 +1168,7 @@ tTendency,
 tilt,
 tumble,
 uhj2b,
-warpZ
+xFadeRotate
 
 
 

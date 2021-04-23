@@ -39,7 +39,7 @@ cat_blacklist :: [String]
 cat_blacklist = ["Base","Input"]
 
 cat_sub :: UGen_Cat_Table
-cat_sub = filter ((`notElem` cat_blacklist) . fst) (ugen_categories_table sc3_ugen_cat_composite)
+cat_sub = filter ((`notElem` cat_blacklist) . fst) (ugen_categories_table sc3_ugen_cat_composite_x)
 
 drop_last :: [a] -> [a]
 drop_last = reverse . tail . reverse
