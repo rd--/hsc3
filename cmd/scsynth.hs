@@ -127,6 +127,12 @@ scsyndef_play sy_nm = do
   gr <- Graphdef.read_graphdef_file sy_nm
   audition gr
 
+-- > UI.ui_choose_file "/home/rohan/sw/hsc3-graphs/db/" >>= maybe (return ()) (scsyndef_print True)
+scsyndef_print :: Bool -> FilePath -> IO ()
+scsyndef_print with_com sy_nm = do
+  gr <- Graphdef.read_graphdef_file sy_nm
+  putStrLn (Graphdef.print_graphdef with_com gr)
+
 -- > UI.ui_choose_file "/home/rohan/sw/hsc3-graphs/db/" >>= maybe (return ()) scsyndef_dump_ugens
 scsyndef_dump_ugens :: FilePath -> IO ()
 scsyndef_dump_ugens sy_nm = do
@@ -162,6 +168,7 @@ help =
     ,"reset"
     ,"scsyndef dump-ugens scyndef-file"
     ,"scsyndef play scyndef-file"
+    ,"scsyndef print with-comments:bool scyndef-file"
     ,"scsyndef stat [scyndef-file] [stat-file]"
     ,"scsyndef to-hs [scyndef-file] [hs-file]"
     ,"status print|monitor [delay:float]"
@@ -185,6 +192,7 @@ main = do
     ["reset"] -> withSC3 reset
     ["scsyndef","dump-ugens",sy] -> scsyndef_dump_ugens sy
     ["scsyndef","play",sy] -> scsyndef_play sy
+    ["scsyndef","print",with_com,sy] -> scsyndef_print (read with_com) sy
     ["scsyndef","stat"] -> scsyndef_ug_stat "/dev/stdin" "/dev/stdout"
     ["scsyndef","stat",sy] -> scsyndef_ug_stat sy "/dev/stdout"
     ["scsyndef","stat",sy,st] -> scsyndef_ug_stat sy st

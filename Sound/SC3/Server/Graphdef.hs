@@ -322,12 +322,13 @@ print_string a =
   let s = Datum.ascii_to_string a
   in if any isSpace s || ';' `elem` s then error "print_string" else s
 
+-- | 'ENCODE_F' for plain text output.
 enc_text :: (String -> String) -> ENCODE_F String
 enc_text com_f =
   (unwords . filter (not . null),print_string,show,show,show,\n -> Numeric.showFFloat Nothing n ""
   ,com_f)
 
-{- | 'encode_graphdef_f' of 'enc_text'
+{- | 'encode_graphdef_f' of 'enc_text' with optional semi-colon delimited comments.
 
 > dir = "/home/rohan/sw/rsc3-disassembler/scsyndef/"
 > pp nm = read_graphdef_file (dir ++ nm) >>= putStrLn . print_graphdef True
