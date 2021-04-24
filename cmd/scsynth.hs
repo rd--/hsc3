@@ -10,6 +10,7 @@ import Sound.SC3 {- hsc3 -}
 
 import qualified Sound.SC3.Server.Graphdef as Graphdef {- hsc3 -}
 import qualified Sound.SC3.Server.Graphdef.Read as Read {- hsc3 -}
+import qualified Sound.SC3.Server.Graphdef.Text as Graphdef {- hsc3 -}
 import qualified Sound.SC3.UGen.Graph.Reconstruct as Reconstruct {- hsc3 -}
 
 import qualified Sound.File.NeXT as SF {- hsc3-sf -}

@@ -3,7 +3,6 @@
 module Sound.SC3.Server.Graphdef where
 
 import Control.Monad {- base -}
-import Data.Char {- base -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
 import System.FilePath {- filepath -}
@@ -12,7 +11,6 @@ import Text.Printf {- base -}
 import qualified Data.Binary.Get as Get {- binary -}
 import qualified Data.Binary.IEEE754 as IEEE754 {- data-binary-ieee754 -}
 import qualified Data.ByteString.Lazy as L {- bytestring -}
-import qualified Numeric {- base -}
 import qualified Safe {- safe -}
 
 import qualified Sound.OSC.Coding.Byte as Byte {- hosc -}
@@ -220,24 +218,6 @@ scsyndef_stat fn = do
   g <- read_graphdef_file fn
   return (graphdef_stat g)
 
-{-
-import qualified Control.Monad.State as S {- mtl -}
-
--- * LIST INPUT
-
--- | Read the next value from a list.
-list_read :: S.State [t] t
-list_read = do
-  l <- S.get
-  when (null l) (error "list_read")
-  S.put (tail l)
-  return (head l)
-
--- | 'flip' 'evalState'.
-with_list :: [t] -> S.State [t] u -> u
-with_list = flip S.evalState
--}
-
 -- * Encode (version zero)
 
 -- | (join_f,str_f,i8_f,i16_f,i32_f,f32_f,com_f)
@@ -313,34 +293,6 @@ encode_graphdef = encode_graphdef_f enc_bytestring
 -- > Byte.decode_i32 (Byte.encode_ascii (Datum.ascii "SCgf"))
 scgf_i32 :: Num n => n
 scgf_i32 = 1396926310
-
--- | * PRINT
-
--- | Print string.  Strings must not have internal whitespace or semi-colons.
-print_string :: Datum.ASCII -> String
-print_string a =
-  let s = Datum.ascii_to_string a
-  in if any isSpace s || ';' `elem` s then error "print_string" else s
-
--- | 'ENCODE_F' for plain text output.
-enc_text :: (String -> String) -> ENCODE_F String
-enc_text com_f =
-  (unwords . filter (not . null),print_string,show,show,show,\n -> Numeric.showFFloat Nothing n ""
-  ,com_f)
-
-{- | 'encode_graphdef_f' of 'enc_text' with optional semi-colon delimited comments.
-
-> dir = "/home/rohan/sw/rsc3-disassembler/scsyndef/"
-> pp nm = read_graphdef_file (dir ++ nm) >>= putStrLn . print_graphdef True
-> pp "simple.scsyndef"
-> pp "with-ctl.scsyndef"
-> pp "mce.scsyndef"
-> pp "mrg.scsyndef"
--}
-print_graphdef :: Bool -> Graphdef -> String
-print_graphdef with_com =
-    let com_f = if with_com then \c -> concat ["\n; ",c,"\n"] else const ""
-    in encode_graphdef_f (enc_text com_f)
 
 -- * IO
 
