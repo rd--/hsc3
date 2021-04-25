@@ -1,5 +1,5 @@
 core=hosc,hsc3
-plain=hosc-util,hsc3-db,hsc3-dot,hsc3-lang,hsc3-plot,hsc3-sf,hsc3-sf-hsndfile,sc3-rdu
+plain=hosc-util,hsc3-db,hsc3-dot,hsc3-lang,hsc3-plot,hsc3-sf,hsc3-sf-hsndfile,hsc3-ui,sc3-rdu
 ext=after-pim,hcg-minus,hcg-minus-cairo,hmeap,hmt,hosc-json,hps,hsc3-auditor,hsc3-cairo,hsc3-data,hsc3-graphs,hsc3-m,hsc3-rec,hsc3-rw,hsc3-unsafe,hsdif,hsharc,hspear,midi-osc,rju,tctl
 oblique=hdf,hls,hly,hmt-diagrams,hps-cairo,html-minus,hts,img-osc,www-minus
 remote=hsc3-process,hsc3-server

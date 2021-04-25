@@ -134,6 +134,11 @@ scsyndef_print with_com sy_nm = do
   gr <- Graphdef.read_graphdef_file sy_nm
   putStrLn (Graphdef.print_graphdef with_com gr)
 
+scsyndef_read :: FilePath -> FilePath -> IO ()
+scsyndef_read txt_fn sy_fn = do
+  txt <- readFile txt_fn
+  Graphdef.graphdefWrite sy_fn (Graphdef.read_graphdef txt)
+
 -- > UI.ui_choose_file "/home/rohan/sw/hsc3-graphs/db/" >>= maybe (return ()) scsyndef_dump_ugens
 scsyndef_dump_ugens :: FilePath -> IO ()
 scsyndef_dump_ugens sy_nm = do
@@ -170,6 +175,7 @@ help =
     ,"scsyndef dump-ugens scyndef-file"
     ,"scsyndef play scyndef-file"
     ,"scsyndef print with-comments:bool scyndef-file"
+    ,"scsyndef read text-file scyndef-file"
     ,"scsyndef stat [scyndef-file] [stat-file]"
     ,"scsyndef to-hs [scyndef-file] [hs-file]"
     ,"status print|monitor [delay:float]"
@@ -194,6 +200,7 @@ main = do
     ["scsyndef","dump-ugens",sy] -> scsyndef_dump_ugens sy
     ["scsyndef","play",sy] -> scsyndef_play sy
     ["scsyndef","print",with_com,sy] -> scsyndef_print (read with_com) sy
+    ["scsyndef","read",txt_fn,sy_fn] -> scsyndef_read txt_fn sy_fn
     ["scsyndef","stat"] -> scsyndef_ug_stat "/dev/stdin" "/dev/stdout"
     ["scsyndef","stat",sy] -> scsyndef_ug_stat sy "/dev/stdout"
     ["scsyndef","stat",sy,st] -> scsyndef_ug_stat sy st

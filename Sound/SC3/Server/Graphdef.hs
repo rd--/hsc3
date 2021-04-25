@@ -121,74 +121,78 @@ graphdef_ugen_nid g n = graphdef_control_nid g 0 + length (graphdef_controls g) 
 
 -- * BINARY GET (version 0 or 2)
 
--- | Get a 'Sample'
-get_sample :: Get.Get Sample
-get_sample = fmap realToFrac IEEE754.getFloat32be
-
 -- | Get a 'Name' (Pascal string).
 get_pstr :: Get.Get Name
 get_pstr = do
   n <- fmap fromIntegral Get.getWord8
   fmap Byte.decode_ascii (Get.getLazyByteString n)
 
+-- | Get functions for Graphdef types, (str_f,i8_f,i16_f,i32_f,f32_f)
+type GET_F m = (m Name,m Int,m Int,m Int,m Double)
+
+-- | GET_F for binary .scsyndef files.
+binary_get_f :: GET_F Get.Get
+binary_get_f =
+  (get_pstr
+  ,fmap fromIntegral Get.getInt8
+  ,fmap fromIntegral Get.getInt16be
+  ,fmap fromIntegral Get.getInt32be
+  ,fmap realToFrac IEEE754.getFloat32be)
+
 -- | Get a 'Control'.
-get_control :: Get.Get Int -> Get.Get Control
-get_control get_i = do
-  nm <- get_pstr
+get_control :: Monad m => (GET_F m,m Int) -> m Control
+get_control ((get_str,_,_,_,_),get_i) = do
+  nm <- get_str
   ix <- get_i
   return (nm,ix)
 
 -- | Get an 'Input'.
-get_input :: Get.Get Int -> Get.Get Input
+get_input :: Monad m => m Int -> m Input
 get_input get_i = do
   u <- get_i
   p <- get_i
   return (Input u p)
 
--- | Get an 'Output'
-get_output :: Get.Get Output
-get_output = fmap fromIntegral Get.getInt8
-
 -- | Get a 'UGen'
-get_ugen :: Get.Get Int -> Get.Get UGen
-get_ugen get_i = do
-  name <- get_pstr
-  rate <- fmap fromIntegral Get.getInt8
+get_ugen :: Monad m => (GET_F m,m Int) -> m UGen
+get_ugen ((get_str,get_i8,get_i16,_,_),get_i) = do
+  name <- get_str
+  rate <- get_i8
   number_of_inputs <- get_i
   number_of_outputs <- get_i
-  special <- fmap fromIntegral Get.getInt16be
+  special <- get_i16
   inputs <- replicateM number_of_inputs (get_input get_i)
-  outputs <- replicateM number_of_outputs get_output
+  outputs <- replicateM number_of_outputs get_i8
   return (name
          ,rate
          ,inputs
          ,outputs
          ,special)
 
--- | Get a 'Graphdef'.  Ignores variants.
-get_graphdef :: Get.Get Graphdef
-get_graphdef = do
-  magic <- Get.getInt32be
-  version <- Get.getInt32be
+-- | Get a 'Graphdef'. Supports version 0 and version 2 files.  Ignores variants.
+get_graphdef :: Monad m => GET_F m -> m Graphdef
+get_graphdef c@(get_str,_,get_i16,get_i32,get_f32) = do
+  magic <- get_i32
+  version <- get_i32
   let get_i =
           case version of
-            0 -> fmap fromIntegral Get.getInt16be
-            2 -> fmap fromIntegral Get.getInt32be
+            0 -> get_i16
+            2 -> get_i32
             _ -> error ("get_graphdef: version not at {zero | two}: " ++ show version)
-  number_of_definitions <- Get.getInt16be
+  number_of_definitions <- get_i16
   when (magic /= scgf_i32)
        (error "get_graphdef: illegal magic string")
   when (number_of_definitions /= 1)
        (error "get_graphdef: non unary graphdef file")
-  name <- get_pstr
+  name <- get_str
   number_of_constants <- get_i
-  constants <- replicateM number_of_constants get_sample
+  constants <- replicateM number_of_constants get_f32
   number_of_control_defaults <- get_i
-  control_defaults <- replicateM number_of_control_defaults get_sample
+  control_defaults <- replicateM number_of_control_defaults get_f32
   number_of_controls <- get_i
-  controls <- replicateM number_of_controls (get_control get_i)
+  controls <- replicateM number_of_controls (get_control (c,get_i))
   number_of_ugens <- get_i
-  ugens <- replicateM number_of_ugens (get_ugen get_i)
+  ugens <- replicateM number_of_ugens (get_ugen (c,get_i))
   return (Graphdef name
                    constants
                    (zip controls control_defaults)
@@ -208,7 +212,7 @@ get_graphdef = do
 read_graphdef_file :: FilePath -> IO Graphdef
 read_graphdef_file nm = do
   b <- L.readFile nm
-  return (Get.runGet get_graphdef b)
+  return (Get.runGet (get_graphdef binary_get_f) b)
 
 -- * STAT
 

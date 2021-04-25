@@ -60,7 +60,7 @@ prj_file :: FilePath -> FilePath
 prj_file = (++) prj_dir
 
 setup_db :: FilePath
-setup_db = prj_file "db/setup.db"
+setup_db = prj_file "lib/db/setup.db"
 
 split_once :: Eq a => a -> [a] -> ([a], [a])
 split_once e l = let (p,_:q) = break ((==) e) l in (p,q)

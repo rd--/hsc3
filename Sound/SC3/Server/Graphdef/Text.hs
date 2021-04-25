@@ -1,8 +1,12 @@
 module Sound.SC3.Server.Graphdef.Text where
 
+import Control.Monad {- base -}
 import Data.Char {- base -}
+import Data.Functor.Identity {- base -}
 
 import qualified Numeric {- base -}
+
+import qualified Control.Monad.State as S {- mtl -}
 
 import qualified Sound.OSC.Datum as Datum {- hosc -}
 
@@ -36,21 +40,24 @@ print_graphdef with_com =
     let com_f = if with_com then \c -> concat ["\n; ",c,"\n"] else const ""
     in encode_graphdef_f (enc_text com_f)
 
-{-
-import qualified Control.Monad.State as S {- mtl -}
-
 -- * LIST INPUT
 
 -- | Read the next value from a list.
-list_read :: S.State [t] t
-list_read = do
+list_read_f :: (t -> u) -> S.State [t] u
+list_read_f f = do
   l <- S.get
-  when (null l) (error "list_read")
+  when (null l) (error "list_read_f")
   S.put (tail l)
-  return (head l)
+  return (f (head l))
 
--- | 'flip' 'evalState'.
-with_list :: [t] -> S.State [t] u -> u
-with_list = flip S.evalState
--}
+-- | GET_F for text representation of Graphdef.
+text_get_f :: GET_F (S.StateT [String] Identity)
+text_get_f = (list_read_f Datum.ascii,list_read_f read,list_read_f read,list_read_f read,list_read_f read)
 
+-- | Read text representation of Graphdef, as written by 'print_graphdef'.
+--
+-- > read_graphdef "1396926310 0 1 simple 2 0.0 440.0 0 0 2 SinOsc 2 2 1 0 -1 1 -1 0 2 Out 2 2 0 0 -1 0 0 0"
+read_graphdef :: String -> Graphdef
+read_graphdef txt =
+  let delete_comments = filter (\x -> not (null x) && (head x /= ';'))
+  in S.evalState (get_graphdef text_get_f) (concatMap words (delete_comments (lines txt)))
