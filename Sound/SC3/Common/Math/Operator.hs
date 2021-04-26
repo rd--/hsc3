@@ -141,7 +141,7 @@ data SC3_Binary_Op
             | GE -- 11
             | Min -- 12
             | Max -- 13
-            | BitAnd
+            | BitAnd -- 14
             | BitOr -- 15
             | BitXor
             | LCM -- 17
@@ -153,8 +153,8 @@ data SC3_Binary_Op
             | Hypot
             | Hypotx
             | Pow -- 25
-            | ShiftLeft
-            | ShiftRight
+            | ShiftLeft -- 26
+            | ShiftRight -- 27
             | UnsignedShift
             | Fill
             | Ring1 -- 30
