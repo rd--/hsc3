@@ -275,9 +275,16 @@ mixN n u =
 mceFill :: Integral n => Int -> (n -> UGen) -> UGen
 mceFill n f = mce (map f [0 .. fromIntegral n - 1])
 
+-- | Construct an array of UGens with ID.
+mceFill_z :: (Integral n, ID z, Enum z) => z -> Int -> (z -> n -> UGen) -> UGen
+mceFill_z z n f = mce (zipWith f [z..] [0 .. fromIntegral n - 1])
+
 -- | Construct and sum a set of UGens.
 mixFill :: Integral n => Int -> (n -> UGen) -> UGen
 mixFill n = mix . mceFill n
+
+mixFill_z :: (Integral n, ID z, Enum z) => z -> Int -> (z -> n -> UGen) -> UGen
+mixFill_z z n = mix . mceFill_z z n
 
 -- | Monad variant on mixFill.
 mixFillM :: (Integral n,Monad m) => Int -> (n -> m UGen) -> m UGen

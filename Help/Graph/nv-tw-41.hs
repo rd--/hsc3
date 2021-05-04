@@ -1,9 +1,7 @@
--- http://sccode.org/1-V (nv) [Line 41]
-let nd z =
-        let i = constant z
-            t = (0.6 ** i) * 40 * impulse AR ((2 ** i) / 32) (1/2)
-            f = (4 ** lfNoise0 z KR (1/16)) * 300
-        in sin (rlpf t f 5e-3)
-    x = splay (mce (map nd [0::Int .. 7])) 1 1 0 True
-    r u = let (p,q) = mce2c u in freeVerb2 p q 0.1 1 1
-in r (r x)
+-- https://swiki.hfbk-hamburg.de/MusicTechnology/899 (nv) [Line 41]
+let n z i =
+      let f = 1.9 ** i / 128
+          p = mce2 (pinkNoise (z,'α') AR) (pinkNoise (z,'β') AR)
+          b = 4 ** lfNoise2 z KR (1.2 ** i / 16)
+      in bpf p (b * 300) 0.15 * (5 ** lfNoise2 z AR f / (i + 8) * 20)
+in splay (mixFill_z 'γ' 15 n) 1 0.5 0 True

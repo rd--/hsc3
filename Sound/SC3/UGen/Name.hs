@@ -45,10 +45,10 @@ sc3_name_edges s =
      then replicate n False ++ q
      else replicate (n - 1) False ++ [True] ++ q
 
-{- | Convert from SC3 name to HS style name.
+{- | Convert from SCLang (class) name to Haskell (function) name.
 
-> s = words "SinOsc LFSaw FFT PV_Add AllpassN BHiPass BinaryOpUGen HPZ1 RLPF TGrains DFM1 FBSineC A2K Lag2UD IIRFilter FMGrainB Pan2 PeakEQ"
-> l = words "sinOsc lfSaw fft pv_Add allpassN bHiPass binaryOpUGen hpz1 rlpf tGrains dfm1 fbSineC a2k lag2UD iirFilter fmGrainB pan2 peakEQ"
+> s = words "SinOsc LFSaw FFT PV_Add AllpassN BHiPass BinaryOpUGen HPZ1 RLPF TGrains DFM1 FBSineC A2K Lag2UD IIRFilter FMGrainB Pan2 PeakEQ RIRandN"
+> l = words "sinOsc lfSaw fft pv_Add allpassN bHiPass binaryOpUGen hpz1 rlpf tGrains dfm1 fbSineC a2k lag2UD iirFilter fmGrainB pan2 peakEQ riRandN"
 > map sc3_name_to_hs_name s == l
 -}
 sc3_name_to_hs_name :: String -> String
@@ -58,8 +58,8 @@ sc3_name_to_hs_name s =
 
 {- | Convert from SC3 name to Lisp style name.
 
-> s = words "SinOsc LFSaw FFT PV_Add AllpassN BHiPass BinaryOpUGen HPZ1 RLPF TGrains DFM1 BPeakEQ Pan2"
-> l = words "sin-osc lf-saw fft pv-add allpass-n b-hi-pass binary-op-u-gen hpz1 rlpf t-grains dfm1 b-peak-e-q pan-2"
+> s = words "SinOsc LFSaw FFT PV_Add AllpassN BHiPass BinaryOpUGen HPZ1 RLPF TGrains DFM1 BPeakEQ Pan2 RIRandN"
+> l = words "sin-osc lf-saw fft pv-add allpass-n b-hi-pass binary-op-u-gen hpz1 rlpf t-grains dfm1 b-peak-e-q pan-2 ri-rand-n"
 > map sc3_name_to_lisp_name s == l
 -}
 sc3_name_to_lisp_name :: String -> String

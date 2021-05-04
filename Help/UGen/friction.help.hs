@@ -24,3 +24,7 @@ let f _ (w,x,y,z,o,_,_,_,_,_) =
       in pan2 (mix ru) (o * 2 - 1) 1
 in mix (rEventVoicer 16 f) * control KR "gain" 1
 
+-- mutantsounds 05 https://swiki.hfbk-hamburg.de/MusicTechnology/899
+let x = mceFill 5 (\i -> clip (lfNoise2 (i :: Int) KR 3) 0 1 * 0.03 + 0.00001)
+    s = X.friction AR (lfTri AR 50 0) x 0.414 0.313 (x * 30000) 1
+in splay s 1 1 0 True

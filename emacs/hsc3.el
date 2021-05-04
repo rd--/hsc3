@@ -145,12 +145,12 @@
   (buffer-substring-no-properties (region-beginning) (region-end)))
 
 (defun hsc3-send-region ()
-  "If region spans multiple lines send using using ghci layout quoting."
+  "Send region text to interpreter."
   (interactive)
   (hsc3-send-text (hsc3-region-string)))
 
 (defun hsc3-send-region-fn (fn)
-  "If region spans multiple lines send using using ghci layout quoting."
+  "Send region text with haskell function to be applied."
   (hsc3-send-text-fn fn (hsc3-region-string)))
 
 (defun hsc3-play-region (k)
@@ -166,20 +166,26 @@
   :type 'string)
 
 (defun hsc3-draw-region ()
-  "Draw region, if region spans multiple lines send using using ghci layout quoting."
+  "Draw region UGen graph."
   (interactive)
   (hsc3-send-region-fn (format "Sound.SC3.UGen.Dot.%s" hsc3-draw-command)))
 
 (defun hsc3-dump-ugens-region ()
-  "Draw region, if region spans multiple lines send using using ghci layout quoting."
+  "Print region UGen graph."
   (interactive)
   (hsc3-send-region-fn "Sound.SC3.ugen_dump_ugens"))
 
 (defun hsc3-ui-region ()
-  "UI for region, if region spans multiple lines send using using ghci layout quoting."
+  "UI for region UGen graph."
   (interactive)
   (let ((str (hsc3-region-string)))
     (hsc3-send-region-fn "Sound.SC3.UI.SCLang.Control.ugen_ui_run \"ui\" 1")))
+
+(defun hsc3-pp-html-region ()
+  "HTML pretty-printer and viewer for region UGen graph."
+  (interactive)
+  (let ((str (hsc3-region-string)))
+    (hsc3-send-region-fn "Sound.SC3.UI.HTML.ugen_graph_pp_html_wv")))
 
 (defun hsc3-pp-smalltalk ()
   "Pretty print UGen as Smalltalk"
