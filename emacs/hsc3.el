@@ -187,6 +187,11 @@
   (let ((str (hsc3-region-string)))
     (hsc3-send-region-fn "Sound.SC3.UI.HTML.ugen_graph_pp_html_wv")))
 
+(defun hsc3-pp-forth ()
+  "Forth PP"
+  (interactive)
+  (hsc3-send-region-fn "Sound.SC3.UGen.DB.PP.ugen_graph_forth_pp (False,False)"))
+
 (defun hsc3-pp-smalltalk ()
   "Pretty print UGen as Smalltalk"
   (interactive)

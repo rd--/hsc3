@@ -58,10 +58,6 @@
 ;;     (insert " ")
 ;;     (insert (hsc3-remove-trailing-newline (shell-command-to-string p)))))
 
-;; (defun hsc3-sc3-forth-pp () "Forth PP" (interactive)
-;;   (hsc3-send-string
-;;    (format "Sound.SC3.UGen.DB.PP.ugen_graph_forth_pp False %s" (thing-at-point 'symbol))))
-
 ;; (defun hsc3-region-string ()
 ;;   "Get region as string (no properties)"
 ;;   (buffer-substring-no-properties
