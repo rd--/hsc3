@@ -271,24 +271,33 @@ mixN n u =
     let xs = transpose (Split.chunksOf n (mceChannels u))
     in mce (map sum_opt xs)
 
--- | Construct an array of UGens.
+-- | Construct an MCE array of UGens.
 mceFill :: Integral n => Int -> (n -> UGen) -> UGen
 mceFill n f = mce (map f [0 .. fromIntegral n - 1])
 
--- | Construct an array of UGens with ID.
+-- | Construct a list of ID UGens.
+listFill_z :: (Integral n, ID z, Enum z) => z -> Int -> (z -> n -> UGen) -> [UGen]
+listFill_z z n f = zipWith f [z..] [0 .. fromIntegral n - 1]
+
+-- | 'mce' of 'listFill_z'
 mceFill_z :: (Integral n, ID z, Enum z) => z -> Int -> (z -> n -> UGen) -> UGen
-mceFill_z z n f = mce (zipWith f [z..] [0 .. fromIntegral n - 1])
+mceFill_z z n = mce . listFill_z z n
 
 -- | Construct and sum a set of UGens.
 mixFill :: Integral n => Int -> (n -> UGen) -> UGen
 mixFill n = mix . mceFill n
 
+-- | Construct and sum a set of ID UGens.
 mixFill_z :: (Integral n, ID z, Enum z) => z -> Int -> (z -> n -> UGen) -> UGen
 mixFill_z z n = mix . mceFill_z z n
 
 -- | Monad variant on mixFill.
 mixFillM :: (Integral n,Monad m) => Int -> (n -> m UGen) -> m UGen
 mixFillM n f = fmap sum_opt (mapM f [0 .. fromIntegral n - 1])
+
+-- | Apply the ID UGen processor /f/ /k/ times in sequence to /i/, ie. for k=4 /f (f (f (f i)))/.
+useq_z :: (ID z, Enum z) => z -> Int -> (z -> UGen -> UGen) -> UGen -> UGen
+useq_z z k f i = if k <= 0 then i else useq_z (succ z) (k - 1) f (f z i)
 
 -- | Variant that is randomly pressed.
 mouseButton' :: Rate -> UGen -> UGen -> UGen -> UGen

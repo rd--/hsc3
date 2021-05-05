@@ -1,8 +1,8 @@
 -- tank (jmcc) ; http://create.ucsb.edu/pipermail/sc-users/2004-April/009692.html
-let s1 =
-      let d = dust 'α' AR 0.2
-          f = expRand 'β' 300 2200
-          p = rand 'γ' (-1) 1
+let s1 z _ =
+      let d = dust (z,'α') AR 0.2
+          f = expRand (z,'β') 300 2200
+          p = rand (z,'γ') (-1) 1
       in pan2 (decay2 d 0.1 0.5 * 0.1 * cubed (fSinOsc AR f 0)) p 1
     s2 =
       let d = dust 'δ' AR 0.01
@@ -19,9 +19,9 @@ let s1 =
           l6 = leakDC l5 0.995
           l7 = l6 + i
       in mrg [l7,localOut l7]
-    r_allpass i = allpassN i 0.03 (X.rRandN 2 'ζ' 0.005 0.02) 1
-    s3 = s2 + mix (Protect.uclone_all 'κ' 8 s1)
-in rev_f (Protect.useq_all 'λ' 4 r_allpass s3)
+    r_allpass z i = allpassN i 0.03 (X.rRandN 2 (z,'ζ') 0.005 0.02) 1
+    s3 = s2 + mixFill_z 'κ' 8 s1
+in rev_f (useq_z 'λ' 4 r_allpass s3)
 
 -- tank (jmcc) ; event control
 let s1 =
@@ -41,5 +41,5 @@ let s1 =
           l6 = leakDC l5 0.995
           l7 = l6 + i
       in mrg [l7,localOut l7]
-    r_allpass i = allpassN i 0.03 (X.rRandN 2 'ζ' 0.005 0.02) 1
-in rev_f (Protect.useq_all 'λ' 4 r_allpass s1)
+    r_allpass z i = allpassN i 0.03 (X.rRandN 2 (z,'ζ') 0.005 0.02) 1
+in rev_f (useq_z 'λ' 4 r_allpass s1)
