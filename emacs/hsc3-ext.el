@@ -51,13 +51,6 @@
 ;;   (hsc3-load-buffer)
 ;;   (hsc3-run-main))
 
-;; (defun hsc3-ugen-default-param ()
-;;   "Insert the default UGen parameters for the UGen before <point>."
-;;   (interactive)
-;;   (let ((p (format "hsc3-default-param %s" (thing-at-point 'symbol))))
-;;     (insert " ")
-;;     (insert (hsc3-remove-trailing-newline (shell-command-to-string p)))))
-
 ;; (defun hsc3-region-string ()
 ;;   "Get region as string (no properties)"
 ;;   (buffer-substring-no-properties

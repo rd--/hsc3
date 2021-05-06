@@ -22,7 +22,7 @@ ugen_default_param nm = maybe ("ERROR: NO ENTRY: " ++ nm) DB.u_default_param (DB
 
 -- > map ugen_control_param ["sinosc","whiteNoise","drand","pitch"]
 ugen_control_param :: String -> String
-ugen_control_param nm = maybe ("ERROR: NO ENTRY: " ++ nm) DB.u_control_inputs_pp (DB.u_lookup_ci nm)
+ugen_control_param nm = maybe ("ERROR: NO ENTRY: " ++ nm) (DB.u_control_inputs_pp False) (DB.u_lookup_ci nm)
 
 -- > map ugen_smalltalk ["sinosc","whiteNoise","drand","pitch"]
 ugen_smalltalk :: String -> String

@@ -102,11 +102,24 @@
   (hsc3-send-line
    (format "Sound.SC3.UGen.DB.ugen_summary_wr \"%s\"" (thing-at-point 'symbol))))
 
-(defun hsc3-ugen-control-param ()
-  "Lookup up the UGen at point in hsc3-db."
+(defun hsc3-ugen-default-param ()
+  "Insert the default UGen parameters (arguments) for the UGen before <point>."
   (interactive)
+  (let ((p (format "hsc3-help ugen-default-param %s" (thing-at-point 'symbol))))
+    (insert " ")
+    (insert (hsc3-remove-trailing-newline (shell-command-to-string p)))))
+
+(defun hsc3-ugen-control-param ()
+  "Insert control UGen parameters (arguments) for the UGen before <point>."
+  (interactive)
+  (let ((p (format "hsc3-help ugen-control-param %s" (thing-at-point 'symbol))))
+    (insert (hsc3-remove-trailing-newline (shell-command-to-string p)))))
+
+(defun hsc3-ugen-control-param-let (ugen-name)
+  "Generate let bindings to controls for all UGen param (printed in *hsc3* buffer)."
+  (interactive "SUGen Name: ")
   (hsc3-send-line
-   (format "Sound.SC3.UGen.DB.ugen_control_param_wr \"%s\"" (thing-at-point 'symbol))))
+   (format "Sound.SC3.UGen.DB.ugen_control_param_wr \"%s\"" ugen-name)))
 
 (defun hsc3-remove-trailing-newline (s)
   "Delete trailing newlines from string."
@@ -200,17 +213,17 @@
 (defun hsc3-id-rewrite-region ()
   "Run hsc3-id-rewrite on region."
   (interactive)
-  (shell-command-on-region
-   (region-beginning)
-   (region-end)
-   "hsc3-rw id-rewrite"
-   nil
-   t))
+  (shell-command-on-region (region-beginning) (region-end) "hsc3-rw id-rewrite" nil t))
 
 (defun hsc3-id-rewrite-buffer ()
   "Run hsc3-id-rewrite on buffer."
   (interactive)
   (shell-command-on-region (point-min) (point-max) "hsc3-rw id-rewrite" nil t))
+
+(defun hsc3-uparam-rewrite ()
+  "Rewrite uparam notation inplace."
+  (interactive)
+  (shell-command-on-region (region-beginning) (region-end) "hsc3-rw uparam expand" nil t))
 
 (defcustom hsc3-server-host "127.0.0.1"
   "The host that scsynth is listening at"
