@@ -8,4 +8,4 @@ let gt = greater_than
           x = allpassC s 1 (wrap c 0.5 1) 2
           y = bpf x (i * 99 + 400) 0.001 * (a AR 0.04 i + 1 * 9)
       in splay (x + y) 1 1 0 True / 3
-in sum (zipWith f [lfTri,lfSaw,lfPar] [0..]) / 3
+in sum (zipWith f [lfTri,lfSaw,lfPar] [0,1,2]) / 3

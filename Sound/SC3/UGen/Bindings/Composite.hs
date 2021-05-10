@@ -451,7 +451,7 @@ splay :: UGen -> UGen -> UGen -> UGen -> Bool -> UGen
 splay i s l c lc =
     let n = max 2 (fromIntegral (fromMaybe 1 (mceDegree i)))
         m = n - 1
-        p = map ( (+ (-1.0)) . (* (2 / m)) ) [0 .. m]
+        p = map ((+ (-1.0)) . (* (2 / m))) [0 .. m]
         a = if lc then sqrt (1 / n) else 1
     in mix (pan2 i (mce p * s + c) 1) * l * a
 

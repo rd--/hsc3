@@ -1,3 +1,9 @@
+-- splay
+splay (sinOsc AR (mce [110,220,440,880]) 0 * 0.1) 1 1 0 True
+
+-- splay
+mix (splay (pan2 (sinOsc AR (mce [110,220,440,880]) 0) 0 0.075) 1 1 0 True)
+
 -- splay ; composite UGen ; inArray spread=1 level=1 center=0 levelComp=true ; mouse control
 let i = 6
     r = map (\e -> rand e 10 20) (take i ['α'..])

@@ -1,7 +1,7 @@
 -- Alvin Lucier, "Music on a Long Thin Wire, Simulated" (Chandrasekhar Ramakrishnan)
 let freq = control KR "freq" 60
-    block_size = recip controlRate
-    mk_dt f = recip f - block_size
+    rcr = recip controlRate
+    mk_dt f = recip f - rcr
     string_delay = mk_dt freq
     pk1_pos = 0.1 -- pickup one position
     src_pos = 0.3 -- source position
