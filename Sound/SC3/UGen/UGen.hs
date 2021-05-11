@@ -75,6 +75,7 @@ control_m rt nm df meta =
     let m = control_meta_t3 id meta
     in Control_U (Control rt Nothing nm df False (Just m))
 
+-- | Generate group of two controls.  Names are generated according to 'control_group_suffixes'
 control_pair :: Control_Group -> R.Rate -> String -> (Double,Double) -> Control_Meta_T3 Double -> (UGen,UGen)
 control_pair grp rt nm (df1,df2) meta =
     let m = (control_meta_t3 id meta) {controlGroup = Just grp}

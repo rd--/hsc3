@@ -357,9 +357,10 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
    (split-string (hsc3-load-file (concat hsc3-directory "lib/hsc3-std-imports.hs")) "\n")))
 
 (defun hsc3-set-prompt ()
-  "Set ghci prompt to hsc3."
+  "Set ghci prompt to hsc3> and the continuation prompt to nil."
   (interactive)
-  (hsc3-send-line ":set prompt \"hsc3> \""))
+  (hsc3-send-line ":set prompt \"hsc3> \"")
+  (hsc3-send-line ":set prompt-cont \"\""))
 
 (defun hsc3-see-haskell ()
  "Show haskell output."
@@ -367,6 +368,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (if (not (comint-check-proc hsc3-buffer))
       (hsc3-start-haskell)
    (hsc3-set-prompt)
+   (hsc3-import-standard-modules)
    (delete-other-windows)
    (split-window-vertically)
    (with-current-buffer hsc3-buffer
