@@ -1,16 +1,19 @@
 -- | UGen data structure representation and associated functions.
 module Sound.SC3.UGen.UGen where
 
-import qualified Data.Char as C {- base -}
+import qualified Data.Char {- base -}
 import Data.Maybe {- base -}
 import Data.List {- base -}
 
-import qualified Sound.SC3.Common.Envelope as E
-import qualified Sound.SC3.Common.Base as B
-import qualified Sound.SC3.Common.Math.Operator as O
-import qualified Sound.SC3.Common.Rate as R
-import qualified Sound.SC3.Common.UId as UId
-import Sound.SC3.UGen.Type
+import qualified Data.List.Split as Split {- split -}
+
+import qualified Sound.SC3.Common.Envelope as Envelope {- hsc3 -}
+import qualified Sound.SC3.Common.Base as Base {- hsc3 -}
+import qualified Sound.SC3.Common.Math.Operator as Operator {- hsc3 -}
+import qualified Sound.SC3.Common.Rate as Rate {- hsc3 -}
+import qualified Sound.SC3.Common.UId as UId {- hsc3 -}
+
+import Sound.SC3.UGen.Type {- hsc3 -}
 
 -- | 'UId' of 'resolveID'.
 toUId :: UId.ID a => a -> UGenId
@@ -18,7 +21,7 @@ toUId = UId . UId.resolveID
 
 -- | Lookup operator name for operator UGens, else UGen name.
 ugen_user_name :: String -> Special -> String
-ugen_user_name nm (Special n) = fromMaybe nm (O.ugen_operator_name nm n)
+ugen_user_name nm (Special n) = fromMaybe nm (Operator.ugen_operator_name nm n)
 
 -- * UGen graph functions
 
@@ -59,24 +62,24 @@ ugenFoldr f st u =
 -- * Unit generator node constructors
 
 -- | Control input node constructor.
-control_f64 :: R.Rate -> Maybe Int -> String -> Sample -> UGen
+control_f64 :: Rate.Rate -> Maybe Int -> String -> Sample -> UGen
 control_f64 r ix nm d = Control_U (Control r ix nm d False Nothing)
 
 -- | Control input node constructor.
 --
 -- Note that if the name begins with a t_ prefix the control is /not/
 -- converted to a triggered control.  Please see 'tr_control'.
-control :: R.Rate -> String -> Double -> UGen
+control :: Rate.Rate -> String -> Double -> UGen
 control r = control_f64 r Nothing
 
 -- | Variant of 'control' with meta data.
-control_m :: R.Rate -> String -> Double -> Control_Meta_T3 Double -> UGen
+control_m :: Rate.Rate -> String -> Double -> Control_Meta_T3 Double -> UGen
 control_m rt nm df meta =
     let m = control_meta_t3 id meta
     in Control_U (Control rt Nothing nm df False (Just m))
 
 -- | Generate group of two controls.  Names are generated according to 'control_group_suffixes'
-control_pair :: Control_Group -> R.Rate -> String -> (Double,Double) -> Control_Meta_T3 Double -> (UGen,UGen)
+control_pair :: Control_Group -> Rate.Rate -> String -> (Double,Double) -> Control_Meta_T3 Double -> (UGen,UGen)
 control_pair grp rt nm (df1,df2) meta =
     let m = (control_meta_t3 id meta) {controlGroup = Just grp}
     in case control_group_suffixes grp of
@@ -86,12 +89,12 @@ control_pair grp rt nm (df1,df2) meta =
          _ -> error "control_pair"
 
 -- | Generate range controls.  Names are generated according to 'control_group_suffixes'
-control_rng :: R.Rate -> String -> (Double,Double) -> Control_Meta_T3 Double -> (UGen,UGen)
+control_rng :: Rate.Rate -> String -> (Double,Double) -> Control_Meta_T3 Double -> (UGen,UGen)
 control_rng = control_pair Control_Range
 
 -- | Triggered (kr) control input node constructor.
 tr_control_f64 :: Maybe Int -> String -> Sample -> UGen
-tr_control_f64 ix nm d = Control_U (Control R.KR ix nm d True Nothing)
+tr_control_f64 ix nm d = Control_U (Control Rate.KR ix nm d True Nothing)
 
 -- | Triggered (kr) control input node constructor.
 tr_control :: String -> Double -> UGen
@@ -125,7 +128,7 @@ mce2c u =
 
 -- | Variant of 'mce2c' that requires input to have two channels.
 unmce2 :: UGen -> (UGen, UGen)
-unmce2 = B.t2_from_list . mceChannels
+unmce2 = Base.t2_from_list . mceChannels
 
 -- | Multiple channel expansion for two inputs.
 mce3 :: UGen -> UGen -> UGen -> UGen
@@ -133,7 +136,7 @@ mce3 x y z = mce [x,y,z]
 
 -- | Variant of 'mce2c' that requires input to have two channels.
 unmce3 :: UGen -> (UGen, UGen, UGen)
-unmce3 = B.t3_from_list . mceChannels
+unmce3 = Base.t3_from_list . mceChannels
 
 -- | Apply a function to each channel at a unit generator.
 mceMap :: (UGen -> UGen) -> UGen -> UGen
@@ -169,12 +172,18 @@ mceChannel n u =
 mceTranspose :: UGen -> UGen
 mceTranspose = mce . map mce . transpose . map mceChannels . mceChannels
 
+-- | Collect subarrays of mce.
+--
+-- > mceClump 2 (mce [1,2,3,4]) == mce2 (mce2 1 2) (mce2 3 4)
+mceClump :: Int -> UGen -> UGen
+mceClump k = mce . map mce . Split.chunksOf k . mceChannels
+
 -- * Transform
 
 -- | Given /unmce/ function make halt mce transform.
 halt_mce_transform_f :: (a -> [a]) -> [a] -> [a]
 halt_mce_transform_f f l =
-    let (l',e) = fromMaybe (error "halt_mce_transform: null?") (B.sep_last l)
+    let (l',e) = fromMaybe (error "halt_mce_transform: null?") (Base.sep_last l)
     in l' ++ f e
 
 -- | The halt MCE transform, ie. lift channels of last input into list.
@@ -212,59 +221,59 @@ unpackLabel length_prefix u =
     case u of
       Label_U (Label s) ->
           let q = fromEnum '?'
-              f c = if C.isAscii c then fromEnum c else q
+              f c = if Data.Char.isAscii c then fromEnum c else q
               s' = map (fromIntegral . f) s
           in if length_prefix then fromIntegral (length s) : s' else s'
       MCE_U m ->
           let x = map (unpackLabel length_prefix) (mceProxies m)
-          in if B.equal_length_p x
+          in if Base.equal_length_p x
              then map mce (transpose x)
              else error (show ("unpackLabel: mce length /=",x))
       _ -> error (show ("unpackLabel: non-label",u))
 
 -- * Envelope
 
--- | 'mce' of 'E.envelope_sc3_array'.
-envelope_to_ugen :: E.Envelope UGen -> UGen
+-- | 'mce' of 'Envelope.envelope_sc3_array'.
+envelope_to_ugen :: Envelope.Envelope UGen -> UGen
 envelope_to_ugen =
     let err = error "envGen: bad Envelope"
-    in mce . fromMaybe err . E.envelope_sc3_array
+    in mce . fromMaybe err . Envelope.envelope_sc3_array
 
--- | 'mce' of 'E.envelope_sc3_ienvgen_array'.
-envelope_to_ienvgen_ugen :: E.Envelope UGen -> UGen
+-- | 'mce' of 'Envelope.envelope_sc3_ienvgen_array'.
+envelope_to_ienvgen_ugen :: Envelope.Envelope UGen -> UGen
 envelope_to_ienvgen_ugen =
     let err = error "envGen: bad Envelope"
-    in mce . fromMaybe err . E.envelope_sc3_ienvgen_array
+    in mce . fromMaybe err . Envelope.envelope_sc3_ienvgen_array
 
 -- * Bitwise
 
--- | 'O.BitAnd'
+-- | 'Operator.BitAnd'
 bitAnd :: UGen -> UGen -> UGen
-bitAnd = mkBinaryOperator O.BitAnd undefined
+bitAnd = mkBinaryOperator Operator.BitAnd undefined
 
--- | 'O.BitOr'
+-- | 'Operator.BitOr'
 bitOr :: UGen -> UGen -> UGen
-bitOr = mkBinaryOperator O.BitOr undefined
+bitOr = mkBinaryOperator Operator.BitOr undefined
 
--- | 'O.BitXor'
+-- | 'Operator.BitXor'
 bitXOr :: UGen -> UGen -> UGen
-bitXOr = mkBinaryOperator O.BitXor undefined
+bitXOr = mkBinaryOperator Operator.BitXor undefined
 
--- | 'O.BitNot'
+-- | 'Operator.BitNot'
 bitNot :: UGen -> UGen
-bitNot = mkUnaryOperator O.BitNot undefined
+bitNot = mkUnaryOperator Operator.BitNot undefined
 
--- | 'O.ShiftLeft'
+-- | 'Operator.ShiftLeft'
 shiftLeft :: UGen -> UGen -> UGen
-shiftLeft = mkBinaryOperator O.ShiftLeft undefined
+shiftLeft = mkBinaryOperator Operator.ShiftLeft undefined
 
--- | 'O.ShiftRight'
+-- | 'Operator.ShiftRight'
 shiftRight :: UGen -> UGen -> UGen
-shiftRight = mkBinaryOperator O.ShiftRight undefined
+shiftRight = mkBinaryOperator Operator.ShiftRight undefined
 
--- | 'O.UnsignedShift'
+-- | 'Operator.UnsignedShift'
 unsignedShift :: UGen -> UGen -> UGen
-unsignedShift = mkBinaryOperator O.UnsignedShift undefined
+unsignedShift = mkBinaryOperator Operator.UnsignedShift undefined
 
 -- | 'shiftLeft' operator.
 (.<<.) :: UGen -> UGen -> UGen
@@ -277,7 +286,7 @@ unsignedShift = mkBinaryOperator O.UnsignedShift undefined
 -- * Rate Flow
 
 -- | Traverse graph rewriting audio rate nodes as control rate.
-rewriteUGenRates :: (R.Rate -> Bool) -> R.Rate -> UGen -> UGen
+rewriteUGenRates :: (Rate.Rate -> Bool) -> Rate.Rate -> UGen -> UGen
 rewriteUGenRates sel_f set_rt =
   let f u = case u of
               Primitive_U p -> let Primitive rt nm i o s z = p
@@ -287,21 +296,21 @@ rewriteUGenRates sel_f set_rt =
 
 -- | Traverse graph rewriting audio rate nodes as control rate.
 rewriteToControlRate :: UGen -> UGen
-rewriteToControlRate = rewriteUGenRates (== R.AR) R.KR
+rewriteToControlRate = rewriteUGenRates (== Rate.AR) Rate.KR
 
 -- | Traverse graph rewriting all nodes as demand rate.
 rewriteToDemandRate :: UGen -> UGen
-rewriteToDemandRate = rewriteUGenRates (const True) R.DR
+rewriteToDemandRate = rewriteUGenRates (const True) Rate.DR
 
 -- | Traverse graph rewriting audio and control nodes as initialisation rate.
 rewriteToInitialisationRate :: UGen -> UGen
-rewriteToInitialisationRate = rewriteUGenRates (`elem` [R.KR,R.AR]) R.IR
+rewriteToInitialisationRate = rewriteUGenRates (`elem` [Rate.KR,Rate.AR]) Rate.IR
 
--- | Select rewriting function given 'R.Rate'.
-rewriteToRate :: R.Rate -> UGen -> UGen
+-- | Select rewriting function given 'Rate.Rate'.
+rewriteToRate :: Rate.Rate -> UGen -> UGen
 rewriteToRate rt =
   case rt of
-    R.KR -> rewriteToControlRate
-    R.DR -> rewriteToDemandRate
-    R.IR -> rewriteToInitialisationRate
-    R.AR -> error "rewriteToRate: AR?"
+    Rate.KR -> rewriteToControlRate
+    Rate.DR -> rewriteToDemandRate
+    Rate.IR -> rewriteToInitialisationRate
+    Rate.AR -> error "rewriteToRate: AR?"
