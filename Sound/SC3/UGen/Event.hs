@@ -32,13 +32,13 @@ rEventAddr k0 stp c =
 rEventVoicerAddr :: UGen -> UGen -> UGen -> Int -> (Int -> REvent UGen -> UGen) -> UGen
 rEventVoicerAddr k0 stp c0 n f = mce (map (\c -> f c (rEventAddr k0 stp (c0 + constant c))) [0 .. n - 1])
 
--- | 'rEventAddr' with 'control' inputs for /EventAddr/ and /EventZero/.
+-- | 'rEventAddr' with 'control' inputs for /eventAddr/, /eventIncr/ and /eventZero/.
 rEvent :: REvent UGen
-rEvent = rEventAddr (control KR "EventAddr" 13000) (control KR "EventIncr" 10) (control KR "EventZero" 0)
+rEvent = rEventAddr (control KR "eventAddr" 13000) (control KR "eventIncr" 10) (control KR "eventZero" 0)
 
--- | 'rEventVoicerAddr' with 'control' inputs for /EventAddr/ and /EventZero/.
+-- | 'rEventVoicerAddr' with 'control' inputs for /eventAddr/, /eventIncr/ and /eventZero/.
 rEventVoicer :: Int -> (Int -> REvent UGen -> UGen) -> UGen
-rEventVoicer = rEventVoicerAddr (control KR "EventAddr" 13000) (control KR "EventIncr" 10) (control KR "EventZero" 0)
+rEventVoicer = rEventVoicerAddr (control KR "eventAddr" 13000) (control KR "eventIncr" 10) (control KR "eventZero" 0)
 
 {- | Given /g/ and /p/ fields of an 'REvent' derive a 'gateReset' from g
 and a trigger derived from monitoring /g/ and /p/ for changed values.

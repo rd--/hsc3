@@ -33,8 +33,8 @@ data SC3_Unary_Op
             | Abs -- 5
             | AsFloat
             | AsInt
-            | Ceil
-            | Floor
+            | Ceil -- 8
+            | Floor -- 9
             | Frac -- 10
             | Sign
             | Squared

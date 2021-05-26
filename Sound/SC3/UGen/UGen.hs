@@ -166,7 +166,7 @@ mceChannel :: Int -> UGen -> UGen
 mceChannel n u =
     case u of
       MCE_U m -> mceProxies m !! n
-      _ -> error "mceChannel: non MCE value"
+      _ -> if n == 0 then u else error "mceChannel: non MCE value, non ZERO index"
 
 -- | Transpose rows and columns, ie. {{a,b},{c,d}} to {{a,c},{b,d}}.
 mceTranspose :: UGen -> UGen
