@@ -475,6 +475,18 @@ tChooseM t a = do
   r <- tiRandM 0 (constant (length (mceChannels a) - 1)) t
   return (select r a)
 
+-- | Triggered Line, implemented in terms of EnvGen.
+tLine :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+tLine rt start end dur trig_ =
+  let p = envCoord [(0,0),(0,start),(dur,end)] 1 1 EnvLin
+  in envGen rt trig_ 1 0 1 DoNothing p
+
+-- | Triggered xLine, implemented in terms of EnvGen.
+tXLine :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+tXLine rt start end dur trig_ =
+  let p = envCoord [(0,0),(0,start),(dur,end)] 1 1 EnvExp
+  in envGen rt trig_ 1 0 1 DoNothing p
+
 -- | Triangle wave as sum of /n/ sines.
 -- For partial n, amplitude is (1 / square n) and phase is pi at every other odd partial.
 triAS :: Int -> UGen -> UGen

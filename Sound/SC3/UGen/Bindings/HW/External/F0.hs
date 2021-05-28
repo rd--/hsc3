@@ -17,6 +17,10 @@ mzPokey f1 c1 f2 c2 f3 c3 f4 c4 ctl = C.mkOsc AR "MZPokey" [f1,c1,f2,c2,f3,c3,f4
 redPhasor :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 redPhasor rate trig rate_ start end loop loopstart loopend = C.mkOsc rate "RedPhasor" [trig,rate_,start,end,loop,loopstart,loopend] 1
 
+-- | A phasor that can loop.
+redPhasor2 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+redPhasor2 rate trig rate_ start end loop loopstart loopend = C.mkOsc rate "RedPhasor2" [trig,rate_,start,end,loop,loopstart,loopend] 1
+
 -- Local Variables:
 -- truncate-lines:t
 -- End:

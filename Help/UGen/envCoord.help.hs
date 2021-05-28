@@ -22,6 +22,14 @@ let tr = tr_control "tr" 1
     e = envGen KR tr 1 0 1 DoNothing p
 in sinOsc AR e 0 * 0.2
 
+-- envCoord ; start and end reset randomly every 4 seconds, ramp every trigger
+let tr = impulse KR (1/4) 0
+    f0 = tExpRand 'α' 110 450 tr
+    f1 = tExpRand 'β' 110 440 tr
+    p = envCoord [(0,0),(0,f0),(4,f1)] 1 1 EnvExp
+    e = envGen KR tr 1 0 1 DoNothing p
+in splay (sinOsc AR (mce [f0,e,f1]) 0) 1 1 0 True * mce [0.05,0.1,0.05]
+
 ---- ; set target value & transition time and trigger
 withSC3 (sendMessage (n_set 1 [("en",550),("tm",4),("tr",1)]))
 withSC3 (sendMessage (n_set 1 [("en",990),("tm",1),("tr",1)]))
