@@ -50,6 +50,32 @@ $ hsc3-help ugen-default-param pitch # fixed rate
 $
 ~~~~
 
+## ugen-sclanguage
+
+Prints the default SuperCollider code for UGen.
+
+~~~~
+$ hsc3-help ugen-sclanguage sinosc lfsaw dseq pv_add
+SinOsc.ar(freq: 440.0, phase: 0.0)
+LFSaw.ar(freq: 440.0, iphase: 0.0)
+Dseq.new(repeats: 1.0, list: 0.0)
+PV_Add.new(bufferA: 0.0, bufferB: 0.0)
+$
+~~~~
+
+## ugen-smalltalk
+
+Prints the default Smalltalk code for UGen.
+
+~~~~
+$ hsc3-help ugen-smalltalk sinosc lfsaw dseq
+SinOsc freq: 440.0 phase: 0.0
+LFSaw freq: 440.0 iphase: 0.0
+Dseq repeats: 1.0 list: 0.0
+PV_Add bufferA: 0.0 bufferB: 0.0
+$
+~~~~
+
 ## ugen-summary
 
 Prints UGen information from [hsc3-db](?t=hsc3-db).
