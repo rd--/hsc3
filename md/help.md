@@ -55,11 +55,12 @@ $
 Prints the default SuperCollider code for UGen.
 
 ~~~~
-$ hsc3-help ugen-sclanguage sinosc lfsaw dseq pv_add
+$ hsc3-help ugen-sclanguage sinosc lfsaw dseq pv_add in
 SinOsc.ar(freq: 440.0, phase: 0.0)
 LFSaw.ar(freq: 440.0, iphase: 0.0)
 Dseq.new(repeats: 1.0, list: 0.0)
 PV_Add.new(bufferA: 0.0, bufferB: 0.0)
+In.ar(numChannels: 1, bus: 0.0)
 $
 ~~~~
 
@@ -68,11 +69,12 @@ $
 Prints the default Smalltalk code for UGen.
 
 ~~~~
-$ hsc3-help ugen-smalltalk sinosc lfsaw dseq
+$ hsc3-help ugen-smalltalk sinosc lfsaw dseq pv_add in
 SinOsc freq: 440.0 phase: 0.0
 LFSaw freq: 440.0 iphase: 0.0
 Dseq repeats: 1.0 list: 0.0
 PV_Add bufferA: 0.0 bufferB: 0.0
+In numChan: 1 bus: 0.0
 $
 ~~~~
 
