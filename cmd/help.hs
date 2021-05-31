@@ -3,7 +3,7 @@ import System.Environment {- base -}
 import qualified Sound.SC3.Common.Help as Help {- hsc3 -}
 
 import qualified Sound.SC3.UGen.DB as DB {- hsc3-db -}
-import qualified Sound.SC3.UGen.DB.Record as DB {- hsc3-db -}
+import qualified Sound.SC3.UGen.DB.PP as DB {- hsc3-db -}
 
 {-
 
@@ -11,26 +11,27 @@ ugen-default-param-named =>
  let {gate=1.0, levelScale=1.0, levelBias=0.0, timeScale=1.0, doneAction=0.0, *envelope=0.0}
  in envGen AR gate levelScale levelBias timeScale doneAction envelope
 
-ugen-default-record =>
- EnvGen {rate=AR, gate_=1, levelScale=1, levelBias=1, timeScale=1, doneAction=0, envelope_=0}
-
 -}
-
--- > map ugen_default_param ["sinosc","whiteNoise","drand","pitch"]
-ugen_default_param :: String -> String
-ugen_default_param nm = maybe ("ERROR: NO ENTRY: " ++ nm) DB.u_default_param (DB.u_lookup_ci nm)
 
 -- > map ugen_control_param ["sinosc","whiteNoise","drand","pitch"]
 ugen_control_param :: String -> String
 ugen_control_param nm = maybe ("ERROR: NO ENTRY: " ++ nm) (DB.u_control_inputs_pp False) (DB.u_lookup_ci nm)
 
+-- > map ugen_default_param ["sinosc","whiteNoise","drand","pitch"]
+ugen_default_param :: String -> String
+ugen_default_param nm = maybe ("ERROR: NO ENTRY: " ++ nm) DB.u_default_param (DB.u_lookup_ci nm)
+
 -- > map ugen_smalltalk ["sinosc","whiteNoise","drand","pitch","pv_add","in"]
 ugen_smalltalk :: String -> String
 ugen_smalltalk nm = maybe ("ERROR: NO ENTRY: " ++ nm) DB.u_smalltalk_pp (DB.u_lookup_ci nm)
 
--- > map ugen_sclanguage ["sinosc","whiteNoise","drand","pitch","pv_brickwall","in"]
+-- > mapM_ (putStrLn . ugen_sclanguage) ["sinosc","whiteNoise","drand","pitch","pv_brickwall","in"]
 ugen_sclanguage :: String -> String
 ugen_sclanguage nm = maybe ("ERROR: NO ENTRY: " ++ nm) DB.u_sclanguage_pp (DB.u_lookup_ci nm)
+
+-- > mapM_ (putStrLn . ugen_hsc3_rec) ["sinosc","whiteNoise","drand","pitch","pv_brickwall","in"]
+ugen_hsc3_rec :: String -> String
+ugen_hsc3_rec nm = maybe ("ERROR: NO ENTRY: " ++ nm) DB.u_hsc3_rec_pp (DB.u_lookup_ci nm)
 
 help :: [String]
 help =
@@ -38,8 +39,9 @@ help =
     ," sc3-help {rtf|scdoc-local|scdoc-online} subject..."
     ," ugen-control-param ugen-name..."
     ," ugen-default-param ugen-name..."
-    ," ugen-sclanguage ugen-name..."
-    ," ugen-smalltalk ugen-name..."
+    ," ugen-default-record ugen-name..."
+    ," ugen-default-sclanguage ugen-name..."
+    ," ugen-default-smalltalk ugen-name..."
     ," ugen-summary ugen-name..."]
 
 main :: IO ()
@@ -51,7 +53,8 @@ main = do
     "sc3-help":"scdoc-online":x -> mapM_ (Help.sc3_scdoc_help_open False . Help.sc3_scdoc_help_path) x
     "ugen-control-param":u -> mapM_ (putStrLn . ugen_control_param) u
     "ugen-default-param":u -> mapM_ (putStrLn . ugen_default_param) u
-    "ugen-sclanguage":u -> mapM_ (putStrLn . ugen_sclanguage) u
-    "ugen-smalltalk":u -> mapM_ (putStrLn . ugen_smalltalk) u
+    "ugen-default-record":u -> mapM_ (putStrLn . ugen_hsc3_rec) u
+    "ugen-default-sclanguage":u -> mapM_ (putStrLn . ugen_sclanguage) u
+    "ugen-default-smalltalk":u -> mapM_ (putStrLn . ugen_smalltalk) u
     "ugen-summary":u -> mapM_ DB.ugen_summary_wr u
     _ -> putStrLn (unlines help)

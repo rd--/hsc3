@@ -50,12 +50,26 @@ $ hsc3-help ugen-default-param pitch # fixed rate
 $
 ~~~~
 
-## ugen-sclanguage
+## ugen-default-record
+
+Prints the default `hsc3-rec` record form.
+
+~~~~
+$ hsc3-help ugen-default-record sinosc lfsaw dseq pv_add in
+SinOsc {rate=AR, freq=440, phase=0}
+LFSaw {rate=AR, freq=440, iphase=0}
+Dseq {rate=DR, uid='α', repeats=1, list=0}
+PV_Add {rate=KR, bufferA=0, bufferB=0}
+In {nc=1, rate=AR, bus=0}
+$
+~~~~
+
+## ugen-default-sclanguage
 
 Prints the default SuperCollider code for UGen.
 
 ~~~~
-$ hsc3-help ugen-sclanguage sinosc lfsaw dseq pv_add in
+$ hsc3-help ugen-default-sclanguage sinosc lfsaw dseq pv_add in
 SinOsc.ar(freq: 440.0, phase: 0.0)
 LFSaw.ar(freq: 440.0, iphase: 0.0)
 Dseq.new(repeats: 1.0, list: 0.0)
@@ -64,12 +78,12 @@ In.ar(numChannels: 1, bus: 0.0)
 $
 ~~~~
 
-## ugen-smalltalk
+## ugen-default-smalltalk
 
 Prints the default Smalltalk code for UGen.
 
 ~~~~
-$ hsc3-help ugen-smalltalk sinosc lfsaw dseq pv_add in
+$ hsc3-help ugen-default-smalltalk sinosc lfsaw dseq pv_add in
 SinOsc freq: 440.0 phase: 0.0
 LFSaw freq: 440.0 iphase: 0.0
 Dseq repeats: 1.0 list: 0.0

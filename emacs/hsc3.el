@@ -171,7 +171,7 @@
   (interactive "p")
   (hsc3-send-region-fn
    (format
-    "Sound.SC3.audition_at (\"%s\",%d + %d) def_play_opt"
+    "Sound.SC3.audition_at (\"%s\",%d + %d) Sound.SC3.def_play_opt"
     hsc3-server-host hsc3-server-port (- k 1))))
 
 (defcustom hsc3-draw-command "draw"
@@ -348,6 +348,13 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
     (buffer-substring-no-properties
        (point-min)
        (point-max))))
+
+(defun hsc3-unload-all-modules ()
+  "Unload all modules and delete all bindings at ghci.
+
+   :load without any arguments unloads all the currently loaded modules and bindings"
+  (interactive)
+  (hsc3-send-line ":load"))
 
 (defun hsc3-import-standard-modules ()
   "Send standard set of hsc3 and related module imports to haskell."
