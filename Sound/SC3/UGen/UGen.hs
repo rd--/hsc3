@@ -172,6 +172,20 @@ mceChannel n u =
 mceTranspose :: UGen -> UGen
 mceTranspose = mce . map mce . transpose . map mceChannels . mceChannels
 
+-- | Rotate mce /k/ places to the right, ie. {a,b,c,d} to {d,a,b,c}
+--
+-- > mceRotate 1 (mce [1,2,3,4]) == mce [4,1,2,3]
+mceRotate :: Int -> UGen -> UGen
+mceRotate k =
+  let rotateRight n p = let (b,a) = splitAt (length p - n) p in a ++ b
+  in mce . rotateRight k . mceChannels
+
+-- | 'concat' at mce channels of each input, ie. {{a,b},{c,d}} to {a,b,c,d}.
+--
+-- > mceConcat (map mce [[1,2],[3,4]]) == mce [1..4]
+mceConcat :: [UGen] -> UGen
+mceConcat = mce . concat . map mceChannels
+
 -- | Collect subarrays of mce.
 --
 -- > mceClump 2 (mce [1,2,3,4]) == mce2 (mce2 1 2) (mce2 3 4)
