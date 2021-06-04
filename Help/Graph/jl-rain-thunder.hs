@@ -1,5 +1,5 @@
 -- http://sccode.org/1-e (jl)
-let d0 = lpf (dust2 'γ' AR (range 40 50 (lfNoise1 'δ' KR 0.2))) 7000
+let d0 = lpf (dust2 'γ' AR (lfNoise1 'δ' KR 0.2 `in_range` (40,50))) 7000
     n0 = pinkNoise 'α' AR * (0.08 + lfNoise1 'β' KR 0.3 * 0.02) + d0
     e0 = line KR 0 1 10 DoNothing
     p0 = tanh (3 * gVerb (hpf n0 400) 250 100 0.25 0.5 15 0.3 0.7 0.5 300 * e0)

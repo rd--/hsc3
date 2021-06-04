@@ -1,4 +1,4 @@
--- | Unit Generator ('UGen'), and associated types and instances.
+-- | Unit Generator ('UGen') and associated types and instances.
 module Sound.SC3.UGen.Type where
 
 import Data.Bits {- base -}
@@ -305,8 +305,7 @@ isMCE u =
       MCE_U _ -> True
       _ -> False
 
--- | Output channels of UGen as a list.  If required, preserves the
--- RHS of and MRG node in channel 0.
+-- | Output channels of UGen as a list.  If required, preserves the RHS of and MRG node in channel 0.
 mceChannels :: UGen -> [UGen]
 mceChannels u =
     case u of
@@ -314,8 +313,7 @@ mceChannels u =
       MRG_U (MRG x y) -> let r:rs = mceChannels x in MRG_U (MRG r y) : rs
       _ -> [u]
 
--- | Number of channels to expand to.  This function sees into MRG,
--- and is defined only for MCE nodes.
+-- | Number of channels to expand to.  This function sees into MRG, and is defined only for MCE nodes.
 mceDegree :: UGen -> Maybe Int
 mceDegree u =
     case mrg_leftmost u of
@@ -335,6 +333,10 @@ mceExtend n u =
                          in MRG_U (MRG r y) : rs
       _ -> replicate n u
 
+-- | Is MCE required, ie. are any input values MCE?
+mceRequired :: [UGen] -> Bool
+mceRequired = any isMCE
+
 {- | Apply MCE transform to a list of inputs.
      The transform extends each input so all are of equal length, and then transposes the matrix.
 
@@ -343,7 +345,7 @@ mceExtend n u =
 -}
 mceInputTransform :: [UGen] -> Maybe [[UGen]]
 mceInputTransform i =
-    if any isMCE i
+    if mceRequired i
     then let n = maximum (map mceDegree_err (filter isMCE i))
          in Just (transpose (map (mceExtend n) i))
     else Nothing
@@ -423,7 +425,7 @@ proxify u =
       Primitive_U p ->
           let o = ugenOutputs p
           in case o of
-               _:_:_ -> mce (map (proxy u) [0..(length o - 1)])
+               _:_:_ -> mce (map (proxy u) [0 .. length o - 1])
                _ -> u
       Constant_U _ -> u
       _ -> error "proxify: illegal ugen"
