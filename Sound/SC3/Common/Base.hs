@@ -24,6 +24,13 @@ type Fn3 a b c d = a -> b -> c -> d
 -- | Quaternary function.
 type Fn4 a b c d e = a -> b -> c -> d -> e
 
+-- | Apply /f/ n times, ie. iterate f x !! n
+--
+-- > iter 3 (* 2) 1 == 8
+-- > iterate (* 2) 1 !! 3 == 8
+iter :: Int -> (a -> a) -> a -> a
+iter n f x = if n == 0 then x else f (iter (n - 1) f x)
+
 -- * Read
 
 -- | Variant of 'reads' requiring exact match.
