@@ -6,4 +6,4 @@ let sosc fr = sinOsc AR fr 0
     i = sinOsc AR f0 ph0 * a0
     w = sosc (sosc (sosc 0.13 * 5 + 6) * 8 + 50)
     s = splay i w 0.7 (sosc 1.2 * 0.6) True
-in out 0 (gVerb s 20 5 1 0.5 25 0 1 1 30)
+in mix (mceTranspose (gVerb s 20 5 1 0.5 25 0 1 1 30))

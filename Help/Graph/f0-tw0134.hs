@@ -1,6 +1,5 @@
 -- http://sccode.org/1-4Qy (f0) (requires -w 512)
-let mean :: Fractional a => [a] -> a
-    mean l = sum l / fromIntegral (length l)
+let mean l = sum l / fromIntegral (length l)
     a = lfSaw AR
     n' = 50
     n = constant n'

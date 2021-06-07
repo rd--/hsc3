@@ -1,5 +1,6 @@
 -- http://www.fredrikolofsson.com/f0blog/?q=node/490 (f0)
-let pkt_26_grid n i =
+let n = 8
+    pkt_26_grid i =
       let t = i / n
           a = abs (varSaw AR 0.02 t 0.5 * 7.5)
           b = varSaw AR 0.16 t (2/3) * a + 300
@@ -12,4 +13,4 @@ let pkt_26_grid n i =
           o = sinOsc AR h (f * pi) * d + b
           z = leakDC (varSaw AR o t 0.5) 0.995
       in pan2 z (varSaw AR 0.02 t 0.5) (1 / n)
-in mixFill 8 (pkt_26_grid 8) * 0.1
+in mixFill n pkt_26_grid * 0.25

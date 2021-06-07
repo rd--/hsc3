@@ -181,7 +181,7 @@
 (defun hsc3-draw-region ()
   "Draw region UGen graph."
   (interactive)
-  (hsc3-send-region-fn (format "Sound.SC3.UGen.Dot.%s" hsc3-draw-command)))
+  (hsc3-send-region-fn (format "Sound.SC3.UGen.Dot.%s $ out 0 " hsc3-draw-command)))
 
 (defun hsc3-dump-ugens-region ()
   "Print region UGen graph."

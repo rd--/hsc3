@@ -292,7 +292,11 @@ mixFillGeneric :: Integral n => Int -> (n -> UGen) -> UGen
 mixFillGeneric n = mix . mceFillGeneric n
 
 -- | Construct and sum a set of UGens.
-mixFill :: Int -> (Int -> UGen) -> UGen
+mixFillInt :: Int -> (Int -> UGen) -> UGen
+mixFillInt = mixFillGeneric
+
+-- | Construct and sum a set of UGens.
+mixFill :: Int -> (UGen -> UGen) -> UGen
 mixFill = mixFillGeneric
 
 -- | Construct and sum a set of ID UGens.
@@ -461,7 +465,7 @@ splay i s l c lc =
         m = n - 1
         p = map ((+ (-1.0)) . (* (2 / m))) [0 .. m]
         a = if lc then sqrt (1 / n) else 1
-    in mix (pan2 i (mce p * s + c) 1) * l * a
+    in mix (pan2 i (s * mce p + c) 1) * l * a
 
 -- | Optimised UGen sum function.
 sum_opt :: [UGen] -> UGen

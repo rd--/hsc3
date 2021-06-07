@@ -9,7 +9,7 @@ import Sound.SC3.UGen.UGen {- hsc3 -}
 
 -- * Event
 
--- | (gate,x,y,z/force,orientation,radius-x,radius-y,pitch,pitch-x,pitch-y)
+-- | (w/gate,x,y,z/force,orientation,radius-x,radius-y,pitch,pitch-x,pitch-y)
 type REvent t = (t,t,t,t,t,t,t,t,t,t)
 
 -- | Translate list to REvent.

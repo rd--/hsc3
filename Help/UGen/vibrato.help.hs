@@ -18,3 +18,7 @@ let n = lfNoise1 'α' KR 1 * 3 + 7
     y = mouseY KR 0 1 Linear 0.2
     v = vibrato 'β' AR (dc AR 400) n x 1 1 y 0.1 0 0
 in sinOsc AR v 0 * 0.1
+
+-- vibrato ; mce
+let v = vibrato 'α' AR (dc AR (mce2 (mce2 411 440) (mce2 419 440.5))) 1 0.02 0 0 0.04 0.1 0 0
+in mix (sinOsc AR v 0 * 0.1)
