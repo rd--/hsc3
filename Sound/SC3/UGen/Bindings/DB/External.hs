@@ -965,8 +965,8 @@ glitchHPF rate in_ freq = mkUGen Nothing [KR,AR] (Left rate) "GlitchHPF" [in_,fr
 -- | backward compatibility
 --
 --  GlitchRHPF [KR,AR] in=0.0 freq=440.0 rq=1.0
-glitchRHPF :: Rate -> UGen -> UGen -> UGen -> UGen
-glitchRHPF rate in_ freq rq = mkUGen Nothing [KR,AR] (Left rate) "GlitchRHPF" [in_,freq,rq] Nothing 1 (Special 0) NoId
+glitchRHPF :: UGen -> UGen -> UGen -> UGen
+glitchRHPF in_ freq rq = mkUGen Nothing [KR,AR] (Right [0]) "GlitchRHPF" [in_,freq,rq] Nothing 1 (Special 0) NoId
 
 -- | Calculate a single DFT bin, to detect presence of a frequency
 --

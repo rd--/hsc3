@@ -10,5 +10,5 @@ let f c (g,_,y,z,o,_,_,p,px,_) =
                       in envPerc_c 0.005 ((y + 1) * 6 * durs!!i) (amps!!i) (cv,cv)
                 env = envGen AR g (latch z g) 0 1 DoNothing shp
             in sinOsc AR (midiCPS (p + px) * frqs!!i + dets!!i) 0 * env * g
-      in pan2 (mixFillInt 11 fn) (o * 2 - 1) 1
+      in pan2 (mixFill 11 fn) (o * 2 - 1) 1
 in mix (rEventVoicer 16 f) * control KR "gain" 0.75

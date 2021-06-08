@@ -272,12 +272,12 @@ mixN n u =
     in mce (map sum_opt xs)
 
 -- | Construct an MCE array of UGens.
-mceFillGeneric :: Integral n => Int -> (n -> UGen) -> UGen
-mceFillGeneric n f = mce (map f [0 .. fromIntegral n - 1])
+mceFill :: Integral n => Int -> (n -> UGen) -> UGen
+mceFill n f = mce (map f [0 .. fromIntegral n - 1])
 
--- | Construct an MCE array of UGens.
-mceFill :: Int -> (Int -> UGen) -> UGen
-mceFill = mceFillGeneric
+-- | Type specialised mceFill
+mceFillInt :: Int -> (Int -> UGen) -> UGen
+mceFillInt = mceFill
 
 -- | Construct a list of ID UGens.
 listFill_z :: (Integral n, ID z, Enum z) => z -> Int -> (z -> n -> UGen) -> [UGen]
@@ -288,16 +288,16 @@ mceFill_z :: (Integral n, ID z, Enum z) => z -> Int -> (z -> n -> UGen) -> UGen
 mceFill_z z n = mce . listFill_z z n
 
 -- | Construct and sum a set of UGens.
-mixFillGeneric :: Integral n => Int -> (n -> UGen) -> UGen
-mixFillGeneric n = mix . mceFillGeneric n
+mixFill :: Integral n => Int -> (n -> UGen) -> UGen
+mixFill n = mix . mceFill n
 
--- | Construct and sum a set of UGens.
+-- | Type specialised mixFill
 mixFillInt :: Int -> (Int -> UGen) -> UGen
-mixFillInt = mixFillGeneric
+mixFillInt = mixFill
 
--- | Construct and sum a set of UGens.
-mixFill :: Int -> (UGen -> UGen) -> UGen
-mixFill = mixFillGeneric
+-- | Type specialised mixFill
+mixFillUGen :: Int -> (UGen -> UGen) -> UGen
+mixFillUGen = mixFill
 
 -- | Construct and sum a set of ID UGens.
 mixFill_z :: (Integral n, ID z, Enum z) => z -> Int -> (z -> n -> UGen) -> UGen
