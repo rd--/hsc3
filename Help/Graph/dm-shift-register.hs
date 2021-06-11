@@ -15,7 +15,7 @@ let shift_register_f n tr x =
     note = demand tr1 0 (dseq 'η' dinf (mceMap (+ trs) (mce [42,46,51,54,59,63,66])) + oct) -- scramble
     chord = shift_register_f 5 tr1 (midiCPS note)
     sig = pmOsc AR
-          (vibrato 'θ' AR (k2a chord) 6 0.02 0 0 0.04 0.1 0.0 0.0)
+          (vibrato 'θ' AR chord 6 0.02 0 0 0.04 0.1 0.0 0.0)
           (urange 1.01 2.01 (lfPulse KR (1/8) 0 0.5) * chord)
           (envGen KR tr1 1 0 1 DoNothing (envelope [3,3,0] [0, 0.2] [EnvNum (-4)]))
           0

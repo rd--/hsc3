@@ -1,4 +1,4 @@
--- https://twitter.com/sluyterrific_sc/status/570012853274615808 (es)
+-- https://twitter.com/sluyterrific_sc/status/570012853274615808 (es) ; edit=rd
 let dup2 :: (t, t) -> (t -> UGen) -> UGen
     dup2 (z1,z2) f = mce2 (f z1) (f z2)
     -- this is not (of course) as written but sounds nicely....
