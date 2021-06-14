@@ -119,7 +119,7 @@ graphdef_control_nid g = (+) (length (graphdef_constants g))
 graphdef_ugen_nid :: Graphdef -> Int -> Int
 graphdef_ugen_nid g n = graphdef_control_nid g 0 + length (graphdef_controls g) + n
 
--- * BINARY GET (version 0 or 2)
+-- * BINARY GET (version 0|1 or 2)
 
 -- | Get a 'Name' (Pascal string).
 get_pstr :: Get.Get Name
@@ -169,7 +169,7 @@ get_ugen ((get_str,get_i8,get_i16,_,_),get_i) = do
          ,outputs
          ,special)
 
--- | Get a 'Graphdef'. Supports version 0 and version 2 files.  Ignores variants.
+-- | Get a 'Graphdef'. Supports version 0|1 and version 2 files.  Ignores variants.
 get_graphdef :: Monad m => GET_F m -> m Graphdef
 get_graphdef c@(get_str,_,get_i16,get_i32,get_f32) = do
   magic <- get_i32
@@ -177,8 +177,9 @@ get_graphdef c@(get_str,_,get_i16,get_i32,get_f32) = do
   let get_i =
           case version of
             0 -> get_i16
+            1 -> get_i16 -- version one allows variants, which are not allowed by hsc3
             2 -> get_i32
-            _ -> error ("get_graphdef: version not at {zero | two}: " ++ show version)
+            _ -> error ("get_graphdef: version not at {zero | one | two}: " ++ show version)
   number_of_definitions <- get_i16
   when (magic /= scgf_i32)
        (error "get_graphdef: illegal magic string")
