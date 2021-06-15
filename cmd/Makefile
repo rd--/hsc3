@@ -7,8 +7,8 @@ build-setup:
 	mkdir -p $(prefix)/bin
 	cp setup $(prefix)/bin/hsc3-setup
 
+dep:
+	cabal v1-install data-ordlist split regex-compat
+
 print-exec:
 	hsc3-setup cabal print-exec hsc3- [a-z]*.hs
-
-dep:
-	cabal install regex-compat
