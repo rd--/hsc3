@@ -194,7 +194,6 @@ mceClump k = mce . map mce . Split.chunksOf k . mceChannels
 
 -- * Transform
 
-{-
 -- | Given /unmce/ function make halt mce transform.
 halt_mce_transform_f :: (a -> [a]) -> [a] -> [a]
 halt_mce_transform_f f l =
@@ -202,11 +201,11 @@ halt_mce_transform_f f l =
     in l' ++ f e
 
 -- | The halt MCE transform, ie. lift channels of last input into list.
+--   This is not used by hsc3, but it is used by hsc3-forth and stsc3.
 --
 -- > halt_mce_transform [1,2,mce2 3 4] == [1,2,3,4]
 halt_mce_transform :: [UGen] -> [UGen]
 halt_mce_transform = halt_mce_transform_f mceChannels
--}
 
 -- | If the root node of a UGen graph is /mce/, transform to /mrg/.
 prepare_root :: UGen -> UGen

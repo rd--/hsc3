@@ -208,7 +208,7 @@
 (defun hsc3-pp-smalltalk ()
   "Pretty print UGen as Smalltalk"
   (interactive)
-  (hsc3-send-region-fn "Sound.SC3.UGen.DB.PP.ugen_graph_smalltalk_pp"))
+  (hsc3-send-region-fn "Sound.SC3.UGen.DB.PP.Graph.ugen_graph_smalltalk_pp"))
 
 (defun hsc3-id-rewrite-region ()
   "Run hsc3-id-rewrite on region."
