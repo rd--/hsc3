@@ -1,4 +1,4 @@
--- reverberated_sine_percussion (jmcc) #3
+-- reverberated sine percussion (jmcc) #3
 uid_st_eval (do
   let d = 6
       c = 5
