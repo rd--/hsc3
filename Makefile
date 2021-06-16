@@ -30,8 +30,8 @@ pull-gh:
 	git pull $(GH_HTTP)
 
 push-tags:
-	git push $(GL_GIT) --tag
-	git push $(GH_GIT) --tag
+	git push $(GL_GIT) --tags
+	git push $(GH_GIT) --tags
 
 update-rd:
 	ssh rd@rohandrape.net "(cd sw/hsc3;git pull $(GL_HTTP))"
