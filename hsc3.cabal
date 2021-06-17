@@ -1,3 +1,4 @@
+cabal-version:     2.4
 Name:              hsc3
 Version:           0.20
 Synopsis:          Haskell SuperCollider
@@ -6,7 +7,7 @@ Description:       Haskell client for the SuperCollider synthesis server,
                    .
                    For installation and configuration see the Tutorial at
                    <http://rohandrape.net/t/hsc3-texts>.
-License:           GPL-3
+License:           GPL-3.0-only
 Category:          Sound
 Copyright:         (c) Rohan Drape and others, 2005-2021
 Author:            Rohan Drape
@@ -15,13 +16,11 @@ Stability:         Experimental
 Homepage:          http://rohandrape.net/t/hsc3
 Tested-With:       GHC == 8.8.4
 Build-Type:        Simple
-Cabal-Version:     >= 1.10
 
 Data-files:        README.md
                    emacs/hsc3.el
-                   Help/Server/*.help.lhs
-                   Help/UGen/ix.md
-                   Help/UGen/*.help.lhs
+                   Help/**/*.hs
+                   lib/*.hs
 
 Library
   Build-Depends:   array,
