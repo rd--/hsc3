@@ -172,7 +172,7 @@ data SC3_Binary_Op
             | SqrDif
             | AbsDif
             | Thresh
-            | AMClip -- 40
+            | AmClip -- 40
             | ScaleNeg
             | Clip2 -- 42
             | Excess

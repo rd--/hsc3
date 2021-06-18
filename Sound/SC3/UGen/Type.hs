@@ -207,7 +207,7 @@ instance BinaryOp UGen where
     sqrDif = mkBinaryOperator SqrDif sqrDif
     absDif = mkBinaryOperator AbsDif absDif
     thresh = mkBinaryOperator Thresh thresh
-    amClip = mkBinaryOperator AMClip amClip
+    amClip = mkBinaryOperator AmClip amClip
     scaleNeg = mkBinaryOperator ScaleNeg scaleNeg
     clip2 = mkBinaryOperator Clip2 clip2
     excess = mkBinaryOperator Excess excess
