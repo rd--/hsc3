@@ -1,53 +1,53 @@
 packages: .
 
-packages: /home/rohan/sw/hosc
-packages: /home/rohan/sw/hsc3
+packages: ../../../hosc
+packages: ../../../hsc3
 
-packages: /home/rohan/sw/html-minus
+packages: ../../../html-minus
 
-packages: /home/rohan/sw/hosc-util
-packages: /home/rohan/sw/hsc3-db
-packages: /home/rohan/sw/hsc3-dot
-packages: /home/rohan/sw/hsc3-lang
-packages: /home/rohan/sw/hsc3-plot
-packages: /home/rohan/sw/hsc3-sf
-packages: /home/rohan/sw/hsc3-sf-hsndfile
-packages: /home/rohan/sw/hsc3-ui
-packages: /home/rohan/sw/sc3-rdu
+packages: ../../../hosc-util
+packages: ../../../hsc3-db
+packages: ../../../hsc3-dot
+packages: ../../../hsc3-lang
+packages: ../../../hsc3-plot
+packages: ../../../hsc3-sf
+packages: ../../../hsc3-sf-hsndfile
+packages: ../../../hsc3-ui
+packages: ../../../sc3-rdu
 
-packages: /home/rohan/sw/hcg-minus
-packages: /home/rohan/sw/hcg-minus-cairo
-packages: /home/rohan/sw/hps
+packages: ../../../hcg-minus
+packages: ../../../hcg-minus-cairo
+packages: ../../../hps
 
-packages: /home/rohan/sw/after-pim
-packages: /home/rohan/sw/hmeap
-packages: /home/rohan/sw/hmt
-packages: /home/rohan/sw/hosc-json
-packages: /home/rohan/sw/hsc3-auditor
-packages: /home/rohan/sw/hsc3-cairo
-packages: /home/rohan/sw/hsc3-data
-packages: /home/rohan/sw/hsc3-m
-packages: /home/rohan/sw/hsc3-rec
-packages: /home/rohan/sw/hsc3-rw
-packages: /home/rohan/sw/hsc3-unsafe
-packages: /home/rohan/sw/hsdif
-packages: /home/rohan/sw/hsharc
-packages: /home/rohan/sw/hspear
-packages: /home/rohan/sw/midi-osc
-packages: /home/rohan/sw/rju
-packages: /home/rohan/sw/tctl
+packages: ../../../after-pim
+packages: ../../../hmeap
+packages: ../../../hmt
+packages: ../../../hosc-json
+packages: ../../../hsc3-auditor
+packages: ../../../hsc3-cairo
+packages: ../../../hsc3-data
+packages: ../../../hsc3-m
+packages: ../../../hsc3-rec
+packages: ../../../hsc3-rw
+packages: ../../../hsc3-unsafe
+packages: ../../../hsdif
+packages: ../../../hsharc
+packages: ../../../hspear
+packages: ../../../midi-osc
+packages: ../../../rju
+packages: ../../../tctl
 
-packages: /home/rohan/sw/hsc3-forth
-packages: /home/rohan/sw/hsc3-lisp
+packages: ../../../hsc3-forth
+packages: ../../../hsc3-lisp
 
-packages: /home/rohan/sw/hdf
-packages: /home/rohan/sw/hls
-packages: /home/rohan/sw/hly
-packages: /home/rohan/sw/hmt-diagrams
-packages: /home/rohan/sw/hps-cairo
-packages: /home/rohan/sw/hts
-packages: /home/rohan/sw/img-osc
-packages: /home/rohan/sw/www-minus
+packages: ../../../hdf
+packages: ../../../hls
+packages: ../../../hly
+packages: ../../../hmt-diagrams
+packages: ../../../hps-cairo
+packages: ../../../hts
+packages: ../../../img-osc
+packages: ../../../www-minus
 
--- packages: /home/rohan/sw/hsc3-process
--- packages: /home/rohan/sw/hsc3-server
+-- packages: ../../../hsc3-process
+-- packages: ../../../hsc3-server
