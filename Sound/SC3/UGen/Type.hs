@@ -167,8 +167,8 @@ instance UnaryOp UGen where
     ampDb = mkUnaryOperator AmpDb ampDb
     asFloat = mkUnaryOperator AsFloat asFloat
     asInt = mkUnaryOperator AsInt asInt
-    cpsMIDI = mkUnaryOperator CPSMIDI cpsMIDI
-    cpsOct = mkUnaryOperator CPSOct cpsOct
+    cpsMIDI = mkUnaryOperator CpsMidi cpsMIDI
+    cpsOct = mkUnaryOperator CpsOct cpsOct
     cubed = mkUnaryOperator Cubed cubed
     dbAmp = mkUnaryOperator DbAmp dbAmp
     distort = mkUnaryOperator Distort distort
@@ -176,13 +176,13 @@ instance UnaryOp UGen where
     isNil = mkUnaryOperator IsNil isNil
     log10 = mkUnaryOperator Log10 log10
     log2 = mkUnaryOperator Log2 log2
-    midiCPS = mkUnaryOperator MIDICPS midiCPS
-    midiRatio = mkUnaryOperator MIDIRatio midiRatio
+    midiCPS = mkUnaryOperator MidiCps midiCPS
+    midiRatio = mkUnaryOperator MidiRatio midiRatio
     notE = mkUnaryOperator Not notE
     notNil = mkUnaryOperator NotNil notNil
-    octCPS = mkUnaryOperator OctCPS octCPS
+    octCPS = mkUnaryOperator OctCps octCPS
     ramp_ = mkUnaryOperator Ramp_ ramp_
-    ratioMIDI = mkUnaryOperator RatioMIDI ratioMIDI
+    ratioMIDI = mkUnaryOperator RatioMidi ratioMIDI
     softClip = mkUnaryOperator SoftClip softClip
     squared = mkUnaryOperator Squared squared
 

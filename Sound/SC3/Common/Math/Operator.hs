@@ -21,9 +21,13 @@ import qualified Sound.SC3.Common.Math as Math {- hsc3 -}
 
 -- * Unary
 
--- | Enumeration of @SC3@ unary operator UGens.
---
--- > zip (map show [minBound :: SC3_Unary_Op .. maxBound]) [0..]
+{- | Enumeration of @SC3@ unary operator UGens.
+     The names here are from the enumeration at "server/plugins/UnaryOpUGens.cpp".
+     The capitalisation is edited since these names become function names in rsc3.
+     Names have a _ suffix if they conflict with UGen names.
+
+> zip (map show [minBound :: SC3_Unary_Op .. maxBound]) [0..]
+-}
 data SC3_Unary_Op
             = Neg -- -
             | Not -- !
@@ -42,14 +46,14 @@ data SC3_Unary_Op
             | Sqrt
             | Exp -- 15
             | Recip -- 16
-            | MIDICPS -- 17
-            | CPSMIDI
-            | MIDIRatio
-            | RatioMIDI -- 20
+            | MidiCps -- 17
+            | CpsMidi
+            | MidiRatio
+            | RatioMidi -- 20
             | DbAmp
             | AmpDb
-            | OctCPS
-            | CPSOct
+            | OctCps
+            | CpsOct
             | Log -- 25
             | Log2
             | Log10
@@ -115,7 +119,7 @@ unaryIndex cr nm =
 
 -- | 'isJust' of 'unaryIndex'.
 --
--- > map (is_unary CI) (words "ABS MIDICPS NEG")
+-- > map (is_unary CI) (words "Abs MidiCps Neg")
 -- > map (is_unary CI) (words "- RAND")
 -- > map (is_unary CI) (words "arctan atan")
 is_unary :: Base.Case_Rule -> String -> Bool
@@ -124,13 +128,14 @@ is_unary cr = isJust . unaryIndex cr
 -- * Binary
 
 -- | Enumeration of @SC3@ unary operator UGens.
+--   The names here are from the enumeration at "server/plugins/BinaryOpUGens.cpp".
 --
 -- > zip (map show [minBound :: SC3_Binary_Op .. maxBound]) [0..]
 data SC3_Binary_Op
             = Add -- 0
             | Sub -- 1
             | Mul -- 2
-            | IDiv
+            | IDiv -- 3
             | FDiv -- 4
             | Mod -- 5
             | EQ_ -- 6
@@ -491,8 +496,8 @@ uop_hs_tbl =
     ,(Cubed,\z -> z * z * z)
     ,(Sqrt,sqrt)
     ,(Recip,recip)
-    ,(MIDICPS,Math.midi_to_cps)
-    ,(CPSMIDI,Math.cps_to_midi)
+    ,(MidiCps,Math.midi_to_cps)
+    ,(CpsMidi,Math.cps_to_midi)
     ,(Sin,sin)
     ,(Cos,cos)
     ,(Tan,tan)]
