@@ -52,7 +52,6 @@ There is also, more obliquely related:
 
 ## cli
 
-[help](http://rohandrape.net/?t=hsc3&e=md/help.md),
 [scsynth](http://rohandrape.net/?t=hsc3&e=md/scsynth.md),
 [setup](http://rohandrape.net/?t=hsc3&e=md/setup.md)
 

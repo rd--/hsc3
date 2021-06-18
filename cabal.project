@@ -1,0 +1,9 @@
+packages: hsc3.cabal
+
+source-repository-package
+    type: git
+    location: https://gitlab.com/rd--/hosc.git
+
+source-repository-package
+    type: git
+    location: https://gitlab.com/rd--/hsc3-sf.git
