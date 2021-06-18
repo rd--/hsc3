@@ -100,7 +100,7 @@
   "Lookup up the UGen at point in hsc3-db."
   (interactive)
   (hsc3-send-line
-   (format "Sound.SC3.UGen.DB.ugen_summary_wr \"%s\"" (thing-at-point 'symbol))))
+   (format "Sound.SC3.UGen.DB.PP.ugen_summary_wr \"%s\"" (thing-at-point 'symbol))))
 
 (defun hsc3-ugen-default-param ()
   "Insert the default UGen parameters (arguments) for the UGen before <point>."
@@ -115,11 +115,11 @@
   (let ((p (format "hsc3-help ugen-control-param %s" (thing-at-point 'symbol))))
     (insert (hsc3-remove-trailing-newline (shell-command-to-string p)))))
 
-(defun hsc3-ugen-control-param-let (ugen-name)
-  "Generate let bindings to controls for all UGen param (printed in *hsc3* buffer)."
-  (interactive "SUGen Name: ")
-  (hsc3-send-line
-   (format "Sound.SC3.UGen.DB.ugen_control_param_wr \"%s\"" ugen-name)))
+(defun hsc3-ugen-control-param-let ()
+  "Insert control UGen parameters (arguments) for the UGen before <point>."
+  (interactive)
+  (let ((p (format "hsc3-help ugen-control-param-let %s" (thing-at-point 'symbol))))
+    (insert (hsc3-remove-trailing-newline (shell-command-to-string p)))))
 
 (defun hsc3-remove-trailing-newline (s)
   "Delete trailing newlines from string."

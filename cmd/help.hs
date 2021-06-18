@@ -17,6 +17,10 @@ ugen-default-param-named =>
 ugen_control_param :: String -> String
 ugen_control_param nm = maybe ("ERROR: NO ENTRY: " ++ nm) (DB.u_control_inputs_pp False) (DB.u_lookup_ci nm)
 
+-- > map ugen_control_param_let ["sinosc","whiteNoise","drand","pitch"]
+ugen_control_param_let :: String -> String
+ugen_control_param_let nm = maybe ("ERROR: NO ENTRY: " ++ nm) DB.u_control_param_pp (DB.u_lookup_ci nm)
+
 -- > map ugen_default_param ["sinosc","whiteNoise","drand","pitch"]
 ugen_default_param :: String -> String
 ugen_default_param nm = maybe ("ERROR: NO ENTRY: " ++ nm) DB.u_default_param (DB.u_lookup_ci nm)
@@ -38,6 +42,7 @@ help =
     ["hsc3-help command [arguments]"
     ," sc3-help {rtf|scdoc-local|scdoc-online} subject..."
     ," ugen-control-param ugen-name..."
+    ," ugen-control-param-let ugen-name..."
     ," ugen-default-param ugen-name..."
     ," ugen-default-record ugen-name..."
     ," ugen-default-sclanguage ugen-name..."
@@ -52,6 +57,7 @@ main = do
     "sc3-help":"scdoc-local":x -> mapM_ (Help.sc3_scdoc_help_open True . Help.sc3_scdoc_help_path) x
     "sc3-help":"scdoc-online":x -> mapM_ (Help.sc3_scdoc_help_open False . Help.sc3_scdoc_help_path) x
     "ugen-control-param":u -> mapM_ (putStrLn . ugen_control_param) u
+    "ugen-control-param-let":u -> mapM_ (putStrLn . ugen_control_param_let) u
     "ugen-default-param":u -> mapM_ (putStrLn . ugen_default_param) u
     "ugen-default-record":u -> mapM_ (putStrLn . ugen_hsc3_rec) u
     "ugen-default-sclanguage":u -> mapM_ (putStrLn . ugen_sclanguage) u
