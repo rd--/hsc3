@@ -1,4 +1,4 @@
-cmd = scsynth setup
+cmd = setup
 
 include ~/sw/hsc3/mk/cmd.mk
 

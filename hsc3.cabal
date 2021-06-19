@@ -123,18 +123,6 @@ Library
                    Sound.SC3.UGen.Type
                    Sound.SC3.UGen.UGen
 
-executable hcs3-scsynth
-  build-depends:    base == 4.* && < 5,
-                    containers,
-                    filepath,
-                    hosc == 0.20.*,
-                    hsc3 == 0.20.*,
-                    hsc3-sf == 0.20.*
-  hs-source-dirs:   cmd
-  main-is:          scsynth.hs
-  default-language: Haskell2010
-  ghc-options:      -Wall -fwarn-tabs
-
 Source-Repository  head
   Type:            git
   Location:        https://gitlab.com/rd--/hsc3
