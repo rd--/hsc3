@@ -9,7 +9,7 @@ all:
 
 clean:
 	(cd cmd ; make clean)
-	rm -Rf dist
+	rm -Rf dist dist-newstyle
 
 mk-cmd:
 	(cd cmd ; make all install)
