@@ -200,13 +200,13 @@ binary_sym_tbl =
     ,(FDiv,"/")
     ,(Mod,"%")
     ,(EQ_,"==")
-    ,(NE,"/=") -- !=
+    ,(NE,"/=") -- or !=
     ,(LT_,"<")
     ,(GT_,">")
     ,(LE,"<=")
     ,(GE,">=")
-    ,(BitAnd,".&.") -- &
-    ,(BitOr,".|.") -- |
+    ,(BitAnd,".&.") -- or &
+    ,(BitOr,".|.") -- or |
     ,(Pow,"**")]
 
 -- | Table of operator names (non-symbolic) and indices.
