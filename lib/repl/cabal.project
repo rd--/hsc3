@@ -21,6 +21,7 @@ packages: ../../../hps
 
 packages: ../../../after-pim
 packages: ../../../hmeap
+packages: ../../../hmt-base
 packages: ../../../hmt
 packages: ../../../hosc-json
 packages: ../../../hsc3-auditor
