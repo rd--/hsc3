@@ -4,11 +4,6 @@
 
 
 
-## Analisys
-[sonLPC](?t=hsc3&e=Help/UGen/sonLPC.help.hs)
-
-
-
 ## Analysis
 [beatTrack](?t=hsc3&e=Help/UGen/beatTrack.help.hs),
 beatTrack2,
@@ -95,7 +90,6 @@ wAmp
 [zeroCrossing](?t=hsc3&e=Help/UGen/zeroCrossing.help.hs),
 keyClarity,
 keyMode,
-pitchTracker,
 qitch,
 [tartini](?t=hsc3&e=Help/UGen/tartini.help.hs)
 
@@ -146,6 +140,8 @@ logger,
 [loopBuf](?t=hsc3&e=Help/UGen/loopBuf.help.hs),
 matchingPResynth,
 [miClouds](?t=hsc3&e=Help/UGen/miClouds.help.hs),
+[redPhasor](?t=hsc3&e=Help/UGen/redPhasor.help.hs),
+[redPhasor2](?t=hsc3&e=Help/UGen/redPhasor2.help.hs),
 sortBuf,
 tGrains2,
 tGrains3,
@@ -178,8 +174,7 @@ convolution2,
 convolution2L,
 convolution3,
 partConv,
-stereoConvolution2L,
-partConvT
+stereoConvolution2L
 
 
 
@@ -261,18 +256,24 @@ dtag
 
 
 
-## Drums
-[analogBassDrum](?t=hsc3&e=Help/UGen/analogBassDrum.help.hs),
-[analogSnareDrum](?t=hsc3&e=Help/UGen/analogSnareDrum.help.hs)
-
-
-
 ## Dynamics
 [compander](?t=hsc3&e=Help/UGen/compander.help.hs),
 companderD,
 [limiter](?t=hsc3&e=Help/UGen/limiter.help.hs),
-[normalizer](?t=hsc3&e=Help/UGen/normalizer.help.hs),
-dCompressor
+[normalizer](?t=hsc3&e=Help/UGen/normalizer.help.hs)
+
+
+
+## Emulators
+ay8910,
+astrocade,
+[atari2600](?t=hsc3&e=Help/UGen/atari2600.help.hs),
+beep,
+mzPokey,
+nes2,
+pokey,
+sid6581f,
+sn76489
 
 
 
@@ -401,7 +402,6 @@ pv_SpectralEnhance,
 [pv_SpectralMap](?t=hsc3&e=Help/UGen/pv_SpectralMap.help.hs),
 pv_Whiten,
 [pv_xFade](?t=hsc3&e=Help/UGen/pv_xFade.help.hs),
-partConvT,
 tpv,
 vbpVoc
 
@@ -412,6 +412,10 @@ vbpVoc
 miMu,
 [miRings](?t=hsc3&e=Help/UGen/miRings.help.hs),
 [miRipples](?t=hsc3&e=Help/UGen/miRipples.help.hs)
+
+
+## Filter:linear
+vbChebyFilt
 
 
 
@@ -434,7 +438,6 @@ goertzel,
 [hairCell](?t=hsc3&e=Help/UGen/hairCell.help.hs),
 [iirFilter](?t=hsc3&e=Help/UGen/iirFilter.help.hs),
 insideOut,
-[lpg](?t=hsc3&e=Help/UGen/lpg.help.hs),
 [lti](?t=hsc3&e=Help/UGen/lti.help.hs),
 meanTriggered,
 [meddis](?t=hsc3&e=Help/UGen/meddis.help.hs),
@@ -518,7 +521,10 @@ apf,
 glitchBPF,
 glitchBRF,
 glitchHPF,
-glitchRHPF
+glitchRHPF,
+redDPCMdecode,
+redDPCMencode,
+redLbyl
 
 
 ## Filters:Nonlinear
@@ -533,9 +539,7 @@ ball,
 [spring](?t=hsc3&e=Help/UGen/spring.help.hs),
 [tBall](?t=hsc3&e=Help/UGen/tBall.help.hs),
 [membraneCircle](?t=hsc3&e=Help/UGen/membraneCircle.help.hs),
-membraneCircleV,
 [membraneHexagon](?t=hsc3&e=Help/UGen/membraneHexagon.help.hs),
-membraneHexagonV,
 [squiz](?t=hsc3&e=Help/UGen/squiz.help.hs),
 waveLoss
 
@@ -588,7 +592,6 @@ standardN,
 arneodoCoulletTresser,
 breakcore,
 brusselator,
-[chen](?t=hsc3&e=Help/UGen/chen.help.hs),
 [dNoiseRing](?t=hsc3&e=Help/UGen/dNoiseRing.help.hs),
 doubleWell,
 doubleWell2,
@@ -649,7 +652,7 @@ pSinGrain,
 [dpw4Saw](?t=hsc3&e=Help/UGen/dpw4Saw.help.hs),
 [fm7](?t=hsc3&e=Help/UGen/fm7.help.hs),
 [miBraids](?t=hsc3&e=Help/UGen/miBraids.help.hs),
-[vbSlide](?t=hsc3&e=Help/UGen/vbSlide.help.hs)
+slide
 
 
 ## Generators:Granular
@@ -669,9 +672,7 @@ ball,
 [spring](?t=hsc3&e=Help/UGen/spring.help.hs),
 [tBall](?t=hsc3&e=Help/UGen/tBall.help.hs),
 [membraneCircle](?t=hsc3&e=Help/UGen/membraneCircle.help.hs),
-membraneCircleV,
-[membraneHexagon](?t=hsc3&e=Help/UGen/membraneHexagon.help.hs),
-membraneHexagonV
+[membraneHexagon](?t=hsc3&e=Help/UGen/membraneHexagon.help.hs)
 
 
 ## Generators:Single-value
@@ -725,6 +726,7 @@ lorenz2DL,
 lorenz2DN,
 [lorenzTrig](?t=hsc3&e=Help/UGen/lorenzTrig.help.hs),
 markovSynth,
+redNoise,
 sieve1,
 standard2DC,
 [standard2DL](?t=hsc3&e=Help/UGen/standard2DL.help.hs),
@@ -811,6 +813,13 @@ clockmus
 
 
 
+## Math
+redDPCMdecode,
+redDPCMencode,
+redLbyl
+
+
+
 ## Maths
 [clip](?t=hsc3&e=Help/UGen/clip.help.hs),
 fold,
@@ -886,54 +895,33 @@ vbap
 
 
 
+## Noise
+redNoise
+
+
+
 ## Osc
 [miOmi](?t=hsc3&e=Help/UGen/miOmi.help.hs),
 [miPlaits](?t=hsc3&e=Help/UGen/miPlaits.help.hs)
 
 
 
-## Oscillator
-[blOsc](?t=hsc3&e=Help/UGen/blOsc.help.hs),
-[harmonicOsc](?t=hsc3&e=Help/UGen/harmonicOsc.help.hs),
-[neoFormant](?t=hsc3&e=Help/UGen/neoFormant.help.hs),
-neoVarSawOsc,
-oscBank,
-[varShapeOsc](?t=hsc3&e=Help/UGen/varShapeOsc.help.hs),
-[vosimOsc](?t=hsc3&e=Help/UGen/vosimOsc.help.hs),
-[zOsc](?t=hsc3&e=Help/UGen/zOsc.help.hs)
-
-
-
 ## Oscillators
-[vbSlide](?t=hsc3&e=Help/UGen/vbSlide.help.hs)
-
-
-
-## PhysicalModelling
-[resonator](?t=hsc3&e=Help/UGen/resonator.help.hs),
-[rongs](?t=hsc3&e=Help/UGen/rongs.help.hs),
-[stringVoice](?t=hsc3&e=Help/UGen/stringVoice.help.hs)
+slide
 
 
 
 ## PhysicalModels
-adachiAyers,
 [dwgBowed](?t=hsc3&e=Help/UGen/dwgBowed.help.hs),
 dwgBowedSimple,
 [dwgBowedTor](?t=hsc3&e=Help/UGen/dwgBowedTor.help.hs),
-[dwgClarinet3](?t=hsc3&e=Help/UGen/dwgClarinet3.help.hs),
-[dwgFlute](?t=hsc3&e=Help/UGen/dwgFlute.help.hs),
 dwgPlucked,
 [dwgPlucked2](?t=hsc3&e=Help/UGen/dwgPlucked2.help.hs),
 [dwgPluckedStiff](?t=hsc3&e=Help/UGen/dwgPluckedStiff.help.hs),
 [diodeRingMod](?t=hsc3&e=Help/UGen/diodeRingMod.help.hs),
-myPlucked,
-myPlucked2,
-myPluckedStiff,
 nTube,
 oteyPiano,
 [oteyPianoStrings](?t=hsc3&e=Help/UGen/oteyPianoStrings.help.hs),
-pluckSynth,
 stkGlobals,
 [stkInst](?t=hsc3&e=Help/UGen/stkInst.help.hs),
 [twoTube](?t=hsc3&e=Help/UGen/twoTube.help.hs)
@@ -965,13 +953,6 @@ randID,
 [freeVerb](?t=hsc3&e=Help/UGen/freeVerb.help.hs),
 freeVerb2,
 [gVerb](?t=hsc3&e=Help/UGen/gVerb.help.hs),
-dwgReverb3Band,
-dwgReverb3Band_16,
-dwgReverbC1C3,
-dwgReverbC1C3_16,
-earlyRef,
-earlyRefAtkGen,
-earlyRefGen,
 [jPverbRaw](?t=hsc3&e=Help/UGen/jPverbRaw.help.hs),
 [miVerb](?t=hsc3&e=Help/UGen/miVerb.help.hs),
 [vbJonVerb](?t=hsc3&e=Help/UGen/vbJonVerb.help.hs)
@@ -1017,6 +998,8 @@ sendTrig,
 [toggleFF](?t=hsc3&e=Help/UGen/toggleFF.help.hs),
 [trig](?t=hsc3&e=Help/UGen/trig.help.hs),
 [trig1](?t=hsc3&e=Help/UGen/trig1.help.hs),
+[redPhasor](?t=hsc3&e=Help/UGen/redPhasor.help.hs),
+[redPhasor2](?t=hsc3&e=Help/UGen/redPhasor2.help.hs),
 [summer](?t=hsc3&e=Help/UGen/summer.help.hs),
 [tBetaRand](?t=hsc3&e=Help/UGen/tBetaRand.help.hs),
 [tBrownRand](?t=hsc3&e=Help/UGen/tBrownRand.help.hs),
@@ -1039,28 +1022,35 @@ apf,
 a2b,
 allpass1,
 allpass2,
+[analogBassDrum](?t=hsc3&e=Help/UGen/analogBassDrum.help.hs),
+analogFoldOsc,
+[analogPhaser](?t=hsc3&e=Help/UGen/analogPhaser.help.hs),
+[analogPhaserMod](?t=hsc3&e=Help/UGen/analogPhaserMod.help.hs),
+analogPulseShaper,
+[analogSnareDrum](?t=hsc3&e=Help/UGen/analogSnareDrum.help.hs),
+[analogTape](?t=hsc3&e=Help/UGen/analogTape.help.hs),
+[analogVintageDistortion](?t=hsc3&e=Help/UGen/analogVintageDistortion.help.hs),
 atsNoise,
 atsPartial,
 [audioMSG](?t=hsc3&e=Help/UGen/audioMSG.help.hs),
 b2a,
 b2Ster,
 b2uhj,
-bHiCut,
 blBufRd,
-bLowCut,
+[blOsc](?t=hsc3&e=Help/UGen/blOsc.help.hs),
 binData,
 blitB3D,
 bufGrainBBF,
 bufGrainBF,
 bufGrainIBF,
 cq_Diff,
+[chen](?t=hsc3&e=Help/UGen/chen.help.hs),
 clipper32,
 clipper4,
 clipper8,
 clockmus,
-combFormlet,
 combLP,
-dwgFlute2,
+dCompressor,
 [dwgSoundBoard](?t=hsc3&e=Help/UGen/dwgSoundBoard.help.hs),
 driveNoise,
 fftCentroid,
@@ -1084,6 +1074,7 @@ grainBufJ,
 grainFMJ,
 grainInJ,
 grainSinJ,
+[harmonicOsc](?t=hsc3&e=Help/UGen/harmonicOsc.help.hs),
 henonTrig,
 inGrain,
 inGrainB,
@@ -1094,12 +1085,13 @@ inGrainIBF,
 lpf1,
 lpf18,
 lpfvs6,
-lrHiCut,
-lrLowCut,
+[lpg](?t=hsc3&e=Help/UGen/lpg.help.hs),
 latoocarfianTrig,
 matchingPResynth,
-miWarps,
+miGrids,
 needleRect,
+[neoFormant](?t=hsc3&e=Help/UGen/neoFormant.help.hs),
+neoVarSawOsc,
 osFold4,
 osFold8,
 osTrunc4,
@@ -1107,6 +1099,7 @@ osTrunc8,
 osWrap4,
 osWrap8,
 onsetsDS,
+oscBank,
 [oteySoundBoard](?t=hsc3&e=Help/UGen/oteySoundBoard.help.hs),
 panX2D,
 peakEQ2,
@@ -1114,6 +1107,7 @@ peakEQ4,
 permMod,
 permModArray,
 permModT,
+[phasorModal](?t=hsc3&e=Help/UGen/phasorModal.help.hs),
 posRatio,
 [rBezier](?t=hsc3&e=Help/UGen/rBezier.help.hs),
 [rdx7](?t=hsc3&e=Help/UGen/rdx7.help.hs),
@@ -1132,14 +1126,16 @@ rmShelf2,
 [rShufflerB](?t=hsc3&e=Help/UGen/rShufflerB.help.hs),
 [rShufflerL](?t=hsc3&e=Help/UGen/rShufflerL.help.hs),
 [rtExpRandN](?t=hsc3&e=Help/UGen/rtExpRandN.help.hs),
+rtLinRandN,
 [rtRandN](?t=hsc3&e=Help/UGen/rtRandN.help.hs),
 [rtScramble](?t=hsc3&e=Help/UGen/rtScramble.help.hs),
 [rTraceRd](?t=hsc3&e=Help/UGen/rTraceRd.help.hs),
 regaliaMitraEQ,
+[resonator](?t=hsc3&e=Help/UGen/resonator.help.hs),
+[rongs](?t=hsc3&e=Help/UGen/rongs.help.hs),
 rosslerResL,
 rotate,
 somAreaWr,
-selectL,
 sinTone,
 skipNeedle,
 [softClipAmp](?t=hsc3&e=Help/UGen/softClipAmp.help.hs),
@@ -1147,8 +1143,6 @@ softClipAmp4,
 softClipAmp8,
 softClipper4,
 softClipper8,
-sonLPCSynth,
-sonLPCSynthIn,
 [spreader](?t=hsc3&e=Help/UGen/spreader.help.hs),
 standardTrig,
 [stkBandedWG](?t=hsc3&e=Help/UGen/stkBandedWG.help.hs),
@@ -1164,11 +1158,22 @@ stkFlute,
 stkSaxofony,
 [stkShakers](?t=hsc3&e=Help/UGen/stkShakers.help.hs),
 stkVoicForm,
+[stringVoice](?t=hsc3&e=Help/UGen/stringVoice.help.hs),
+[tLine](?t=hsc3&e=Help/UGen/tLine.help.hs),
 tTendency,
+txLine,
 tilt,
 tumble,
 uhj2b,
-xFadeRotate
+[varShapeOsc](?t=hsc3&e=Help/UGen/varShapeOsc.help.hs),
+[vosimOsc](?t=hsc3&e=Help/UGen/vosimOsc.help.hs),
+werner,
+[zOsc](?t=hsc3&e=Help/UGen/zOsc.help.hs)
+
+
+
+## User Interaction
+slub
 
 
 
@@ -1256,13 +1261,13 @@ cubed,
 sqrt,
 exp,
 recip,
-midicps,
-cpsmidi,
+midiCps,
+cpsMidi,
 midiRatio,
-ratioMIDI,
+ratioMidi,
 [dbAmp](?t=hsc3&e=Help/UGen/dbAmp.help.hs),
 [ampDb](?t=hsc3&e=Help/UGen/ampDb.help.hs),
-octCPS,
+octCps,
 cpsOct,
 [log](?t=hsc3&e=Help/UGen/log.help.hs),
 log2,

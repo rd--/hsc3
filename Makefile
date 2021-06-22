@@ -8,11 +8,7 @@ all:
 	echo "hsc3"
 
 clean:
-	(cd cmd ; make clean)
 	rm -Rf dist dist-newstyle
-
-mk-cmd:
-	(cd cmd ; make all install)
 
 mk-tags:
 	find . -name '*.hs' | xargs hasktags -e

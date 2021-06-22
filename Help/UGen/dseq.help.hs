@@ -36,5 +36,19 @@ in mix (sinOsc AR (geom 8 60 2 * d * e) 0) * 1/5 * 0.1
 let d = demand (impulse AR 8 0) 0 (dseq 'α' dinf (mce (map mce [[60,67],[59,62]])))
 in sinOsc AR (midiCPS d) 0 * 0.1
 
+-- dseq ; shared dseq, different patterns
+uid_st_eval
+(do a <- dseqM 3 (mce [1,3,2,7,8])
+    let t = impulse KR 5 0
+        f = demand t 0 (mce [a,a]) * 30 + 340
+    return (sinOsc AR f 0 * 0.1))
+
+-- dseq ; distinct dseq, equal patterns
+uid_st_eval
+(do a <- clone 2 (dseqM 3 (mce [1,3,2,7,8]))
+    let t = impulse KR 5 0
+        f = demand t 0 a * 30 + 340
+    return (sinOsc AR f 0 * 0.1))
+
 ---- ; drawings
 UI.ui_baudline 4096 50 "linear" 2

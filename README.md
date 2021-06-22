@@ -50,10 +50,6 @@ is written for
 There is also, more obliquely related:
 -->
 
-## cli
-
-[setup](http://rohandrape.net/?t=hsc3&e=md/setup.md)
-
 ## help
 
 [UGen Index](http://rohandrape.net/?t=hsc3&e=Help/UGen/ix.md)

@@ -46,6 +46,14 @@ hpz1 (whiteNoise 'α' AR * 0.01)
 -- whiteNoise ; frequency control
 sinOsc AR (whiteNoise 'α' KR * 300 + 500) 0 * 0.1
 
+-- whiteNoise ; monad constructor ; clone
+uid_st_eval (fmap (* mce [0.02,0.04]) (clone 2 (whiteNoiseM AR)))
+
+-- whiteNoiseM ; Control.Monad.ap
+uid_st_eval
+(do x <- return (-) `ap` whiteNoiseM AR `ap` whiteNoiseM AR
+    return (x * 0.05))
+
 ---- ; drawings
 Sound.SC3.Plot.plot_ugen1 0.01 (whiteNoise 'γ' AR)
 Sound.SC3.Plot.plot_ugen1 0.05 (lpf (whiteNoise 'γ' AR) 500)
