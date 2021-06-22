@@ -21,10 +21,8 @@
 (defvar sc3-help-directory nil
   "*The directory containing the SC3 RTF help files (default=nil).")
 
-(defvar hsc3-literate-p nil
-  "*Flag to indicate if we are in literate mode (default=nil).")
-
-(make-variable-buffer-local 'hsc3-literate-p)
+(defvar hsc3-auto-import-modules nil
+  "*Flag to decide if the hsc3 standard module set is imported on startup (default=nil).")
 
 (defun hsc3-chunk-string (n s)
   "Split a string into chunks of 'n' characters."
@@ -62,10 +60,6 @@
   "Send :quit instruction to haskell."
   (interactive)
   (hsc3-send-line ":quit"))
-
-(defun hsc3-unlit (s)
-  "Remove Bird-literate marks."
-   (replace-regexp-in-string "^[> ]* ?" "" s))
 
 (defun hsc3-uncomment (s)
   "Remove initial comment and Bird-literate markers if present."
@@ -142,11 +136,8 @@
   (interactive)
   (let* ((s (buffer-substring-no-properties
              (line-beginning-position)
-             (line-end-position)))
-	 (s* (if hsc3-literate-p
-		 (hsc3-unlit s)
-	       (hsc3-uncomment s))))
-    (hsc3-send-line s*)))
+             (line-end-position))))
+    (hsc3-send-line (hsc3-uncomment s))))
 
 (defun hsc3-send-main ()
   "Send main to haskell."
@@ -375,7 +366,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (if (not (comint-check-proc hsc3-buffer))
       (hsc3-start-haskell)
    (hsc3-set-prompt)
-   (hsc3-import-standard-modules)
+   (if hsc3-auto-import-modules (hsc3-import-standard-modules))
    (delete-other-windows)
    (split-window-vertically)
    (with-current-buffer hsc3-buffer
@@ -455,22 +446,10 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
     (setq hsc3-mode-map map)))
 
 (define-derived-mode
-  literate-hsc3-mode
-  hsc3-mode
-  "Literate Haskell SuperCollider"
-  "Major mode for interacting with an inferior haskell process."
-  (setq hsc3-literate-p t)
-  (setq haskell-literate 'bird)
-  (turn-on-font-lock))
-
-(add-to-list 'auto-mode-alist '("\\.lhs$" . literate-hsc3-mode))
-
-(define-derived-mode
   hsc3-mode
   haskell-mode
   "Haskell SuperCollider"
   "Major mode for interacting with an inferior hsc3 process."
-  (setq hsc3-literate-p nil)
   (turn-on-font-lock))
 
 (add-to-list 'auto-mode-alist '("\\.hs$" . hsc3-mode))

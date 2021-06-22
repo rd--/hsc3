@@ -1,3 +1,22 @@
+(defvar hsc3-literate-p nil
+  "*Flag to indicate if we are in literate mode (default=nil).")
+
+(make-variable-buffer-local 'hsc3-literate-p)
+
+(defun hsc3-unlit (s)
+  "Remove Bird-literate marks."
+   (replace-regexp-in-string "^[> ]* ?" "" s))
+
+(define-derived-mode
+  literate-hsc3-mode
+  hsc3-mode
+  "Literate Haskell SuperCollider"
+  "Major mode for interacting with an inferior haskell process."
+  (setq hsc3-literate-p t)
+  (setq haskell-literate 'bird)
+  (turn-on-font-lock))
+
+(add-to-list 'auto-mode-alist '("\\.lhs$" . literate-hsc3-mode))
 
 ;; (require 'haskell-interactive-mode)
 ;; (require 'haskell-process)
