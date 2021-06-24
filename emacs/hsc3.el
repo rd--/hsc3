@@ -131,13 +131,16 @@
   (hsc3-see-haskell)
   (hsc3-send-line (format ":load \"%s\"" buffer-file-name)))
 
+(defun hsc3-current-line ()
+  "Get current line."
+  (buffer-substring-no-properties
+   (line-beginning-position)
+   (line-end-position)))
+
 (defun hsc3-send-current-line ()
   "Send the current line to haskell."
   (interactive)
-  (let* ((s (buffer-substring-no-properties
-             (line-beginning-position)
-             (line-end-position))))
-    (hsc3-send-line (hsc3-uncomment s))))
+  (hsc3-send-line (hsc3-uncomment (hsc3-current-line))))
 
 (defun hsc3-send-main ()
   "Send main to haskell."
@@ -184,6 +187,14 @@
   (interactive)
   (let ((str (hsc3-region-string)))
     (hsc3-send-region-fn "Sound.SC3.UI.SCLang.Control.ugen_ui_run \"ui\" 1")))
+
+(defun hsc3-ui-comment ()
+  "UI for description in comment line."
+  (interactive)
+  (hsc3-send-line
+   (format
+    "Sound.SC3.UI.SCLang.Control.control_text_ui_run \"ui\" 1 \"%s\""
+    (hsc3-current-line))))
 
 (defun hsc3-pp-html-region ()
   "HTML pretty-printer and viewer for region UGen graph."
@@ -395,6 +406,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (define-key map (kbd "C-c C-g") 'hsc3-draw-region)
   (define-key map (kbd "C-c C-d") 'hsc3-dump-ugens-region)
   (define-key map (kbd "C-c C-v") 'hsc3-ui-region)
+  (define-key map (kbd "C-c C-f") 'hsc3-ui-comment)
   (define-key map (kbd "C-c C-j") 'hsc3-sc3-help)
   (define-key map (kbd "C-c C-i") 'hsc3-interrupt-haskell)
   (define-key map (kbd "C-c C-k") 'hsc3-reset-scsynth)

@@ -99,8 +99,8 @@ control_spec_parse str =
   case splitOn "," str of
     [cnmdef,lhs,rhs,wrp] -> case splitOn ":" cnmdef of
                               [cnm,def] -> (cnm,read def,(read lhs,read rhs,wrp))
-                              _ -> error "control_spec_parse: cnmdef"
-    _ -> error "control_spec_parse: str"
+                              _ -> error ("control_spec_parse: " ++ cnmdef)
+    _ -> error ("control_spec_parse: " ++ str)
 
 -- | Semicolon separated, no spaces.
 --
@@ -119,7 +119,9 @@ control_spec_seq_print :: [ControlSpec Double] -> String
 control_spec_seq_print = intercalate ";" . map control_spec_print
 
 control_spec_to_control :: ControlSpec Double -> Control
-control_spec_to_control (cnm,def,(lhs,rhs,wrp)) = Control KR Nothing cnm def False (Just (Control_Meta lhs rhs wrp 0 "" Nothing))
+control_spec_to_control (cnm,def,(lhs,rhs,wrp)) =
+  let grp = if last cnm `elem` "[]" then Just Control_Range else Nothing
+  in Control KR Nothing cnm def False (Just (Control_Meta lhs rhs wrp 0 "" grp))
 
 {- | See SCClassLibrary/Common/Control/Spec:ControlSpec.initClass
 
