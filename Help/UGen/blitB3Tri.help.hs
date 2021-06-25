@@ -22,5 +22,6 @@ let f _ (g,x,y,z,o,rx,ry,_,_,_) =
       in pan2 (X.blitB3Tri AR freq (1 - (rx * 0.05)) y) (o * 2 - 1) (z * g)
 in mix (eventVoicer 16 f) * control KR "gain" 0.25
 
+----- ; drawings
 UI.ui_sc3_scope 2 0 (2 ^ 14) 0 "audio" 2
 UI.ui_scope_rju 512 100.0 ("embed",9) 2 (512,512) 4.0
