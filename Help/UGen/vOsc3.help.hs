@@ -16,4 +16,4 @@ let f _ (g,_,y,z,_,_,_,p,_,_) =
           o1 = vOsc3 AR pos f0 (f0 + 1) (f0 + 9)
           o2 = vOsc3 AR pos (f0 - 1) (f0 + 3) (f0 + 4)
       in mce2 o1 o2 * g * z
-in mix (rEventVoicer 16 f) * control KR "gain" 0.25
+in mix (eventVoicer 16 f) * control KR "gain" 0.25

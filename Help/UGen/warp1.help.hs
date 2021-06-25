@@ -25,7 +25,7 @@ let f _ (g,x,y,z,o,rx,ry,_,_,_) =
           freqScale = linLin ry 0 1 0.75 1.25
           ol = linLin rx 0 1 2 16
       in pan2 (warp1 1 b x freqScale dur (-1) ol (ry * 0.75) 2) (o * 2 - 1) (z * g)
-in mix (rEventVoicer 16 f) * control KR "gain" 2
+in mix (eventVoicer 16 f) * control KR "gain" 2
 
 ---- ; setup
 fn = "/home/rohan/data/audio/instr/celeste/long/13-C4-long.wav"

@@ -16,4 +16,4 @@ let f c (g,x,y,z,o,_,_,_,_,_) =
           a2 = abs (a (c,'ζ') (tExpRand (c,'η') 6 24 g))
           sig = sinOsc AR (midiCPS (x * 84 + 24)) (tRand 'ι' 0 two_pi g)
       in pan2 (sig * a1 * a2) (o * 2 - 1) (z * lagUD g (y * 0.01) (y * 2))
-in mix (rEventVoicer 16 f) * control KR "gain" 1
+in mix (eventVoicer 16 f) * control KR "gain" 1

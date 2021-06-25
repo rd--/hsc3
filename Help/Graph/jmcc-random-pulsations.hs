@@ -12,4 +12,4 @@ let f _ (g,x,y,z,o,rx,_,_,_,_) =
           o2 = sinOsc AR (y * 80 + 8) 0
           o3 = sinOsc KR (o * 0.5 + 0.3) (rx * 2 * pi) * 0.7
       in pan2 (o1 `amClip` o2) o3 (z * 5 * lagUD g 0 12)
-in mix (rEventVoicer 16 f) * control KR "gain" 1
+in mix (eventVoicer 16 f) * control KR "gain" 1

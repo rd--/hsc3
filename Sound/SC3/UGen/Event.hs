@@ -15,78 +15,78 @@ import Sound.SC3.UGen.UGen {- hsc3 -}
 -- * Event
 
 -- | (w/gate,x,y,z/force,orientation,radius-x,radius-y,pitch,pitch-x,pitch-y)
-type REvent t = (t,t,t,t,t,t,t,t,t,t)
+type Event t = (t,t,t,t,t,t,t,t,t,t)
 
--- | Translate list to REvent.
-rEvent_from_list :: Num t => [t] -> REvent t
-rEvent_from_list l =
+-- | Translate list to Event.
+event_from_list :: Num t => [t] -> Event t
+event_from_list l =
   case l of
     [w,x,y,z,o,rx,ry,p,px,py] -> (w,x,y,z,o,rx,ry,p,px,py)
-    _ -> error "rEvent_from_list?"
+    _ -> error "event_from_list?"
 
 {- | k0 = index of control bus zero for event system,
     stp = voice index incremennt,
       c = event channel or voice (zero indexed)
 -}
-rEventAddr :: UGen -> UGen -> UGen -> REvent UGen
-rEventAddr k0 stp c =
+eventAddr :: UGen -> UGen -> UGen -> Event UGen
+eventAddr k0 stp c =
   let u = in' 10 KR (k0 + (c * stp))
-  in rEvent_from_list (mceChannels u)
+  in event_from_list (mceChannels u)
 
 -- | c0 = index of voice (channel) zero for event set, n = number of voices (channels)
-rEventVoicerAddr :: UGen -> UGen -> UGen -> Int -> (Int -> REvent UGen -> UGen) -> UGen
-rEventVoicerAddr k0 stp c0 n f = mce (map (\c -> f c (rEventAddr k0 stp (c0 + constant c))) [0 .. n - 1])
+eventVoicerAddr :: UGen -> UGen -> UGen -> Int -> (Int -> Event UGen -> UGen) -> UGen
+eventVoicerAddr k0 stp c0 n f = mce (map (\c -> f c (eventAddr k0 stp (c0 + constant c))) [0 .. n - 1])
 
--- | 'rEventAddr' with 'control' inputs for /eventAddr/, /eventIncr/ and /eventZero/.
-rEvent :: REvent UGen
-rEvent = rEventAddr (control KR "eventAddr" 13000) (control KR "eventIncr" 10) (control KR "eventZero" 0)
+-- | 'eventAddr' with 'control' inputs for /eventAddr/, /eventIncr/ and /eventZero/.
+event :: Event UGen
+event = eventAddr (control KR "eventAddr" 13000) (control KR "eventIncr" 10) (control KR "eventZero" 0)
 
--- | 'rEventVoicerAddr' with 'control' inputs for /eventAddr/, /eventIncr/ and /eventZero/.
-rEventVoicer :: Int -> (Int -> REvent UGen -> UGen) -> UGen
-rEventVoicer = rEventVoicerAddr (control KR "eventAddr" 13000) (control KR "eventIncr" 10) (control KR "eventZero" 0)
+-- | 'eventVoicerAddr' with 'control' inputs for /eventAddr/, /eventIncr/ and /eventZero/.
+eventVoicer :: Int -> (Int -> Event UGen -> UGen) -> UGen
+eventVoicer = eventVoicerAddr (control KR "eventAddr" 13000) (control KR "eventIncr" 10) (control KR "eventZero" 0)
 
-{- | Given /g/ and /p/ fields of an 'REvent' derive a 'gateReset' from g
+{- | Given /g/ and /p/ fields of an 'Event' derive a 'gateReset' from g
 and a trigger derived from monitoring /g/ and /p/ for changed values.
 -}
-rEventGateReset :: UGen -> UGen -> (UGen, UGen)
-rEventGateReset g p = let tr = changed p 0.01 + changed g 0.01 in (gateReset g tr,tr)
+eventGateReset :: UGen -> UGen -> (UGen, UGen)
+eventGateReset g p = let tr = changed p 0.01 + changed g 0.01 in (gateReset g tr,tr)
 
 -- * Ctl
 
 -- | Sequence of 16 continous controller inputs in range (0-1).
-type RCtl = (UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen)
+type Ctl = (UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen)
 
 -- | k0 = index of control bus zero for ctl system, c = ctl channel or voice (zero indexed)
-rCtlAddr :: UGen -> UGen -> RCtl
-rCtlAddr k0 c =
+ctlAddr :: UGen -> UGen -> Ctl
+ctlAddr k0 c =
   let u = in' 16 KR (k0 + (c * 16))
   in case mceChannels u of
        [cc0,cc1,cc2,cc3,cc4,cc5,cc6,cc7,cc8,cc9,cc10,cc11,cc12,cc13,cc14,cc15] ->
          (cc0,cc1,cc2,cc3,cc4,cc5,cc6,cc7,cc8,cc9,cc10,cc11,cc12,cc13,cc14,cc15)
-       _ -> error "rCtlAddr?"
+       _ -> error "ctlAddr?"
 
 -- | c0 = index of voice (channel) zero for ctl set, n = number of voices (channels)
-rCtlVoicerAddr :: UGen -> UGen -> Int -> (Int -> RCtl -> UGen) -> UGen
-rCtlVoicerAddr k0 c0 n f = mce (map (\c -> f c (rCtlAddr k0 (c0 + constant c))) [0 .. n - 1])
+ctlVoicerAddr :: UGen -> UGen -> Int -> (Int -> Ctl -> UGen) -> UGen
+ctlVoicerAddr k0 c0 n f = mce (map (\c -> f c (ctlAddr k0 (c0 + constant c))) [0 .. n - 1])
 
--- | 'rCtlAddr' with 'control' inputs for /CtlAddr/ and /CtlZero/.
-rCtl :: RCtl
-rCtl = rCtlAddr (control KR "CtlAddr" 11000) (control KR "CtlZero" 0)
+-- | 'ctlAddr' with 'control' inputs for /CtlAddr/ and /CtlZero/.
+ctl :: Ctl
+ctl = ctlAddr (control KR "CtlAddr" 11000) (control KR "CtlZero" 0)
 
--- | 'rCtlVoicerAddr' with 'control' inputs for /CtlAddr/ and /CtlZero/.
-rCtlVoicer :: Int -> (Int -> RCtl -> UGen) -> UGen
-rCtlVoicer = rCtlVoicerAddr (control KR "CtlAddr" 11000) (control KR "CtlZero" 0)
+-- | 'ctlVoicerAddr' with 'control' inputs for /CtlAddr/ and /CtlZero/.
+ctlVoicer :: Int -> (Int -> Ctl -> UGen) -> UGen
+ctlVoicer = ctlVoicerAddr (control KR "CtlAddr" 11000) (control KR "CtlZero" 0)
 
--- | First eight elements of RCtl.
-type RCtl8 = (UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen)
+-- | First eight elements of Ctl.
+type Ctl8 = (UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen)
 
--- | Select first eight elements of RCtl.
-rCtl_to_rCtl8 :: RCtl -> RCtl8
-rCtl_to_rCtl8 (cc0,cc1,cc2,cc3,cc4,cc5,cc6,cc7,_,_,_,_,_,_,_,_) = (cc0,cc1,cc2,cc3,cc4,cc5,cc6,cc7)
+-- | Select first eight elements of Ctl.
+ctl_to_ctl8 :: Ctl -> Ctl8
+ctl_to_ctl8 (cc0,cc1,cc2,cc3,cc4,cc5,cc6,cc7,_,_,_,_,_,_,_,_) = (cc0,cc1,cc2,cc3,cc4,cc5,cc6,cc7)
 
--- | 'rCtlVoicer' of 'rCtl_to_rCtl8'
-rCtl8Voicer :: Int -> (Int -> RCtl8 -> UGen) -> UGen
-rCtl8Voicer k0 f = rCtlVoicer k0 (\n c -> f n (rCtl_to_rCtl8 c))
+-- | 'ctlVoicer' of 'ctl_to_ctl8'
+ctl8Voicer :: Int -> (Int -> Ctl8 -> UGen) -> UGen
+ctl8Voicer k0 f = ctlVoicer k0 (\n c -> f n (ctl_to_ctl8 c))
 
 -- * Names
 

@@ -23,7 +23,7 @@ let f c (g,x,y,z,_,_,_,_,_,_) =
             in combN m 0.31 0.31 2 + m
           ms = ms1 (lfNoise1 (c,'β') KR 3) 48 + ms1 (lfNoise1 (c,'γ') KR 3) 72
       in ms * z * lagUD g 0.2 2
-in mix (rEventVoicer 16 f) * control KR "gain" 1
+in mix (eventVoicer 16 f) * control KR "gain" 1
 
 -- modal space (jmcc) #8 ; event control ; modeless
 let f c (g,_,y,z,_,_,_,p,_,_) =
@@ -35,4 +35,4 @@ let f c (g,_,y,z,_,_,_,p,_,_) =
             in combN m 0.31 0.31 2 + m
           ms = ms1 (lfNoise1 (c,'β') KR 3) 0 + ms1 (lfNoise1 (c,'γ') KR 3) 24
       in ms * z * lagUD g (y * 0.05 + 0.01) (y * 2 + 1)
-in mix (rEventVoicer 16 f) * control KR "gain" 1
+in mix (eventVoicer 16 f) * control KR "gain" 1

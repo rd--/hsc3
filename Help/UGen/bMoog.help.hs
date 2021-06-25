@@ -16,4 +16,4 @@ let f c (g,x,y,z,o,rx,ry,_,_,_) =
           cf = sinOsc KR (sinOsc KR 0.1 0) (1.5 * pi) * rx * 1550 + 1800
           flt = X.bMoog sig cf y md 0.95
       in pan2 ((combN flt 0.5 (mce2 0.4 0.35) 2 * 0.4) + (flt * 0.5)) (o * 2 - 1) (lagUD g 0 3 * z)
-in mix (rEventVoicer 16 f) * control KR "gain" 1
+in mix (eventVoicer 16 f) * control KR "gain" 1

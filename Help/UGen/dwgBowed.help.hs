@@ -27,4 +27,4 @@ let f _c (g,_,y,z,o,rx,ry,p,_,_) =
           s5 = bpf s4 490 1 + s4
           s6 = lpf s5 6000
       in pan2 s6 (o * 2 - 1) 1
-in mix (rEventVoicer 16 f) * control KR "gain" 0.25
+in mix (eventVoicer 16 f) * control KR "gain" 0.25

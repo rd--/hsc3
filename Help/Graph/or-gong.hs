@@ -37,4 +37,4 @@ let f _ (g,x,y,z,o,rx,ry,_,_,_) =
           op2 = sinOsc AR (midiCPS (mnn) * ratio2 + op3) 0 * midiCPS (mnn) * ratio2 * index2 * env2
           op1 = sinOsc AR (midiCPS (mnn) * ratio1 + op2) 0
       in splay (op1 * env1 * amp) 1 1 0 True
-in mix (rEventVoicer 16 f) * control KR "gain" 0.25
+in mix (eventVoicer 16 f) * control KR "gain" 0.25

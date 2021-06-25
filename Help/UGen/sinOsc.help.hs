@@ -103,7 +103,7 @@ let f c (g,_,_,z,o,rx,_,p,_,_) =
           s = sinOsc AR (lag (midiCPS p) (rx * 2) + freq_mod) (tRand (c,'δ') 0 (2 * pi) g)
           l = sinOsc KR o (tRand (c,'ε') 0 pi g) * tRand (c,'ζ') 0.1 0.99 g
       in pan2 s l (lagUD g 0 1 * z * amp_mod)
-in mix (rEventVoicer 16 f) * control KR "gain" 1.5
+in mix (eventVoicer 16 f) * control KR "gain" 1.5
 
 -- sinOsc ; control_m inputs
 let f = control_m KR "mnn" 69 (0,127,"lin")

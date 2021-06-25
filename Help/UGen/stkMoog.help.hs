@@ -41,4 +41,4 @@ let f _ (g,_,y,z,o,rx,ry,p,px,_) =
           gain = linLin z 0 1 16 96
           sig = X.stkMoog AR freq filterQ sweeprate vibfreq vibgain gain 1
       in pan2 sig (o * 2 - 1) (lagUD g 0.01 0.25)
-in mix (rEventVoicer 16 f) * control KR "gain" 1
+in mix (eventVoicer 16 f) * control KR "gain" 1

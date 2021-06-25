@@ -63,7 +63,7 @@ let f _ (g,x,y,z,o,rx,ry,_,_,_) =
           du = (ry * 8) / tRate
           tr = impulse AR (y * 60 + 10) 0
       in tGrains 2 tr b (1 + (rx * 0.5)) ctr du o (z * g) 4
-in mix (rEventVoicer 16 f) * control KR "gain" 2
+in mix (eventVoicer 16 f) * control KR "gain" 2
 
 ---- ; setup
 fn = "/home/rohan/data/audio/metal.wav"

@@ -13,4 +13,4 @@ let f _ (g,x,y,z,o,rx,ry,_,_,_) =
           a = max 0 (lfNoise2 'γ' KR (r * (0.75 + rx))) * z
           l = X.rRandN 4 'δ' (-1) 1
       in mix (pan2 s (l + (o * 2 - 1)) (a * lagUD g 0 (ry * 2)))
-in combN (mix (rEventVoicer 16 f) * control KR "gain" 0.5) 0.1 0.1 1
+in combN (mix (eventVoicer 16 f) * control KR "gain" 0.5) 0.1 0.1 1

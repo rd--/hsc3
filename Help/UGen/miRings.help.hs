@@ -8,7 +8,7 @@ let f _ (g,x,y,z,o,rx,ry,_,_,_) =
       in X.miRings AR 0
          tr (x * 24 + 36) (latch o tr * 0.75 + 0.25) (y * 0.65 + 0.15) (0.7 - latch rx tr) (0.25 + latch ry tr)
          md 1 0 0 0 * z
-in mix (rEventVoicer 16 f) * control KR "gain" 4
+in mix (eventVoicer 16 f) * control KR "gain" 4
 
 -- MiRings ; basics
 X.miRings AR (pinkNoise 'α' AR * 0.05) 0 40 0.25 0.5 0.7 0.25 (X.miRings_mode "MODAL_RESONATOR") 1 0 0 0
@@ -23,7 +23,7 @@ let f _ (g,x,y,z,o,rx,ry,_,_,_) =
       in X.miRings AR 0
          tr (x * 24 + 36) (latch o tr * 0.75 + 0.25) (y * 0.65 + 0.15) (0.7 - latch rx tr) (0.25 + latch ry tr)
          md 1 0 0 0 * z
-in mix (rEventVoicer 16 f) * control KR "gain" 2
+in mix (eventVoicer 16 f) * control KR "gain" 2
 
 -- MiRings ; using the 'pit' input to set MIDI pitch and excite the resonator
 X.miRings AR 0 0 (range 30 50 (lfNoise0 'α' KR 2)) 0.25 0.5 0.7 0.25 (X.miRings_mode "SYMPATHETIC_STRING") 1 0 0 0 * 0.2
@@ -38,7 +38,7 @@ let f _ (g,x,y,z,o,rx,ry,_,_,_) =
       in X.miRings AR 0
          tr (x * 24 + 36) (0.25 + latch o tr * 0.15) (0.25 + y * 0.5) (0.7 - latch rx tr * 0.15) (0.25 + latch ry tr * 0.15)
          md 1 0 0 0 * z
-in mix (rEventVoicer 16 f) * control KR "gain" 2
+in mix (eventVoicer 16 f) * control KR "gain" 2
 
 -- MiRings ; sympathetic strings
 let tr = dust 'α' KR 1

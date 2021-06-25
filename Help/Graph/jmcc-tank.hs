@@ -29,7 +29,7 @@ let s1 =
             let tr = trig g controlDur
                 freq = linExp x 0 1 300 2200
             in pan2 (decay2 tr 0.1 (0.5 + y * 0.5) * 0.2 * cubed (fSinOsc AR freq 0)) (o * 2 - 1) z
-      in mix (rEventVoicer 16 f) * control KR "gain" 1
+      in mix (eventVoicer 16 f) * control KR "gain" 1
     rev_f i =
       let l0 = localIn 2 AR (mce2 0 0) * 0.98
           l1 = onePole l0 0.33

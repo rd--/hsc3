@@ -20,4 +20,4 @@ let f c (g,_,y,z,_,_,_,p,_,_) =
           l = ((p - 36) / 27) - 1
           cmb_ = sum_opt (zipWith cmb ['δ'..] [-0.05,0,0.04])
       in pan2 cmb_ l (1 + z)
-in mix (rEventVoicer 16 f) * control KR "gain" 1
+in mix (eventVoicer 16 f) * control KR "gain" 1

@@ -43,7 +43,7 @@ let f _ (g,x,y,z,o,rx,ry,_,_,_) =
           spc = 0.5 - y * 0.5
           md = 0
       in X.miElements AR 0 0 g pit stre cont 0 z 0 flo 0.5 0.5 (0.25 + rx * 0.5) 0.5 geo bri dmp pos spc md 0 * 0.25
-in mix (rEventVoicer 6 f) * control KR "gain" 1
+in mix (eventVoicer 6 f) * control KR "gain" 1
 
 -- miElements ; metal, bells
 let tr = dust 'α' AR 2.5
@@ -60,7 +60,7 @@ let f _ (g,x,y,z,o,_,_,_,_,_) =
           geo = latch y g * 0.4 + 0.5
           spc = o * 0.5 + 0.5
       in X.miElements AR 0 inp 0 pit 0.5 0.2 0 0 0 0.5 0.5 0.5 0.5 0.5 geo 0.4 0.9 0.2 spc 0 0
-in mix (rEventVoicer 6 f) * control KR "gain" 1
+in mix (eventVoicer 6 f) * control KR "gain" 1
 
 -- miElements ; strike input ; playing chords ; model=2=Strings
 let inp = decay (dust 'α' AR 1) 0.01
@@ -77,7 +77,7 @@ let f _ (g,x,y,z,o,rx,_,_,_,_) =
           dam = latch (0.9 - z) g
           md = 2
       in X.miElements AR 0 inp 0 pit 0.5 0.2 0 0 0 0.5 0.5 0.5 0.5 0.5 geo bri dam 0.2 0.3 md 0
-in mix (rEventVoicer 6 f) * control KR "gain" 1
+in mix (eventVoicer 6 f) * control KR "gain" 1
 
 -- miElements ; mallets, strength
 let gat = coinGate 'α' 0.4 (impulse KR 6 0)

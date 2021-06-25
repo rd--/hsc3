@@ -29,4 +29,4 @@ let f c (g,x,y,z,_,_,_,p,_,_) =
           iota n i z = mce (take n (iterate (+ z) i))
           d = klankSpec_mce (iota 12 fq fq) (geom 12 1 r1) r2
       in softClip (dynKlank exc 1 0 1 d)
-in mix (rEventVoicer 16 f) * control KR "gain" 0.75
+in mix (eventVoicer 16 f) * control KR "gain" 0.75

@@ -25,7 +25,7 @@ let f _ (g,x,y,z,o,rx,ry,_,_,_) =
           e = -1
           tr = impulse AR (y * 60 + 10) 0
       in grainBuf 2 tr (ry * 0.5) b (1 + (rx * 0.1)) x 2 o e 512 * z * g
-in mix (rEventVoicer 16 f) * control KR "gain" 2
+in mix (eventVoicer 16 f) * control KR "gain" 2
 
 ---- ; load buffer
 fn = "/home/rohan/data/audio/metal.wav"

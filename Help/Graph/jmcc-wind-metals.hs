@@ -41,4 +41,4 @@ let f c (g,x,y,z,_,_,_,_,_,_) =
           k = klankSpec_mce fq (mce (replicate n 1)) dt
           s = dynKlank exc 1 0 1 k
       in softClip (dynKlank exc 1 0 1 k)
-in mix (rEventVoicer 16 f) * control KR "gain" 1
+in mix (eventVoicer 16 f) * control KR "gain" 1

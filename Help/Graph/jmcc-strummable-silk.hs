@@ -24,4 +24,4 @@ let f c (g,_,y,z,o,_,_,p,_,_) =
       in pan2 (dynKlank plk 1 0 1 param) (o * 2 - 1) z
     r_allpass z i = allpassN i 0.1 (X.rRandN 2 (z,'ζ') 0 0.05) 4
     rev = useq_z 'λ' 6 r_allpass
-in rev (leakDC (lpf (mix (rEventVoicer 16 f)) 12000) 0.995) * control KR "gain" 1
+in rev (leakDC (lpf (mix (eventVoicer 16 f)) 12000) 0.995) * control KR "gain" 1

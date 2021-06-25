@@ -16,7 +16,7 @@ let f _ (g,x,y,z,o,rx,_,_,_,_) =
       let md = X.miBraids_mode "VOSIM"
           mnn = x * 24 + 36 -- x * 12 + 78
       in pan2 (X.miBraids AR mnn (y * 0.75) rx md 0 0 0 0 0) (o * 2 - 1) (g * z)
-in mix (rEventVoicer 16 f) * control KR "gain" 1
+in mix (eventVoicer 16 f) * control KR "gain" 1
 
 -- MiBraids ; 31:FLUTED
 let pit = 38;
@@ -51,7 +51,7 @@ let f _ (g,x,y,z,o,rx,_,_,_,_) =
           color = latch rx tr * 0.25 + 0.65
           md = X.miBraids_mode "PLUCKED"
       in pan2 (X.miBraids AR pit timb color md tr 0 0 0 0) (o * 2 - 1) (trig1 g 16 * 0.1)
-in mix (rEventVoicer 16 f) * control KR "gain" 1
+in mix (eventVoicer 16 f) * control KR "gain" 1
 
 -- MiBraids ; 34:KICK
 let tr = impulse KR 4 0

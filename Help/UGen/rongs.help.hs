@@ -25,4 +25,4 @@ let f _ (g,x,y,z,o,rx,ry,_,_,_) =
           loss = 0.25 + o * tRand 'δ' (-0.1) 0.1 tr
           sig = X.rongs AR tr tr f0 structure brightness damping accent stretch position loss
       in pan2 (leakDC sig 0.995) (o * 2 - 1) (lagUD z 0 2)
-in mix (rEventVoicer 6 f) * control KR "gain" 1
+in mix (eventVoicer 6 f) * control KR "gain" 1

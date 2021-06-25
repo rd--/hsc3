@@ -26,4 +26,4 @@ let f _ (g,x,y,z,_,_,_,_,_,_) =
                 0
       in mix (sig * ampCompA KR cps 0 0.32 1 * z * g)
     rvb s = xFade2 s (gVerb (bpf s (midiCPS 90) 1) 50 8 0.5 0.5 15 0 0.7 0.5 300) 0.2 1
-in rvb (mix (rEventVoicer 16 f)) * control KR "gain" 1
+in rvb (mix (eventVoicer 16 f)) * control KR "gain" 1

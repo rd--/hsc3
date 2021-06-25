@@ -24,4 +24,4 @@ let f c (g,x,y,z,_,_,_,_,_,_) =
           f1 = midiCPS (fSinOsc KR f0 0 * rand (c,'γ') 0 24 + rand (c,'δ') 36 84)
           sw = resonz (whiteNoise (c,'α') AR * 0.007) f1 0.1
       in mce (map (flt sw) ['ε','ζ']) * z * lag g 0.1
-in mix (rEventVoicer 16 f) * control KR "gain" 1
+in mix (eventVoicer 16 f) * control KR "gain" 1

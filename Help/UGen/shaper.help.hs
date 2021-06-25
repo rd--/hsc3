@@ -29,7 +29,7 @@ let f _ (g,_,y,z,o,_,_,p,_,_) =
           c = Gen.cheby 257 [1,0,1,1,0,1]
           b = asLocalBuf 'α' (to_wavetable_nowrap c)
       in pan2 (shaper b s) (o * 2 - 1) (z * g)
-in mix (rEventVoicer 16 f) * control KR "gain" 1.0
+in mix (eventVoicer 16 f) * control KR "gain" 1.0
 
 ---- ; drawings
 Sound.SC3.Plot.plot_p1_ln [Gen.cheby 257 [1,0,1,1,0,1]]

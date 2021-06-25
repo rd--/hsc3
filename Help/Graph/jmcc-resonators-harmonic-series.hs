@@ -29,4 +29,4 @@ let f c (g,_,y,z,o,rx,ry,p,_,_) =
             (map (\i -> 1 / (constant i + (2 * y))) [0 .. nharm - 1])
             (map (\k -> rand (c,'ε',k) 0.5 4.5 * (0.5 + ry)) (enumFromN 'ζ' nharm))
       in pan2 (Protect.uclone_all 'η' 2 (dynKlank noise 1 0 1 spec)) (o * 2 - 1) (z * g)
-in mix (rEventVoicer 16 f) * control KR "gain" 1
+in mix (eventVoicer 16 f) * control KR "gain" 1

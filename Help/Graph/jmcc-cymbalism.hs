@@ -26,4 +26,4 @@ let f c (g,x,y,z,_,_,_,_,_,_) =
           whn = whiteNoise (c,'γ') AR * z * 0.1
           sig = decay (trig g controlDur) (y * 0.01) * whn
       in dynKlank sig 1 0 1 (mceTranspose spc)
-in mix (rEventVoicer 16 f) * control KR "gain" 1
+in mix (eventVoicer 16 f) * control KR "gain" 1
