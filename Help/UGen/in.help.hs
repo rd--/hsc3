@@ -1,4 +1,4 @@
--- in ; patching input to output (see also soundIn)
+-- in ; patching input to output (see also soundIn) ; in haskell 'in' is a reserved keyword
 in' 2 AR numOutputBuses
 
 -- in ; patching input to output, with delay
@@ -30,8 +30,11 @@ in mrg2 (sinOsc AR (in' 1 KR 0) 0 * decay (in' 1 KR 1) 0.2 * 0.1) wr
 -- in ; patch mono input to stereo output
 pan2 (in' 1 AR numOutputBuses) 0 1
 
+-- in ; make a control rate graph to write freq and gate values
+let wr = out 10 (mce2 (tRand 'α' 220 2200 (dust 'β' KR 1)) (dust 'γ' KR 3))
+    rd = sinOsc AR (in' 1 KR 10) 0 * decay2 (in' 1 KR 11) 0.01 1 * 0.25
+in mrg2 rd wr
+
 ---- ; set value on a control bus
 withSC3 (Sound.OSC.sendMessage (c_set1 0 300))
 withSC3 (Sound.OSC.sendMessage (c_set1 0 600))
-
----- ; note hsc3 renames UGen to in' since in is a reserved keyword

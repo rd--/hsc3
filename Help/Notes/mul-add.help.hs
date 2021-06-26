@@ -1,16 +1,23 @@
--- mulAdd ; optimisations
-The order of the multiplier inputs is significant regards multi-rate inputs?
+---- ; mulAdd ; optimisations
+
+The order of the multiplier inputs is significant regards multi-rate inputs.
+
 sclang re-orders these if required.
-g_04 CRASHES scsynth.
 
-> g_04 = mulAdd 0.1 (sinOsc AR 440 0) 0.05
+hsc3 does not.
 
-    {MulAdd(0.1,SinOsc.ar(440,0),0.05)}.draw
+The graph below will crash scsynth.
 
-NOTE: mulAdd with I-RATE at input 0 and K-RATE thereafter CRASHES
+mulAdd 0.1 (sinOsc AR 440 0) 0.05
 
-> g_06 = sinOsc AR (mulAdd (control IR "x" 110) (control KR "y" 2) (control IR "z" 110)) 0 * 0.1
+c.f.
 
+{MulAdd.new(in: 0.1, mul: SinOsc.ar(freq: 440, phase: 0), add: 0.05)}.draw
 
-    {0.05 + (0.1 * SinOsc.ar(440,0))}.draw
+Note: mulAdd with i-rate at input 0 and k-rate thereafter crashes scsynth.
 
+sinOsc AR (mulAdd (control IR "x" 110) (control KR "y" 2) (control IR "z" 110)) 0 * 0.1
+
+c.f.
+
+{0.05 + (0.1 * SinOsc.ar(freq: 440, phase: 0))}.draw

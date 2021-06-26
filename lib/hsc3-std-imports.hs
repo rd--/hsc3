@@ -5,6 +5,8 @@ import Data.List {- base -}
 
 import System.Random {- random -}
 
+import Sound.OSC {- hosc -}
+
 import Sound.SC3 {- hsc3 -}
 import qualified Sound.SC3.Common.Base {- hsc3 -}
 import qualified Sound.SC3.Common.Buffer.Gen as Gen {- hsc3 -}
