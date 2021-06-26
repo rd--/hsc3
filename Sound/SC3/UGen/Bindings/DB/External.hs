@@ -1922,7 +1922,7 @@ permMod rate in_ freq = mkUGen Nothing [AR] (Left rate) "PermMod" [in_,freq] Not
 --
 --  PermModArray [AR] in=0.0 freq=50.0 pattern=0.0
 permModArray :: Rate -> UGen -> UGen -> UGen -> UGen
-permModArray rate in_ freq pattern = mkUGen Nothing [AR] (Left rate) "PermModArray" [in_,freq,pattern] Nothing 1 (Special 0) NoId
+permModArray rate in_ freq pattern_ = mkUGen Nothing [AR] (Left rate) "PermModArray" [in_,freq,pattern_] Nothing 1 (Special 0) NoId
 
 -- | Sample permutation UGen with tail.
 --

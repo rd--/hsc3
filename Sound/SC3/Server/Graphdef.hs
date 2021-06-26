@@ -148,10 +148,7 @@ get_control ((get_str,_,_,_,_),get_i) = do
 
 -- | Get an 'Input'.
 get_input :: Monad m => m Int -> m Input
-get_input get_i = do
-  u <- get_i
-  p <- get_i
-  return (Input u p)
+get_input get_i = liftM2 Input get_i get_i
 
 -- | Get a 'UGen'
 get_ugen :: Monad m => (GET_F m,m Int) -> m UGen

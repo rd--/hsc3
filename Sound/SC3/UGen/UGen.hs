@@ -184,7 +184,7 @@ mceRotate k =
 --
 -- > mceConcat (map mce [[1,2],[3,4]]) == mce [1..4]
 mceConcat :: [UGen] -> UGen
-mceConcat = mce . concat . map mceChannels
+mceConcat = mce . concatMap mceChannels
 
 -- | Collect subarrays of mce.
 --

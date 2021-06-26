@@ -2,11 +2,7 @@ cabal-version:     2.4
 Name:              hsc3
 Version:           0.20
 Synopsis:          Haskell SuperCollider
-Description:       Haskell client for the SuperCollider synthesis server,
-                   <http://audiosynth.com/>.
-                   .
-                   For installation and configuration see the Tutorial at
-                   <http://rohandrape.net/t/hsc3-texts>.
+Description:       Haskell SuperCollider
 License:           GPL-3.0-only
 Category:          Sound
 Copyright:         (c) Rohan Drape and others, 2005-2021

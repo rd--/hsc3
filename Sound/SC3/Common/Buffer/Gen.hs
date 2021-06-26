@@ -28,7 +28,7 @@ sine1_p n (pfreq,ampl) = sine3_p n (pfreq,ampl,0)
 
 -- | Series of sine wave harmonics using specified amplitudes.
 sine1_l :: (Enum n,Floating n) => Int -> [n] -> [[n]]
-sine1_l n ampl = map (sine1_p n) (zip [1..] ampl)
+sine1_l n = zipWith (curry (sine1_p n)) [1..]
 
 -- | 'sum_l' of 'sine1_l'.
 --
@@ -89,7 +89,7 @@ gen_cheby n =
         c k x = cos (k * acos' x)
         ix = [-1,-1 + (2 / (fromIntegral n - 1)) .. 1]
         mix = map sum . transpose
-        c_normalize x = let m = maximum (map abs x) in map (* (recip m)) x
+        c_normalize x = let m = maximum (map abs x) in map (* recip m) x
     in c_normalize . mix . zipWith (\k a -> map ((* a) . c k) ix) [1..]
 
 -- | Type specialised 'gen_cheby'.
