@@ -47,6 +47,7 @@ Library
                    Sound.SC3.Common.Buffer.Array
                    Sound.SC3.Common.Buffer.Gen
                    Sound.SC3.Common.Buffer.Vector
+                   Sound.SC3.Common.Context
                    Sound.SC3.Common.Enum
                    Sound.SC3.Common.Envelope
                    Sound.SC3.Common.Help
