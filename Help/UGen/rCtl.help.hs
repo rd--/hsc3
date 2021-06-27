@@ -1,4 +1,4 @@
--- ctl
+-- ctl8
 let f _ (c1,c2,c3,c4,c5,c6,c7,_c8) =
       let freq = midiCPS (48 + c1 * 24)
           nh = c2 * 200

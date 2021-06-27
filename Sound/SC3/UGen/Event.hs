@@ -54,39 +54,39 @@ eventGateReset g p = let tr = changed p 0.01 + changed g 0.01 in (gateReset g tr
 -- * Ctl
 
 -- | Sequence of 16 continous controller inputs in range (0-1).
-type Ctl = (UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen)
+type Ctl16 = (UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen)
 
 -- | k0 = index of control bus zero for ctl system, c = ctl channel or voice (zero indexed)
-ctlAddr :: UGen -> UGen -> Ctl
-ctlAddr k0 c =
+ctl16Addr :: UGen -> UGen -> Ctl16
+ctl16Addr k0 c =
   let u = in' 16 KR (k0 + (c * 16))
   in case mceChannels u of
        [cc0,cc1,cc2,cc3,cc4,cc5,cc6,cc7,cc8,cc9,cc10,cc11,cc12,cc13,cc14,cc15] ->
          (cc0,cc1,cc2,cc3,cc4,cc5,cc6,cc7,cc8,cc9,cc10,cc11,cc12,cc13,cc14,cc15)
-       _ -> error "ctlAddr?"
+       _ -> error "ctl16Addr?"
 
 -- | c0 = index of voice (channel) zero for ctl set, n = number of voices (channels)
-ctlVoicerAddr :: UGen -> UGen -> Int -> (Int -> Ctl -> UGen) -> UGen
-ctlVoicerAddr k0 c0 n f = mce (map (\c -> f c (ctlAddr k0 (c0 + constant c))) [0 .. n - 1])
+ctl16VoicerAddr :: UGen -> UGen -> Int -> (Int -> Ctl16 -> UGen) -> UGen
+ctl16VoicerAddr k0 c0 n f = mce (map (\c -> f c (ctl16Addr k0 (c0 + constant c))) [0 .. n - 1])
 
--- | 'ctlAddr' with 'control' inputs for /CtlAddr/ and /CtlZero/.
-ctl :: Ctl
-ctl = ctlAddr (control KR "CtlAddr" 11000) (control KR "CtlZero" 0)
+-- | 'ctl16Addr' with 'control' inputs for /Ctl16Addr/ and /Ctl16Zero/.
+ctl16 :: Ctl16
+ctl16 = ctl16Addr (control KR "Ctl16Addr" 11000) (control KR "Ctl16Zero" 0)
 
 -- | 'ctlVoicerAddr' with 'control' inputs for /CtlAddr/ and /CtlZero/.
-ctlVoicer :: Int -> (Int -> Ctl -> UGen) -> UGen
-ctlVoicer = ctlVoicerAddr (control KR "CtlAddr" 11000) (control KR "CtlZero" 0)
+ctl16Voicer :: Int -> (Int -> Ctl16 -> UGen) -> UGen
+ctl16Voicer = ctl16VoicerAddr (control KR "Ctl16Addr" 11000) (control KR "Ctl16Zero" 0)
 
--- | First eight elements of Ctl.
+-- | First eight elements of Ctl16.
 type Ctl8 = (UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen)
 
 -- | Select first eight elements of Ctl.
-ctl_to_ctl8 :: Ctl -> Ctl8
-ctl_to_ctl8 (cc0,cc1,cc2,cc3,cc4,cc5,cc6,cc7,_,_,_,_,_,_,_,_) = (cc0,cc1,cc2,cc3,cc4,cc5,cc6,cc7)
+ctl16_to_ctl8 :: Ctl16 -> Ctl8
+ctl16_to_ctl8 (cc0,cc1,cc2,cc3,cc4,cc5,cc6,cc7,_,_,_,_,_,_,_,_) = (cc0,cc1,cc2,cc3,cc4,cc5,cc6,cc7)
 
--- | 'ctlVoicer' of 'ctl_to_ctl8'
+-- | 'ctl16Voicer' of 'ctl_to_ctl8'
 ctl8Voicer :: Int -> (Int -> Ctl8 -> UGen) -> UGen
-ctl8Voicer k0 f = ctlVoicer k0 (\n c -> f n (ctl_to_ctl8 c))
+ctl8Voicer k0 f = ctl16Voicer k0 (\n c -> f n (ctl16_to_ctl8 c))
 
 -- * Names
 

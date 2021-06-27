@@ -6,6 +6,7 @@ import Text.Printf {- base -}
 -- | (moduleName, qualifierName, packageName)
 type Context = [(String, Maybe String, String)]
 
+-- | Format a Context as a sequence of import commands.
 context_format :: Context -> [String]
 context_format =
   let f (moduleName,qualifier,packageName) =
@@ -14,9 +15,11 @@ context_format =
           Just qualifierName -> printf "import qualified %s as %s {- %s -}" moduleName qualifierName packageName
   in map f
 
+-- | writeFile of context_format
 context_write :: FilePath -> Context -> IO ()
 context_write fn = writeFile fn . unlines . context_format
 
+-- | Minimal hsc3 context
 min_context :: Context
 min_context =
   [("Prelude",Nothing,"base")
@@ -26,6 +29,7 @@ min_context =
   ,("Data.List",Nothing,"base")
   ,("Sound.SC3",Nothing,"hsc3")]
 
+-- | Standard hsc3 context
 std_context :: Context
 std_context =
   [("Prelude",Nothing,"base")
