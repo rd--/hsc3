@@ -1,3 +1,4 @@
+import Prelude {- base -}
 import Control.Monad {- base -}
 import Data.Bits {- base -}
 import Data.Function {- base -}

@@ -19,7 +19,8 @@ context_write fn = writeFile fn . unlines . context_format
 
 min_context :: Context
 min_context =
-  [("Control.Monad",Nothing,"base")
+  [("Prelude",Nothing,"base")
+  ,("Control.Monad",Nothing,"base")
   ,("Data.Bits",Nothing,"base")
   ,("Data.Function",Nothing,"base")
   ,("Data.List",Nothing,"base")
@@ -27,7 +28,8 @@ min_context =
 
 std_context :: Context
 std_context =
-  [("Control.Monad",Nothing,"base")
+  [("Prelude",Nothing,"base")
+  ,("Control.Monad",Nothing,"base")
   ,("Data.Bits",Nothing,"base")
   ,("Data.Function",Nothing,"base")
   ,("Data.List",Nothing,"base")
