@@ -45,6 +45,8 @@ std_context =
   ,("Sound.SC3.UGen.Bindings.HW.External.SC3_Plugins",Just "X","hsc3")
   ,("Sound.SC3.UGen.Bindings.HW.External.Zita",Just "X","hsc3")
   ,("Sound.SC3.UGen.Bindings.DB.RDU",Just "X","sc3-rdu")
+  ,("Sound.SC3.UGen.Dot",Just "Sound.SC3.UGen.Dot","hsc3-dot")
+  ,("Sound.SC3.UGen.Unsafe",Nothing,"hsc3-unsafe")
   ,("Sound.SC3.UGen.Unsafe",Nothing,"hsc3-unsafe")
   ,("Sound.SC3.UGen.Protect",Just "Protect","hsc3-rw")
   ,("Sound.SC3.UI.HTML",Just "UI","hsc3-ui")
