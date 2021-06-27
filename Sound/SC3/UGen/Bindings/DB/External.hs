@@ -1966,6 +1966,12 @@ printVal rate in_ numblocks id_ = mkUGen Nothing [KR] (Left rate) "PrintVal" [in
 qitch :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 qitch rate in_ databufnum ampThreshold algoflag ampbufnum minfreq maxfreq = mkUGen Nothing [KR] (Left rate) "Qitch" [in_,databufnum,ampThreshold,algoflag,ampbufnum,minfreq,maxfreq] Nothing 2 (Special 0) NoId
 
+-- | rotating clock divider
+--
+--  RCD [AR] clock=0 rotate=0 reset=0 div=0 spread=0 auto=0 len=0 down=0 gates=0
+rcd :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+rcd clock rotate_ reset div_ spread auto len down gates = mkUGen Nothing [AR] (Right [0]) "RCD" [clock,rotate_,reset,div_,spread,auto,len,down,gates] Nothing 8 (Special 0) NoId
+
 -- | TB303 Filter Emulation
 --
 --  RLPFD [KR,AR] in=0.0 ffreq=440.0 res=0.0 dist=0.0;    FILTER: TRUE
