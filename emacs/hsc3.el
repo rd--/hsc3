@@ -165,7 +165,7 @@
   (interactive "p")
   (hsc3-send-region-fn
    (format
-    "Sound.SC3.audition_at (\"%s\",%d + %d) Sound.SC3.def_play_opt"
+    "Sound.SC3.auditionAt (\"%s\",%d + %d) Sound.SC3.def_play_opt"
     hsc3-server-host hsc3-server-port (- k 1))))
 
 (defcustom hsc3-draw-command "draw"
@@ -294,15 +294,15 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (interactive)
   (hsc3-send-line
    (format
-    "Sound.SC3.withSC3At_seq (\"%s\",%d) %d Sound.SC3.serverStatus >>= mapM putStrLn . concat"
+    "Sound.SC3.withSC3AtSeq (\"%s\",%d) %d Sound.SC3.serverStatus >>= mapM putStrLn . concat"
     hsc3-server-host hsc3-server-port hsc3-seq-degree)))
 
 (defun hsc3-play-region-seq ()
-  "hsc3-play-region-opt with auditionAt_seq hsc3-seq-degree."
+  "hsc3-play-region-opt with auditionAtSeq hsc3-seq-degree."
   (interactive)
   (hsc3-send-region-fn
    (format
-    "Sound.SC3.audition_at_seq (\"%s\",%d) def_play_opt %d"
+    "Sound.SC3.auditionAtSeq (\"%s\",%d) def_play_opt %d"
     hsc3-server-host hsc3-server-port hsc3-seq-degree)))
 
 (defun hsc3-reset-scsynth-seq ()
@@ -310,7 +310,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (interactive)
   (hsc3-send-line
    (format
-    "Sound.SC3.withSC3At_seq_ (\"%s\",%d) %d Sound.SC3.reset"
+    "Sound.SC3.withSC3AtSeq_ (\"%s\",%d) %d Sound.SC3.reset"
     hsc3-server-host hsc3-server-port hsc3-seq-degree)))
 
 (defun hsc3-dmenu-ugen-core ()

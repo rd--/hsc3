@@ -83,15 +83,15 @@ withSC3_tm tm = timeout_r tm . withSC3
 
 -- | Run /f/ at /k/ scsynth servers with sequential port numbers starting at 'Options.sc3_port_def'.
 --
--- > withSC3At_seq sc3_default_udp 2 (sendMessage status >> waitReply "/status.reply")
-withSC3At_seq :: (String,Int) -> Int -> Connection UDP a -> IO [a]
-withSC3At_seq (h,p) k f = do
+-- > withSC3AtSeq sc3_default_udp 2 (sendMessage status >> waitReply "/status.reply")
+withSC3AtSeq :: (String,Int) -> Int -> Connection UDP a -> IO [a]
+withSC3AtSeq (h,p) k f = do
   let mk_udp i = openUDP h (p + i)
   mapM (\i -> withTransport (mk_udp i) f) [0 .. k - 1]
 
--- | 'void' of 'withSC3_seq'.
-withSC3At_seq_ :: (String,Int) -> Int -> Connection UDP a -> IO ()
-withSC3At_seq_ loc k = void . withSC3At_seq loc k
+-- | 'void' of 'withSC3AtSeq'.
+withSC3AtSeq_ :: (String,Int) -> Int -> Connection UDP a -> IO ()
+withSC3AtSeq_ loc k = void . withSC3AtSeq loc k
 
 -- * Server control
 
@@ -191,39 +191,39 @@ nrt_audition = withSC3 . nrt_play
 
 -- | Class for values that can be encoded and send to @scsynth@ for audition.
 class Audible e where
-    play_at :: Transport m => Play_Opt -> e -> m ()
+    playAt :: Transport m => Play_Opt -> e -> m ()
     -- | Variant where /id/ is @-1@.
     play :: Transport m => e -> m ()
-    play = play_at (-1,Enum.AddToHead,1,[])
+    play = playAt (-1,Enum.AddToHead,1,[])
 
 instance Audible Graphdef.Graphdef where
-    play_at = playGraphdef
+    playAt = playGraphdef
 
 instance Audible Synthdef.Synthdef where
-    play_at = playSynthdef
+    playAt = playSynthdef
 
 instance Audible UGen.UGen where
-    play_at = playUGen
+    playAt = playUGen
 
--- | 'withSC3At' of 'play_at'.
-audition_at :: Audible e => (String,Int) -> Play_Opt -> e -> IO ()
-audition_at loc opt = withSC3At loc . play_at opt
+-- | 'withSC3At' of 'playAt'.
+auditionAt :: Audible e => (String,Int) -> Play_Opt -> e -> IO ()
+auditionAt loc opt = withSC3At loc . playAt opt
 
--- | 'withSC3_seq' of 'play_at'.
-audition_at_seq :: Audible e => (String,Int) -> Play_Opt -> Int -> e -> IO ()
-audition_at_seq loc opt k = withSC3At_seq_ loc k . play_at opt
+-- | 'withSC3AtSeq' of 'playAt'.
+auditionAtSeq :: Audible e => (String,Int) -> Play_Opt -> Int -> e -> IO ()
+auditionAtSeq loc opt k = withSC3AtSeq_ loc k . playAt opt
 
 -- | Default 'Play_Opt', ie. (-1,addToHead,1,[])
 def_play_opt :: Play_Opt
 def_play_opt = (-1,Enum.AddToHead,1,[])
 
--- | 'audition_at' 'def_play_opt'
+-- | 'auditionAt' 'def_play_opt'
 audition :: Audible e => e -> IO ()
-audition = audition_at sc3_default_udp def_play_opt
+audition = auditionAt sc3_default_udp def_play_opt
 
--- | 'audition_at_seq' 'def_play_opt'
-audition_seq :: Audible e => Int -> e -> IO ()
-audition_seq = audition_at_seq sc3_default_udp def_play_opt
+-- | 'auditionAtSeq' 'def_play_opt'
+auditionSeq :: Audible e => Int -> e -> IO ()
+auditionSeq = auditionAtSeq sc3_default_udp def_play_opt
 
 -- * Notifications
 
