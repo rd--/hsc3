@@ -7,8 +7,14 @@ import Data.Char {- base -}
 --   I = initialisation, K = control, A = audio, D = demand.
 --
 -- > Data.List.sort [DR,AR,KR,IR] == [IR,KR,AR,DR]
-data Rate = IR | KR | AR | DR
+data Rate = InitialisationRate | ControlRate | AudioRate | DemandRate
             deriving (Eq,Ord,Enum,Bounded,Show,Read)
+
+ir, kr, ar, dr :: Rate
+ir = InitialisationRate
+kr = ControlRate
+ar = AudioRate
+dr =DemandRate
 
 -- | Integer rate identifier, as required for scsynth bytecode.
 rateId :: Rate -> Int
@@ -18,10 +24,10 @@ rateId = fromEnum
 rate_color :: Rate -> String
 rate_color r =
     case r of
-      AR -> "black"
-      KR -> "blue"
-      IR -> "yellow"
-      DR -> "red"
+      AudioRate -> "black"
+      ControlRate -> "blue"
+      InitialisationRate -> "yellow"
+      DemandRate -> "red"
 
 -- | Set of all 'Rate' values.
 all_rates :: [Rate]
@@ -33,17 +39,17 @@ all_rates = [minBound .. maxBound]
 rate_parse :: String -> Maybe Rate
 rate_parse r =
     case map toUpper r of
-      "AR" -> Just AR
-      "KR" -> Just KR
-      "IR" -> Just IR
-      "DR" -> Just DR
+      "AR" -> Just AudioRate
+      "KR" -> Just ControlRate
+      "IR" -> Just InitialisationRate
+      "DR" -> Just DemandRate
       _ -> Nothing
 
 -- * Control rates
 
 -- | Enumeration of the four operating rates for controls.
 --   I = initialisation, K = control, T = trigger, A = audio.
-data K_Type = K_IR | K_KR | K_TR | K_AR
+data K_Type = K_InitialisationRate | K_ControlRate | K_TriggerRate | K_AudioRate
              deriving (Eq,Show,Ord)
 
 -- | Determine class of control given 'Rate' and /trigger/ status.
@@ -51,10 +57,10 @@ ktype :: Rate -> Bool -> K_Type
 ktype r tr =
     if tr
     then case r of
-           KR -> K_TR
-           _ -> error "ktype: non KR trigger control"
+           ControlRate -> K_TriggerRate
+           _ -> error "ktype: non ControlRate trigger control"
     else case r of
-           IR -> K_IR
-           KR -> K_KR
-           AR -> K_AR
-           DR -> error "ktype: DR control"
+           InitialisationRate -> K_InitialisationRate
+           ControlRate -> K_ControlRate
+           AudioRate -> K_AudioRate
+           DemandRate -> error "ktype: DemandRate control"

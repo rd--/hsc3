@@ -1,12 +1,12 @@
 -- fm7 ; two of six
-let c = [[xLine KR 300 310 4 DoNothing,0,1]
-        ,[xLine KR 300 310 8 DoNothing,0,1]
+let c = [[xLine kr 300 310 4 DoNothing,0,1]
+        ,[xLine kr 300 310 8 DoNothing,0,1]
         ,[0,0,1]
         ,[0,0,1]
         ,[0,0,1]
         ,[0,0,1] ]
-    m = [[line KR 0 0.001 2 DoNothing,line KR 0.1 0 4 DoNothing,0,0,0,0]
-        ,[line KR 0 6 1 DoNothing,0,0,0,0,0]
+    m = [[line kr 0 0.001 2 DoNothing,line kr 0.1 0 4 DoNothing,0,0,0,0]
+        ,[line kr 0 6 1 DoNothing,0,0,0,0,0]
         ,[0,0,0,0,0,0]
         ,[0,0,0,0,0,0]
         ,[0,0,0,0,0,0]
@@ -69,9 +69,9 @@ let x = [[[0.0,-1/3,-1.0,0.0]
         ,[[0.0,0.5,-0.5,0.25]
          ,[0.25,0.5,-1/3,0.0]
          ,[1.0,0.5,-1/6,0.5]]]
-    cs = map (map (\[f,p,m,a] -> sinOsc AR f p * m + a)) x
-    ms = map (map (\[f,w,m,a] -> pulse AR f w * m + a)) y
+    cs = map (map (\[f,p,m,a] -> sinOsc ar f p * m + a)) x
+    ms = map (map (\[f,w,m,a] -> pulse ar f w * m + a)) y
     [c1,c2,c3,c4,c5,c6] = mceChannels (X.fm7_mx cs ms)
-    g3 = linLin (lfSaw KR 0.1 0) (-1) 1 0 (dbAmp (-12))
+    g3 = linLin (lfSaw kr 0.1 0) (-1) 1 0 (dbAmp (-12))
     g6 = dbAmp (-3)
 in mce [c1 + c3 * g3 + c5,c2 + c4 + c6 * g6]

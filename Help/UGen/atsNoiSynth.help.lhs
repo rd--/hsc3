@@ -25,18 +25,18 @@ run re-synthesis, sine & noise levels are at X and Y mouse controls
 > g_01 =
 >     let numPartials = constant (ATS.ats_n_partials ats_hdr_0)
 >         dur = constant (ATS.ats_analysis_duration ats_hdr_0)
->         filePointer = lfSaw KR (1 / dur) 1 * 0.5 + 0.5
->         sinePct = mouseX KR 0 1 Linear 0.2
->         noisePct = mouseY KR 0 1 Linear 0.2
->     in X.atsNoiSynth AR 0 numPartials 0 1 filePointer sinePct noisePct 1 0 25 0 1
+>         filePointer = lfSaw kr (1 / dur) 1 * 0.5 + 0.5
+>         sinePct = mouseX kr 0 1 Linear 0.2
+>         noisePct = mouseY kr 0 1 Linear 0.2
+>     in X.atsNoiSynth ar 0 numPartials 0 1 filePointer sinePct noisePct 1 0 25 0 1
 
 run re-synthesis, filePointer is at X-axis, sine & noise levels are both at Y
 
 > f_02 numBands bandStart bandSkip =
 >     let numPartials = constant (ATS.ats_n_partials ats_hdr_0)
->         filePointer = mouseX KR 0.0 1.0 Linear 0.2
->         noisePct = mouseY KR 0.0 1.0 Linear 0.2
->     in X.atsNoiSynth AR 0 numPartials 0 1 filePointer (1 - noisePct) noisePct 1 0 25 0 1
+>         filePointer = mouseX kr 0.0 1.0 Linear 0.2
+>         noisePct = mouseY kr 0.0 1.0 Linear 0.2
+>     in X.atsNoiSynth ar 0 numPartials 0 1 filePointer (1 - noisePct) noisePct 1 0 25 0 1
 
 > g_02 = f_02 25 0 1
 > g_03 = f_02 25 1 2

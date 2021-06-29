@@ -1,43 +1,43 @@
 -- resonz
-let n = whiteNoise 'α' AR in resonz (n * 0.5) 2000 0.1
+let n = whiteNoise 'α' ar in resonz (n * 0.5) 2000 0.1
 
 -- resonz ; modulate frequency
-let n = whiteNoise 'α' AR
-    f = xLine KR 1000 8000 10 RemoveSynth
+let n = whiteNoise 'α' ar
+    f = xLine kr 1000 8000 10 RemoveSynth
 in resonz (n * 0.5) f 0.05
 
 -- resonz ; modulate bandwidth
-let n = whiteNoise 'α' AR
-    bw = xLine KR 1 0.001 8 RemoveSynth
+let n = whiteNoise 'α' ar
+    bw = xLine kr 1 0.001 8 RemoveSynth
 in resonz (n * 0.5) 2000 bw
 
 -- resonz ; modulate bandwidth opposite direction
-let n = whiteNoise 'α' AR
-    bw = xLine KR 0.001 1 8 RemoveSynth
+let n = whiteNoise 'α' ar
+    bw = xLine kr 0.001 1 8 RemoveSynth
 in resonz (n * 0.5) 2000 bw
 
 -- resonz ; mouse control (1/Q = bandwidth / center-frequency)
-let n = pinkNoise 'α' AR
-    m = mouseX KR 36 85 Linear 0.2 {- midi note -}
-    w = mouseY KR 0.1 5 Linear 0.2 {- bandwidth -}
+let n = pinkNoise 'α' ar
+    m = mouseX kr 36 85 Linear 0.2 {- midi note -}
+    w = mouseY kr 0.1 5 Linear 0.2 {- bandwidth -}
     f = midiCPS (floorE m) {- centre frequency -}
     rq = w / f {- 1/Q (reciprocal of Q) -}
 in resonz (n * 0.5) f rq
 
 -- resonz ; pinkNoise ; event control
 let f c (g,_,y,z,o,_,_,p,_,_) =
-      pan2 (resonz (pinkNoise c AR) (midiCPS p) (y * 0.25) * 24) (o * 2 - 1) (z * g)
-in mix (eventVoicer 16 f) * control KR "gain" 1
+      pan2 (resonz (pinkNoise c ar) (midiCPS p) (y * 0.25) * 24) (o * 2 - 1) (z * g)
+in mix (eventVoicer 16 f) * control kr "gain" 1
 
 -- resonz ; pinkNoise ; event control
 let f c (g,_,y,z,o,rx,_,p,_,_) =
       let (gt,_) = eventGateReset g p
-          e = envGen KR gt 1 0 1 DoNothing (envPerc 0.01 (1 + rx))
+          e = envGen kr gt 1 0 1 DoNothing (envPerc 0.01 (1 + rx))
           f = midiCPS p {- centre frequency -}
           rq = linLin y 0 1 0.05 0.25 / f {- 1/Q (reciprocal of Q) -}
           scl = 900
-      in pan2 (resonz (pinkNoise c AR) f rq * scl * z) (o * 2 - 1) e
-in mix (eventVoicer 16 f) * control KR "gain" 1
+      in pan2 (resonz (pinkNoise c ar) f rq * scl * z) (o * 2 - 1) e
+in mix (eventVoicer 16 f) * control kr "gain" 1
 
 {---- ; Q
 The Q factor of a resonator is defined as the center-frequency (cf) divided by the bandwidth (bw).

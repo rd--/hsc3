@@ -1,2 +1,2 @@
 -- abs
-abs (syncSaw AR 100 440 * 0.1)
+abs (syncSaw ar 100 440 * 0.1)

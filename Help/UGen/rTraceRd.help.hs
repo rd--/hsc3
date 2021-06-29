@@ -1,27 +1,27 @@
 -- rTraceRd ; printing only
 let b = asLocalBuf 'α' [0,-1,1/4, 1/4,0,1/2, 1/2,1,1/4, 3/4,0,0, 1,-1,1/4]
-    ph = mouseX KR 0 1 Linear 0.05
-    tr = X.rTraceRd KR b 3 ph 1
+    ph = mouseX kr 0 1 Linear 0.05
+    tr = X.rTraceRd kr b 3 ph 1
     labels = mce . map label
-    pr = poll (impulse KR 5 0) (mce2 ph tr) 0 (labels ["ph","tr"])
-in mrg2 (out 0 (dc AR 0)) pr
+    pr = poll (impulse kr 5 0) (mce2 ph tr) 0 (labels ["ph","tr"])
+in mrg2 (out 0 (dc ar 0)) pr
 
 -- rTraceRd ; listening ; X is (-1 0 1 0 -1)
 let b = asLocalBuf 'α' [0,-1,1/4, 1/4,0,1/2, 1/2,1,1/4, 3/4,0,0, 1,-1,1/4]
-    o = sinOsc AR 440 0 * 0.1
-    x = X.rTraceRd KR b 3 (lfSaw KR 1 0 * 0.5 + 0.5) 1
+    o = sinOsc ar 440 0 * 0.1
+    x = X.rTraceRd kr b 3 (lfSaw kr 1 0 * 0.5 + 0.5) 1
 in pan2 o x 1
 
 -- rTraceRd
 let b = asLocalBuf 'α' [0,-1,1/4, 1/4,0,1/2, 1/2,1,1/4, 3/4,0,0, 1,-1,1/4]
-    x = X.rTraceRd KR b 3 (lfSaw KR 1 0 * 0.5 + 0.5) 1
-    o = sinOsc AR (linLin x (-1) 1 440 880) 0 * 0.1
+    x = X.rTraceRd kr b 3 (lfSaw kr 1 0 * 0.5 + 0.5) 1
+    o = sinOsc ar (linLin x (-1) 1 440 880) 0 * 0.1
 in pan2 o 0 1
 
 -- rTraceRd ; Y is (1/4 1/2 1/4 0 1/4)
 let b = asLocalBuf 'α' [0,-1,1/4, 1/4,0,1/2, 1/2,1,1/4, 3/4,0,0, 1,-1,1/4]
-    o = sinOsc AR 440 0 * 0.1
-    tr n = X.rTraceRd KR b 3 (lfSaw KR 1 0 * 0.5 + 0.5) n
+    o = sinOsc ar 440 0 * 0.1
+    tr n = X.rTraceRd kr b 3 (lfSaw kr 1 0 * 0.5 + 0.5) n
     l = tr 1
     g = tr 2
 in pan2 o l g

@@ -79,4 +79,4 @@ mkFilterMCEId = mk_filter_mce all_rates
 
 -- | Information unit generators are very specialized.
 mkInfo :: String -> UGen
-mkInfo name = mkOsc IR name [] 1
+mkInfo name = mkOsc InitialisationRate name [] 1

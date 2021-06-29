@@ -6,7 +6,7 @@
 >   let target_b = 12 {- source signal -}
 >       target_file = "/home/rohan/data/audio/pf-c5.aif"
 >   _ <- async (b_allocRead target_b target_file 0 0)
->   return (playBuf 1 AR (constant target_b) 1 0 0 Loop DoNothing)
+>   return (playBuf 1 ar (constant target_b) 1 0 0 Loop DoNothing)
 
 > f_02 :: Transport m => UGen -> m UGen
 > f_02 s = do

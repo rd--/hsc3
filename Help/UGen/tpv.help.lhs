@@ -11,15 +11,15 @@
     > withSC3 (mapM_ async msg)
 
 > g_01 =
->     let i = playBuf 1 AR 1 (bufRateScale KR 1) 1 0 Loop DoNothing
->         x = mouseX KR 1 70 Linear 0.1
->         y = mouseY KR 0.25 3 Linear 0.1
+>     let i = playBuf 1 ar 1 (bufRateScale kr 1) 1 0 Loop DoNothing
+>         x = mouseX kr 1 70 Linear 0.1
+>         y = mouseY kr 0.25 3 Linear 0.1
 >         o = tpv' 0 i 70 x y 4 0.2
 >     in mce2 (i * 0.1) o
 
 > g_02 =
->     let i = playBuf 1 AR 1 (bufRateScale KR 1) 1 0 Loop DoNothing
->         x = mouseX KR 0.1 100 Linear 0.1
->         y = mouseY KR (-20) 40 Linear 0.1
+>     let i = playBuf 1 ar 1 (bufRateScale kr 1) 1 0 Loop DoNothing
+>         x = mouseX kr 0.1 100 Linear 0.1
+>         y = mouseY kr (-20) 40 Linear 0.1
 >         o = tpv' 0 i 50 50 1 x (dbAmp y)
 >     in pan2 o 0 1

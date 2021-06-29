@@ -1,7 +1,7 @@
 -- vDiskIn
-let b = control KR "buf" 0
+let b = control kr "buf" 0
     nc = 2
-in vDiskIn nc 0 (sinOsc KR 0.25 0 * 0.25 + 1) Loop 0
+in vDiskIn nc 0 (sinOsc kr 0.25 0 * 0.25 + 1) Loop 0
 
 ---- ; allocate and read file, leave open
 let fn = "/home/rohan/data/audio/pf-c5.aif"

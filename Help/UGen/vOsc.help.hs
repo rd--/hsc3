@@ -1,9 +1,9 @@
 -- vOsc ; oscillator at eight consecutive wavetable buffers, mouse selects ; requires=tbl
 let n = 8
-    b = control KR "tbl" 0
-    x = mouseX KR b (b + n - 1) Linear 0.1
-    y = mouseY KR 0.01 0.2 Exponential 0.2
-in vOsc AR x (mce [120, 121]) 0 * y
+    b = control kr "tbl" 0
+    x = mouseX kr b (b + n - 1) Linear 0.1
+    y = mouseY kr 0.01 0.2 Exponential 0.2
+in vOsc ar x (mce [120, 121]) 0 * y
 
 ---- ; setup ; allocate and fill tables 0 to 7
 gen_harm i = let {square a = a * a ; n = square (fromIntegral i + 1) ; f j = square ((n - j) / n) } in map f [0 .. n - 1]

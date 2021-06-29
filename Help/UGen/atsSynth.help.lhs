@@ -23,14 +23,14 @@ simple re-synthesiser, ATS data is at buffer 0, X is file pointer, Y is freq mul
 
 > g_00 =
 >   let numPartials = constant (ATS.ats_n_partials ats_hdr_0)
->       filePointer = mouseX KR 0.0 1.0 Linear 0.2
->       freqMul = mouseY KR 0.75 1.25 Linear 0.2
->   in X.atsSynth AR 0 numPartials 0 1 filePointer freqMul 0
+>       filePointer = mouseX kr 0.0 1.0 Linear 0.2
+>       freqMul = mouseY kr 0.75 1.25 Linear 0.2
+>   in X.atsSynth ar 0 numPartials 0 1 filePointer freqMul 0
 
 > f_01 numPartials partialStart partialSkip freqMul freqAdd =
 >     let dur = constant (ATS.ats_analysis_duration ats_hdr_0)
->         filePointer = lfSaw KR (1 / dur) 1 * 0.5 + 0.5
->     in X.atsSynth AR 0 numPartials partialStart partialSkip filePointer freqMul freqAdd
+>         filePointer = lfSaw kr (1 / dur) 1 * 0.5 + 0.5
+>     in X.atsSynth ar 0 numPartials partialStart partialSkip filePointer freqMul freqAdd
 
 resynthesize only the top half of the partials
 

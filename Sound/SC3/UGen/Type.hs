@@ -408,9 +408,9 @@ proxy u n =
 rateOf :: UGen -> Rate
 rateOf u =
     case u of
-      Constant_U _ -> IR
+      Constant_U _ -> InitialisationRate
       Control_U c -> controlOperatingRate c
-      Label_U _ -> IR
+      Label_U _ -> InitialisationRate
       Primitive_U p -> ugenRate p
       Proxy_U p -> ugenRate (proxySource p)
       MCE_U _ -> maximum (map rateOf (mceChannels u))
@@ -430,14 +430,14 @@ proxify u =
       Constant_U _ -> u
       _ -> error "proxify: illegal ugen"
 
--- | Filters with DR inputs run at KR.  This is a little unfortunate,
+-- | Filters with DemandRate inputs run at ControlRate.  This is a little unfortunate,
 -- it'd be nicer if the rate in this circumstance could be given.
 mk_ugen_select_rate :: String -> [UGen] -> [Rate] -> Either Rate [Int] -> Rate
 mk_ugen_select_rate nm h rs r =
   let r' = either id (maximum . map (rateOf . Safe.atNote ("mkUGen: " ++ nm) h)) r
-  in if isRight r && r' == DR && DR `notElem` rs
-     then if KR `elem` rs then KR else error "mkUGen: DR input to non-KR filter"
-     else if r' `elem` rs || r' == DR
+  in if isRight r && r' == DemandRate && DemandRate `notElem` rs
+     then if ControlRate `elem` rs then ControlRate else error "mkUGen: DemandRate input to non-ControlRate filter"
+     else if r' `elem` rs || r' == DemandRate
           then r'
           else error ("mkUGen: rate restricted: " ++ show (r,r',rs,nm))
 
@@ -479,7 +479,7 @@ mkUnaryOperator i f a =
 --
 -- > constant 2 * constant 3 == constant 6
 --
--- > let o = sinOsc AR 440 0
+-- > let o = sinOsc ar 440 0
 --
 -- > o * 1 == o && 1 * o == o && o * 2 /= o
 -- > o + 0 == o && 0 + o == o && o + 1 /= o
@@ -529,7 +529,7 @@ is_mul_operator = is_math_binop 2
 
 -- | MulAdd re-writer, applicable only directly at add operator UGen.
 --   The MulAdd UGen is very sensitive to input rates.
---   ADD=AR with IN|MUL=IR|CONST will CRASH scsynth.
+--   ADD=AudioRate with IN|MUL=InitialisationRate|CONST will CRASH scsynth.
 mul_add_optimise_direct :: UGen -> UGen
 mul_add_optimise_direct u =
   let reorder (i,j,k) =
@@ -553,10 +553,10 @@ mul_add_optimise_direct u =
 {- | MulAdd optimiser, applicable at any UGen (ie. checks /u/ is an ADD ugen)
 
 > import Sound.SC3
-> g1 = sinOsc AR 440 0 * 0.1 + control IR "x" 0.05
-> g2 = sinOsc AR 440 0 * control IR "x" 0.1 + 0.05
-> g3 = control IR "x" 0.1 * sinOsc AR 440 0 + 0.05
-> g4 = 0.05 + sinOsc AR 440 0 * 0.1
+> g1 = sinOsc ar 440 0 * 0.1 + control ir "x" 0.05
+> g2 = sinOsc ar 440 0 * control ir "x" 0.1 + 0.05
+> g3 = control ir "x" 0.1 * sinOsc ar 440 0 + 0.05
+> g4 = 0.05 + sinOsc ar 440 0 * 0.1
 -}
 mul_add_optimise :: UGen -> UGen
 mul_add_optimise u = if is_add_operator u then mul_add_optimise_direct u else u

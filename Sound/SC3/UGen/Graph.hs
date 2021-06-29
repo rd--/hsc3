@@ -70,7 +70,7 @@ data U_Node = U_Node_C {u_node_id :: UID_t
 u_node_k_to_control :: U_Node -> Control
 u_node_k_to_control nd =
   case nd of
-    U_Node_K _ rt ix nm df ty mt -> Control rt ix nm df (ty == K_TR) mt
+    U_Node_K _ rt ix nm df ty mt -> Control rt ix nm df (ty == K_TriggerRate) mt
     _ -> error "u_node_k_to_control?"
 
 -- | Derive "user" name for U_Node
@@ -153,11 +153,11 @@ u_node_k_eq p q =
   then p == q
   else error "u_node_k_eq? not U_Node_K"
 
--- | 'Rate' of 'U_Node', ie. 'IR' for constants & see through 'U_Node_P'.
+-- | 'Rate' of 'U_Node', ie. 'InitialisationRate' for constants & see through 'U_Node_P'.
 u_node_rate :: U_Node -> Rate
 u_node_rate n =
     case n of
-      U_Node_C {} -> IR
+      U_Node_C {} -> InitialisationRate
       U_Node_K {} -> u_node_k_rate n
       U_Node_U {} -> u_node_u_rate n
       U_Node_P _ n' _ -> u_node_rate n'
@@ -204,10 +204,10 @@ u_node_sort_controls c =
 u_node_ktype :: U_Node -> Maybe K_Type
 u_node_ktype n =
     case (u_node_u_name n,u_node_u_rate n) of
-      ("Control",IR) -> Just K_IR
-      ("Control",KR) -> Just K_KR
-      ("TrigControl",KR) -> Just K_TR
-      ("AudioControl",AR) -> Just K_AR
+      ("Control",InitialisationRate) -> Just K_InitialisationRate
+      ("Control",ControlRate) -> Just K_ControlRate
+      ("TrigControl",ControlRate) -> Just K_TriggerRate
+      ("AudioControl",AudioRate) -> Just K_AudioRate
       _ -> Nothing
 
 -- | Is 'U_Node' a control UGen?
@@ -265,7 +265,7 @@ u_node_mk_ktype_map =
 
 -- * Nodes (Implicit)
 
--- | 4-tuple to count 'K_Type's, ie. (IR,KR,TR,AR).
+-- | 4-tuple to count 'K_Type's, ie. (InitialisationRate,ControlRate,TriggerRate,AudioRate).
 type U_NODE_KS_COUNT = (Int,Int,Int,Int)
 
 -- | Count the number of /controls/ of each 'K_Type'.
@@ -276,10 +276,10 @@ u_node_ks_count =
             in case ns of
                  [] -> r
                  n:ns' -> let r' = case u_node_k_type n of
-                                     K_IR -> (i+1,k,t,a)
-                                     K_KR -> (i,k+1,t,a)
-                                     K_TR -> (i,k,t+1,a)
-                                     K_AR -> (i,k,t,a+1)
+                                     K_InitialisationRate -> (i+1,k,t,a)
+                                     K_ControlRate -> (i,k+1,t,a)
+                                     K_TriggerRate -> (i,k,t+1,a)
+                                     K_AudioRate -> (i,k,t,a+1)
                           in recur r' ns'
     in recur (0,0,0,0)
 
@@ -291,18 +291,18 @@ u_node_mk_implicit_ctl ks =
     let (ni,nk,nt,na) = u_node_ks_count ks
         mk_n t n o =
             let (nm,r) = case t of
-                            K_IR -> ("Control",IR)
-                            K_KR -> ("Control",KR)
-                            K_TR -> ("TrigControl",KR)
-                            K_AR -> ("AudioControl",AR)
+                            K_InitialisationRate -> ("Control",InitialisationRate)
+                            K_ControlRate -> ("Control",ControlRate)
+                            K_TriggerRate -> ("TrigControl",ControlRate)
+                            K_AudioRate -> ("AudioControl",AudioRate)
                 i = replicate n r
             in if n == 0
                then Nothing
                else Just (U_Node_U (-1) r nm [] i (Special o) no_id)
-    in catMaybes [mk_n K_IR ni 0
-                 ,mk_n K_KR nk ni
-                 ,mk_n K_TR nt (ni + nk)
-                 ,mk_n K_AR na (ni + nk + nt)]
+    in catMaybes [mk_n K_InitialisationRate ni 0
+                 ,mk_n K_ControlRate nk ni
+                 ,mk_n K_TriggerRate nt (ni + nk)
+                 ,mk_n K_AudioRate na (ni + nk + nt)]
 
 -- * Edges
 
@@ -442,7 +442,7 @@ ug_add_implicit_buf g =
       0 -> g
       n -> let (c,g') = ug_mk_node_c (Constant (fromIntegral n)) g
                p = u_node_from_port c
-               u = U_Node_U (-1) IR "MaxLocalBufs" [p] [] (Special 0) no_id
+               u = U_Node_U (-1) InitialisationRate "MaxLocalBufs" [p] [] (Special 0) no_id
            in g' {ug_ugens = u : ug_ugens g'}
 
 -- | 'ug_add_implicit_buf' and 'ug_add_implicit_ctl'.
@@ -499,7 +499,7 @@ ug_pv_validate g = maybe g error (ug_pv_check g)
      and finally adds implicit nodes and validates PV sub-graphs.
 
 > import Sound.SC3 {- hsc3 -}
-> ugen_to_graph (out 0 (pan2 (sinOsc AR 440 0) 0.5 0.1))
+> ugen_to_graph (out 0 (pan2 (sinOsc ar 440 0) 0.5 0.1))
 
 -}
 ugen_to_graph :: UGen -> U_Graph

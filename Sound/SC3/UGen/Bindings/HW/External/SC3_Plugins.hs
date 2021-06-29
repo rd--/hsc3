@@ -36,7 +36,7 @@ stkBowedI rt freq gate_ onamp offamp bowpressure bowposition vibfreq vibgain lou
 
 -- | Wrapping Synthesis toolkit.
 --
---  StkGlobals [AR] showWarnings=0.0 printErrors=0.0 rawfilepath=0.0
+--  StkGlobals [ar] showWarnings=0.0 printErrors=0.0 rawfilepath=0.0
 stkGlobals :: Rate -> UGen -> UGen -> UGen -> UGen
 stkGlobals rate showWarnings printErrors rawfilepath =
-  mkUGen Nothing [AR] (Left rate) "StkGlobals" ([showWarnings,printErrors] ++ U.unpackLabel False rawfilepath) Nothing 1 (Special 0) NoId
+  mkUGen Nothing [ar] (Left rate) "StkGlobals" ([showWarnings,printErrors] ++ U.unpackLabel False rawfilepath) Nothing 1 (Special 0) NoId

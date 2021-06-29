@@ -47,7 +47,7 @@ ugenTraverse halt_f map_f u =
 
 {- | Right fold of UGen graph.
 
-> ugenFoldr (:) [] (pan2 (sinOsc AR 440 0) 0.25 0.1)
+> ugenFoldr (:) [] (pan2 (sinOsc AudioRate 440 0) 0.25 0.1)
 -}
 ugenFoldr :: (UGen -> a -> a) -> a -> UGen -> a
 ugenFoldr f st u =
@@ -94,7 +94,7 @@ control_rng = control_pair Control_Range
 
 -- | Triggered (kr) control input node constructor.
 tr_control_f64 :: Maybe Int -> String -> Sample -> UGen
-tr_control_f64 ix nm d = Control_U (Control Rate.KR ix nm d True Nothing)
+tr_control_f64 ix nm d = Control_U (Control Rate.ControlRate ix nm d True Nothing)
 
 -- | Triggered (kr) control input node constructor.
 tr_control :: String -> Double -> UGen
@@ -311,21 +311,21 @@ rewriteUGenRates sel_f set_rt =
 
 -- | Traverse graph rewriting audio rate nodes as control rate.
 rewriteToControlRate :: UGen -> UGen
-rewriteToControlRate = rewriteUGenRates (== Rate.AR) Rate.KR
+rewriteToControlRate = rewriteUGenRates (== Rate.AudioRate) Rate.ControlRate
 
 -- | Traverse graph rewriting all nodes as demand rate.
 rewriteToDemandRate :: UGen -> UGen
-rewriteToDemandRate = rewriteUGenRates (const True) Rate.DR
+rewriteToDemandRate = rewriteUGenRates (const True) Rate.DemandRate
 
 -- | Traverse graph rewriting audio and control nodes as initialisation rate.
 rewriteToInitialisationRate :: UGen -> UGen
-rewriteToInitialisationRate = rewriteUGenRates (`elem` [Rate.KR,Rate.AR]) Rate.IR
+rewriteToInitialisationRate = rewriteUGenRates (`elem` [Rate.ControlRate,Rate.AudioRate]) Rate.InitialisationRate
 
 -- | Select rewriting function given 'Rate.Rate'.
 rewriteToRate :: Rate.Rate -> UGen -> UGen
 rewriteToRate rt =
   case rt of
-    Rate.KR -> rewriteToControlRate
-    Rate.DR -> rewriteToDemandRate
-    Rate.IR -> rewriteToInitialisationRate
-    Rate.AR -> error "rewriteToRate: AR?"
+    Rate.ControlRate -> rewriteToControlRate
+    Rate.DemandRate -> rewriteToDemandRate
+    Rate.InitialisationRate -> rewriteToInitialisationRate
+    Rate.AudioRate -> error "rewriteToRate: AudioRate?"

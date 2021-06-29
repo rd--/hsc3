@@ -66,33 +66,57 @@ uid_st_seq_ = fst . uid_st_seq
 
 -- | Unary UId lift.
 liftUId1 :: UId m => (Int -> Base.Fn1 a b) -> Base.Fn1 a (m b)
-liftUId1 f a = do
-  n <- generateUId
-  return (f n a)
+liftUId1 fn a = do
+  z <- generateUId
+  return (fn z a)
 
 -- | Binary UId lift.
 liftUId2 :: UId m => (Int -> Base.Fn2 a b c) -> Base.Fn2 a b (m c)
-liftUId2 f a b = do
-  n <- generateUId
-  return (f n a b)
+liftUId2 fn a b = do
+  z <- generateUId
+  return (fn z a b)
 
 -- | Ternary UId lift.
 liftUId3 :: UId m => (Int -> Base.Fn3 a b c d) -> Base.Fn3 a b c (m d)
-liftUId3 f a b c = do
-  n <- generateUId
-  return (f n a b c)
+liftUId3 fn a b c = do
+  z <- generateUId
+  return (fn z a b c)
 
 -- | Quaternary UId lift.
 liftUId4 :: UId m => (Int -> Base.Fn4 a b c d e) -> Base.Fn4 a b c d (m e)
-liftUId4 f a b c d = do
-  n <- generateUId
-  return (f n a b c d)
+liftUId4 fn a b c d = do
+  z <- generateUId
+  return (fn z a b c d)
+
+-- | 5-parameter UId lift.
+liftUId5 :: UId m => (Int -> Base.Fn5 a b c d e f) -> Base.Fn5 a b c d e (m f)
+liftUId5 fn a b c d e = do
+  z <- generateUId
+  return (fn z a b c d e)
+
+-- | 6-parameter UId lift.
+liftUId6 :: UId m => (Int -> Base.Fn6 a b c d e f g) -> Base.Fn6 a b c d e f (m g)
+liftUId6 fn a b c d e f = do
+  z <- generateUId
+  return (fn z a b c d e f)
+
+-- | 10-parameter UId lift.
+liftUId10 :: UId m => (Int -> Base.Fn10 a b c d e f g h i j k) -> Base.Fn10 a b c d e f g h i j (m k)
+liftUId10 fn a b c d e f g h i j = do
+  z <- generateUId
+  return (fn z a b c d e f g h i j)
+
+-- | 11-parameter UId lift.
+liftUId11 :: UId m => (Int -> Base.Fn11 a b c d e f g h i j k l) -> Base.Fn11 a b c d e f g h i j k (m l)
+liftUId11 fn a b c d e f g h i j k = do
+  z <- generateUId
+  return (fn z a b c d e f g h i j k)
 
 -- * ID
 
 -- | Typeclass to constrain UGen identifiers.
 --
--- > map resolveID [0::Int,1] == [3151710696,1500603050]
+-- > map resolveID [0::Int,1] == [0,1]
 -- > map resolveID ['α','β'] == [1439603815,4131151318]
 -- > map resolveID [('α','β'),('β','α')] == [3538183581,3750624898]
 -- > map resolveID [('α',('α','β')),('β',('α','β'))] == [0020082907,2688286317]
@@ -102,7 +126,7 @@ class Murmur32.Hashable32 a => ID a where
     resolveID = fromIntegral . Murmur32.asWord32 . Murmur32.hash32
 
 instance ID Char where
-instance ID Int where
+instance ID Int where resolveID = id
 instance (ID p,ID q) => ID (p,q) where
 instance (ID p,ID q,ID r) => ID (p,q,r) where
 

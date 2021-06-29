@@ -1,5 +1,5 @@
 -- peak
-let t = dust 'α' AR 20
-    r = impulse AR 0.4 0
+let t = dust 'α' ar 20
+    r = impulse ar 0.4 0
     f = peak t r * 500 + 200
-in sinOsc AR f 0 * 0.2
+in sinOsc ar f 0 * 0.2

@@ -1,9 +1,9 @@
 -- trigAvg
-let x = mouseX KR 0 1000 Linear 0.2
-    b = mouseButton KR 0 1 0.2
-    n = X.trigAvg KR (roundTo x 100) b
-in sinOsc AR n 0 * 0.1
+let x = mouseX kr 0 1000 Linear 0.2
+    b = mouseButton kr 0 1 0.2
+    n = X.trigAvg kr (roundTo x 100) b
+in sinOsc ar n 0 * 0.1
 
 -- trigAvg
-let n = X.trigAvg KR (sinOsc AR 0.1 0) (impulse KR 0.2 0)
-in sinOsc AR 220 0 * n * 0.25
+let n = X.trigAvg kr (sinOsc ar 0.1 0) (impulse kr 0.2 0)
+in sinOsc ar 220 0 * n * 0.25

@@ -1,6 +1,6 @@
 -- stkModalBar ; https://ccrma.stanford.edu/software/stk/classstk_1_1ModalBar.html
-let x = mouseX KR 0.25 12 Linear 0.2
-    tr = impulse KR x 0 - 0.5
+let x = mouseX kr 0.25 12 Linear 0.2
+    tr = impulse kr x 0 - 0.5
     freq = midiCPS (tiRand 'α' 25 96 tr)
     instrument = tiRand 'β' 0 9 tr -- Marimba, Vibraphone, Agogo, Wood1, Reso, Wood2, Beats, Two Fixed, Clump
     stickhardness = tRand 'γ' 0 127 tr
@@ -9,11 +9,11 @@ let x = mouseX KR 0.25 12 Linear 0.2
     vibratofreq = tRand 'ζ' 0 127 tr
     directstickmix = tRand 'η' 0 127 tr
     volume = tRand 'θ' 0 127 tr
-in X.stkModalBar AR freq instrument stickhardness stickposition vibratogain vibratofreq directstickmix volume tr
+in X.stkModalBar ar freq instrument stickhardness stickposition vibratogain vibratofreq directstickmix volume tr
 
 -- stkModalBar
-let x = mouseX KR 1 12 Linear 0.2
-    tr = impulse KR x 0 - 0.5
+let x = mouseX kr 1 12 Linear 0.2
+    tr = impulse kr x 0 - 0.5
     tr3 = pulseDivider tr 3 0
     freq = midiCPS (tiRand 'α' 52 64 tr)
     instrument = 1
@@ -23,13 +23,13 @@ let x = mouseX KR 1 12 Linear 0.2
     vibratofreq = tRand 'ε' 4 12 tr3
     directstickmix = tRand 'ζ' 0 1 tr3
     volume = tRand 'η' 16 48 tr3
-in X.stkModalBar AR freq instrument stickhardness stickposition vibratogain vibratofreq directstickmix volume tr
+in X.stkModalBar ar freq instrument stickhardness stickposition vibratogain vibratofreq directstickmix volume tr
 
 -- stkModalBar ; event control
 let f _ (g,_,y,z,o,rx,_,p,_,_) =
       let tr = g - 0.5
           freq = midiCPS p
-          instr = control KR "instrument" 4
-          sig = X.stkModalBar AR freq instr ((1 - y) * 127) (y * 127) 64 64 (rx * 127) 127 tr
+          instr = control kr "instrument" 4
+          sig = X.stkModalBar ar freq instr ((1 - y) * 127) (y * 127) 64 64 (rx * 127) 127 tr
       in pan2 sig (o * 2 - 1) (latch z g * 3)
-in mix (eventVoicer 16 f) * control KR "gain" 1
+in mix (eventVoicer 16 f) * control kr "gain" 1

@@ -1,34 +1,34 @@
 -- envCoord ; co-ordinate (break-point) envelope
 let c = EnvLin
     p = envCoord [(0,0),(0.5,0.1),(0.55,1),(1,0)] 9 0.1 c
-    e = envGen KR 1 1 0 1 RemoveSynth p
-in sinOsc AR 440 0 * e
+    e = envGen kr 1 1 0 1 RemoveSynth p
+in sinOsc ar 440 0 * e
 
 -- envCoord ; line segments ; internal graph triggers and randomises line end points
-let tr = dust 'α' KR 2
+let tr = dust 'α' kr 2
     st = 440
     en = tRand 'β' 300 900 tr
     tm = tRand 'γ' 0.5 1.5 tr
     p = envCoord [(0,st),(tm,en)] 1 1 EnvLin
-    e = envGen KR tr 1 0 1 DoNothing p
-in sinOsc AR e 0 * 0.2
+    e = envGen kr tr 1 0 1 DoNothing p
+in sinOsc ar e 0 * 0.2
 
 -- envCoord ; line segments ; external control
 let tr = tr_control "tr" 1
-    st = control KR "st" 440
-    en = control KR "en" 880
-    tm = control KR "tm" 2
+    st = control kr "st" 440
+    en = control kr "en" 880
+    tm = control kr "tm" 2
     p = envCoord [(0,st),(tm,en)] 1 1 EnvLin
-    e = envGen KR tr 1 0 1 DoNothing p
-in sinOsc AR e 0 * 0.2
+    e = envGen kr tr 1 0 1 DoNothing p
+in sinOsc ar e 0 * 0.2
 
 -- envCoord ; start and end reset randomly every 4 seconds, ramp every trigger
-let tr = impulse KR (1/4) 0
+let tr = impulse kr (1/4) 0
     f0 = tExpRand 'α' 110 450 tr
     f1 = tExpRand 'β' 110 440 tr
     p = envCoord [(0,0),(0,f0),(4,f1)] 1 1 EnvExp
-    e = envGen KR tr 1 0 1 DoNothing p
-in splay (sinOsc AR (mce [f0,e,f1]) 0) 1 1 0 True * mce [0.05,0.1,0.05]
+    e = envGen kr tr 1 0 1 DoNothing p
+in splay (sinOsc ar (mce [f0,e,f1]) 0) 1 1 0 True * mce [0.05,0.1,0.05]
 
 ---- ; set target value & transition time and trigger
 withSC3 (sendMessage (n_set 1 [("en",550),("tm",4),("tr",1)]))

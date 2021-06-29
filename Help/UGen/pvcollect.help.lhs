@@ -12,19 +12,19 @@
     > withSC3 alloc_buf
 
 > spectral_delay m p _ =
->   let l = lfPar KR 0.5 0
+>   let l = lfPar kr 0.5 0
 >       v = linLin l (-1) 1 0.1 1
 >   in (m + delayN m 1 v,p)
 
 > bpf_sweep nf m p i =
->   let l = lfPar KR 0.1 0
+>   let l = lfPar kr 0.1 0
 >       e = abs (constant i - (linLin l (-1) 1 2 (constant nf / 20)))
 >   in ((e <** 10) * m,p)
 
 > pv_g nf cf =
 >   let no_op m p _ = (m,p)
 >       combf m p i = ((modE i 7.0 ==** 0) * m,p)
->       sf = playBuf 1 AR 11 (bufRateScale KR 11) 1 0 Loop DoNothing
+>       sf = playBuf 1 ar 11 (bufRateScale kr 11) 1 0 Loop DoNothing
 >       c1 = fft' 10 sf
 >       c2 = pvcollect c1 nf cf 0 250 0
 >   in 0.1 * ifft' c2
@@ -42,7 +42,7 @@
     > number of controls        : 0
     > control rates             : []
     > number of unit generators : 1013
-    > unit generator rates      : [(KR,5),(AR,4),(DR,1004)]
+    > unit generator rates      : [(kr,5),(ar,4),(dr,1004)]
 
    > putStrLn $ synthstat_concise (pv_g 1024 (bpf_sweep 1024))
 

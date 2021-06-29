@@ -5,7 +5,7 @@
 > import Sound.SC3 {- hsc3 -}
 > import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
 
-> g_01 = pinkNoise 'α' AR * 0.03 + sinOsc AR 440 0 * 0.5
+> g_01 = pinkNoise 'α' ar * 0.03 + sinOsc ar 440 0 * 0.5
 
 > f_01 sig map_buf =
 >     let c0 = fft' (localBuf 'β' 1 2048) sig

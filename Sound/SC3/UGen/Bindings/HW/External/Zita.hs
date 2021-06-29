@@ -25,4 +25,4 @@ zitaRev_param =
 
 -- | ZitaRev binding.
 zitaRev :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-zitaRev in1 in2 in_delay lf_x low_rt60 mid_rt60 hf_damping eq1_freq eq1_level eq2_freq eq2_level dry_wet_mix level = mkFilterR [AR] "FaustZitaRev" [in1,in2,in_delay,lf_x,low_rt60,mid_rt60,hf_damping,eq1_freq,eq1_level,eq2_freq,eq2_level,dry_wet_mix,level] 2
+zitaRev in1 in2 in_delay lf_x low_rt60 mid_rt60 hf_damping eq1_freq eq1_level eq2_freq eq2_level dry_wet_mix level = mkFilterR [ar] "FaustZitaRev" [in1,in2,in_delay,lf_x,low_rt60,mid_rt60,hf_damping,eq1_freq,eq1_level,eq2_freq,eq2_level,dry_wet_mix,level] 2

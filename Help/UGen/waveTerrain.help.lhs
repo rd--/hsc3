@@ -40,12 +40,12 @@ Send table to scsynth
 Hear terrain
 
 > gr_01 =
->     let x' = mouseX KR 1 200 Exponential 0.2
->         y' = mouseY KR 1 300 Exponential 0.2
->         x = abs (sinOsc AR x' 0) + lfNoise2 'α' AR 2
->         y = abs (sinOsc AR y' (pi / 2))
+>     let x' = mouseX kr 1 200 Exponential 0.2
+>         y' = mouseY kr 1 300 Exponential 0.2
+>         x = abs (sinOsc ar x' 0) + lfNoise2 'α' ar 2
+>         y = abs (sinOsc ar y' (pi / 2))
 >         b = 0
->     in X.waveTerrain AR b x y 100 50
+>     in X.waveTerrain ar b x y 100 50
 
 Alternate terrain function.
 

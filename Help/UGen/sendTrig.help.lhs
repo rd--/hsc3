@@ -7,8 +7,8 @@
 Retrieve a single message
 
 > g_01 =
->     let s = lfNoise0 'α' KR 5
->         o = sinOsc AR (s * 200 + 500) 0 * 0.1
+>     let s = lfNoise0 'α' kr 5
+>         o = sinOsc ar (s * 200 + 500) 0 * 0.1
 >     in mrg [o,sendTrig s 0 s]
 
 > f_01 :: Transport m => m Message
@@ -19,13 +19,13 @@ Retrieve a single message
 Send random triggers, request notifications, then for each trigger start a synth (s_03).
 
 > g_02 =
->     let t = dust 'α' KR 1.0
+>     let t = dust 'α' kr 1.0
 >     in sendTrig t 0 t
 
 > g_03 =
->     let freq = control KR "freq" 440
->         env = envGen KR 1 0.1 0 1 RemoveSynth (envPerc 0.01 1)
->     in sinOsc AR freq 0 * env
+>     let freq = control kr "freq" 440
+>         env = envGen kr 1 0.1 0 1 RemoveSynth (envPerc 0.01 1)
+>     in sinOsc ar freq 0 * env
 
 > s_03 = synthdef "s_03" (out 0 g_03)
 

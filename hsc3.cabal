@@ -63,6 +63,7 @@ Library
                    Sound.SC3.Common.Monad.Operators
                    Sound.SC3.Common.Rate
                    Sound.SC3.Common.UId
+                   Sound.SC3.Common.Unsafe
                    Sound.SC3.FD
                    Sound.SC3.Server
                    Sound.SC3.Server.Command
@@ -95,7 +96,6 @@ Library
                    Sound.SC3.UGen.Bindings.DB
                    Sound.SC3.UGen.Bindings.DB.External
                    Sound.SC3.UGen.Bindings.HW
-                   Sound.SC3.UGen.Bindings.Monad
                    Sound.SC3.UGen.Bindings.HW.Construct
                    Sound.SC3.UGen.Bindings.HW.External
                    Sound.SC3.UGen.Bindings.HW.External.F0

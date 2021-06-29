@@ -24,6 +24,18 @@ type Fn3 a b c d = a -> b -> c -> d
 -- | Quaternary function.
 type Fn4 a b c d e = a -> b -> c -> d -> e
 
+-- | 5-parameter function.
+type Fn5 a b c d e f = a -> b -> c -> d -> e -> f
+
+-- | 6-parameter function.
+type Fn6 a b c d e f g = a -> b -> c -> d -> e -> f -> g
+
+-- | 10-parameter function.
+type Fn10 a b c d e f g h i j k = a -> b -> c -> d -> e -> f -> g -> h -> i -> j -> k
+
+-- | 11-parameter function.
+type Fn11 a b c d e f g h i j k l = a -> b -> c -> d -> e -> f -> g -> h -> i -> j -> k -> l
+
 -- | Apply /f/ n times, ie. iterate f x !! n
 --
 -- > iter 3 (* 2) 1 == 8

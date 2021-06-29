@@ -8,13 +8,13 @@ let k_sr = 48000
     sdt = mce [300,400]
     lpp = mce [rand 'ζ' 4300 4500,rand 'η' 4000 4200]
     sr = sampleRate
-    local = localIn' 2 AR
-    wn = line KR 0 1 0.1 DoNothing * whiteNoise 'θ' AR * 0.03
+    local = localIn' 2 ar
+    wn = line kr 0 1 0.1 DoNothing * whiteNoise 'θ' ar * 0.03
     ph = delTapWr b (wn + local)
     fb = delTapRd b ph del 1
     p_fb = mix (pan2 fb loc 1)
     h_fb = hpf p_fb hpp
-    ao = X.averageOutput (abs h_fb) (impulse KR (recip (avg / sr)) 0) -- RFWUGens
+    ao = X.averageOutput (abs h_fb) (impulse kr (recip (avg / sr)) 0) -- RFWUGens
     n_fb = h_fb * (0.02 / clip (lag ao (sdt / sr)) 0.0001 1)
     l_fb = lpf n_fb lpp
 in mrg [localOut l_fb,out 0 l_fb]

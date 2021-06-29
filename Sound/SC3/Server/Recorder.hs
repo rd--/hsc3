@@ -48,9 +48,9 @@ rec_synthdef_nm nc = "sc3-recorder-" ++ show nc
 -- > Sound.SC3.UGen.Dot.draw (rec_synthdef 2)
 rec_synthdef :: Int -> Synthdef
 rec_synthdef nc =
-    let bufnum = control KR "bufnum" 0
-        bus = control KR "bus" 0
-    in synthdef (rec_synthdef_nm nc) (diskOut bufnum (in' nc AR bus))
+    let bufnum = control kr "bufnum" 0
+        bus = control kr "bus" 0
+    in synthdef (rec_synthdef_nm nc) (diskOut bufnum (in' nc ar bus))
 
 -- | Asyncronous initialisation 'Message's ('d_recv', 'b_alloc' and
 -- 'b_write').
@@ -88,7 +88,7 @@ rec_end_m r =
 
 > import Sound.SC3
 > withSC3 (Sound.OSC.sendMessage (dumpOSC TextPrinter))
-> audition (out 0 (sinOsc AR (mce2 440 441) 0 * 0.1))
+> audition (out 0 (sinOsc ar (mce2 440 441) 0 * 0.1))
 > let rc = default_SC3_Recorder {rec_dur = Just 5.0}
 > nrt_audition (sc3_recorder rc)
 

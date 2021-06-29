@@ -22,7 +22,7 @@ in X.zitaRev i i in_delay 200 low_rt60 mid_rt60 6000 eq1_freq eq1_level eq2_freq
 
 -- zitaRev ; longer still
 let i = soundIn 0
-    k (nm,df,m) = control_m KR nm df m
+    k (nm,df,m) = control_m kr nm df m
     in_delay = k ("in_delay",100,(20,100,"lin"))
     low_rt60 = k ("low_rt60",6,(1,8,"exp"))
     mid_rt60 = k ("mid_rt60",2,(1,8,"exp"))

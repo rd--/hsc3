@@ -8,11 +8,11 @@ let rvb i rT =
       let z = map constant [z0,z1,z1,z2,z2]
           t = map constant [t0,t1,t2,t3]
           e = Envelope z t [c,c,c] Nothing Nothing 0
-      in envGen KR 1 1 0 1 RemoveSynth e
+      in envGen kr 1 1 0 1 RemoveSynth e
     mk_saw t4 f0 f1 l =
       let f = mk_env f0 t0 f0 t1 t2 f1 (t3 + t4 + t5 + t5) EnvLin
           g = mk_env 0 t0 0.1 (t1 + t2 + t3) t4 0.0 (t5 + t5) EnvLin
-          s = saw AR f
+          s = saw ar f
           t0 = 0.035
           t1 = 0.2267573696
           t2 = 2.2675736061

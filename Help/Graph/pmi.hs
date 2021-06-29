@@ -4,5 +4,5 @@ let n = rand 'α' 1 12
     mf = rand 'γ' 0 800
     pme = rand 'δ' 0 12
     l = rand 'ε' (-1) 1
-    pm = line KR 0 pme n DoNothing
-in linPan2 (pmOsc AR cf mf pm 0) l 0.05
+    pm = line kr 0 pme n DoNothing
+in linPan2 (pmOsc ar cf mf pm 0) l 0.05

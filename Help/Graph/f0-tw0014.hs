@@ -1,5 +1,5 @@
 -- http://fredrikolofsson.com/f0blog/?q=node/478 (f0)
-let a = sinOscFB AR
+let a = sinOscFB ar
     k = 1/9
     f i = let a0 = a (i+1) k * 999
               a1 = a k 1 * k

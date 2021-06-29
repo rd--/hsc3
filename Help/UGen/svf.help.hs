@@ -1,8 +1,8 @@
 -- svf ; state variable filter
-let signal = lfSaw AR (range 110 35 (lfSaw KR 2 0)) 0
-    cutoff = mouseX KR 20 20000 Exponential 0.2
-    res = mouseY KR 1 0 Linear 0.2
-    k = control KR
+let signal = lfSaw ar (range 110 35 (lfSaw kr 2 0)) 0
+    cutoff = mouseX kr 20 20000 Exponential 0.2
+    res = mouseY kr 1 0 Linear 0.2
+    k = control kr
     low = k "low" 0.1
     band = k "band" 0.0
     high = k "high" 0.0
@@ -12,7 +12,7 @@ in X.svf signal cutoff res low band high notch peak_
 
 -- svf ; event control
 let f c (g,x,y,z,o,rx,_,p,px,_) =
-      let signal = lfSaw AR (midiCPS (p + px)) 0
+      let signal = lfSaw ar (midiCPS (p + px)) 0
           cutoff = linExp x 0 1 20 20000
           res = y
           ty = constant c
@@ -22,7 +22,7 @@ let f c (g,x,y,z,o,rx,_,p,px,_) =
           notch = (ty + 3) `modE` 5 * z
           peak_ = (ty + 4) `modE` 5 * z
       in pan2 (X.svf signal cutoff res low band high notch peak_) (o * 2 - 1) (lagUD g 0.1 (rx * 9))
-in mix (eventVoicer 16 f) * control KR "gain" 0.2
+in mix (eventVoicer 16 f) * control kr "gain" 0.2
 
 ---- ; control edits
 msg k v = withSC3 (Sound.OSC.sendMessage (n_set1 (-1) k v))

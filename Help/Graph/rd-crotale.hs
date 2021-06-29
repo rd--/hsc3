@@ -152,8 +152,8 @@ let crotale_data =
        ,24.931695])
     (cf,ca,cd) = crotale_data
     ps = mce [-12,-5,0,2,4,5,7,12]
-    n = pinkNoise 'α' AR
-    t = dust 'β' KR 3
+    n = pinkNoise 'α' ar
+    t = dust 'β' kr 3
     fs = select (tiRand 'γ' 0 7 t) ps
     g = tRand 'δ' 0 1 t
     fo = tRand 'ε' 0 1 t

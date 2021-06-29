@@ -1,14 +1,14 @@
 -- envASR ; random release time
-let g = setResetFF 1 (dust 'α' KR 1)
+let g = setResetFF 1 (dust 'α' kr 1)
     p = envASR 0.01 1 1 (EnvNum (-4))
-    e = envGen KR g 0.1 0 1 RemoveSynth p
-in sinOsc AR 440 0 * e
+    e = envGen kr g 0.1 0 1 RemoveSynth p
+in sinOsc ar 440 0 * e
 
 -- envASR ; control
-let g = control KR "env-gate" 1
+let g = control kr "env-gate" 1
     p = envASR 0.01 1 1 (EnvNum (-4))
-    e = envGen KR g 0.1 0 1 RemoveSynth p
-in sinOsc AR 440 0 * e
+    e = envGen kr g 0.1 0 1 RemoveSynth p
+in sinOsc ar 440 0 * e
 
 ---- ; close gate message
 withSC3 (Sound.OSC.sendMessage (n_set1 (-1) "env-gate" 0))

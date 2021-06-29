@@ -30,7 +30,7 @@ event_from_list l =
 -}
 eventAddr :: UGen -> UGen -> UGen -> Event UGen
 eventAddr k0 stp c =
-  let u = in' 10 KR (k0 + (c * stp))
+  let u = in' 10 ControlRate (k0 + (c * stp))
   in event_from_list (mceChannels u)
 
 -- | c0 = index of voice (channel) zero for event set, n = number of voices (channels)
@@ -39,11 +39,11 @@ eventVoicerAddr k0 stp c0 n f = mce (map (\c -> f c (eventAddr k0 stp (c0 + cons
 
 -- | 'eventAddr' with 'control' inputs for /eventAddr/, /eventIncr/ and /eventZero/.
 event :: Event UGen
-event = eventAddr (control KR "eventAddr" 13000) (control KR "eventIncr" 10) (control KR "eventZero" 0)
+event = eventAddr (control ControlRate "eventAddr" 13000) (control ControlRate "eventIncr" 10) (control ControlRate "eventZero" 0)
 
 -- | 'eventVoicerAddr' with 'control' inputs for /eventAddr/, /eventIncr/ and /eventZero/.
 eventVoicer :: Int -> (Int -> Event UGen -> UGen) -> UGen
-eventVoicer = eventVoicerAddr (control KR "eventAddr" 13000) (control KR "eventIncr" 10) (control KR "eventZero" 0)
+eventVoicer = eventVoicerAddr (control ControlRate "eventAddr" 13000) (control ControlRate "eventIncr" 10) (control ControlRate "eventZero" 0)
 
 {- | Given /g/ and /p/ fields of an 'Event' derive a 'gateReset' from g
 and a trigger derived from monitoring /g/ and /p/ for changed values.
@@ -59,7 +59,7 @@ type Ctl16 = (UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,U
 -- | k0 = index of control bus zero for ctl system, c = ctl channel or voice (zero indexed)
 ctl16Addr :: UGen -> UGen -> Ctl16
 ctl16Addr k0 c =
-  let u = in' 16 KR (k0 + (c * 16))
+  let u = in' 16 ControlRate (k0 + (c * 16))
   in case mceChannels u of
        [cc0,cc1,cc2,cc3,cc4,cc5,cc6,cc7,cc8,cc9,cc10,cc11,cc12,cc13,cc14,cc15] ->
          (cc0,cc1,cc2,cc3,cc4,cc5,cc6,cc7,cc8,cc9,cc10,cc11,cc12,cc13,cc14,cc15)
@@ -71,11 +71,11 @@ ctl16VoicerAddr k0 c0 n f = mce (map (\c -> f c (ctl16Addr k0 (c0 + constant c))
 
 -- | 'ctl16Addr' with 'control' inputs for /Ctl16Addr/ and /Ctl16Zero/.
 ctl16 :: Ctl16
-ctl16 = ctl16Addr (control KR "Ctl16Addr" 11000) (control KR "Ctl16Zero" 0)
+ctl16 = ctl16Addr (control ControlRate "Ctl16Addr" 11000) (control ControlRate "Ctl16Zero" 0)
 
 -- | 'ctlVoicerAddr' with 'control' inputs for /CtlAddr/ and /CtlZero/.
 ctl16Voicer :: Int -> (Int -> Ctl16 -> UGen) -> UGen
-ctl16Voicer = ctl16VoicerAddr (control KR "Ctl16Addr" 11000) (control KR "Ctl16Zero" 0)
+ctl16Voicer = ctl16VoicerAddr (control ControlRate "Ctl16Addr" 11000) (control ControlRate "Ctl16Zero" 0)
 
 -- | First eight elements of Ctl16.
 type Ctl8 = (UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen)
@@ -121,7 +121,7 @@ control_spec_seq_print = intercalate ";" . map control_spec_print
 control_spec_to_control :: ControlSpec Double -> Control
 control_spec_to_control (cnm,def,(lhs,rhs,wrp)) =
   let grp = if last cnm `elem` "[]" then Just Control_Range else Nothing
-  in Control KR Nothing cnm def False (Just (Control_Meta lhs rhs wrp 0 "" grp))
+  in Control ControlRate Nothing cnm def False (Just (Control_Meta lhs rhs wrp 0 "" grp))
 
 {- | See SCClassLibrary/Common/Control/Spec:ControlSpec.initClass
 

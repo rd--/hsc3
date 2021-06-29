@@ -1,5 +1,5 @@
 -- http://fredrikolofsson.com/f0blog/?q=node/478 (f0)
-let a n = lfPulse AR n 0 0.5
+let a n = lfPulse ar n 0 0.5
     b = mce [1..4]
     a1 = (a (b/32) + 1) / 8
     a2 = (a a1 + 1) * b

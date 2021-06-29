@@ -1,17 +1,17 @@
 -- envADSR ; random release time
-let g = setResetFF 1 (dust 'α' KR 1)
+let g = setResetFF 1 (dust 'α' kr 1)
     p = envADSR 0.01 0.25 0.15 0.75 1 (EnvNum (-4)) 0
-    e = envGen KR g 0.1 0 1 RemoveSynth p
-in sinOsc AR 440 0 * e
+    e = envGen kr g 0.1 0 1 RemoveSynth p
+in sinOsc ar 440 0 * e
 
 -- envADSR
-let c = control KR "gate" 1
+let c = control kr "gate" 1
     p = envADSR 0.75 2.75 0.1 7.25 1 (EnvNum (-4)) 0
-    e = envGen KR c 1 0 1 RemoveSynth p
-in sinOsc AR 440 0 * e * 0.1
+    e = envGen kr c 1 0 1 RemoveSynth p
+in sinOsc ar 440 0 * e * 0.1
 
 -- envADSR ; record variant
-let g = control KR "gate" 1
+let g = control kr "gate" 1
     c = EnvNum (-4)
     r = ADSR {adsr_attackTime = 0.75
              ,adsr_decayTime = 0.75
@@ -21,14 +21,14 @@ let g = control KR "gate" 1
              ,adsr_curve = (c,c,c)
              ,adsr_bias = 0}
     p = envADSR_r r
-    e = envGen KR g 0.1 0 1 DoNothing p
-in sinOsc AR 440 0 * e
+    e = envGen kr g 0.1 0 1 DoNothing p
+in sinOsc ar 440 0 * e
 
 -- envADSR ; adsr_def
-let g = control KR "gate" 1
+let g = control kr "gate" 1
     p = envADSR_r adsr_def
-    e = envGen KR g 0.1 0 1 DoNothing p
-in sinOsc AR 440 0 * e
+    e = envGen kr g 0.1 0 1 DoNothing p
+in sinOsc ar 440 0 * e
 
 ---- ; close gate message
 withSC3 (Sound.OSC.sendMessage (n_set1 (-1) "gate" 0))

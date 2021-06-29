@@ -7,9 +7,9 @@ uid_st_eval (do
              rt <- sequence (p (randM 1 5))
              return (klankSpec f (p 1) rt)
   z <- clone 2 y
-  n <- fmap (* 0.03) (whiteNoiseM AR)
+  n <- fmap (* 0.03) (whiteNoiseM ar)
   tf <- randM 0.5 3.5
-  let t = impulse AR tf 0
+  let t = impulse ar tf 0
       s = decay t 0.004 * n
   return (klank s 1 0 1 (mceTranspose z)))
 
@@ -23,7 +23,7 @@ let f c (g,x,y,z,_,_,_,_,_,_) =
                 rt = map (\e -> tRand (c,e) 1 5 g) (enumFromN n 15)
             in klankSpec f3 (replicate 15 1) rt
           spc = mce2 (mk_spc 'α') (mk_spc 'β')
-          whn = whiteNoise (c,'γ') AR * z * 0.1
+          whn = whiteNoise (c,'γ') ar * z * 0.1
           sig = decay (trig g controlDur) (y * 0.01) * whn
       in dynKlank sig 1 0 1 (mceTranspose spc)
-in mix (eventVoicer 16 f) * control KR "gain" 1
+in mix (eventVoicer 16 f) * control kr "gain" 1

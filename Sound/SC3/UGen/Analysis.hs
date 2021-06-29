@@ -78,6 +78,6 @@ ugen_remove_out_node u =
   let err = error "ugen_remove_out_node?"
       assert_is_output x = if x `elem` ["Out","ReplaceOut","OffsetOut"] then x else err
   in case u of
-       Primitive_U (Primitive Rate.AR nm (_bus:inputs) [] _special _uid) -> (assert_is_output nm,mce inputs)
+       Primitive_U (Primitive Rate.AudioRate nm (_bus:inputs) [] _special _uid) -> (assert_is_output nm,mce inputs)
        MRG_U (MRG lhs rhs) -> let (nm,res) = ugen_remove_out_node lhs in (nm,MRG_U (MRG res rhs))
        _ -> err

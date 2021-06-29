@@ -1,47 +1,47 @@
 -- rFreezer ; check buffer
-let b = control KR "buf" 0
-    s = bufRateScale KR b
-in playBuf 1 AR b s 1 0 NoLoop RemoveSynth * 0.1
+let b = control kr "buf" 0
+    s = bufRateScale kr b
+in playBuf 1 ar b s 1 0 NoLoop RemoveSynth * 0.1
 
 -- rFreezer ; static instance
-let b = control KR "buf" 0
+let b = control kr "buf" 0
 in X.rFreezer b 0.35 0.4 0.6 0.1 0.05 0.02 0.1 0 0 6
 
 -- rFreezer ; static instance
-let b = control KR "buf" 0
+let b = control kr "buf" 0
 in X.rFreezer b 0.3 0.4 0.6 1 0 0 0 0 0 6
 
 -- rFreezer ; static instance
-let b = control KR "buf" 0
+let b = control kr "buf" 0
 in X.rFreezer b 0.3 0.7 0.6 0.35 0 0.5 0.5 0 0 6
 
 -- rFreezer ; static instance
-let b = control KR "buf" 0
+let b = control kr "buf" 0
 in X.rFreezer b 0.2500 0.2505 0.1 1 0 0.050 0.005 0 0 24
 
 -- rFreezer ; k-rate instance
-let b = control KR "buf" 0
-    n z f i j = linLin (lfNoise2 z KR f) (-1) 1 i j
+let b = control kr "buf" 0
+    n z f i j = linLin (lfNoise2 z kr f) (-1) 1 i j
     left = n 'α' 1 0.3 0.8
     right = left + n 'β' 1 0.01 0.05
 in X.rFreezer b left right 0.1 0.5 0.1 0.5 0.05 0 0 24
 
 -- rFreezer ; k-rate instance
-let b = control KR "buf" 0
-    n z i j = linLin (lfNoise2 z KR 0.1) (-1) 1 i j
+let b = control kr "buf" 0
+    n z i j = linLin (lfNoise2 z kr 0.1) (-1) 1 i j
 in X.rFreezer b (n 'α' 0.3 0.4) (n 'β' 0.5 0.6) (n 'γ' 0.3 0.6) (n 'δ' 0.95 1.05) (n 'ε' 0.05 0.15) (n 'ζ' 0.05 0.15) (n 'η' 0.05 0.15) 0 0 36
 
 -- rFreezer ; controls
-let b = control_m KR "buf" 0 (0,0,"lin")
-    (lhs,rhs) = control_rng KR "wnd" (0,1) (0,1,"lin")
-    amp = control_m KR "amp" 0.1 (0,1,"amp")
-    incr = control_m KR "incr" 1 (0,4,"lin")
-    incrO = control_m KR "incrO" 0 (0,1,"lin")
-    incrR = control_m KR "incrR" 0 (0,1,"lin")
-    wndR = control_m KR "wndR" 0 (0,1,"lin")
-    syncPh = control_m KR "syncPh" 0 (0,1,"trigger")
-    randPh = control_m KR "randPh" 0 (0,1,"trigger")
-    dgr = control_m KR "numLp" 24 (1,64,"lin")
+let b = control_m kr "buf" 0 (0,0,"lin")
+    (lhs,rhs) = control_rng kr "wnd" (0,1) (0,1,"lin")
+    amp = control_m kr "amp" 0.1 (0,1,"amp")
+    incr = control_m kr "incr" 1 (0,4,"lin")
+    incrO = control_m kr "incrO" 0 (0,1,"lin")
+    incrR = control_m kr "incrR" 0 (0,1,"lin")
+    wndR = control_m kr "wndR" 0 (0,1,"lin")
+    syncPh = control_m kr "syncPh" 0 (0,1,"trigger")
+    randPh = control_m kr "randPh" 0 (0,1,"trigger")
+    dgr = control_m kr "numLp" 24 (1,64,"lin")
 in X.rFreezer b lhs rhs amp incr incrO incrR wndR syncPh randPh dgr
 
 ---- ; allocate buffer 0, required for examples

@@ -32,9 +32,9 @@ ugen_optimise_ir_rand =
             case u of
               Primitive_U p ->
                   case p of
-                    Primitive IR "Rand" [Constant_U (Constant l),Constant_U (Constant r)] [IR] _ (UId z) ->
+                    Primitive InitialisationRate "Rand" [Constant_U (Constant l),Constant_U (Constant r)] [InitialisationRate] _ (UId z) ->
                         Constant_U (Constant (c_rand z l r))
-                    Primitive IR "IRand" [Constant_U (Constant l),Constant_U (Constant r)] [IR] _ (UId z) ->
+                    Primitive InitialisationRate "InitialisationRateand" [Constant_U (Constant l),Constant_U (Constant r)] [InitialisationRate] _ (UId z) ->
                         Constant_U (Constant (c_irand z l r))
                     _ -> u
               _ -> u

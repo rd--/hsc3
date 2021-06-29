@@ -6,7 +6,7 @@
 ...gate prints however...
 
 > g_02 =
->   let g = lfPulse KR 0.25 0 0.5
+>   let g = lfPulse kr 0.25 0 0.5
 >       u = stkBowedR
 >         {freq = midiCPS (rand 'α' 24 96)
 >         ,bowpressure = rand 'β' 0 127

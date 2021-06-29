@@ -1,6 +1,6 @@
 -- rongs
-let tr_freq = sinOsc KR 0.1 (pi/2) `in_exprange` (10.1,1.0)
-    tr = dust2 'α' KR tr_freq
+let tr_freq = sinOsc kr 0.1 (pi/2) `in_exprange` (10.1,1.0)
+    tr = dust2 'α' kr tr_freq
     sig = let f0 = mce2 1.0 1.01 * tExpRand 'β' 0.001 0.100 tr * sampleRate / 2
               structure = tRand 'γ' 0.25 0.75 tr
               brightness = tRand 'δ' 0.25 0.75 tr
@@ -9,7 +9,7 @@ let tr_freq = sinOsc KR 0.1 (pi/2) `in_exprange` (10.1,1.0)
               stretch = tRand 'ε' 0.1 0.99 tr
               position = 0.15
               loss = tRand 'η' 0.1 0.5 tr
-          in X.rongs AR tr tr f0 structure brightness damping accent stretch position loss
+          in X.rongs ar tr tr f0 structure brightness damping accent stretch position loss
 in splay (leakDC sig 0.995) 0.25 1 (tRand 'θ' (-1) 1 tr) True
 
 -- rongs ; event control
@@ -23,6 +23,6 @@ let f _ (g,x,y,z,o,rx,ry,_,_,_) =
           stretch = 0.5 + z * tRand 'γ' (-0.5) 0.5 tr
           position = y * 0.5
           loss = 0.25 + o * tRand 'δ' (-0.1) 0.1 tr
-          sig = X.rongs AR tr tr f0 structure brightness damping accent stretch position loss
+          sig = X.rongs ar tr tr f0 structure brightness damping accent stretch position loss
       in pan2 (leakDC sig 0.995) (o * 2 - 1) (lagUD z 0 2)
-in mix (eventVoicer 6 f) * control KR "gain" 1
+in mix (eventVoicer 6 f) * control kr "gain" 1

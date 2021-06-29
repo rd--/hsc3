@@ -3,7 +3,7 @@
 
 > import Sound.SC3
 
-> let {i = whiteNoise 'α' AR * 0.05
+> let {i = whiteNoise 'α' ar * 0.05
 >     ;b = localBuf 'β' 1024 1
 >     ;c = dwt b i 0.5 0 1 0 0}
 > in audition (out 0 (mce2 (idwt c 0 0 0) i))
@@ -21,7 +21,7 @@ direct synthesis via writing values to buffer (try changing wavelet type...)
 
 > withSC3 (send (b_zero 10))
 
-run this to change sound: WARNING, NOISY!
+run this to change sound: WarNING, NOISY!
 
 > do {a <- evalRandIO (nrrand 1024 (-1) 1)
 >    ;withSC3 (send (b_setn 10 [(0,a)]))}

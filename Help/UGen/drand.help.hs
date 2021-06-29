@@ -1,9 +1,9 @@
 -- drand
 let n = drand 'α' dinf (mce [1, 3, 2, 7, 8])
-    x = mouseX KR 1 400 Exponential 0.1
-    t = impulse KR x 0
+    x = mouseX kr 1 400 Exponential 0.1
+    t = impulse kr x 0
     f = demand t 0 n * 30 + 340
-in sinOsc AR f 0 * 0.1
+in sinOsc ar f 0 * 0.1
 
 -- drand
 let d = drand 'α' dinf
@@ -16,6 +16,6 @@ let d = drand 'α' dinf
              ,dseq 'θ' 1 (mce [2, 0, 0, 0, 0, 0, 0, 0])
              ,dseq 'ι' 1 (mce [0, 1, 0, 1, 0, 1, 0, 1])
              ,dseq 'κ' 1 (mce [1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0])])
-    t = impulse AR 10 0
+    t = impulse ar 10 0
     x = demand t 0 d * t
-in decay x 1 * pinkNoise 'λ' AR * 0.1
+in decay x 1 * pinkNoise 'λ' ar * 0.1

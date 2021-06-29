@@ -10,11 +10,11 @@ let vc = [[25,21,98,38,99, 0,99, 0,36,17,87,2,1,0,0,0,59,0, 1,1,8]
     mnn = iRand 'β' 48 72
     vel = iRand 'γ' 10 69
     loc = rand 'δ' (-1) 1
-    gate_ = line KR 1 0 dur DoNothing
+    gate_ = line kr 1 0 dur DoNothing
     reset_ = 0
     data_ = 0
     buf = asLocalBuf 'ε' (map constant (concat vc))
-    s = pan2 (X.rdx7 AR buf gate_ reset_ data_ 0 mnn vel 0x2000 0 0 0) loc 1
+    s = pan2 (X.rdx7 ar buf gate_ reset_ data_ 0 mnn vel 0x2000 0 0 0) loc 1
     d = detectSilence s 0.001 0.1 RemoveSynth
 in mrg [out 0 s,d]
 
@@ -29,27 +29,27 @@ let f _ (g,x,_,z,o,_,_,p,_,_) =
                ,[99,99,99,99,50,50,50,50,3,2,1,29,99,1,0,0,0,1,24]]
           buf = asLocalBuf 'ε' (map constant (concat vc))
           x0 = latch x g
-      in pan2 (X.rdx7 AR buf g 0 0 0 p z (0x2000 * (x - x0)) 0 0 0) (o * 2 - 1) 1
-in mix (eventVoicer 16 f) * control KR "gain" 1
+      in pan2 (X.rdx7 ar buf g 0 0 0 p z (0x2000 * (x - x0)) 0 0 0) (o * 2 - 1) 1
+in mix (eventVoicer 16 f) * control kr "gain" 1
 
 -- rdx7 ; data at shared buffer ; external control
-let buf = control KR "dat" 100
-    gate_ = control KR "gate" 0
-    reset = control KR "reset" 0
-    data_ = control KR "data" 0
-    vc = control KR "vc" 0
-    mnn = control KR "mnn" 60
-    vel = control KR "vel" 99
+let buf = control kr "dat" 100
+    gate_ = control kr "gate" 0
+    reset = control kr "reset" 0
+    data_ = control kr "data" 0
+    vc = control kr "vc" 0
+    mnn = control kr "mnn" 60
+    vel = control kr "vel" 99
     pw = 0x2000
     mw = 0
     bc = 0
     fc = 0
-in X.rdx7 AR buf gate_ reset data_ vc mnn vel pw mw bc fc
+in X.rdx7 ar buf gate_ reset data_ vc mnn vel pw mw bc fc
 
 -- rdx7 ; data at shared buffer
 let nv = 32 -- 221
-    buf = control KR "dat" 100
-    tr = dust 'α' KR 2.0
+    buf = control kr "dat" 100
+    tr = dust 'α' kr 2.0
     gate_ = toggleFF tr
     reset_ = 0
     data_ = 0
@@ -57,17 +57,17 @@ let nv = 32 -- 221
     mnn = tRand 'γ' 56.5 57.5 tr -- FRACTIONAL MIDI NOTE NUMBER -- 60 61
     vel = tRand 'δ' 10 29 tr
     loc = tRand 'ε' (-1) 1 tr
-in pan2 (X.rdx7 AR buf gate_ reset_ data_ vc mnn vel 0x2000 0 0 0) loc 1
+in pan2 (X.rdx7 ar buf gate_ reset_ data_ vc mnn vel 0x2000 0 0 0) loc 1
 
 -- rdx7 ; event control ; data at shared buffer
 let f _ (g,x,_,z,o,_,_,p,_,_) =
-      let buf = control KR "buf" 100
-          vc = control_m KR "vc" 0 (0,31,"lin")
+      let buf = control kr "buf" 100
+          vc = control_m kr "vc" 0 (0,31,"lin")
           x0 = latch x g
           pw = 0x2000 * (1 + (x - x0) * 2)
-          s = X.rdx7 AR buf g 0 0 vc p (z * 99) pw 0 0 0
+          s = X.rdx7 ar buf g 0 0 vc p (z * 99) pw 0 0 0
       in pan2 s (o * 2 - 1) 1
-in mix (eventVoicer 16 f) * control_m KR "gain" 1 (0,4,"amp")
+in mix (eventVoicer 16 f) * control_m kr "gain" 1 (0,4,"amp")
 
 ---- ; send init voice
 import qualified Sound.SC3.Data.Yamaha.DX7 as DX7 {- hsc3-data -}

@@ -1,9 +1,9 @@
 -- sos ; same as twopole
-let theta = line KR (0.2 * pi) pi 5 RemoveSynth
-    rho = line KR 0.6 0.99 5 RemoveSynth
+let theta = line kr (0.2 * pi) pi 5 RemoveSynth
+    rho = line kr 0.6 0.99 5 RemoveSynth
     b1 = 2 * rho * cos theta
     b2 = - (rho * rho)
-in sos (lfSaw AR 200 0 * 0.1) 1 0 0 b1 b2
+in sos (lfSaw ar 200 0 * 0.1) 1 0 0 b1 b2
 
 -- sos ; http://www.earlevel.com/main/2011/01/02/biquad-formulas/
 let fc = 100
@@ -16,19 +16,19 @@ let fc = 100
     a2 = a0
     b1 = 2 * (k * k - 1) * norm
     b2 = (1 - k / q + k * k) * norm
-in sos (whiteNoise 'α' AR * 0.2) a0 a1 a2 (- b1) (- b2)
+in sos (whiteNoise 'α' ar * 0.2) a0 a1 a2 (- b1) (- b2)
 
 -- sos
-let b1 = mouseY KR 1.45 1.998 Linear 0.2
-    b2 = mouseX KR (-0.999) (-0.9998) Linear 0.2
-in sos (impulse AR 2 0) 0.0 0.05 0.0 b1 b2
+let b1 = mouseY kr 1.45 1.998 Linear 0.2
+    b2 = mouseX kr (-0.999) (-0.9998) Linear 0.2
+in sos (impulse ar 2 0) 0.0 0.05 0.0 b1 b2
 
 -- sos
 let f _ (w,x,y,z,o,_,_,_,_,_) =
       let b1 = linLin y 0 1 1.45 1.998
           b2 = linLin x 0 1 (-0.999) (-0.9998)
       in pan2 (sos (trig (k2a w) 0) 0.0 0.05 0.0 b1 b2) (o * 2 - 1) 8
-in mix (eventVoicer 16 f) * control KR "gain" 1
+in mix (eventVoicer 16 f) * control kr "gain" 1
 
 -- sos
 let f _ (w,x,y,z,o,_,_,_,_,_) =
@@ -42,4 +42,4 @@ let f _ (w,x,y,z,o,_,_,_,_,_) =
           s3 = s2 + delayC (rhpf (s1 * 0.9) (freq * 0.99999) (rq * 0.999)) 0.02 0.01223
           s4 = decay2 s3 0.4 0.3 * s2
       in pan2 s4 (o * 2 - 1) 0.1
-in mix (eventVoicer 16 f) * control KR "gain" 0.5
+in mix (eventVoicer 16 f) * control kr "gain" 0.5

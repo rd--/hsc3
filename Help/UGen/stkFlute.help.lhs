@@ -17,8 +17,8 @@
 >   let u = stkFluteR
 >           {freq = 440
 >           ,jetDelay = 49
->           ,noisegain = line KR 0.05 0.25 3 DoNothing
->           ,jetRatio = line KR 0.10 0.60 3 RemoveSynth}
+>           ,noisegain = line kr 0.05 0.25 3 DoNothing
+>           ,jetRatio = line kr 0.10 0.60 3 RemoveSynth}
 >   in mkStkFlute u
 
 <https://ccrma.stanford.edu/software/stk/classstk_1_1Flute.html>

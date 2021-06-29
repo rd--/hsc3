@@ -5,9 +5,9 @@
 
 fails..., but so does sclang...
 
-> let {p = pinkNoise 'α' AR
->     ;mx = mouseX KR (-1) 1 Linear 0.2
->     ;my = mouseY KR 0 0.1 Linear 0.2
+> let {p = pinkNoise 'α' ar
+>     ;mx = mouseX kr (-1) 1 Linear 0.2
+>     ;my = mouseY kr 0 0.1 Linear 0.2
 >     ;[w,x,y] = mceChannels (panB2 p mx my)
 >     ;o = decodeB2 2 w x y 0.5}
 > in audition (out 0 o)

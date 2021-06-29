@@ -1,70 +1,70 @@
 -- ladspa ; caps ; # 1767 C* ChorusI - Mono chorus/flanger
 let s = soundIn 0
-    x = mouseX KR 0 1 Linear 0.2
-    y = mouseY KR 0 1 Linear 0.2
-    n1 = range 2.5 40 (lfNoise2 'α' KR 0.2)
-    n2 = range 0.5 10 (lfNoise2 'β' KR 0.2)
-in X.ladspa 1 AR 1767 [n1,n2,0.5,0.5,x,y,s]
+    x = mouseX kr 0 1 Linear 0.2
+    y = mouseY kr 0 1 Linear 0.2
+    n1 = range 2.5 40 (lfNoise2 'α' kr 0.2)
+    n2 = range 0.5 10 (lfNoise2 'β' kr 0.2)
+in X.ladspa 1 ar 1767 [n1,n2,0.5,0.5,x,y,s]
 
 -- ladspa ; caps ; # 1769 C* Click - Metronome
-let x = roundE (mouseX KR 0 3 Linear 0.2)
-    y = mouseY KR 4 240 Linear 0.2
-in X.ladspa 1 AR 1769 [x,y,0.5,0.5]
+let x = roundE (mouseX kr 0 3 Linear 0.2)
+    y = mouseY kr 4 240 Linear 0.2
+in X.ladspa 1 ar 1769 [x,y,0.5,0.5]
 
 -- ladspa ; caps ; # 1773 C* Eq10 - 10-band equaliser
 let s = soundIn 0
     enumN n e = take n (enumFrom e)
-    n = map (\z -> range (-24) 48 (lfNoise2 z KR 0.2)) (enumN 10 'α')
-in X.ladspa 1 AR 1773 (n ++ [s]) * 0.1
+    n = map (\z -> range (-24) 48 (lfNoise2 z kr 0.2)) (enumN 10 'α')
+in X.ladspa 1 ar 1773 (n ++ [s]) * 0.1
 
 -- ladspa ; caps ; # 1771 C* Saturate - Various static nonlinearities, 8x oversampled
 let s = soundIn 0
-in X.ladspa 1 AR 1771 [1,0,0,s]
+in X.ladspa 1 ar 1771 [1,0,0,s]
 
 -- ladspa ; caps ; # 1771 C* Saturate - Various static nonlinearities, 8x oversampled
 let s = soundIn 0
-    x = roundE (mouseX KR 0 11 Linear 0.2)
-    y = mouseY KR (-24) 72 Linear 0.2
-in X.ladspa 1 AR 1771 [x,y,0.0,s]
+    x = roundE (mouseX kr 0 11 Linear 0.2)
+    y = mouseY kr (-24) 72 Linear 0.2
+in X.ladspa 1 ar 1771 [x,y,0.0,s]
 
 -- ladspa ; caps ; # 1772 C* Compress - Compressor and saturating limiter
 let s = soundIn 0
-    x = roundE (mouseX KR 0 2 Linear 0.2)
-    y = mouseY KR 0 1 Linear 0.2
-in X.ladspa 1 AR 1772 [0.5,x,y,0.5,0.5,0.1,0,s]
+    x = roundE (mouseX kr 0 2 Linear 0.2)
+    y = mouseY kr 0 1 Linear 0.2
+in X.ladspa 1 ar 1772 [0.5,x,y,0.5,0.5,0.1,0,s]
 
 -- ladspa ; caps ; # 1779 C* Plate - Versatile plate reverb
 let s = soundIn 0
-    x = mouseX KR 0 1 Linear 0.2
-    y = mouseY KR 0 1 Linear 0.2
-in X.ladspa 2 AR 1779 [x,y,0.5,0.5,s]
+    x = mouseX kr 0 1 Linear 0.2
+    y = mouseY kr 0 1 Linear 0.2
+in X.ladspa 2 ar 1779 [x,y,0.5,0.5,s]
 
 -- ladspa ; caps ; # 1788 C* Wider - Stereo image synthesis
 let s = soundIn 0
-    x = mouseX KR (-1) 1 Linear 0.2
-    y = mouseY KR 0 1 Linear 0.2
-in X.ladspa 2 AR 1788 [x,y,s]
+    x = mouseX kr (-1) 1 Linear 0.2
+    y = mouseY kr 0 1 Linear 0.2
+in X.ladspa 2 ar 1788 [x,y,s]
 
 -- ladspa ; caps ; # 2586 C* PhaserII - Mono phaser
 let s = soundIn 0
-    x = mouseX KR 0 1 Linear 0.2
-    y = mouseY KR 0 1 Linear 0.2
-in X.ladspa 1 AR 2586 [0.3,x,0.5,y,0.8,s]
+    x = mouseX kr 0 1 Linear 0.2
+    y = mouseY kr 0 1 Linear 0.2
+in X.ladspa 1 ar 2586 [0.3,x,0.5,y,0.8,s]
 
 -- ladspa ; caps ; # 2592 C* AmpVTS - Idealised guitar amplification
-X.ladspa 1 AR 2592 [1,0.25,0.75,0.5,1,0.25,1,0.75,0.75,0.25,0.5,soundIn 0] * 0.1
+X.ladspa 1 ar 2592 [1,0.25,0.75,0.5,1,0.25,1,0.75,0.75,0.25,0.5,soundIn 0] * 0.1
 
 -- ladspa ; caps ; # 2592 C* AmpVTS - Idealised guitar amplification
 let s = soundIn 0
-    x = roundE (mouseX KR 0 8 Linear 0.2)
-    y = mouseY KR 0 1 Linear 0.2
+    x = roundE (mouseX kr 0 8 Linear 0.2)
+    y = mouseY kr 0 1 Linear 0.2
     enumN n e = take n (enumFrom e)
-    [n1,n2,n3,n4,n5,n6,n7,n8] = map (\z -> lfNoise2 z KR 0.2) (enumN 8 'α')
-in X.ladspa 1 AR 2592 [1,y,n1,n2,x,n3,n4,n5,n6,n7,n8,s]
+    [n1,n2,n3,n4,n5,n6,n7,n8] = map (\z -> lfNoise2 z kr 0.2) (enumN 8 'α')
+in X.ladspa 1 ar 2592 [1,y,n1,n2,x,n3,n4,n5,n6,n7,n8,s]
 
 -- ladspa ; caps ; # 2609 C* EqFA4p - 4-band parametric eq
 let s = soundIn 0
-    f z m l r = m (lfNoise2 z KR 0.2) (-1) 1 l r
+    f z m l r = m (lfNoise2 z kr 0.2) (-1) 1 l r
     p = [f 'α' linLin 0 1
         ,f 'β' linExp 20 14000
         ,f 'γ' linExp 0.125 8
@@ -83,7 +83,7 @@ let s = soundIn 0
         ,f 'π' linLin (-24) 24
         ,0
         ,s]
-in pan2 (X.ladspa 1 AR 2609 p) (f 'ρ' linLin (-1) 1) 0.25
+in pan2 (X.ladspa 1 ar 2609 p) (f 'ρ' linLin (-1) 1) 0.25
 
 {---- ; Note: debian sc3-plugins doesn't build ladspalist, to build type:
 
@@ -227,18 +227,18 @@ CAPS = http://quitte.de/dsp/caps.html, http://packages.debian.org/stable/caps
 
 ---- ladspa ; caps ; # 2588 C* Scape - Stereo delay with chromatic resonances
 let s = soundIn 0 * 0.1
-in X.ladspa 2 AR 2588 [30,2,0,0.1,0.5,415,s] * 0.1
+in X.ladspa 2 ar 2588 [30,2,0,0.1,0.5,415,s] * 0.1
 
 ---- ladspa ; caps ; # 2588 C* Scape - Stereo delay with chromatic resonances
 let s = soundIn 0 * 0.1
-    x = mouseX KR 30 164 Linear 0.2
-    y = roundE (mouseY KR 2 4 Linear 0.2)
-    n1 = lfNoise2 'α' KR 0.2 * 0.5 + 0.5
-    n2 = lfNoise2 'β' KR 0.2 * 0.5 + 0.5
-in X.ladspa 2 AR 2588 [x,y,n1,n2,0.5,440,s]
+    x = mouseX kr 30 164 Linear 0.2
+    y = roundE (mouseY kr 2 4 Linear 0.2)
+    n1 = lfNoise2 'α' kr 0.2 * 0.5 + 0.5
+    n2 = lfNoise2 'β' kr 0.2 * 0.5 + 0.5
+in X.ladspa 2 ar 2588 [x,y,n1,n2,0.5,440,s]
 
 ---- ladpsa ; caps ; # 2603 C* Spice - Not an exciter
 let s = soundIn 0
-    x = mouseX KR 50 400 Exponential 0.2
-    y = mouseY KR 400 5000 Exponential 0.2
-in X.ladspa 1 AR 2603 [x,0.5,0.5,y,0.5,s]
+    x = mouseX kr 50 400 Exponential 0.2
+    y = mouseY kr 400 5000 Exponential 0.2
+in X.ladspa 1 ar 2603 [x,0.5,0.5,y,0.5,s]

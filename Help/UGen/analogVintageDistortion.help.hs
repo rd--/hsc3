@@ -1,12 +1,12 @@
 -- analogVintageDistortion
-let amp = control KR "amp" 0.025
-    drivegain = control KR "drivegain" 0.85
-    bias = control KR "bias" 0.1
-    lowgain = control KR "lowgain" (dbAmp (-3))
-    highgain = control KR "highgain" (dbAmp (-9))
-    shelvingfreq = control_m KR "shelvingfreq" 600 (200,800,"exp")
-    oversample = control_m KR "oversample" 1 (0,1,"switch")
-    sig = sinOsc AR (sinOsc KR 1 0 `in_exprange` (80,1000)) 0
+let amp = control kr "amp" 0.025
+    drivegain = control kr "drivegain" 0.85
+    bias = control kr "bias" 0.1
+    lowgain = control kr "lowgain" (dbAmp (-3))
+    highgain = control kr "highgain" (dbAmp (-9))
+    shelvingfreq = control_m kr "shelvingfreq" 600 (200,800,"exp")
+    oversample = control_m kr "oversample" 1 (0,1,"switch")
+    sig = sinOsc ar (sinOsc kr 1 0 `in_exprange` (80,1000)) 0
     flt = X.analogVintageDistortion sig drivegain bias lowgain highgain shelvingfreq oversample
 in mce2 (sig * 0.5) flt * amp
 

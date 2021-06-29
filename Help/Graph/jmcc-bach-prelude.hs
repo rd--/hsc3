@@ -11,6 +11,6 @@ let p1 = [[60,64,67,72,76],[60,62,69,74,77],[59,62,67,74,77],[60,64,67,72,76]
          ,[36,47,67,71,74,77,74,71,74,71,67,71,62,65,64,62]
          ,replicate 16 60]
     p = concatMap (concat . replicate 2 . (\x -> x ++ drop 2 x)) p1 ++ concat p2
-    tr = impulse KR 5 0
+    tr = impulse kr 5 0
     freq = demand tr 0 (dseq 'α' 1 (mce (map midiCPS p)))
-in pan2 (freeVerb (lpf (saw AR (lag freq 0.03)) 1000) 0.3 0.5 0.35) 0 0.2
+in pan2 (freeVerb (lpf (saw ar (lag freq 0.03)) 1000) 0.3 0.5 0.35) 0 0.2

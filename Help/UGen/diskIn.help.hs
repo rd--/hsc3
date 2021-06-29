@@ -1,5 +1,5 @@
 -- diskIn ; requires=dsk
-let nc = 2 in diskIn nc (control KR "dsk" 0) Loop
+let nc = 2 in diskIn nc (control kr "dsk" 0) Loop
 
 ---- ; setup
 {fn = "/home/rohan/rd/data/ut/inland/flac/c/20.2/20.2-LW+RD.flac";nc = 2;dsk = 0}

@@ -12,12 +12,12 @@ import Sound.SC3.UGen.Bindings.DB
 import Sound.SC3.UGen.Type
 
 -- | Make NRT score that runs /u/ for /dur/ seconds to output bus zero.
---   If /u/ is at KR insert 'k2a' UGen.
+--   If /u/ is at ControlRate insert 'k2a' UGen.
 nrt_ugen_rec :: Time -> UGen -> NRT
 nrt_ugen_rec dur u =
     let sg = case rateOf u of
-               AR -> u
-               KR -> k2a u
+               AudioRate -> u
+               ControlRate -> k2a u
                _ -> error "nrt_ugen_rec: rate?"
         sy = synthdef "anonymous" (out 0 sg)
         m0 = d_recv sy

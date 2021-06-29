@@ -6,12 +6,12 @@ uid_st_eval (do
               r3 <- randM 700 1300
               r4 <- randM (-1) 1
               r5 <- randM 80 120
-              n0 <- lfNoise2M AR r5
-              let f = sinOsc KR r0 r1 * r2 + r3
-              return (pan2 (sinOsc AR f 0 * n0 * 0.1) r4 1)
+              n0 <- lfNoise2M ar r5
+              let f = sinOsc kr r0 r1 * r2 + r3
+              return (pan2 (sinOsc ar f 0 * n0 * 0.1) r4 1)
   ns <- clone 4 nd
-  n0 <- clone 2 (lfNoise2M KR 0.4)
-  n1 <- lfNoise2M AR (n0 * 90 + 620)
-  n2 <- lfNoise2M KR (mce2 0.3 0.301)
+  n0 <- clone 2 (lfNoise2M kr 0.4)
+  n1 <- lfNoise2M ar (n0 * 90 + 620)
+  n2 <- lfNoise2M kr (mce2 0.3 0.301)
   let e = n1 * (n2 * 0.15 + 0.18)
   return (combL (mix ns + e) 0.3 0.3 3))

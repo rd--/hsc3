@@ -6,7 +6,7 @@ is not apparent from the edge structure of the graph.  See instead
 PV_Split.
 
 > g_01 =
->     let z = lfClipNoise 'α' AR 100 * 0.1
+>     let z = lfClipNoise 'α' ar 100 * 0.1
 >         c0 = fft' (localBuf 'β' 2048 1) z
 >         c1 = pv_Copy c0 (localBuf 'γ' 2048 1)
 >     in ifft' c1 - ifft' c0

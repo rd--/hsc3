@@ -13,19 +13,25 @@ import Sound.SC3.Common.Math.Filter.BEQ
 import Sound.SC3.Common.Math.Operator
 import Sound.SC3.Common.Rate
 import Sound.SC3.Common.UId
+import Sound.SC3.Common.Unsafe
 
 import Sound.SC3.UGen.Bindings.DB
 import Sound.SC3.UGen.Bindings.HW
-import Sound.SC3.UGen.Bindings.Monad
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
 -- | Generate a localBuf and use setBuf to initialise it.
-asLocalBuf :: ID i => i -> [UGen] -> UGen
-asLocalBuf i xs =
-    let b = localBuf i 1 (fromIntegral (length xs))
+asLocalBufId :: ID i => i -> [UGen] -> UGen
+asLocalBufId z xs =
+    let b = localBufId z 1 (fromIntegral (length xs))
         s = setBuf' b xs 0
     in mrg2 b s
+
+asLocalBufM :: UId m => [UGen] -> m UGen
+asLocalBufM = liftUId1 asLocalBufId
+
+asLocalBuf :: [UGen] -> UGen
+asLocalBuf = liftUnsafe1 asLocalBufM
 
 -- | balance2 with MCE input.
 balanceStereo :: UGen -> UGen -> UGen -> UGen
@@ -62,23 +68,32 @@ changed :: UGen -> UGen -> UGen
 changed input threshold = abs (hpz1 input) `greater_than` threshold
 
 -- | 'mce' variant of 'lchoose'.
-choose :: ID m => m -> UGen -> UGen
-choose e = lchoose e . mceChannels
+chooseId :: ID m => m -> UGen -> UGen
+chooseId z = lchooseId z . mceChannels
 
 -- | 'liftUId' of 'choose'.
 chooseM :: UId m => UGen -> m UGen
-chooseM = liftUId1 choose
+chooseM = liftUId1 chooseId
+
+choose :: UGen -> UGen
+choose = liftUnsafe1 chooseM
 
 -- | 'clearBuf' of 'localBuf'.
-clearLocalBuf :: ID a => a -> UGen -> UGen -> UGen
-clearLocalBuf z nc nf = clearBuf (localBuf z nc nf)
+clearLocalBufId :: ID a => a -> UGen -> UGen -> UGen
+clearLocalBufId z nc nf = clearBuf (localBufId z nc nf)
+
+clearLocalBufM :: UId m => UGen -> UGen -> m UGen
+clearLocalBufM = liftUId2 clearLocalBufId
+
+clearLocalBuf :: UGen -> UGen -> UGen
+clearLocalBuf = liftUnsafe2 clearLocalBufM
 
 -- | Demand rate (:) function.
-dcons :: ID m => (m,m,m) -> UGen -> UGen -> UGen
-dcons (z0,z1,z2) x xs =
-    let i = dseq z0 1 (mce2 0 1)
-        a = dseq z1 1 (mce2 x xs)
-    in dswitch z2 i a
+dconsId :: ID m => (m,m,m) -> UGen -> UGen -> UGen
+dconsId (z0,z1,z2) x xs =
+    let i = dseqId z0 1 (mce2 0 1)
+        a = dseqId z1 1 (mce2 x xs)
+    in dswitchId z2 i a
 
 -- | Demand rate (:) function.
 dconsM :: (UId m) => UGen -> UGen -> m UGen
@@ -86,6 +101,9 @@ dconsM x xs = do
   i <- dseqM 1 (mce2 0 1)
   a <- dseqM 1 (mce2 x xs)
   dswitchM i a
+
+dcons :: UGen -> UGen -> UGen
+dcons = liftUnsafe2 dconsM
 
 -- | Dynamic klang, dynamic sine oscillator bank
 dynKlang :: Rate -> UGen -> UGen -> UGen -> UGen
@@ -118,10 +136,16 @@ fft' buf i = fft buf i 0.5 0 1 0
 --
 -- > let c = ffta 'α' 2048 (soundIn 0) 0.5 0 1 0
 -- > in audition (out 0 (ifft c 0 0))
-ffta :: ID i => i -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-ffta z nf i h wt a ws =
-    let b = localBuf z 1 nf
+fftaId :: ID i => i -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+fftaId z nf i h wt a ws =
+    let b = localBufId z 1 nf
     in fft b i h wt a ws
+
+fftaM :: UId m => UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> m UGen
+fftaM = liftUId6 fftaId
+
+ffta :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+ffta = liftUnsafe6 fftaM
 
 -- | Sum of 'numInputBuses' and 'numOutputBuses'.
 firstPrivateBus :: UGen
@@ -130,7 +154,7 @@ firstPrivateBus = numInputBuses + numOutputBuses
 -- | Frequency shifter, in terms of 'hilbert' (see also 'freqShift').
 freqShift_hilbert :: UGen -> UGen -> UGen -> UGen
 freqShift_hilbert i f p =
-    let o = sinOsc AR f (mce [p + 0.5 * pi, p])
+    let o = sinOsc ar f (mce [p + 0.5 * pi, p])
         h = hilbert i
     in mix (h * o)
 
@@ -153,7 +177,7 @@ hilbertFIR :: UGen -> UGen -> UGen
 hilbertFIR s b =
   let c0 = fft' b s
       c1 = pv_PhaseShift90 c0
-      delay = bufDur KR b
+      delay = bufDur kr b
   in mce2 (delayN s delay delay) (ifft' c1)
 
 -- | Variant ifft with default value for window type.
@@ -201,12 +225,15 @@ klankSpec_mce :: UGen -> UGen -> UGen -> UGen
 klankSpec_mce = klanx_spec_f mceChannels mce
 
 -- | Randomly select one of a list of UGens (initialisation rate).
-lchoose :: ID m => m -> [UGen] -> UGen
-lchoose e a = select (iRand e 0 (fromIntegral (length a))) (mce a)
+lchooseId :: ID m => m -> [UGen] -> UGen
+lchooseId z a = select (iRandId z 0 (fromIntegral (length a))) (mce a)
 
 -- | 'liftUId' of 'lchoose'.
 lchooseM :: UId m => [UGen] -> m UGen
-lchooseM = liftUId1 lchoose
+lchooseM = liftUId1 lchooseId
+
+lchoose :: [UGen] -> UGen
+lchoose = liftUnsafe1 lchooseM
 
 -- | 'linExp' of (-1,1).
 linExp_b :: UGen -> UGen -> UGen -> UGen
@@ -235,15 +262,15 @@ localIn' nc r = localIn nc r (mce (replicate nc 0))
 -- | Generate an 'envGen' UGen with @fadeTime@ and @gate@ controls.
 --
 -- > import Sound.SC3
--- > audition (out 0 (makeFadeEnv 1 * sinOsc AR 440 0 * 0.1))
+-- > audition (out 0 (makeFadeEnv 1 * sinOsc ar 440 0 * 0.1))
 -- > withSC3 (send (n_set1 (-1) "gate" 0))
 makeFadeEnv :: Double -> UGen
 makeFadeEnv fadeTime =
-    let dt = control KR "fadeTime" (realToFrac fadeTime)
-        gate_ = control KR "gate" 1
+    let dt = control kr "fadeTime" (realToFrac fadeTime)
+        gate_ = control kr "gate" 1
         startVal = dt `less_than_or_equal_to` 0
         env = Envelope [startVal,1,0] [1,1] [EnvLin,EnvLin] (Just 1) Nothing 0
-    in envGen KR gate_ 1 0 dt RemoveSynth env
+    in envGen kr gate_ 1 0 dt RemoveSynth env
 
 -- | 'mce' of 'map' /f/ of 'id_seq' /n/.
 mce_gen :: ID z => (Id -> UGen) -> Int -> z -> UGen
@@ -314,25 +341,31 @@ useq_z z k f i = if k <= 0 then i else useq_z (succ z) (k - 1) f (f z i)
 -- | Variant that is randomly pressed.
 mouseButton' :: Rate -> UGen -> UGen -> UGen -> UGen
 mouseButton' rt l r tm =
-    let o = lfClipNoise 'z' rt 1
+    let o = lfClipNoiseId 'z' rt 1
     in lag (linLin o (-1) 1 l r) tm
 
 -- | Randomised mouse UGen (see also 'mouseX'' and 'mouseY'').
-mouseR :: ID a => a -> Rate -> UGen -> UGen -> Warp UGen -> UGen -> UGen
-mouseR z rt l r ty tm =
+mouseRId :: ID a => a -> Rate -> UGen -> UGen -> Warp UGen -> UGen -> UGen
+mouseRId z rt l r ty tm =
   let f = case ty of
             Linear -> linLin
             Exponential -> linExp
             _ -> undefined
-  in lag (f (lfNoise1 z rt 1) (-1) 1 l r) tm
+  in lag (f (lfNoise1Id z rt 1) (-1) 1 l r) tm
+
+mouseRM :: UId m => Rate -> UGen -> UGen -> Warp UGen -> UGen -> m UGen
+mouseRM = liftUId5 mouseRId
+
+mouseR :: Rate -> UGen -> UGen -> Warp UGen -> UGen -> UGen
+mouseR = liftUnsafe5 mouseRM
 
 -- | Variant that randomly traverses the mouseX space.
 mouseX' :: Rate -> UGen -> UGen -> Warp UGen -> UGen -> UGen
-mouseX' = mouseR 'x'
+mouseX' = mouseRId 'x'
 
 -- | Variant that randomly traverses the mouseY space.
 mouseY' :: Rate -> UGen -> UGen -> Warp UGen -> UGen -> UGen
-mouseY' = mouseR 'y'
+mouseY' = mouseRId 'y'
 
 -- | Translate onset type string to constant UGen value.
 onsetType :: Num a => String -> a
@@ -367,7 +400,7 @@ pmOsc r cf mf pm mp = sinOsc r cf (sinOsc r mf mp * pm)
 -- place of a trigger.
 poll' :: UGen -> UGen -> UGen -> UGen -> UGen
 poll' t i l tr =
-    let t' = if isConstant t then impulse KR t 0 else t
+    let t' = if isConstant t then impulse kr t 0 else t
     in mrg [i,poll t' i l tr]
 
 -- | Variant of 'in'' offset so zero if the first private bus.
@@ -400,20 +433,26 @@ pv_calcPVRecSize dur frame_size hop sample_rate =
     in ceiling (fromIntegral raw_size * recip hop + 3)
 
 -- | 'rand' with left edge set to zero.
-rand0 :: ID a => a -> UGen -> UGen
-rand0 z = rand z 0
+rand0Id :: ID a => a -> UGen -> UGen
+rand0Id z = randId z 0
 
 -- | 'UId' form of 'rand0'.
 rand0M :: UId m => UGen -> m UGen
 rand0M = randM 0
 
+rand0 :: UGen -> UGen
+rand0 = liftUnsafe1 rand0M
+
 -- | 'rand' with left edge set to negative /n/.
-rand2 :: ID a => a -> UGen -> UGen
-rand2 z n = rand z (negate n) n
+rand2Id :: ID a => a -> UGen -> UGen
+rand2Id z n = randId z (negate n) n
 
 -- | 'UId' form of 'rand2'.
 rand2M :: UId m => UGen -> m UGen
 rand2M n = randM (negate n) n
+
+rand2 :: UGen -> UGen
+rand2 = liftUnsafe1 rand2M
 
 -- | rotate2 with MCE input.
 rotateStereo :: UGen -> UGen -> UGen
@@ -436,23 +475,23 @@ setBuf' b xs o = setBuf b o (fromIntegral (length xs)) (mce xs)
 
 -- | Silence.
 silent :: Int -> UGen
-silent n = let s = dc AR 0 in mce (replicate n s)
+silent n = let s = dc ar 0 in mce (replicate n s)
 
 {- | Zero indexed audio input buses.
      Optimises case of consecutive UGens.
 
-> soundIn (mce2 0 1) == in' 2 AR numOutputBuses
-> soundIn (mce2 0 2) == in' 1 AR (numOutputBuses + mce2 0 2)
+> soundIn (mce2 0 1) == in' 2 ar numOutputBuses
+> soundIn (mce2 0 2) == in' 1 ar (numOutputBuses + mce2 0 2)
 
 -}
 soundIn :: UGen -> UGen
 soundIn u =
-    let r = in' 1 AR (numOutputBuses + u)
+    let r = in' 1 ar (numOutputBuses + u)
     in case u of
          MCE_U m ->
              let n = mceProxies m
              in if all (==1) (zipWith (-) (tail n) n)
-                then in' (length n) AR (numOutputBuses + head n)
+                then in' (length n) ar (numOutputBuses + head n)
                 else r
          _ -> r
 
@@ -471,21 +510,24 @@ splay i s l c lc =
 sum_opt :: [UGen] -> UGen
 sum_opt = sum_opt_f sum3 sum4
 
--- | Single tap into a delayline.  AR only.
+-- | Single tap into a delayline.  ar only.
 tap :: Int -> Rate -> UGen -> UGen -> UGen
 tap numChannels rt bufnum delaytime =
     let n = delaytime * negate sampleRate
     in playBuf numChannels rt bufnum 1 0 n Loop DoNothing
 
 -- | Randomly select one of several inputs on trigger.
-tChoose :: ID m => m -> UGen -> UGen -> UGen
-tChoose z t a = select (tiRand z 0 (mceN a - 1) t) a
+tChooseId :: ID m => m -> UGen -> UGen -> UGen
+tChooseId z t a = select (tiRandId z 0 (mceN a - 1) t) a
 
 -- | Randomly select one of several inputs.
 tChooseM :: (UId m) => UGen -> UGen -> m UGen
 tChooseM t a = do
   r <- tiRandM 0 (constant (length (mceChannels a) - 1)) t
   return (select r a)
+
+tChoose :: UGen -> UGen -> UGen
+tChoose = liftUnsafe2 tChooseM
 
 -- | Triggered Line, implemented in terms of EnvGen.
 tLine :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
@@ -508,12 +550,12 @@ triAS n f0 =
         mk_ph i = if i + 1 `mod` 4 == 0 then pi else 0
         m = [1,3 .. n]
         param = zip3 (map mk_freq m) (map mk_ph m) (map mk_amp m)
-    in sum_opt (map (\(fr,ph,am) -> sinOsc AR fr ph * am) param)
+    in sum_opt (map (\(fr,ph,am) -> sinOsc ar fr ph * am) param)
 
 -- | Randomly select one of several inputs on trigger (weighted).
-tWChoose :: ID m => m -> UGen -> UGen -> UGen -> UGen -> UGen
-tWChoose z t a w n =
-    let i = tWindex z t n w
+tWChooseId :: ID m => m -> UGen -> UGen -> UGen -> UGen -> UGen
+tWChooseId z t a w n =
+    let i = tWindexId z t n w
     in select i a
 
 -- | Randomly select one of several inputs (weighted).
@@ -521,6 +563,9 @@ tWChooseM :: (UId m) => UGen -> UGen -> UGen -> UGen -> m UGen
 tWChooseM t a w n = do
   i <- tWindexM t n w
   return (select i a)
+
+tWChoose :: UGen -> UGen -> UGen -> UGen -> UGen
+tWChoose = liftUnsafe4 tWChooseM
 
 -- | Unpack an FFT chain into separate demand-rate FFT bin streams.
 unpackFFT :: UGen -> Int -> Int -> Int -> UGen -> [UGen]
@@ -533,7 +578,7 @@ varLag_env in_ time warp start =
       start_ = fromMaybe in_ start
       e = Envelope [start_,in_] [time] [warp] Nothing Nothing 0
       -- e[6] = curve; e[7] = curvature;
-      time_ch = if rateOf time == IR then 0 else changed time 0
+      time_ch = if rateOf time == InitialisationRate then 0 else changed time 0
       tr = changed in_ 0 + time_ch + impulse rt 0 0
   in envGen rt tr 1 0 1 DoNothing e
 
@@ -541,7 +586,7 @@ varLag_env in_ time warp start =
      If @fadeTime@ is given multiply by 'makeFadeEnv'.
 
 > import Sound.SC3 {- hsc3 -}
-> audition (wrapOut (Just 1) (sinOsc AR 440 0 * 0.1))
+> audition (wrapOut (Just 1) (sinOsc ar 440 0 * 0.1))
 > import Sound.OSC {- hosc -}
 > withSC3 (sendMessage (n_set1 (-1) "gate" 0))
 -}
@@ -549,31 +594,31 @@ wrapOut :: Maybe Double -> UGen -> UGen
 wrapOut fadeTime z =
   if isSink z
   then z
-  else out (control KR "out" 0) (maybe z ((* z) . makeFadeEnv) fadeTime)
+  else out (control kr "out" 0) (maybe z ((* z) . makeFadeEnv) fadeTime)
 
 -- * wslib
 
 -- | Cross-fading version of 'playBuf'.
 playBufCF :: Int -> UGen -> UGen -> UGen -> UGen -> Loop UGen -> UGen -> Int -> UGen
 playBufCF nc bufnum rate trigger startPos loop lag' n =
-    let trigger' = if rateOf trigger == DR
-                   then tDuty AR trigger 0 DoNothing 1 0
+    let trigger' = if rateOf trigger == DemandRate
+                   then tDuty ar trigger 0 DoNothing 1 0
                    else trigger
         index' = stepper trigger' 0 0 (constant n - 1) 1 0
         on = map
              (\i -> inRange index' (i - 0.5) (i + 0.5))
              [0 .. constant n - 1]
         rate' = case rateOf rate of
-                  DR -> map (\on' -> demand on' 0 rate) on
-                  KR -> map (gate rate) on
-                  AR -> map (gate rate) on
-                  IR -> map (const rate) on
-        startPos' = if rateOf startPos == DR
+                  DemandRate -> map (\on' -> demand on' 0 rate) on
+                  ControlRate -> map (gate rate) on
+                  AudioRate -> map (gate rate) on
+                  InitialisationRate -> map (const rate) on
+        startPos' = if rateOf startPos == DemandRate
                     then demand trigger' 0 startPos
                     else startPos
         lag'' = 1 / lag'
         s = zipWith
-            (\on' r -> let p = playBuf nc AR bufnum r on' startPos' loop DoNothing
+            (\on' r -> let p = playBuf nc ar bufnum r on' startPos' loop DoNothing
                        in p * sqrt (slew on' lag'' lag''))
             on rate'
     in sum_opt s
@@ -583,5 +628,5 @@ playBufCF nc bufnum rate trigger startPos loop lag' n =
 -- | An oscillator that reads through a table once.
 osc1 :: Rate -> UGen -> UGen -> DoneAction UGen -> UGen
 osc1 rt buf dur doneAction =
-    let ph = line rt 0 (bufFrames IR buf - 1) dur doneAction
+    let ph = line rt 0 (bufFrames ir buf - 1) dur doneAction
     in bufRd 1 rt buf ph NoLoop LinearInterpolation

@@ -12,12 +12,12 @@ import Sound.SC3.UGen.Type
 
 -- | Transform 'U_Node_C' to 'U_Node_K', 'id' for other 'U_Node' types.
 --
--- > let k = U_Node_K 8 KR Nothing "k_8" 0.1 K_KR Nothing
+-- > let k = U_Node_K 8 ControlRate Nothing "k_8" 0.1 K_ControlRate Nothing
 -- > node_k_eq k (snd (constant_to_control 8 (U_Node_C 0 0.1)))
 constant_to_control :: UID_t -> U_Node -> (UID_t,U_Node)
 constant_to_control z n =
     case n of
-      U_Node_C _ k -> (z + 1,U_Node_K z KR Nothing ("k_" ++ show z) k K_KR Nothing)
+      U_Node_C _ k -> (z + 1,U_Node_K z ControlRate Nothing ("k_" ++ show z) k K_ControlRate Nothing)
       _ -> (z,n)
 
 -- | If the 'From_Port' is a /constant/ generate a /control/ 'U_Node', else retain 'From_Port'.

@@ -1,7 +1,7 @@
 -- pauseSelfWhenDone
-let x = mouseX KR (-1) 1 Linear 0.1
+let x = mouseX kr (-1) 1 Linear 0.1
     e = linen x 1 0.1 1 DoNothing
-    o = sinOsc AR 440 0 * e
+    o = sinOsc ar 440 0 * e
 in mrg [o,pauseSelfWhenDone e]
 
 ---- ; run paused node (assuming no intermediate node is created)

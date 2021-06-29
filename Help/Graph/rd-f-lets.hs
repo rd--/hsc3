@@ -18,6 +18,6 @@ uid_st_eval (do
                     ,f_let t 0.15 4 5 (mce2 (25 + r2) (50 + r3))
                     ,let lr = fmap (* latch r4 t)
                      in lr (f_let t 0.5 1 16 (mce2 300 600))]
-      tr = impulse AR 24 0
-  n <- lfNoise0M KR 2
+      tr = impulse ar 24 0
+  n <- lfNoise0M kr 2
   return . (* (n * 0.25 + 0.25)) . sum =<< mk_n tr)

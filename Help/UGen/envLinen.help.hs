@@ -1,7 +1,7 @@
 -- envLinen
 let t = envLinen 0.4 2 0.4 0.1
-    e = envGen KR 1 1 0 1 RemoveSynth t
-in sinOsc AR 440 0 * e
+    e = envGen kr 1 1 0 1 RemoveSynth t
+in sinOsc ar 440 0 * e
 
 ---- ; drawings
 import Sound.SC3.Plot {- hsc3-plot -}

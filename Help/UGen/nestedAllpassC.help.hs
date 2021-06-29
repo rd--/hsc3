@@ -10,7 +10,7 @@ let sig = soundIn 0
           d2 = 0.022
           d3 = 0.0084
       in X.doubleNestedAllpassL s d1 d1 0.15 d2 d2 0.25 d3 d3 0.3
-    fb = localIn nc AR 0
+    fb = localIn nc ar 0
     lp0 = lpf sig 6000
     lp1 = delayL lp0 0.024 0.024
     ap1 = doubleNestedAllpassL_def (lp1 + (0.5 * fb))
@@ -23,7 +23,7 @@ in sig + (rev * 0.5)
 -- nestedAllpassL
 let sig = soundIn 0
     nc = 2
-    fb = localIn nc AR 0
+    fb = localIn nc ar 0
     lp = lpf sig 6000
     ap1 = X.doubleNestedAllpassL (lp + (0.5 * fb)) 0.0047 0.0047 0.25 0.0083 0.0083 0.35 0.022 0.022 0.45
     ap2 = delayL (X.nestedAllpassL (delayL ap1 0.05 0.05) 0.03 0.03 0.25952 0.03 0.03 0.3) 0.067 0.067
@@ -36,7 +36,7 @@ in sig + (rev * 0.5)
 -- nestedAllpassL
 let sig = soundIn 0
     nc = 2
-    fb = localIn nc AR 0
+    fb = localIn nc ar 0
     lp = lpf sig 4000
     ap1 = allpassL (lp + (0.5 * fb)) 0.008 0.008 0.0459
     ap2 = delayL (allpassL ap1 0.012 0.012 0.06885) 0.004 0.004

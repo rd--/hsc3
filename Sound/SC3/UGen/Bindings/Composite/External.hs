@@ -13,7 +13,7 @@ import qualified Sound.SC3.UGen.Bindings.DB.External as External
 
 -- | FM7 variant where input matrices are not in MCE form.
 fm7_mx :: [[UGen]] -> [[UGen]] -> UGen
-fm7_mx ctlMatrix modMatrix = External.fm7 AR (mce (concat ctlMatrix)) (mce (concat modMatrix))
+fm7_mx ctlMatrix modMatrix = External.fm7 ar (mce (concat ctlMatrix)) (mce (concat modMatrix))
 
 {- | greyhole re-orders parameters as well as unpacking the input signal.
 

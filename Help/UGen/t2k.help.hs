@@ -1,2 +1,2 @@
 -- t2k
-trig (t2k (dust 'α' AR 4)) 0.1 * sinOsc AR 800 0 * 0.1
+trig (t2k (dust 'α' ar 4)) 0.1 * sinOsc ar 800 0 * 0.1
