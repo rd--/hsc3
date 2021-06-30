@@ -114,6 +114,9 @@ mrg2 u = MRG_U . MRG u
 
 -- * Multiple channel expansion
 
+mce1 :: UGen -> UGen
+mce1 = mce . return
+
 -- | Multiple channel expansion for two inputs.
 mce2 :: UGen -> UGen -> UGen
 mce2 x y = mce [x,y]

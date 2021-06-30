@@ -12,5 +12,12 @@ let b = control kr "buf" 0
     o = formant ar (xLine kr 200 1000 4 DoNothing) 2000 800 * 0.125
 in mrg2 o (recordBuf ar b 0 0.5 0.5 1 NoLoop 1 RemoveSynth o)
 
+-- recordBuf ; mce
+let b = mce2 (control kr "buf1" 0) (control kr "buf2" 0)
+    o = sinOsc ar (mce2 110 220) 0 * 0.1
+in out 0 (mceMap mce1 o)
+    
+in mrg2 o (recordBuf ar b 0 0.5 0.5 1 NoLoop 1 RemoveSynth (mceMap mce1 o))
+
 ---- ; setup
 withSC3 (async (b_alloc 0 (48000 * 4) 1))

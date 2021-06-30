@@ -291,7 +291,7 @@ mce :: [UGen] -> UGen
 mce xs =
     case xs of
       [] -> error "mce: []"
-      [x] -> x
+      [x] -> MCE_U (MCE_Unit x)
       _ -> MCE_U (MCE_Vector xs)
 
 -- | Type specified 'mce_elem'.

@@ -11,8 +11,19 @@ let n = 10
 in saw ar f * 0.1
 
 -- select ; i-rate
-let a = mce [rand 'α' 110 220,rand 'β' 220 440,rand 'γ' 440 880]
-in sinOsc ar (select (rand 'δ' 0 3) a) 0 * 0.1
+let a = mce [rand 110 220,rand 220 440,rand 440 880]
+in sinOsc ar (select (rand 0 3) a) 0 * 0.1
+
+-- select ; i-rate ; id
+let a = mce [randId 'α' 110 220,randId 'β' 220 440,randId 'γ' 440 880]
+in sinOsc ar (select (randId 'δ' 0 3) a) 0 * 0.1
+
+-- select ; nested mce
+let n = 10
+    a = mce [mce [517, 403, 89], mce [562, 816, 107], mce [241, 145, 90, 224]]
+    c = n / 2
+    f = select (lfSaw kr (mce [0.5, 0.75]) 0 * c + c) a
+in saw ar f * 0.1
 
 -- select ; buffer segment player ; requires=buf
 let nc = 2
@@ -23,10 +34,10 @@ let nc = 2
     segment_size = bufFrames kr buf / n_segments
     tr = impulse kr (n_segments / bufDur kr buf) 0
     phase = phasor ar tr (bufRateScale kr buf) 0 (segment_size - 1) 0
-    ix = mce [dseries 'α' dinf 0 1 `modE` n_segments -- play segments in sequence (reconstruct)
-             ,n_segments - 1 - (dseries 'β' dinf 0 1 `modE` n_segments) -- play segments in reverse sequence
-             ,dbrown 'γ' dinf 0 (n_segments - 1) 1
-             ,dwhite 'δ' dinf 0 (n_segments - 1)]
+    ix = mce [dseriesId 'α' dinf 0 1 `modE` n_segments -- play segments in sequence (reconstruct)
+             ,n_segments - 1 - (dseriesId 'β' dinf 0 1 `modE` n_segments) -- play segments in reverse sequence
+             ,dbrownId 'γ' dinf 0 (n_segments - 1) 1
+             ,dwhiteId 'δ' dinf 0 (n_segments - 1)]
     zero = select sel (demand tr 0 (ix * segment_size))
 in bufRdN nc ar buf (zero + phase) NoLoop * 0.1
 

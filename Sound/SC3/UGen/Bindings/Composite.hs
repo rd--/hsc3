@@ -334,6 +334,9 @@ mixFill_z z n = mix . mceFill_z z n
 mixFillM :: (Integral n,Monad m) => Int -> (n -> m UGen) -> m UGen
 mixFillM n f = fmap sum_opt (mapM f [0 .. fromIntegral n - 1])
 
+mceConst :: Int -> UGen -> UGen
+mceConst n c = mce (replicate n c)
+
 -- | Apply the ID UGen processor /f/ /k/ times in sequence to /i/, ie. for k=4 /f (f (f (f i)))/.
 useq_z :: (ID z, Enum z) => z -> Int -> (z -> UGen -> UGen) -> UGen -> UGen
 useq_z z k f i = if k <= 0 then i else useq_z (succ z) (k - 1) f (f z i)

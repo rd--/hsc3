@@ -27,6 +27,9 @@ let freq = mce [1,2,3,5,7,9,11,13,17,19,23]
     amp = control kr "amp" 0.1
 in out 12000 (sinOsc kr (freq * mul) 0 * amp)
 
+-- out ; nested mce ; multiple out
+out 0 (sinOsc ar (mce1 (mce2 110 220)) 0 * 0.1)
+
 ---- ; drawings
 UI.ui_sc3_scope 12 12000 (2 ^ 14) 0 "control" 0
 UI.ui_sc3_ctl_plot 900 11 12000 900 (1/25) 5
