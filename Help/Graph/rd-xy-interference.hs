@@ -23,4 +23,4 @@ let x = mouseX kr 20 22000 Linear (mce2 0.005 0.025)
                  a = sinOsc ar (x + n) 0
                  b = sinOsc ar y 0
              in a * b
-in mixFill_z 'β' 3 nd
+in mixFillId 'β' 3 nd

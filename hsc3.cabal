@@ -59,6 +59,7 @@ Library
                    Sound.SC3.Common.Math.Operator
                    Sound.SC3.Common.Math.Warp
                    Sound.SC3.Common.Math.Window
+                   Sound.SC3.Common.Mce
                    Sound.SC3.Common.Monad
                    Sound.SC3.Common.Monad.Operators
                    Sound.SC3.Common.Rate
@@ -112,7 +113,7 @@ Library
                    Sound.SC3.UGen.HS
                    Sound.SC3.UGen.Math
                    Sound.SC3.UGen.Math.Composite
-                   Sound.SC3.UGen.MCE
+                   Sound.SC3.UGen.Mce
                    Sound.SC3.UGen.Name
                    Sound.SC3.UGen.Optimise
                    Sound.SC3.UGen.Plain

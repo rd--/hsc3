@@ -4,7 +4,7 @@ module Sound.SC3.UGen.PP where
 import Data.List {- split -}
 
 import Sound.SC3.Common.Math
-import Sound.SC3.UGen.MCE
+import Sound.SC3.Common.Mce
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
@@ -25,6 +25,6 @@ ugen_concise_pp u =
          Label_U (Label s) -> bracketed ('"','"') s
          Primitive_U p -> prim_pp p
          Proxy_U (Proxy p n) -> prim_pp p ++ "@" ++ show n
-         MCE_U (MCE_Unit u') -> ugen_concise_pp u'
-         MCE_U (MCE_Vector v) -> bracketed ('[',']') (intercalate "," (map ugen_concise_pp v))
-         MRG_U (MRG l r) -> unwords [ugen_concise_pp l,"&",ugen_concise_pp r]
+         Mce_U (Mce_Unit u') -> ugen_concise_pp u'
+         Mce_U (Mce_Vector v) -> bracketed ('[',']') (intercalate "," (map ugen_concise_pp v))
+         Mrg_U (Mrg l r) -> unwords [ugen_concise_pp l,"&",ugen_concise_pp r]

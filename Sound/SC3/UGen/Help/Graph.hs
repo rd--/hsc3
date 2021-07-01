@@ -6,6 +6,7 @@ import Sound.SC3.Common.Envelope
 import Sound.SC3.Common.Rate
 
 import Sound.SC3.UGen.Bindings
+import Sound.SC3.UGen.Mce
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 

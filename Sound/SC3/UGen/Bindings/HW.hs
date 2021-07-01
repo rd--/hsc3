@@ -10,7 +10,7 @@ import qualified Sound.SC3.UGen.UGen as U
 
 -- | Zero local buffer.
 --
--- ClearBuf does not copy the buffer number through so this is an MRG node.
+-- ClearBuf does not copy the buffer number through so this is an Mrg node.
 clearBuf :: UGen -> UGen
 clearBuf b = U.mrg2 b (C.mkOsc ir "ClearBuf" [b] 1)
 

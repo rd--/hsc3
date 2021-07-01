@@ -17,8 +17,8 @@ Create terrain given function.
 >         xs = tk w [0,1/w ..]
 >         ys = tk h [0,1/h ..]
 >         ix = map (\y -> map (\x -> (x,y)) xs) ys
->         add_z = map (\(x,y) -> (x,y,z (x,y)))
->     in concatMap add_z ix
+>         addz = map (\(x,y) -> (x,y,z (x,y)))
+>     in concatMap addz ix
 
 Confirm terrain
 

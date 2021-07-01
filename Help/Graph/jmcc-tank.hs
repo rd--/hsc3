@@ -45,8 +45,8 @@ let s1 z _ =
           l7 = l6 + i
       in mrg [l7,localOut l7]
     r_allpass z i = allpassN i 0.03 (X.rRandNId 2 (z,'ζ') 0.005 0.02) 1
-    s3 = s2 + mixFill_z 'κ' 8 s1
-in rev_f (useq_z 'λ' 4 r_allpass s3)
+    s3 = s2 + mixFillId 'κ' 8 s1
+in rev_f (useqId 'λ' 4 r_allpass s3)
 
 -- tank (jmcc) ; event control
 let s1 =
@@ -88,4 +88,4 @@ let s1 =
           l7 = l6 + i
       in mrg [l7,localOut l7]
     r_allpass z i = allpassN i 0.03 (X.rRandNId 2 (z,'ζ') 0.005 0.02) 1
-in rev_f (useq_z 'λ' 4 r_allpass s1)
+in rev_f (useqId 'λ' 4 r_allpass s1)

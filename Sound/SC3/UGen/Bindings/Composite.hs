@@ -1,9 +1,7 @@
 -- | Common unit generator graphs.
 module Sound.SC3.UGen.Bindings.Composite where
 
-import Control.Monad {- base -}
 import Data.List {- base -}
-import qualified Data.List.Split as Split {- split -}
 import Data.Maybe {- base -}
 
 import Sound.SC3.Common.Enum
@@ -17,6 +15,8 @@ import Sound.SC3.Common.Unsafe
 
 import Sound.SC3.UGen.Bindings.DB
 import Sound.SC3.UGen.Bindings.HW
+import Sound.SC3.UGen.Math
+import Sound.SC3.UGen.Mce
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
@@ -33,7 +33,7 @@ asLocalBufM = liftUId1 asLocalBufId
 asLocalBuf :: [UGen] -> UGen
 asLocalBuf = liftUnsafe1 asLocalBufM
 
--- | balance2 with MCE input.
+-- | balance2 with Mce input.
 balanceStereo :: UGen -> UGen -> UGen -> UGen
 balanceStereo sig pos level = let (x,y) = unmce2 sig in balance2 x y pos level
 
@@ -208,7 +208,7 @@ klangSpec = klanx_spec_f id mce
 klangSpec_k :: Real n => [n] -> [n] -> [n] -> UGen
 klangSpec_k = klanx_spec_f (map constant) mce
 
--- | Variant of 'klangSpec' for 'MCE' inputs.
+-- | Variant of 'klangSpec' for 'Mce' inputs.
 klangSpec_mce :: UGen -> UGen -> UGen -> UGen
 klangSpec_mce = klanx_spec_f mceChannels mce
 
@@ -220,7 +220,7 @@ klankSpec = klanx_spec_f id mce
 klankSpec_k :: Real n => [n] -> [n] -> [n] -> UGen
 klankSpec_k = klanx_spec_f (map constant) mce
 
--- | Variant of 'klankSpec' for 'MCE' inputs.
+-- | Variant of 'klankSpec' for 'Mce' inputs.
 klankSpec_mce :: UGen -> UGen -> UGen -> UGen
 klankSpec_mce = klanx_spec_f mceChannels mce
 
@@ -272,103 +272,34 @@ makeFadeEnv fadeTime =
         env = Envelope [startVal,1,0] [1,1] [EnvLin,EnvLin] (Just 1) Nothing 0
     in envGen kr gate_ 1 0 dt RemoveSynth env
 
--- | 'mce' of 'map' /f/ of 'id_seq' /n/.
-mce_gen :: ID z => (Id -> UGen) -> Int -> z -> UGen
-mce_gen f n = mce . map f . id_seq n
-
--- | Monad/applicative variant of mce_gen.
-mce_genM :: Applicative f => f UGen -> Int -> f UGen
-mce_genM f n = fmap mce (replicateM n f)
-
--- | Count 'mce' channels.
-mceN :: UGen -> UGen
-mceN = constant . length . mceChannels
-
--- | Collapse possible mce by summing.
-mix :: UGen -> UGen
-mix = sum_opt . mceChannels
-
--- | Mix divided by number of inputs.
-mceMean :: UGen -> UGen
-mceMean e = let p = mceChannels e in sum_opt p / constant (length p)
-
--- | Mix variant, sum to n channels.
-mixN :: Int -> UGen -> UGen
-mixN n u =
-    let xs = transpose (Split.chunksOf n (mceChannels u))
-    in mce (map sum_opt xs)
-
--- | Construct an MCE array of UGens.
-mceFill :: Integral n => Int -> (n -> UGen) -> UGen
-mceFill n f = mce (map f [0 .. fromIntegral n - 1])
-
--- | Type specialised mceFill
-mceFillInt :: Int -> (Int -> UGen) -> UGen
-mceFillInt = mceFill
-
--- | Construct a list of ID UGens.
-listFill_z :: (Integral n, ID z, Enum z) => z -> Int -> (z -> n -> UGen) -> [UGen]
-listFill_z z n f = zipWith f [z..] [0 .. fromIntegral n - 1]
-
--- | 'mce' of 'listFill_z'
-mceFill_z :: (Integral n, ID z, Enum z) => z -> Int -> (z -> n -> UGen) -> UGen
-mceFill_z z n = mce . listFill_z z n
-
--- | Construct and sum a set of UGens.
-mixFill :: Integral n => Int -> (n -> UGen) -> UGen
-mixFill n = mix . mceFill n
-
--- | Type specialised mixFill
-mixFillInt :: Int -> (Int -> UGen) -> UGen
-mixFillInt = mixFill
-
--- | Type specialised mixFill
-mixFillUGen :: Int -> (UGen -> UGen) -> UGen
-mixFillUGen = mixFill
-
--- | Construct and sum a set of ID UGens.
-mixFill_z :: (Integral n, ID z, Enum z) => z -> Int -> (z -> n -> UGen) -> UGen
-mixFill_z z n = mix . mceFill_z z n
-
--- | Monad variant on mixFill.
-mixFillM :: (Integral n,Monad m) => Int -> (n -> m UGen) -> m UGen
-mixFillM n f = fmap sum_opt (mapM f [0 .. fromIntegral n - 1])
-
-mceConst :: Int -> UGen -> UGen
-mceConst n c = mce (replicate n c)
-
--- | Apply the ID UGen processor /f/ /k/ times in sequence to /i/, ie. for k=4 /f (f (f (f i)))/.
-useq_z :: (ID z, Enum z) => z -> Int -> (z -> UGen -> UGen) -> UGen -> UGen
-useq_z z k f i = if k <= 0 then i else useq_z (succ z) (k - 1) f (f z i)
-
 -- | Variant that is randomly pressed.
-mouseButton' :: Rate -> UGen -> UGen -> UGen -> UGen
-mouseButton' rt l r tm =
+mouseButtonRand :: Rate -> UGen -> UGen -> UGen -> UGen
+mouseButtonRand rt l r tm =
     let o = lfClipNoiseId 'z' rt 1
     in lag (linLin o (-1) 1 l r) tm
 
 -- | Randomised mouse UGen (see also 'mouseX'' and 'mouseY'').
-mouseRId :: ID a => a -> Rate -> UGen -> UGen -> Warp UGen -> UGen -> UGen
-mouseRId z rt l r ty tm =
+mouseRandId :: ID a => a -> Rate -> UGen -> UGen -> Warp UGen -> UGen -> UGen
+mouseRandId z rt l r ty tm =
   let f = case ty of
             Linear -> linLin
             Exponential -> linExp
             _ -> undefined
   in lag (f (lfNoise1Id z rt 1) (-1) 1 l r) tm
 
-mouseRM :: UId m => Rate -> UGen -> UGen -> Warp UGen -> UGen -> m UGen
-mouseRM = liftUId5 mouseRId
+mouseRandM :: UId m => Rate -> UGen -> UGen -> Warp UGen -> UGen -> m UGen
+mouseRandM = liftUId5 mouseRandId
 
-mouseR :: Rate -> UGen -> UGen -> Warp UGen -> UGen -> UGen
-mouseR = liftUnsafe5 mouseRM
+mouseRand :: Rate -> UGen -> UGen -> Warp UGen -> UGen -> UGen
+mouseRand = liftUnsafe5 mouseRandM
 
 -- | Variant that randomly traverses the mouseX space.
-mouseX' :: Rate -> UGen -> UGen -> Warp UGen -> UGen -> UGen
-mouseX' = mouseRId 'x'
+mouseXRand :: Rate -> UGen -> UGen -> Warp UGen -> UGen -> UGen
+mouseXRand = mouseRandId 'x'
 
 -- | Variant that randomly traverses the mouseY space.
-mouseY' :: Rate -> UGen -> UGen -> Warp UGen -> UGen -> UGen
-mouseY' = mouseRId 'y'
+mouseYRand :: Rate -> UGen -> UGen -> Warp UGen -> UGen -> UGen
+mouseYRand = mouseRandId 'y'
 
 -- | Translate onset type string to constant UGen value.
 onsetType :: Num a => String -> a
@@ -377,8 +308,8 @@ onsetType s =
     in fromIntegral (fromMaybe 3 (elemIndex s t))
 
 -- | Onset detector with default values for minor parameters.
-onsets' :: UGen -> UGen -> UGen -> UGen
-onsets' c t o = onsets c t o 1 0.1 10 11 1 0
+onsetsDefault :: UGen -> UGen -> UGen -> UGen
+onsetsDefault c t o = onsets c t o 1 0.1 10 11 1 0
 
 -- | Format magnitude and phase data data as required for packFFT.
 packFFTSpec :: [UGen] -> [UGen] -> UGen
@@ -401,10 +332,10 @@ pmOsc r cf mf pm mp = sinOsc r cf (sinOsc r mf mp * pm)
 -- | Variant of 'poll' that generates an 'mrg' value with the input
 -- signal at left, and that allows a constant /frequency/ input in
 -- place of a trigger.
-poll' :: UGen -> UGen -> UGen -> UGen -> UGen
-poll' t i l tr =
-    let t' = if isConstant t then impulse kr t 0 else t
-    in mrg [i,poll t' i l tr]
+pollExt :: UGen -> UGen -> UGen -> UGen -> UGen
+pollExt optTrig in_ label_ trigId =
+    let tr = if isConstant optTrig then impulse kr optTrig 0 else optTrig
+    in mrg [in_,poll tr in_ label_ trigId]
 
 -- | Variant of 'in'' offset so zero if the first private bus.
 privateIn :: Int -> Rate -> UGen -> UGen
@@ -457,7 +388,7 @@ rand2M n = randM (negate n) n
 rand2 :: UGen -> UGen
 rand2 = liftUnsafe1 rand2M
 
--- | rotate2 with MCE input.
+-- | rotate2 with Mce input.
 rotateStereo :: UGen -> UGen -> UGen
 rotateStereo sig pos = let (x,y) = unmce2 sig in rotate2 x y pos
 
@@ -491,7 +422,7 @@ soundIn :: UGen -> UGen
 soundIn u =
     let r = in' 1 ar (numOutputBuses + u)
     in case u of
-         MCE_U m ->
+         Mce_U m ->
              let n = mceProxies m
              in if all (==1) (zipWith (-) (tail n) n)
                 then in' (length n) ar (numOutputBuses + head n)
@@ -509,10 +440,6 @@ splay i s l c lc =
         a = if lc then sqrt (1 / n) else 1
     in mix (pan2 i (s * mce p + c) 1) * l * a
 
--- | Optimised UGen sum function.
-sum_opt :: [UGen] -> UGen
-sum_opt = sum_opt_f sum3 sum4
-
 -- | Single tap into a delayline.  ar only.
 tap :: Int -> Rate -> UGen -> UGen -> UGen
 tap numChannels rt bufnum delaytime =
@@ -521,7 +448,7 @@ tap numChannels rt bufnum delaytime =
 
 -- | Randomly select one of several inputs on trigger.
 tChooseId :: ID m => m -> UGen -> UGen -> UGen
-tChooseId z t a = select (tiRandId z 0 (mceN a - 1) t) a
+tChooseId z t a = select (tiRandId z 0 (mceSize a - 1) t) a
 
 -- | Randomly select one of several inputs.
 tChooseM :: (UId m) => UGen -> UGen -> m UGen

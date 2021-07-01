@@ -5,8 +5,8 @@ in mix (sinOsc ar f 0 * 0.1)
 -- mceFill ; c.f. uclone_all
 mceFillInt 2 (\z -> brownNoiseId z ar * 0.05)
 
--- mceFill_z
-mceFill_z 'α' 2 (\z i -> brownNoiseId z ar * 0.025 * (i + 1))
+-- mceFillId
+mceFillId 'α' 2 (\z i -> brownNoiseId z ar * 0.025 * (i + 1))
 
 -- mce ; out out ; two channels
 sinOsc ar (mce2 440 441) 0 * 0.1

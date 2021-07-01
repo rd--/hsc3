@@ -5,11 +5,11 @@ import Data.List {- base -}
 
 import qualified Sound.SC3.Common.Rate as Rate {- hsc3 -}
 import qualified Sound.SC3.UGen.Bindings.DB as DB {- hsc3 -}
-import qualified Sound.SC3.UGen.MCE as MCE {- hsc3 -}
+import qualified Sound.SC3.Common.Mce as Mce {- hsc3 -}
 import Sound.SC3.UGen.Type
 
 -- | UGen primitive set.
---   Sees through Proxy and MRG, possible multiple primitives for MCE.
+--   Sees through Proxy and Mrg, possible multiple primitives for Mce.
 ugen_primitive_set :: UGen -> [Primitive]
 ugen_primitive_set u =
     case u of
@@ -18,8 +18,8 @@ ugen_primitive_set u =
       Label_U _ -> []
       Primitive_U p -> [p]
       Proxy_U p -> [proxySource p]
-      MCE_U m -> concatMap ugen_primitive_set (MCE.mce_elem m)
-      MRG_U m -> ugen_primitive_set (mrgLeft m)
+      Mce_U m -> concatMap ugen_primitive_set (Mce.mce_elem m)
+      Mrg_U m -> ugen_primitive_set (mrgLeft m)
 
 -- | Heuristic based on primitive name (@FFT@, @PV_@).  Note that
 -- @IFFT@ is at /control/ rate, not @PV@ rate.
@@ -31,7 +31,7 @@ ugen_is_pv_rate :: UGen -> Bool
 ugen_is_pv_rate = any (primitive_is_pv_rate . ugenName) . ugen_primitive_set
 
 -- | Traverse input graph until an @FFT@ or @PV_Split@ node is
--- encountered, and then locate the buffer input.  Biases left at MCE
+-- encountered, and then locate the buffer input.  Biases left at Mce
 -- nodes.
 --
 -- > import Sound.SC3
@@ -49,7 +49,7 @@ pv_track_buffer u =
                "PV_Split" -> Right (ugenInputs p !! 1)
                _ -> pv_track_buffer (ugenInputs p !! 0)
 
--- | Buffer node number of frames. Biases left at MCE nodes.  Sees
+-- | Buffer node number of frames. Biases left at Mce nodes.  Sees
 -- through @LocalBuf@, otherwise uses 'bufFrames'.
 --
 -- > buffer_nframes 10 == bufFrames IR 10
@@ -79,5 +79,5 @@ ugen_remove_out_node u =
       assert_is_output x = if x `elem` ["Out","ReplaceOut","OffsetOut"] then x else err
   in case u of
        Primitive_U (Primitive Rate.AudioRate nm (_bus:inputs) [] _special _uid) -> (assert_is_output nm,mce inputs)
-       MRG_U (MRG lhs rhs) -> let (nm,res) = ugen_remove_out_node lhs in (nm,MRG_U (MRG res rhs))
+       Mrg_U (Mrg lhs rhs) -> let (nm,res) = ugen_remove_out_node lhs in (nm,Mrg_U (Mrg res rhs))
        _ -> err

@@ -14,7 +14,7 @@ import qualified System.Random as Random {- random -}
 import qualified Sound.SC3.Common.Math as Math
 import Sound.SC3.Common.Math.Operator
 import Sound.SC3.Common.Rate
-import Sound.SC3.UGen.MCE
+import Sound.SC3.Common.Mce
 
 -- * Basic types
 
@@ -128,7 +128,7 @@ data Proxy = Proxy {proxySource :: Primitive
             deriving (Eq,Read,Show)
 
 -- | Multiple root graph.
-data MRG = MRG {mrgLeft :: UGen
+data Mrg = Mrg {mrgLeft :: UGen
                ,mrgRight :: UGen}
            deriving (Eq,Read,Show)
 
@@ -138,8 +138,8 @@ data UGen = Constant_U Constant
           | Label_U Label
           | Primitive_U Primitive
           | Proxy_U Proxy
-          | MCE_U (MCE UGen)
-          | MRG_U MRG
+          | Mce_U (Mce UGen)
+          | Mrg_U Mrg
             deriving (Eq,Read,Show)
 
 instance EqE UGen where
@@ -242,7 +242,7 @@ u_constant = fmap constantValue . un_constant
 u_constant_err :: UGen -> Sample
 u_constant_err = fromMaybe (error "u_constant") . u_constant
 
--- * MRG
+-- * Mrg
 
 -- | Multiple root graph constructor.
 mrg :: [UGen] -> UGen
@@ -250,13 +250,13 @@ mrg u =
     case u of
       [] -> error "mrg: []"
       [x] -> x
-      (x:xs) -> MRG_U (MRG x (mrg xs))
+      (x:xs) -> Mrg_U (Mrg x (mrg xs))
 
--- | See into 'MRG_U', follows leftmost rule until arriving at non-MRG node.
+-- | See into 'Mrg_U', follows leftmost rule until arriving at non-Mrg node.
 mrg_leftmost :: UGen -> UGen
 mrg_leftmost u =
     case u of
-      MRG_U m -> mrg_leftmost (mrgLeft m)
+      Mrg_U m -> mrg_leftmost (mrgLeft m)
       _ -> u
 
 -- * Predicates
@@ -265,12 +265,12 @@ mrg_leftmost u =
 isConstant :: UGen -> Bool
 isConstant = isJust . un_constant
 
--- | True if input is a sink 'UGen', ie. has no outputs.  Sees into MRG.
+-- | True if input is a sink 'UGen', ie. has no outputs.  Sees into Mrg.
 isSink :: UGen -> Bool
 isSink u =
     case mrg_leftmost u of
       Primitive_U p -> null (ugenOutputs p)
-      MCE_U m -> all isSink (mce_elem m)
+      Mce_U m -> all isSink (mce_elem m)
       _ -> False
 
 -- | See into 'Proxy_U'.
@@ -284,60 +284,60 @@ un_proxy u =
 isProxy :: UGen -> Bool
 isProxy = isJust . un_proxy
 
--- * MCE
+-- * Mce
 
 -- | Multiple channel expansion node constructor.
 mce :: [UGen] -> UGen
 mce xs =
     case xs of
       [] -> error "mce: []"
-      [x] -> MCE_U (MCE_Unit x)
-      _ -> MCE_U (MCE_Vector xs)
+      [x] -> Mce_U (Mce_Unit x)
+      _ -> Mce_U (Mce_Vector xs)
 
 -- | Type specified 'mce_elem'.
-mceProxies :: MCE UGen -> [UGen]
+mceProxies :: Mce UGen -> [UGen]
 mceProxies = mce_elem
 
--- | Multiple channel expansion node ('MCE_U') predicate.  Sees into MRG.
-isMCE :: UGen -> Bool
-isMCE u =
+-- | Multiple channel expansion node ('Mce_U') predicate.  Sees into Mrg.
+isMce :: UGen -> Bool
+isMce u =
     case mrg_leftmost u of
-      MCE_U _ -> True
+      Mce_U _ -> True
       _ -> False
 
--- | Output channels of UGen as a list.  If required, preserves the RHS of and MRG node in channel 0.
+-- | Output channels of UGen as a list.  If required, preserves the RHS of and Mrg node in channel 0.
 mceChannels :: UGen -> [UGen]
 mceChannels u =
     case u of
-      MCE_U m -> mce_elem m
-      MRG_U (MRG x y) -> let r:rs = mceChannels x in MRG_U (MRG r y) : rs
+      Mce_U m -> mce_elem m
+      Mrg_U (Mrg x y) -> let r:rs = mceChannels x in Mrg_U (Mrg r y) : rs
       _ -> [u]
 
--- | Number of channels to expand to.  This function sees into MRG, and is defined only for MCE nodes.
+-- | Number of channels to expand to.  This function sees into Mrg, and is defined only for Mce nodes.
 mceDegree :: UGen -> Maybe Int
 mceDegree u =
     case mrg_leftmost u of
-      MCE_U m -> Just (length (mceProxies m))
+      Mce_U m -> Just (length (mceProxies m))
       _ -> Nothing
 
 -- | Erroring variant.
 mceDegree_err :: UGen -> Int
 mceDegree_err = fromMaybe (error "mceDegree: not mce") . mceDegree
 
--- | Extend UGen to specified degree.  Follows "leftmost" rule for MRG nodes.
+-- | Extend UGen to specified degree.  Follows "leftmost" rule for Mrg nodes.
 mceExtend :: Int -> UGen -> [UGen]
 mceExtend n u =
     case u of
-      MCE_U m -> mceProxies (mce_extend n m)
-      MRG_U (MRG x y) -> let (r:rs) = mceExtend n x
-                         in MRG_U (MRG r y) : rs
+      Mce_U m -> mceProxies (mce_extend n m)
+      Mrg_U (Mrg x y) -> let (r:rs) = mceExtend n x
+                         in Mrg_U (Mrg r y) : rs
       _ -> replicate n u
 
--- | Is MCE required, ie. are any input values MCE?
+-- | Is Mce required, ie. are any input values Mce?
 mceRequired :: [UGen] -> Bool
-mceRequired = any isMCE
+mceRequired = any isMce
 
-{- | Apply MCE transform to a list of inputs.
+{- | Apply Mce transform to a list of inputs.
      The transform extends each input so all are of equal length, and then transposes the matrix.
 
 > mceInputTransform [mce2 1 2,mce2 3 4] == Just [[1,3],[2,4]]
@@ -346,24 +346,24 @@ mceRequired = any isMCE
 mceInputTransform :: [UGen] -> Maybe [[UGen]]
 mceInputTransform i =
     if mceRequired i
-    then let n = maximum (map mceDegree_err (filter isMCE i))
+    then let n = maximum (map mceDegree_err (filter isMce i))
          in Just (transpose (map (mceExtend n) i))
     else Nothing
 
--- | Build a UGen after MCE transformation of inputs.
+-- | Build a UGen after Mce transformation of inputs.
 mceBuild :: ([UGen] -> UGen) -> [UGen] -> UGen
 mceBuild f i =
     case mceInputTransform i of
       Nothing -> f i
-      Just i' -> MCE_U (MCE_Vector (map (mceBuild f) i'))
+      Just i' -> Mce_U (Mce_Vector (map (mceBuild f) i'))
 
--- | True if MCE is an immediate proxy for a multiple-out Primitive.
+-- | True if Mce is an immediate proxy for a multiple-out Primitive.
 --   This is useful when disassembling graphs, ie. ugen_graph_forth_pp at hsc3-db.
-mce_is_direct_proxy :: MCE UGen -> Bool
+mce_is_direct_proxy :: Mce UGen -> Bool
 mce_is_direct_proxy m =
     case m of
-      MCE_Unit _ -> False
-      MCE_Vector v ->
+      Mce_Unit _ -> False
+      Mce_Vector v ->
           let p = map un_proxy v
               p' = catMaybes p
           in all isJust p &&
@@ -413,15 +413,15 @@ rateOf u =
       Label_U _ -> InitialisationRate
       Primitive_U p -> ugenRate p
       Proxy_U p -> ugenRate (proxySource p)
-      MCE_U _ -> maximum (map rateOf (mceChannels u))
-      MRG_U m -> rateOf (mrgLeft m)
+      Mce_U _ -> maximum (map rateOf (mceChannels u))
+      Mrg_U m -> rateOf (mrgLeft m)
 
 -- | Apply proxy transformation if required.
 proxify :: UGen -> UGen
 proxify u =
     case u of
-      MCE_U m -> mce (map proxify (mce_elem m))
-      MRG_U m -> mrg [proxify (mrgLeft m), mrgRight m]
+      Mce_U m -> mce (map proxify (mce_elem m))
+      Mrg_U m -> mrg [proxify (mrgLeft m), mrgRight m]
       Primitive_U p ->
           let o = ugenOutputs p
           in case o of
@@ -444,7 +444,7 @@ mk_ugen_select_rate nm h rs r =
 -- | Construct proxied and multiple channel expanded UGen.
 --
 -- cf = constant function, rs = rate set, r = rate, nm = name, i =
--- inputs, i_mce = list of MCE inputs, o = outputs.
+-- inputs, i_mce = list of Mce inputs, o = outputs.
 mkUGen :: Maybe ([Sample] -> Sample) -> [Rate] -> Either Rate [Int] ->
           String -> [UGen] -> Maybe [UGen] -> Int -> Special -> UGenId -> UGen
 mkUGen cf rs r nm i i_mce o s z =

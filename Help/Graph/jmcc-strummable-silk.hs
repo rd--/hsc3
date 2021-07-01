@@ -26,7 +26,7 @@ let x = mouseX kr 0 1 Linear 0.2
       in pan2 (klank (pinkNoiseId z ar * e) 1 0 1 param) (k * 0.2 - 0.5) 1
     strs = sum (map strummable_guitar_str (zip [0..7] ['α'..]))
     r_allpass z i = allpassN i 0.1 (X.rRandNId 2 (z,'ζ') 0 0.05) 4
-    rev = useq_z 'λ' 6 r_allpass
+    rev = useqId 'λ' 6 r_allpass
 in rev (leakDC (lpf strs 12000) 0.995)
 
 -- strummable silk (jmcc) #11 ; event control
@@ -49,5 +49,5 @@ let f c (g,_,y,z,o,_,_,p,_,_) =
           param = klankSpec_mce freq (mce (replicate n 1)) (X.rRandNId n c 0.3 1)
       in pan2 (dynKlank plk 1 0 1 param) (o * 2 - 1) z
     r_allpass z i = allpassN i 0.1 (X.rRandNId 2 (z,'ζ') 0 0.05) 4
-    rev = useq_z 'λ' 6 r_allpass
+    rev = useqId 'λ' 6 r_allpass
 in rev (leakDC (lpf (mix (eventVoicer 16 f)) 12000) 0.995) * control kr "gain" 1

@@ -41,8 +41,8 @@ ugenTraverse halt_f map_f u =
              in case recur s of
                   Primitive_U p' -> map_f (Proxy_U (p {proxySource = p'}))
                   _ -> error "ugenTraverse"
-         MCE_U m -> map_f (mce (map recur (mceProxies m)))
-         MRG_U (MRG l r) -> map_f (MRG_U (MRG (recur l) (recur r)))
+         Mce_U m -> map_f (mce (map recur (mceProxies m)))
+         Mrg_U (Mrg l r) -> map_f (Mrg_U (Mrg (recur l) (recur r)))
          _ -> map_f u
 
 {- | Right fold of UGen graph.
@@ -55,8 +55,8 @@ ugenFoldr f st u =
     in case u of
          Primitive_U p -> f u (foldr recur st (ugenInputs p))
          Proxy_U p -> f u (ugenFoldr f st (Primitive_U (proxySource p)))
-         MCE_U m -> f u (foldr recur st (mceProxies m))
-         MRG_U (MRG l r) -> f u (f l (f r st))
+         Mce_U m -> f u (foldr recur st (mceProxies m))
+         Mrg_U (Mrg l r) -> f u (f l (f r st))
          _ -> f u st
 
 -- * Unit generator node constructors
@@ -110,7 +110,7 @@ control_set =
 
 -- | Multiple root graph node constructor (left input is output)
 mrg2 :: UGen -> UGen -> UGen
-mrg2 u = MRG_U . MRG u
+mrg2 u = Mrg_U . Mrg u
 
 -- * Multiple channel expansion
 
@@ -121,7 +121,7 @@ mce1 = mce . return
 mce2 :: UGen -> UGen -> UGen
 mce2 x y = mce [x,y]
 
--- | Extract two channels from possible MCE, if there is only one channel it is duplicated.
+-- | Extract two channels from possible Mce, if there is only one channel it is duplicated.
 mce2c :: UGen -> (UGen,UGen)
 mce2c u =
     case mceChannels u of
@@ -153,23 +153,23 @@ map_ix f = zipWith (curry f) [0..]
 mce_map_ix :: ((Int,UGen) -> UGen) -> UGen -> UGen
 mce_map_ix f u = mce (map_ix f (mceChannels u))
 
--- | Apply UGen list operation on MCE contents.
+-- | Apply UGen list operation on Mce contents.
 mceEdit :: ([UGen] -> [UGen]) -> UGen -> UGen
 mceEdit f u =
     case u of
-      MCE_U m -> mce (f (mceProxies m))
-      _ -> error "mceEdit: non MCE value"
+      Mce_U m -> mce (f (mceProxies m))
+      _ -> error "mceEdit: non Mce value"
 
--- | Reverse order of channels at MCE.
+-- | Reverse order of channels at Mce.
 mceReverse :: UGen -> UGen
 mceReverse = mceEdit reverse
 
--- | Obtain indexed channel at MCE.
+-- | Obtain indexed channel at Mce.
 mceChannel :: Int -> UGen -> UGen
 mceChannel n u =
     case u of
-      MCE_U m -> mceProxies m !! n
-      _ -> if n == 0 then u else error "mceChannel: non MCE value, non ZERO index"
+      Mce_U m -> mceProxies m !! n
+      _ -> if n == 0 then u else error "mceChannel: non Mce value, non ZERO index"
 
 -- | Transpose rows and columns, ie. {{a,b},{c,d}} to {{a,c},{b,d}}.
 mceTranspose :: UGen -> UGen
@@ -203,7 +203,7 @@ halt_mce_transform_f f l =
     let (l',e) = fromMaybe (error "halt_mce_transform: null?") (Base.sep_last l)
     in l' ++ f e
 
--- | The halt MCE transform, ie. lift channels of last input into list.
+-- | The halt Mce transform, ie. lift channels of last input into list.
 --   This is not used by hsc3, but it is used by hsc3-forth and stsc3.
 --
 -- > halt_mce_transform [1,2,mce2 3 4] == [1,2,3,4]
@@ -214,8 +214,8 @@ halt_mce_transform = halt_mce_transform_f mceChannels
 prepare_root :: UGen -> UGen
 prepare_root u =
     case u of
-      MCE_U m -> mrg (mceProxies m)
-      MRG_U m -> mrg2 (prepare_root (mrgLeft m)) (prepare_root (mrgRight m))
+      Mce_U m -> mrg (mceProxies m)
+      Mrg_U m -> mrg2 (prepare_root (mrgLeft m)) (prepare_root (mrgRight m))
       _ -> u
 
 -- * Multiple root graphs
@@ -242,7 +242,7 @@ unpackLabel length_prefix u =
               f c = if Data.Char.isAscii c then fromEnum c else q
               s' = map (fromIntegral . f) s
           in if length_prefix then fromIntegral (length s) : s' else s'
-      MCE_U m ->
+      Mce_U m ->
           let x = map (unpackLabel length_prefix) (mceProxies m)
           in if Base.equal_length_p x
              then map mce (transpose x)

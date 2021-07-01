@@ -16,7 +16,7 @@ let mkls bp t = envGen kr 1 1 0 1 RemoveSynth (envCoord bp t 1 EnvLin)
                    f_ = mkls [(0,f1),(0.33,f2),(1,f3)] t
                    a_ = mkls [(0,0),(0.33,a),(1,0)] t
                in (saw ar f_ * a_)
-in mixFill_z 'ε' 8 part
+in mixFillId 'ε' 8 part
 
 -- discretion (rd, 2006-10-15) ; monad
 uid_st_eval (do

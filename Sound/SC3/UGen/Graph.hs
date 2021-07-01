@@ -408,7 +408,7 @@ ug_mk_node_p n p g =
     in (U_Node_P z n p,g {ug_next_id = z + 1})
 
 -- | Transform 'UGen' into 'U_Graph', appending to existing 'U_Graph'.
---   Allow RHS of MRG node to be MCE (splice all nodes into graph).
+--   Allow rhs of Mrg node to be Mce (splice all nodes into graph).
 ug_mk_node :: UGen -> U_Graph -> (U_Node,U_Graph)
 ug_mk_node u g =
     case u of
@@ -419,12 +419,12 @@ ug_mk_node u g =
       Proxy_U p ->
           let (n,g') = ug_mk_node_u (proxySource p) g
           in ug_mk_node_p n (proxyIndex p) g'
-      MRG_U m ->
+      Mrg_U m ->
           let f g' l = case l of
                          [] -> g'
                          n:l' -> let (_,g'') = ug_mk_node n g' in f g'' l'
           in ug_mk_node (mrgLeft m) (f g (mceChannels (mrgRight m)))
-      MCE_U _ -> error (show ("ug_mk_node: mce",u))
+      Mce_U _ -> error (show ("ug_mk_node: mce",u))
 
 -- | Add implicit /control/ UGens to 'U_Graph'.
 ug_add_implicit_ctl :: U_Graph -> U_Graph

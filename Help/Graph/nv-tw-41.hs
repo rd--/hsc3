@@ -12,4 +12,4 @@ let n z i =
           p = mce2 (pinkNoiseId (z,'α') ar) (pinkNoiseId (z,'β') ar)
           b = 4 ** lfNoise2Id z kr (1.2 ** i / 16)
       in bpf p (b * 300) 0.15 * (5 ** lfNoise2Id z ar f / (i + 8) * 20)
-in splay (mixFill_z 'γ' 15 n) 1 0.5 0 True
+in splay (mixFillId 'γ' 15 n) 1 0.5 0 True
