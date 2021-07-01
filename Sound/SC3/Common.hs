@@ -8,6 +8,7 @@ import Sound.SC3.Common.Help as M
 import Sound.SC3.Common.Math as M
 import Sound.SC3.Common.Math.Operator as M
 import Sound.SC3.Common.Math.Warp as M
+import Sound.SC3.Common.Mce as M
 import Sound.SC3.Common.Monad as M
 import Sound.SC3.Common.Rate as M
 import Sound.SC3.Common.UId as M
