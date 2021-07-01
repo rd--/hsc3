@@ -1,15 +1,15 @@
 -- blOsc
-let freq = rand 'α' 55 220
-    width = rand 'β' 0 1
-    waveform = iRand 'γ' 0 2
-in pan2 (X.blOsc ar freq width waveform) (rand 'δ' (-1) 1) (rand 'ε' 0.02 0.1)
+let freq = randId 'α' 55 220
+    width = randId 'β' 0 1
+    waveform = iRandId 'γ' 0 2
+in pan2 (X.blOsc ar freq width waveform) (randId 'δ' (-1) 1) (randId 'ε' 0.02 0.1)
 
 -- blOsc ; k-rate (not implemented for width/waveform)
-let tr = dust 'α' kr 2
-    freq = tRand 'β' 55 220 tr
-    width = tRand 'γ' 0 1 tr
-    waveform = tiRand 'δ' 0 2 tr
-in pan2 (X.blOsc ar freq width waveform) (tRand 'ε' (-1) 1 tr) (tRand 'ζ' 0.02 0.1 tr)
+let tr = dustId 'α' kr 2
+    freq = tRandId 'β' 55 220 tr
+    width = tRandId 'γ' 0 1 tr
+    waveform = tiRandId 'δ' 0 2 tr
+in pan2 (X.blOsc ar freq width waveform) (tRandId 'ε' (-1) 1 tr) (tRandId 'ζ' 0.02 0.1 tr)
 
 -- blOsc ; k-rate (not implemented for width/waveform)
 let freq = control_m kr "freq" 110 (55,880,"exp")

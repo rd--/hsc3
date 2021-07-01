@@ -16,7 +16,7 @@ let bf = control kr "bufnum" 0
 in s * e * am
 
 ---- ; read audio file into memory
-let fn = "/home/rohan/rd/j/2019-04-21/FAirLIGHT/IIX/REEDS/clarmdhi.snd"
+let fn = "/home/rohan/rd/j/2019-04-21/FAIRLIGHT/IIX/REEDS/clarmdhi.snd"
 withSC3 (async (b_allocRead 0 fn 0 0))
 
 ---- ; send control messages

@@ -11,7 +11,7 @@ let f = mouseY kr 4 8 Linear 0.1
 in impulse ar f (mce [0,x]) * 0.1
 
 -- impulse ; frequency 0 returns a single impulse
-decay (impulse ar 0 0) 1 * brownNoise 'α' ar * 0.1
+decay (impulse ar 0 0) 1 * brownNoiseId 'α' ar * 0.1
 
 -- impulse ; non-bandlimited
 let f = sinOsc ar 0.25 0.0 * 2500.0 + 2505.0

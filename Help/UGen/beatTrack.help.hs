@@ -1,5 +1,5 @@
 -- beatTrack
-let c = localBuf 'α' 1 1024
+let c = localBufId 'α' 1 1024
     i = soundIn 0
     x = mouseX kr (-1) 1 Linear 0.2
     [b, h, q, t] = mceChannels (beatTrack kr (fft' c i) x)

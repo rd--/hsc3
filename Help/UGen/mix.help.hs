@@ -1,5 +1,5 @@
 -- mix ; optimized summation (see sum_opt), ie. Sum3
-mix (mce [pinkNoise 'α' ar,fSinOsc ar 801 0,lfSaw ar 40 0]) * 0.05
+mix (mce [pinkNoiseId 'α' ar,fSinOsc ar 801 0,lfSaw ar 40 0]) * 0.05
 
 -- mix ; c.f. sum4
 mix (sinOsc ar (mce (take 10 (iterate (* 2) 36))) 0) * 0.025

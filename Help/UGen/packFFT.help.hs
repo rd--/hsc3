@@ -1,11 +1,11 @@
 -- packFFT
-let b = localBuf 'α' 512 1
+let b = localBufId 'α' 512 1
     n = 100
     square a = a * a
-    r1 z = range 0 1 (fSinOsc kr (expRand (z,'β') 0.1 1) 0)
+    r1 z = range 0 1 (fSinOsc kr (expRandId (z,'β') 0.1 1) 0)
     m1 = map r1 (id_seq n 'γ')
     m2 = zipWith (*) m1 (map square [1.0, 0.99 ..])
-    r2 z = lfPulse kr (2 ** iRand (z,'δ') (-3) 5) 0 0.3
+    r2 z = lfPulse kr (2 ** iRandId (z,'δ') (-3) 5) 0 0.3
     i = map r2 (id_seq n 'ε')
     m3 = zipWith (*) m2 i
     p = replicate n 0.0

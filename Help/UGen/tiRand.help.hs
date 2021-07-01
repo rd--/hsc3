@@ -1,6 +1,6 @@
 -- tiRand
-let l = tiRand 'α' (-1) 1 (dust 'β' kr 10)
-in pan2 (pinkNoise 'γ' ar * 0.1) l 1
+let l = tiRandId 'α' (-1) 1 (dustId 'β' kr 10)
+in pan2 (pinkNoiseId 'γ' ar * 0.1) l 1
 
 -- tiRand ; monadic variant
 uid_st_eval

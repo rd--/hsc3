@@ -5,7 +5,7 @@ Example graph
 
 > g_01 =
 >     let d = xLine kr 20000 2 10 RemoveSynth
->     in dust 'α' ar d * 0.15
+>     in dustId 'α' ar d * 0.15
 
 > g_02 = soundIn 0
 

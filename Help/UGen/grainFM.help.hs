@@ -8,8 +8,8 @@ let d = 15
 in grainFM 2 t 0.1 f 200 i l (-1) 512 * 0.1
 
 -- grainFM ; mouse control
-let n1 = whiteNoise 'α' kr
-    n2 = lfNoise1 'β' kr 500
+let n1 = whiteNoiseId 'α' kr
+    n2 = lfNoise1Id 'β' kr 500
     x = mouseX kr (-0.5) 0.5 Linear 0.1
     y = mouseY kr 0 400 Linear 0.1
     f = n1 * y + 440

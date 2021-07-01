@@ -1,5 +1,5 @@
 -- loudness ; assume hop-size of half fft-size
-let b = localBuf 'α' 1 1024
+let b = localBufId 'α' 1 1024
     x = mouseX kr 0.001 0.1 Exponential 0.2
     i = sinOsc ar 1000 0 * x
     f = fft' b i

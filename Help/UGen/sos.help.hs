@@ -16,7 +16,7 @@ let fc = 100
     a2 = a0
     b1 = 2 * (k * k - 1) * norm
     b2 = (1 - k / q + k * k) * norm
-in sos (whiteNoise 'α' ar * 0.2) a0 a1 a2 (- b1) (- b2)
+in sos (whiteNoiseId 'α' ar * 0.2) a0 a1 a2 (- b1) (- b2)
 
 -- sos
 let b1 = mouseY kr 1.45 1.998 Linear 0.2

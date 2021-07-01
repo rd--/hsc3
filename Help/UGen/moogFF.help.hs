@@ -1,5 +1,5 @@
 -- moogFF
-let n = whiteNoise 'α' ar * 0.05
+let n = whiteNoiseId 'α' ar * 0.05
     freq = mouseX kr 100 10000 Exponential 0.1
     gain = mouseY kr 0 4 Linear 0.1
 in moogFF n freq gain 0
@@ -11,7 +11,7 @@ let x = mouseX kr 100 20000 Exponential 0.1
 in moogFF i x y 0
 
 -- moogFF
-let n = lfNoise0 'α' kr 0.43
+let n = lfNoise0Id 'α' kr 0.43
     p = pulse ar (mce [40, 121]) (mce [0.3, 0.7])
     f0 = linLin n 0 1 0.001 2.2
     f = linLin (sinOsc kr f0 0) (-1) 1 30 4200

@@ -68,7 +68,7 @@ control_f64 r ix nm d = Control_U (Control r ix nm d False Nothing)
 -- | Control input node constructor.
 --
 -- Note that if the name begins with a t_ prefix the control is /not/
--- converted to a triggered control.  Please see 'tr_control'.
+-- converted to a triggered control.  Please see 'trigControl'.
 control :: Rate.Rate -> String -> Double -> UGen
 control r = control_f64 r Nothing
 
@@ -93,12 +93,12 @@ control_rng :: Rate.Rate -> String -> (Double,Double) -> Control_Meta_T3 Double 
 control_rng = control_pair Control_Range
 
 -- | Triggered (kr) control input node constructor.
-tr_control_f64 :: Maybe Int -> String -> Sample -> UGen
-tr_control_f64 ix nm d = Control_U (Control Rate.ControlRate ix nm d True Nothing)
+trigControl_f64 :: Maybe Int -> String -> Sample -> UGen
+trigControl_f64 ix nm d = Control_U (Control Rate.ControlRate ix nm d True Nothing)
 
 -- | Triggered (kr) control input node constructor.
-tr_control :: String -> Double -> UGen
-tr_control = tr_control_f64 Nothing
+trigControl :: String -> Double -> UGen
+trigControl = trigControl_f64 Nothing
 
 -- | Set indices at a list of controls.
 control_set :: [UGen] -> [UGen]

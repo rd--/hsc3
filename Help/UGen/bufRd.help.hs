@@ -15,7 +15,7 @@ in bufRdL nc ar b phase Loop
 let nc = 2
     b = control kr "buf" 0
     x = mouseX kr (mce [5, 10]) 100 Linear 0.1
-    n = lfNoise1 'α' ar x
+    n = lfNoise1Id 'α' ar x
 in mix (bufRdL nc ar b (n * bufFrames kr b * bufRateScale kr b) Loop)
 
 -- bufRd ; requires=buf ; fixed frequency wavetable oscillator ; c.f. osc

@@ -7,7 +7,7 @@
 Retrieve a single message
 
 > g_01 =
->     let s = lfNoise0 'α' kr 5
+>     let s = lfNoise0Id 'α' kr 5
 >         o = sinOsc ar (s * 200 + 500) 0 * 0.1
 >     in mrg [o,sendTrig s 0 s]
 
@@ -19,7 +19,7 @@ Retrieve a single message
 Send random triggers, request notifications, then for each trigger start a synth (s_03).
 
 > g_02 =
->     let t = dust 'α' kr 1.0
+>     let t = dustId 'α' kr 1.0
 >     in sendTrig t 0 t
 
 > g_03 =

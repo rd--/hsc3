@@ -6,10 +6,10 @@ let x = mouseX kr 20 sampleRate Linear 0.1
 in lorenzL ar x 10 27 2.667 0.05 0.1 0 0 * 0.3
 
 -- lorenzL ; randomly modulate params
-let n e = lfNoise0 e kr 0.5
-    n0 = mul_add (n 'α') 2 10
-    n1 = mul_add (n 'β') 20 38
-    n2 = mul_add (n 'γ') 1.5 2
+let nId e = lfNoise0Id e kr 0.5
+    n0 = mul_add (nId 'α') 2 10
+    n1 = mul_add (nId 'β') 20 38
+    n2 = mul_add (nId 'γ') 1.5 2
 in lorenzL ar sampleRate n0 n1 n2 0.05 0.1 0 0 * 0.2
 
 -- lorenzL ; frequency control

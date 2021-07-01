@@ -1,8 +1,8 @@
 -- lorenzTrig ; randomly modulate params
 let minfreq = 11025
     maxfreq = 44100
-    s = lfNoise0 'α' kr 1 * 2 + 10
-    b = lfNoise0 'β' kr 1 * 1.5 + 2
+    s = lfNoise0Id 'α' kr 1 * 2 + 10
+    b = lfNoise0Id 'β' kr 1 * 1.5 + 2
     r = 28
     h = 0.02
     x0 = 0.090879182417163

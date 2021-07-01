@@ -1,4 +1,4 @@
--- klank ; the klankSpec family of functions can help create the 'spec' entry
+-- klank ; the klankSpec family of functions can help create theId 'spec' entry
 let impulse_freq = 0.125
     mk reson_freq = let ampl = 1
                         decay_time = 16

@@ -6,7 +6,7 @@ let o = sinOsc kr 2 pi
 in t + sinOsc ar f 0 * 0.1
 
 -- runningMin
-let n = dust 'α' ar 20
+let n = dustId 'α' ar 20
     t = impulse ar 0.4 0
     f = runningMin n t * 500 + 200
 in sinOsc ar f 0 * 0.2

@@ -136,16 +136,16 @@ fft' buf i = fft buf i 0.5 0 1 0
 --
 -- > let c = ffta 'α' 2048 (soundIn 0) 0.5 0 1 0
 -- > in audition (out 0 (ifft c 0 0))
-fftaId :: ID i => i -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-fftaId z nf i h wt a ws =
+fftAllocId :: ID i => i -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+fftAllocId z nf i h wt a ws =
     let b = localBufId z 1 nf
     in fft b i h wt a ws
 
-fftaM :: UId m => UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> m UGen
-fftaM = liftUId6 fftaId
+fftAllocM :: UId m => UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> m UGen
+fftAllocM = liftUId6 fftAllocId
 
-ffta :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-ffta = liftUnsafe6 fftaM
+fftAlloc :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+fftAlloc = liftUnsafe6 fftAllocM
 
 -- | Sum of 'numInputBuses' and 'numOutputBuses'.
 firstPrivateBus :: UGen

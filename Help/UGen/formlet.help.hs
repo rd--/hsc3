@@ -17,7 +17,7 @@ let s = blip ar (sinOsc kr 5 0 * 20 + 300) 1000 * 0.1
 in formlet s y 0.005 x
 
 -- formlet ; and again (control-rate)
-let s = dust 'α' kr (mce2 10 11)
+let s = dustId 'α' kr (mce2 10 11)
     x = mouseX kr 0.1 2 Exponential 0.2
     y = mouseY kr 7 200 Exponential 0.2
     f = formlet s y 0.005 x

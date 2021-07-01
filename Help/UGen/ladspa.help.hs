@@ -2,8 +2,8 @@
 let s = soundIn 0
     x = mouseX kr 0 1 Linear 0.2
     y = mouseY kr 0 1 Linear 0.2
-    n1 = range 2.5 40 (lfNoise2 'α' kr 0.2)
-    n2 = range 0.5 10 (lfNoise2 'β' kr 0.2)
+    n1 = range 2.5 40 (lfNoise2Id 'α' kr 0.2)
+    n2 = range 0.5 10 (lfNoise2Id 'β' kr 0.2)
 in X.ladspa 1 ar 1767 [n1,n2,0.5,0.5,x,y,s]
 
 -- ladspa ; caps ; # 1769 C* Click - Metronome
@@ -14,7 +14,7 @@ in X.ladspa 1 ar 1769 [x,y,0.5,0.5]
 -- ladspa ; caps ; # 1773 C* Eq10 - 10-band equaliser
 let s = soundIn 0
     enumN n e = take n (enumFrom e)
-    n = map (\z -> range (-24) 48 (lfNoise2 z kr 0.2)) (enumN 10 'α')
+    n = map (\z -> range (-24) 48 (lfNoise2Id z kr 0.2)) (enumN 10 'α')
 in X.ladspa 1 ar 1773 (n ++ [s]) * 0.1
 
 -- ladspa ; caps ; # 1771 C* Saturate - Various static nonlinearities, 8x oversampled
@@ -59,31 +59,31 @@ let s = soundIn 0
     x = roundE (mouseX kr 0 8 Linear 0.2)
     y = mouseY kr 0 1 Linear 0.2
     enumN n e = take n (enumFrom e)
-    [n1,n2,n3,n4,n5,n6,n7,n8] = map (\z -> lfNoise2 z kr 0.2) (enumN 8 'α')
+    [n1,n2,n3,n4,n5,n6,n7,n8] = map (\z -> lfNoise2Id z kr 0.2) (enumN 8 'α')
 in X.ladspa 1 ar 2592 [1,y,n1,n2,x,n3,n4,n5,n6,n7,n8,s]
 
 -- ladspa ; caps ; # 2609 C* EqFA4p - 4-band parametric eq
 let s = soundIn 0
-    f z m l r = m (lfNoise2 z kr 0.2) (-1) 1 l r
-    p = [f 'α' linLin 0 1
-        ,f 'β' linExp 20 14000
-        ,f 'γ' linExp 0.125 8
-        ,f 'δ' linLin (-24) 24
-        ,f 'ε' linLin 0 1
-        ,f 'ζ' linExp 20 14000
-        ,f 'η' linExp 0.125 8
-        ,f 'θ' linLin (-24) 24
-        ,f 'ι' linLin 0 1
-        ,f 'κ' linExp 20 14000
-        ,f 'λ' linExp 0.125 8
-        ,f 'μ' linLin (-24) 24
-        ,f 'ν' linLin 0 1
-        ,f 'ξ' linExp 20 14000
-        ,f 'ο' linExp 0.125 8
-        ,f 'π' linLin (-24) 24
+    fId z m l r = m (lfNoise2Id z kr 0.2) (-1) 1 l r
+    p = [fId 'α' linLin 0 1
+        ,fId 'β' linExp 20 14000
+        ,fId 'γ' linExp 0.125 8
+        ,fId 'δ' linLin (-24) 24
+        ,fId 'ε' linLin 0 1
+        ,fId 'ζ' linExp 20 14000
+        ,fId 'η' linExp 0.125 8
+        ,fId 'θ' linLin (-24) 24
+        ,fId 'ι' linLin 0 1
+        ,fId 'κ' linExp 20 14000
+        ,fId 'λ' linExp 0.125 8
+        ,fId 'μ' linLin (-24) 24
+        ,fId 'ν' linLin 0 1
+        ,fId 'ξ' linExp 20 14000
+        ,fId 'ο' linExp 0.125 8
+        ,fId 'π' linLin (-24) 24
         ,0
         ,s]
-in pan2 (X.ladspa 1 ar 2609 p) (f 'ρ' linLin (-1) 1) 0.25
+in pan2 (X.ladspa 1 ar 2609 p) (fId 'ρ' linLin (-1) 1) 0.25
 
 {---- ; Note: debian sc3-plugins doesn't build ladspalist, to build type:
 
@@ -233,8 +233,8 @@ in X.ladspa 2 ar 2588 [30,2,0,0.1,0.5,415,s] * 0.1
 let s = soundIn 0 * 0.1
     x = mouseX kr 30 164 Linear 0.2
     y = roundE (mouseY kr 2 4 Linear 0.2)
-    n1 = lfNoise2 'α' kr 0.2 * 0.5 + 0.5
-    n2 = lfNoise2 'β' kr 0.2 * 0.5 + 0.5
+    n1 = lfNoise2Id 'α' kr 0.2 * 0.5 + 0.5
+    n2 = lfNoise2Id 'β' kr 0.2 * 0.5 + 0.5
 in X.ladspa 2 ar 2588 [x,y,n1,n2,0.5,440,s]
 
 ---- ladpsa ; caps ; # 2603 C* Spice - Not an exciter

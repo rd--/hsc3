@@ -26,4 +26,4 @@
 
     lpc <- LPC.lpc_read_binary LPC.BigEndian fn_01
     lpc <- LPC.lpc_read_text fn_02
-    withSC3 (au_01 lpc (whiteNoise 'α' ar * 10))
+    withSC3 (au_01 lpc (whiteNoiseId 'α' ar * 10))

@@ -17,7 +17,7 @@ sin (range 0 two_pi (negate (saw ar 440))) * 0.2
 -- saw ; ln 2021-04-16 https://lukasnowok.github.io/spectrology/
 let tr = impulse ar (xLine ar 1 1000 20 DoNothing) 0
     e = envGen ar tr 1 0 1 DoNothing (envPerc 0 0.1)
-in saw ar (tRand 'a' 50 (xLine ar 50 5000 20 DoNothing) tr) * e * 0.1
+in saw ar (tRandId 'a' 50 (xLine ar 50 5000 20 DoNothing) tr) * e * 0.1
 
 ---- ; drawings
 UI.ui_baudline 4096 50 "linear" 2

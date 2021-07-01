@@ -5,10 +5,10 @@
 > import Sound.SC3 {- hsc3 -}
 > import Sound.SC3.UGen.Bindings.DB.External {- hsc3 -}
 
-> g_01 = pinkNoise 'α' ar * 0.03 + sinOsc ar 440 0 * 0.5
+> g_01 = pinkNoiseId 'α' ar * 0.03 + sinOsc ar 440 0 * 0.5
 
 > f_01 sig map_buf =
->     let c0 = fft' (localBuf 'β' 1 2048) sig
+>     let c0 = fft' (localBufId 'β' 1 2048) sig
 >         c1 = pv_MagMap c0 map_buf
 >     in ifft' c1
 
@@ -32,5 +32,5 @@ the curve to map the sound onto
 
 localBuf fails...
 
-> g_09 = f_01 g_01 (asLocalBuf 'γ' t_01)
+> g_09 = f_01 g_01 (asLocalBufId 'γ' t_01)
 

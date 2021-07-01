@@ -12,7 +12,7 @@ let b = control kr "buf" 0
 in bufRdL 1 ar 0 p NoLoop
 
 -- sweep ; backwards, variable offset ; requires=buf
-let n = lfNoise0 'α' kr 15
+let n = lfNoise0Id 'α' kr 15
     x = mouseX kr 0.5 10 Exponential 0.1
     t = impulse ar x 0
     r = bufSampleRate kr 0
@@ -27,7 +27,7 @@ let x = mouseX kr 0.5 10 Exponential 0.1
 in bufRdL 1 ar 0 p NoLoop
 
 -- sweep ; f0 (sc-users, 2012-02-09)
-let lf = range 0.01 1.25 (lfNoise2 'α' kr 1)
+let lf = range 0.01 1.25 (lfNoise2Id 'α' kr 1)
     du = duty ar lf 0 DoNothing lf
     tr = abs (hpz1 du) `greater_than` 0
     ph = sweep tr (1/du)
@@ -35,7 +35,7 @@ let lf = range 0.01 1.25 (lfNoise2 'α' kr 1)
 in sinOsc ar fr 0 * 0.2
 
 -- sweep ; line segments, set start & end values, transition time and trigger, stops at end time
-let tr = tr_control "tr" 1
+let tr = trigControl "tr" 1
     st = control kr "st" 440
     en = control kr "en" 880
     tm = control kr "tm" 2

@@ -1,5 +1,5 @@
 -- varShapeOsc
-let modulator = sinOsc kr (lfNoise2 'a' kr 4 * 10) 0
+let modulator = sinOsc kr (lfNoise2Id 'a' kr 4 * 10) 0
     freq = 100
     pw = sinOsc kr 0.01 0 `in_range` (0,1)
     waveshape = lag modulator 0.1 `in_range` (0,1)

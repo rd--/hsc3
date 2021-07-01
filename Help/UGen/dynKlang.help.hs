@@ -3,7 +3,7 @@ let s = klangSpec [800,1000,1200] [0.3,0.3,0.3] [pi,pi,pi]
 in dynKlang ar 1 0 s * 0.4
 
 -- dynKlang ; fixed randomised
-let f = map (\z -> rand z 600 1000) ['a'..'l']
+let f = map (\z -> randId z 600 1000) ['a'..'l']
     s = klangSpec f (replicate 12 1) (replicate 12 0)
 in dynKlang ar 1 0 s * 0.05
 
@@ -15,8 +15,8 @@ in dynKlang ar 1 0 (klangSpec_mce f a p) * 0.1
 
 -- dynKlang ; https://www.listarc.bham.ac.uk/lists/sc-users/msg66911.html
 let k = 16 :: Int
-    f i = (((fromIntegral i ** range_hs (0.3,0.7) (lag (lfNoise0 i kr 1) 0.1)) + 1) * 99
-          ,max 0 (lfNoise1 i kr (linRand i 0 10 0)))
+    f i = (((fromIntegral i ** range_hs (0.3,0.7) (lag (lfNoise0Id i kr 1) 0.1)) + 1) * 99
+          ,max 0 (lfNoise1Id i kr (linRandId i 0 10 0)))
     (frq,amp) = unzip (map f [0 .. k - 1])
     s = dynKlang ar 1 0 (klangSpec frq amp (replicate k 0)) * 0.01
 in pan2 s 0 1

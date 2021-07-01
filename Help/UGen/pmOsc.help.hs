@@ -9,10 +9,10 @@ pmOsc ar 300 550 (line kr 0 20 8 DoNothing) 0 * 0.1
 
 -- pmOsc ; random parameters, linear modulation index motion over n seconds
 let n = 2
-    cf = rand 'α' 0 2000
-    mf = rand 'β' 0 800
-    pme = rand 'γ' 0 12
-    l = rand 'δ' (-1) 1
+    cf = randId 'α' 0 2000
+    mf = randId 'β' 0 800
+    pme = randId 'γ' 0 12
+    l = randId 'δ' (-1) 1
     pm = line kr 0 pme n DoNothing
 in linPan2 (pmOsc ar cf mf pm 0) l 0.05
 
@@ -20,7 +20,7 @@ in linPan2 (pmOsc ar cf mf pm 0) l 0.05
 let f _ (g,x,y,z,_,_,_,_,_,_) =
       let cps = midiCPS (x * 24 + 42)
           sig = pmOsc ar
-                (vibrato 'θ' ar (k2a cps) (y * 4 + 4) 0.02 0 0 0.04 0.1 0.0 0.0)
+                (vibratoId 'θ' ar (k2a cps) (y * 4 + 4) 0.02 0 0 0.04 0.1 0.0 0.0)
                 (urange 1.01 2.01 (lfPulse kr (1/8) 0 0.5) * cps)
                 (envGen kr g 1 0 1 DoNothing (envelope [3,3,0] [0, 0.2] [EnvNum (-4)]))
                 0

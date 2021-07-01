@@ -7,7 +7,7 @@ in warp1 nc b p x 0.1 (-1) 8 0.1 2
 
 -- warp1 ; real-time (delayed) input, localBuf
 let sz = 8192
-    b = clearBuf (localBuf 'α' 1 sz)
+    b = clearBuf (localBufId 'α' 1 sz)
     i = soundIn 0
     r = recordBuf ar b 0 1 0 1 Loop 1 DoNothing i
     ph = (sz / sampleRate) * 2 * pi

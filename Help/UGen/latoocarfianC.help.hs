@@ -3,7 +3,7 @@ let x = mouseX kr 20 sampleRate Linear 0.1
 in latoocarfianC ar x 1 3 0.5 0.5 0.5 0.5 * 0.1
 
 -- latoocarfianC ; randomly modulate all parameters
-let [n0,n1,n2,n3] = map (\e -> lfNoise2 e kr 5) ['α','β','γ','δ']
+let [n0,n1,n2,n3] = map (\e -> lfNoise2Id e kr 5) ['α','β','γ','δ']
     f = sampleRate / 4
     a = n0 * 1.5 + 1.5
     b = n1 * 1.5 + 1.5

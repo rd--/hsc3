@@ -6,10 +6,14 @@ import Data.Maybe {- base -}
 
 import Sound.SC3.Common.Math {- hsc3 -}
 import Sound.SC3.Common.Rate {- hsc3 -}
+import Sound.SC3.Common.UId {- hsc3 -}
+import Sound.SC3.Common.Unsafe {- hsc3 -}
+import Sound.SC3.UGen.Analysis  {- hsc3 -}
 import Sound.SC3.UGen.Type {- hsc3 -}
 import Sound.SC3.UGen.UGen {- hsc3 -}
 
-import qualified Sound.SC3.UGen.Bindings.DB.External as External
+import qualified Sound.SC3.UGen.Bindings.DB as DB {- hsc3 -}
+import qualified Sound.SC3.UGen.Bindings.DB.External as External {- hsc3 -}
 
 -- | FM7 variant where input matrices are not in MCE form.
 fm7_mx :: [[UGen]] -> [[UGen]] -> UGen
@@ -153,3 +157,34 @@ pulseDPW rt freq width =
   let o1 = External.sawDPW rt freq 0
       o2 = External.sawDPW rt freq (wrap_hs (-1,1) (width+width))
   in o1 - o2
+
+-- * rdu
+
+-- | Variant that unpacks the output /mce/ node.
+pv_SplitUnpack :: UGen -> UGen -> (UGen,UGen)
+pv_SplitUnpack a b =
+    case mceChannels (External.pv_Split a b) of
+      [p,q] -> (p,q)
+      _ -> error "pv_SplitUnpack"
+
+-- | A 'pv_Split' variant, like 'ffta', that allocates a 'localBuf' by
+-- tracing the input graph to locate the parent @FFT@ or @PV_Split@
+-- node.
+pv_SplitAllocId :: ID i => i -> UGen -> UGen
+pv_SplitAllocId z u =
+    case pv_track_nframes u of
+      Left err -> error err
+      Right nf -> let b = DB.localBufId z nf 1 in External.pv_Split u b
+
+pv_SplitAllocM :: UId m => UGen -> m UGen
+pv_SplitAllocM = liftUId1 pv_SplitAllocId
+
+pv_SplitAlloc :: UGen -> UGen
+pv_SplitAlloc = liftUnsafe1 pv_SplitAllocM
+
+-- | Variant that unpacks the output /mce/ node.
+pv_SplitAllocUnpackId :: ID i => i -> UGen -> (UGen,UGen)
+pv_SplitAllocUnpackId z u =
+    case mceChannels (pv_SplitAllocId z u) of
+      [p,q] -> (p,q)
+      _ -> error "pv_SplitAllocUnpackId"

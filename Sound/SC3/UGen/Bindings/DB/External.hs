@@ -563,6 +563,18 @@ dwgBowedSimple rate freq velb force gate_ pos release c1 c3 = mkUGen Nothing [Au
 dwgBowedTor :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 dwgBowedTor rate freq velb force gate_ pos release c1 c3 impZ fB mistune c1tor c3tor iZtor = mkUGen Nothing [AudioRate] (Left rate) "DWGBowedTor" [freq,velb,force,gate_,pos,release,c1,c3,impZ,fB,mistune,c1tor,c3tor,iZtor] Nothing 1 (Special 0) NoId
 
+-- | Clarinet physical model.
+--
+--  DWGClarinet3 [AudioRate] freq=440.0 pm=1.0 pc=1.0 m=0.8 gate=1.0 release=1.0e-2 c1=0.25 c3=7.0
+dwgClarinet3 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dwgClarinet3 rate freq pm pc m gate_ release c1 c3 = mkUGen Nothing [AudioRate] (Left rate) "DWGClarinet3" [freq,pm,pc,m,gate_,release,c1,c3] Nothing 1 (Special 0) NoId
+
+-- | Reimplementation of STK flute model.
+--
+--  DWGFlute [AudioRate] freq=400.0 pm=1.0 endr=0.5 jetr=0.25 jetRa=0.33 gate=1.0 release=0.1
+dwgFlute :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dwgFlute rate freq pm endr jetr jetRa gate_ release = mkUGen Nothing [AudioRate] (Left rate) "DWGFlute" [freq,pm,endr,jetr,jetRa,gate_,release] Nothing 1 (Special 0) NoId
+
 -- | Plucked physical model.
 --
 --  DWGPlucked [AudioRate] freq=440 amp=0.5 gate=1 pos=0.14 c1=1 c3=30 inp=0 release=0.1
@@ -1221,11 +1233,13 @@ keyMode rate chain keydecay chromaleak = mkUGen Nothing [ControlRate] (Left rate
 kmeansToBPSet1 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 kmeansToBPSet1 rate freq numdatapoints maxnummeans nummeans tnewdata tnewmeans soft bufnum = mkUGen Nothing [AudioRate] (Left rate) "KmeansToBPSet1" [freq,numdatapoints,maxnummeans,nummeans,tnewdata,tnewmeans,soft,bufnum] Nothing 1 (Special 0) NoId
 
+{-
 -- | Run any LADSPA plugin inside SuperCollider
 --
 --  LADSPA [AudioRate] nChans=0 id=0 args=0
 ladspa :: Rate -> UGen -> UGen -> UGen -> UGen
 ladspa rate nChans id_ args = mkUGen Nothing [AudioRate] (Left rate) "LADSPA" [nChans,id_,args] Nothing 0 (Special 0) NoId
+-}
 
 -- | random walk step
 --
@@ -1592,6 +1606,12 @@ moogLadder in_ ffreq res = mkUGen Nothing [ControlRate,AudioRate] (Right [0]) "M
 --  MoogVCF [AudioRate] in=0 fco=0 res=0;    FILTER: TRUE
 moogVCF :: UGen -> UGen -> UGen -> UGen
 moogVCF in_ fco res = mkUGen Nothing [AudioRate] (Right [0]) "MoogVCF" [in_,fco,res] Nothing 1 (Special 0) NoId
+
+-- | Stereo reverb
+--
+--  NHHall [AudioRate] in1=0.0 in2=0.0 rt60=1.0 stereo=0.5 lowFreq=200.0 lowRatio=0.5 hiFreq=4000.0 hiRatio=0.5 earlyDiffusion=0.5 lateDiffusion=0.5 modRate=0.2 modDepth=0.3
+nhHall :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+nhHall in1 in2 rt60 stereo lowFreq lowRatio hiFreq hiRatio earlyDiffusion lateDiffusion modRate modDepth = mkUGen Nothing [AudioRate] (Right [0,1]) "NHHall" [in1,in2,rt60,stereo,lowFreq,lowRatio,hiFreq,hiRatio,earlyDiffusion,lateDiffusion,modRate,modDepth] Nothing 2 (Special 0) NoId
 
 -- | Non Linear Filter Equation
 --
@@ -2129,9 +2149,9 @@ rDelayMap bufnum in_ dynamic spec = mkUGen Nothing [AudioRate] (Right [1]) "RDel
 
 -- | (Undocumented class)
 --
---  RDelaySet [AudioRate] in=0 spec=0
-rDelaySet :: Rate -> UGen -> UGen -> UGen
-rDelaySet rate in_ spec = mkUGen Nothing [AudioRate] (Left rate) "RDelaySet" [in_,spec] Nothing 1 (Special 0) NoId
+--  RDelaySet [AudioRate] input=0 *setArray=0;    MCE=1, FILTER: TRUE
+rDelaySet :: UGen -> UGen -> UGen
+rDelaySet input setArray = mkUGen Nothing [AudioRate] (Right [0]) "RDelaySet" [input] (Just [setArray]) 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
@@ -2142,8 +2162,8 @@ rDelaySetBuf rate bufnum in_ spec = mkUGen Nothing [AudioRate] (Left rate) "RDel
 -- | (Undocumented class)
 --
 --  RDustR [AudioRate] iot_min=0.1 iot_max=1
-rDustR :: ID a => a -> Rate -> UGen -> UGen -> UGen
-rDustR z rate iot_min iot_max = mkUGen Nothing [AudioRate] (Left rate) "RDustR" [iot_min,iot_max] Nothing 1 (Special 0) (toUId z)
+rDustRId :: ID a => a -> Rate -> UGen -> UGen -> UGen
+rDustRId z rate iot_min iot_max = mkUGen Nothing [AudioRate] (Left rate) "RDustR" [iot_min,iot_max] Nothing 1 (Special 0) (toUId z)
 
 -- | (Undocumented class)
 --
@@ -2162,8 +2182,8 @@ rExpRandN nc = liftUnsafe2 (rExpRandNM nc)
 -- | (Undocumented class)
 --
 --  RFreezer [AudioRate] bufnum=0 left=0 right=1 gain=1 increment=1 incrementOffset=0 incrementRandom=0 rightRandom=0 syncPhaseTrigger=0 randomizePhaseTrigger=0 numberOfLoops=4
-rFreezer :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-rFreezer rate bufnum left right gain increment incrementOffset incrementRandom rightRandom syncPhaseTrigger randomizePhaseTrigger numberOfLoops = mkUGen Nothing [AudioRate] (Left rate) "RFreezer" [bufnum,left,right,gain,increment,incrementOffset,incrementRandom,rightRandom,syncPhaseTrigger,randomizePhaseTrigger,numberOfLoops] Nothing 1 (Special 0) NoId
+rFreezer :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+rFreezer bufnum left right gain increment incrementOffset incrementRandom rightRandom syncPhaseTrigger randomizePhaseTrigger numberOfLoops = mkUGen Nothing [AudioRate] (Left AudioRate) "RFreezer" [bufnum,left,right,gain,increment,incrementOffset,incrementRandom,rightRandom,syncPhaseTrigger,randomizePhaseTrigger,numberOfLoops] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
@@ -2187,9 +2207,9 @@ rlpfd in_ ffreq res dist = mkUGen Nothing [ControlRate,AudioRate] (Right [0]) "R
 
 -- | (Undocumented class)
 --
---  RLagC [ControlRate] in=0 timeUp=0.1 curveUp=0 timeDown=0.1 curveDown=0
-rLagC :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-rLagC rate in_ timeUp curveUp timeDown curveDown = mkUGen Nothing [ControlRate] (Left rate) "RLagC" [in_,timeUp,curveUp,timeDown,curveDown] Nothing 1 (Special 0) NoId
+--  RLagC [ControlRate] in=0 timeUp=0.1 curveUp=0 timeDown=0.1 curveDown=0;    FILTER: TRUE
+rLagC :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+rLagC in_ timeUp curveUp timeDown curveDown = mkUGen Nothing [ControlRate] (Right [0]) "RLagC" [in_,timeUp,curveUp,timeDown,curveDown] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
@@ -2250,14 +2270,14 @@ rmShelf2 rate in_ freq k = mkUGen Nothing [AudioRate] (Left rate) "RMShelf2" [in
 -- | (Undocumented class)
 --
 --  RObxdFilter [AudioRate] in=0 cutoff=440 resonance=0 multimode=0.5 bandpass=0 fourpole=0
-rObxdFilter :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-rObxdFilter rate in_ cutoff resonance multimode bandpass fourpole = mkUGen Nothing [AudioRate] (Left rate) "RObxdFilter" [in_,cutoff,resonance,multimode,bandpass,fourpole] Nothing 1 (Special 0) NoId
+rObxdFilter :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+rObxdFilter in_ cutoff resonance multimode bandpass fourpole = mkUGen Nothing [AudioRate] (Right [0]) "RObxdFilter" [in_,cutoff,resonance,multimode,bandpass,fourpole] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  RPVDecayTbl [] fft_buf=0 decay_rate_buf=0 history_buf=0
-rpvDecayTbl :: Rate -> UGen -> UGen -> UGen -> UGen
-rpvDecayTbl rate fft_buf decay_rate_buf history_buf = mkUGen Nothing [InitialisationRate,ControlRate,AudioRate,DemandRate] (Left rate) "RPVDecayTbl" [fft_buf,decay_rate_buf,history_buf] Nothing 1 (Special 0) NoId
+rpvDecayTbl :: UGen -> UGen -> UGen -> UGen
+rpvDecayTbl fft_buf decay_rate_buf history_buf = mkUGen Nothing [ControlRate] (Left ControlRate) "RPVDecayTbl" [fft_buf,decay_rate_buf,history_buf] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
@@ -2276,20 +2296,20 @@ rRandN nc = liftUnsafe2 (rRandNM nc)
 -- | (Undocumented class)
 --
 --  RSVFBP [AudioRate] in=0 freq=440 q=0
-rsvfbp :: Rate -> UGen -> UGen -> UGen -> UGen
-rsvfbp rate in_ freq q = mkUGen Nothing [AudioRate] (Left rate) "RSVFBP" [in_,freq,q] Nothing 1 (Special 0) NoId
+rsvfbp :: UGen -> UGen -> UGen -> UGen
+rsvfbp in_ freq q = mkUGen Nothing [AudioRate] (Right [0]) "RSVFBP" [in_,freq,q] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  RSVFHP [AudioRate] in=0 freq=440 q=0
-rsvfhp :: Rate -> UGen -> UGen -> UGen -> UGen
-rsvfhp rate in_ freq q = mkUGen Nothing [AudioRate] (Left rate) "RSVFHP" [in_,freq,q] Nothing 1 (Special 0) NoId
+rsvfhp :: UGen -> UGen -> UGen -> UGen
+rsvfhp in_ freq q = mkUGen Nothing [AudioRate] (Right [0]) "RSVFHP" [in_,freq,q] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
 --  RSVFLP [AudioRate] in=0 freq=440 q=0
-rsvflp :: Rate -> UGen -> UGen -> UGen -> UGen
-rsvflp rate in_ freq q = mkUGen Nothing [AudioRate] (Left rate) "RSVFLP" [in_,freq,q] Nothing 1 (Special 0) NoId
+rsvflp :: UGen -> UGen -> UGen -> UGen
+rsvflp in_ freq q = mkUGen Nothing [AudioRate] (Right [0]) "RSVFLP" [in_,freq,q] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
@@ -2300,8 +2320,8 @@ rShufflerB bufnum readLocationMinima readLocationMaxima readIncrementMinima read
 -- | (Undocumented class)
 --
 --  RShufflerL [AudioRate] in=0 fragmentSize=0.01 maxDelay=0.01
-rShufflerL :: Rate -> UGen -> UGen -> UGen -> UGen
-rShufflerL rate in_ fragmentSize maxDelay = mkUGen Nothing [AudioRate] (Left rate) "RShufflerL" [in_,fragmentSize,maxDelay] Nothing 1 (Special 0) NoId
+rShufflerL :: UGen -> UGen -> UGen -> UGen
+rShufflerL in_ fragmentSize maxDelay = mkUGen Nothing [AudioRate] (Right [0]) "RShufflerL" [in_,fragmentSize,maxDelay] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
@@ -2617,6 +2637,24 @@ softClipper4 rate in_ = mkUGen Nothing [AudioRate] (Left rate) "SoftClipper4" [i
 softClipper8 :: Rate -> UGen -> UGen
 softClipper8 rate in_ = mkUGen Nothing [AudioRate] (Left rate) "SoftClipper8" [in_] Nothing 1 (Special 0) NoId
 
+-- | LPC analizer.
+--
+--  SonLPC [AudioRate] buff=-1.0 in=0.0 hop=0.5 poles=10.0
+sonLPC :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
+sonLPC rate buff in_ hop poles = mkUGen Nothing [AudioRate] (Left rate) "SonLPC" [buff,in_,hop,poles] Nothing 1 (Special 0) NoId
+
+-- | (Undocumented class)
+--
+--  SonLPCSynth [AudioRate] chain=-1.0
+sonLPCSynth :: Rate -> UGen -> UGen
+sonLPCSynth rate chain = mkUGen Nothing [AudioRate] (Left rate) "SonLPCSynth" [chain] Nothing 1 (Special 0) NoId
+
+-- | (Undocumented class)
+--
+--  SonLPCSynthIn [AudioRate] chain=-1.0 in=0.0
+sonLPCSynthIn :: Rate -> UGen -> UGen -> UGen
+sonLPCSynthIn rate chain in_ = mkUGen Nothing [AudioRate] (Left rate) "SonLPCSynthIn" [chain,in_] Nothing 1 (Special 0) NoId
+
 -- | Karplus-Strong via a sorting algorithm
 --
 --  SortBuf [AudioRate] bufnum=0 sortrate=10 reset=0
@@ -2928,6 +2966,12 @@ vbJonVerb in_ decay_ damping inputbw erfl tail_ = mkUGen Nothing [AudioRate] (Ri
 --  VBPVoc [AudioRate] numChannels=0 bufnum=0 playpos=0 fftsize=2048
 vbpVoc :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen
 vbpVoc rate numChannels bufnum playpos fftsize = mkUGen Nothing [AudioRate] (Left rate) "VBPVoc" [numChannels,bufnum,playpos,fftsize] Nothing 1 (Special 0) NoId
+
+-- | lowpass filter for envelope following
+--
+--  VBSlide [KR,AR] in=0.0 slideup=50.0 slidedown=3000.0;    FILTER: TRUE
+vbSlide :: UGen -> UGen -> UGen -> UGen
+vbSlide in_ slideup slidedown = mkUGen Nothing [ControlRate,AudioRate] (Right [0]) "VBSlide" [in_,slideup,slidedown] Nothing 1 (Special 0) NoId
 
 -- | 2D scanning pattern virtual machine
 --

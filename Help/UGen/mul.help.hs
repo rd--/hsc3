@@ -2,7 +2,7 @@
 sinOsc ar 440 0 * 0.15
 
 -- mul ; creates a beating effect (subaudio rate)
-fSinOsc kr 10 0 * pinkNoise 'α' ar * 0.1
+fSinOsc kr 10 0 * pinkNoiseId 'α' ar * 0.1
 
 -- mul ; ring modulation
 let p = sinOsc ar (xLine kr 100 1001 10 DoNothing) 0

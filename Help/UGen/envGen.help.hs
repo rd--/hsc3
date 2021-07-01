@@ -1,5 +1,5 @@
 -- envGen ; https://www.listarc.bham.ac.uk/lists/sc-users/msg14815.html
-let n = range 0.01 0.15 (lfNoise1 'α' kr 2)
+let n = range 0.01 0.15 (lfNoise1Id 'α' kr 2)
     e = Envelope [0,1] [n] [EnvLin] Nothing (Just 0) 0
     c = env_circle_0 e
     a = envGen ar 1 1 0 1 DoNothing c
@@ -14,7 +14,7 @@ in (sinOsc ar f 0 + impulse ar 1 0) * 0.1
 -- envGen ; c.f. envXYC ; non-linear Phasor ; positive half traversed more quickly than negative
 let e = envXYC [(0,0,EnvNum (-0.5)),(0.4,pi,EnvNum 0.5),(1,two_pi,EnvLin)]
     o = sinOsc kr 0 (envGen kr 1 1 0 2 DoNothing (env_circle_0 e))
-in (soundIn 0 + pinkNoise 'α' ar * 0.1) * range 0.25 1 o
+in (soundIn 0 + pinkNoiseId 'α' ar * 0.1) * range 0.25 1 o
 
 {---- ; see also help files for the following envelope constructors
 

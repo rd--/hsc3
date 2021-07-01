@@ -484,7 +484,7 @@ ug_pv_check g =
       n ->
         let d = concatMap (map u_node_u_name . u_node_descendents g) n
         in if any Analysis.primitive_is_pv_rate d || any (`elem` ["IFFT"]) d
-           then Just (show ("PV: multiple out edges, see pv_split",map u_node_u_name n,d))
+           then Just (show ("PV: multiple out edges, see pv_Split",map u_node_u_name n,d))
            else Nothing
 
 -- | Variant that runs 'error' as required.

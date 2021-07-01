@@ -8,15 +8,15 @@
 > g_02 =
 >   let g = lfPulse kr 0.25 0 0.5
 >       u = stkBowedR
->         {freq = midiCPS (rand 'α' 24 96)
->         ,bowpressure = rand 'β' 0 127
->         ,bowposition = rand 'γ' 0 127
->         ,vibfreq = rand 'δ' 32 96
->         ,vibgain = rand 'ε' 32 96
->         ,loudness_ = rand 'ζ' 32 96
+>         {freq = midiCPS (randId 'α' 24 96)
+>         ,bowpressure = randId 'β' 0 127
+>         ,bowposition = randId 'γ' 0 127
+>         ,vibfreq = randId 'δ' 32 96
+>         ,vibgain = randId 'ε' 32 96
+>         ,loudness_ = randId 'ζ' 32 96
 >         ,gate_ = g
->         ,attackrate = rand 'η' 1 64
->         ,decayrate = rand 'θ' 1 64}
+>         ,attackrate = randId 'η' 1 64
+>         ,decayrate = randId 'θ' 1 64}
 >   in mkStkBowed u
 
 <https://ccrma.stanford.edu/software/stk/classstk_1_1Bowed.html>

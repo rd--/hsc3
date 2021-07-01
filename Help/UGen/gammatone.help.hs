@@ -1,5 +1,5 @@
 -- gammatone
-X.gammatone (whiteNoise 'α' ar) 440 200 * 0.5
+X.gammatone (whiteNoiseId 'α' ar) 440 200 * 0.5
 
 -- gammatone ; sweeping frequency of sine input
 X.gammatone (sinOsc ar (mouseX kr 100 2000 Linear 0.2) 0) 1000 500 * 0.5
@@ -97,5 +97,5 @@ let freqs = take 88 (map midiCPS [21..])
                    ,1.3138311518147
                    ,1.2570452124657
                    ,1.1677392221542]
-in mix (X.gammatone (whiteNoise 'α' ar) (mce freqs) (mce bandwidths) * mce outereargain)
+in mix (X.gammatone (whiteNoiseId 'α' ar) (mce freqs) (mce bandwidths) * mce outereargain)
 

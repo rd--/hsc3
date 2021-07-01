@@ -1,5 +1,5 @@
 -- delayN ; dust randomly triggers decay to envelope WhiteNoise ; input is left, delay right
-let i = decay (dust 'α' ar 1) 0.3 * whiteNoise 'β' ar * 0.1
+let i = decay (dustId 'α' ar 1) 0.3 * whiteNoiseId 'β' ar * 0.1
 in mce2 i (delayN i 0.1 0.1)
 
 -- delayN ; delay time varied at control rate ; sinOsc reinforcing or cancelling with delayed copy

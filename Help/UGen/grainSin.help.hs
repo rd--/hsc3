@@ -1,5 +1,5 @@
 -- grainSin ; mouse control
-let n = whiteNoise 'α' kr
+let n = whiteNoiseId 'α' kr
     x = mouseX kr (-0.5) 0.5 Linear 0.1
     y = mouseY kr 0 400 Linear 0.1
     f = n * y + 440
@@ -9,9 +9,9 @@ in grainSin 2 t 0.1 f x (-1) 512 * 0.1
 -- grainSin ; f0 https://www.listarc.bham.ac.uk/lists/sc-users/msg66911.html
 let k = 16
     t = impulse ar (mouseY kr 1 999 Linear 0.2) 0
-    f i = ((fromIntegral i ** range_hs (0.3,0.7) (lfNoise0 i kr 1)) + 1) * 99
+    f i = ((fromIntegral i ** range_hs (0.3,0.7) (lfNoise0Id i kr 1)) + 1) * 99
     l = mce (map f [0::Int .. k - 1])
-in grainSin 2 t (mouseX kr 0.001 0.5 Exponential 0.2) (tChoose 'α' t l) 0 (-1) 512 * 0.1
+in grainSin 2 t (mouseX kr 0.001 0.5 Exponential 0.2) (tChooseId 'α' t l) 0 (-1) 512 * 0.1
 
 -- grainSin ; event control
 let f _ (g,_,y,z,o,rx,ry,p,_,_) =

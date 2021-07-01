@@ -13,4 +13,4 @@ let x = mouseX kr 0 1 Linear 0.2
 in sinOsc ar f 0 * 0.1
 
 -- linExp ; i-rate
-sinOsc ar (linExp (rand 'α' 0 1) 0 1 220 440) 0 * 0.1
+sinOsc ar (linExp (randId 'α' 0 1) 0 1 220 440) 0 * 0.1

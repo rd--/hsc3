@@ -1,29 +1,29 @@
--- MiClouds ; basic granulation ; requires=buf (stereo) ; 0=GRANULar
+-- MiClouds ; basic granulation ; requires=buf (stereo) ; 0=GRANULAR
 let buf = control kr "buf" 0
     nc = 2
     input = playBuf nc ar buf 1 1 0 Loop DoNothing
-    dens = lfNoise1 'α' kr 0.3 `in_range` (0.3,0.45)
-in X.miClouds ar 0 0 0 dens 0.5 1 1 0.5 0 0 0 (X.miClouds_mode "GRANULar") 0 0 input
+    dens = lfNoise1Id 'α' kr 0.3 `in_range` (0.3,0.45)
+in X.miClouds ar 0 0 0 dens 0.5 1 1 0.5 0 0 0 (X.miClouds_mode "GRANULAR") 0 0 input
 
 -- MiClouds
-let imp = dust 'α' ar (mce2 0.8 1.1)
-    freq = midiCPS (latch (pinkNoise 'β' ar * 24 + 80) imp)
+let imp = dustId 'α' ar (mce2 0.8 1.1)
+    freq = midiCPS (latch (pinkNoiseId 'β' ar * 24 + 80) imp)
     input = rlpf imp freq 0.002 * 4
-    pit = lfNoise1 'γ' kr 0.3 * 12
-    pos = lfNoise2 'δ' kr 0.4 * 0.5 + 0.5
-    size = lfNoise1 'ε' kr 0.3 * 0.5 + 0.5
-    dens = lfNoise1 'ζ' kr 0.3 * 0.5 + 0.5
-    tex = lfNoise1 'η' kr 0.3 * 0.5 + 0.5
-    frez = lfClipNoise 'θ' kr 0.3
-in X.miClouds ar pit pos size dens tex 0.5 2 0.5 0.3 0.8 frez (X.miClouds_mode "GRANULar") 1 0 input
+    pit = lfNoise1Id 'γ' kr 0.3 * 12
+    pos = lfNoise2Id 'δ' kr 0.4 * 0.5 + 0.5
+    size = lfNoise1Id 'ε' kr 0.3 * 0.5 + 0.5
+    dens = lfNoise1Id 'ζ' kr 0.3 * 0.5 + 0.5
+    tex = lfNoise1Id 'η' kr 0.3 * 0.5 + 0.5
+    frez = lfClipNoiseId 'θ' kr 0.3
+in X.miClouds ar pit pos size dens tex 0.5 2 0.5 0.3 0.8 frez (X.miClouds_mode "GRANULAR") 1 0 input
 
 -- MiClouds ; using external grain trigger ; requires=buf (stereo)
 let buf = control kr "buf" 0
     nc = 2
     input = playBuf nc ar buf 1 1 0 Loop DoNothing
     dens = 0.5
-    tr = dust 'α' kr 10
-in X.miClouds ar (-5) 0 0.2 dens 0.5 1 1 0.5 0 0 0 (X.miClouds_mode "GRANULar") 0 tr input
+    tr = dustId 'α' kr 10
+in X.miClouds ar (-5) 0 0.2 dens 0.5 1 1 0.5 0 0 0 (X.miClouds_mode "GRANULAR") 0 tr input
 
 -- MiClouds ; 3=SPECTRAL ; (this mode causes high CPU peaks)
 let buf = control kr "buf" 0
@@ -38,9 +38,9 @@ in X.miClouds ar 0 0 size dens tex 1 1 0.5 0.8 0.8 0 (X.miClouds_mode "SPECTRAL"
 let buf = control kr "buf" 0
     nc = 2
     input = playBuf nc ar buf 1 1 0 Loop DoNothing
-    size = squared (range 0.1 0.5 (lfNoise1 'α' kr 0.2))
-    dens = lfNoise1 'β' kr 0.3 * 0.5 + 0.5
-    tex = lfNoise1 'γ' kr 0.3 * 0.5 + 0.5
+    size = squared (range 0.1 0.5 (lfNoise1Id 'α' kr 0.2))
+    dens = lfNoise1Id 'β' kr 0.3 * 0.5 + 0.5
+    tex = lfNoise1Id 'γ' kr 0.3 * 0.5 + 0.5
 in X.miClouds ar 0 0 size dens tex 1 1 0.5 0.6 0.6 0 (X.miClouds_mode "SPECTRAL") 1 0 input * 0.25
 
 ---- ; allocate buffer 0, required for examples

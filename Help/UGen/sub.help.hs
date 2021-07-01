@@ -1,6 +1,6 @@
 -- sub (-)
 let o = fSinOsc ar 800 0
-    n = pinkNoise 'α' ar
+    n = pinkNoiseId 'α' ar
 in (o - n) * 0.1
 
 -- sub ; dc offset

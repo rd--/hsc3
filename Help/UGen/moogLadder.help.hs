@@ -4,7 +4,7 @@ let o = mix (lfSaw ar (mce2 120 180) 0 * 0.33)
 in X.moogLadder o cf 0.75
 
 -- moogLadder
-let n = dust 'α' ar 3
+let n = dustId 'α' ar 3
 in X.moogLadder n 2000 (mouseY kr 0 1 Linear 0.2)
 
 -- moogLadder ; event control

@@ -6,14 +6,14 @@ let vc = [[25,21,98,38,99, 0,99, 0,36,17,87,2,1,0,0,0,59,0, 1,1,8]
          ,[78,63,53,28,99,52,62, 3,38,11,80,3,0,0,0,0,77,0, 7,0,0]
          ,[98,56,63,23,99,89,74, 2, 0, 4, 1,0,0,0,0,0,99,0, 1,0,7]
          ,[99,99,99,99,50,50,50,50,3,2,1,29,99,1,0,0,0,1,24]]
-    dur = rand 'α' 0.1 10.0
-    mnn = iRand 'β' 48 72
-    vel = iRand 'γ' 10 69
-    loc = rand 'δ' (-1) 1
+    dur = randId 'α' 0.1 10.0
+    mnn = iRandId 'β' 48 72
+    vel = iRandId 'γ' 10 69
+    loc = randId 'δ' (-1) 1
     gate_ = line kr 1 0 dur DoNothing
     reset_ = 0
     data_ = 0
-    buf = asLocalBuf 'ε' (map constant (concat vc))
+    buf = asLocalBufId 'ε' (map constant (concat vc))
     s = pan2 (X.rdx7 ar buf gate_ reset_ data_ 0 mnn vel 0x2000 0 0 0) loc 1
     d = detectSilence s 0.001 0.1 RemoveSynth
 in mrg [out 0 s,d]
@@ -27,7 +27,7 @@ let f _ (g,x,_,z,o,_,_,p,_,_) =
                ,[78,63,53,28,99,52,62, 3,38,11,80,3,0,0,0,0,77,0, 7,0,0]
                ,[98,56,63,23,99,89,74, 2, 0, 4, 1,0,0,0,0,0,99,0, 1,0,7]
                ,[99,99,99,99,50,50,50,50,3,2,1,29,99,1,0,0,0,1,24]]
-          buf = asLocalBuf 'ε' (map constant (concat vc))
+          buf = asLocalBufId 'ε' (map constant (concat vc))
           x0 = latch x g
       in pan2 (X.rdx7 ar buf g 0 0 0 p z (0x2000 * (x - x0)) 0 0 0) (o * 2 - 1) 1
 in mix (eventVoicer 16 f) * control kr "gain" 1
@@ -49,14 +49,14 @@ in X.rdx7 ar buf gate_ reset data_ vc mnn vel pw mw bc fc
 -- rdx7 ; data at shared buffer
 let nv = 32 -- 221
     buf = control kr "dat" 100
-    tr = dust 'α' kr 2.0
+    tr = dustId 'α' kr 2.0
     gate_ = toggleFF tr
     reset_ = 0
     data_ = 0
-    vc = tRand 'β' 0 (nv - 1) tr
-    mnn = tRand 'γ' 56.5 57.5 tr -- FRACTIONAL MIDI NOTE NUMBER -- 60 61
-    vel = tRand 'δ' 10 29 tr
-    loc = tRand 'ε' (-1) 1 tr
+    vc = tRandId 'β' 0 (nv - 1) tr
+    mnn = tRandId 'γ' 56.5 57.5 tr -- FRACTIONAL MIDI NOTE NUMBER -- 60 61
+    vel = tRandId 'δ' 10 29 tr
+    loc = tRandId 'ε' (-1) 1 tr
 in pan2 (X.rdx7 ar buf gate_ reset_ data_ vc mnn vel 0x2000 0 0 0) loc 1
 
 -- rdx7 ; event control ; data at shared buffer

@@ -42,7 +42,7 @@ Hear terrain
 > gr_01 =
 >     let x' = mouseX kr 1 200 Exponential 0.2
 >         y' = mouseY kr 1 300 Exponential 0.2
->         x = abs (sinOsc ar x' 0) + lfNoise2 'α' ar 2
+>         x = abs (sinOsc ar x' 0) + lfNoise2Id 'α' ar 2
 >         y = abs (sinOsc ar y' (pi / 2))
 >         b = 0
 >     in X.waveTerrain ar b x y 100 50

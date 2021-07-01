@@ -1561,8 +1561,8 @@ linRand = liftUnsafe3 linRandM
 -- | Two channel linear crossfade.
 --
 --  LinXFade2 [ControlRate,AudioRate] inA=0 inB=0 pan=0 level=1;    FILTER: TRUE, PSUEDO INPUTS: [3]
-linXFade2 :: UGen -> UGen -> UGen -> UGen -> UGen
-linXFade2 inA inB pan level = mkUGen Nothing [ControlRate,AudioRate] (Right [0,1]) "LinXFade2" [inA,inB,pan,level] Nothing 1 (Special 0) NoId
+linXFade2 :: UGen -> UGen -> UGen -> UGen
+linXFade2 inA inB pan = mkUGen Nothing [ControlRate,AudioRate] (Right [0,1]) "LinXFade2" [inA,inB,pan] Nothing 1 (Special 0) NoId
 
 -- | Line generator.
 --

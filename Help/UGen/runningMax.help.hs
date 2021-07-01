@@ -1,5 +1,5 @@
 -- runningMax
-let n = dust 'α' ar 20
+let n = dustId 'α' ar 20
     t = impulse ar 0.4 0
     f = runningMax n t * 500 + 200
 in t + sinOsc ar f 0 * 0.2

@@ -19,7 +19,7 @@ in sinOsc ar (m3 * 200 + 500) 0 * 0.1 -- modulate frequency with the force
 -- spring ; modulating a resonating string
 let k = mouseX kr 0.5 100 Exponential 0.2
     d = mouseY kr 0.0001 0.1 Exponential 0.2
-    t = dust 'α' ar 2
+    t = dustId 'α' ar 2
     m0 = spring ar (toggleFF t) k 0.01
     m1 = spring ar m0 (0.5 * k) d
     m2 = spring ar m0 (0.6 * k) d

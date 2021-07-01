@@ -5,7 +5,7 @@
 
 fails..., but so does sclang...
 
-> let {p = pinkNoise 'α' ar
+> let {p = pinkNoiseId 'α' ar
 >     ;mx = mouseX kr (-1) 1 Linear 0.2
 >     ;my = mouseY kr 0 0.1 Linear 0.2
 >     ;[w,x,y] = mceChannels (panB2 p mx my)

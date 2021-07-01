@@ -21,15 +21,15 @@ in X.rFreezer b 0.2500 0.2505 0.1 1 0 0.050 0.005 0 0 24
 
 -- rFreezer ; k-rate instance
 let b = control kr "buf" 0
-    n z f i j = linLin (lfNoise2 z kr f) (-1) 1 i j
-    left = n 'α' 1 0.3 0.8
-    right = left + n 'β' 1 0.01 0.05
+    nId z f i j = linLin (lfNoise2Id z kr f) (-1) 1 i j
+    left = nId 'α' 1 0.3 0.8
+    right = left + nId 'β' 1 0.01 0.05
 in X.rFreezer b left right 0.1 0.5 0.1 0.5 0.05 0 0 24
 
 -- rFreezer ; k-rate instance
 let b = control kr "buf" 0
-    n z i j = linLin (lfNoise2 z kr 0.1) (-1) 1 i j
-in X.rFreezer b (n 'α' 0.3 0.4) (n 'β' 0.5 0.6) (n 'γ' 0.3 0.6) (n 'δ' 0.95 1.05) (n 'ε' 0.05 0.15) (n 'ζ' 0.05 0.15) (n 'η' 0.05 0.15) 0 0 36
+    nId z i j = linLin (lfNoise2Id z kr 0.1) (-1) 1 i j
+in X.rFreezer b (nId 'α' 0.3 0.4) (nId 'β' 0.5 0.6) (nId 'γ' 0.3 0.6) (nId 'δ' 0.95 1.05) (nId 'ε' 0.05 0.15) (nId 'ζ' 0.05 0.15) (nId 'η' 0.05 0.15) 0 0 36
 
 -- rFreezer ; controls
 let b = control_m kr "buf" 0 (0,0,"lin")
@@ -63,5 +63,5 @@ ld "/home/rohan/uc/sp-id/flac/gamelan/suhirdjan/gender-barung-S-3-3.flac"
 
 Create a set of concurrent loops at a signal buffer.  This is the
 dynamic and gestural variant of RLoopSet.  It was written after
-reading the manual for the GRM Tools 'Freeze' plugin.
+reading the manual for the GRM ToolsId 'Freeze' plugin.
 -}
