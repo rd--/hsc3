@@ -48,7 +48,7 @@ sc3_name_edges s =
 {- | Convert from SCLang (class) name to Haskell (function) name.
 
 > s = words "SinOsc LFSaw FFT PV_Add AllpassN BHiPass BinaryOpUGen HPZ1 RLPF TGrains DFM1 FBSineC A2K Lag2UD IIRFilter FMGrainB Pan2 PeakEQ RIRandN"
-> l = words "sinOsc lfSaw fft pv_Add allpassN bHiPass binaryOpUGen hpz1 rlpf tGrains dfm1 fbSineC a2k lag2UD iirFilter fmGrainB pan2 peakEQ riRandN"
+> l = words "sinOsc lfSaw fft pv_Add allpassN bHiPass binaryOpUGen hpz1 rlpf tGrains dfm1 fbSineC a2k lag2UD iirFilter fmGrainB pan2 peakEQ rIRandN"
 > map sc3_name_to_hs_name s == l
 -}
 sc3_name_to_hs_name :: String -> String

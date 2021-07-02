@@ -17,4 +17,4 @@ let lfn f l r = range l r (lfNoise0 kr f)
                * lfn q 0.01 1.8
              ,hpb q * lfn q 1.2 1.8
              ,blip ar (lfn q 16 36) 3 * mce2 0.03 0.09]
-in mk drand + mk dxrandU
+in mk drand + mk dxrand

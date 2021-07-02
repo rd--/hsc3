@@ -68,8 +68,8 @@ Gerate mesh given terrain given function.
 >         ys = tk h [0,1/h ..]
 >         ix0 = map (\y -> map (\x -> (x,y)) xs) ys
 >         ix1 = map (\x -> map (\y -> (x,y)) ys) xs
->         add_z = map (\(x,y) -> (x,y,z (x,y)))
->     in (map add_z ix0,map add_z ix1)
+>         addz = map (\(x,y) -> (x,y,z (x,y)))
+>     in (map addz ix0,map add_z ix1)
 
 Confirm terrain mesh
 
