@@ -1,0 +1,9 @@
+UGen has an instance of IsList.
+
+This allows literal multiple-channel inputs to be written without annotation.
+
+Ie. `sinOsc ar [440,441] 0`.
+
+This requires the OverloadedLists language extension to be in place.
+
+It is not entirely clear if this is a good idea or not.
