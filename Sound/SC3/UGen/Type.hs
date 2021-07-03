@@ -10,7 +10,7 @@ import Data.List {- base -}
 import Data.Maybe {- base -}
 import Text.Printf {- base -}
 
-import GHC.Exts {- base -}
+import qualified GHC.Exts as Exts {- base -}
 
 import qualified Safe {- safe -}
 import qualified System.Random as Random {- random -}
@@ -696,7 +696,7 @@ instance Bits UGen where
     bitSizeMaybe = error "UGen.bitSizeMaybe"
     isSigned _ = True
 
-instance IsList UGen where
+instance Exts.IsList UGen where
   type Item UGen = UGen
   fromList = mce
   toList = mceChannels
