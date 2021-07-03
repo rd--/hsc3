@@ -1,3 +1,5 @@
+{-# Language TypeFamilies #-}
+
 -- | Unit Generator ('UGen') and associated types and instances.
 module Sound.SC3.UGen.Type where
 
@@ -7,6 +9,8 @@ import qualified Data.Fixed as F {- base -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
 import Text.Printf {- base -}
+
+import GHC.Exts {- base -}
 
 import qualified Safe {- safe -}
 import qualified System.Random as Random {- random -}
@@ -691,3 +695,8 @@ instance Bits UGen where
     popCount = error "UGen.popCount"
     bitSizeMaybe = error "UGen.bitSizeMaybe"
     isSigned _ = True
+
+instance IsList UGen where
+  type Item UGen = UGen
+  fromList = mce
+  toList = mceChannels

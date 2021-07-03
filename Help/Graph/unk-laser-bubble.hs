@@ -12,7 +12,6 @@ in limiter (rotate2 s0 s1 (lfSaw kr 0.1 0)) 1 0.01 * 0.25
 
 -- laser bubble ; https://www.listarc.bham.ac.uk/lists/sc-users/msg14775.html ; id
 let n = 8
-    laser_bubble_f :: ID a => a -> UGen
     laser_bubble_f z =
       let xr = dxrandId z dinf (mce [0.1,0.2,0.3,0.4,0.5])
           lf = dstutterId z 2 xr

@@ -1,7 +1,7 @@
 -- harmonic swimming (jmcc) #1
 let a = 0.02
     f = 50
-    p = 20::Int
+    p = 20
     l = line kr 0 (- a) 60 DoNothing
     o h = let r = X.rRandN 2 2 8
               n = lfNoise1 kr r

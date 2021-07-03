@@ -16,8 +16,7 @@ let pls c d f = let t = pulseDivider c d 0
 in sum (map (plss clk) (smpl f))
 
 -- wial (rd, 2006-09-21) ; monad
-let wial_m :: UId m => m UGen
-    wial_m = do
+let wial_m = do
       let pls c d f = do let t = pulseDivider c d 0
                              e = decay2 t 0.05 0.75
                              o = sinOsc ar (toggleFF t * f + f * 2) 0

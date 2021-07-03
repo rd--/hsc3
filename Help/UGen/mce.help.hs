@@ -14,5 +14,11 @@ sinOsc ar (mce2 440 441) 0 * 0.1
 -- mce ; two out ; each single channel
 sinOsc ar (mce1 (mce2 440 441)) 0 * 0.1
 
+---- mce ; isList ; :set -XOverloadedLists (~/.ghci)
+sinOsc ar [440,441] 0 * 0.1
+
+---- mce ; isList ; :set -XOverloadedLists (~/.ghci) ; channel layout is L=440,441 and R=660,661
+mix (sinOsc ar [[440,660],[441,661]] 0) * 0.1
+
 ---- ; c.f uclone_all
 Protect.uclone_allId 'α' 2 (brownNoiseId 'β' ar) * 0.05

@@ -23,13 +23,11 @@ let bg_f k =
 in mce2 (pebble_beach ()) (pebble_beach ())
 
 -- pebble beach (np) ; http://sccode.org/1-u ; requires 'scsynth -u 57110 -m 32768' ; id
-let bg_f :: UGen -> UGen
-    bg_f k =
+let bg_f k =
       let sc = 0.4 + (k * 0.07)
           fr = range 3100 4900 (lag (lfNoise0Id 'α' kr 21.8) 0.7) * sc
           am = range 0 1 (lag (lfNoise1Id 'α' kr 5.227) 5.374)
       in bpf (pinkNoiseId 'α' ar * 0.4) fr 0.1 * am
-    fg_f :: UGen -> UGen -> UGen
     fg_f df tf =
       let d = dustId 'α' ar (df * randId 'α' 0.8 1.2) * 50
           l = exprange 800 900 (sinOsc kr 2.2 0)
@@ -38,7 +36,6 @@ let bg_f :: UGen -> UGen
           t = lagUD (range 2 0.5 (saw kr tf)) 0.6 2.8
           o = z * t
       in o + combL o 0.8 (randId 'α' 0.2 0.8) (lchooseId 'α' [-4,4])
-    pebble_beach :: ID a => a -> UGen
     pebble_beach j =
       let bg' = let am = range 0 1 (lag (lfNoise0Id 'α' kr 34) 1.4)
                 in brownNoiseId 'α' ar * 0.06 * am

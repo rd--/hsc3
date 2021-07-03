@@ -22,7 +22,6 @@ let rvb i rT =
     t4 = 7.9365079365
     s = sum (zipWith3 (mk_saw t4) f0 f1 l)
     n = 30
-    rand_rng_n :: Int -> (UGen,UGen) -> Int -> [UGen]
     rand_rng_n k rng z = take k (randomRs rng (mkStdGen z))
     l = rand_rng_n n (-1.0,1.0) 1
     f = [29,87.5,116,175,233,350,524,880,1048,1760]

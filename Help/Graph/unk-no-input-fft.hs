@@ -10,8 +10,7 @@ let e_01 = envelope [0.0001,1,0.0001,0.01,0.0001] (map (* 512) (normalizeSum [1,
 in ifft (mceFill 2 gen_f) 1 0
 
 -- no input fft ; https://www.listarc.bham.ac.uk/liasts/sc-users/msg63383.html ; id
-let e_01 :: Envelope Double
-    e_01 = envelope [0.0001,1,0.0001,0.01,0.0001] (map (* 512) (normalizeSum [1,2,2,50])) [EnvExp]
+let e_01 = envelope [0.0001,1,0.0001,0.01,0.0001] (map (* 512) (normalizeSum [1,2,2,50])) [EnvExp]
     e_ix e n = constant (envelope_at e (fromIntegral n))
     fft_size = 1024
     fft_f z = fft (localBufId z 1 (constant fft_size)) (dc ar 0) 0.5 0 1 0

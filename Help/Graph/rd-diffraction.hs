@@ -1,4 +1,4 @@
--- diffraction (rd, 2006-09-09) ; monad
+-- diffraction (rd, 2006-09-09)
 let diffraction_p _ =
       let x = mouseX kr 0.001 0.02 Exponential 0.1
           y = mouseY kr 120 400 Exponential 0.1
@@ -31,7 +31,6 @@ uid_st_eval (do
       diffraction_r =
         let x = mouseX kr 0.75 1.25 Exponential 0.1
             y = mouseY kr 0.25 1 Exponential 0.1
-            f :: UId m => Int -> m UGen
             f _ = do fr <- fmap (* x) (randM 50 59)
                      am <- fmap (* y) (randM 0.04 0.16)
                      return (sinOsc ar fr 0 * am)

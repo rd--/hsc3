@@ -6,9 +6,9 @@ import Data.List {- base -}
 
 import qualified Data.List.Split as Split {- split -}
 
-import Sound.SC3.Common.UId
-import Sound.SC3.UGen.Math
-import Sound.SC3.UGen.Type
+import Sound.SC3.Common.UId {- hsc3 -}
+import qualified Sound.SC3.UGen.Math as Math {- hsc3 -}
+import Sound.SC3.UGen.Type {- hsc3 -}
 
 -- | Construct a list of UGens.
 listFillId :: (Integral n, ID z, Enum z) => z -> Int -> (z -> n -> UGen) -> [UGen]
@@ -39,7 +39,7 @@ mceSize = constant . length . mceChannels
 
 -- | Mix divided by number of inputs.
 mceMean :: UGen -> UGen
-mceMean e = let p = mceChannels e in sum_opt p / constant (length p)
+mceMean e = let p = mceChannels e in Math.sum_opt p / constant (length p)
 
 -- | Construct an Mce array of UGens.
 mceFill :: Integral n => Int -> (n -> UGen) -> UGen
@@ -55,13 +55,13 @@ mceFillInt = mceFill
 
 -- | Collapse possible mce by summing.
 mix :: UGen -> UGen
-mix = sum_opt . mceChannels
+mix = Math.sum_opt . mceChannels
 
 -- | Mix variant, sum to n channels.
 mixTo :: Int -> UGen -> UGen
 mixTo n u =
     let xs = transpose (Split.chunksOf n (mceChannels u))
-    in mce (map sum_opt xs)
+    in mce (map Math.sum_opt xs)
 
 -- | Construct and sum a set of UGens.
 mixFill :: Integral n => Int -> (n -> UGen) -> UGen
@@ -81,4 +81,4 @@ mixFillId z n = mix . mceFillId z n
 
 -- | Monad variant on mixFill.
 mixFillM :: (Integral n,Monad m) => Int -> (n -> m UGen) -> m UGen
-mixFillM n f = fmap sum_opt (mapM f [0 .. fromIntegral n - 1])
+mixFillM n f = fmap Math.sum_opt (mapM f [0 .. fromIntegral n - 1])

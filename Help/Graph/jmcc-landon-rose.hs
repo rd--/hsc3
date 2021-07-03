@@ -24,4 +24,4 @@ let nt =
           x = e * pinkNoiseId z ar * mce2 0.0011 0.0012
       in klank x 1 0 1 p
     env i = abs (sinOsc ar (1 / 8) ((constant i / 2) * pi))
-in sum (zipWith3 nd "αβγδ" (map env [0::Int .. 3]) fr)
+in sum (zipWith3 nd "αβγδ" (map env [0 .. 3]) fr)
