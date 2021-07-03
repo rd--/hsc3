@@ -47,7 +47,7 @@ ugenTraverse halt_f map_f u =
 
 {- | Right fold of UGen graph.
 
-> ugenFoldr (:) [] (pan2 (sinOsc AudioRate 440 0) 0.25 0.1)
+> map Sound.SC3.UGen.PP.ugen_concise_pp $ ugenFoldr (:) [] (pan2 (sinOsc AudioRate 440 0) 0.25 0.1)
 -}
 ugenFoldr :: (UGen -> a -> a) -> a -> UGen -> a
 ugenFoldr f st u =

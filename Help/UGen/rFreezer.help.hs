@@ -21,12 +21,24 @@ in X.rFreezer b 0.2500 0.2505 0.1 1 0 0.050 0.005 0 0 24
 
 -- rFreezer ; k-rate instance
 let b = control kr "buf" 0
+    n f i j = linLin (lfNoise2 kr f) (-1) 1 i j
+    left = n 1 0.3 0.8
+    right = left + n 1 0.01 0.05
+in X.rFreezer b left right 0.1 0.5 0.1 0.5 0.05 0 0 24
+
+-- rFreezer ; k-rate instance ; id
+let b = control kr "buf" 0
     nId z f i j = linLin (lfNoise2Id z kr f) (-1) 1 i j
     left = nId 'α' 1 0.3 0.8
     right = left + nId 'β' 1 0.01 0.05
 in X.rFreezer b left right 0.1 0.5 0.1 0.5 0.05 0 0 24
 
 -- rFreezer ; k-rate instance
+let b = control kr "buf" 0
+    n i j = linLin (lfNoise2 kr 0.1) (-1) 1 i j
+in X.rFreezer b (n 0.3 0.4) (n 0.5 0.6) (n 0.3 0.6) (n 0.95 1.05) (n 0.05 0.15) (n 0.05 0.15) (n 0.05 0.15) 0 0 36
+
+-- rFreezer ; k-rate instance ; id
 let b = control kr "buf" 0
     nId z i j = linLin (lfNoise2Id z kr 0.1) (-1) 1 i j
 in X.rFreezer b (nId 'α' 0.3 0.4) (nId 'β' 0.5 0.6) (nId 'γ' 0.3 0.6) (nId 'δ' 0.95 1.05) (nId 'ε' 0.05 0.15) (nId 'ζ' 0.05 0.15) (nId 'η' 0.05 0.15) 0 0 36

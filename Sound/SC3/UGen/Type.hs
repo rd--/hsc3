@@ -118,33 +118,51 @@ newtype Special = Special Int
     deriving (Eq,Read,Show)
 
 -- | UGen primitives.
-data Primitive = Primitive {ugenRate :: Rate
-                           ,ugenName :: String
-                           ,ugenInputs :: [UGen]
-                           ,ugenOutputs :: [Output]
-                           ,ugenSpecial :: Special
-                           ,ugenId :: UGenId}
-                 deriving (Eq,Read,Show)
+data Primitive t =
+  Primitive {ugenRate :: Rate
+            ,ugenName :: String
+            ,ugenInputs :: [t]
+            ,ugenOutputs :: [Output]
+            ,ugenSpecial :: Special
+            ,ugenId :: UGenId}
+  deriving (Eq,Read,Show)
 
 -- | Proxy indicating an output port at a multi-channel primitive.
-data Proxy = Proxy {proxySource :: Primitive
-                   ,proxyIndex :: Int}
-            deriving (Eq,Read,Show)
+data Proxy t =
+  Proxy {proxySource :: Primitive t
+        ,proxyIndex :: Int}
+  deriving (Eq,Read,Show)
 
 -- | Multiple root graph.
-data Mrg = Mrg {mrgLeft :: UGen
-               ,mrgRight :: UGen}
-           deriving (Eq,Read,Show)
+data Mrg t =
+  Mrg {mrgLeft :: t
+      ,mrgRight :: t}
+  deriving (Eq,Read,Show)
+
+{-
+data Circuit t
+  = Constant_U Constant
+  | Control_U Control
+  | Label_U Label
+  | Primitive_U (Primitive t)
+  | Proxy_U (Proxy t)
+  | Mce_U (Mce t)
+  | Mrg_U (Mrg t)
+  deriving (Eq,Read,Show)
+
+data UGen = UGen (Circuit UGen)
+-}
 
 -- | Union type of Unit Generator forms.
-data UGen = Constant_U Constant
-          | Control_U Control
-          | Label_U Label
-          | Primitive_U Primitive
-          | Proxy_U Proxy
-          | Mce_U (Mce UGen)
-          | Mrg_U Mrg
-            deriving (Eq,Read,Show)
+data UGen
+  = Constant_U Constant
+  | Control_U Control
+  | Label_U Label
+  | Primitive_U (Primitive UGen)
+  | Proxy_U (Proxy UGen)
+  | Mce_U (Mce UGen)
+  | Mrg_U (Mrg UGen)
+  deriving (Eq,Read,Show)
 
 instance EqE UGen where
     equal_to = mkBinaryOperator EQ_ Math.sc3_eq
@@ -278,7 +296,7 @@ isSink u =
       _ -> False
 
 -- | See into 'Proxy_U'.
-un_proxy :: UGen -> Maybe Proxy
+un_proxy :: UGen -> Maybe (Proxy UGen)
 un_proxy u =
     case u of
       Proxy_U p -> Just p

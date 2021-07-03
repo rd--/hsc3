@@ -393,7 +393,7 @@ ug_mk_node_rec u n g =
 
 -- | Run 'ug_mk_node_rec' at inputs and either find existing primitive
 -- node or insert a new one.
-ug_mk_node_u :: Primitive -> U_Graph -> (U_Node,U_Graph)
+ug_mk_node_u :: Primitive UGen -> U_Graph -> (U_Node,U_Graph)
 ug_mk_node_u (Primitive r nm i o s d) g =
     let (i',g') = ug_mk_node_rec i [] g
         i'' = map u_node_from_port i'

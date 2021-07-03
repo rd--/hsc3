@@ -10,7 +10,7 @@ import Sound.SC3.UGen.Type
 
 -- | UGen primitive set.
 --   Sees through Proxy and Mrg, possible multiple primitives for Mce.
-ugen_primitive_set :: UGen -> [Primitive]
+ugen_primitive_set :: UGen -> [Primitive UGen]
 ugen_primitive_set u =
     case u of
       Constant_U _ -> []
