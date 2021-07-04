@@ -115,6 +115,7 @@ liftUId11 fn a b c d e f g h i j k = do
 -- * ID
 
 -- | Typeclass to constrain UGen identifiers.
+--   Char inputs are hashed to generate longer seeds for when ir (constant) random UGens are optimised.
 --
 -- > map resolveID [0::Int,1] == [0,1]
 -- > map resolveID ['α','β'] == [1439603815,4131151318]

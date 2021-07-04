@@ -412,19 +412,19 @@ ug_mk_node_p n p g =
 ug_mk_node :: UGen -> U_Graph -> (U_Node,U_Graph)
 ug_mk_node u g =
     case u of
-      Constant_U c -> ug_mk_node_c c g
-      Control_U k -> ug_mk_node_k k g
-      Label_U _ -> error (show ("ug_mk_node: label",u))
-      Primitive_U p -> ug_mk_node_u p g
-      Proxy_U p ->
+      UGen (CConstant c) -> ug_mk_node_c c g
+      UGen (CControl k) -> ug_mk_node_k k g
+      UGen (CLabel _) -> error (show ("ug_mk_node: label",u))
+      UGen (CPrimitive p) -> ug_mk_node_u p g
+      UGen (CProxy p) ->
           let (n,g') = ug_mk_node_u (proxySource p) g
           in ug_mk_node_p n (proxyIndex p) g'
-      Mrg_U m ->
+      UGen (CMrg m) ->
           let f g' l = case l of
                          [] -> g'
                          n:l' -> let (_,g'') = ug_mk_node n g' in f g'' l'
           in ug_mk_node (mrgLeft m) (f g (mceChannels (mrgRight m)))
-      Mce_U _ -> error (show ("ug_mk_node: mce",u))
+      UGen (CMce _) -> error (show ("ug_mk_node: mce",u))
 
 -- | Add implicit /control/ UGens to 'U_Graph'.
 ug_add_implicit_ctl :: U_Graph -> U_Graph

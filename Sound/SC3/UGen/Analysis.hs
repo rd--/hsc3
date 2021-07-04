@@ -13,13 +13,13 @@ import Sound.SC3.UGen.Type
 ugen_primitive_set :: UGen -> [Primitive UGen]
 ugen_primitive_set u =
     case u of
-      Constant_U _ -> []
-      Control_U _ -> []
-      Label_U _ -> []
-      Primitive_U p -> [p]
-      Proxy_U p -> [proxySource p]
-      Mce_U m -> concatMap ugen_primitive_set (Mce.mce_elem m)
-      Mrg_U m -> ugen_primitive_set (mrgLeft m)
+      UGen (CConstant _) -> []
+      UGen (CControl _) -> []
+      UGen (CLabel _) -> []
+      UGen (CPrimitive p) -> [p]
+      UGen (CProxy p) -> [proxySource p]
+      UGen (CMce m) -> concatMap ugen_primitive_set (Mce.mce_elem m)
+      UGen (CMrg m) -> ugen_primitive_set (mrgLeft m)
 
 -- | Heuristic based on primitive name (@FFT@, @PV_@).  Note that
 -- @IFFT@ is at /control/ rate, not @PV@ rate.
@@ -78,6 +78,6 @@ ugen_remove_out_node u =
   let err = error "ugen_remove_out_node?"
       assert_is_output x = if x `elem` ["Out","ReplaceOut","OffsetOut"] then x else err
   in case u of
-       Primitive_U (Primitive Rate.AudioRate nm (_bus:inputs) [] _special _uid) -> (assert_is_output nm,mce inputs)
-       Mrg_U (Mrg lhs rhs) -> let (nm,res) = ugen_remove_out_node lhs in (nm,Mrg_U (Mrg res rhs))
+       UGen (CPrimitive (Primitive Rate.AudioRate nm (_bus:inputs) [] _special _uid)) -> (assert_is_output nm,mce inputs)
+       UGen (CMrg (Mrg lhs rhs)) -> let (nm,res) = ugen_remove_out_node lhs in (nm,UGen (CMrg (Mrg res rhs)))
        _ -> err

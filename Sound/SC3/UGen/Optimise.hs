@@ -30,12 +30,12 @@ ugen_optimise_ir_rand :: UGen -> UGen
 ugen_optimise_ir_rand =
     let f u =
             case u of
-              Primitive_U p ->
+              UGen (CPrimitive p) ->
                   case p of
-                    Primitive InitialisationRate "Rand" [Constant_U (Constant l),Constant_U (Constant r)] [InitialisationRate] _ (UId z) ->
-                        Constant_U (Constant (c_rand z l r))
-                    Primitive InitialisationRate "InitialisationRateand" [Constant_U (Constant l),Constant_U (Constant r)] [InitialisationRate] _ (UId z) ->
-                        Constant_U (Constant (c_irand z l r))
+                    Primitive InitialisationRate "Rand" [UGen (CConstant (Constant l)),UGen (CConstant (Constant r))] [InitialisationRate] _ (UId z) ->
+                        UGen (CConstant (Constant (c_rand z l r)))
+                    Primitive InitialisationRate "IRand" [UGen (CConstant (Constant l)),UGen (CConstant (Constant r))] [InitialisationRate] _ (UId z) ->
+                        UGen (CConstant (Constant (c_irand z l r)))
                     _ -> u
               _ -> u
     in ugenTraverse (const False) f
@@ -61,16 +61,16 @@ ugen_optimise_const_operator :: UGen -> UGen
 ugen_optimise_const_operator =
     let f u =
             case u of
-              Primitive_U p ->
+              UGen (CPrimitive p) ->
                   case p of
-                    Primitive _ "BinaryOpUGen" [Constant_U (Constant l)
-                                               ,Constant_U (Constant r)] [_] (Special z) _ ->
+                    Primitive _ "BinaryOpUGen" [UGen (CConstant (Constant l))
+                                               ,UGen (CConstant (Constant r))] [_] (Special z) _ ->
                         case binop_special_hs z of
-                          Just fn -> Constant_U (Constant (fn l r))
+                          Just fn -> UGen (CConstant (Constant (fn l r)))
                           _ -> u
-                    Primitive _ "UnaryOpUGen" [Constant_U (Constant i)] [_] (Special z) _ ->
+                    Primitive _ "UnaryOpUGen" [UGen (CConstant (Constant i))] [_] (Special z) _ ->
                         case uop_special_hs z of
-                          Just fn -> Constant_U (Constant (fn i))
+                          Just fn -> UGen (CConstant (Constant (fn i)))
                           _ -> u
                     _ -> u
               _ -> u
