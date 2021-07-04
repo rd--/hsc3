@@ -1,9 +1,14 @@
+{-# Language DeriveFunctor, DeriveFoldable, DeriveTraversable #-}
+
 -- | The SC3 multiple channel expansion rules over an abstract type.
 module Sound.SC3.Common.Mce where
 
 -- | Multiple channel expansion.
-data Mce n = Mce_Unit n | Mce_Vector [n]
-             deriving (Eq,Read,Show)
+data Mce t = Mce_Unit t | Mce_Vector [t]
+             deriving (Functor, Foldable, Traversable, Eq, Read, Show)
+
+mce_from_list :: [t] -> Mce t
+mce_from_list = Mce_Vector
 
 -- | Elements at 'MCE'.
 mce_elem :: Mce t -> [t]
@@ -12,7 +17,7 @@ mce_elem m =
       Mce_Unit e -> [e]
       Mce_Vector e -> e
 
--- | Extend 'Mce' to specified degree.
+-- | Extend 'Mce' to specified degree, only at initial depth.
 mce_extend :: Int -> Mce n -> Mce n
 mce_extend n m =
     case m of
@@ -50,3 +55,9 @@ instance Num n => Num (Mce n) where
 instance Fractional n => Fractional (Mce n) where
     (/) = mce_binop (/)
     fromRational = Mce_Unit . fromRational
+
+{-
+Should Mce be a Tree?
+import qualified Data.Tree as Tree {- containers -}
+type Mce t = Tree.Tree [t]
+-}

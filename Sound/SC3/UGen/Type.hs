@@ -1,4 +1,5 @@
 {-# Language TypeFamilies #-}
+{-# Language DeriveFunctor, DeriveFoldable, DeriveTraversable #-}
 
 -- | Unit Generator ('UGen') and associated types and instances.
 module Sound.SC3.UGen.Type where
@@ -12,6 +13,8 @@ import Text.Printf {- base -}
 
 import qualified GHC.Exts as Exts {- base -}
 
+import qualified Data.Traversable as Traversable {- containers -}
+import qualified Data.Reify as Reify {- data-reify -}
 import qualified Safe {- safe -}
 import qualified System.Random as Random {- random -}
 
@@ -19,14 +22,12 @@ import qualified Sound.SC3.Common.Math as Math
 import Sound.SC3.Common.Math.Operator
 import Sound.SC3.Common.Rate
 import Sound.SC3.Common.Mce
+import qualified Sound.SC3.Common.UId as UId
 
 -- * Basic types
 
--- | Type of unique identifier.
-type UID_t = Int
-
--- | Data type for the identifier at a 'Primitive' 'UGen'.
-data UGenId = NoId | UId UID_t
+-- | Identifier used to distinguish otherwise equal non-deterministic nodes.
+data UGenId = NoId | UId UId.Id
               deriving (Eq,Read,Show)
 
 -- | Alias of 'NoId', the 'UGenId' used for deterministic UGens.
@@ -125,37 +126,46 @@ data Primitive t =
             ,ugenOutputs :: [Output]
             ,ugenSpecial :: Special
             ,ugenId :: UGenId}
-  deriving (Eq,Read,Show)
+  deriving (Functor, Foldable, Traversable, Eq, Read, Show)
 
 -- | Proxy indicating an output port at a multi-channel primitive.
 data Proxy t =
   Proxy {proxySource :: Primitive t
         ,proxyIndex :: Int}
-  deriving (Eq,Read,Show)
+  deriving (Functor, Foldable, Traversable, Eq, Read, Show)
 
 -- | Multiple root graph.
 data Mrg t =
   Mrg {mrgLeft :: t
       ,mrgRight :: t}
-  deriving (Eq,Read,Show)
+  deriving (Functor, Foldable, Traversable, Eq, Read, Show)
 
+{-
 -- | Control type
 data CVarTy = CVarInit | CVarControl | CVarTrigger deriving (Eq,Read,Show)
+CVar CVarTy String Double -- ^ Control input (named)
+-}
 
 -- | Circuit
 data Circuit t
   = CConstant Constant
-  -- | CVar CVarTy String Double -- ^ Control input (named)
   | CControl Control
   | CLabel Label
   | CPrimitive (Primitive t)
-  | CProxy (Proxy t) -- ^ Output port
+  | CProxy (Proxy t) -- ^ Output port at multi-channel primitive
   | CMce (Mce t) -- ^ Multiple channel expansion
   | CMrg (Mrg t) -- ^ Multiple root graph
-  deriving (Eq,Read,Show)
+  deriving (Functor, Foldable, Traversable, Eq, Read, Show)
 
 -- | UGen
 data UGen = UGen (Circuit UGen) deriving (Eq,Read,Show)
+
+instance Reify.MuRef UGen where
+  type DeRef UGen = Circuit
+  mapDeRef f (UGen c) = Traversable.traverse f c
+
+ugenCircuit :: UGen -> Circuit UGen
+ugenCircuit (UGen c) = c
 
 {-
 -- | Union type of Unit Generator forms.

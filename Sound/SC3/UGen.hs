@@ -10,6 +10,7 @@ import Sound.SC3.UGen.Math as U
 import Sound.SC3.UGen.Math.Composite as U
 import Sound.SC3.UGen.Mce as U
 import Sound.SC3.UGen.Name as U
+import Sound.SC3.UGen.Netlist as U
 import Sound.SC3.UGen.Optimise as U
 import Sound.SC3.UGen.Type as U
 import Sound.SC3.UGen.UGen as U

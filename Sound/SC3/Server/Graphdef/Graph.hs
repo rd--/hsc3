@@ -8,6 +8,7 @@ import qualified Data.IntMap as M {- containers -}
 import qualified Sound.OSC.Datum as Datum {- hosc -}
 
 import qualified Sound.SC3.Common.Rate as Rate {- hsc3 -}
+import qualified Sound.SC3.Common.UId as UId {- hsc3 -}
 import qualified Sound.SC3.UGen.Graph as Graph {- hsc3 -}
 import qualified Sound.SC3.UGen.Type as Type {- hsc3 -}
 import qualified Sound.SC3.Server.Graphdef as Graphdef {- hsc3 -}
@@ -30,7 +31,7 @@ mk_encoding_maps (Graph.U_Graph _ cs ks us) =
     ,Graph.u_node_mk_ktype_map us)
 
 -- | Locate index in map given node identifer 'UID_t'.
-uid_lookup :: Type.UID_t -> Int_Map -> Int
+uid_lookup :: UId.Id -> Int_Map -> Int
 uid_lookup = M.findWithDefault (error "uid_lookup")
 
 -- | Lookup 'K_Type' index from map (erroring variant of 'lookup').

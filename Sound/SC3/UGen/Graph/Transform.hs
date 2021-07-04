@@ -4,9 +4,9 @@ module Sound.SC3.UGen.Graph.Transform where
 import Data.Either {- base -}
 import Data.List {- base -}
 
-import Sound.SC3.Common.Rate
+import qualified Sound.SC3.Common.Rate as Rate {- hsc3 -}
+import qualified Sound.SC3.Common.UId as UId {- hsc3 -}
 import Sound.SC3.UGen.Graph
-import Sound.SC3.UGen.Type
 
 -- * Lift constants
 
@@ -14,14 +14,14 @@ import Sound.SC3.UGen.Type
 --
 -- > let k = U_Node_K 8 ControlRate Nothing "k_8" 0.1 K_ControlRate Nothing
 -- > node_k_eq k (snd (constant_to_control 8 (U_Node_C 0 0.1)))
-constant_to_control :: UID_t -> U_Node -> (UID_t,U_Node)
+constant_to_control :: UId.Id -> U_Node -> (UId.Id,U_Node)
 constant_to_control z n =
     case n of
-      U_Node_C _ k -> (z + 1,U_Node_K z ControlRate Nothing ("k_" ++ show z) k K_ControlRate Nothing)
+      U_Node_C _ k -> (z + 1,U_Node_K z Rate.ControlRate Nothing ("k_" ++ show z) k Rate.K_ControlRate Nothing)
       _ -> (z,n)
 
 -- | If the 'From_Port' is a /constant/ generate a /control/ 'U_Node', else retain 'From_Port'.
-c_lift_from_port :: U_Graph -> UID_t -> From_Port -> (UID_t,Either From_Port U_Node)
+c_lift_from_port :: U_Graph -> UId.Id -> From_Port -> (UId.Id,Either From_Port U_Node)
 c_lift_from_port g z fp =
     case fp of
       From_Port_C _ ->
@@ -31,9 +31,9 @@ c_lift_from_port g z fp =
       _ -> (z,Left fp)
 
 -- | Lift a set of 'U_NodeU' /inputs/ from constants to controls.  The
--- result triple gives the incremented 'UID_t', the transformed
+-- result triple gives the incremented 'UId.Id', the transformed
 -- 'From_Port' list, and the list of newly minted control 'U_Node's.
-c_lift_inputs :: U_Graph -> UID_t -> [From_Port] -> (UID_t,[From_Port],[U_Node])
+c_lift_inputs :: U_Graph -> UId.Id -> [From_Port] -> (UId.Id,[From_Port],[U_Node])
 c_lift_inputs g z i =
     let (z',r) = mapAccumL (c_lift_from_port g) z i
         f e = case e of
@@ -43,14 +43,14 @@ c_lift_inputs g z i =
     in (z',r',rights r)
 
 -- | Lift inputs at 'U_Node_U' as required.
-c_lift_ugen :: U_Graph -> UID_t -> U_Node -> (UID_t,U_Node,[U_Node])
+c_lift_ugen :: U_Graph -> UId.Id -> U_Node -> (UId.Id,U_Node,[U_Node])
 c_lift_ugen g z n =
     let i = u_node_u_inputs n
         (z',i',k) = c_lift_inputs g z i
     in (z',n {u_node_u_inputs = i'},k)
 
 -- | 'c_lift_ugen' at list of 'U_Node_U'.
-c_lift_ugens :: U_Graph -> UID_t -> [U_Node] -> (UID_t,[U_Node],[U_Node])
+c_lift_ugens :: U_Graph -> UId.Id -> [U_Node] -> (UId.Id,[U_Node],[U_Node])
 c_lift_ugens g  =
     let recur (k,r) z u =
             case u of

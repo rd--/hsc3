@@ -19,9 +19,10 @@ import Data.Function {- base -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
 
-import Sound.SC3.Common.Rate {- hsc3 -}
+import qualified Sound.SC3.Common.Rate as Rate {- hsc3 -}
+import qualified Sound.SC3.Common.UId as UId {- hsc3 -}
 import Sound.SC3.UGen.Type {- hsc3 -}
-import Sound.SC3.UGen.UGen {- hsc3 -}
+import qualified Sound.SC3.UGen.UGen as UGen {- hsc3 -}
 
 import qualified Sound.SC3.UGen.Analysis as Analysis {- hsc3 -}
 
@@ -31,13 +32,13 @@ import qualified Sound.SC3.UGen.Analysis as Analysis {- hsc3 -}
 type Port_Index = Int
 
 -- | Type to represent the left hand side of an edge in a unit generator graph.
-data From_Port = From_Port_C {from_port_nid :: UID_t}
-               | From_Port_K {from_port_nid :: UID_t,from_port_kt :: K_Type}
-               | From_Port_U {from_port_nid :: UID_t,from_port_idx :: Maybe Port_Index}
+data From_Port = From_Port_C {from_port_nid :: UId.Id}
+               | From_Port_K {from_port_nid :: UId.Id,from_port_kt :: Rate.K_Type}
+               | From_Port_U {from_port_nid :: UId.Id,from_port_idx :: Maybe Port_Index}
                deriving (Eq,Show)
 
 -- | A destination port.
-data To_Port = To_Port {to_port_nid :: UID_t,to_port_idx :: Port_Index}
+data To_Port = To_Port {to_port_nid :: UId.Id,to_port_idx :: Port_Index}
              deriving (Eq,Show)
 
 -- | A connection from 'From_Port' to 'To_Port'.
@@ -45,40 +46,41 @@ type U_Edge = (From_Port,To_Port)
 
 -- | Sum-type to represent nodes in unit generator graph.
 --   _C = constant, _K = control, _U = ugen, _P = proxy.
-data U_Node = U_Node_C {u_node_id :: UID_t
+data U_Node = U_Node_C {u_node_id :: UId.Id
                        ,u_node_c_value :: Sample}
-            | U_Node_K {u_node_id :: UID_t
-                       ,u_node_k_rate :: Rate
+            | U_Node_K {u_node_id :: UId.Id
+                       ,u_node_k_rate :: Rate.Rate
                        ,u_node_k_index :: Maybe Int
                        ,u_node_k_name :: String
                        ,u_node_k_default :: Sample
-                       ,u_node_k_type :: K_Type
+                       ,u_node_k_type :: Rate.K_Type
                        ,u_node_k_meta :: Maybe (Control_Meta Sample)}
-            | U_Node_U {u_node_id :: UID_t
-                       ,u_node_u_rate :: Rate
+            | U_Node_U {u_node_id :: UId.Id
+                       ,u_node_u_rate :: Rate.Rate
                        ,u_node_u_name :: String
                        ,u_node_u_inputs :: [From_Port]
                        ,u_node_u_outputs :: [Output]
                        ,u_node_u_special :: Special
                        ,u_node_u_ugenid :: UGenId}
-            | U_Node_P {u_node_id :: UID_t
-                       ,u_node_p_node :: U_Node
-                       ,u_node_p_index :: Port_Index}
+            | U_Node_P {u_node_id :: UId.Id
+                       ,u_node_p_id :: UId.Id
+                       ,u_node_p_index :: Port_Index
+                       ,u_node_p_rate :: Rate.Rate}
             deriving (Eq,Show)
 
 -- | Convert from U_Node_K to Control (ie. discard index).
 u_node_k_to_control :: U_Node -> Control
 u_node_k_to_control nd =
   case nd of
-    U_Node_K _ rt ix nm df ty mt -> Control rt ix nm df (ty == K_TriggerRate) mt
+    U_Node_K _ rt ix nm df ty mt -> Control rt ix nm df (ty == Rate.K_TriggerRate) mt
     _ -> error "u_node_k_to_control?"
 
 -- | Derive "user" name for U_Node
 u_node_user_name :: U_Node -> String
-u_node_user_name n = ugen_user_name (u_node_u_name n) (u_node_u_special n)
+u_node_user_name n = UGen.ugen_user_name (u_node_u_name n) (u_node_u_special n)
 
 -- | Type to represent a unit generator graph.
-data U_Graph = U_Graph {ug_next_id :: UID_t
+data U_Graph = U_Graph {ug_next_id :: UId.Id
                        ,ug_constants :: [U_Node]
                        ,ug_controls :: [U_Node]
                        ,ug_ugens :: [U_Node]}
@@ -153,14 +155,16 @@ u_node_k_eq p q =
   then p == q
   else error "u_node_k_eq? not U_Node_K"
 
--- | 'Rate' of 'U_Node', ie. 'InitialisationRate' for constants & see through 'U_Node_P'.
-u_node_rate :: U_Node -> Rate
+{- | 'Rate' of 'U_Node', ie. 'InitialisationRate' for constants. See through 'U_Node_P'.
+      Not used at hsc3 but used by hsc3-dot &etc.
+-}
+u_node_rate :: U_Node -> Rate.Rate
 u_node_rate n =
     case n of
-      U_Node_C {} -> InitialisationRate
+      U_Node_C {} -> Rate.InitialisationRate
       U_Node_K {} -> u_node_k_rate n
       U_Node_U {} -> u_node_u_rate n
-      U_Node_P _ n' _ -> u_node_rate n'
+      U_Node_P {} -> u_node_p_rate n
 
 -- | Generate a label for 'U_Node' using the /type/ and the 'u_node_id'.
 u_node_label :: U_Node -> String
@@ -169,7 +173,7 @@ u_node_label nd =
       U_Node_C n _ -> "c_" ++ show n
       U_Node_K n _ _ _ _ _ _ -> "k_" ++ show n
       U_Node_U n _ _ _ _ _ _ -> "u_" ++ show n
-      U_Node_P n _ _ -> "p_" ++ show n
+      U_Node_P n _ _ _ -> "p_" ++ show n
 
 -- | Calculate all in edges for a 'U_Node_U'.
 u_node_in_edges :: U_Node -> [U_Edge]
@@ -188,7 +192,7 @@ u_node_from_port d =
           case o of
             [_] -> From_Port_U n Nothing
             _ -> error (show ("u_node_from_port: non unary U_Node_U",d))
-      U_Node_P _ u p -> From_Port_U (u_node_id u) (Just p)
+      U_Node_P _ u p _ -> From_Port_U u (Just p)
 
 -- | If controls have been given indices they must be coherent.
 u_node_sort_controls :: [U_Node] -> [U_Node]
@@ -201,13 +205,13 @@ u_node_sort_controls c =
     in if coherent then c' else error (show ("u_node_sort_controls: incoherent",c))
 
 -- | Determine 'K_Type' of a /control/ UGen at 'U_Node_U', or not.
-u_node_ktype :: U_Node -> Maybe K_Type
+u_node_ktype :: U_Node -> Maybe Rate.K_Type
 u_node_ktype n =
     case (u_node_u_name n,u_node_u_rate n) of
-      ("Control",InitialisationRate) -> Just K_InitialisationRate
-      ("Control",ControlRate) -> Just K_ControlRate
-      ("TrigControl",ControlRate) -> Just K_TriggerRate
-      ("AudioControl",AudioRate) -> Just K_AudioRate
+      ("Control",Rate.InitialisationRate) -> Just Rate.K_InitialisationRate
+      ("Control",Rate.ControlRate) -> Just Rate.K_ControlRate
+      ("TrigControl",Rate.ControlRate) -> Just Rate.K_TriggerRate
+      ("AudioControl",Rate.AudioRate) -> Just Rate.K_AudioRate
       _ -> Nothing
 
 -- | Is 'U_Node' a control UGen?
@@ -235,7 +239,7 @@ u_node_localbuf_count us =
 
 -- | Controls are a special case.  We need to know not the overall
 -- index but the index in relation to controls of the same type.
-u_node_fetch_k :: UID_t -> K_Type -> [U_Node] -> Int
+u_node_fetch_k :: UId.Id -> Rate.K_Type -> [U_Node] -> Int
 u_node_fetch_k z t =
     let recur i ns =
             case ns of
@@ -248,7 +252,7 @@ u_node_fetch_k z t =
     in recur 0
 
 -- | All the elements of a U_Node_U, except the u_node_id.
-type U_Node_NOID = (Rate,String,[From_Port],[Output],Special,UGenId)
+type U_Node_NOID = (Rate.Rate,String,[From_Port],[Output],Special,UGenId)
 
 -- | Predicate to locate primitive, names must be unique.
 u_node_eq_noid :: U_Node_NOID -> U_Node -> Bool
@@ -258,7 +262,7 @@ u_node_eq_noid x nd =
       _ ->  error "u_node_eq_noid"
 
 -- | Make map associating 'K_Type' with UGen index.
-u_node_mk_ktype_map :: [U_Node] -> [(K_Type,Int)]
+u_node_mk_ktype_map :: [U_Node] -> [(Rate.K_Type,Int)]
 u_node_mk_ktype_map =
     let f (i,n) = let g ty = (ty,i) in fmap g (u_node_ktype n)
     in mapMaybe f . zip [0..]
@@ -276,10 +280,10 @@ u_node_ks_count =
             in case ns of
                  [] -> r
                  n:ns' -> let r' = case u_node_k_type n of
-                                     K_InitialisationRate -> (i+1,k,t,a)
-                                     K_ControlRate -> (i,k+1,t,a)
-                                     K_TriggerRate -> (i,k,t+1,a)
-                                     K_AudioRate -> (i,k,t,a+1)
+                                     Rate.K_InitialisationRate -> (i+1,k,t,a)
+                                     Rate.K_ControlRate -> (i,k+1,t,a)
+                                     Rate.K_TriggerRate -> (i,k,t+1,a)
+                                     Rate.K_AudioRate -> (i,k,t,a+1)
                           in recur r' ns'
     in recur (0,0,0,0)
 
@@ -291,18 +295,18 @@ u_node_mk_implicit_ctl ks =
     let (ni,nk,nt,na) = u_node_ks_count ks
         mk_n t n o =
             let (nm,r) = case t of
-                            K_InitialisationRate -> ("Control",InitialisationRate)
-                            K_ControlRate -> ("Control",ControlRate)
-                            K_TriggerRate -> ("TrigControl",ControlRate)
-                            K_AudioRate -> ("AudioControl",AudioRate)
+                            Rate.K_InitialisationRate -> ("Control",Rate.InitialisationRate)
+                            Rate.K_ControlRate -> ("Control",Rate.ControlRate)
+                            Rate.K_TriggerRate -> ("TrigControl",Rate.ControlRate)
+                            Rate.K_AudioRate -> ("AudioControl",Rate.AudioRate)
                 i = replicate n r
             in if n == 0
                then Nothing
                else Just (U_Node_U (-1) r nm [] i (Special o) no_id)
-    in catMaybes [mk_n K_InitialisationRate ni 0
-                 ,mk_n K_ControlRate nk ni
-                 ,mk_n K_TriggerRate nt (ni + nk)
-                 ,mk_n K_AudioRate na (ni + nk + nt)]
+    in catMaybes [mk_n Rate.K_InitialisationRate ni 0
+                 ,mk_n Rate.K_ControlRate nk ni
+                 ,mk_n Rate.K_TriggerRate nt (ni + nk)
+                 ,mk_n Rate.K_AudioRate na (ni + nk + nt)]
 
 -- * Edges
 
@@ -323,16 +327,16 @@ ug_edges = concatMap u_node_in_edges . ug_ugens
 ug_empty_graph :: U_Graph
 ug_empty_graph = U_Graph 0 [] [] []
 
--- | Find the maximum 'UID_t' used at 'U_Graph'.  It is an error if this is not 'ug_next_id'.
-ug_maximum_id :: U_Graph -> UID_t
+-- | Find the maximum 'UId.Id' used at 'U_Graph'.  It is an error if this is not 'ug_next_id'.
+ug_maximum_id :: U_Graph -> UId.Id
 ug_maximum_id (U_Graph z c k u) =
   let z' = maximum (map u_node_id (c ++ k ++ u))
   in if z' /= z
      then error (show ("ug_maximum_id: not ug_next_id?",z,z'))
      else z
 
--- | Find 'U_Node' with indicated 'UID_t'.
-ug_find_node :: U_Graph -> UID_t -> Maybe U_Node
+-- | Find 'U_Node' with indicated 'UId.Id'.
+ug_find_node :: U_Graph -> UId.Id -> Maybe U_Node
 ug_find_node (U_Graph _ cs ks us) n =
     let f x = u_node_id x == n
     in find f (cs ++ ks ++ us)
@@ -347,7 +351,7 @@ ug_from_port_node_err g fp =
     let e = error "ug_from_port_node_err"
     in fromMaybe e (ug_from_port_node g fp)
 
--- * Graph (Building)
+-- * Graph (Construct from UGen)
 
 -- | Insert a constant 'U_Node' into the 'U_Graph'.
 ug_push_c :: Sample -> U_Graph -> (U_Node,U_Graph)
@@ -365,7 +369,7 @@ ug_mk_node_c (Constant x) g =
 -- | Insert a control node into the 'U_Graph'.
 ug_push_k :: Control -> U_Graph -> (U_Node,U_Graph)
 ug_push_k (Control r ix nm d tr meta) g =
-    let n = U_Node_K (ug_next_id g) r ix nm d (ktype r tr) meta
+    let n = U_Node_K (ug_next_id g) r ix nm d (Rate.ktype r tr) meta
     in (n,g {ug_controls = n : ug_controls g
             ,ug_next_id = ug_next_id g + 1})
 
@@ -401,11 +405,11 @@ ug_mk_node_u (Primitive r nm i o s d) g =
         y = find (u_node_eq_noid u) (ug_ugens g')
     in maybe (ug_push_u u g') (\y' -> (y',g')) y
 
--- | Proxies do not get stored in the graph.
+-- | Proxies do not get stored in the graph.  Proxies are always of U nodes.
 ug_mk_node_p :: U_Node -> Port_Index -> U_Graph -> (U_Node,U_Graph)
 ug_mk_node_p n p g =
     let z = ug_next_id g
-    in (U_Node_P z n p,g {ug_next_id = z + 1})
+    in (U_Node_P z (u_node_id n) p (u_node_u_rate n),g {ug_next_id = z + 1})
 
 -- | Transform 'UGen' into 'U_Graph', appending to existing 'U_Graph'.
 --   Allow rhs of Mrg node to be Mce (splice all nodes into graph).
@@ -426,6 +430,8 @@ ug_mk_node u g =
           in ug_mk_node (mrgLeft m) (f g (mceChannels (mrgRight m)))
       UGen (CMce _) -> error (show ("ug_mk_node: mce",u))
 
+-- * Implicit
+
 -- | Add implicit /control/ UGens to 'U_Graph'.
 ug_add_implicit_ctl :: U_Graph -> U_Graph
 ug_add_implicit_ctl g =
@@ -442,7 +448,7 @@ ug_add_implicit_buf g =
       0 -> g
       n -> let (c,g') = ug_mk_node_c (Constant (fromIntegral n)) g
                p = u_node_from_port c
-               u = U_Node_U (-1) InitialisationRate "MaxLocalBufs" [p] [] (Special 0) no_id
+               u = U_Node_U (-1) Rate.InitialisationRate "MaxLocalBufs" [p] [] (Special 0) no_id
            in g' {ug_ugens = u : ug_ugens g'}
 
 -- | 'ug_add_implicit_buf' and 'ug_add_implicit_ctl'.
@@ -491,6 +497,21 @@ ug_pv_check g =
 ug_pv_validate :: U_Graph -> U_Graph
 ug_pv_validate g = maybe g error (ug_pv_check g)
 
+-- * Netlist to U_Graph
+
+{-
+netlist_entry_to_node :: (UId.Id,Circuit UId) -> U_Node
+netlist_entry_to_node (k,c) =
+    case c of
+      CConstant (Constant x) -> U_Node_C k x
+      CControl (Control r ix nm d tr meta) -> U_Node_K k r ix nm d (Rate.ktype r tr) meta
+      CLabel _ -> error (show ("netlist_entry_to_node: label",k,c))
+      CPrimitive (Primitive r nm i o s d) -> U_Node_U k r nm i... o s d
+      CProxy (Proxy src ix) -> U_Node_P k src... ix src...
+      CMrg m... -> ...
+      CMce _ -> error (show ("netlist_entry_to_node: mce",k,c))
+-}
+
 -- * UGen to U_Graph
 
 {- | Transform a unit generator into a graph.
@@ -504,7 +525,7 @@ ug_pv_validate g = maybe g error (ug_pv_check g)
 -}
 ugen_to_graph :: UGen -> U_Graph
 ugen_to_graph u =
-    let (_,g) = ug_mk_node (prepare_root u) ug_empty_graph
+    let (_,g) = ug_mk_node (UGen.prepare_root u) ug_empty_graph
         g' = g {ug_ugens = reverse (ug_ugens g)
                ,ug_controls = u_node_sort_controls (ug_controls g)}
     in ug_pv_validate (ug_add_implicit g')

@@ -4,11 +4,12 @@ module Sound.SC3.Server.Graphdef.Read where
 import Sound.OSC.Datum {- hosc -}
 
 import qualified Sound.SC3.Common.Rate as Rate {- hsc3 -}
+import qualified Sound.SC3.Common.UId as UId {- hsc3 -}
 import qualified Sound.SC3.Server.Graphdef as Graphdef {- hsc3 -}
 import qualified Sound.SC3.UGen.Graph as Graph {- hsc3 -}
 import qualified Sound.SC3.UGen.Type as Type {- hsc3 -}
 
-control_to_node :: Graphdef.Graphdef -> Type.UID_t -> (Graphdef.Control,Type.Sample) -> Graph.U_Node
+control_to_node :: Graphdef.Graphdef -> UId.Id -> (Graphdef.Control,Type.Sample) -> Graph.U_Node
 control_to_node g z ((nm,ix),v) =
     let z' = Graphdef.graphdef_control_nid g z
         nm' = ascii_to_string nm
@@ -27,7 +28,7 @@ input_to_from_port g (Graphdef.Input u p) =
                          else Nothing
               in Graph.From_Port_U (Graphdef.graphdef_ugen_nid g u) port
 
-ugen_to_node :: Graphdef.Graphdef -> Type.UID_t -> Graphdef.UGen -> Graph.U_Node
+ugen_to_node :: Graphdef.Graphdef -> UId.Id -> Graphdef.UGen -> Graph.U_Node
 ugen_to_node g z u =
     let (name,rate,inputs,outputs,special) = u
         z' = Graphdef.graphdef_ugen_nid g z
