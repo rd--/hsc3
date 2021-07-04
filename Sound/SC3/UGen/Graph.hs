@@ -21,6 +21,7 @@ import Data.Maybe {- base -}
 
 import qualified Sound.SC3.Common.Rate as Rate {- hsc3 -}
 import qualified Sound.SC3.Common.UId as UId {- hsc3 -}
+import Sound.SC3.UGen.Netlist {- hsc3 -}
 import Sound.SC3.UGen.Type {- hsc3 -}
 import qualified Sound.SC3.UGen.UGen as UGen {- hsc3 -}
 
@@ -67,6 +68,11 @@ data U_Node = U_Node_C {u_node_id :: UId.Id
                        ,u_node_p_index :: Port_Index
                        ,u_node_p_rate :: Rate.Rate}
             deriving (Eq,Show)
+
+u_node_is_c,u_node_is_k,u_node_is_u :: U_Node -> Bool
+u_node_is_c n = case n of {U_Node_C {} -> True; _ -> False}
+u_node_is_k n = case n of {U_Node_K {} -> True; _ -> False}
+u_node_is_u n = case n of {U_Node_U {} -> True; _ -> False}
 
 -- | Convert from U_Node_K to Control (ie. discard index).
 u_node_k_to_control :: U_Node -> Control
@@ -421,14 +427,14 @@ ug_mk_node u g =
       UGen (CLabel _) -> error (show ("ug_mk_node: label",u))
       UGen (CPrimitive p) -> ug_mk_node_u p g
       UGen (CProxy p) ->
-          let (n,g') = ug_mk_node_u (proxySource p) g
+          let (n,g') = ug_mk_node (proxySource p) g
           in ug_mk_node_p n (proxyIndex p) g'
-      UGen (CMrg m) ->
+      UGen (CMrg m _) ->
           let f g' l = case l of
                          [] -> g'
                          n:l' -> let (_,g'') = ug_mk_node n g' in f g'' l'
           in ug_mk_node (mrgLeft m) (f g (mceChannels (mrgRight m)))
-      UGen (CMce _) -> error (show ("ug_mk_node: mce",u))
+      UGen (CMce _ _) -> error (show ("ug_mk_node: mce",u))
 
 -- * Implicit
 
@@ -499,18 +505,30 @@ ug_pv_validate g = maybe g error (ug_pv_check g)
 
 -- * Netlist to U_Graph
 
-{-
-netlist_entry_to_node :: (UId.Id,Circuit UId) -> U_Node
-netlist_entry_to_node (k,c) =
+circuit_to_from_port :: UId.Id -> Circuit UId.Id -> From_Port
+circuit_to_from_port k c =
+  case c of
+    CConstant _ -> From_Port_C k
+    CControl (Control rt _ _ _ tr _) -> From_Port_K k (Rate.ktype rt tr)
+    CPrimitive _ -> From_Port_U k Nothing
+    CProxy (Proxy src ix _) -> From_Port_U src (Just ix)
+    _ -> error "circuit_to_from_port?"
+
+netlist_entry_to_u_node :: Netlist -> (UId.Id,Circuit UId.Id) -> Maybe U_Node
+netlist_entry_to_u_node nl (k,c) =
     case c of
-      CConstant (Constant x) -> U_Node_C k x
-      CControl (Control r ix nm d tr meta) -> U_Node_K k r ix nm d (Rate.ktype r tr) meta
+      CConstant (Constant x) -> Just (U_Node_C k x)
+      CControl (Control r ix nm d tr meta) -> Just (U_Node_K k r ix nm d (Rate.ktype r tr) meta)
       CLabel _ -> error (show ("netlist_entry_to_node: label",k,c))
-      CPrimitive (Primitive r nm i o s d) -> U_Node_U k r nm i... o s d
-      CProxy (Proxy src ix) -> U_Node_P k src... ix src...
-      CMrg m... -> ...
-      CMce _ -> error (show ("netlist_entry_to_node: mce",k,c))
--}
+      CPrimitive (Primitive r nm is o s d) -> Just (U_Node_U k r nm (map (\i -> circuit_to_from_port i (netlistLookupCircuitNote "netlist_entry_to_u_node/Primitive" nl i)) is) o s d)
+      CProxy (Proxy src ix rt) -> Just (U_Node_P k src ix rt)
+      CMrg _ _ -> Nothing
+      CMce _ _ -> error (show ("netlist_entry_to_node: mce",k,c))
+
+netlist_to_u_graph :: Netlist -> U_Graph
+netlist_to_u_graph (l,r) =
+  let n = mapMaybe (netlist_entry_to_u_node (l,r)) l
+  in U_Graph (maximum (map fst l) + 1) (filter u_node_is_c n) (filter u_node_is_k n) (filter u_node_is_u n)
 
 -- * UGen to U_Graph
 
@@ -523,12 +541,15 @@ netlist_entry_to_node (k,c) =
 > ugen_to_graph (out 0 (pan2 (sinOsc ar 440 0) 0.5 0.1))
 
 -}
-ugen_to_graph :: UGen -> U_Graph
-ugen_to_graph u =
+ugen_to_graph_direct :: UGen -> U_Graph
+ugen_to_graph_direct u =
     let (_,g) = ug_mk_node (UGen.prepare_root u) ug_empty_graph
         g' = g {ug_ugens = reverse (ug_ugens g)
                ,ug_controls = u_node_sort_controls (ug_controls g)}
     in ug_pv_validate (ug_add_implicit g')
+
+ugen_to_graph :: UGen -> U_Graph
+ugen_to_graph = netlist_to_u_graph . ugenNetlist
 
 -- * Stat
 

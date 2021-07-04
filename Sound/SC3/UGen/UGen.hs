@@ -37,12 +37,10 @@ ugenTraverse halt_f map_f u =
              let i = ugenInputs p
              in map_f (UGen (CPrimitive (p {ugenInputs = map recur i})))
          UGen (CProxy p) ->
-             let s = UGen (CPrimitive (proxySource p))
-             in case recur s of
-                  UGen (CPrimitive p') -> map_f (UGen (CProxy (p {proxySource = p'})))
-                  _ -> error "ugenTraverse"
-         UGen (CMce m) -> map_f (mce (map recur (mceProxies m)))
-         UGen (CMrg (Mrg l r)) -> map_f (UGen (CMrg (Mrg (recur l) (recur r))))
+             let s = proxySource p -- UGen (CPrimitive (proxySource p))
+             in map_f (UGen (CProxy (p {proxySource = recur s})))
+         UGen (CMce m _) -> map_f (mce (map recur (mceProxies m)))
+         UGen (CMrg (Mrg l r) rt) -> map_f (UGen (CMrg (Mrg (recur l) (recur r)) rt))
          _ -> map_f u
 
 {- | Right fold of UGen graph.
@@ -58,9 +56,9 @@ ugenFoldr f st u =
     let recur = flip (ugenFoldr f)
     in case u of
          UGen (CPrimitive p) -> f u (foldr recur st (ugenInputs p))
-         UGen (CProxy p) -> f u (ugenFoldr f st (UGen (CPrimitive (proxySource p))))
-         UGen (CMce m) -> f u (foldr recur st (mceProxies m))
-         UGen (CMrg (Mrg l r)) -> f u (f l (f r st))
+         UGen (CProxy p) -> f u (ugenFoldr f st (proxySource p))
+         UGen (CMce m _) -> f u (foldr recur st (mceProxies m))
+         UGen (CMrg (Mrg l r) _) -> f u (f l (f r st))
          _ -> f u st
 
 -- * Unit generator node constructors
@@ -114,7 +112,7 @@ control_set =
 
 -- | Multiple root graph node constructor (left input is output)
 mrg2 :: UGen -> UGen -> UGen
-mrg2 u = UGen . CMrg . Mrg u
+mrg2 u = UGen . flip CMrg (rateOf u). Mrg u
 
 -- * Multiple channel expansion
 
@@ -161,7 +159,7 @@ mce_map_ix f u = mce (map_ix f (mceChannels u))
 mceEdit :: ([UGen] -> [UGen]) -> UGen -> UGen
 mceEdit f u =
     case u of
-      UGen (CMce m) -> mce (f (mceProxies m))
+      UGen (CMce m _) -> mce (f (mceProxies m))
       _ -> error "mceEdit: non Mce value"
 
 -- | Reverse order of channels at Mce.
@@ -172,7 +170,7 @@ mceReverse = mceEdit reverse
 mceChannel :: Int -> UGen -> UGen
 mceChannel n u =
     case u of
-      UGen (CMce m) -> mceProxies m !! n
+      UGen (CMce m _) -> mceProxies m !! n
       _ -> if n == 0 then u else error "mceChannel: non Mce value, non ZERO index"
 
 -- | Transpose rows and columns, ie. {{a,b},{c,d}} to {{a,c},{b,d}}.
@@ -218,8 +216,8 @@ halt_mce_transform = halt_mce_transform_f mceChannels
 prepare_root :: UGen -> UGen
 prepare_root u =
     case u of
-      UGen (CMce m) -> mrg (mceProxies m)
-      UGen (CMrg m) -> mrg2 (prepare_root (mrgLeft m)) (prepare_root (mrgRight m))
+      UGen (CMce m _) -> mrg (mceProxies m)
+      UGen (CMrg m _) -> mrg2 (prepare_root (mrgLeft m)) (prepare_root (mrgRight m))
       _ -> u
 
 -- * Multiple root graphs
@@ -246,7 +244,7 @@ unpackLabel length_prefix u =
               f c = if Data.Char.isAscii c then fromEnum c else q
               s' = map (fromIntegral . f) s
           in if length_prefix then fromIntegral (length s) : s' else s'
-      UGen (CMce m) ->
+      UGen (CMce m _) ->
           let x = map (unpackLabel length_prefix) (mceProxies m)
           in if Base.equal_length_p x
              then map mce (transpose x)

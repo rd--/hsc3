@@ -422,7 +422,7 @@ soundIn :: UGen -> UGen
 soundIn u =
     let r = in' 1 ar (numOutputBuses + u)
     in case u of
-         UGen (CMce m) ->
+         UGen (CMce m _) ->
              let n = mceProxies m
              in if all (==1) (zipWith (-) (tail n) n)
                 then in' (length n) ar (numOutputBuses + head n)

@@ -1,5 +1,7 @@
 module Sound.SC3.UGen.Netlist where
 
+import Data.List {- base -}
+import Data.Maybe {- base -}
 import System.IO.Unsafe {- base -}
 
 import qualified Data.Reify as Reify {- data-reify -}
@@ -17,3 +19,17 @@ ugenNetlistIO u = do
 {-# NOINLINE ugenNetlist #-}
 ugenNetlist :: UGen -> Netlist
 ugenNetlist u = unsafePerformIO (ugenNetlistIO u)
+
+netlistLookupCircuit :: Netlist -> Id -> Maybe (Circuit Id)
+netlistLookupCircuit (l,_) k = lookup k l
+
+netlistLookupCircuitNote :: String -> Netlist -> Id -> Circuit Id
+netlistLookupCircuitNote msg nl = fromMaybe (error ("netlistLookupCircuit: " ++ msg)) . netlistLookupCircuit nl
+
+netlistLookupId :: Netlist -> Circuit Id -> Maybe Id
+netlistLookupId (l,_) c =
+  let reverseLookup k = fmap fst . find ((== k) . snd)
+  in reverseLookup c l
+
+netlistLookupIdNote :: String -> Netlist -> Circuit Id -> Id
+netlistLookupIdNote msg nl = fromMaybe (error ("netlistLookupId: " ++ msg)) . netlistLookupId nl

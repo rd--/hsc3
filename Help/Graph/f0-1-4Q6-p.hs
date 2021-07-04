@@ -1,5 +1,5 @@
 -- http://sccode.org/1-4Q6 (f0)
-let f c (g,_,y,z,o,_,_,p,px,_) =
+let f _ (g,_,y,z,o,_,_,p,px,_) =
       let normalise x = map (/ (maximum x)) x
           amps = normalise [1,0.67,1,1.8,2.67,1.67,1.46,1.33,1.33,1,1.33]
           durs = [1,0.9,0.65,0.55,0.325,0.35,0.25,0.2,0.15,0.1,0.075]

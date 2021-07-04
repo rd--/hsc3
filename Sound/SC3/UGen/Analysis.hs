@@ -17,9 +17,9 @@ ugen_primitive_set u =
       UGen (CControl _) -> []
       UGen (CLabel _) -> []
       UGen (CPrimitive p) -> [p]
-      UGen (CProxy p) -> [proxySource p]
-      UGen (CMce m) -> concatMap ugen_primitive_set (Mce.mce_elem m)
-      UGen (CMrg m) -> ugen_primitive_set (mrgLeft m)
+      UGen (CProxy p) -> ugen_primitive_set (proxySource p)
+      UGen (CMce m _) -> concatMap ugen_primitive_set (Mce.mce_elem m)
+      UGen (CMrg m _) -> ugen_primitive_set (mrgLeft m)
 
 -- | Heuristic based on primitive name (@FFT@, @PV_@).  Note that
 -- @IFFT@ is at /control/ rate, not @PV@ rate.
@@ -79,5 +79,5 @@ ugen_remove_out_node u =
       assert_is_output x = if x `elem` ["Out","ReplaceOut","OffsetOut"] then x else err
   in case u of
        UGen (CPrimitive (Primitive Rate.AudioRate nm (_bus:inputs) [] _special _uid)) -> (assert_is_output nm,mce inputs)
-       UGen (CMrg (Mrg lhs rhs)) -> let (nm,res) = ugen_remove_out_node lhs in (nm,UGen (CMrg (Mrg res rhs)))
+       UGen (CMrg (Mrg lhs rhs) rt) -> let (nm,res) = ugen_remove_out_node lhs in (nm,UGen (CMrg (Mrg res rhs) rt))
        _ -> err

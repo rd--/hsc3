@@ -130,8 +130,9 @@ data Primitive t =
 
 -- | Proxy indicating an output port at a multi-channel primitive.
 data Proxy t =
-  Proxy {proxySource :: Primitive t
-        ,proxyIndex :: Int}
+  Proxy {proxySource :: t
+        ,proxyIndex :: Int
+        ,proxyRate :: Rate}
   deriving (Functor, Foldable, Traversable, Eq, Read, Show)
 
 -- | Multiple root graph.
@@ -153,8 +154,8 @@ data Circuit t
   | CLabel Label
   | CPrimitive (Primitive t)
   | CProxy (Proxy t) -- ^ Output port at multi-channel primitive
-  | CMce (Mce t) -- ^ Multiple channel expansion
-  | CMrg (Mrg t) -- ^ Multiple root graph
+  | CMce (Mce t) Rate -- ^ Multiple channel expansion
+  | CMrg (Mrg t) Rate -- ^ Multiple root graph
   deriving (Functor, Foldable, Traversable, Eq, Read, Show)
 
 -- | UGen
@@ -307,7 +308,7 @@ mrg u =
     case u of
       [] -> error "mrg: []"
       [x] -> x
-      (x:xs) -> UGen (CMrg (Mrg x (mrg xs)))
+      (x:xs) -> UGen (CMrg (Mrg x (mrg xs)) (rateOf x))
 
 -- | See into 'Mrg_U', follows leftmost rule until arriving at non-Mrg node.
 {-
@@ -320,7 +321,7 @@ mrg_leftmost u =
 mrg_leftmost :: UGen -> UGen
 mrg_leftmost u =
   case u of
-    UGen (CMrg m) -> mrg_leftmost (mrgLeft m)
+    UGen (CMrg m _) -> mrg_leftmost (mrgLeft m)
     _ -> u
 
 -- * Predicates
@@ -346,7 +347,7 @@ isSink :: UGen -> Bool
 isSink u =
     case mrg_leftmost u of
       UGen (CPrimitive p) -> null (ugenOutputs p)
-      UGen (CMce m) -> all isSink (mce_elem m)
+      UGen (CMce m _) -> all isSink (mce_elem m)
       _ -> False
 
 -- | See into 'Proxy_U'.
@@ -386,8 +387,8 @@ mce :: [UGen] -> UGen
 mce xs =
     case xs of
       [] -> error "mce: []"
-      [x] -> UGen (CMce (Mce_Unit x))
-      _ -> UGen (CMce (Mce_Vector xs))
+      [x] -> UGen (CMce (Mce_Unit x) (rateOf x))
+      _ -> UGen (CMce (Mce_Vector xs) (maximum (map rateOf xs)))
 
 -- | Type specified 'mce_elem'.
 {-
@@ -408,8 +409,15 @@ isMce u =
 isMce :: UGen -> Bool
 isMce u =
     case mrg_leftmost u of
-      UGen (CMce _) -> True
+      UGen (CMce _ _) -> True
       _ -> False
+
+circuitChannels :: Circuit UGen -> [UGen]
+circuitChannels u =
+    case u of
+      CMce m _ -> mce_elem m
+      CMrg (Mrg x y) rt -> let r:rs = mceChannels x in UGen (CMrg (Mrg r y) rt) : rs
+      _ -> [UGen u]
 
 -- | Output channels of UGen as a list.  If required, preserves the RHS of and Mrg node in channel 0.
 {-
@@ -421,11 +429,7 @@ mceChannels u =
       _ -> [u]
 -}
 mceChannels :: UGen -> [UGen]
-mceChannels u =
-    case u of
-      UGen (CMce m) -> mce_elem m
-      UGen (CMrg (Mrg x y)) -> let r:rs = mceChannels x in UGen (CMrg (Mrg r y)) : rs
-      _ -> [u]
+mceChannels (UGen c) = circuitChannels c
 
 -- | Number of channels to expand to.  This function sees into Mrg, and is defined only for Mce nodes.
 {-
@@ -438,7 +442,7 @@ mceDegree u =
 mceDegree :: UGen -> Maybe Int
 mceDegree u =
     case mrg_leftmost u of
-      UGen (CMce m) -> Just (length (mceProxies m))
+      UGen (CMce m _) -> Just (length (mceProxies m))
       _ -> Nothing
 
 -- | Erroring variant.
@@ -462,9 +466,8 @@ mceExtend n u =
 mceExtend :: Int -> UGen -> [UGen]
 mceExtend n u =
     case u of
-      UGen (CMce m) -> mceProxies (mce_extend n m)
-      UGen (CMrg (Mrg x y)) -> let (r:rs) = mceExtend n x
-                               in UGen (CMrg (Mrg r y)) : rs
+      UGen (CMce m _) -> mceProxies (mce_extend n m)
+      UGen (CMrg (Mrg x y) rt) -> let (r:rs) = mceExtend n x in UGen (CMrg (Mrg r y) rt) : rs
       _ -> replicate n u
 
 -- | Is Mce required, ie. are any input values Mce?
@@ -508,7 +511,7 @@ mceBuild :: ([UGen] -> UGen) -> [UGen] -> UGen
 mceBuild f i =
     case mceInputTransform i of
       Nothing -> f i
-      Just i' -> UGen (CMce (Mce_Vector (map (mceBuild f) i')))
+      Just i' -> let xs = map (mceBuild f) i' in UGen (CMce (Mce_Vector xs) (maximum (map rateOf xs)))
 
 -- | True if Mce is an immediate proxy for a multiple-out Primitive.
 --   This is useful when disassembling graphs, ie. ugen_graph_forth_pp at hsc3-db.
@@ -572,7 +575,7 @@ proxy u n =
 proxy :: UGen -> Int -> UGen
 proxy u n =
     case u of
-      UGen (CPrimitive p) -> UGen (CProxy (Proxy p n))
+      UGen (CPrimitive p) -> UGen (CProxy (Proxy (UGen (CPrimitive p)) n (ugenRate p)))
       _ -> error "proxy: not primitive?"
 
 -- | Determine the rate of a UGen.
@@ -588,16 +591,19 @@ rateOf u =
       Mce_U _ -> maximum (map rateOf (mceChannels u))
       Mrg_U m -> rateOf (mrgLeft m)
 -}
-rateOf :: UGen -> Rate
-rateOf u =
+circuitRateOf :: Circuit t -> Rate
+circuitRateOf u =
     case u of
-      UGen (CConstant _) -> InitialisationRate
-      UGen (CControl c) -> controlOperatingRate c
-      UGen (CLabel _) -> InitialisationRate
-      UGen (CPrimitive p) -> ugenRate p
-      UGen (CProxy p) -> ugenRate (proxySource p)
-      UGen (CMce _) -> maximum (map rateOf (mceChannels u))
-      UGen (CMrg m) -> rateOf (mrgLeft m)
+      CConstant _ -> InitialisationRate
+      CControl c -> controlOperatingRate c
+      CLabel _ -> InitialisationRate
+      CPrimitive p -> ugenRate p
+      CProxy p -> proxyRate p
+      CMce _ rt -> rt
+      CMrg _ rt -> rt
+
+rateOf :: UGen -> Rate
+rateOf (UGen c) = circuitRateOf c
 
 -- | Apply proxy transformation if required.
 {-
@@ -617,8 +623,8 @@ proxify u =
 proxify :: UGen -> UGen
 proxify u =
     case u of
-      UGen (CMce m) -> mce (map proxify (mce_elem m))
-      UGen (CMrg m) -> mrg [proxify (mrgLeft m), mrgRight m]
+      UGen (CMce m _) -> mce (map proxify (mce_elem m))
+      UGen (CMrg m _) -> mrg [proxify (mrgLeft m), mrgRight m]
       UGen (CPrimitive p) ->
           let o = ugenOutputs p
           in case o of

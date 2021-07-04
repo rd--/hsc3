@@ -24,7 +24,7 @@ ugen_concise_pp u =
          UGen (CControl (Control _ _ nm def _ _)) -> nm ++ "=" ++ real_pp k def
          UGen (CLabel (Label s)) -> bracketed ('"','"') s
          UGen (CPrimitive p) -> prim_pp p
-         UGen (CProxy (Proxy p n)) -> prim_pp p ++ "@" ++ show n
-         UGen (CMce (Mce_Unit u')) -> ugen_concise_pp u'
-         UGen (CMce (Mce_Vector v)) -> bracketed ('[',']') (intercalate "," (map ugen_concise_pp v))
-         UGen (CMrg (Mrg l r)) -> unwords [ugen_concise_pp l,"&",ugen_concise_pp r]
+         UGen (CProxy (Proxy p n _)) -> ugen_concise_pp p ++ "@" ++ show n
+         UGen (CMce (Mce_Unit u') _) -> ugen_concise_pp u'
+         UGen (CMce (Mce_Vector v) _) -> bracketed ('[',']') (intercalate "," (map ugen_concise_pp v))
+         UGen (CMrg (Mrg l r) _) -> unwords [ugen_concise_pp l,"&",ugen_concise_pp r]
