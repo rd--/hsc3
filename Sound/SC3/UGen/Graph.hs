@@ -523,7 +523,7 @@ netlist_entry_to_u_node nl (k,c) =
       CPrimitive (Primitive r nm is o s d) -> Just (U_Node_U k r nm (map (\i -> circuit_to_from_port i (netlistLookupCircuitNote "netlist_entry_to_u_node/Primitive" nl i)) is) o s d)
       CProxy (Proxy src ix rt) -> Just (U_Node_P k src ix rt)
       CMrg _ _ -> Nothing
-      CMce _ _ -> error (show ("netlist_entry_to_node: mce",k,c))
+      CMce _ _ -> Nothing -- error (show ("netlist_entry_to_node: mce",k,c))
 
 netlist_to_u_graph :: Netlist -> U_Graph
 netlist_to_u_graph (l,r) =
@@ -548,8 +548,15 @@ ugen_to_graph_direct u =
                ,ug_controls = u_node_sort_controls (ug_controls g)}
     in ug_pv_validate (ug_add_implicit g')
 
+ugen_to_graph_netlist :: UGen -> U_Graph
+ugen_to_graph_netlist u =
+    let g = netlist_to_u_graph (ugenNetlist (UGen.prepare_root u))
+        g' = g {ug_ugens = reverse (ug_ugens g)
+               ,ug_controls = u_node_sort_controls (ug_controls g)}
+    in ug_pv_validate (ug_add_implicit g')
+
 ugen_to_graph :: UGen -> U_Graph
-ugen_to_graph = ugen_to_graph_direct -- netlist_to_u_graph . ugenNetlist
+ugen_to_graph = ugen_to_graph_netlist -- ugen_to_graph_direct --
 
 -- * Stat
 

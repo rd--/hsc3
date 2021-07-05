@@ -5,6 +5,7 @@ import Data.Maybe {- base -}
 import System.IO.Unsafe {- base -}
 
 import qualified Data.Reify as Reify {- data-reify -}
+import qualified Data.Reify.Graph.CSE as CSE {- data-reify-cse -}
 
 import Sound.SC3.Common.UId {- hsc3 -}
 import Sound.SC3.UGen.Type {- hsc3 -}
@@ -13,7 +14,8 @@ type Netlist = ([(Id,Circuit Id)], Id)
 
 ugenNetlistIO :: UGen -> IO Netlist
 ugenNetlistIO u = do
-  Reify.Graph nl rt <- Reify.reifyGraph u
+  g <- Reify.reifyGraph u
+  let Reify.Graph nl rt = CSE.cse g
   return (nl,rt)
 
 {-# NOINLINE ugenNetlist #-}

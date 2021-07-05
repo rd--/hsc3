@@ -5,7 +5,7 @@ module Sound.SC3.Common.Mce where
 
 -- | Multiple channel expansion.
 data Mce t = Mce_Unit t | Mce_Vector [t]
-             deriving (Functor, Foldable, Traversable, Eq, Read, Show)
+             deriving (Functor, Foldable, Traversable, Ord, Eq, Read, Show)
 
 mce_from_list :: [t] -> Mce t
 mce_from_list = Mce_Vector

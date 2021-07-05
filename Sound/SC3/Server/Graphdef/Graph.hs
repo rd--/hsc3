@@ -36,9 +36,9 @@ uid_lookup = M.findWithDefault (error "uid_lookup")
 
 -- | Lookup 'K_Type' index from map (erroring variant of 'lookup').
 ktype_map_lookup :: Rate.K_Type -> [(Rate.K_Type,Int)] -> Int
-ktype_map_lookup k =
-    let e = error (show ("ktype_map_lookup",k))
-    in fromMaybe e . lookup k
+ktype_map_lookup k m =
+    let e = error (show ("ktype_map_lookup",k,m))
+    in fromMaybe e (lookup k m)
 
 -- * Encoding
 

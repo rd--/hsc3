@@ -27,6 +27,7 @@ Library
                    data-binary-ieee754,
                    data-ordlist,
                    data-reify,
+                   data-reify-cse,
                    directory,
                    filepath,
                    hosc == 0.20.*,

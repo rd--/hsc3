@@ -6,7 +6,7 @@ module Sound.SC3.UGen.Type where
 
 import Data.Bits {- base -}
 import Data.Either {- base -}
-import qualified Data.Fixed as F {- base -}
+import qualified Data.Fixed as Fixed {- base -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
 import Text.Printf {- base -}
@@ -28,7 +28,7 @@ import qualified Sound.SC3.Common.UId as UId
 
 -- | Identifier used to distinguish otherwise equal non-deterministic nodes.
 data UGenId = NoId | UId UId.Id
-              deriving (Eq,Read,Show)
+              deriving (Ord, Eq, Read, Show)
 
 -- | Alias of 'NoId', the 'UGenId' used for deterministic UGens.
 no_id :: UGenId
@@ -44,7 +44,7 @@ type Sample = Double
 --
 -- > Constant 3 == Constant 3
 -- > (Constant 3 > Constant 1) == True
-newtype Constant = Constant {constantValue :: Sample} deriving (Eq,Ord,Read,Show)
+newtype Constant = Constant {constantValue :: Sample} deriving (Ord, Eq, Read, Show)
 
 -- | Control meta-data.
 data Control_Meta n =
@@ -55,7 +55,7 @@ data Control_Meta n =
                  ,ctl_units :: String -- ^ Unit of measure (ie hz, ms etc.).
                  ,controlGroup :: Maybe Control_Group -- ^ Control group.
                  }
-    deriving (Eq,Read,Show)
+    deriving (Ord, Eq, Read, Show)
 
 -- | 3-tuple form of 'Control_Meta' data.
 type Control_Meta_T3 n = (n,n,String)
@@ -76,7 +76,7 @@ data Control_Group
   = Control_Range
   | Control_Array Int
   | Control_XY
-  deriving (Eq,Read,Show)
+  deriving (Ord, Eq, Read, Show)
 
 -- | The number of elements in a control group.
 control_group_degree :: Control_Group -> Int
@@ -106,17 +106,17 @@ data Control = Control {controlOperatingRate :: Rate
                        ,controlDefault :: Sample
                        ,controlTriggered :: Bool
                        ,controlMeta :: Maybe (Control_Meta Sample)}
-               deriving (Eq,Read,Show)
+               deriving (Ord, Eq, Read, Show)
 
 -- | Labels.
-newtype Label = Label {ugenLabel :: String} deriving (Eq,Read,Show)
+newtype Label = Label {ugenLabel :: String} deriving (Ord, Eq, Read, Show)
 
 -- | Unit generator output descriptor.
 type Output = Rate
 
 -- | Operating mode of unary and binary operators.
 newtype Special = Special Int
-    deriving (Eq,Read,Show)
+    deriving (Ord, Eq, Read, Show)
 
 -- | UGen primitives.
 data Primitive t =
@@ -126,20 +126,20 @@ data Primitive t =
             ,ugenOutputs :: [Output]
             ,ugenSpecial :: Special
             ,ugenId :: UGenId}
-  deriving (Functor, Foldable, Traversable, Eq, Read, Show)
+  deriving (Functor, Foldable, Traversable, Ord, Eq, Read, Show)
 
 -- | Proxy indicating an output port at a multi-channel primitive.
 data Proxy t =
   Proxy {proxySource :: t
         ,proxyIndex :: Int
         ,proxyRate :: Rate}
-  deriving (Functor, Foldable, Traversable, Eq, Read, Show)
+  deriving (Functor, Foldable, Traversable, Ord, Eq, Read, Show)
 
 -- | Multiple root graph.
 data Mrg t =
   Mrg {mrgLeft :: t
       ,mrgRight :: t}
-  deriving (Functor, Foldable, Traversable, Eq, Read, Show)
+  deriving (Functor, Foldable, Traversable, Ord, Eq, Read, Show)
 
 {-
 -- | Control type
@@ -156,10 +156,10 @@ data Circuit t
   | CProxy (Proxy t) -- ^ Output port at multi-channel primitive
   | CMce (Mce t) Rate -- ^ Multiple channel expansion
   | CMrg (Mrg t) Rate -- ^ Multiple root graph
-  deriving (Functor, Foldable, Traversable, Eq, Read, Show)
+  deriving (Functor, Foldable, Traversable, Ord, Eq, Read, Show)
 
 -- | UGen
-data UGen = UGen (Circuit UGen) deriving (Eq,Read,Show)
+data UGen = UGen (Circuit UGen) deriving (Eq, Read, Show)
 
 instance Reify.MuRef UGen where
   type DeRef UGen = Circuit
@@ -227,7 +227,7 @@ instance UnaryOp UGen where
 
 instance BinaryOp UGen where
     iDiv = mkBinaryOperator IDiv iDiv
-    modE = mkBinaryOperator Mod F.mod'
+    modE = mkBinaryOperator Mod Fixed.mod'
     lcmE = mkBinaryOperator LCM lcmE
     gcdE = mkBinaryOperator GCD gcdE
     roundUp = mkBinaryOperator RoundUp roundUp
