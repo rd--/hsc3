@@ -6,6 +6,10 @@ import System.IO.Unsafe {- base -}
 -- * Lift
 
 -- | Lift monadic r to unsafe form.
+liftUnsafe0 :: (IO r) -> (x -> r)
+liftUnsafe0 fn _ = unsafePerformIO fn
+
+-- | Lift monadic r to unsafe form.
 liftUnsafe1 :: (a -> IO r) -> (a -> r)
 liftUnsafe1 fn = unsafePerformIO . fn
 
