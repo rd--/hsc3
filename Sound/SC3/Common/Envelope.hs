@@ -338,14 +338,13 @@ envCoord xy dur amp c = envXYC (map (\(x,y) -> (x * dur,y * amp,c)) xy)
 envPairs :: (Num n,Ord n) => [(n,n)] -> Envelope_Curve n -> Envelope n
 envPairs xy = envCoord (sortOn fst xy) 1 1
 
--- | Variant 'envPerc' with user specified 'Envelope_Curve a'.
+-- | Percussive envelope, with attack, release, level and curve inputs.
 envPerc_c :: Num a => a -> a -> a -> Envelope_Curve_2 a -> Envelope a
 envPerc_c atk rls lvl (c0,c1) =
     let c = [c0,c1]
     in Envelope [0,lvl,0] [atk,rls] c Nothing Nothing 0
 
--- | Percussive envelope, with attack, release, level and curve
---   inputs.
+-- | Percussive envelope, with attack and release inputs.
 envPerc :: Num a => a -> a -> Envelope a
 envPerc atk rls =
     let cn = EnvNum (-4)

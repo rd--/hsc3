@@ -180,7 +180,7 @@
 (defun hsc3-dump-ugens-region ()
   "Print region UGen graph."
   (interactive)
-  (hsc3-send-region-fn "Sound.SC3.ugen_dump_ugens"))
+  (hsc3-send-region-fn "Sound.SC3.ugen_dump_ugens $ wrapOut Nothing"))
 
 (defun hsc3-ui-region ()
   "UI for region UGen graph."

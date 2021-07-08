@@ -15,7 +15,8 @@ type Netlist = ([(Id,Circuit Id)], Id)
 ugenNetlistIO :: UGen -> IO Netlist
 ugenNetlistIO u = do
   g <- Reify.reifyGraph u
-  let Reify.Graph nl rt = CSE.cse g
+  --let Reify.Graph nl rt = CSE.cse g
+  let Reify.Graph nl rt = g
   return (nl,rt)
 
 {-# NOINLINE ugenNetlist #-}

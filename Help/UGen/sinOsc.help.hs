@@ -133,6 +133,9 @@ let geom k z m = mce (take k (iterate (* m) z))
     o3 = pulse ar (1/4) 0.5
 in (o1 + o2 + o3) * 0.1
 
+-- jh ; <https://scsynth.org/t/auditory-illusion-with-exponentially-spaced-frequencies/4157>
+mix (sinOsc ar (300 * mce (map (4 **) (take 200 [0, 0.002 ..]))) 0 * 0.02)
+
 ---- ; drawings
-UI.ui_baudline 4096 50 "linear" 2
+UI.ui_baudline (4096 * 1) 50 "linear" 2
 Sound.SC3.Plot.plot_ugen_nrt (48000,64) 1.0 (sinOsc ar 1 0)

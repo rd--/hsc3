@@ -15,3 +15,8 @@ let t = dustId 'α' kr 10
     o = sinOsc ar f 0
     l = tRandId 'γ' (-1) 1 t
 in pan2 o l 0.1
+
+-- tRand ; equal (sanity)
+let t = dustId 'α' kr 1
+    f = tRandId 'β' 120 240 t
+in sinOsc ar (mce2 f f) 0 * 0.1

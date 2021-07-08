@@ -44,12 +44,18 @@ let f = mouseX kr 220 880 Exponential 0.1
     x = phasor ar tr (two_pi * f / sr) 0 two_pi 0
 in sin x * 0.1
 
--- phasor ; as lfSaw, but with precision issues
-phasor ar (impulse ar 440 0) (2 * 440 / sampleRate) (-1) 1 0 * 0.1
+-- phasor ; as saw
+let f0 = midiCPS (mouseX kr 36 96 Linear 0.2)
+in phasor ar 0 (f0 * sampleDur) (-1) 1 0 * 0.1
+
+-- phasor ; as sinOsc
+let f0 = midiCPS (mouseX kr 36 96 Linear 0.2)
+    ph = phasor ar 0 (f0 * sampleDur) 0 1 0 * two_pi
+in sin ph * 0.1
 
 -- phasor ; as sinOsc, but with precision issues
-let f0 = 220
-    ph = phasor ar (impulse ar f0 0) (two_pi * f0 / sampleRate) 0 two_pi 0
+let f0 = midiCPS (mouseX kr 36 96 Linear 0.2)
+    ph = phasor ar (impulse ar f0 0) (f0 * sampleDur) 0 1 0 * two_pi
 in sin ph * 0.1
 
 -- phasor ; approximation of square wave ; sync ; http://listarc.bham.ac.uk/lists/sc-users/msg69869.html
@@ -68,3 +74,6 @@ withSC3 (async (b_allocRead 0 "/home/rohan/data/audio/pf-c5.aif" 0 0))
 
 ---- ; allocate and generate (non-wavetable) buffer (see osc for wavetable oscillator)
 withSC3 (mapM_ maybe_async [b_alloc 0 8192 1,b_gen_sine1 0 [Normalise,Clear] [1]])
+
+---- ; drawings
+UI.ui_sc3_scope 2 0 4096 1 "audio" 0

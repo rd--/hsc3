@@ -556,7 +556,7 @@ ugen_to_graph_netlist u =
     in ug_pv_validate (ug_add_implicit g')
 
 ugen_to_graph :: UGen -> U_Graph
-ugen_to_graph = ugen_to_graph_netlist -- ugen_to_graph_direct --
+ugen_to_graph = ugen_to_graph_direct -- direct | netlist
 
 -- * Stat
 
