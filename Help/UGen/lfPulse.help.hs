@@ -1,8 +1,20 @@
--- lfPulse ; note SC2 had no initial phase argument
-let f = lfPulse kr 3 0 0.3 * 200 + 200 in lfPulse ar f 0 0.2 * 0.1
+-- lfPulse ; 50 Hz wave ; note SC2 had no initial phase argument
+lfPulse ar 50 0 0.5 * 0.1
 
--- lfPulse
+-- lfPulse ; modulating frequency
+lfPulse ar (xLine kr 1 200 10 DoNothing) 0 0.2 * 0.1
+
+-- lfPulse ; amplitude modulation
+lfPulse kr (xLine kr 1 200 10 DoNothing) 0 0.2 * sinOsc ar 440 0 * 0.1
+
+-- lfPulse ; used as both oscillator and lfo
+lfPulse ar (lfPulse kr 3 0 0.3 * 200 + 200) 0 0.2 * 0.1
+
+-- lfPulse ; mouse control of width
 let x = mouseX kr 0 1 Linear 0.2 in lfPulse ar 220 0 x * 0.1
+
+-- lfPulse ; compare with band limited pulse ugen
+mce2 (pulse ar 100 0.3) (lfPulse ar 100 0 0.3) * 0.1
 
 -- lfPulse ; as sum of sines ; for odd partials n amplitude is (1 / n), for even 0 ; phase is 0
 let mk_freq f0 n = f0 * fromInteger n

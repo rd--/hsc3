@@ -64,9 +64,13 @@ fir8 :: F_U9 n -> F_ST1 (T8 n) n n
 fir8 f (n,(z7,z6,z5,z4,z3,z2,z1,z0)) = (f n z0 z1 z2 z3 z4 z5 z6 z7,(z6,z5,z4,z4,z2,z1,z0,n))
 
 -- | iir = infinite impulse response
+--
+-- > l_apply_f_st1 (iir1 (\x y1 -> x + y1)) 0 (replicate 10 1) == [1,2,3,4,5,6,7,8,9,10]
 iir1 :: F_U2 n -> F_ST1 n n n
 iir1 f (n,y0) = let r = f n y0 in (r,r)
 
+-- > l_apply_f_st1 (iir2 (\x y1 y2 -> x + y1 + y2)) (0,0) (replicate 10 1) == [1,2,4,7,12,20,33,54,88,143]
+-- > map (+1) [0+0,1+0,2+1,4+2,7+4,12+7,20+12,33+20,54+33,88+54] == [1,2,4,7,12,20,33,54,88,143] -- https://oeis.org/A000071
 iir2 :: F_U3 n -> F_ST1 (T2 n) n n
 iir2 f (n,(y1,y0)) = let r = f n y0 y1 in (r,(y0,r))
 
@@ -119,6 +123,7 @@ mavg9 = fir8 avg9
 sr_to_rps :: Floating n => n -> n
 sr_to_rps sr = two_pi / sr
 
+-- | resonz iir2_ff_fb function.  param are for 'Filter.resonz_coef'.
 resonz_f :: Floating n => T3 n -> (n -> n -> n -> T2 n)
 resonz_f param x y1 y2 =
     let (a0,b1,b2) = Filter.resonz_coef param
