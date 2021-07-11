@@ -48,9 +48,14 @@ avg9 :: Fractional n => F_U9 n
 avg9 p q r s t u v w x = (p + q + r + s + t + u + v + w + x) / 9
 
 -- | fir = finite impulse response
+--
+-- > l_apply_f_st1 (fir1 (\x z1 -> (x + z1) / 2)) 0 [0 .. 5] == [0.0,0.5,1.5,2.5,3.5,4.5]
 fir1 :: F_U2 n -> F_ST1 n n n
 fir1 f (n,z0) = (f n z0,n)
 
+-- | fir = finite impulse response
+--
+-- > l_apply_f_st1 (fir2 (\x x1 x2 -> (x + x1 + x2) / 2)) (0,0) [0 .. 5] == [0.0,0.5,1.5,3.0,4.5,6.0]
 fir2 :: F_U3 n -> F_ST1 (T2 n) n n
 fir2 f (n,(z1,z0)) = (f n z0 z1,(z0,n))
 
