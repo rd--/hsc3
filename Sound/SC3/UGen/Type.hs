@@ -483,6 +483,7 @@ mceRequired = any isMce
 
 > mceInputTransform [mce2 1 2,mce2 3 4] == Just [[1,3],[2,4]]
 > mceInputTransform [mce2 1 2,mce2 3 4,mce3 5 6 7] == Just [[1,3,5],[2,4,6],[1,3,7]]
+> mceInputTransform [mce2 (mce2 1 2) (mce2 3 4),mce2 5 6] == Just [[mce2 1 2,5],[mce2 3 4,6]]
 -}
 {-
 mceInputTransform :: [UGen] -> Maybe [[UGen]]

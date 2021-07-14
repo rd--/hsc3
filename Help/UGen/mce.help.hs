@@ -1,4 +1,4 @@
--- mce ; channel layout is L=440,441 and R=660,661
+-- mce ; nested ; channel layout is L=440,441 and R=660,661
 let f = mce2 (mce2 440 660) (mce2 441 661)
 in mix (sinOsc ar f 0 * 0.1)
 
@@ -8,10 +8,10 @@ mceFillInt 2 (\z -> brownNoiseId z ar * 0.05)
 -- mceFillId
 mceFillId 'α' 2 (\z i -> brownNoiseId z ar * 0.025 * (i + 1))
 
--- mce ; out out ; two channels
+-- mce ; one out ; two channels
 sinOsc ar (mce2 440 441) 0 * 0.1
 
--- mce ; two out ; each single channel
+-- mce ; two out ; each single channel ; hence mono
 sinOsc ar (mce1 (mce2 440 441)) 0 * 0.1
 
 ---- mce ; isList ; :set -XOverloadedLists (~/.ghci)
