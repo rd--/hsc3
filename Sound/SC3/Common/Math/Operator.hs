@@ -58,7 +58,7 @@ data SC3_Unary_Op
             | Log2
             | Log10
             | Sin -- 28
-            | Cos
+            | Cos -- 29
             | Tan -- 30
             | ArcSin
             | ArcCos

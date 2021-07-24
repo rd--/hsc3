@@ -2,11 +2,12 @@
 module Sound.SC3.Common.Rate where
 
 import Data.Char {- base -}
+import Data.Maybe {- base -}
 
 -- | Operating rate of unit generator.
 --   I = initialisation, K = control, A = audio, D = demand.
 --
--- > Data.List.sort [DR,AR,KR,IR] == [IR,KR,AR,DR]
+-- > Data.List.sort [dr,ar,kr,ir] == [ir,kr,ar,dr]
 data Rate = InitialisationRate | ControlRate | AudioRate | DemandRate
             deriving (Eq,Ord,Enum,Bounded,Show,Read)
 
@@ -15,6 +16,15 @@ ir = InitialisationRate
 kr = ControlRate
 ar = AudioRate
 dr =DemandRate
+
+{- | Standard SuperCollider rate abbreviations.
+
+> map rateAbbrev [minBound .. maxBound] == ["ir","kr","ar","dr"]
+-}
+rateAbbrev :: Rate -> String
+rateAbbrev rt =
+  fromMaybe (error "rateAbbrev?")
+  (lookup (fromEnum rt) (zip [0..] (words "ir kr ar dr")))
 
 -- | Integer rate identifier, as required for scsynth bytecode.
 rateId :: Rate -> Int

@@ -12,9 +12,13 @@ let f1 = xLine kr 1 1000 9 RemoveSynth
     f2 = sinOsc ar f1 0 * 200 + 800 -- (-1,1) ; (-200,200) ; (600,1000)
 in sinOsc ar f2 0 * 0.25
 
--- sinOsc ; Modulate phase
+-- sinOsc ; modulate phase ; modulator here is in (-2pi,2pi)
 let ph = sinOsc ar (xLine kr 20 8000 10 RemoveSynth) 0 * 2 * pi
 in sinOsc ar 800 ph * 0.1
+
+-- sinOsc ; phase input only
+let ph = sinOsc ar (xLine kr 20 8000 10 RemoveSynth) 0 * pi
+in sinOsc ar 0 ph * 0.1
 
 -- sinOsc ; mouse control
 let x = mouseX kr 40 10000 Exponential 0.2
