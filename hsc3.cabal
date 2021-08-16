@@ -26,8 +26,6 @@ Library
                    containers,
                    data-binary-ieee754,
                    data-ordlist,
-                   data-reify,
-                   data-reify-cse,
                    directory,
                    filepath,
                    hosc == 0.20.*,
@@ -117,7 +115,7 @@ Library
                    Sound.SC3.UGen.Math.Composite
                    Sound.SC3.UGen.Mce
                    Sound.SC3.UGen.Name
-                   Sound.SC3.UGen.Netlist
+                   --Sound.SC3.UGen.Netlist
                    Sound.SC3.UGen.Optimise
                    Sound.SC3.UGen.Plain
                    Sound.SC3.UGen.PP

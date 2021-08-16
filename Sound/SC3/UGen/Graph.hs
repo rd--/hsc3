@@ -21,7 +21,6 @@ import Data.Maybe {- base -}
 
 import qualified Sound.SC3.Common.Rate as Rate {- hsc3 -}
 import qualified Sound.SC3.Common.UId as UId {- hsc3 -}
-import Sound.SC3.UGen.Netlist {- hsc3 -}
 import Sound.SC3.UGen.Type {- hsc3 -}
 import qualified Sound.SC3.UGen.UGen as UGen {- hsc3 -}
 
@@ -503,7 +502,11 @@ ug_pv_check g =
 ug_pv_validate :: U_Graph -> U_Graph
 ug_pv_validate g = maybe g error (ug_pv_check g)
 
+{-
+
 -- * Netlist to U_Graph
+
+import Sound.SC3.UGen.Netlist {- hsc3 -}
 
 circuit_to_from_port :: UId.Id -> Circuit UId.Id -> From_Port
 circuit_to_from_port k c =
@@ -530,6 +533,8 @@ netlist_to_u_graph (l,r) =
   let n = mapMaybe (netlist_entry_to_u_node (l,r)) l
   in U_Graph (maximum (map fst l) + 1) (filter u_node_is_c n) (filter u_node_is_k n) (filter u_node_is_u n)
 
+-}
+
 -- * UGen to U_Graph
 
 {- | Transform a unit generator into a graph.
@@ -548,15 +553,17 @@ ugen_to_graph_direct u =
                ,ug_controls = u_node_sort_controls (ug_controls g)}
     in ug_pv_validate (ug_add_implicit g')
 
+{-
 ugen_to_graph_netlist :: UGen -> U_Graph
 ugen_to_graph_netlist u =
     let g = netlist_to_u_graph (ugenNetlist (UGen.prepare_root u))
         g' = g {ug_ugens = reverse (ug_ugens g)
                ,ug_controls = u_node_sort_controls (ug_controls g)}
     in ug_pv_validate (ug_add_implicit g')
+-}
 
 ugen_to_graph :: UGen -> U_Graph
-ugen_to_graph = ugen_to_graph_direct -- direct | netlist
+ugen_to_graph = ugen_to_graph_direct
 
 -- * Stat
 

@@ -1,6 +1,3 @@
-{-# Language TypeFamilies #-}
-{-# Language DeriveFunctor, DeriveFoldable, DeriveTraversable #-}
-
 -- | Unit Generator ('UGen') and associated types and instances.
 module Sound.SC3.UGen.Type where
 
@@ -11,10 +8,6 @@ import Data.List {- base -}
 import Data.Maybe {- base -}
 import Text.Printf {- base -}
 
-import qualified GHC.Exts as Exts {- base -}
-
-import qualified Data.Traversable as Traversable {- containers -}
-import qualified Data.Reify as Reify {- data-reify -}
 import qualified Safe {- safe -}
 import qualified System.Random as Random {- random -}
 
@@ -126,20 +119,20 @@ data Primitive t =
             ,ugenOutputs :: [Output]
             ,ugenSpecial :: Special
             ,ugenId :: UGenId}
-  deriving (Functor, Foldable, Traversable, Ord, Eq, Read, Show)
+  deriving (Ord, Eq, Read, Show)
 
 -- | Proxy indicating an output port at a multi-channel primitive.
 data Proxy t =
   Proxy {proxySource :: t
         ,proxyIndex :: Int
         ,proxyRate :: Rate}
-  deriving (Functor, Foldable, Traversable, Ord, Eq, Read, Show)
+  deriving (Ord, Eq, Read, Show)
 
 -- | Multiple root graph.
 data Mrg t =
   Mrg {mrgLeft :: t
       ,mrgRight :: t}
-  deriving (Functor, Foldable, Traversable, Ord, Eq, Read, Show)
+  deriving (Ord, Eq, Read, Show)
 
 {-
 -- | Control type
@@ -156,14 +149,20 @@ data Circuit t
   | CProxy (Proxy t) -- ^ Output port at multi-channel primitive
   | CMce (Mce t) Rate -- ^ Multiple channel expansion
   | CMrg (Mrg t) Rate -- ^ Multiple root graph
-  deriving (Functor, Foldable, Traversable, Ord, Eq, Read, Show)
+  deriving (Ord, Eq, Read, Show)
 
 -- | UGen
 data UGen = UGen (Circuit UGen) deriving (Eq, Read, Show)
 
+{-
+{-# Language TypeFamilies #-}
+{-# Language DeriveFunctor, DeriveFoldable, DeriveTraversable #-}
+import qualified Data.Traversable as Traversable {- containers -}
+import qualified Data.Reify as Reify {- data-reify -}
 instance Reify.MuRef UGen where
   type DeRef UGen = Circuit
   mapDeRef f (UGen c) = Traversable.traverse f c
+-}
 
 ugenCircuit :: UGen -> Circuit UGen
 ugenCircuit (UGen c) = c
@@ -1015,7 +1014,11 @@ instance Bits UGen where
     bitSizeMaybe = error "UGen.bitSizeMaybe"
     isSigned _ = True
 
+{-
+import qualified GHC.Exts as Exts {- base -}
+
 instance Exts.IsList UGen where
   type Item UGen = UGen
   fromList = mce
   toList = mceChannels
+-}

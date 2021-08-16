@@ -140,6 +140,18 @@ in (o1 + o2 + o3) * 0.1
 -- jh ; <https://scsynth.org/t/auditory-illusion-with-exponentially-spaced-frequencies/4157>
 mix (sinOsc ar (300 * mce (map (4 **) (take 200 [0, 0.002 ..]))) 0 * 0.02)
 
+-- sinOsc ; https://scsynth.org/t/what-kind-of-synthesis-is-this/4318/30
+let mratio = 4
+    amp = 0.2
+    boost = 2
+    tr = impulse ar (lfNoise2 kr 1 `in_exprange` (1, 100)) 0
+    envgen x = let c = EnvNum (-8) in envGen ar tr 1 0 1 DoNothing (envPerc_c 0.0001 x 1 (c,c))
+    freq = (midiCPS 60.5 / 16) * (linExp (envgen 0.4) 0 1 1 40)
+    ix = mouseY kr 0 2 Linear 0.1
+    sig = sinOsc ar freq (sinOsc ar (freq * mratio) 0 * ix)
+in tanh (pan2 sig 0 boost) * envgen 1 * amp
+
 ---- ; drawings
 UI.ui_baudline (4096 * 1) 50 "linear" 2
 Sound.SC3.Plot.plot_ugen_nrt (48000,64) 1.0 (sinOsc ar 1 0)
+(midiCPS 60.5 / 16)
