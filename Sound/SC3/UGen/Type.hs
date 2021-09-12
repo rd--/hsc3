@@ -773,6 +773,20 @@ mkBinaryOperator i f a b =
 
 -- * Numeric instances
 
+-- | Is /u/ the primitive for the named UGen.
+is_primitive_for :: String -> UGen -> Bool
+is_primitive_for k u =
+    case u of
+      UGen (CPrimitive (Primitive _ nm [_,_] [_] _ _)) -> nm == k
+      _ -> False
+
+-- | Is /u/ the primitive for the named UGen.
+is_constant_of :: Sample -> UGen -> Bool
+is_constant_of k u =
+    case u of
+      UGen (CConstant c) -> constantValue c == k
+      _ -> False
+
 -- | Is /u/ a binary math operator with SPECIAL of /k/.
 {-
 is_math_binop :: Int -> UGen -> Bool

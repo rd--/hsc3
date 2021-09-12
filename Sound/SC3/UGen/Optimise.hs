@@ -5,6 +5,7 @@ import System.Random {- random -}
 
 import Sound.SC3.Common.Math.Operator
 import Sound.SC3.Common.Rate
+import qualified Sound.SC3.UGen.Bindings.DB as Bindings {- hsc3 -}
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 
@@ -80,3 +81,17 @@ ugen_optimise_const_operator =
 constant_opt :: UGen -> Maybe Sample
 constant_opt = u_constant . ugen_optimise_ir_rand
 
+{- | Constant optimising MulAdd.
+
+> mulAddOptimised (sinOsc ar 440 0) 1 0 == sinOsc ar 440 0
+> mulAddOptimised (sinOsc ar 440 0) 0.1 0 == sinOsc ar 440 0 * 0.1
+> mulAddOptimised (sinOsc ar 440 0) 1 1 == sinOsc ar 440 0 + 1
+> mulAddOptimised (sinOsc ar 440 0) 0.1 1 == mulAdd (sinOsc ar 440 0) 0.1 1
+-}
+mulAddOptimised :: UGen -> UGen -> UGen -> UGen
+mulAddOptimised u m a =
+  case (is_constant_of 1 m,is_constant_of 0 a) of
+    (True,True) -> u
+    (False,True) -> u * m
+    (True,False) -> u + a
+    (False,False) -> Bindings.mulAdd u m a
