@@ -1,7 +1,7 @@
 -- demand ; monadic form
 uid_st_eval (
   do r <- dustM kr 1
-     s <- dgeomM dinf (midiCPS 72) (midiRatio 1)
+     s <- dgeomM dinf (midiCps 72) (midiRatio 1)
      let t = impulse kr 10 0
          f = demand t r s
          o = sinOsc ar (mce [f,f + 0.7]) 0
@@ -10,7 +10,7 @@ uid_st_eval (
 -- demand
 let n = diwhiteId 'α' dinf 60 72
     t = impulse kr 10 0
-    s = midiCPS n
+    s = midiCps n
     f = demand t 0 s
     o = sinOsc ar (mce [f,f + 0.7]) 0
 in cubed (cubed o) * 0.1

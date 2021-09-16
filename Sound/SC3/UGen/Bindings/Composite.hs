@@ -512,6 +512,16 @@ varLag_env in_ time warp start =
       tr = changed in_ 0 + time_ch + impulse rt 0 0
   in envGen rt tr 1 0 1 DoNothing e
 
+{- | k channel white noise.
+
+> whiteNoiseN 2 ar * 0.1
+-}
+whiteNoiseMN :: UId m => Int -> Rate -> m UGen
+whiteNoiseMN k r = fmap mce (mapM (\_ -> whiteNoiseM r) [1 .. k])
+
+whiteNoiseN :: Int -> Rate -> UGen
+whiteNoiseN k = liftUnsafe1 (whiteNoiseMN k)
+
 {- | If @z@ isn't a sink node route to an @out@ node writing to @bus@.
      If @fadeTime@ is given multiply by 'makeFadeEnv'.
 

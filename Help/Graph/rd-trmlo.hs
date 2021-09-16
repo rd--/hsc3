@@ -1,5 +1,5 @@
 -- trmlo-u (rd)
-let mWrp i l r = linLin_b i (midiCPS l) (midiCPS r)
+let mWrp i l r = linLin_b i (midiCps l) (midiCps r)
     mWrp1 i m = mWrp i m (m + 1)
     mWrpN i m n = mWrp i m (m + n)
     o1 = let f = 5
@@ -36,7 +36,7 @@ let mWrp i l r = linLin_b i (midiCPS l) (midiCPS r)
 in o1 + o2 + o3 + o4
 
 -- trmlo ; id
-let mWrp i l r = linLin_b i (midiCPS l) (midiCPS r)
+let mWrp i l r = linLin_b i (midiCps l) (midiCps r)
     mWrp1 i m = mWrp i m (m + 1)
     mWrpN i m n = mWrp i m (m + n)
     o1 = let f = 5

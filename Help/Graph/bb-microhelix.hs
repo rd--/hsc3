@@ -11,8 +11,8 @@ let rp = replicate
         let n = pinkNoise ar * decay ctrigs (0.001 * abs (lfNoise1 ar 4))
         in fold (bpf n 15000 0.9 * (25 * range 0 1 (lfNoise1 ar 8))) (-1) 1
     snd1 =
-        let o = sinOsc ar (midiCPS 44) 0 * 0.5 + sinOsc ar (midiCPS 90) 0 * 0.6
-        in lpf o (midiCPS 32) * 2 + hpf (lpf (whiteNoise ar * 0.008) 12000) 2400
+        let o = sinOsc ar (midiCps 44) 0 * 0.5 + sinOsc ar (midiCps 90) 0 * 0.6
+        in lpf o (midiCps 32) * 2 + hpf (lpf (whiteNoise ar * 0.008) 12000) 2400
     hiNoise =
         let n = whiteNoise ar
             e = decay2 (ctrigs * (lfNoise1 ar 8 * 0.5 + 0.5)) 0.02 0.1 * 0.05
@@ -47,8 +47,8 @@ let rp = replicate
         let n = pinkNoiseId 'ε' ar * decay ctrigs (0.001 * abs (lfNoise1Id 'ζ' ar 4))
         in fold (bpf n 15000 0.9 * (25 * range 0 1 (lfNoise1Id 'η' ar 8))) (-1) 1
     snd1 =
-        let o = sinOsc ar (midiCPS 44) 0 * 0.5 + sinOsc ar (midiCPS 90) 0 * 0.6
-        in lpf o (midiCPS 32) * 2 + hpf (lpf (whiteNoiseId 'θ' ar * 0.008) 12000) 2400
+        let o = sinOsc ar (midiCps 44) 0 * 0.5 + sinOsc ar (midiCps 90) 0 * 0.6
+        in lpf o (midiCps 32) * 2 + hpf (lpf (whiteNoiseId 'θ' ar * 0.008) 12000) 2400
     hiNoise =
         let n = whiteNoiseId 'ι' ar
             e = decay2 (ctrigs * (lfNoise1Id 'κ' ar 8 * 0.5 + 0.5)) 0.02 0.1 * 0.05

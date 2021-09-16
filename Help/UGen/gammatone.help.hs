@@ -5,7 +5,7 @@ X.gammatone (whiteNoiseId 'α' ar) 440 200 * 0.5
 X.gammatone (sinOsc ar (mouseX kr 100 2000 Linear 0.2) 0) 1000 500 * 0.5
 
 -- gammatone ; filters centered on 88 piano keys
-let freqs = take 88 (map midiCPS [21..])
+let freqs = take 88 (map midiCps [21..])
     to_bw f = 24.7 * (f * 0.00437 + 1)
     bandwidths = map to_bw freqs
     -- calculated from ISO2002 100dB phon curve as approximation to sensitivity of outer ear

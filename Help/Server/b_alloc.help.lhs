@@ -19,4 +19,4 @@ message, is still asynchronous.
 > g0 =
 >     let x = mouseX KR 0 9 Linear 0.1
 >         k = degreeToKey b0 x 12
->     in sinOsc AR (midiCPS (48 + k)) 0 * 0.1
+>     in sinOsc AR (midiCps (48 + k)) 0 * 0.1

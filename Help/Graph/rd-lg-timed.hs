@@ -9,7 +9,7 @@ let timed r y p =
     x = mouseX kr 0.5 1.25 Linear 0.2
     tn = lg (timed dinf n (d * x))
     ta = lg (timed dinf a (d * x))
-in sinOsc ar (midiCPS tn) 0 * ta
+in sinOsc ar (midiCps tn) 0 * ta
 
 -- lg-timed (rd) ; monad
 uid_st_eval (do
@@ -26,4 +26,4 @@ uid_st_eval (do
       x = mouseX kr 0.5 1.25 Linear 0.2
   tn <- lg =<< timed dinf n (d * x)
   ta <- lg =<< timed dinf a (d * x)
-  return (sinOsc ar (midiCPS tn) 0 * ta))
+  return (sinOsc ar (midiCps tn) 0 * ta))

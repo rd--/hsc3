@@ -1,7 +1,7 @@
 -- birds (jmcc)
 let node _ = let f = rand 94.0 102.0 + lag (lfSaw ar (7 + rand2 1.5) (rand 0 1) * rand 11 15) 0.1
                  a = lfPulse kr (1.0 / rand 12 15.6) (rand 0 1) 0.16 * 0.05
-                 b = sinOsc ar (midiCPS f) (rand 0 1) * a
+                 b = sinOsc ar (midiCps f) (rand 0 1) * a
              in rotate2 b (silent 1) (rand2 1)
     apfr i = allpassL i 0.07 (rand 0 0.06) (rand 0.7 2.0)
     d = mixFill 6 node
@@ -20,7 +20,7 @@ uid_st_eval (do
                 r8 <- randM (-1.0) 1.0
                 let f = r1 + lag (lfSaw ar (7 + r2) r3 * r4) 0.1
                     a = lfPulse kr (1.0 / r6) r7 0.16 * 0.05
-                    b = sinOsc ar (midiCPS f) r5 * a
+                    b = sinOsc ar (midiCps f) r5 * a
                 return (rotate2 b (silent 1) r8)
       apf_r i = do r1 <- randM 0.0 0.06
                    r2 <- randM 0.7 2.0

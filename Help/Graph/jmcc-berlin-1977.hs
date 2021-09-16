@@ -8,7 +8,7 @@ let dsequ sq tr = demand tr 0 (dseq dinf (mce sq))
     note = dsequ patternList clock {- midi note pattern sequencer -}
     clock_16 = pulseDivider clock 16 0 {- divide clock by 16 -}
     note' = dsequR [-12,-7,-5,0,2,5] clock_16 + note {- transpose somewhat randomly -}
-    freq = midiCPS note' {- convert midi note to cycles per second -}
+    freq = midiCps note' {- convert midi note to cycles per second -}
     env = decay2 clock (0.05 * clock_time) (2 * clock_time)
     amp = env * 0.1 + 0.02 {- amplitude envelope -}
     filt = env * (fSinOsc kr 0.17 0 * 800) + 1400 {- filter frequency -}
@@ -26,7 +26,7 @@ let dsequId z sq tr = demand tr 0 (dseqId z dinf (mce sq))
     note = dsequId 'α' patternList clock {- midi note pattern sequencer -}
     clock_16 = pulseDivider clock 16 0 {- divide clock by 16 -}
     note' = dsequRId 'β' [-12,-7,-5,0,2,5] clock_16 + note {- transpose somewhat randomly -}
-    freq = midiCPS note' {- convert midi note to cycles per second -}
+    freq = midiCps note' {- convert midi note to cycles per second -}
     env = decay2 clock (0.05 * clock_time) (2 * clock_time)
     amp = env * 0.1 + 0.02 {- amplitude envelope -}
     filt = env * (fSinOsc kr 0.17 0 * 800) + 1400 {- filter frequency -}
@@ -36,7 +36,7 @@ in combN (rlpf s filt 0.15) 0.2 (mce2 0.2 0.17) 1.5
 
 -- berlin 1977 (jmcc) #4 ; event-control
 let f _ (g,_,y,z,_,_,_,p,_,_) =
-      let freq = midiCPS p
+      let freq = midiCps p
           env = decay2 (trig g controlDur) (0.05 * y) (2 * y)
           amp = env * z + 0.02
           filt = env * (fSinOsc kr 0.17 0 * 800) + 1400 {- filter frequency -}

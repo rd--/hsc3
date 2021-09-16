@@ -18,7 +18,7 @@ let d = linLin (lfNoise2Id 'α' kr 0.1) (-1) 1 0.05 0.5
     w1 = tRandId 'γ' 0.65 1 t
     w = phasor ar t ((w1 - w0) * sampleDur) w0 w1 0
     e = decay2 t 0.1 d
-    f = midiCPS (tRandId 'δ' 36 72 t)
+    f = midiCps (tRandId 'δ' 36 72 t)
     o = varSaw ar f 0 w * e * 0.1
     l = tRandId 'ε' (-1) 1 t
 in pan2 o l 1
@@ -38,6 +38,6 @@ let midinote = 60
     amp = 0.25
     asr = envASR 0.1 1 0.1 (EnvNum (-4))
     env = envGen kr gate_ 1 0 1 RemoveSynth asr
-    freq = midiCPS midinote
+    freq = midiCps midinote
     width = range 0.2 0.8 (lfNoise2Id 'α' kr 1) * range 0.7 0.8 (sinOsc kr 5 (randId 'β' 0.0 1.0))
 in varSaw ar freq 0 width * env * amp

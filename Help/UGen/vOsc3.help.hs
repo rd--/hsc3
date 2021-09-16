@@ -10,7 +10,7 @@ in mce2 o1 o2 * y
 -- vOsc3 ; event control ; see vOsc help for setup
 let f _ (g,_,y,z,_,_,_,p,_,_) =
       let n = 8
-          f0 = midiCPS p
+          f0 = midiCps p
           b = control kr "tbl" 0
           pos = linLin y 0 1 b (b + n - 1)
           o1 = vOsc3 ar pos f0 (f0 + 1) (f0 + 9)

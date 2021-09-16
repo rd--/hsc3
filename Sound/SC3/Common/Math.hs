@@ -278,6 +278,23 @@ degree_to_key s n d =
         a = (d - fromIntegral d') * 10.0 * (n / 12.0)
     in (n * fromIntegral (d' `div` l)) + Safe.atNote "degree_to_key" s (d' `mod` l) + a
 
+{- | One-indexed piano key number (for standard 88 key piano) to midi note number.
+
+> map pianokey_to_midi [1,49,88] == [21,69,108]
+-}
+pianokey_to_midi :: Num n => n -> n
+pianokey_to_midi = (+) 20
+
+{- | Piano key to hertz (ba.pianokey2hz in Faust).
+     This is useful as a more musical gamut than midi note numbers.
+     Ie. if x is in (0,1) then pianokey_to_cps of (x * 88) is in (26,4168)
+
+> map (round . pianokey_to_cps) [0,1,40,49,88] == [26,28,262,440,4186]
+> map (round . midi_to_cps) [0,60,69,127] == [8,262,440,12544]
+-}
+pianokey_to_cps :: Floating n => n -> n
+pianokey_to_cps = midi_to_cps . pianokey_to_midi
+
 -- | Linear amplitude to decibels.
 --
 -- > map (round . amp_to_db) [0.01,0.05,0.0625,0.125,0.25,0.5] == [-40,-26,-24,-18,-12,-6]

@@ -323,8 +323,8 @@ class (Floating a, Ord a) => UnaryOp a where
     asFloat = error "asFloat"
     asInt :: a -> a
     asInt = error "asInt"
-    cpsMIDI :: a -> a
-    cpsMIDI = Math.cps_to_midi
+    cpsMidi :: a -> a
+    cpsMidi = Math.cps_to_midi
     cpsOct :: a -> a
     cpsOct = Math.cps_to_oct
     cubed :: a -> a
@@ -341,20 +341,20 @@ class (Floating a, Ord a) => UnaryOp a where
     log10 = logBase 10
     log2 :: a -> a
     log2 = logBase 2
-    midiCPS :: a -> a
-    midiCPS = Math.midi_to_cps
+    midiCps :: a -> a
+    midiCps = Math.midi_to_cps
     midiRatio :: a -> a
     midiRatio = Math.midi_to_ratio
     notE :: a -> a
     notE a = if a > 0.0 then 0.0 else 1.0
     notNil :: a -> a
     notNil a = if a /= 0.0 then 0.0 else 1.0
-    octCPS :: a -> a
-    octCPS = Math.oct_to_cps
+    octCps :: a -> a
+    octCps = Math.oct_to_cps
     ramp_ :: a -> a
     ramp_ _ = error "ramp_"
-    ratioMIDI :: a -> a
-    ratioMIDI = Math.ratio_to_midi
+    ratioMidi :: a -> a
+    ratioMidi = Math.ratio_to_midi
     softClip :: a -> a
     softClip = Math.sc3_softclip
     squared :: a -> a

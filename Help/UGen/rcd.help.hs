@@ -1,5 +1,5 @@
 -- rcd ; rotating clock divider
-let freqs = mce (map (\i -> midiCPS (i * 5 + 50)) [0 .. 8])
+let freqs = mce (map (\i -> midiCps (i * 5 + 50)) [0 .. 8])
     amps = mce [1, 0.5, 0.3, 0.3, 0.3, 0.2, 0.2, 0.2]
     tr = lfPulse ar 7 0 0.01
     rot = -2

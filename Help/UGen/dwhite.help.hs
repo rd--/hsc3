@@ -11,7 +11,7 @@ let n = dwhiteId 'α' dinf 0 1
     r = control_m kr "r" 96 (0,127,"lin")
     t = impulse kr (control_m kr "trigFreq" 2 (0.01,12,"lin")) 0
     m = exp (demand t 0 n * (log r - log l) + log l)
-in sinOsc ar (midiCPS m) 0 * 0.1
+in sinOsc ar (midiCps m) 0 * 0.1
 
 ---- ; drawings
 UI.ui_sc3_scope 2 0 4096 1 "audio" 0

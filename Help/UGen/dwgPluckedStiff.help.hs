@@ -20,7 +20,7 @@ let sequId e s tr = demand tr 0 (dseqId e dinf (mce s))
         in tDuty ar d 0 DoNothing 1 0
     freq = let n0 = sequId 'β' [60,62,63,58,48,55] t
                n1 = sequId 'γ' [63,60,48,62,55,58] t
-           in midiCPS (mce2 n0 n1)
+           in midiCps (mce2 n0 n1)
     amp = tRandId 'δ' 0.05 0.65 t -- pulse amplitude (0  - 1, def = 0.5)
     gate_ = 1 -- synth release
     pos = tRandId 'ε' 0.05 0.25 t -- pluck position (0 - 1, def = 0.14)
@@ -37,7 +37,7 @@ in pan2 ps pan 0.1
 
 -- dwgPluckedStiff ; event control
 let f _c (g,_,y,z,o,rx,_,p,_,_) =
-      let freq = midiCPS p
+      let freq = midiCps p
           c3 = 20
           inp = let e = envelope [0,1,1,0] [0.001,0.006,0.0005] (map EnvNum [5,-5,-8])
                 in z * lfClipNoiseId 'α' ar 2000 * envGen ar g 1 0 1 DoNothing e

@@ -13,7 +13,7 @@ in mix (sinOsc ar f 0 * a)
 let mk_freq f0 n = f0 * fromInteger n
     mk_amp n = 1 / fromInteger n
     mk_param f0 n = let m = [1,2 .. n] in zip (map (mk_freq f0) m) (map mk_amp m)
-    x = midiCPS (mouseX kr 20 72 Linear 0.2)
+    x = midiCps (mouseX kr 20 72 Linear 0.2)
     y = mouseY kr 0.01 0.1 Exponential 0.2
     e = xLine kr 0.01 1 20 DoNothing -- cross-fade from sum to lfSaw
     o1 = sum (map (\(fr,am) -> sinOsc ar fr 0 * am) (mk_param x 25)) * (1 - e)

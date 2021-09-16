@@ -52,7 +52,7 @@ let b = asLocalBufId 'α' [0,0.5,0.1,0.5,1,0.01]
     d = dbufrdId 'ε' b d_i Loop
     s = env_curve_shape EnvLin
     e = demandEnvGen kr l d s 0 1 1 1 0 5 RemoveSynth
-    f = midiCPS (60 + (e * 12))
+    f = midiCps (60 + (e * 12))
 in sinOsc ar (f * mce2 1 1.01) 0 * 0.1
 
 -- demandEnvGen ; read envelope break-points from buffer, here simply duration/level pairs.
@@ -61,7 +61,7 @@ let b = asLocalBufId 'α' [61,1,60,2,72,1,55,5,67,9,67]
     lvl = dbufrdId 'β' b (dseriesId 'γ' 6 0 2) Loop
     dur = dbufrdId 'δ' b (dseriesId 'ε' 5 1 2) Loop
     e = demandEnvGen kr lvl dur 1 0 1 1 1 0 1 RemoveSynth
-in sinOsc ar (midiCPS e) 0 * 0.1
+in sinOsc ar (midiCps e) 0 * 0.1
 
 -- demandEnvGen ; lfNoise1
 let y = mouseY kr 0.5 20 Linear 0.2

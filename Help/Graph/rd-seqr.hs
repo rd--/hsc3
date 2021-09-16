@@ -1,6 +1,6 @@
 -- seqr (rd)
 let nrand n l = mceChannels . X.rRandN n l
-    nfreq n l r = map (midiCPS . floorE) (nrand n l r)
+    nfreq n l r = map (midiCps . floorE) (nrand n l r)
     seqr_f f e =
       let n = constant (length e `div` 2)
       in select (lfSaw kr f 0 * n + n) (mce e)
@@ -13,7 +13,7 @@ in seqr 12
 
 -- seqr (rd) ; id
 let nrand n e l = mceChannels . X.rRandNId n e l
-    nfreq z n l r = map (midiCPS . floorE) (nrand n z l r)
+    nfreq z n l r = map (midiCps . floorE) (nrand n z l r)
     seqr_f f e =
       let n = constant (length e `div` 2)
       in select (lfSaw kr f 0 * n + n) (mce e)

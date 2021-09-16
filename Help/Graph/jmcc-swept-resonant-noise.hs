@@ -7,7 +7,7 @@ let flt src _ =
                  (X.rRandN p 0.5 2.5)
       in klank src 1 0 1 spec
     n = whiteNoise ar * 0.007
-    f = midiCPS (fSinOsc kr (rand 0.1 0.3) 0 * rand 0 24 + rand 36 84)
+    f = midiCps (fSinOsc kr (rand 0.1 0.3) 0 * rand 0 24 + rand 36 84)
     sw = resonz n f 0.1
 in mceFill 2 (flt sw)
 
@@ -20,7 +20,7 @@ let flt src z =
                  (X.rRandNId p z 0.5 2.5)
       in klank src 1 0 1 spec
     n = whiteNoiseId 'α' ar * 0.007
-    f = midiCPS (fSinOsc kr (randId 'β' 0.1 0.3) 0 * randId 'γ' 0 24 + randId 'δ' 36 84)
+    f = midiCps (fSinOsc kr (randId 'β' 0.1 0.3) 0 * randId 'γ' 0 24 + randId 'δ' 36 84)
     sw = resonz n f 0.1
 in mce (map (flt sw) ['ε','ζ'])
 
@@ -34,7 +34,7 @@ let f _ (g,x,y,z,_,_,_,_,_,_) =
                   (X.rRandN np 0.5 2.5)
             in dynKlank src 1 0 1 spec
           f0 = (0.25 + y) * rand 0.1 0.3
-          f1 = midiCPS (fSinOsc kr f0 0 * rand 0 24 + rand 36 84)
+          f1 = midiCps (fSinOsc kr f0 0 * rand 0 24 + rand 36 84)
           sw = resonz (whiteNoise ar * 0.007) f1 0.1
       in mceFill 2 (flt sw) * z * lag g 0.1
 in mix (eventVoicer 16 f) * control kr "gain" 1
@@ -49,7 +49,7 @@ let f c (g,x,y,z,_,_,_,_,_,_) =
                   (X.rRandNId np (c,k) 0.5 2.5)
             in dynKlank src 1 0 1 spec
           f0 = (0.25 + y) * randId (c,'β') 0.1 0.3
-          f1 = midiCPS (fSinOsc kr f0 0 * randId (c,'γ') 0 24 + randId (c,'δ') 36 84)
+          f1 = midiCps (fSinOsc kr f0 0 * randId (c,'γ') 0 24 + randId (c,'δ') 36 84)
           sw = resonz (whiteNoiseId (c,'α') ar * 0.007) f1 0.1
       in mce (map (flt sw) ['ε','ζ']) * z * lag g 0.1
 in mix (eventVoicer 16 f) * control kr "gain" 1

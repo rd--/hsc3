@@ -12,7 +12,7 @@ in pan2 sig (tRandId 'ζ' (-1) 1 trig) 1
 
 -- analogBassDrum ; event control
 let f _ (g,x,y,z,o,rx,ry,_,_,_) =
-      let freq = midiCPS (x * 25 + 24)
+      let freq = midiCps (x * 25 + 24)
           tr = trig g controlDur
           selffm = tRandId 'α' 0.1 0.9 tr
           sig = X.analogBassDrum ar tr 0 z freq y rx (ry `in_range` (0.1,0.2)) selffm

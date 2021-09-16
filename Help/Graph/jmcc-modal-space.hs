@@ -3,9 +3,9 @@ let ms1 n r =
       let b = asLocalBuf [0,2,3.2,5,7,9,10] {- dorian scale -}
           x = mouseX kr 0 15 Linear 0.1 {- mouse indexes into scale -}
           k = degreeToKey b x 12 {- 12 notes per octave -}
-          o = sinOsc ar (midiCPS (r + k + n * 0.04)) 0 * 0.1
-          t = lfPulse ar (midiCPS (mce2 48 55)) 0 0.15
-          f = midiCPS (sinOsc kr 0.1 0 * 10 + r)
+          o = sinOsc ar (midiCps (r + k + n * 0.04)) 0 * 0.1
+          t = lfPulse ar (midiCps (mce2 48 55)) 0 0.15
+          f = midiCps (sinOsc kr 0.1 0 * 10 + r)
           d = rlpf t f 0.1 * 0.1
           m = o + d
       in combN m 0.31 0.31 2 + m
@@ -16,9 +16,9 @@ let ms1 n r =
       let b = asLocalBufId 'α' [0,2,3.2,5,7,9,10] {- dorian scale -}
           x = mouseX kr 0 15 Linear 0.1 {- mouse indexes into scale -}
           k = degreeToKey b x 12 {- 12 notes per octave -}
-          o = sinOsc ar (midiCPS (r + k + n * 0.04)) 0 * 0.1
-          t = lfPulse ar (midiCPS (mce2 48 55)) 0 0.15
-          f = midiCPS (sinOsc kr 0.1 0 * 10 + r)
+          o = sinOsc ar (midiCps (r + k + n * 0.04)) 0 * 0.1
+          t = lfPulse ar (midiCps (mce2 48 55)) 0 0.15
+          f = midiCps (sinOsc kr 0.1 0 * 10 + r)
           d = rlpf t f 0.1 * 0.1
           m = o + d
       in combN m 0.31 0.31 2 + m
@@ -29,9 +29,9 @@ let f c (g,x,y,z,_,_,_,_,_,_) =
       let ms1 n r =
             let b = asLocalBuf [0,2,3.2,5,7,9,10] {- dorian scale -}
                 k = degreeToKey b (x * 25) 12 {- 12 notes per octave -}
-                o = sinOsc ar (midiCPS (r + k + n * y * 0.08)) 0 * 0.1
-                t = lfPulse ar (midiCPS (mce2 48 55)) 0 0.15
-                d = rlpf t (midiCPS (sinOsc kr 0.1 0 * 10 + r)) 0.1 * 0.1
+                o = sinOsc ar (midiCps (r + k + n * y * 0.08)) 0 * 0.1
+                t = lfPulse ar (midiCps (mce2 48 55)) 0 0.15
+                d = rlpf t (midiCps (sinOsc kr 0.1 0 * 10 + r)) 0.1 * 0.1
                 m = o + d
             in combN m 0.31 0.31 2 + m
           ms = ms1 (lfNoise1 kr 3) 48 + ms1 (lfNoise1 kr 3) 72
@@ -43,9 +43,9 @@ let f c (g,x,y,z,_,_,_,_,_,_) =
       let ms1 n r =
             let b = asLocalBufId 'α' [0,2,3.2,5,7,9,10] {- dorian scale -}
                 k = degreeToKey b (x * 25) 12 {- 12 notes per octave -}
-                o = sinOsc ar (midiCPS (r + k + n * y * 0.08)) 0 * 0.1
-                t = lfPulse ar (midiCPS (mce2 48 55)) 0 0.15
-                d = rlpf t (midiCPS (sinOsc kr 0.1 0 * 10 + r)) 0.1 * 0.1
+                o = sinOsc ar (midiCps (r + k + n * y * 0.08)) 0 * 0.1
+                t = lfPulse ar (midiCps (mce2 48 55)) 0 0.15
+                d = rlpf t (midiCps (sinOsc kr 0.1 0 * 10 + r)) 0.1 * 0.1
                 m = o + d
             in combN m 0.31 0.31 2 + m
           ms = ms1 (lfNoise1Id (c,'β') kr 3) 48 + ms1 (lfNoise1Id (c,'γ') kr 3) 72
@@ -55,9 +55,9 @@ in mix (eventVoicer 16 f) * control kr "gain" 1
 -- modal space (jmcc) #8 ; event control ; modeless
 let f _ (g,_,y,z,_,_,_,p,_,_) =
       let ms1 n r =
-            let o = sinOsc ar (midiCPS (p + r + n * y * 0.08)) 0 * 0.1
-                t = lfPulse ar (midiCPS (mce2 48 55)) 0 0.15
-                d = rlpf t (midiCPS (sinOsc kr 0.1 0 * 10 + r)) 0.1 * 0.1
+            let o = sinOsc ar (midiCps (p + r + n * y * 0.08)) 0 * 0.1
+                t = lfPulse ar (midiCps (mce2 48 55)) 0 0.15
+                d = rlpf t (midiCps (sinOsc kr 0.1 0 * 10 + r)) 0.1 * 0.1
                 m = o + d
             in combN m 0.31 0.31 2 + m
           ms = ms1 (lfNoise1 kr 3) 0 + ms1 (lfNoise1 kr 3) 24
@@ -67,9 +67,9 @@ in mix (eventVoicer 16 f) * control kr "gain" 1
 -- modal space (jmcc) #8 ; event control ; modeless ; id
 let f c (g,_,y,z,_,_,_,p,_,_) =
       let ms1 n r =
-            let o = sinOsc ar (midiCPS (p + r + n * y * 0.08)) 0 * 0.1
-                t = lfPulse ar (midiCPS (mce2 48 55)) 0 0.15
-                d = rlpf t (midiCPS (sinOsc kr 0.1 0 * 10 + r)) 0.1 * 0.1
+            let o = sinOsc ar (midiCps (p + r + n * y * 0.08)) 0 * 0.1
+                t = lfPulse ar (midiCps (mce2 48 55)) 0 0.15
+                d = rlpf t (midiCps (sinOsc kr 0.1 0 * 10 + r)) 0.1 * 0.1
                 m = o + d
             in combN m 0.31 0.31 2 + m
           ms = ms1 (lfNoise1Id (c,'β') kr 3) 0 + ms1 (lfNoise1Id (c,'γ') kr 3) 24

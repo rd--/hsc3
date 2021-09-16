@@ -13,9 +13,9 @@ let ratio1 = rand 0.49 1.11 -- 0.9
     env3 = mk_env [0, 1, 1, 0] [0.4, 0.3, dur]
     env2 = mk_env [0, 1, 1, 0] [0, 0.3, dur]
     env1 = mk_env [0, 1, 1, 0] [0.003, 0.3, dur - 0.5]
-    op3 = sinOsc ar (midiCPS (mnn) * ratio3) 0 * midiCPS (mnn) * ratio3 * index3 * env3
-    op2 = sinOsc ar (midiCPS (mnn) * ratio2 + op3) 0 * midiCPS (mnn) * ratio2 * index2 * env2
-    op1 = sinOsc ar (midiCPS (mnn) * ratio1 + op2) 0
+    op3 = sinOsc ar (midiCps mnn * ratio3) 0 * midiCps mnn * ratio3 * index3 * env3
+    op2 = sinOsc ar (midiCps mnn * ratio2 + op3) 0 * midiCps mnn * ratio2 * index2 * env2
+    op1 = sinOsc ar (midiCps mnn * ratio1 + op2) 0
 in splay (op1 * env1 * amp) 1 1 0 True
 
 -- or ; https://recarteblog.wordpress.com/2021/05/05/gongfm_sc ; id
@@ -33,9 +33,9 @@ let ratio1 = randId 'α' 0.49 1.11 -- 0.9
     env3 = mk_env [0, 1, 1, 0] [0.4, 0.3, dur]
     env2 = mk_env [0, 1, 1, 0] [0, 0.3, dur]
     env1 = mk_env [0, 1, 1, 0] [0.003, 0.3, dur - 0.5]
-    op3 = sinOsc ar (midiCPS (mnn) * ratio3) 0 * midiCPS (mnn) * ratio3 * index3 * env3
-    op2 = sinOsc ar (midiCPS (mnn) * ratio2 + op3) 0 * midiCPS (mnn) * ratio2 * index2 * env2
-    op1 = sinOsc ar (midiCPS (mnn) * ratio1 + op2) 0
+    op3 = sinOsc ar (midiCps mnn * ratio3) 0 * midiCps mnn * ratio3 * index3 * env3
+    op2 = sinOsc ar (midiCps mnn * ratio2 + op3) 0 * midiCps mnn * ratio2 * index2 * env2
+    op1 = sinOsc ar (midiCps mnn * ratio1 + op2) 0
 in splay (op1 * env1 * amp) 1 1 0 True
 
 -- or ; https://recarteblog.wordpress.com/2021/05/05/gongfm_sc ; event control
@@ -53,8 +53,8 @@ let f _ (g,x,y,z,o,rx,ry,_,_,_) =
           env3 = mk_env [0, 1, 1, 0] [0.4, 0.3, dur]
           env2 = mk_env [0, 1, 1, 0] [0, 0.3, dur]
           env1 = mk_env [0, 1, 1, 0] [0.003, 0.3, dur - 0.5]
-          op3 = sinOsc ar (midiCPS (mnn) * ratio3) 0 * midiCPS (mnn) * ratio3 * index3 * env3
-          op2 = sinOsc ar (midiCPS (mnn) * ratio2 + op3) 0 * midiCPS (mnn) * ratio2 * index2 * env2
-          op1 = sinOsc ar (midiCPS (mnn) * ratio1 + op2) 0
+          op3 = sinOsc ar (midiCps mnn * ratio3) 0 * midiCps mnn * ratio3 * index3 * env3
+          op2 = sinOsc ar (midiCps mnn * ratio2 + op3) 0 * midiCps mnn * ratio2 * index2 * env2
+          op1 = sinOsc ar (midiCps mnn * ratio1 + op2) 0
       in splay (op1 * env1 * amp) 1 1 0 True
 in mix (eventVoicer 16 f) * control kr "gain" 0.25

@@ -7,7 +7,7 @@ in X.miClouds ar 0 0 0 dens 0.5 1 1 0.5 0 0 0 (X.miClouds_mode "GRANULAR") 0 0 i
 
 -- MiClouds
 let imp = dustId 'α' ar (mce2 0.8 1.1)
-    freq = midiCPS (latch (pinkNoiseId 'β' ar * 24 + 80) imp)
+    freq = midiCps (latch (pinkNoiseId 'β' ar * 24 + 80) imp)
     input = rlpf imp freq 0.002 * 4
     pit = lfNoise1Id 'γ' kr 0.3 * 12
     pos = lfNoise2Id 'δ' kr 0.4 * 0.5 + 0.5

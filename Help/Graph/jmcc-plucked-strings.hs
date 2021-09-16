@@ -1,5 +1,5 @@
 -- plucked strings (jmcc)
-let dt _ = 1 / midiCPS (floorE (rand 60 90))
+let dt _ = 1 / midiCps (floorE (rand 60 90))
     i _ = let s0 = impulse ar (rand 2 2.2) 0 * 0.3
               s1 = dust ar 0.5 * 0.3
               s2 = impulse ar (sinOsc kr (rand 0.05 0.15) (rand 0 (pi * 2)) * 5 + 5.2) 0 * 0.3
@@ -12,7 +12,7 @@ in mixFill 5 s
 -- plucked strings (jmcc) ; monad
 uid_st_eval (do
   let dt = do r0 <- randM 60 90
-              return (1 / midiCPS (floorE r0))
+              return (1 / midiCps (floorE r0))
       i = do r0 <- randM 2 2.2
              n0 <- dustM ar 0.5
              r1 <- randM 0.05 0.15

@@ -54,7 +54,7 @@ let nv = 32 -- 221
     reset_ = 0
     data_ = 0
     vc = tRandId 'β' 0 (nv - 1) tr
-    mnn = tRandId 'γ' 56.5 57.5 tr -- FRACTIONAL MIDI NOTE NUMBER -- 60 61
+    mnn = tRandId 'γ' 56.5 57.5 tr -- fractional midi note number -- 60 61
     vel = tRandId 'δ' 10 29 tr
     loc = tRandId 'ε' (-1) 1 tr
 in pan2 (X.rdx7 ar buf gate_ reset_ data_ vc mnn vel 0x2000 0 0 0) loc 1

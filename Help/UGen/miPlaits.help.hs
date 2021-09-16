@@ -79,7 +79,7 @@ let trigger = dustId 'α' kr (range_hs (0.1,7) (lfNoise2Id 'β' kr 0.1))
     morph = lfTri kr 0.11 0 * 0.5 + 0.5
     pitch_ = tiRandId 'γ' 24 48 trigger
     engine = roundE (tRandId 'δ' 0 15 trigger)
-    sub = sinOsc ar (midiCPS pitch_) 0 * 0.1
+    sub = sinOsc ar (midiCps pitch_) 0 * 0.1
     mi = X.miPlaits ar pitch_ engine harmonics timbre morph trigger 0 0 0 0 0.8 0.2 * 0.5
 in (mi + sub) * 0.2
 

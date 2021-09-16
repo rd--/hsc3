@@ -5,4 +5,4 @@ in sinOsc ar f 0 * 0.1
 
 -- roundUp
 let n = line kr 24 108 6 RemoveSynth
-in saw ar (midiCPS (roundUp n 1)) * 0.2
+in saw ar (midiCps (roundUp n 1)) * 0.2

@@ -9,7 +9,7 @@ let f = lfTri kr 0.4 (mce [0..3]) * 200 + 400
 in mix (lfTri ar f 0 * 0.1)
 
 -- lfTri ; mouse control
-let x = midiCPS (mouseX kr 20 72 Linear 0.2)
+let x = midiCps (mouseX kr 20 72 Linear 0.2)
     e = xLine kr 0.01 1 20 DoNothing
     o1 = triAS 25 x * (1 - e)
     o2 = lfTri ar x 0 * e

@@ -20,7 +20,7 @@ mce2 (pulse ar 100 0.3) (lfPulse ar 100 0 0.3) * 0.1
 let mk_freq f0 n = f0 * fromInteger n
     mk_amp n = if even n then 0 else 1 / fromInteger n
     mk_param f0 n = let m = [1,3 .. n] in zip (map (mk_freq f0) m) (map mk_amp m)
-    x = midiCPS (mouseX kr 20 72 Linear 0.2)
+    x = midiCps (mouseX kr 20 72 Linear 0.2)
     y = mouseY kr 0.01 0.1 Exponential 0.2
     e = xLine kr 0.01 1 20 DoNothing -- xfade
     o1 = sum (map (\(fr,am) -> sinOsc ar fr 0 * am) (mk_param x 50)) * (1 - e)

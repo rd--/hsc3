@@ -9,6 +9,6 @@ let f _ (g,_,y,z,o,_,_,p,px,_) =
             let shp = let cv = EnvNum (-4.5)
                       in envPerc_c 0.005 ((y + 1) * 6 * durs!!i) (amps!!i) (cv,cv)
                 env = envGen ar g (latch z g) 0 1 DoNothing shp
-            in sinOsc ar (midiCPS (p + px) * frqs!!i + dets!!i) 0 * env * g
+            in sinOsc ar (midiCps (p + px) * frqs!!i + dets!!i) 0 * env * g
       in pan2 (mixFill 11 fn) (o * 2 - 1) 1
 in mix (eventVoicer 16 f) * control kr "gain" 0.75

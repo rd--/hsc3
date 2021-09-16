@@ -8,7 +8,7 @@
 > g_02 =
 >   let g = lfPulse kr 0.25 0 0.5
 >       u = stkBowedR
->         {freq = midiCPS (randId 'α' 24 96)
+>         {freq = midiCps (randId 'α' 24 96)
 >         ,bowpressure = randId 'β' 0 127
 >         ,bowposition = randId 'γ' 0 127
 >         ,vibfreq = randId 'δ' 32 96

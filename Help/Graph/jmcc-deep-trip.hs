@@ -1,5 +1,5 @@
 -- deep trip (jmcc) #9 ; texture=overlap,4,12,4,inf
-let f = midiCPS (lfNoise1 kr (rand 0 0.3) * 60 + 70)
+let f = midiCps (lfNoise1 kr (rand 0 0.3) * 60 + 70)
     a'' = sinOsc kr (rand 0 40) 0 * 0.1
     a' = max 0 (lfNoise1 kr (rand 0 8) * a'')
     a = lfNoise2 ar (f * rand 0 0.5) * a'
@@ -10,7 +10,7 @@ let f = midiCPS (lfNoise1 kr (rand 0 0.3) * 60 + 70)
 in s + c0 + c1
 
 -- deep trip (jmcc) #9 ; texture=overlap,4,12,4,inf ; id
-let f = midiCPS (lfNoise1Id 'α' kr (randId 'β' 0 0.3) * 60 + 70)
+let f = midiCps (lfNoise1Id 'α' kr (randId 'β' 0 0.3) * 60 + 70)
     a'' = sinOsc kr (randId 'γ' 0 40) 0 * 0.1
     a' = max 0 (lfNoise1Id 'δ' kr (randId 'ε' 0 8) * a'')
     a = lfNoise2Id 'ζ' ar (f * randId 'η' 0 0.5) * a'

@@ -1,7 +1,7 @@
 -- stkMandolin
 let x = mouseX kr 0.25 16 Linear 0.2
     tr = impulse kr x 0 - 0.5
-    freq = midiCPS (tiRandId 'α' 32 96 tr)
+    freq = midiCps (tiRandId 'α' 32 96 tr)
     bodysize = tRandId 'β' 0 127 tr
     pickposition = tRandId 'γ' 0 127 tr
     stringdamping = tRandId 'δ' 0 127 tr
@@ -14,7 +14,7 @@ in pan2 m (tRandId 'η' (-1) 1 tr) 0.5
 let x = mouseX kr 3 16 Linear 0.2
     tr = impulse kr x 0 - 0.5 -- trig
     tr3 = pulseDivider tr 3 0
-    freq = midiCPS (tiRandId 'α' 54 66 tr)
+    freq = midiCps (tiRandId 'α' 54 66 tr)
     bodysize = tRandId 'β' 72 94 tr3
     pickposition = tRandId 'γ' 32 42 tr3
     stringdamping = tRandId 'δ' 64 72 tr3

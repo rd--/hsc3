@@ -32,7 +32,7 @@ in mix (eventVoicer 16 f) * control kr "gain" 1
 
 -- sos
 let f _ (w,x,y,z,o,_,_,_,_,_) =
-      let freq = midiCPS (x * 25 + 48)
+      let freq = midiCps (x * 25 + 48)
           rq = 0.002 + (y * 0.004)
           b1 = 1.987 * 0.9889999999 * cos 0.09
           b2 = -0.998057

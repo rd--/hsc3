@@ -45,16 +45,16 @@ let f = mouseX kr 220 880 Exponential 0.1
 in sin x * 0.1
 
 -- phasor ; as saw
-let f0 = midiCPS (mouseX kr 36 96 Linear 0.2)
+let f0 = midiCps (mouseX kr 36 96 Linear 0.2)
 in phasor ar 0 (f0 * sampleDur) (-1) 1 0 * 0.1
 
 -- phasor ; as sinOsc
-let f0 = midiCPS (mouseX kr 36 96 Linear 0.2)
+let f0 = midiCps (mouseX kr 36 96 Linear 0.2)
     ph = phasor ar 0 (f0 * sampleDur) 0 1 0 * two_pi
 in sin ph * 0.1
 
 -- phasor ; as sinOsc, but with precision issues
-let f0 = midiCPS (mouseX kr 36 96 Linear 0.2)
+let f0 = midiCps (mouseX kr 36 96 Linear 0.2)
     ph = phasor ar (impulse ar f0 0) (f0 * sampleDur) 0 1 0 * two_pi
 in sin ph * 0.1
 

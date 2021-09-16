@@ -17,7 +17,7 @@ in splay (leakDC sig 0.995) 0.25 1 (tRandId 'θ' (-1) 1 tr) True
 -- rongs ; event control
 let f _ (g,x,y,z,o,rx,ry,_,_,_) =
       let tr = trig1 g controlDur
-          f0 = midiCPS (x * 88 + 20)
+          f0 = midiCps (x * 88 + 20)
           structure = 0.5 + ry * tRandId 'α' (-1) 1 tr
           brightness = 0.5 + rx * tRandId 'β' (-1) 1 tr
           damping = y * 0.25

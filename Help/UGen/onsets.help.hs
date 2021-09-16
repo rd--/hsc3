@@ -3,11 +3,11 @@ let x = mouseX kr 0 1 Linear 0.2
     i = mix (soundIn (mce2 0 1))
     c = fft' (localBufId 'γ' 1 512) i
     o = onsetsDefault c x (onsetType "rcomplex")
-in sinOsc ar (midiCPS (tiRandId 'a' 40 72 o)) 0 * 0.1
+in sinOsc ar (midiCps (tiRandId 'a' 40 72 o)) 0 * 0.1
 
 -- onsets ; generative signal with distinct onsets ; x varies threshold ; detector triggers noise
 let e = linLin (saw ar 2) (-1) 1 0 1
-    p = let f = midiCPS (tiRandId 'α' 63 75 (impulse kr 2 0)) in pulse ar f 0.5 * 0.1
+    p = let f = midiCps (tiRandId 'α' 63 75 (impulse kr 2 0)) in pulse ar f 0.5 * 0.1
     f = linExp (lfNoise2Id 'β' kr 0.5) (-1) 1 100 10000
     z = lpf p f * e
     c = fft' (localBufId 'γ' 1 512) z

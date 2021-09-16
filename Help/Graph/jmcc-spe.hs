@@ -5,8 +5,8 @@ let rapf i = allpassN i 0.05 (X.rRandN 2 0 0.05) 4
               s = mce [00,03,02,07
                       ,08,32,16,18
                       ,00,12,24,32]
-              f = midiCPS (demand t 0 (dseq dinf s) + 32)
-              rq = midiCPS (lfNoise1 kr 1 * 36 + 110)
+              f = midiCps (demand t 0 (dseq dinf s) + 32)
+              rq = midiCps (lfNoise1 kr 1 * 36 + 110)
           in rlpf (lfSaw ar f 0 * e) rq 0.1
 in iter 4 rapf src
 
@@ -21,8 +21,8 @@ uid_st_eval (do
                            ,00,12,24,32]
                n <- lfNoise1M kr 1
                m <- dseqM dinf s
-               let f = midiCPS (demand t 0 m + 32)
+               let f = midiCps (demand t 0 m + 32)
                    o = lfSaw ar f 0 * e
-                   rq = midiCPS (n * 36 + 110)
+                   rq = midiCps (n * 36 + 110)
                return (rlpf o rq 0.1)
   chainM 4 rapf =<< src)

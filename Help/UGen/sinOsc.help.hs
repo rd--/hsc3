@@ -1,8 +1,8 @@
 -- sinOsc ; fixed frequency (hz) and initial-phase (radians)
-sinOsc ar (midiCPS 69) 0 * 0.1 -- 415 440
+sinOsc ar (midiCps 69) 0 * 0.1 -- 415 440
 
 -- sinOsc ; control input for frequency ; ie. withSC3 (Sound.OSC.sendMessage (n_set1 (-1) "mnn" 64))
-sinOsc ar (midiCPS (control kr "mnn" 69)) 0 * 0.25
+sinOsc ar (midiCps (control kr "mnn" 69)) 0 * 0.25
 
 -- sinOsc ; modulate freq
 sinOsc ar (xLine kr 2000 200 1 RemoveSynth) 0 * 0.5
@@ -104,7 +104,7 @@ in sinOsc ar ((f0 * cR) + (sinOsc ar (f0 * mR) 0 * mI * (f0 * mR))) 0 * 0.1
 let f c (g,_,_,z,o,rx,_,p,_,_) =
       let freq_mod = sinOsc kr (tRand 0.02 0.06 g) 0 * tRand 0.1 2 g
           amp_mod = sinOsc kr (tRand 1 3 g / 60) 0 `in_range` (0.2, 0.5)
-          s = sinOsc ar (lag (midiCPS p) (rx * 2) + freq_mod) (tRand 0 (2 * pi) g)
+          s = sinOsc ar (lag (midiCps p) (rx * 2) + freq_mod) (tRand 0 (2 * pi) g)
           l = sinOsc kr o (tRand 0 pi g) * tRand 0.1 0.99 g
       in pan2 s l (lagUD g 0 1 * z * amp_mod)
 in mix (eventVoicer 16 f) * control kr "gain" 1.5
@@ -113,7 +113,7 @@ in mix (eventVoicer 16 f) * control kr "gain" 1.5
 let f c (g,_,_,z,o,rx,_,p,_,_) =
       let freq_mod = sinOsc kr (tRandId (c,'α') 0.02 0.06 g) 0 * tRandId (c,'β') 0.1 2 g
           amp_mod = sinOsc kr (tRandId (c,'γ') 1 3 g / 60) 0 `in_range` (0.2, 0.5)
-          s = sinOsc ar (lag (midiCPS p) (rx * 2) + freq_mod) (tRandId (c,'δ') 0 (2 * pi) g)
+          s = sinOsc ar (lag (midiCps p) (rx * 2) + freq_mod) (tRandId (c,'δ') 0 (2 * pi) g)
           l = sinOsc kr o (tRandId (c,'ε') 0 pi g) * tRandId (c,'ζ') 0.1 0.99 g
       in pan2 s l (lagUD g 0 1 * z * amp_mod)
 in mix (eventVoicer 16 f) * control kr "gain" 1.5
@@ -121,7 +121,7 @@ in mix (eventVoicer 16 f) * control kr "gain" 1.5
 -- sinOsc ; control_m inputs
 let f = control_m kr "mnn" 69 (0,127,"lin")
     a = control_m kr "amp" 0.25 (0,1,"amp")
-in sinOsc ar (midiCPS f) 0 * a
+in sinOsc ar (midiCps f) 0 * a
 
 -- sinOsc ; ln 2021-04-05 https://lukasnowok.github.io/spectrology/
 let geom k z m = mce (take k (iterate (* m) z))
@@ -146,7 +146,7 @@ let mratio = 4
     boost = 2
     tr = impulse ar (lfNoise2 kr 1 `in_exprange` (1, 100)) 0
     envgen x = let c = EnvNum (-8) in envGen ar tr 1 0 1 DoNothing (envPerc_c 0.0001 x 1 (c,c))
-    freq = (midiCPS 60.5 / 16) * (linExp (envgen 0.4) 0 1 1 40)
+    freq = (midiCps 60.5 / 16) * (linExp (envgen 0.4) 0 1 1 40)
     ix = mouseY kr 0 2 Linear 0.1
     sig = sinOsc ar freq (sinOsc ar (freq * mratio) 0 * ix)
 in tanh (pan2 sig 0 boost) * envgen 1 * amp
@@ -154,4 +154,4 @@ in tanh (pan2 sig 0 boost) * envgen 1 * amp
 ---- ; drawings
 UI.ui_baudline (4096 * 1) 50 "linear" 2
 Sound.SC3.Plot.plot_ugen_nrt (48000,64) 1.0 (sinOsc ar 1 0)
-(midiCPS 60.5 / 16)
+(midiCps 60.5 / 16)

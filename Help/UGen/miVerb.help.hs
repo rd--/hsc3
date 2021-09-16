@@ -3,7 +3,7 @@ X.miVerb 0.7 0.5 0.5 0.05 0 0.625 (impulse ar 1 0)
 
 -- MiVerb ; stereo ; with freezing
 let imp = dustId 'α' ar (mce2 0.7 0.8)
-    freq = midiCPS (latch (pinkNoiseId 'β' ar * 24 + 80) imp)
+    freq = midiCps (latch (pinkNoiseId 'β' ar * 24 + 80) imp)
     input = rlpf imp freq 0.002 * 3
     freez = tRandId 'γ' (-1) 1 (dustId 'δ' kr 0.7)
     revtime = 0.8
