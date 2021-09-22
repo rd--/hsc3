@@ -465,16 +465,16 @@ dbufrd = liftUnsafe3 dbufrdM
 
 -- | Buffer write demand ugen
 --
---  Dbufwr [DemandRate] bufnum=0 phase=0 loop=1 input=0;    REORDERS INPUTS: [3,0,1,2], ENUMERATION INPUTS: 3=Loop, DEMAND/NONDET
+--  Dbufwr [DemandRate] bufnum=0 phase=0 input=0 loop=1;    REORDERS INPUTS: [2,0,1,3], ENUMERATION INPUTS: 3=Loop, DEMAND/NONDET
 dbufwrId :: ID a => a -> UGen -> UGen -> UGen -> Loop UGen -> UGen
-dbufwrId z bufnum phase loop input = mkUGen Nothing [DemandRate] (Left DemandRate) "Dbufwr" [bufnum,phase,loop,(from_loop input)] Nothing 1 (Special 0) (toUId z)
+dbufwrId z bufnum phase input loop = mkUGen Nothing [DemandRate] (Left DemandRate) "Dbufwr" [bufnum,phase,input,(from_loop loop)] Nothing 1 (Special 0) (toUId z)
 
 -- | Monad variant of Dbufwr.
 dbufwrM :: UId m => UGen -> UGen -> UGen -> Loop UGen -> m UGen
 dbufwrM = liftUId4 dbufwrId
 
 -- | Unsafe variant of Dbufwr.
-dbufwr ::  UGen -> UGen -> UGen -> Loop UGen -> UGen
+dbufwr :: UGen -> UGen -> UGen -> Loop UGen -> UGen
 dbufwr = liftUnsafe4 dbufwrM
 
 -- | Constrain a demand-rate stream to a given sum

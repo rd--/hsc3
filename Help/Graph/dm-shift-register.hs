@@ -12,7 +12,7 @@ let shift_register_f n tr x =
     tr1 = trig1 (cuspL ar (rt * 3) 1 1.9 0.0) 0.001
     tr4 = pulseDivider tr1 4 0
     oct = demand tr4 0 (drand dinf (mce [12,-12]))
-    note = demand tr1 0 (dseq dinf (mceMap (+ trs) (mce [42,46,51,54,59,63,66])) + oct) -- scramble
+    note = demand tr1 0 (dseq dinf (mce [42,46,51,54,59,63,66] + oct + trs)) -- scramble
     chord = shift_register_f 5 tr1 (midiCps note)
     sig = pmOsc ar
           (vibrato ar chord 6 0.02 0 0 0.04 0.1 0.0 0.0)

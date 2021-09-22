@@ -99,20 +99,20 @@
 (defun hsc3-ugen-default-param ()
   "Insert the default UGen parameters (arguments) for the UGen before <point>."
   (interactive)
-  (let ((p (format "hsc3-help ugen-default-param %s" (thing-at-point 'symbol))))
+  (let ((p (format "hsc3-help ugen exemplar hs %s" (thing-at-point 'symbol))))
     (insert " ")
     (insert (hsc3-remove-trailing-newline (shell-command-to-string p)))))
 
 (defun hsc3-ugen-control-param ()
   "Insert control UGen parameters (arguments) for the UGen before <point>."
   (interactive)
-  (let ((p (format "hsc3-help ugen-control-param %s" (thing-at-point 'symbol))))
+  (let ((p (format "hsc3-help ugen exemplar hs/control %s" (thing-at-point 'symbol))))
     (insert (hsc3-remove-trailing-newline (shell-command-to-string p)))))
 
 (defun hsc3-ugen-control-param-let ()
   "Insert control UGen parameters (arguments) for the UGen before <point>."
   (interactive)
-  (let ((p (format "hsc3-help ugen-control-param-let %s" (thing-at-point 'symbol))))
+  (let ((p (format "hsc3-help ugen exemplar hs/control/let %s" (thing-at-point 'symbol))))
     (insert (hsc3-remove-trailing-newline (shell-command-to-string p)))))
 
 (defun hsc3-remove-trailing-newline (s)
@@ -387,9 +387,9 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
          (set-window-point window (point-max)))))))
 
 (defun hsc3-ugen-smalltalk ()
-  "Insert hcs3-help ugen-smalltalk of thing-at-point"
+  "Insert Smalltalk UGen exemplar"
   (interactive)
-  (insert (shell-command-to-string (concat "hsc3-help ugen-smalltalk " (thing-at-point 'symbol)))))
+  (insert (shell-command-to-string (concat "hsc3-help ugen exemplar st " (thing-at-point 'symbol)))))
 
 (defvar hsc3-mode-map nil
   "Haskell SuperCollider keymap.")

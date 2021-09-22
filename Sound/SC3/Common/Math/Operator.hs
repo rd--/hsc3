@@ -54,9 +54,9 @@ data SC3_Unary_Op
             | AmpDb
             | OctCps
             | CpsOct
-            | Log -- 25
-            | Log2
-            | Log10
+            | Log -- 25 (natural, base e)
+            | Log2 -- 26 (base 2)
+            | Log10 -- 27 (base 10)
             | Sin -- 28
             | Cos -- 29
             | Tan -- 30

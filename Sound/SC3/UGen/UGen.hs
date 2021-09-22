@@ -197,6 +197,14 @@ mceConcat = mce . concatMap mceChannels
 mceClump :: Int -> UGen -> UGen
 mceClump k = mce . map mce . Split.chunksOf k . mceChannels
 
+-- | Foldl1 at channels of mce.
+mceReduce :: (UGen -> UGen -> UGen) -> UGen -> UGen
+mceReduce f = foldl1 f . mceChannels
+
+-- | mceReduce of *.
+mceProduct :: UGen -> UGen
+mceProduct = mceReduce (*)
+
 -- * Transform
 
 -- | Given /unmce/ function make halt mce transform.

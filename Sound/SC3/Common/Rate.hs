@@ -4,18 +4,21 @@ module Sound.SC3.Common.Rate where
 import Data.Char {- base -}
 import Data.Maybe {- base -}
 
--- | Operating rate of unit generator.
---   I = initialisation, K = control, A = audio, D = demand.
---
--- > Data.List.sort [dr,ar,kr,ir] == [ir,kr,ar,dr]
+-- | Enumeration of operating rates of unit generators.
 data Rate = InitialisationRate | ControlRate | AudioRate | DemandRate
             deriving (Eq,Ord,Enum,Bounded,Show,Read)
 
+{- | Standard abbreviations of Rate values.
+     ir = initialisation, kr = control, ar = audio, dr = demand.
+     dr sorts to the right of the fixed clock rates.
+
+> Data.List.sort [dr,ar,kr,ir] == [ir,kr,ar,dr]
+-}
 ir, kr, ar, dr :: Rate
 ir = InitialisationRate
 kr = ControlRate
 ar = AudioRate
-dr =DemandRate
+dr = DemandRate
 
 {- | Standard SuperCollider rate abbreviations.
 
