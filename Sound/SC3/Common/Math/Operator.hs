@@ -43,7 +43,7 @@ data SC3_Unary_Op
             | Sign
             | Squared
             | Cubed
-            | Sqrt
+            | Sqrt -- 14
             | Exp -- 15
             | Recip -- 16
             | MidiCps -- 17
