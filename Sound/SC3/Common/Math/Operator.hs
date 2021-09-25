@@ -72,7 +72,7 @@ data SC3_Unary_Op
             | BiLinRand -- 40
             | Sum3Rand
             | Distort -- 42
-            | SoftClip
+            | SoftClip -- 43
             | Coin
             | DigitValue
             | Silence
@@ -153,7 +153,7 @@ data SC3_Binary_Op
             | GCD -- 18
             | Round -- 19
             | RoundUp -- 20
-            | Trunc
+            | Trunc -- 21
             | Atan2
             | Hypot
             | Hypotx
