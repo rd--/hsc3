@@ -313,13 +313,18 @@ unsignedShift = mkBinaryOperator Operator.UnsignedShift undefined
 
 -- * Rate Flow
 
--- | Traverse graph rewriting audio rate nodes as control rate.
+{- | Traverse graph rewriting audio rate nodes as control rate.
+     In the Circuit model rate information is stored not only at Primitive but also at Proxy and Mce and Mrg
+-}
 rewriteUGenRates :: (Rate.Rate -> Bool) -> Rate.Rate -> UGen -> UGen
 rewriteUGenRates sel_f set_rt =
   let f u = case u of
-              UGen (CPrimitive p) ->
-                let Primitive rt nm i o s z = p
-                in UGen (CPrimitive (if sel_f rt then Primitive set_rt nm i o s z else p))
+              UGen (CPrimitive (Primitive rt nm i o s z)) ->
+                UGen (CPrimitive (Primitive (if sel_f rt then set_rt else rt) nm i o s z))
+              UGen (CProxy (Proxy src ix rt)) ->
+                UGen (CProxy (Proxy src ix (if sel_f rt then set_rt else rt)))
+              UGen (CMce m rt) -> UGen (CMce m (if sel_f rt then set_rt else rt))
+              UGen (CMrg m rt) -> UGen (CMrg m (if sel_f rt then set_rt else rt))
               _ -> u
   in ugenTraverse (const False) f -- requires endRewrite node (see rsc3-arf)
 

@@ -121,7 +121,9 @@ data Primitive t =
             ,ugenId :: UGenId}
   deriving (Ord, Eq, Read, Show)
 
--- | Proxy indicating an output port at a multi-channel primitive.
+{- | Proxy indicating an output port at a multi-channel primitive.
+     The Circuit model requires storing the rate because the proxySource has type t (not Primitive)
+-}
 data Proxy t =
   Proxy {proxySource :: t
         ,proxyIndex :: Int
@@ -140,7 +142,10 @@ data CVarTy = CVarInit | CVarControl | CVarTrigger deriving (Eq,Read,Show)
 CVar CVarTy String Double -- ^ Control input (named)
 -}
 
--- | Circuit
+{- | Circuit
+     This model requires caching rate values at Proxy and Mce and Mrg.
+     This makes rate-rewriting code more intricate
+-}
 data Circuit t
   = CConstant Constant
   | CControl Control
