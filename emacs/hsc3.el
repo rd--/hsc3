@@ -1,3 +1,7 @@
+;;; hsc3.el --- Haskell SuperCollider
+
+;;; Commentary:
+
 ;; Indentation and font locking is courtesy `haskell' mode (debian=haskell-mode).
 ;; Inter-process communication is courtesy `comint'.
 ;; Symbol at point acquisition is courtesy `thingatpt'.
@@ -8,24 +12,30 @@
 (require 'thingatpt)
 (require 'find-lisp)
 
+;;; Code:
+
 (defcustom hsc3-buffer "*hsc3*"
-  "*The name of the hsc3 haskell process buffer."
+  "The name of the hsc3 haskell process buffer."
   :type 'string)
 
 (defvar hsc3-interpreter (list "ghci")
-  "*The name of the haskell interpreter (default=\"ghci\").")
+  "The name of the haskell interpreter (default=\"ghci\").")
 
 (defvar hsc3-directory nil
-  "*The hsc3 directory (default=nil).")
+  "The hsc3 directory (default=nil).")
 
 (defvar sc3-help-directory nil
-  "*The directory containing the SC3 RTF help files (default=nil).")
+  "The directory containing the SC3 RTF help files (default=nil).
+
+These can be fetched from the SuperCollider archives by typing:
+
+git checkout 2495f4f61c0955001169d28142543aabbe1bedcb build/old_rtf_help.tar.gz")
 
 (defvar hsc3-auto-import-modules nil
-  "*Flag to decide if the hsc3 standard module set is imported on startup (default=nil).")
+  "Flag to decide if the hsc3 standard module set is imported on startup (default=nil).")
 
 (defun hsc3-chunk-string (n s)
-  "Split a string into chunks of 'n' characters."
+  "Split the string S into chunks of N characters."
   (let* ((l (length s))
          (m (min l n))
          (c (substring s 0 m)))
@@ -34,26 +44,27 @@
       (cons c (hsc3-chunk-string n (substring s n))))))
 
 (defun hsc3-send-line (s)
-  "Send string, with newline appended, to haskell."
+  "Send the string S, with newline appended, to haskell."
   (if (comint-check-proc hsc3-buffer)
       (let ((cs (hsc3-chunk-string 64 (concat s "\n"))))
         (mapcar
          (lambda (c) (comint-send-string hsc3-buffer c))
          cs))
-    (error "no hsc3 process?")))
+    (error "No hsc3 process?")))
 
 (defun hsc3-send-layout-block (s)
-  "Send string to haskell using ghci layout block notation."
+  "Send the string S to haskell using ghci layout block notation."
   (hsc3-send-line (mapconcat 'identity (list ":{" s ":}") "\n")))
 
 (defun hsc3-send-text (str)
-  "If text spans multiple lines `hsc3-send-layout-block' else `hsc3-send-line'."
+  "If the string STR spans multiple lines `hsc3-send-layout-block' else `hsc3-send-line'."
   (if (string-match "\n" str)
       (hsc3-send-layout-block str)
     (hsc3-send-line str)))
 
 (defun hsc3-send-text-fn (fn str)
-  "Send text with fn prefixed."
+  "Send string STR with haskell function FN applied using the $ operator.
+If STR has a newline the layout is adjusted accordingly."
   (hsc3-send-text (if (string-match "\n" str) (concat fn " $\n" str) (concat fn " $ " str))))
 
 (defun hsc3-send-quit ()
@@ -62,10 +73,11 @@
   (hsc3-send-line ":quit"))
 
 (defun hsc3-uncomment (s)
-  "Remove initial comment and Bird-literate markers if present."
+  "Remove initial comment and Bird-literate markers from the string S if present."
    (replace-regexp-in-string "^[- ]*[> ]*" "" s))
 
 (defun hsc3-find-files (dir rgx)
+  "Find files at DIR matching RGX."
   (mapc (lambda (filename)
           (find-file-other-window filename))
         (find-lisp-find-files dir rgx)))
@@ -115,9 +127,9 @@
   (let ((p (format "hsc3-help ugen exemplar hs/control/let %s" (thing-at-point 'symbol))))
     (insert (hsc3-remove-trailing-newline (shell-command-to-string p)))))
 
-(defun hsc3-remove-trailing-newline (s)
-  "Delete trailing newlines from string."
-  (replace-regexp-in-string "\n\\'" "" s))
+(defun hsc3-remove-trailing-newline (str)
+  "Delete trailing newlines from STR."
+  (replace-regexp-in-string "\n\\'" "" str))
 
 (defun hsc3-cd ()
   "Change directory at ghci to current value of 'default-directory'."
@@ -157,11 +169,11 @@
   (hsc3-send-text (hsc3-region-string)))
 
 (defun hsc3-send-region-fn (fn)
-  "Send region text with haskell function to be applied."
+  "Send region text with haskell function FN to be applied."
   (hsc3-send-text-fn fn (hsc3-region-string)))
 
 (defun hsc3-play-region (k)
-  "Play region at scsynth.  The (one-indexed) prefix agument indicates which server to send to."
+  "Play region at scsynth.  The (one-indexed) prefix agument K indicates which server to send to."
   (interactive "p")
   (hsc3-send-region-fn
    (format
@@ -203,12 +215,12 @@
     (hsc3-send-region-fn "Sound.SC3.UI.HTML.ugen_graph_pp_html_wv")))
 
 (defun hsc3-pp-forth ()
-  "Forth PP"
+  "Forth PP."
   (interactive)
   (hsc3-send-region-fn "Sound.SC3.UGen.DB.PP.ugen_graph_forth_pp (False,False)"))
 
 (defun hsc3-pp-smalltalk ()
-  "Pretty print UGen as Smalltalk"
+  "Pretty print UGen as Smalltalk."
   (interactive)
   (hsc3-send-region-fn "Sound.SC3.UGen.DB.PP.Graph.ugen_graph_smalltalk_pp"))
 
@@ -228,15 +240,15 @@
   (shell-command-on-region (region-beginning) (region-end) "hsc3-rw uparam expand" nil t))
 
 (defcustom hsc3-server-host "127.0.0.1"
-  "The host that scsynth is listening at"
+  "The host that scsynth is listening at."
   :type 'string)
 
 (defcustom hsc3-server-port 57110
-  "The port that scsynth is listening at"
+  "The port that scsynth is listening at."
   :type 'integer)
 
 (defun hsc3-with-sc3 (txt)
-  "withSC3 at `hsc3-server-host' and `hsc3-server-port'"
+  "Sound.SC3.withSC3 at `hsc3-server-host' and `hsc3-server-port' of the string TXT."
   (hsc3-send-line
    (format "Sound.SC3.withSC3At (\"%s\",%d) %s" hsc3-server-host hsc3-server-port txt)))
 
@@ -281,12 +293,12 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (hsc3-with-sc3 "Sound.SC3.serverStatus >>= mapM putStrLn"))
 
 (defun hsc3-quit-scsynth ()
-  "Quit"
+  "Quit."
   (interactive)
   (hsc3-with-sc3 "(Sound.OSC.sendMessage Sound.SC3.quit)"))
 
 (defcustom hsc3-seq-degree 2
-  "*Number of scsynth processes to address at -seq operations (default=2)."
+  "Number of scsynth processes to address at -seq operations (default=2)."
   :type 'integer)
 
 (defun hsc3-server-status-seq ()
@@ -298,7 +310,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
     hsc3-server-host hsc3-server-port hsc3-seq-degree)))
 
 (defun hsc3-play-region-seq ()
-  "hsc3-play-region-opt with auditionAtSeq hsc3-seq-degree."
+  "Sound.SC3.auditionAtSeq of `hsc3-seq-degree'."
   (interactive)
   (hsc3-send-region-fn
    (format
@@ -314,37 +326,41 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
     hsc3-server-host hsc3-server-port hsc3-seq-degree)))
 
 (defun hsc3-dmenu-ugen-core ()
-  "dmenu of categorised core SC3 UGens"
+  "Run dmenu to select a core SC3 UGen."
   (interactive)
   (insert (shell-command-to-string "hsc3-db dmenu ugen core")))
 
 (defun hsc3-dmenu-ugen-ext ()
-  "dmenu of categorised external SC3 UGens"
+  "Run dmenu to select an external SC3 UGen."
   (interactive)
   (insert (shell-command-to-string "hsc3-db dmenu ugen external")))
 
 (defun hsc3-dmenu-ugen-all ()
-  "dmenu of all categorised SC3 UGens"
+  "Run dmenu to select an SC3 UGen."
   (interactive)
   (insert (shell-command-to-string "hsc3-db dmenu ugen all")))
 
 (defun hsc3-xmenu-ugen-core ()
-  "xmenu of categorised core SC3 UGens"
+  "Run xmenu to select a core SC3 UGen."
   (interactive)
   (insert (shell-command-to-string "hsc3-db xmenu core")))
 
 (defun hsc3-xmenu-ugen-ext ()
-  "xmenu of categorised external SC3 UGens"
+  "Run xmenu to select an external SC3 UGen."
   (interactive)
   (insert (shell-command-to-string "hsc3-db xmenu external")))
 
 (defun hsc3-xmenu-ugen-all ()
-  "xmenu of categorised core and external SC3 UGens."
+  "Run xmenu to select an SC3 UGen."
   (interactive)
-  (insert (shell-command-to-string "cat ~/sw/hsc3-db/lib/xmenu/ugen-core-tree.text ~/sw/hsc3-db/lib/xmenu/nil.text ~/sw/hsc3-db/lib/xmenu/ugen-ext-tree.text | xmenu")))
+  (insert
+   (shell-command-to-string
+    "cat ~/sw/hsc3-db/lib/xmenu/ugen-core-tree.text \
+         ~/sw/hsc3-db/lib/xmenu/nil.text \
+         ~/sw/hsc3-db/lib/xmenu/ugen-ext-tree.text | xmenu")))
 
 (defun hsc3-load-file (fn)
-  "Load named file as string"
+  "Load file FN as string."
   (with-temp-buffer
     (insert-file-contents fn)
     (buffer-substring-no-properties
@@ -387,7 +403,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
          (set-window-point window (point-max)))))))
 
 (defun hsc3-ugen-smalltalk ()
-  "Insert Smalltalk UGen exemplar"
+  "Insert Smalltalk UGen exemplar."
   (interactive)
   (insert (shell-command-to-string (concat "hsc3-help ugen exemplar st " (thing-at-point 'symbol)))))
 
@@ -395,7 +411,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   "Haskell SuperCollider keymap.")
 
 (defun hsc3-mode-keybindings (map)
-  "Haskell SuperCollider keybindings."
+  "Add Haskell SuperCollider keybindings to MAP."
   (define-key map (kbd "C-c <") 'hsc3-load-current-file)
   (define-key map (kbd "C-c >") 'hsc3-see-haskell)
   (define-key map (kbd "C-c C-c") 'hsc3-send-current-line)
@@ -421,7 +437,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (define-key map (kbd "C-c C-u") 'hsc3-ugen-summary))
 
 (defun hsc3-mode-menu (map)
-  "Haskell SuperCollider Menu"
+  "Add Haskell SuperCollider Menu to MAP."
   (define-key map [menu-bar hsc3] (cons "Haskell-SuperCollider" (make-sparse-keymap "Haskell-SuperCollider")))
   (define-key map [menu-bar hsc3 help] (cons "Help" (make-sparse-keymap "Help")))
   (define-key map [menu-bar hsc3 help hsc3] '("HSC3 Help" . hsc3-help))
@@ -467,3 +483,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
 (add-to-list 'auto-mode-alist '("\\.hs$" . hsc3-mode))
 
 (provide 'hsc3)
+
+(provide 'hsc3)
+
+;;; hsc3.el ends here
