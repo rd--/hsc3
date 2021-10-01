@@ -173,6 +173,16 @@ mceChannel n u =
       UGen (CMce m _) -> mceProxies m !! n
       _ -> if n == 0 then u else error "mceChannel: non Mce value, non ZERO index"
 
+{- | Obtain indexed channel at Mce, indicex wrap around.
+
+> map (\ix -> mceChannelWrap ix (mce [1,2,3,4,5])) [0 .. 9]
+-}
+mceChannelWrap :: Int -> UGen -> UGen
+mceChannelWrap n u =
+    case u of
+      UGen (CMce m _) -> mceProxies m !! (n `mod` length m)
+      _ -> u
+
 -- | Transpose rows and columns, ie. {{a,b},{c,d}} to {{a,c},{b,d}}.
 mceTranspose :: UGen -> UGen
 mceTranspose = mce . map mce . transpose . map mceChannels . mceChannels
