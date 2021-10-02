@@ -41,7 +41,7 @@ data SC3_Unary_Op
             | Floor -- 9
             | Frac -- 10
             | Sign
-            | Squared
+            | Squared -- 12
             | Cubed
             | Sqrt -- 14
             | Exp -- 15

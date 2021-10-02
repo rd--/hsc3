@@ -11,7 +11,7 @@ let trig = dust2Id 'α' kr 8
 in pan2 sig (tRandId 'ζ' (-1) 1 trig) 1
 
 -- analogBassDrum ; event control
-let f _ (g,x,y,z,o,rx,ry,_,_,_) =
+let f (_,g,x,y,z,o,rx,ry,_,_,_) =
       let freq = midiCps (x * 25 + 24)
           tr = trig g controlDur
           selffm = tRandId 'α' 0.1 0.9 tr

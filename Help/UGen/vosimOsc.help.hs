@@ -6,7 +6,7 @@ let freq = sinOsc kr (sinOsc kr 0.01 0) 0 `in_exprange` (10,800)
 in X.vosimOsc ar freq form1freq form2freq shape * 0.1
 
 -- vosimOsc ; event control
-let f _ (g,x,y,z,o,rx,ry,_,_,_) =
+let f (_,g,x,y,z,o,rx,ry,_,_,_) =
       let freq = x * 40 + 10
           form1freq = y * 900 + 100
           form2freq = rx * 900 + 100

@@ -24,7 +24,7 @@ uid_st_eval (do
   return (klank s 1 0 1 (mceTranspose (mce z))))
 
 -- cymbalism (jmcc) #2 ; event control
-let f _ (g,x,y,z,_,_,_,_,_,_) =
+let f (_,g,x,y,z,_,_,_,_,_,_) =
       let mk_spc _ =
             let f1 = x * 2000 + 500
                 f3 = mceFill 15 (\_ -> tRand f1 (f1 + rand 0 8000) g)
@@ -37,7 +37,7 @@ let f _ (g,x,y,z,_,_,_,_,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 1
 
 -- cymbalism (jmcc) #2 ; event control ; id
-let f c (g,x,y,z,_,_,_,_,_,_) =
+let f (c,g,x,y,z,_,_,_,_,_,_) =
       let enumFromN e i = let j = fromEnum e in [j .. j + i]
           mk_spc n =
             let f1 = x * 2000 + 500

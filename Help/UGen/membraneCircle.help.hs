@@ -10,7 +10,7 @@ let x = mouseX kr 0 1 Linear 0.2
 in X.membraneCircle ar (pinkNoiseId 'α' ar * e) tension loss
 
 -- membraneCircle ; event control
-let f _ (g,x,y,z,o,_,_,_,_,_) =
+let f (_,g,x,y,z,o,_,_,_,_,_) =
       let loss = linExp y 0 1 0.99999 0.99950
           wobble = sinOsc kr 2 0
           tension = linExp x 0 1 0.01 0.1 + (wobble * 0.0001)

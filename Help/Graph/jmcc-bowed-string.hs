@@ -29,7 +29,7 @@ uid_st_eval (do
   return (softClip (k * 0.1)))
 
 -- bowed string (jmcc) ; event control
-let f _ (g,x,y,z,_,_,_,p,_,_) =
+let f (_,g,x,y,z,_,_,_,p,_,_) =
       let n0 = mce2 (brownNoise ar) (brownNoise ar)
           r0 = expRand 0.125 0.5
           r1 = rand 0.7 0.9
@@ -44,7 +44,7 @@ let f _ (g,x,y,z,_,_,_,p,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 0.75
 
 -- bowed string (jmcc) ; event control ; id
-let f c (g,_,y,z,_,_,_,p,_,_) =
+let f (c,g,_,y,z,_,_,_,p,_,_) =
       let n0 = mce2 (brownNoiseId (c,'α') ar) (brownNoiseId (c,'β') ar)
           r0 = expRandId (c,'γ') 0.125 0.5
           r1 = randId (c,'δ') 0.7 0.9

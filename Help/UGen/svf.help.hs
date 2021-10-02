@@ -11,7 +11,7 @@ let signal = lfSaw ar (range 110 35 (lfSaw kr 2 0)) 0
 in X.svf signal cutoff res low band high notch peak_
 
 -- svf ; event control
-let f c (g,x,y,z,o,rx,_,p,px,_) =
+let f (c,g,x,y,z,o,rx,_,p,px,_) =
       let signal = lfSaw ar (midiCps (p + px)) 0
           cutoff = linExp x 0 1 20 20000
           res = y

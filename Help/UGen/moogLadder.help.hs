@@ -8,7 +8,7 @@ let n = dustId 'α' ar 3
 in X.moogLadder n 2000 (mouseY kr 0 1 Linear 0.2)
 
 -- moogLadder ; event control
-let f _ (g,_,y,z,o,rx,ry,p,_,_) =
+let f (_,g,_,y,z,o,rx,ry,p,_,_) =
       let f0 = midiCps p
           f1 = f0 * (1 + y * 8)
           res = rx + ry

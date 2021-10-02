@@ -18,7 +18,7 @@ let n1 = whiteNoiseId 'α' kr
 in grainFM 2 t 0.1 f 200 i x (-1) 512 * 0.1
 
 -- grainFM ; event control
-let f _ (g,x,y,z,o,rx,ry,p,px,_) =
+let f (_,g,x,y,z,o,rx,ry,p,px,_) =
       let tr = impulse ar (y * 64 + 10) 0
           cf = midiCps (p + px)
           mf = (cf * 1.5) + ((1 - x) * z * cf)

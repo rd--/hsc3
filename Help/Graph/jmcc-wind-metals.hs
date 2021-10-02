@@ -35,7 +35,7 @@ let n = 6
 in softClip (s * 0.1)
 
 -- wind metals (jmcc) ; event-control
-let f c (g,x,y,z,_,_,_,_,_,_) =
+let f (c,g,x,y,z,_,_,_,_,_,_) =
       let n = 6
           base = linExp x 0 1 60 4000
           rng = tRand 500 8000 g
@@ -51,7 +51,7 @@ let f c (g,x,y,z,_,_,_,_,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 1
 
 -- wind metals (jmcc) ; event-control ; id
-let f c (g,x,y,z,_,_,_,_,_,_) =
+let f (c,g,x,y,z,_,_,_,_,_,_) =
       let n = 6
           base = linExp x 0 1 60 4000
           rng = tRandId (c,'β') 500 8000 g

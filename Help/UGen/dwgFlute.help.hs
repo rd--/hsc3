@@ -15,7 +15,7 @@ let freq = control_m kr "freq" 440 (220,880,"exp")
 in pan2 (hpf (lpf signal 6000) 200) pan (0.2 * amp)
 
 -- dwgFlute ; event control
-let f c (g,x,y,z,o,rx,ry,_,_,_) =
+let f (c,g,x,y,z,o,rx,ry,_,_,_) =
       let freq = midiCps (x * 25 + 42)
           vib = sinOsc kr 4 0 + (0.01 * z * whiteNoiseId c ar)
           pm = k2a ((0.1 + z) * vib * g)

@@ -17,7 +17,7 @@ let a z f = let fm = mce2 (randId (z,'α') 0.7 1.3) 1
 in pan2 (o * a1 * a2) (rand2Id 'κ' 1) 1
 
 -- zizle (jmcc) #SC3d1.5 ; event control
-let f _ (g,x,y,z,o,_,_,_,_,_) =
+let f (_,g,x,y,z,o,_,_,_,_,_) =
       let a f0 = let fm = mce2 (tRand 0.7 1.3 g) 1
                      ph = mce2 (tRand 0 two_pi g) (tRand 0 two_pi g)
                  in mix (sinOsc ar (f0 * fm) ph)
@@ -28,7 +28,7 @@ let f _ (g,x,y,z,o,_,_,_,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 1
 
 -- zizle (jmcc) #SC3d1.5 ; event control ; id
-let f c (g,x,y,z,o,_,_,_,_,_) =
+let f (c,g,x,y,z,o,_,_,_,_,_) =
       let a e f0 = let fm = mce2 (tRandId (e,'α') 0.7 1.3 g) 1
                        ph = mce2 (tRandId (e,'β') 0 two_pi g) (tRandId (e,'γ') 0 two_pi g)
                    in mix (sinOsc ar (f0 * fm) ph)

@@ -23,7 +23,7 @@ let n = iRandId 'α' 36 90
 in pan2 c_ l 1
 
 -- synthetic piano (jmcc) #3 ; event-control
-let f _ (g,_,y,z,_,_,_,p,_,_) =
+let f (_,g,_,y,z,_,_,_,p,_,_) =
       let e = decay2 (trig g controlDur) 0.008 (linLin y 0 1 0.02 0.06) * z * 2
           cmb o = let n0 = lfNoise2 ar 3000
                       dt = 1 / midiCps (p + o)
@@ -34,7 +34,7 @@ let f _ (g,_,y,z,_,_,_,p,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 1
 
 -- synthetic piano (jmcc) #3 ; event-control ; id
-let f c (g,_,y,z,_,_,_,p,_,_) =
+let f (c,g,_,y,z,_,_,_,p,_,_) =
       let e = decay2 (trig g controlDur) 0.008 (linLin y 0 1 0.02 0.06) * z * 2
           cmb k o = let n0 = lfNoise2Id (c,k) ar 3000
                         dt = 1 / midiCps (p + o)

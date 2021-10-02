@@ -28,7 +28,7 @@ let k = mouseX kr 0.5 100 Exponential 0.2
 in combL t 0.1 (linLin m4 (-10) 10 (1/8000) (1/100)) 12
 
 -- spring ; event control
-let f _ (w,x,y,z,o,rx,_,_,_,_) =
+let f (_,w,x,y,z,o,rx,_,_,_,_) =
       let k = linExp x 0 1 0.1 20
           d = linExp y 0 1 0.00001 0.065
           s = spring ar (k2a w) k d
@@ -37,7 +37,7 @@ let f _ (w,x,y,z,o,rx,_,_,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 2
 
 -- spring ; event control
-let f _ (w,x,y,z,_,_,_,_,_,_) =
+let f (_,w,x,y,z,_,_,_,_,_,_) =
       let k = linExp x 0 1 0.5 100
           d = linExp y 0 1 0.0001 0.1
           t = trig (k2a w) 0

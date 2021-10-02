@@ -25,7 +25,7 @@ let flt src z =
 in mce (map (flt sw) ['ε','ζ'])
 
 -- swept resonant noise (jmcc) #2 ; event control
-let f _ (g,x,y,z,_,_,_,_,_,_) =
+let f (_,g,x,y,z,_,_,_,_,_,_) =
       let flt src _ =
             let np = 10
                 spec = klankSpec_mce
@@ -40,7 +40,7 @@ let f _ (g,x,y,z,_,_,_,_,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 1
 
 -- swept resonant noise (jmcc) #2 ; event control ; id
-let f c (g,x,y,z,_,_,_,_,_,_) =
+let f (c,g,x,y,z,_,_,_,_,_,_) =
       let flt src k =
             let np = 10
                 spec = klankSpec_mce

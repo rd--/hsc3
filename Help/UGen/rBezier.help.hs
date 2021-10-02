@@ -34,7 +34,7 @@ let rt = kr
 in soundIn 0 * range 0.25 1 s
 
 -- rBezier ; event control
-let f _ (g,_,y,z,o,rx,ry,p,px,_) =
+let f (_,g,_,y,z,o,rx,ry,p,px,_) =
       let w i l r = linLin i 0 1 l r
           freq = midiCps (p + leakDC px 0.995)
           s = X.rBezier ar 20 0.004 freq 0 (mce [0,0,w y 0.05 0.25,-1.3,w rx 0.25 0.45,-1.3

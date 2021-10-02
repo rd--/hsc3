@@ -21,7 +21,7 @@ let n = 50
 in leakDC (mix (pan2 ks l 1)) 0.995
 
 -- pluck ; event control
-let f c (g,x,y,z,o,_,_,_,_,_) =
+let f (c,g,x,y,z,o,_,_,_,_,_) =
       let n = whiteNoiseId (c,'α') ar * z
           dl_max = 1 / 220
           dl = dl_max * (1 - x * 0.9)
@@ -30,7 +30,7 @@ let f c (g,x,y,z,o,_,_,_,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 2
 
 -- pluck ; event control ; gateReset
-let f _ (g,x,y,z,o,_,_,p,_,_) =
+let f (_,g,x,y,z,o,_,_,p,_,_) =
       let n = whiteNoiseId 'α' ar * z
           dl_max = 1 / 8
           (gt,tr) = eventGateReset g p
@@ -40,7 +40,7 @@ let f _ (g,x,y,z,o,_,_,p,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 2
 
 -- pluck ; event control ; gateReset ; p+px
-let f _ (g,_,y,z,o,_,_,p,px,_) =
+let f (_,g,_,y,z,o,_,_,p,px,_) =
       let n = whiteNoiseId 'α' ar * z
           dl_max = 1 / 8
           (gt,tr) = eventGateReset g p

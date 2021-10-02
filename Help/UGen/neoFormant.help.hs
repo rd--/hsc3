@@ -7,7 +7,7 @@ let modulator = sinOsc kr 0.1 0
 in pan2 sig modulator 0.1
 
 -- neoFormant ; event control
-let f _ (g,x,y,z,o,rx,_,_,_,_) =
+let f (_,g,x,y,z,o,rx,_,_,_,_) =
       let carrierFreq = midiCps (x * 13 + 36)
           formantFreq = y `in_exprange` (100,550)
           phaseShift = lag rx 0.5 * 2

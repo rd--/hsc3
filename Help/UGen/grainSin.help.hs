@@ -14,7 +14,7 @@ let k = 16
 in grainSin 2 t (mouseX kr 0.001 0.5 Exponential 0.2) (tChooseId 'α' t l) 0 (-1) 512 * 0.1
 
 -- grainSin ; event control
-let f _ (g,_,y,z,o,rx,ry,p,_,_) =
+let f (_,g,_,y,z,o,rx,ry,p,_,_) =
       let tr = impulse ar (linLin y 0 1 6 72) 0
           du = linLin rx 0 1 0.01 0.15
       in grainSin 2 tr du (midiCps (p + (ry * 2 - 1))) (o * 2 - 1) (-1) 512 * z * g

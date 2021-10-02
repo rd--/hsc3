@@ -11,7 +11,7 @@ in mce2 (sig * 0.05) (X.analogTape sig bias saturation drive 1 0 * 0.1)
 let bias = control kr "bias" 0.25
     saturation = control kr "saturation" 0.25
     drive = control kr "drive" 0.25
-    f _ (g,x,y,z,o,rx,ry,_,_,_) =
+    f (_,g,x,y,z,o,rx,ry,_,_,_) =
       let freq = midiCps (x * 12 + 48)
           width = y
           sig = varSaw ar freq 0 width

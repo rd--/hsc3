@@ -21,12 +21,12 @@ let m = mouseX kr 36 85 Linear 0.2 {- midi note -}
 in resonz (pinkNoise ar) f rq
 
 -- resonz ; pinkNoise ; event control
-let f _ (g,_,y,z,o,_,_,p,_,_) =
+let f (_,g,_,y,z,o,_,_,p,_,_) =
       pan2 (resonz (pinkNoise ar) (midiCps p) (y * 0.25) * 24) (o * 2 - 1) (z * g)
 in mix (eventVoicer 16 f) * control kr "gain" 1
 
 -- resonz ; pinkNoise ; event control
-let f _ (g,_,y,z,o,rx,_,p,_,_) =
+let f (_,g,_,y,z,o,rx,_,p,_,_) =
       let (gt,_) = eventGateReset g p
           e = envGen kr gt 1 0 1 DoNothing (envPerc 0.01 (1 + rx))
           f = midiCps p {- centre frequency -}

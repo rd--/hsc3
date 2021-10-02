@@ -27,7 +27,7 @@ let series n i j = case n of {0 -> []; _ -> i : series (n - 1) (i + j) j}
 in Protect.uclone_all 'η' 2 (klank noise 1 0 1 spec)
 
 -- resonators harmonic series (jmcc) #2 ; event control
-let f _ (g,_,y,z,o,rx,_,p,_,_) =
+let f (_,g,_,y,z,o,rx,_,p,_,_) =
       let nharm = 12
           spec _ = let freq = midiCps p
                        series n i j = case n of {0 -> []; _ -> i : series (n - 1) (i + j) j}
@@ -40,7 +40,7 @@ let f _ (g,_,y,z,o,rx,_,p,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 1
 
 -- resonators harmonic series (jmcc) #2 ; event control ; id
-let f c (g,_,y,z,o,rx,ry,p,_,_) =
+let f (c,g,_,y,z,o,rx,ry,p,_,_) =
       let series n i j = case n of {0 -> []; _ -> i : series (n - 1) (i + j) j}
           enumFromN e i = let j = fromEnum e in [j .. j + i]
           nharm = 12

@@ -30,7 +30,7 @@ let gat = lfPulse kr 1 0.01 0.5
 in X.miElements ar 0 0 gat pit 0.5 cont 0 0.5 0 flow 0.5 0.5 0.3 0.5 0.25 0.3 0.8 0.2 0.3 0 0 * 0.25
 
 -- miElements ; model=0=MODAL ; event control
-let f _ (g,x,y,z,o,rx,ry,_,_,_) =
+let f (_,g,x,y,z,o,rx,ry,_,_,_) =
       let tr = trig1 g controlDur
           pit = x * 24 + 56
           stre = ry * 0.5 + 0.25
@@ -53,7 +53,7 @@ let tr = dustId 'α' ar 2.5
 in X.miElements ar 0 inp 0 40 0.5 0.2 0 0 0 0.5 0.5 0.5 0.5 0.5 g 0.4 0.9 0.2 space 0 0 * 0.35
 
 -- miElements ; metal, bells ; event control
-let f _ (g,x,y,z,o,_,_,_,_,_) =
+let f (_,g,x,y,z,o,_,_,_,_,_) =
       let tr = trig1 (k2a g) sampleDur
           inp = decay (tr * z * 4) 0.01
           pit = latch x g * 12 + 36
@@ -68,7 +68,7 @@ let inp = decay (dustId 'α' ar 1) 0.01
 in X.miElements ar 0 inp 0 {-pit-} 53 0.5 0.2 0 0 0 0.5 0.5 0.5 0.5 0.5 {-geom-} g {-bright-} 0.5 {-damp-} 0.9 0.2 0.3 {-model-} 2 0
 
 -- miElements ; metal, bells ; event control
-let f _ (g,x,y,z,o,rx,_,_,_,_) =
+let f (_,g,x,y,z,o,rx,_,_,_,_) =
       let tr = trig1 (k2a g) sampleDur
           inp = decay tr 0.01
           pit = x * 12 + 48

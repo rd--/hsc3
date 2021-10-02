@@ -9,7 +9,7 @@ let md = control kr "mode" 0
 in (combN sig 0.5 (mce2 0.4 0.35) 2 * 0.4) + (sig * 0.5)
 
 -- bMoog ; event control
-let f c (g,x,y,z,o,rx,ry,_,_,_) =
+let f (c,g,x,y,z,o,rx,ry,_,_,_) =
       let md = constant c `modE` 3
           f0 = linExp x 0 1 20 12000
           sig = lfSaw ar (mce2 (f0 * 0.99) (f0 * 1.01)) 0 * ry * 0.4

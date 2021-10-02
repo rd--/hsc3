@@ -16,7 +16,7 @@ let freq = control_m kr "freq" 440 (220,880,"exp")
 in pan2 (hpf signal 200) pan amp
 
 -- dwgClarinet3 ; event control
-let f _ (g,x,y,z,o,rx,ry,_,_,_) =
+let f (_,g,x,y,z,o,rx,ry,_,_,_) =
       let freq = midiCps (x * 25 + 42)
           vib = sinOsc kr (y * 4) 0 * (z * 0.005) + 1
           amp = linLin z 0 1 0.65 1

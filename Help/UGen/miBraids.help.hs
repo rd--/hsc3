@@ -12,7 +12,7 @@ let pit = roundE (range 33 66 (lfNoise0Id 'α' kr 4))
 in X.miBraids ar pit timb color (X.miBraids_mode "VOSIM") 0 0 0 0 0 * 0.1
 
 -- MiBraids ; 21:VOSIM ; event control
-let f _ (g,x,y,z,o,rx,_,_,_,_) =
+let f (_,g,x,y,z,o,rx,_,_,_,_) =
       let md = X.miBraids_mode "VOSIM"
           mnn = x * 24 + 36 -- x * 12 + 78
       in pan2 (X.miBraids ar mnn (y * 0.75) rx md 0 0 0 0 0) (o * 2 - 1) (g * z)
@@ -44,7 +44,7 @@ let tr = dustId 'α' kr 0.6
 in X.miBraids ar pit timb color (X.miBraids_mode "PLUCKED") tr 0 0 0 0 * 0.1
 
 -- MiBraids ; 28:PLUCKED ; event control
-let f _ (g,x,y,z,o,rx,_,_,_,_) =
+let f (_,g,x,y,z,o,rx,_,_,_,_) =
       let tr = trig1 g controlDur
           pit = x * 24 + 45
           timb = latch y tr * 0.5 + 0.25

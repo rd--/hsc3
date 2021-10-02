@@ -56,7 +56,7 @@ let b = control kr "buf" 0
 in tGrains 2 clk b x (0.3 * bufDur kr b) dur 0 0.1 2
 
 -- tGrains ; requires=buf ; event control
-let f _ (g,x,y,z,o,rx,ry,_,_,_) =
+let f (_,g,x,y,z,o,rx,ry,_,_,_) =
       let b = control kr "buf" 0
           tRate = linExp y 0 1 2 200
           ctr = x * bufDur kr b

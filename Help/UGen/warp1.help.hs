@@ -18,7 +18,7 @@ let sz = 8192
 in mrg2 (i + w) r
 
 -- warp1 ; requires=buf ; event control
-let f _ (g,x,y,z,o,rx,ry,_,_,_) =
+let f (_,g,x,y,z,o,rx,ry,_,_,_) =
       let b = control kr "buf" 0
           p = linLin (lfSaw kr 0.05 0) (-1) 1 0 1
           dur = linLin y 0 1 0.01 0.2

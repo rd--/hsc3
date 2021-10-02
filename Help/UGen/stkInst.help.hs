@@ -1,5 +1,5 @@
 -- stkInst ; bowed ; event control ; https://ccrma.stanford.edu/software/stk/classstk_1_1Bowed.html
-let f _ (g,_,y,z,o,rx,_,p,_,_) =
+let f (_,g,_,y,z,o,rx,_,p,_,_) =
       let kBowPressure = 2
           kBowPosition = 4
           kVibratoFrequency = 11
@@ -15,7 +15,7 @@ let f _ (g,_,y,z,o,rx,_,p,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 1
 
 -- stkInst ; brass ; event control ; https://ccrma.stanford.edu/software/stk/classstk_1_1Brass.html
-let f _ (g,_,y,z,o,rx,ry,p,_,_) =
+let f (_,g,_,y,z,o,rx,ry,p,_,_) =
       let kLipTension = 2
           kSlideLength = 4
           kVibratoFrequency = 11
@@ -31,7 +31,7 @@ let f _ (g,_,y,z,o,rx,ry,p,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 2
 
 -- stkInst ; clarinet ; event control ; https://ccrma.stanford.edu/software/stk/classstk_1_1Clarinet.html
-let f _ (g,_,y,z,o,rx,ry,p,_,_) =
+let f (_,g,_,y,z,o,rx,ry,p,_,_) =
       let kReedStiffness = 2
           kNoiseGain = 4
           kVibratoFrequency = 11
@@ -47,7 +47,7 @@ let f _ (g,_,y,z,o,rx,ry,p,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 1
 
 -- stkInst ; flute ; event control ; https://ccrma.stanford.edu/software/stk/classstk_1_1Flute.html
-let f _ (g,_,y,z,o,rx,ry,p,_,_) =
+let f (_,g,_,y,z,o,rx,ry,p,_,_) =
       let kJetDelay = 2
           kNoiseGain = 4
           kVibratoFrequency = 11
@@ -63,7 +63,7 @@ let f _ (g,_,y,z,o,rx,ry,p,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 0.5
 
 -- stkInst ; mandolin ; event control ; https://ccrma.stanford.edu/software/stk/classstk_1_1Mandolin.html
-let f _ (g,_,y,z,o,rx,ry,p,_,_) =
+let f (_,g,_,y,z,o,rx,ry,p,_,_) =
       let kBodySize = 2
           kPluckPosition = 4
           kStringDetuning = 1
@@ -75,7 +75,7 @@ let f _ (g,_,y,z,o,rx,ry,p,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 2
 
 -- stkInst ; mesh2D ; event control ; https://ccrma.stanford.edu/software/stk/classstk_1_1Mesh2D.html
-let f _ (g,x,y,z,o,rx,ry,p,_,_) =
+let f (_,g,x,y,z,o,rx,ry,p,_,_) =
       let kXDimension = 2
           kYDimension = 4
           kMeshDecay = 11
@@ -89,21 +89,21 @@ let f _ (g,x,y,z,o,rx,ry,p,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 2
 
 -- stkInst ; plucked ; event control ; https://ccrma.stanford.edu/software/stk/classstk_1_1Plucked.html
-let f _ (g,_,y,z,o,_,_,p,_,_) =
+let f (_,g,_,y,z,o,_,_,p,_,_) =
       let args = [0] -- cannot be []...
           s = X.stkInst ar (midiCps p) g (0.5 + z * 0.5) (y * 0.01) (X.stkAt "Plucked") (mce args)
       in pan2 s (o * 2 - 1) 1
 in mix (eventVoicer 16 f) * control kr "gain" 1
 
 -- stkInst ; sitar ; event control ; https://ccrma.stanford.edu/software/stk/classstk_1_1Sitar.html
-let f _ (g,_,y,z,o,_,_,p,_,_) =
+let f (_,g,_,y,z,o,_,_,p,_,_) =
       let args = [0] -- cannot be []...
           s = X.stkInst ar (midiCps (latch p g)) g (0.5 + z * 0.5) (y * 0.01) (X.stkAt "Sitar") (mce args)
       in pan2 s (o * 2 - 1) 1
 in mix (eventVoicer 16 f) * control kr "gain" 1
 
 -- stkInst ; voicForm ; event control ; https://ccrma.stanford.edu/software/stk/classstk_1_1VoicForm.html
-let f _ (g,_,y,z,o,rx,ry,p,_,_) =
+let f (_,g,_,y,z,o,rx,ry,p,_,_) =
       let kVoicedUnvoicedMix = 2
           kVowelPhonemeSelection = 4
           kVibratoFrequency = 11

@@ -17,7 +17,7 @@ let n = 2
 in linPan2 (pmOsc ar cf mf pm 0) l 0.05
 
 -- pmOsc ; event control
-let f _ (g,x,y,z,_,_,_,_,_,_) =
+let f (_,g,x,y,z,_,_,_,_,_,_) =
       let cps = midiCps (x * 24 + 42)
           sig = pmOsc ar
                 (vibratoId 'θ' ar (k2a cps) (y * 4 + 4) 0.02 0 0 0.04 0.1 0.0 0.0)

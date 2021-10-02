@@ -16,7 +16,7 @@ let sig = decay2 (dustId 'α' ar 4) 0.01 1
 in sb sig (mce2 1 (control_m kr "mul" 2.8 (0.25,4,"lin")))
 
 -- dwgSoundBoard ; event control
-let f c (g,x,y,z,o,rx,ry,_,_,_) =
+let f (c,g,x,y,z,o,rx,ry,_,_,_) =
       let env = decay2 (trig g controlDur * z) 0.01 (0.05 + y * 0.15)
           sig = pinkNoiseId c ar * env
           c1_min = control_m kr "c1_min" 5 (1,5,"lin")
@@ -37,7 +37,7 @@ let f c (g,x,y,z,o,rx,ry,_,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 1
 
 -- dwgSoundBoard ; pluck ; event control
-let f _ (g,x,y,z,o,rx,_,_,_,_) =
+let f (_,g,x,y,z,o,rx,_,_,_,_) =
       let n = whiteNoiseId 'α' ar * (z + y * 0.75)
           dl_max = 1 / 220 -- 110
           dl = dl_max * (1 - x * 0.9)

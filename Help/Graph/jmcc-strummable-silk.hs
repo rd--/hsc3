@@ -30,7 +30,7 @@ let x = mouseX kr 0 1 Linear 0.2
 in rev (leakDC (lpf strs 12000) 0.995)
 
 -- strummable silk (jmcc) #11 ; event control
-let f _ (g,_,y,z,o,_,_,p,_,_) =
+let f (_,g,_,y,z,o,_,_,p,_,_) =
       let n = 15
           e = decay (impulse ar (linExp y 0 1 11 19) 0 * (z * 2 + lag (trig g 1) 0.2) * 0.04) 0.04
           plk = pinkNoise ar * e
@@ -41,7 +41,7 @@ let f _ (g,_,y,z,o,_,_,p,_,_) =
 in iter 6 r_allpass (leakDC (lpf (mix (eventVoicer 16 f)) 12000) 0.995) * control kr "gain" 1
 
 -- strummable silk (jmcc) #11 ; event control ; id
-let f c (g,_,y,z,o,_,_,p,_,_) =
+let f (c,g,_,y,z,o,_,_,p,_,_) =
       let n = 15
           e = decay (impulse ar (linExp y 0 1 11 19) 0 * (z * 2 + lag (trig g 1) 0.2) * 0.04) 0.04
           plk = pinkNoiseId c ar * e

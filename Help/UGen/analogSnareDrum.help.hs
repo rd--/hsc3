@@ -10,7 +10,7 @@ let trig = dust2Id 'α' kr 8
 in pan2 sig (tRandId 'ζ' (-1) 1 trig) 0.1
 
 -- analogSnareDrum ; event control
-let f _ (g,x,y,z,o,rx,ry,_,_,_) =
+let f (_,g,x,y,z,o,rx,ry,_,_,_) =
       let freq = midiCps (x * 25 + 36)
           tr = trig g controlDur
           sig = X.analogSnareDrum ar tr 0 z freq y rx (ry * 2)

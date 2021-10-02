@@ -35,7 +35,7 @@ let dsequId z sq tr = demand tr 0 (dseqId z dinf (mce sq))
 in combN (rlpf s filt 0.15) 0.2 (mce2 0.2 0.17) 1.5
 
 -- berlin 1977 (jmcc) #4 ; event-control
-let f _ (g,_,y,z,_,_,_,p,_,_) =
+let f (_,g,_,y,z,_,_,_,p,_,_) =
       let freq = midiCps p
           env = decay2 (trig g controlDur) (0.05 * y) (2 * y)
           amp = env * z + 0.02

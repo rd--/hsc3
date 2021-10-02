@@ -25,7 +25,7 @@ let ms1 n r =
 in ms1 (lfNoise1Id 'β' kr 3) 48 + ms1 (lfNoise1Id 'γ' kr 3) 72 * 0.25
 
 -- modal space (jmcc) #8 ; event control
-let f c (g,x,y,z,_,_,_,_,_,_) =
+let f (_,g,x,y,z,_,_,_,_,_,_) =
       let ms1 n r =
             let b = asLocalBuf [0,2,3.2,5,7,9,10] {- dorian scale -}
                 k = degreeToKey b (x * 25) 12 {- 12 notes per octave -}
@@ -39,7 +39,7 @@ let f c (g,x,y,z,_,_,_,_,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 1
 
 -- modal space (jmcc) #8 ; event control ; id
-let f c (g,x,y,z,_,_,_,_,_,_) =
+let f (c,g,x,y,z,_,_,_,_,_,_) =
       let ms1 n r =
             let b = asLocalBufId 'α' [0,2,3.2,5,7,9,10] {- dorian scale -}
                 k = degreeToKey b (x * 25) 12 {- 12 notes per octave -}
@@ -53,7 +53,7 @@ let f c (g,x,y,z,_,_,_,_,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 1
 
 -- modal space (jmcc) #8 ; event control ; modeless
-let f _ (g,_,y,z,_,_,_,p,_,_) =
+let f (_,g,_,y,z,_,_,_,p,_,_) =
       let ms1 n r =
             let o = sinOsc ar (midiCps (p + r + n * y * 0.08)) 0 * 0.1
                 t = lfPulse ar (midiCps (mce2 48 55)) 0 0.15
@@ -65,7 +65,7 @@ let f _ (g,_,y,z,_,_,_,p,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 1
 
 -- modal space (jmcc) #8 ; event control ; modeless ; id
-let f c (g,_,y,z,_,_,_,p,_,_) =
+let f (c,g,_,y,z,_,_,_,p,_,_) =
       let ms1 n r =
             let o = sinOsc ar (midiCps (p + r + n * y * 0.08)) 0 * 0.1
                 t = lfPulse ar (midiCps (mce2 48 55)) 0 0.15

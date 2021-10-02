@@ -14,36 +14,52 @@ import Sound.SC3.UGen.UGen {- hsc3 -}
 
 -- * Event
 
--- | (w/gate,x,y,z/force,orientation,radius-x,radius-y,pitch,pitch-x,pitch-y)
-type Event t = (t,t,t,t,t,t,t,t,t,t)
+{- | (v,w/gate,x,y,z/force,orientation,radius-x,radius-y,pitch,pitch-x,pitch-y)
+
+     v = voice/channel
+-}
+type Event t = (Int,t,t,t,t,t,t,t,t,t,t)
 
 -- | Translate list to Event.
-event_from_list :: Num t => [t] -> Event t
-event_from_list l =
+event_from_list :: Num t => Int -> [t] -> Event t
+event_from_list v l =
   case l of
-    [w,x,y,z,o,rx,ry,p,px,py] -> (w,x,y,z,o,rx,ry,p,px,py)
+    [w,x,y,z,o,rx,ry,p,px,py] -> (v,w,x,y,z,o,rx,ry,p,px,py)
     _ -> error "event_from_list?"
 
-{- | k0 = index of control bus zero for event system,
-    stp = voice index incremennt,
-      c = event channel or voice (zero indexed)
+{- | (eventAddr, eventIncr, eventZero)
+
+eventAddr = k0 = index of control bus zero for event system,
+eventIncr = stp = voice index incremennt,
+eventZero = c0 = offset for event voices at current server
 -}
-eventAddr :: UGen -> UGen -> UGen -> Event UGen
-eventAddr k0 stp c =
-  let u = in' 10 ControlRate (k0 + (c * stp))
-  in event_from_list (mceChannels u)
+type EventMeta t = (t, t, t)
+
+eventMetaDefault :: Num n => EventMeta n
+eventMetaDefault = (13000, 10, 0)
+
+eventMetaControls :: EventMeta Int -> EventMeta UGen
+eventMetaControls (p,q,r) =
+  let k nm i = control ControlRate nm (fromIntegral i)
+  in (k"eventAddr" p, k "eventIncr" q, k "eventZero" r)
+
+-- | c = event channel or voice (zero indexed)
+eventAddr :: (UGen,UGen,UGen) -> Int -> Event UGen
+eventAddr (k0, stp, c0) c =
+  let u = in' 10 ControlRate (k0 + ((c0 + fromIntegral c) * stp))
+  in event_from_list c (mceChannels u)
 
 -- | c0 = index of voice (channel) zero for event set, n = number of voices (channels)
-eventVoicerAddr :: UGen -> UGen -> UGen -> Int -> (Int -> Event UGen -> UGen) -> UGen
-eventVoicerAddr k0 stp c0 n f = mce (map (\c -> f c (eventAddr k0 stp (c0 + constant c))) [0 .. n - 1])
+eventVoicerAddr :: EventMeta UGen -> Int -> (Event UGen -> UGen) -> UGen
+eventVoicerAddr m n f = mce (map (\c -> f (eventAddr m c)) [0 .. n - 1])
 
 -- | 'eventAddr' with 'control' inputs for /eventAddr/, /eventIncr/ and /eventZero/.
-event :: Event UGen
-event = eventAddr (control ControlRate "eventAddr" 13000) (control ControlRate "eventIncr" 10) (control ControlRate "eventZero" 0)
+event :: Int -> Event UGen
+event = eventAddr (eventMetaControls eventMetaDefault)
 
 -- | 'eventVoicerAddr' with 'control' inputs for /eventAddr/, /eventIncr/ and /eventZero/.
-eventVoicer :: Int -> (Int -> Event UGen -> UGen) -> UGen
-eventVoicer = eventVoicerAddr (control ControlRate "eventAddr" 13000) (control ControlRate "eventIncr" 10) (control ControlRate "eventZero" 0)
+eventVoicer :: Int -> (Event UGen -> UGen) -> UGen
+eventVoicer = eventVoicerAddr (eventMetaControls eventMetaDefault)
 
 {- | Given /g/ and /p/ fields of an 'Event' derive a 'gateReset' from g
 and a trigger derived from monitoring /g/ and /p/ for changed values.

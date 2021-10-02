@@ -39,7 +39,7 @@ let ratio1 = randId 'α' 0.49 1.11 -- 0.9
 in splay (op1 * env1 * amp) 1 1 0 True
 
 -- or ; https://recarteblog.wordpress.com/2021/05/05/gongfm_sc ; event control
-let f _ (g,x,y,z,o,rx,ry,_,_,_) =
+let f (_,g,x,y,z,o,rx,ry,_,_,_) =
       let ratio1 = x `in_range` (0.49,1.11)
           ratio2 = y `in_range` (0.15,0.55)
           ratio3 = o `in_range` (0.34,1.35)

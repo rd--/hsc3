@@ -11,7 +11,7 @@ let pan = 0
 in pan2 sig pan 1
 
 -- stringVoice ; event control
-let f _ (g,x,y,z,o,rx,ry,_,_,_) =
+let f (_,g,x,y,z,o,rx,ry,_,_,_) =
       let freq = midiCps (x * 25 + 36)
           tr = trig g controlDur
           sig = X.stringVoice ar tr 0 freq z y rx (ry * 2)

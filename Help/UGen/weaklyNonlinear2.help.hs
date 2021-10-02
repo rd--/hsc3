@@ -14,7 +14,7 @@ let input = sinOsc ar (mouseX kr 1 1000 Exponential 0.1) 0 * 0.1
 in pan2 (X.weaklyNonlinear2 ar input 0 1 1 freq 0 0 (-0.001) 3 0 0) 0 0.1
 
 -- weaklyNonlinear2 ; event control
-let f _ (g,x,y,z,o,_,_,_,_,_) =
+let f (_,g,x,y,z,o,_,_,_,_,_) =
       let input = saw ar 261.626 * linExp y 0 1 0.0001 1
           freq = x * 300 + 100
       in pan2 (X.weaklyNonlinear2 ar input 0 1 1 freq 0 0 0 0 0 0) (o * 2 - 1) (z * g)

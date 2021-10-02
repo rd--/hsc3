@@ -9,7 +9,7 @@ let nf = 1024 * 2
 in pan2 (X.sonLPCSynthIn ar chain exci) 0 1
 
 -- sonLPC ; event control
-let f c (g,x,y,z,o,_,_,_,_,_) =
+let f (c,g,x,y,z,o,_,_,_,_,_) =
       let nf = 1024 * 2
           hop = 1 / 4
           poles = linLin y 0 1 5 80

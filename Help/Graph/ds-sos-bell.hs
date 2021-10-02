@@ -1,5 +1,5 @@
 -- https://github.com/supercollider-quarks/SynthDefPool/blob/master/pool/sos_bell.scd (ds)
-let f _ (g,_,_,z,o,_,_,p,_,_) =
+let f (_,g,_,_,z,o,_,_,p,_,_) =
       let mce_mean x = sum (mceChannels x) / fromIntegral (mceDegree_err x)
           freq = midiCps (p - 12)
           amp = z * g * 16
@@ -22,7 +22,7 @@ let f _ (g,_,_,z,o,_,_,p,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 1
 
 -- https://github.com/supercollider-quarks/SynthDefPool/blob/master/pool/sos_bell.scd (ds) ; id
-let f c (g,_,_,z,o,_,_,p,_,_) =
+let f (c,g,_,_,z,o,_,_,p,_,_) =
       let mce_mean x = sum (mceChannels x) / fromIntegral (mceDegree_err x)
           freq = midiCps (p - 12)
           amp = z * g * 16

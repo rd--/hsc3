@@ -24,7 +24,7 @@ let z = sinOsc ar 300 0 * line kr 0 1 12 DoNothing
 in shaper b z * 0.1
 
 -- shaper ; event control
-let f _ (g,_,y,z,o,_,_,p,_,_) =
+let f (_,g,_,y,z,o,_,_,p,_,_) =
       let s = sinOsc ar (midiCps p) 0 * y
           c = Gen.cheby 257 [1,0,1,1,0,1]
           b = asLocalBufId 'α' (to_wavetable_nowrap c)

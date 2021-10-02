@@ -2,7 +2,7 @@
 X.miRings ar (impulse ar 1 0) 0 60 0.25 0.5 0.7 0.25 (X.miRings_mode "MODAL_RESONATOR") 1 0 0 0
 
 -- MiRings ; basics ; 0=MODAL_RESONATOR ; event control
-let f _ (g,x,y,z,o,rx,ry,_,_,_) =
+let f (_,g,x,y,z,o,rx,ry,_,_,_) =
       let tr = trig1 g controlDur
           md = X.miRings_mode "MODAL_RESONATOR"
       in X.miRings ar 0
@@ -17,7 +17,7 @@ X.miRings ar (pinkNoiseId 'α' ar * 0.05) 0 40 0.25 0.5 0.7 0.25 (X.miRings_mode
 X.miRings ar 0 (dustId 'α' kr 0.7) 33 0.25 0.5 0.7 0.25 (X.miRings_mode "SYMPATHETIC_STRING") 1 0 0 0 * 0.2
 
 -- MiRings ; basics ; 1=SYMPATHETIC_STRING ; event control
-let f _ (g,x,y,z,o,rx,ry,_,_,_) =
+let f (_,g,x,y,z,o,rx,ry,_,_,_) =
       let tr = trig1 g controlDur
           md = X.miRings_mode "SYMPATHETIC_STRING"
       in X.miRings ar 0
@@ -32,7 +32,7 @@ X.miRings ar 0 0 (range 30 50 (lfNoise0Id 'α' kr 2)) 0.25 0.5 0.7 0.25 (X.miRin
 X.miRings ar 0 0 (range 30 50 (lfNoise0Id 'α' kr 2)) 0.25 0.5 0.7 0.25 (X.miRings_mode "MODULATED/INHARMONIC_STRING") 1 0 0 0 * 0.2
 
 -- MiRings ; basics ; 2=MODULATED/INHARMONIC_STRING ; event control
-let f _ (g,x,y,z,o,rx,ry,_,_,_) =
+let f (_,g,x,y,z,o,rx,ry,_,_,_) =
       let tr = trig1 g controlDur
           md = X.miRings_mode "MODULATED/INHARMONIC_STRING"
       in X.miRings ar 0
