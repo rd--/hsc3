@@ -2375,7 +2375,7 @@ rtRandN nc = liftUnsafe3 (rtRandNM nc)
 --
 --  RTScramble [InitialisationRate,ControlRate] trigger=0 *inputs=0;    MCE=1, FILTER: TRUE, NONDET
 rtScrambleId :: ID a => a -> UGen -> UGen -> UGen
-rtScrambleId z trigger inputs = mkUGen Nothing [InitialisationRate,ControlRate] (Right [0]) "RTScramble" [trigger] (Just [inputs]) 1 (Special 0) (toUId z)
+rtScrambleId z trigger inputs = mkUGen Nothing [InitialisationRate,ControlRate] (Right [0]) "RTScramble" [trigger] (Just [inputs]) (length (mceChannels inputs) + 0) (Special 0) (toUId z)
 
 -- | Monad variant of RTScramble.
 rtScrambleM :: UId m => UGen -> UGen -> m UGen
