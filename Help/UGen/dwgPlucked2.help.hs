@@ -35,7 +35,7 @@ let dur = mce [1,1,2,1,1,1,2,3,1,1,1,1,2,3,4] * 0.175
 in pan2 ps pan 0.1
 
 -- dwgPlucked2 ; event control
-let f _c (g,x,y,z,o,rx,_,p,_,_) =
+let f (_,g,x,y,z,o,rx,_,p,_,_) =
       let c3 = 20
           (gt,tr) = eventGateReset g p
           dx = latch x tr - x
