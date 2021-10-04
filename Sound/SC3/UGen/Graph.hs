@@ -582,7 +582,7 @@ ug_stat_ln s =
        ,"control rates             : " ++ hist show (map u_node_k_rate ks)
        ,"control names             : " ++ unwords (map u_node_k_name ks)
        ,"number of unit generators : " ++ show (length us)
-       ,"unit generator rates      : " ++ hist show (map u_node_u_rate us)
+       ,"unit generator rates      : " ++ hist Rate.rateAbbrev (map u_node_u_rate us)
        ,"unit generator set        : " ++ hist id (map u_node_user_name us)
        ,"unit generator sequence   : " ++ unwords (map u_node_user_name us)]
 
