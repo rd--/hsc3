@@ -402,11 +402,6 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
        (save-selected-window
          (set-window-point window (point-max)))))))
 
-(defun hsc3-ugen-smalltalk ()
-  "Insert Smalltalk UGen exemplar."
-  (interactive)
-  (insert (shell-command-to-string (concat "hsc3-help ugen exemplar st " (thing-at-point 'symbol)))))
-
 (defvar hsc3-mode-map nil
   "Haskell SuperCollider keymap.")
 
@@ -481,8 +476,6 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (turn-on-font-lock))
 
 (add-to-list 'auto-mode-alist '("\\.hs$" . hsc3-mode))
-
-(provide 'hsc3)
 
 (provide 'hsc3)
 
