@@ -14,7 +14,7 @@ sum_l :: Num n => [[n]] -> [n]
 sum_l = map sum . transpose
 
 -- | Unit normalisation.
-nrm_u :: (Fractional n,Ord n) => [n] -> [n]
+nrm_u :: (Fractional n, Ord n) => [n] -> [n]
 nrm_u = Buffer.normalize (-1) 1
 
 -- * sine1
@@ -22,8 +22,8 @@ nrm_u = Buffer.normalize (-1) 1
 -- | 'sine3_p' with zero phase.
 --
 -- > import Sound.SC3.Plot {- hsc3-plot -}
--- > plot_p1_ln [sine1_p 512 (1,1)]
-sine1_p :: (Enum n,Floating n) => Int -> (n,n) -> [n]
+-- > plot_p1_ln [sine1_p 512 (1, 1)]
+sine1_p :: (Enum n, Floating n) => Int -> (n,n) -> [n]
 sine1_p n (pfreq,ampl) = sine3_p n (pfreq,ampl,0)
 
 -- | Series of sine wave harmonics using specified amplitudes.
@@ -32,13 +32,13 @@ sine1_l n = zipWith (curry (sine1_p n)) [1..]
 
 -- | 'sum_l' of 'sine1_l'.
 --
--- > plot_p1_ln [sine1 256 [1,0.95 .. 0.5]]
+-- > plot_p1_ln [sine1 256 [1, 0.95 .. 0.5]]
 sine1 :: (Enum n,Floating n) => Int -> [n] -> [n]
 sine1 n = sum_l . sine1_l n
 
 -- | 'nrm_u' of 'sine1_l'.
 --
--- > plot_p1_ln [sine1_nrm 256 [1,0.95 .. 0.5]]
+-- > plot_p1_ln [sine1_nrm 256 [1, 0.95 .. 0.5]]
 sine1_nrm :: (Enum n,Floating n,Ord n) => Int -> [n] -> [n]
 sine1_nrm n = nrm_u . sine1 n
 
@@ -50,8 +50,8 @@ sine2_l n = map (sine1_p n)
 
 -- | 'sum_l' of 'sine2_l'.
 --
--- > plot_p1_ln [sine2 256 (zip [1,2..] [1,0.95 .. 0.5])]
--- > plot_p1_ln [sine2 256 (zip [1,1.5 ..] [1,0.95 .. 0.5])]
+-- > plot_p1_ln [sine2 256 (zip [1, 2..] [1, 0.95 .. 0.5])]
+-- > plot_p1_ln [sine2 256 (zip [1, 1.5 ..] [1, 0.95 .. 0.5])]
 sine2 :: (Enum n,Floating n) => Int -> [(n,n)] -> [n]
 sine2 n = sum_l . sine2_l n
 
@@ -81,7 +81,7 @@ sine3 n = sum_l . sine3_l n
 
 {- | Generate Chebyshev waveshaping table, see b_gen_cheby.
 
-> Sound.SC3.Plot.plot_p1_ln [gen_cheby 256 [1,0,1,1,0,1]]
+> Sound.SC3.Plot.plot_p1_ln [gen_cheby 256 [1, 0, 1, 1, 0, 1]]
 -}
 gen_cheby :: (Enum n, Floating n, Ord n, Integral i) => i -> [n] -> [n]
 gen_cheby n =
@@ -95,3 +95,7 @@ gen_cheby n =
 -- | Type specialised 'gen_cheby'.
 cheby :: (Enum n, Floating n, Ord n) => Int -> [n] -> [n]
 cheby = gen_cheby
+
+-- | Variant that generates a wavetable (without guard point) suitable for the Shaper UGen.
+chebyShaperTbl :: (Enum n, Floating n, Ord n) => Int -> [n] -> [n]
+chebyShaperTbl n = Buffer.to_wavetable_nowrap . cheby n
