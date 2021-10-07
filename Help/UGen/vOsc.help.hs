@@ -14,5 +14,5 @@ withSC3 (mapM_ maybe_async (concatMap gen_setup [0 .. 7]))
 Sound.SC3.Plot.plot_p1_imp [gen_harm 7]
 
 ---- ; setup ; reallocate buffers while oscillator is running
-resetTable i = do {h <- Sound.SC3.Lang.Random.IO.nrrand 12 0 1; Sound.OSC.sendMessage (b_gen_sine1 i b_flags h)}
+resetTable i = do {h <- Sound.SC3.Lang.Random.IO.nrrand 12 0 1; Sound.OSC.sendMessage (b_gen_sine1 i [Normalise,Wavetable,Clear] h)}
 withSC3 (mapM_ resetTable [0 .. 7])
