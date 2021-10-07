@@ -16,5 +16,5 @@ let b = control kr "buf" 0
 in playBufCF 1 b r tr sp NoLoop 2 5
 
 ---- ; load sound file to buffer zero (single channel file required for examples)
-withSC3 (async (b_allocRead 0 "/home/rohan/data/audio/pf-c5.aif" 0 0))
-withSC3 (async (b_allocRead 0 "/home/rohan/opt/src/SuperCollider3/supercollider/supercollider/sounds/a11wlk01.wav" 0 0))
+withSC3 (async (b_allocRead 0 (sfRequire "pf-c5.aif") 0 0))
+withSC3 (async (b_allocRead 0 (sfRequire "a11wlk01.wav") 0 0))

@@ -42,5 +42,5 @@ let nc = 2
 in bufRdN nc ar buf (zero + phase) NoLoop * 0.1
 
 ---- ; setup ; nc=2
-{buf = 0 ; fn = "/home/rohan/data/audio/amen.wav"}
+{buf = 0 ; fn = sfRequire "amen.wav"}
 withSC3 (async (b_allocRead buf fn 0 0))

@@ -11,4 +11,5 @@ import Sound.SC3.Common.Math.Warp as M
 import Sound.SC3.Common.Mce as M
 import Sound.SC3.Common.Monad as M
 import Sound.SC3.Common.Rate as M
+import Sound.SC3.Common.SoundFile as M
 import Sound.SC3.Common.UId as M

@@ -57,19 +57,19 @@ let b = control_m kr "buf" 0 (0,0,"lin")
 in X.rFreezer b lhs rhs amp incr incrO incrR wndR syncPh randPh dgr
 
 ---- ; allocate buffer 0, required for examples
-ld fn = withSC3 (async (b_allocRead 0 fn 0 0))
-ld "/home/rohan/data/audio/instr/crotales/crotale05(D).wav"
-ld "/home/rohan/uc/sp-id/flac/gamelan/suhirdjan/saron-panerus-S-0-5.flac"
-ld "/home/rohan/uc/sp-id/flac/gamelan/suhirdjan/saron-panerus-S-0-6.flac"
-ld "/home/rohan/uc/sp-id/flac/gamelan/suhirdjan/saron-barung-S-0-1.flac"
-ld "/home/rohan/uc/sp-id/flac/gamelan/suhirdjan/saron-demung-S-1-3.flac"
-ld "/home/rohan/uc/sp-id/flac/gamelan/suhirdjan/saron-demung-S-1-5.flac"
-ld "/home/rohan/uc/sp-id/flac/gamelan/suhirdjan/saron-demung-S-1-6.flac"
-ld "/home/rohan/uc/sp-id/flac/gamelan/suhirdjan/bonang-barung-S-0-2.flac"
-ld "/home/rohan/uc/sp-id/flac/gamelan/suhirdjan/bonang-barung-S-2-1.flac"
-ld "/home/rohan/uc/sp-id/flac/gamelan/suhirdjan/gender-barung-S-1-2.flac"
-ld "/home/rohan/uc/sp-id/flac/gamelan/suhirdjan/gender-barung-S-2-5.flac"
-ld "/home/rohan/uc/sp-id/flac/gamelan/suhirdjan/gender-barung-S-3-3.flac"
+ld fn = withSC3 (async (b_allocRead 0 (sfRequire fn) 0 0))
+ld "crotale05(D).wav"
+ld "saron-panerus-S-0-5.flac"
+ld "saron-panerus-S-0-6.flac"
+ld "saron-barung-S-0-1.flac"
+ld "saron-demung-S-1-3.flac"
+ld "saron-demung-S-1-5.flac"
+ld "saron-demung-S-1-6.flac"
+ld "bonang-barung-S-0-2.flac"
+ld "bonang-barung-S-2-1.flac"
+ld "gender-barung-S-1-2.flac"
+ld "gender-barung-S-2-5.flac"
+ld "gender-barung-S-3-3.flac"
 
 {---- ; RFreeze ; concurrent loops at a signal buffer
 

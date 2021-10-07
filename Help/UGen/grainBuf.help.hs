@@ -28,11 +28,11 @@ let f (_,g,x,y,z,o,rx,ry,_,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 2
 
 ---- ; load buffer
-fn = "/home/rohan/data/audio/metal.wav"
-fn = "/home/rohan/data/audio/instr/celeste/long/13-C4-long.wav"
-fn = "/home/rohan/data/audio/instr/celeste/long/25-C5-long.wav"
-fn = "/home/rohan/data/audio/instr/celeste/long/37-C6-long.wav"
-fn = "/home/rohan/data/audio/instr/celeste/long/49-C7-long.wav"
+fn = sfRequire "metal.wav"
+fn = sfRequire "13-C4-long.wav" -- instr/celeste/long
+fn = sfRequire "25-C5-long.wav"
+fn = sfRequire "37-C6-long.wav"
+fn = sfRequire "49-C7-long.wav"
 withSC3 (async (b_allocRead 0 fn 0 0))
 
 fn = "/home/rohan/uc/the-center-is-between-us/visitants/flac/f/y.flac"

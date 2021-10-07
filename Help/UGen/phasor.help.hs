@@ -13,12 +13,12 @@ let rate = mouseX kr 1 200 Linear 0.1
     x = phasor ar tr (rate / sr) 0 1 (mce2 0 (mouseY kr 0 1 Linear 0.2))
 in sinOsc ar (x * 500 + 500) 0 * 0.1
 
--- phasor ; as phase input to bufRd
+-- phasor ; as phase input to bufRd ; requires=buf
 let b = control kr "buf" 0
     ph = phasor ar 0 (bufRateScale kr b) 0 (bufFrames kr b) 0
 in bufRd 1 ar b ph Loop NoInterpolation
 
--- phasor ; audio rate oscillator as phase input to bufRd
+-- phasor ; audio rate oscillator as phase input to bufRd ; requires=buf
 let b = control kr "buf" 0
     f = 440
     fr = bufFrames kr b
@@ -70,7 +70,7 @@ let freq = mouseX kr 200 4000 Exponential 0.2
 in pan2 (leakDC squareSig 0.995) 0 0.05
 
 ---- ; load sound file to buffer zero
-withSC3 (async (b_allocRead 0 "/home/rohan/data/audio/pf-c5.aif" 0 0))
+withSC3 (async (b_allocRead 0 (sfRequire "pf-c5.aif") 0 0))
 
 ---- ; allocate and generate (non-wavetable) buffer (see osc for wavetable oscillator)
 withSC3 (mapM_ maybe_async [b_alloc 0 8192 1,b_gen_sine1 0 [Normalise,Clear] [1]])
