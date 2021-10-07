@@ -1,12 +1,22 @@
 -- osc ; fixed frequency wavetable oscillator
-let tbl = Gen.sine1_nrm 256 [1, 1/2, 1/3, 1/4, 1/5]
-    buf = asLocalBuf (Sound.SC3.Common.Buffer.to_wavetable tbl)
-in osc ar buf 220 0 * 0.1
+let tbl = asLocalBuf (Gen.sine1Tbl 256 [1, 1/2, 1/3, 1/4, 1/5])
+in osc ar tbl 220 0 * 0.1
 
 -- osc ; mouse frequency control
-let tbl = Gen.sine1_nrm 256 [1, 1/2, 1/3, 1/4, 1/5]
-    buf = asLocalBuf (Sound.SC3.Common.Buffer.to_wavetable tbl)
-in osc ar buf (mouseX kr 110 220 Exponential 0.2) 0 * 0.1
+let tbl = asLocalBuf (Gen.sine1Tbl 256 [1, 1/2, 1/3, 1/4, 1/5])
+in osc ar tbl (mouseX kr 110 220 Exponential 0.2) 0 * 0.1
+
+-- osc ; modulate frequency
+let tbl = asLocalBuf (Gen.sine1Tbl 256 [1, 1/2, 1/3, 1/4, 1/5])
+in osc ar tbl (xLine kr 2000 200 1 DoNothing) 0 * 0.1
+
+-- osc ; as frequency modulator
+let tbl = asLocalBuf (Gen.sine1Tbl 256 [1, 1/2, 1/3, 1/4, 1/5])
+in osc ar tbl (osc ar tbl (xLine kr 1 1000 9 RemoveSynth) 0 * 200 + 800) 0 * 0.1
+
+-- osc ; as phase modulator
+let tbl = asLocalBuf (Gen.sine1Tbl 256 [1, 1/2, 1/3, 1/4, 1/5])
+in osc ar tbl 800 (osc ar tbl (xLine kr 20 8000 10 RemoveSynth) 0 * 2 * pi) * 0.1
 
 -- osc ; requires=tbl ; fixed frequency wavetable oscillator
 let b = control kr "tbl" 0

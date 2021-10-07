@@ -44,6 +44,10 @@ sine1 n = sum_l . sine1_l n
 sine1_nrm :: (Enum n,Floating n,Ord n) => Int -> [n] -> [n]
 sine1_nrm n = nrm_u . sine1 n
 
+-- | Variant that generates a wavetable (without guard point) suitable for the Shaper UGen.
+sine1Tbl :: (Enum n, Floating n, Ord n) => Int -> [n] -> [n]
+sine1Tbl n = Buffer.to_wavetable . sine1_nrm n
+
 -- * sine2
 
 -- | Series of /n/ sine wave partials using specified frequencies and amplitudes.

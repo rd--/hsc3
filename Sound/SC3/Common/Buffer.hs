@@ -129,14 +129,12 @@ of two adjacent elements of the Wavetable.
 from_wavetable :: Num n => [n] -> [n]
 from_wavetable = map (uncurry (+)) . t2_adjacent
 
-{- | A Wavetable has /n * 2 + 2/ elements, where /n/ is the number
-of elements of the Signal.  Each signal element /e0/ expands to the
-two elements /(2 * e0 - e1, e1 - e0)/ where /e1/ is the next
-element, or zero at the final element.  Properly wavetables are
-only of power of two element signals.
+{- | A Wavetable has n * 2 + 2 elements, where n is the number of elements of the Signal.
+     Each signal element e0 expands to the two elements (2 * e0 - e1, e1 - e0)
+     where e1 is the next element, or zero at the final element.
+     Properly wavetables are only of power of two element signals.
 
 > > Signal[0,0.5,1,0.5].asWavetable == Wavetable[-0.5,0.5,0,0.5,1.5,-0.5,1,-0.5]
-
 > to_wavetable [0,0.5,1,0.5] == [-0.5,0.5,0,0.5,1.5,-0.5,1,-0.5]
 -}
 to_wavetable :: Num a => [a] -> [a]
@@ -152,11 +150,9 @@ to_wavetable_nowrap =
 
 {- | Variant of 'sineFill' that gives each component table.
 
-> let t = sineGen 1024 (map recip [1,2,3,5,8,13,21,34,55]) (replicate 9 0)
+> let t = sineGen 1024 (map recip [1, 2, 3, 5, 8, 13, 21, 34, 55]) (replicate 9 0)
 > map length t == replicate 9 1024
-
-> import Sound.SC3.Plot
-> plotTable t
+> Sound.SC3.Plot.plot_p1_ln t
 -}
 sineGen :: (Floating n,Enum n) => Int -> [n] -> [n] -> [[n]]
 sineGen n =
@@ -165,17 +161,14 @@ sineGen n =
         f h amp iph = map (\z -> sin (z + iph) * amp) (ph h)
     in zipWith3 f [1..]
 
-{- | @Signal.*sineFill@ is a table generator.  Frequencies are
-partials, amplitudes and initial phases are as given.  Result is
-normalised.
+{- | @Signal.*sineFill@ is a table generator.
+     Frequencies are partials, amplitudes and initial phases are as given.
+     Result is normalised.
 
-> let t = let a = [[21,5,34,3,2,13,1,8,55]
->                 ,[13,8,55,34,5,21,3,1,2]
->                 ,[55,34,1,3,2,13,5,8,21]]
->         in map (\amp -> sineFill 1024 (map recip amp) (replicate 9 0)) a
+> let a = [[21,5,34,3,2,13,1,8,55],[13,8,55,34,5,21,3,1,2],[55,34,1,3,2,13,5,8,21]]
+> let t = map (\amp -> sineFill 1024 (map recip amp) (replicate 9 0)) a
+> Sound.SC3.Plot.plot_p1_ln t
 
-> import Sound.SC3.Plot
-> plotTable t
 -}
 sineFill :: (Ord n,Floating n,Enum n) => Int -> [n] -> [n] -> [n]
 sineFill n amp iph =
