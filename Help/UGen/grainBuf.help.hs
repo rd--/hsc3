@@ -28,12 +28,12 @@ let f (_,g,x,y,z,o,rx,ry,_,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 2
 
 ---- ; load buffer
-fn = sfRequire "metal.wav"
-fn = sfRequire "13-C4-long.wav" -- instr/celeste/long
-fn = sfRequire "25-C5-long.wav"
-fn = sfRequire "37-C6-long.wav"
-fn = sfRequire "49-C7-long.wav"
-withSC3 (async (b_allocRead 0 fn 0 0))
+ld fn = withSC3 (async (b_allocRead 0 (sfResolve fn) 0 0))
+ld "metal.wav"
+ld "instr/celeste/long/13-C4-long.wav"
+ld "instr/celeste/long/25-C5-long.wav"
+ld "instr/celeste/long/37-C6-long.wav"
+ld "instr/celeste/long/49-C7-long.wav"
 
 fn = "/home/rohan/uc/the-center-is-between-us/visitants/flac/f/y.flac"
 withSC3 (async (b_allocRead 0 fn (48000 * 45) (48000 * 1)))

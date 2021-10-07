@@ -66,6 +66,6 @@ let f (_,g,x,y,z,o,rx,ry,_,_,_) =
 in mix (eventVoicer 16 f) * control kr "gain" 2
 
 ---- ; setup
-fn = sfRequire "metal.wav"
-fn = sfRequire "37-C6-long.wav"
-withSC3 (async (b_allocRead 0 fn 0 0))
+ld fn = withSC3 (async (b_allocRead 0 (sfResolve fn) 0 0))
+ld "metal.wav"
+ld "instr/celeste/long/37-C6-long.wav"

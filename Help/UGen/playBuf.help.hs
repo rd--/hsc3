@@ -50,11 +50,11 @@ let n_buf = 61
 in playBuf 1 ar b r t 0 Loop DoNothing * 0.5
 
 ---- ; setup ; nc=1
-{buf = 0 ; fn = sfRequire "metal.wav"}
+{buf = 0 ; fn = sfResolve "metal.wav"}
 withSC3 (async (b_allocRead buf fn 0 0))
 
 ---- ; setup ; nc=2
-{buf = 0 ; fn = sfRequire "pf-c5.aif"}
+{buf = 0 ; fn = sfResolve "pf-c5.aif"}
 withSC3 (async (b_allocRead buf fn 0 0))
 
 ---- ; setup ; dir ; cnt=61

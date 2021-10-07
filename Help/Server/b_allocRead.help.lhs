@@ -5,7 +5,7 @@
 
 Read an audio file into a buffer.
 
-> f_00 = sfRequire "jonchaies.wav"
+> f_00 = sfResolve "jonchaies.wav"
 > m_00 = b_allocRead 0 f_00 0 0
 
     withSC3 (async m_00)
@@ -53,7 +53,7 @@ Free buffer.  Memory is immediately made free.
 
 Small sample buffer
 
-> f_01 = sfRequire "metal.wav"
+> f_01 = sfResolve "metal.wav"
 
     withSC3 (async m_01)
 

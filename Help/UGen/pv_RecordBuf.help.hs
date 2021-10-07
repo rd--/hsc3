@@ -8,7 +8,7 @@ let snd_buf = control kr "buf" 0
 in mrg2 i c1
 
 ---- ; load soundfile
-fn = sfRequire "a11wlk01.wav"
+fn = sfResolve "a11wlk01.wav"
 withSC3 (async (b_allocRead 0 fn 0 0))
 
 ---- ; allocate analysis buffer ; duration=5, frame-size=1024, hop-size=0.25, sample-rate=48000

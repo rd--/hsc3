@@ -35,5 +35,5 @@ in rShufflerB_grp b
    (k "iotQ" 0.0 (0,1,"lin"))
 
 ---- ; load buffer
-ld fn = withSC3 (async (b_allocRead 0 (sfRequire fn) 0 0))
+ld fn = withSC3 (async (b_allocRead 0 (sfResolve fn) 0 0))
 ld "crotale05(D).wav"

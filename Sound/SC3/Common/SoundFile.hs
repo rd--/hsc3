@@ -9,16 +9,9 @@ import System.Process {- process -}
 
 import qualified Data.List.Split as Split {- split -}
 
--- | SFDIR environment variable.
-sfDir :: IO FilePath
-sfDir = getEnv "SFDIR"
-
--- | SFPATH environment variable.
-sfPath :: IO FilePath
-sfPath = getEnv "SFPATH"
-
-{- | Run the system process "find" to find the file fn (case-sensitively) starting from dir.
+{- | Find the file fn (case-sensitively) starting from dir.
      Runs the system command "find" (so UNIX only).
+     Note that fn must be a file name not a relative path name.
 
 > findFileFromDirectory "/home/rohan/data/audio" "metal.wav"
 -}
@@ -30,22 +23,42 @@ findFileFromDirectory dir fn = do
     [r0] -> return (Just r0)
     _ -> error "findFileFromDirectory: multiple files?"
 
-{- | Run findFileFromDirectory for each entry in path until the file is found, or not.
 
-> findFileFromPath ["/home/rohan/rd/data/"] "20.2-LW+RD.flac"
+{- | Find the file fn starting from dir.
+     If dir/fn names a file return that file, else call findFileFromDirectory.
+     Note this will not find dir/p/q/r given q/r, the query must be either p/q/r or r.
+
+> findFileAtOrFromDirectory "/home/rohan/data/audio" "instr/bosendorfer/072/C5.aif"
 -}
-findFileFromPath :: [FilePath] -> FilePath -> IO (Maybe FilePath)
-findFileFromPath path fn =
+findFileAtOrFromDirectory :: String -> String -> IO (Maybe String)
+findFileAtOrFromDirectory dir fn = do
+  isAtDir <- doesFileExist (dir </> fn)
+  if isAtDir then return (Just (dir </> fn)) else findFileFromDirectory dir fn
+
+{- | Run findFileAtOrFromDirectory for each entry in path until the file is found, or not.
+
+> findFileAtOrFromPath ["/home/rohan/rd/data/"] "20.2-LW+RD.flac"
+-}
+findFileAtOrFromPath :: [FilePath] -> FilePath -> IO (Maybe FilePath)
+findFileAtOrFromPath path fn =
   case path of
     [] -> return Nothing
     dir:path' -> do
-      m <- findFileFromDirectory dir fn
+      m <- findFileAtOrFromDirectory dir fn
       case m of
         Just r -> return (Just r)
-        Nothing -> findFileFromPath path' fn
+        Nothing -> findFileAtOrFromPath path' fn
+
+-- | SFDIR environment variable.
+sfDir :: IO FilePath
+sfDir = getEnv "SFDIR"
+
+-- | SFPATH environment variable.
+sfPath :: IO FilePath
+sfPath = getEnv "SFPATH"
 
 {- | Find file fn at 'sfDir' directly or along 'sfPath'.
-     If fn is either an absolute or names a relative file and if that file exists it is returned.
+     If fn is either absolute or names a relative file and if that file exists it is returned.
      If sdDir/fn exists it is returned.
      Else each directory at sfPath is searched (recursively) in turn.
 
@@ -57,26 +70,26 @@ sfFindFile fn = do
   path <- fmap (Split.splitOn ":") sfPath
   isFn <- doesFileExist fn
   isDir <- doesFileExist (dir </> fn)
-  if isFn then return (Just fn) else if isDir then return (Just (dir </> fn)) else findFileFromPath path fn
+  if isFn then return (Just fn) else if isDir then return (Just (dir </> fn)) else findFileAtOrFromPath path fn
 
 -- | sfFindFile or error.
-sfRequireFile :: FilePath -> IO FilePath
-sfRequireFile fn = do
+sfResolveFile :: FilePath -> IO FilePath
+sfResolveFile fn = do
   m <- sfFindFile fn
   case m of
-    Nothing  -> error ("sfRequireFile: " ++ fn)
+    Nothing  -> error ("sfResolveFile: " ++ fn)
     Just r -> return r
 
-{- | Unsafe sfRequireFile.
-     It's useful to refer to a soundfile by it's name.
+{- | Unsafe sfResolveFile.
+     For resolving sound file names at read only sound file archives this is quite safe.
 -}
-sfRequire :: FilePath -> FilePath
-sfRequire = unsafePerformIO . sfRequireFile
+sfResolve :: FilePath -> FilePath
+sfResolve = unsafePerformIO . sfResolveFile
 
 {- | Return the number of channels at fn.
      Runs the system command "soxi" (so UNIX only).
 
-> sfRequireFile "metal.wav" >>= sfNumChannels >>= print
+> sfResolveFile "metal.wav" >>= sfNumChannels >>= print
 -}
 sfNumChannels :: FilePath -> IO Int
 sfNumChannels fn = fmap read (System.Process.readProcess "soxi" ["-c", fn] "")
@@ -84,7 +97,7 @@ sfNumChannels fn = fmap read (System.Process.readProcess "soxi" ["-c", fn] "")
 {- | Return the sample rate of fn.
      Runs the system command "soxi" (so UNIX only).
 
-> sfRequireFile "metal.wav" >>= sfSampleRate >>= print
+> sfResolveFile "metal.wav" >>= sfSampleRate >>= print
 -}
 sfSampleRate :: FilePath -> IO Int
 sfSampleRate fn = fmap read (System.Process.readProcess "soxi" ["-r", fn] "")
@@ -92,7 +105,7 @@ sfSampleRate fn = fmap read (System.Process.readProcess "soxi" ["-r", fn] "")
 {- | Return the number of frames at fn.
      Runs the system command "soxi" (so UNIX only).
 
-> sfRequireFile "metal.wav" >>= sfFrameCount >>= print
+> sfResolveFile "metal.wav" >>= sfFrameCount >>= print
 -}
 sfFrameCount :: FilePath -> IO Int
 sfFrameCount fn = fmap read (System.Process.readProcess "soxi" ["-s", fn] "")
@@ -100,11 +113,20 @@ sfFrameCount fn = fmap read (System.Process.readProcess "soxi" ["-s", fn] "")
 {- | Return the number of channels, sample-rate and number of frames at fn.
      Runs the system command "soxi" (so UNIX only).
 
-> sfRequireFile "metal.wav" >>= sfInfo >>= print
+> sfResolveFile "metal.wav" >>= sfMetadata >>= print
 -}
-sfInfo :: FilePath -> IO (Int, Int, Int)
-sfInfo fn = do
+sfMetadata :: FilePath -> IO (Int, Int, Int)
+sfMetadata fn = do
   nc <- sfNumChannels fn
   sr <- sfSampleRate fn
   nf <- sfFrameCount fn
   return (nc, sr, nf)
+
+{- | Unsafe sfMetadata.
+     For fetching sound file information from read only sound file archives this is quite safe.
+
+> sfInfo (sfResolve "metal.wav") == (1,44100,1029664)
+> sfInfo (sfResolve "pf-c5.aif") == (2,44100,576377)
+-}
+sfInfo :: FilePath -> (Int, Int, Int)
+sfInfo = unsafePerformIO . sfMetadata
