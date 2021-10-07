@@ -7,17 +7,22 @@ in shaper b z * 0.1
 
 -- shaper ; hear waveshaper at pure (sin) tone ; local wavetable
 let z = sinOsc ar 300 0 * line kr 0 1 6 DoNothing
-    t = chebyShaperTbl 256 [1, 0, 1, 1, 0, 1]
+    t = Gen.chebyShaperTbl 256 [1, 0, 1, 1, 0, 1]
 in shaper (asLocalBuf t) z * 0.1
 
 -- shaper ; minor variation
 let z = sinOsc ar 400 (pi / 2) * line kr 0 1 6 DoNothing
-in shaper (asLocalBuf (chebyShaperTbl 256 [1, 0, 1, 1, 0, 1])) z * 0.1
+in shaper (asLocalBuf (Gen.chebyShaperTbl 256 [1, 0, 1, 1, 0, 1])) z * 0.1
+
+-- shaper ; mouse control
+let z = sinOsc ar 400 (pi / 2) * mouseY kr 0.01 1 Exponential 0.2
+    t = asLocalBuf (Gen.chebyShaperTbl 256 [1, 0, 1, 1, 0, 1])
+in shaper t z * 0.1
 
 -- shaper ; sound in ; mouse control ; warning=feedback
 let z = soundIn 0
     x = mouseX kr (-1) 1 Linear 0.2
-    t = asLocalBuf (chebyShaperTbl 256 [1, 0, 1, 1, 0, 1])
+    t = asLocalBuf (Gen.chebyShaperTbl 256 [1, 0, 1, 1, 0, 1])
 in xFade2 z (shaper t z) x 0.5
 
 -- shaper ; hear waveshaper at pure (sin) tone ; requires=tbl see b_gen_cheby at b_gen help file
@@ -41,11 +46,10 @@ in xFade2 z (shaper (control kr "tbl" 10) z) x 0.5
 -- shaper ; event control
 let f (_,g,_,y,z,o,_,_,p,_,_) =
       let s = sinOsc ar (midiCps p) 0 * y
-          c = Gen.cheby 257 [1,0,1,1,0,1]
-          b = asLocalBufId 'α' (to_wavetable_nowrap c)
+          b = asLocalBuf (Gen.chebyShaperTbl 256 [1, 0, 1, 1, 0, 1])
       in pan2 (shaper b s) (o * 2 - 1) (z * g)
 in mix (eventVoicer 16 f) * control kr "gain" 1.0
 
 ---- ; drawings
-Sound.SC3.Plot.plot_p1_ln [Gen.cheby 257 [1,0,1,1,0,1]]
-Sound.SC3.Plot.plot_p1_ln [to_wavetable_nowrap (Gen.cheby 257 [1,0,1,1,0,1])]
+Sound.SC3.Plot.plot_p1_ln [Gen.cheby 256 [1, 0, 1, 1, 0, 1]]
+Sound.SC3.Plot.plot_p1_ln [Gen.chebyShaperTbl 256 [1, 0, 1, 1, 0, 1]]

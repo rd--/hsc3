@@ -36,9 +36,11 @@ sine1_l n = zipWith (curry (sine1_p n)) [1..]
 sine1 :: (Enum n,Floating n) => Int -> [n] -> [n]
 sine1 n = sum_l . sine1_l n
 
--- | 'nrm_u' of 'sine1_l'.
---
--- > plot_p1_ln [sine1_nrm 256 [1, 0.95 .. 0.5]]
+{- | 'nrm_u' of 'sine1_l'.
+
+> Sound.SC3.Plot.plot_p1_ln [sine1_nrm 256 [1, 0.95 .. 0.5]]
+> Sound.SC3.Plot.plot_p1_ln [sine1_nrm 256 [1, 1/2, 1/3, 1/4, 1/5]]
+-}
 sine1_nrm :: (Enum n,Floating n,Ord n) => Int -> [n] -> [n]
 sine1_nrm n = nrm_u . sine1 n
 
@@ -48,10 +50,11 @@ sine1_nrm n = nrm_u . sine1 n
 sine2_l :: (Enum n,Floating n) => Int -> [(n,n)] -> [[n]]
 sine2_l n = map (sine1_p n)
 
--- | 'sum_l' of 'sine2_l'.
---
--- > plot_p1_ln [sine2 256 (zip [1, 2..] [1, 0.95 .. 0.5])]
--- > plot_p1_ln [sine2 256 (zip [1, 1.5 ..] [1, 0.95 .. 0.5])]
+{- | 'sum_l' of 'sine2_l'.
+
+> Sound.SC3.Plot.plot_p1_ln [sine2 256 (zip [1, 2..] [1, 0.95 .. 0.5])]
+> Sound.SC3.Plot.plot_p1_ln [sine2 256 (zip [1, 1.5 ..] [1, 0.95 .. 0.5])]
+-}
 sine2 :: (Enum n,Floating n) => Int -> [(n,n)] -> [n]
 sine2 n = sum_l . sine2_l n
 
@@ -63,9 +66,9 @@ sine2_nrm n = nrm_u . sine1 n
 
 -- | Sine wave table at specified frequency, amplitude and phase.
 sine3_p :: (Enum n,Floating n) => Int -> (n,n,n) -> [n]
-sine3_p n (pfreq,ampl,phase) =
-    let incr = (Math.two_pi / (fromIntegral n - 1)) * pfreq
-    in map ((*) ampl . sin) (take n [phase,phase + incr ..])
+sine3_p n (pfreq, ampl, phase) =
+    let incr = (Math.two_pi / (fromIntegral n - 0)) * pfreq -- the table should not arrive back at zero
+    in map ((*) ampl . sin) (take n [phase, phase + incr ..])
 
 -- | 'map' of 'sine3_p'.
 sine3_l :: (Enum n,Floating n) => Int -> [(n,n,n)] -> [[n]]
@@ -87,7 +90,7 @@ gen_cheby :: (Enum n, Floating n, Ord n, Integral i) => i -> [n] -> [n]
 gen_cheby n =
     let acos' x = if x > 1 then 0 else if x < -1 then pi else acos x
         c k x = cos (k * acos' x)
-        ix = [-1,-1 + (2 / (fromIntegral n - 1)) .. 1]
+        ix = [-1, -1 + (2 / (fromIntegral n - 1)) .. 1] -- increment?
         mix = map sum . transpose
         c_normalize x = let m = maximum (map abs x) in map (* recip m) x
     in c_normalize . mix . zipWith (\k a -> map ((* a) . c k) ix) [1..]
