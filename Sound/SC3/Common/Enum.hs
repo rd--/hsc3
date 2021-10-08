@@ -11,16 +11,16 @@ data Loop t =
   deriving (Eq, Show)
 
 -- | Apply /f/ at 'WithLoop'.
-loop_coerce :: (t -> u) -> Loop t -> Loop u
-loop_coerce f lp =
+loop_map :: (t -> u) -> Loop t -> Loop u
+loop_map f lp =
   case lp of
     NoLoop -> NoLoop
     Loop -> Loop
     WithLoop t -> WithLoop (f t)
 
--- | fmap is 'loop_coerce'
+-- | fmap is 'loop_map'
 instance Functor Loop where
-  fmap = loop_coerce
+  fmap = loop_map
 
 -- | Resolve 'Loop'.
 from_loop :: Num t => Loop t -> t
@@ -61,8 +61,8 @@ data DoneAction t
   deriving (Eq, Show)
 
 -- | Apply /f/ at 'WithDoneAction'.
-done_action_coerce :: (t -> u) -> DoneAction t -> DoneAction u
-done_action_coerce f e =
+done_action_map :: (t -> u) -> DoneAction t -> DoneAction u
+done_action_map f e =
     case e of
       DoNothing -> DoNothing
       PauseSynth -> PauseSynth
@@ -70,9 +70,9 @@ done_action_coerce f e =
       RemoveGroup -> RemoveGroup
       WithDoneAction x -> WithDoneAction (f x)
 
--- | fmap is 'done_action_coerce'
+-- | fmap is 'done_action_map'
 instance Functor DoneAction where
-  fmap = done_action_coerce
+  fmap = done_action_map
 
 -- | Resolve 'DoneAction'.
 from_done_action :: Num t => DoneAction t -> t
@@ -104,16 +104,16 @@ from_warp e =
       WithWarp u -> u
 
 -- | Apply /f/ at 'WithWarp'
-warp_coerce :: (t -> u) -> Warp t -> Warp u
-warp_coerce f e =
+warp_map :: (t -> u) -> Warp t -> Warp u
+warp_map f e =
     case e of
       Linear -> Linear
       Exponential -> Exponential
       WithWarp u -> WithWarp (f u)
 
--- | fmap = 'warp_coerce'
+-- | fmap = 'warp_map'
 instance Functor Warp where
-  fmap = warp_coerce
+  fmap = warp_map
 
 -- * Buffer
 

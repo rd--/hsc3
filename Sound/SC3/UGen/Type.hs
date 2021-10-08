@@ -1,4 +1,4 @@
--- | Unit Generator ('UGen') and associated types and instances.
+-- | Unit Generator and associated types and instances.
 module Sound.SC3.UGen.Type where
 
 import Data.Bits {- base -}
@@ -11,6 +11,8 @@ import Text.Printf {- base -}
 import qualified Safe {- safe -}
 import qualified System.Random as Random {- random -}
 
+import qualified Sound.OSC as Osc {- hosc -}
+
 import qualified Sound.SC3.Common.Math as Math
 import Sound.SC3.Common.Math.Operator
 import Sound.SC3.Common.Rate
@@ -20,23 +22,24 @@ import qualified Sound.SC3.Common.UId as UId
 -- * Basic types
 
 -- | Identifier used to distinguish otherwise equal non-deterministic nodes.
-data UGenId = NoId | UId UId.Id
-              deriving (Ord, Eq, Read, Show)
+data UGenId = NoId | UId UId.Id deriving (Ord, Eq, Read, Show)
 
 -- | Alias of 'NoId', the 'UGenId' used for deterministic UGens.
 no_id :: UGenId
 no_id = NoId
 
--- | SC3 samples are 32-bit 'Float'.  hsc3 represents data as 64-bit
--- 'Double'.  If 'UGen' values are used more generally (ie. see
--- hsc3-forth) 'Float' may be too imprecise, ie. for representing time
--- stamps.
+{- | SC3 samples are 32-bit 'Float'.
+     hsc3 represents data as 64-bit 'Double'.
+     If 'UGen' values are used more generally (ie. see hsc3-forth) 'Float' may be too imprecise,
+     i.e. for representing time stamps.
+-}
 type Sample = Double
 
--- | Constants.
---
--- > Constant 3 == Constant 3
--- > (Constant 3 > Constant 1) == True
+{- | Constants.
+
+> Constant 3 == Constant 3
+> (Constant 3 > Constant 1) == True
+-}
 newtype Constant = Constant {constantValue :: Sample} deriving (Ord, Eq, Read, Show)
 
 -- | Control meta-data.
@@ -64,7 +67,12 @@ type Control_Meta_T5 n = (n,n,String,n,String)
 control_meta_t5 :: (n -> m) -> Control_Meta_T5 n -> Control_Meta m
 control_meta_t5 f (l,r,w,stp,u) = Control_Meta (f l) (f r) w (f stp) u Nothing
 
-{- | Controls may form part of a control group. -}
+{- | Controls may form part of a control group.
+     There are presently three types of groups.
+     Ranges controls have two values (minima, maxima) and are ordinarily drawn as a range slider.
+     Array controls have n values [e1 .. eN] and are ordinarily drawn as a multislider.
+     XY controls have two values (x,y)  and are ordinarily drawn as a two dimensional slider.
+-}
 data Control_Group
   = Control_Range
   | Control_Array Int
@@ -81,7 +89,7 @@ control_group_degree grp =
 
 {- | Grouped controls have names that have equal prefixes and identifying suffixes.
      Range controls have two elements, minima and maxima, suffixes are [ and ].
-     Array controls have N elements and have IX suffixes.
+     Array controls have n elements and have zero-indexed numerical suffixes.
      XY controls have two elements, X and Y coordinates, suffixes are X and Y.
 -}
 control_group_suffixes :: Control_Group -> [String]
@@ -91,8 +99,9 @@ control_group_suffixes grp =
     Control_Array n -> map (printf "%02d") [0 .. n - 1]
     Control_XY -> ["X","Y"]
 
--- | Control inputs.  It is an invariant that controls with equal
--- names within a UGen graph must be equal in all other respects.
+{- | Control inputs.
+     It is an unchecked invariant that controls with equal names within a UGen graph must be equal in all other respects.
+-}
 data Control = Control {controlOperatingRate :: Rate
                        ,controlIndex :: Maybe Int
                        ,controlName :: String
@@ -111,14 +120,18 @@ type Output = Rate
 newtype Special = Special Int
     deriving (Ord, Eq, Read, Show)
 
--- | UGen primitives.
+{- | UGen primitives.
+     There can be two sets of messages associated with the Primitive.
+     One to be run prior to the graph being executed, the other after it has ended.
+-}
 data Primitive t =
   Primitive {ugenRate :: Rate
             ,ugenName :: String
             ,ugenInputs :: [t]
             ,ugenOutputs :: [Output]
             ,ugenSpecial :: Special
-            ,ugenId :: UGenId}
+            ,ugenId :: UGenId
+            ,ugenBrackets :: ([Osc.Message], [Osc.Message])}
   deriving (Ord, Eq, Read, Show)
 
 {- | Proxy indicating an output port at a multi-channel primitive.
@@ -376,6 +389,17 @@ isProxy = isJust . un_proxy
 isProxy :: UGen -> Bool
 isProxy = isJust . un_proxy
 
+-- | Get Primitive from UGen if UGen is a Primitive.
+ugenPrimitive :: UGen -> Maybe (Primitive UGen)
+ugenPrimitive (UGen c) =
+  case c of
+    CPrimitive p -> Just p
+    _ -> Nothing
+
+-- | Is 'UGen' a 'Primitive'?
+isPrimitive :: UGen -> Bool
+isPrimitive = isJust . ugenPrimitive
+
 -- * Mce
 
 -- | Multiple channel expansion node constructor.
@@ -518,8 +542,10 @@ mceBuild f i =
       Nothing -> f i
       Just i' -> let xs = map (mceBuild f) i' in UGen (CMce (Mce_Vector xs) (maximum (map rateOf xs)))
 
--- | True if Mce is an immediate proxy for a multiple-out Primitive.
---   This is useful when disassembling graphs, ie. ugen_graph_forth_pp at hsc3-db.
+{- | True if Mce is an immediate proxy for a multiple-out Primitive.
+     This is useful when disassembling graphs, ie. ugen_graph_forth_pp at hsc3-db.
+     It's also useful when editing a Primitive after it is constructed, as in bracketUGen.
+-}
 mce_is_direct_proxy :: Mce UGen -> Bool
 mce_is_direct_proxy m =
     case m of
@@ -530,6 +556,28 @@ mce_is_direct_proxy m =
           in all isJust p &&
              length (nub (map proxySource p')) == 1 &&
              map proxyIndex p' `isPrefixOf` [0..]
+
+-- * Bracketed
+
+{- | Attach initialisation and cleanup message sequences to UGen.
+     For simplicity and clarity, brackets can only be attached to Primitive UGen nodes.
+     This will look into the leftmost proxy
+-}
+bracketUGen :: UGen -> ([Osc.Message], [Osc.Message]) -> UGen
+bracketUGen u (pre, post) =
+  let err = error "bracketUGen: only Primitive UGens or immediate proxies may have brackets"
+      rw_proxy pxy =
+        case pxy of
+          UGen (CProxy (Proxy (UGen (CPrimitive p)) pix prt)) ->
+            UGen (CProxy (Proxy (bracketUGen (UGen (CPrimitive p)) (pre, post)) pix prt))
+          _ -> err
+  in case u of
+       UGen (CPrimitive p) -> let (lhs, rhs) = ugenBrackets p in UGen (CPrimitive (p {ugenBrackets = (lhs ++ pre, rhs ++ post)}))
+       UGen (CMce m rt) ->
+         if mce_is_direct_proxy m
+         then UGen (CMce (mce_map rw_proxy m) rt)
+         else err
+       _ -> err
 
 -- * Validators
 
@@ -685,7 +733,7 @@ mkUGen cf rs r nm i i_mce o s z =
     let i' = maybe i ((i ++) . concatMap mceChannels) i_mce
         f h = let r' = mk_ugen_select_rate nm h rs r
                   o' = replicate o r'
-                  u = UGen (CPrimitive (Primitive r' nm h o' s z))
+                  u = UGen (CPrimitive (Primitive r' nm h o' s z ([], [])))
               in case cf of
                    Just cf' ->
                      if all isConstant h
@@ -782,7 +830,7 @@ mkBinaryOperator i f a b =
 is_primitive_for :: String -> UGen -> Bool
 is_primitive_for k u =
     case u of
-      UGen (CPrimitive (Primitive _ nm [_,_] [_] _ _)) -> nm == k
+      UGen (CPrimitive (Primitive _ nm [_,_] [_] _ _ _)) -> nm == k
       _ -> False
 
 -- | Is /u/ the primitive for the named UGen.
@@ -803,7 +851,7 @@ is_math_binop k u =
 is_math_binop :: Int -> UGen -> Bool
 is_math_binop k u =
     case u of
-      UGen (CPrimitive (Primitive _ "BinaryOpUGen" [_,_] [_] (Special s) NoId)) -> s == k
+      UGen (CPrimitive (Primitive _ "BinaryOpUGen" [_,_] [_] (Special s) NoId _)) -> s == k
       _ -> False
 
 -- | Is /u/ an ADD operator?
@@ -829,9 +877,11 @@ is_mul_operator = is_math_binop 2
 is_mul_operator :: UGen -> Bool
 is_mul_operator = is_math_binop 2
 
--- | MulAdd re-writer, applicable only directly at add operator UGen.
---   The MulAdd UGen is very sensitive to input rates.
---   ADD=AudioRate with IN|MUL=InitialisationRate|CONST will CRASH scsynth.
+{- | MulAdd re-writer, applicable only directly at add operator UGen.
+     The MulAdd UGen is very sensitive to input rates.
+     ADD=AudioRate with IN|MUL=InitialisationRate|CONST will CRASH scsynth.
+     This only considers primitives that do not have bracketing messages.
+-}
 {-
 mul_add_optimise_direct :: UGen -> UGen
 mul_add_optimise_direct u =
@@ -861,13 +911,13 @@ mul_add_optimise_direct u =
            then Nothing
            else Just (max (max ri rj) rk,if rj > ri then (j,i,k) else (i,j,k))
   in case assert_is_add_operator "MUL-ADD" u of
-       UGen (CPrimitive (Primitive _ _ [UGen (CPrimitive (Primitive _ "BinaryOpUGen" [i,j] [_] (Special 2) NoId)),k] [_] _ NoId)) ->
+       UGen (CPrimitive (Primitive _ _ [UGen (CPrimitive (Primitive _ "BinaryOpUGen" [i,j] [_] (Special 2) NoId ([],[]))),k] [_] _ NoId ([],[]))) ->
          case reorder (i,j,k) of
-           Just (rt,(p,q,r)) -> UGen (CPrimitive (Primitive rt "MulAdd" [p,q,r] [rt] (Special 0) NoId))
+           Just (rt,(p,q,r)) -> UGen (CPrimitive (Primitive rt "MulAdd" [p,q,r] [rt] (Special 0) NoId ([],[])))
            Nothing -> u
-       UGen (CPrimitive (Primitive _ _ [k,UGen (CPrimitive (Primitive _ "BinaryOpUGen" [i,j] [_] (Special 2) NoId))] [_] _ NoId)) ->
+       UGen (CPrimitive (Primitive _ _ [k,UGen (CPrimitive (Primitive _ "BinaryOpUGen" [i,j] [_] (Special 2) NoId ([],[])))] [_] _ NoId ([],[]))) ->
          case reorder (i,j,k) of
-           Just (rt,(p,q,r)) -> UGen (CPrimitive (Primitive rt "MulAdd" [p,q,r] [rt] (Special 0) NoId))
+           Just (rt,(p,q,r)) -> UGen (CPrimitive (Primitive rt "MulAdd" [p,q,r] [rt] (Special 0) NoId ([],[])))
            Nothing -> u
        _ -> u
 
@@ -886,7 +936,9 @@ mul_add_optimise u = if is_add_operator u then mul_add_optimise_direct u else u
 mul_add_optimise :: UGen -> UGen
 mul_add_optimise u = if is_add_operator u then mul_add_optimise_direct u else u
 
--- | Sum3 re-writer, applicable only directly at add operator UGen.
+{- | Sum3 re-writer, applicable only directly at add operator UGen.
+     This only considers nodes that have no bracketing messages.
+-}
 {-
 sum3_optimise_direct :: UGen -> UGen
 sum3_optimise_direct u =
@@ -900,10 +952,10 @@ sum3_optimise_direct u =
 sum3_optimise_direct :: UGen -> UGen
 sum3_optimise_direct u =
   case assert_is_add_operator "SUM3" u of
-    UGen (CPrimitive (Primitive r _ [UGen (CPrimitive (Primitive _ "BinaryOpUGen" [i,j] [_] (Special 0) NoId)),k] [_] _ NoId)) ->
-      UGen (CPrimitive (Primitive r "Sum3" [i,j,k] [r] (Special 0) NoId))
-    UGen (CPrimitive (Primitive r _ [k,UGen (CPrimitive (Primitive _ "BinaryOpUGen" [i,j] [_] (Special 0) NoId))] [_] _ NoId)) ->
-      UGen (CPrimitive (Primitive r "Sum3" [i,j,k] [r] (Special 0) NoId))
+    UGen (CPrimitive (Primitive r _ [UGen (CPrimitive (Primitive _ "BinaryOpUGen" [i,j] [_] (Special 0) NoId ([],[]))),k] [_] _ NoId ([],[]))) ->
+      UGen (CPrimitive (Primitive r "Sum3" [i,j,k] [r] (Special 0) NoId ([],[])))
+    UGen (CPrimitive (Primitive r _ [k,UGen (CPrimitive (Primitive _ "BinaryOpUGen" [i,j] [_] (Special 0) NoId ([],[])))] [_] _ NoId ([],[]))) ->
+      UGen (CPrimitive (Primitive r "Sum3" [i,j,k] [r] (Special 0) NoId ([],[])))
     _ -> u
 
 -- | /Sum3/ optimiser, applicable at any /u/ (ie. checks if /u/ is an ADD operator).

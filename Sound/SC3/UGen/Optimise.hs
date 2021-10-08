@@ -33,9 +33,9 @@ ugen_optimise_ir_rand =
             case u of
               UGen (CPrimitive p) ->
                   case p of
-                    Primitive InitialisationRate "Rand" [UGen (CConstant (Constant l)),UGen (CConstant (Constant r))] [InitialisationRate] _ (UId z) ->
+                    Primitive InitialisationRate "Rand" [UGen (CConstant (Constant l)),UGen (CConstant (Constant r))] [InitialisationRate] _ (UId z) ([],[]) ->
                         UGen (CConstant (Constant (c_rand z l r)))
-                    Primitive InitialisationRate "IRand" [UGen (CConstant (Constant l)),UGen (CConstant (Constant r))] [InitialisationRate] _ (UId z) ->
+                    Primitive InitialisationRate "IRand" [UGen (CConstant (Constant l)),UGen (CConstant (Constant r))] [InitialisationRate] _ (UId z) ([],[]) ->
                         UGen (CConstant (Constant (c_irand z l r)))
                     _ -> u
               _ -> u
@@ -65,11 +65,11 @@ ugen_optimise_const_operator =
               UGen (CPrimitive p) ->
                   case p of
                     Primitive _ "BinaryOpUGen" [UGen (CConstant (Constant l))
-                                               ,UGen (CConstant (Constant r))] [_] (Special z) _ ->
+                                               ,UGen (CConstant (Constant r))] [_] (Special z) _ ([],[]) ->
                         case binop_special_hs z of
                           Just fn -> UGen (CConstant (Constant (fn l r)))
                           _ -> u
-                    Primitive _ "UnaryOpUGen" [UGen (CConstant (Constant i))] [_] (Special z) _ ->
+                    Primitive _ "UnaryOpUGen" [UGen (CConstant (Constant i))] [_] (Special z) _ ([],[]) ->
                         case uop_special_hs z of
                           Just fn -> UGen (CConstant (Constant (fn i)))
                           _ -> u

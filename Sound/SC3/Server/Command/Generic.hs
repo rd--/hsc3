@@ -95,9 +95,12 @@ b_getn b l = message "/b_getn" (b_bufnum b : B.mk_duples b_ix b_size l)
 b_query :: Integral i => [i] -> Message
 b_query = message "/b_query" . map int32
 
--- | Read sound file data into an existing buffer. (Asynchronous)
+{- | Read sound file data into an existing buffer. (Asynchronous)
+     Param: bufId pathName startFrame numFrames bufFrame leaveOpen
+-}
 b_read :: Integral i => i -> String -> i -> i -> i -> Bool -> Message
-b_read b p f n f' z = message "/b_read" [b_bufnum b,string p,int32 f,int32 n,int32 f',int32 (fromEnum z)]
+b_read bufId pathName startFrame numFrames bufFrame leaveOpen =
+  message "/b_read" [b_bufnum bufId,string pathName,int32 startFrame,int32 numFrames,int32 bufFrame,int32 (fromEnum leaveOpen)]
 
 -- | Read sound file data into an existing buffer, picking specific channels. (Asynchronous)
 b_readChannel :: Integral i => i -> String -> i -> i -> i -> Bool -> [i] -> Message

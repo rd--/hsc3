@@ -70,8 +70,8 @@ env_curve_interpolation_f c =
       EnvHold -> undefined
 
 -- | Apply /f/ to 'EnvNum' value.
-env_curve_coerce :: (a -> b) -> Envelope_Curve a -> Envelope_Curve b
-env_curve_coerce f e =
+env_curve_map :: (a -> b) -> Envelope_Curve a -> Envelope_Curve b
+env_curve_map f e =
     case e of
       EnvStep -> EnvStep
       EnvLin -> EnvLin
@@ -97,14 +97,14 @@ data Envelope a =
     deriving (Eq,Show)
 
 -- | Apply /f/ to all /a/ at 'Envelope'.
-envelope_coerce :: (a -> b) -> Envelope a -> Envelope b
-envelope_coerce f e =
+envelope_map :: (a -> b) -> Envelope a -> Envelope b
+envelope_map f e =
     let Envelope l t c rn ln os = e
-    in Envelope (map f l) (map f t) (map (env_curve_coerce f) c) rn ln (f os)
+    in Envelope (map f l) (map f t) (map (env_curve_map f) c) rn ln (f os)
 
--- | fmap = 'envelope_coerce'
+-- | fmap = 'envelope_map'
 instance Functor Envelope where
-  fmap = envelope_coerce
+  fmap = envelope_map
 
 {- | Variant without release and loop node inputs (defaulting to nil).
 

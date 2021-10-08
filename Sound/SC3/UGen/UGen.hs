@@ -1,11 +1,14 @@
 -- | UGen data structure representation and associated functions.
 module Sound.SC3.UGen.UGen where
 
+import Data.Bifunctor {- base -}
 import qualified Data.Char {- base -}
 import Data.Maybe {- base -}
 import Data.List {- base -}
 
 import qualified Data.List.Split as Split {- split -}
+
+import qualified Sound.OSC as Osc {- hosc -}
 
 import qualified Sound.SC3.Common.Envelope as Envelope {- hsc3 -}
 import qualified Sound.SC3.Common.Base as Base {- hsc3 -}
@@ -47,9 +50,6 @@ ugenTraverse halt_f map_f u =
 
 > map Sound.SC3.UGen.PP.ugen_concise_pp $ ugenFoldr (:) [] (sinOsc ar 440 0 * 0.1)
 > map Sound.SC3.UGen.PP.ugen_concise_pp $ ugenFoldr (:) [] (pan2 (sinOsc ar 440 0) 0.25 0.1)
-> mapM_ print (ugenCircuit (sinOsc ar 440 0 * 0.1))
-> mapM_ (print . Sound.SC3.UGen.PP.ugen_concise_pp) (ugenCircuit (sinOsc ar 440 0 * 0.1))
-> mapM_ (print . Sound.SC3.UGen.PP.ugen_concise_pp) (ugenCircuit (pan2 (sinOsc ar 440 0) 0.25 0.1))
 -}
 ugenFoldr :: (UGen -> a -> a) -> a -> UGen -> a
 ugenFoldr f st u =
@@ -60,6 +60,21 @@ ugenFoldr f st u =
          UGen (CMce m _) -> f u (foldr recur st (mceProxies m))
          UGen (CMrg (Mrg l r) _) -> f u (f l (f r st))
          _ -> f u st
+
+-- | Fold over UGen and collect all bracketing messages from all Primitive nodes.
+ugenCollectBrackets :: UGen -> ([Osc.Message], [Osc.Message])
+ugenCollectBrackets =
+  bimap concat concat .
+  unzip .
+  map ugenBrackets .
+  nub .
+  mapMaybe ugenPrimitive .
+  ugenFoldr (:) []
+
+{- | Are there any brackets at UGen.
+     
+ugenHasAnyBrackets :: UGen -> Bool
+ugenHasAnyBrackets = (== ([],[])) . ugenCollectBrackets
 
 -- * Unit generator node constructors
 
@@ -329,8 +344,8 @@ unsignedShift = mkBinaryOperator Operator.UnsignedShift undefined
 rewriteUGenRates :: (Rate.Rate -> Bool) -> Rate.Rate -> UGen -> UGen
 rewriteUGenRates sel_f set_rt =
   let f u = case u of
-              UGen (CPrimitive (Primitive rt nm i o s z)) ->
-                UGen (CPrimitive (Primitive (if sel_f rt then set_rt else rt) nm i o s z))
+              UGen (CPrimitive (Primitive rt nm i o s z b)) ->
+                UGen (CPrimitive (Primitive (if sel_f rt then set_rt else rt) nm i o s z b))
               UGen (CProxy (Proxy src ix rt)) ->
                 UGen (CProxy (Proxy src ix (if sel_f rt then set_rt else rt)))
               UGen (CMce m rt) -> UGen (CMce m (if sel_f rt then set_rt else rt))

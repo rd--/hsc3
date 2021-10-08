@@ -12,12 +12,17 @@ import Sound.SC3.UGen.UGen
 bracketed :: (a,a) -> [a] -> [a]
 bracketed (l,r) x = l : x ++ [r]
 
--- | Print constants and labels directly, primitives as un-adorned
--- names, mce as [p,q], mrg as p&q, contols as nm=def and proxies as
--- u@n.
+{- | Print constants and labels directly,
+     primitives as un-adorned names,
+     mce as [p,q],
+     mrg as p&q,
+     contols as nm=def,
+     proxies as u@n,
+     and bracketed as <u>.
+-}
 ugen_concise_pp :: UGen -> String
 ugen_concise_pp u =
-    let prim_pp (Primitive _ nm _ _ sp _) = ugen_user_name nm sp
+    let prim_pp (Primitive _ nm _ _ sp _ _) = ugen_user_name nm sp
         k = 5
     in case u of
          UGen (CConstant (Constant n)) -> real_pp k n
