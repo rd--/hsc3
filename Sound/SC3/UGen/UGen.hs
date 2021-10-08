@@ -71,10 +71,9 @@ ugenCollectBrackets =
   mapMaybe ugenPrimitive .
   ugenFoldr (:) []
 
-{- | Are there any brackets at UGen.
-     
+-- | Are there any brackets at UGen.
 ugenHasAnyBrackets :: UGen -> Bool
-ugenHasAnyBrackets = (== ([],[])) . ugenCollectBrackets
+ugenHasAnyBrackets = (/= ([],[])) . ugenCollectBrackets
 
 -- * Unit generator node constructors
 
