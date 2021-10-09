@@ -14,8 +14,8 @@ import Sound.OSC.FD {- hosc -}
 
 import Sound.SC3.Server.Command
 import Sound.SC3.Server.Enum
-import qualified Sound.SC3.Server.Graphdef as G
-import Sound.SC3.Server.NRT
+import qualified Sound.SC3.Server.Graphdef as Graphdef
+import Sound.SC3.Server.Nrt
 import Sound.SC3.Server.Options
 import Sound.SC3.Server.Status
 import Sound.SC3.Server.Synthdef
@@ -55,15 +55,15 @@ reset fd = do
   sendMessage fd (g_new [(1,AddToTail,0),(2,AddToTail,0)])
 
 -- | Send 'd_recv' and 's_new' messages to scsynth.
-playGraphdef :: Transport t => Int -> t -> G.Graphdef -> IO ()
+playGraphdef :: Transport t => Int -> t -> Graphdef.Graphdef -> IO ()
 playGraphdef k fd g = do
-  let nm = ascii_to_string (G.graphdef_name g)
+  let nm = ascii_to_string (Graphdef.graphdef_name g)
       fn = "/tmp" </> nm <.> "scsyndef"
-      by = G.encode_graphdef g
+      by = Graphdef.encode_graphdef g
       sz = L.length by
   if sz < 65507
     then void (async fd (d_recv_bytes by))
-    else G.graphdefWrite fn g >> async fd (d_load fn) >> sendMessage fd (s_new0 nm k AddToTail 1)
+    else Graphdef.graphdefWrite fn g >> async fd (d_load fn) >> sendMessage fd (s_new0 nm k AddToTail 1)
 
 -- | 'playGraphdef' of 'synthdef_to_graphdef'.
 playSynthdef :: Transport t => Int -> t -> Synthdef -> IO ()
@@ -85,13 +85,13 @@ run_bundle fd t0 b = do
   pauseThreadUntil (t - latency)
   mapM_ (maybe_async_at fd t) (bundleMessages b)
 
--- | Perform an 'NRT' score (as would be rendered by 'writeNRT').  In
+-- | Perform an 'Nrt' score (as would be rendered by 'writeNrt').  In
 -- particular note that all timestamps /must/ be in 'NTPr' form.
-nrt_play :: Transport t => t -> NRT -> IO ()
+nrt_play :: Transport t => t -> Nrt -> IO ()
 nrt_play fd sc = time >>= \t0 -> mapM_ (run_bundle fd t0) (nrt_bundles sc)
 
 -- | 'withSC3' of 'nrt_play'
-nrt_audition :: NRT -> IO ()
+nrt_audition :: Nrt -> IO ()
 nrt_audition sc = withSC3 (`nrt_play` sc)
 
 -- * Audible
@@ -102,7 +102,7 @@ class Audible e where
     play :: Transport t => t -> e -> IO ()
     play = play_id (-1)
 
-instance Audible G.Graphdef where
+instance Audible Graphdef.Graphdef where
     play_id = playGraphdef
 
 instance Audible Synthdef where

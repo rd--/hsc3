@@ -9,8 +9,8 @@ import Data.List.Split {- split -}
 
 import Sound.SC3.Common.Math {- hsc3 -}
 
--- | An SC3 synthesis parameters, ie. (control-name,control-value).
-type Param1 = (String,Double)
+-- | An SC3 synthesis parameter, ie. (controlName,controlValue).
+type Param1 = (String, Double)
 
 -- | Set of SC3 synthesiser parameters.
 type Param = [Param1]

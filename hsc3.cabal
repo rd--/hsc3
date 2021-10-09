@@ -80,9 +80,9 @@ Library
                    Sound.SC3.Server.Graphdef.Text
                    Sound.SC3.Server.FD
                    Sound.SC3.Server.Monad
-                   Sound.SC3.Server.NRT
-                   Sound.SC3.Server.NRT.Edit
-                   Sound.SC3.Server.NRT.UGen
+                   Sound.SC3.Server.Nrt
+                   Sound.SC3.Server.Nrt.Edit
+                   Sound.SC3.Server.Nrt.UGen
                    Sound.SC3.Server.Options
                    Sound.SC3.Server.Param
                    Sound.SC3.Server.Recorder

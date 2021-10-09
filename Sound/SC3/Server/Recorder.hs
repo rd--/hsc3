@@ -1,4 +1,4 @@
--- | Recording @scsynth@.
+-- | Recording scsynth.
 module Sound.SC3.Server.Recorder where
 
 import Sound.OSC {- hosc -}
@@ -6,12 +6,12 @@ import Sound.OSC {- hosc -}
 import Sound.SC3.Common.Rate
 import Sound.SC3.Server.Command
 import Sound.SC3.Server.Enum
-import Sound.SC3.Server.NRT
+import Sound.SC3.Server.Nrt
 import Sound.SC3.Server.Synthdef
 import Sound.SC3.UGen.Bindings
 import Sound.SC3.UGen.UGen
 
--- | Parameters for recording @scsynth@.
+-- | Parameters for recording scsynth.
 data SC3_Recorder =
     SC3_Recorder {rec_sftype :: SoundFileFormat -- ^ Sound file format.
                  ,rec_coding :: SampleFormat -- ^ Sample format.
@@ -52,8 +52,7 @@ rec_synthdef nc =
         bus = control kr "bus" 0
     in synthdef (rec_synthdef_nm nc) (diskOut bufnum (in' nc ar bus))
 
--- | Asyncronous initialisation 'Message's ('d_recv', 'b_alloc' and
--- 'b_write').
+-- | Asyncronous initialisation 'Message's ('d_recv', 'b_alloc' and 'b_write').
 --
 -- > withSC3 (sendBundle (bundle immediately (rec_init_m def)))
 rec_init_m :: SC3_Recorder -> [Message]
@@ -84,7 +83,7 @@ rec_end_m r =
     ,b_close (rec_buf_id r)
     ,b_free (rec_buf_id r)]
 
-{- | 'NRT' score for recorder, if 'rec_dur' is given schedule 'rec_end_m'.
+{- | 'Nrt' score for recorder, if 'rec_dur' is given schedule 'rec_end_m'.
 
 > import Sound.SC3
 > withSC3 (Sound.OSC.sendMessage (dumpOSC TextPrinter))
@@ -93,9 +92,9 @@ rec_end_m r =
 > nrt_audition (sc3_recorder rc)
 
 -}
-sc3_recorder :: SC3_Recorder -> NRT
+sc3_recorder :: SC3_Recorder -> Nrt
 sc3_recorder r =
     let b0 = bundle 0 (rec_init_m r ++ [rec_begin_m r])
     in case rec_dur r of
-         Nothing -> NRT [b0]
-         Just d -> NRT [b0,bundle d (rec_end_m r)]
+         Nothing -> Nrt [b0]
+         Just d -> Nrt [b0,bundle d (rec_end_m r)]

@@ -18,7 +18,7 @@ import qualified Sound.SC3.Server.Command as Command
 import qualified Sound.SC3.Server.Command.Generic as Generic
 import qualified Sound.SC3.Server.Enum as Enum
 import qualified Sound.SC3.Server.Graphdef as Graphdef
-import qualified Sound.SC3.Server.NRT as NRT
+import qualified Sound.SC3.Server.Nrt as Nrt
 import qualified Sound.SC3.Server.Options as Options
 import qualified Sound.SC3.Server.Status as Status
 import qualified Sound.SC3.Server.Synthdef as Synthdef
@@ -147,7 +147,7 @@ playUGen loc =
     Synthdef.synthdef "Anonymous" .
     Composite.wrapOut Nothing
 
--- * NRT
+-- * Nrt
 
 -- | Wait ('pauseThreadUntil') until bundle is due to be sent relative
 -- to the initial 'Time', then send each message, asynchronously if
@@ -159,24 +159,24 @@ run_bundle t0 b = do
   liftIO (pauseThreadUntil (t - latency))
   mapM_ (maybe_async_at t) (bundleMessages b)
 
-{- | Play an 'NRT' score (as would be rendered by 'writeNRT').
+{- | Play an 'Nrt' score (as would be rendered by 'writeNrt').
 
-> let sc = NRT [bundle 1 [s_new0 "default" (-1) AddToHead 1]
+> let sc = Nrt [bundle 1 [s_new0 "default" (-1) AddToHead 1]
 >              ,bundle 2 [n_set1 (-1) "gate" 0]]
 > in withSC3 (nrt_play sc)
 
 -}
-nrt_play :: Transport m => NRT.NRT -> m ()
+nrt_play :: Transport m => Nrt.Nrt -> m ()
 nrt_play sc = do
   t0 <- liftIO time
-  mapM_ (run_bundle t0) (NRT.nrt_bundles sc)
+  mapM_ (run_bundle t0) (Nrt.nrt_bundles sc)
 
 -- | Variant where asynchronous commands at time @0@ are separated out and run before
 -- the initial time-stamp is taken.  This re-orders synchronous
 -- commands in relation to asynchronous at time @0@.
-nrt_play_reorder :: Transport m => NRT.NRT -> m ()
+nrt_play_reorder :: Transport m => Nrt.Nrt -> m ()
 nrt_play_reorder s = do
-  let (i,r) = NRT.nrt_span (<= 0) s
+  let (i,r) = Nrt.nrt_span (<= 0) s
       i' = concatMap bundleMessages i
       (a,b) = Command.partition_async i'
   mapM_ async a
@@ -184,7 +184,7 @@ nrt_play_reorder s = do
   mapM_ (run_bundle t) (Bundle 0 b : r)
 
 -- | 'withSC3' of 'nrt_play'.
-nrt_audition :: NRT.NRT -> IO ()
+nrt_audition :: Nrt.Nrt -> IO ()
 nrt_audition = withSC3 . nrt_play
 
 -- * Audible
