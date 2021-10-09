@@ -1,4 +1,5 @@
-    Sound.SC3.Lang.Help.sc3_scdoc_help_server_command_open False "/b_allocRead"
+---- ;help
+Sound.SC3.sc3_scdoc_help_server_command_open False "/b_allocRead"
 
 > import Sound.OSC {- hosc -}
 > import Sound.SC3 {- hsc3 -}

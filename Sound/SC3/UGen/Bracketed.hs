@@ -1,4 +1,5 @@
-import qualified Sound.OSC as Osc {- hosc -}
+-- | Bracketed UGens.
+module Sound.SC3.UGen.Bracketed where
 
 import Sound.SC3.Common.Enum {- hsc3 -}
 import Sound.SC3.Common.SoundFile {- hsc3 -}
@@ -19,3 +20,19 @@ sndfileIn bufId sndFileName loop =
      (diskIn nc (constant bufId) loop)
      ([b_alloc bufId bufSize nc, b_read bufId fileName 0 (-1) 0 True]
      ,[b_close bufId, b_free bufId])
+
+{- | b_allocRead with brackets to allocate and read and then free a buffer.
+     Returns bufId as a bracketed constant, and basic sound file information,
+     (numberOfChannels, sampleRate, numberOfFrames).
+
+let (buf, nc, sr, nf) = sndfileRead 0 "metal.wav"
+    tr = impulse ar (nf / sr) 0
+    ph = phasor ar tr (sr / sampleRate) 0 nf 0
+in bufRdL nc ar buf ph NoLoop
+
+-}
+sndfileRead :: Buffer_Id -> FilePath -> (UGen, Int, UGen, UGen)
+sndfileRead bufId sndFileName =
+  let fileName = sfResolve sndFileName
+      (nc,sr,nf) = sfInfo fileName
+  in (bracketUGen (constant bufId) ([b_allocRead bufId fileName 0 0], [b_free bufId]), nc, constant sr, constant nf)

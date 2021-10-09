@@ -1,14 +1,11 @@
 -- | UGen data structure representation and associated functions.
 module Sound.SC3.UGen.UGen where
 
-import Data.Bifunctor {- base -}
 import qualified Data.Char {- base -}
 import Data.Maybe {- base -}
 import Data.List {- base -}
 
 import qualified Data.List.Split as Split {- split -}
-
-import qualified Sound.OSC as Osc {- hosc -}
 
 import qualified Sound.SC3.Common.Envelope as Envelope {- hsc3 -}
 import qualified Sound.SC3.Common.Base as Base {- hsc3 -}
@@ -62,13 +59,11 @@ ugenFoldr f st u =
          _ -> f u st
 
 -- | Fold over UGen and collect all bracketing messages from all Primitive nodes.
-ugenCollectBrackets :: UGen -> ([Osc.Message], [Osc.Message])
+ugenCollectBrackets :: UGen -> Brackets
 ugenCollectBrackets =
-  bimap concat concat .
-  unzip .
+  concatBrackets .
   map ugenBrackets .
   nub .
-  mapMaybe ugenPrimitive .
   ugenFoldr (:) []
 
 -- | Are there any brackets at UGen.

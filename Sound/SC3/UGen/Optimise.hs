@@ -29,17 +29,31 @@ c_irand z l r = fromInteger (round (c_rand z l r))
 -- > in draw (u + ugen_optimise_ir_rand u)
 ugen_optimise_ir_rand :: UGen -> UGen
 ugen_optimise_ir_rand =
-    let f u =
-            case u of
-              UGen (CPrimitive p) ->
-                  case p of
-                    Primitive InitialisationRate "Rand" [UGen (CConstant (Constant l)),UGen (CConstant (Constant r))] [InitialisationRate] _ (UId z) ([],[]) ->
-                        UGen (CConstant (Constant (c_rand z l r)))
-                    Primitive InitialisationRate "IRand" [UGen (CConstant (Constant l)),UGen (CConstant (Constant r))] [InitialisationRate] _ (UId z) ([],[]) ->
-                        UGen (CConstant (Constant (c_irand z l r)))
-                    _ -> u
+  let f u =
+        case u of
+          UGen (CPrimitive p) ->
+            case p of
+              Primitive
+                InitialisationRate
+                "Rand"
+                [UGen (CConstant (Constant l ([],[])))
+                ,UGen (CConstant (Constant r ([],[])))]
+                [InitialisationRate]
+                _
+                (UId z)
+                ([],[]) -> UGen (CConstant (Constant (c_rand z l r) ([],[])))
+              Primitive
+                InitialisationRate
+                "IRand"
+                [UGen (CConstant (Constant l ([],[])))
+                ,UGen (CConstant (Constant r ([],[])))]
+                [InitialisationRate]
+                _
+                (UId z)
+                ([],[]) -> UGen (CConstant (Constant (c_irand z l r) ([],[])))
               _ -> u
-    in ugenTraverse (const False) f
+          _ -> u
+        in ugenTraverse (const False) f
 
 -- | Optimise 'UGen' graph by re-writing binary operators with
 -- 'Constant' inputs.  The standard graph constructors already do
@@ -60,22 +74,34 @@ ugen_optimise_ir_rand =
 -- > in draw (mix (mce [u,u',ugen_optimise_const_operator u']))
 ugen_optimise_const_operator :: UGen -> UGen
 ugen_optimise_const_operator =
-    let f u =
-            case u of
-              UGen (CPrimitive p) ->
-                  case p of
-                    Primitive _ "BinaryOpUGen" [UGen (CConstant (Constant l))
-                                               ,UGen (CConstant (Constant r))] [_] (Special z) _ ([],[]) ->
-                        case binop_special_hs z of
-                          Just fn -> UGen (CConstant (Constant (fn l r)))
-                          _ -> u
-                    Primitive _ "UnaryOpUGen" [UGen (CConstant (Constant i))] [_] (Special z) _ ([],[]) ->
-                        case uop_special_hs z of
-                          Just fn -> UGen (CConstant (Constant (fn i)))
-                          _ -> u
-                    _ -> u
+  let f u =
+        case u of
+          UGen (CPrimitive p) ->
+            case p of
+              Primitive
+                _
+                "BinaryOpUGen"
+                [UGen (CConstant (Constant l ([],[])))
+                ,UGen (CConstant (Constant r ([],[])))]
+                [_]
+                (Special z)
+                _
+                ([],[]) -> case binop_special_hs z of
+                             Just fn -> UGen (CConstant (Constant (fn l r) ([],[])))
+                             _ -> u
+              Primitive
+                _
+                "UnaryOpUGen"
+                [UGen (CConstant (Constant i ([],[])))]
+                [_]
+                (Special z)
+                _
+                ([],[]) -> case uop_special_hs z of
+                             Just fn -> UGen (CConstant (Constant (fn i) ([],[])))
+                             _ -> u
               _ -> u
-    in ugenTraverse (const False) f
+          _ -> u
+  in ugenTraverse (const False) f
 
 -- | 'u_constant' of 'ugen_optimise_ir_rand'.
 constant_opt :: UGen -> Maybe Sample

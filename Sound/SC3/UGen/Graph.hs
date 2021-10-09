@@ -365,9 +365,11 @@ ug_push_c x g =
     in (n,g {ug_constants = n : ug_constants g
             ,ug_next_id = ug_next_id g + 1})
 
--- | Either find existing 'Constant' 'U_Node', or insert a new 'U_Node'.
+{- | Either find existing 'Constant' 'U_Node', or insert a new 'U_Node'.
+     Brackets are discarded.
+-}
 ug_mk_node_c :: Constant -> U_Graph -> (U_Node,U_Graph)
-ug_mk_node_c (Constant x) g =
+ug_mk_node_c (Constant x _b) g =
     let y = find (is_u_node_c_of x) (ug_constants g)
     in maybe (ug_push_c x g) (\y' -> (y',g)) y
 
@@ -400,8 +402,9 @@ ug_mk_node_rec u n g =
       x:xs -> let (y,g') = ug_mk_node x g
               in ug_mk_node_rec xs (y:n) g'
 
--- | Run 'ug_mk_node_rec' at inputs and either find existing primitive
--- node or insert a new one.
+{- | Run 'ug_mk_node_rec' at inputs and either find existing primitive node or insert a new one.
+     Brackets are discarded.
+-}
 ug_mk_node_u :: Primitive UGen -> U_Graph -> (U_Node,U_Graph)
 ug_mk_node_u (Primitive r nm i o s d _b) g =
     let (i',g') = ug_mk_node_rec i [] g
@@ -451,7 +454,7 @@ ug_add_implicit_buf :: U_Graph -> U_Graph
 ug_add_implicit_buf g =
     case u_node_localbuf_count (ug_ugens g) of
       0 -> g
-      n -> let (c,g') = ug_mk_node_c (Constant (fromIntegral n)) g
+      n -> let (c,g') = ug_mk_node_c (Constant (fromIntegral n) ([],[])) g
                p = u_node_from_port c
                u = U_Node_U (-1) Rate.InitialisationRate "MaxLocalBufs" [p] [] (Special 0) no_id
            in g' {ug_ugens = u : ug_ugens g'}

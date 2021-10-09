@@ -17,15 +17,15 @@ bracketed (l,r) x = l : x ++ [r]
      mce as [p,q],
      mrg as p&q,
      contols as nm=def,
-     proxies as u@n,
-     and bracketed as <u>.
+     proxies as u@n.
+     Brackets are not printed.
 -}
 ugen_concise_pp :: UGen -> String
 ugen_concise_pp u =
     let prim_pp (Primitive _ nm _ _ sp _ _) = ugen_user_name nm sp
         k = 5
     in case u of
-         UGen (CConstant (Constant n)) -> real_pp k n
+         UGen (CConstant (Constant n _)) -> real_pp k n
          UGen (CControl (Control _ _ nm def _ _)) -> nm ++ "=" ++ real_pp k def
          UGen (CLabel (Label s)) -> bracketed ('"','"') s
          UGen (CPrimitive p) -> prim_pp p

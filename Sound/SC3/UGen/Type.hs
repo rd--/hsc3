@@ -1,6 +1,7 @@
 -- | Unit Generator and associated types and instances.
 module Sound.SC3.UGen.Type where
 
+import Data.Bifunctor {- base -}
 import Data.Bits {- base -}
 import Data.Either {- base -}
 import qualified Data.Fixed as Fixed {- base -}
@@ -35,12 +36,34 @@ no_id = NoId
 -}
 type Sample = Double
 
+{- | Brackets are two sets of Open Sound Control messages that can be associated with a UGen.
+     The first is to be run prior to the graph being executed, the other after it has ended.
+-}
+type Brackets = ([Osc.Message], [Osc.Message])
+
+-- | No messages.
+emptyBrackets :: Brackets
+emptyBrackets = ([],[])
+
+{- | Combine a sequence of Brackets into one Bracket.
+
+> f = bimap concat concat . unzip
+> f [(['a'],['A']),(['b'],['B'])]
+-}
+concatBrackets :: [Brackets] -> Brackets
+concatBrackets = bimap concat concat . unzip
+
 {- | Constants.
+     Constants may have brackets.
+     This allows for buffer allocation and deallocation to be associated with a buffer identifier.
 
 > Constant 3 == Constant 3
 > (Constant 3 > Constant 1) == True
 -}
-newtype Constant = Constant {constantValue :: Sample} deriving (Ord, Eq, Read, Show)
+data Constant =
+  Constant {constantValue :: Sample
+           ,constantBrackets :: Brackets}
+  deriving (Ord, Eq, Read, Show)
 
 -- | Control meta-data.
 data Control_Meta n =
@@ -120,10 +143,7 @@ type Output = Rate
 newtype Special = Special Int
     deriving (Ord, Eq, Read, Show)
 
-{- | UGen primitives.
-     There can be two sets of messages associated with the Primitive.
-     One to be run prior to the graph being executed, the other after it has ended.
--}
+-- | UGen primitives.
 data Primitive t =
   Primitive {ugenRate :: Rate
             ,ugenName :: String
@@ -131,7 +151,7 @@ data Primitive t =
             ,ugenOutputs :: [Output]
             ,ugenSpecial :: Special
             ,ugenId :: UGenId
-            ,ugenBrackets :: ([Osc.Message], [Osc.Message])}
+            ,primitiveBrackets :: Brackets}
   deriving (Ord, Eq, Read, Show)
 
 {- | Proxy indicating an output port at a multi-channel primitive.
@@ -559,25 +579,34 @@ mce_is_direct_proxy m =
 
 -- * Bracketed
 
-{- | Attach initialisation and cleanup message sequences to UGen.
+{- | Attach Brackets (initialisation and cleanup message sequences) to UGen.
      For simplicity and clarity, brackets can only be attached to Primitive UGen nodes.
      This will look into the leftmost proxy
 -}
-bracketUGen :: UGen -> ([Osc.Message], [Osc.Message]) -> UGen
+bracketUGen :: UGen -> Brackets -> UGen
 bracketUGen u (pre, post) =
-  let err = error "bracketUGen: only Primitive UGens or immediate proxies may have brackets"
+  let err = error "bracketUGen: only Constants or Primitive UGens or immediate proxies may have brackets"
       rw_proxy pxy =
         case pxy of
           UGen (CProxy (Proxy (UGen (CPrimitive p)) pix prt)) ->
             UGen (CProxy (Proxy (bracketUGen (UGen (CPrimitive p)) (pre, post)) pix prt))
           _ -> err
   in case u of
-       UGen (CPrimitive p) -> let (lhs, rhs) = ugenBrackets p in UGen (CPrimitive (p {ugenBrackets = (lhs ++ pre, rhs ++ post)}))
+       UGen (CConstant c) -> let (lhs, rhs) = constantBrackets c in UGen (CConstant (c {constantBrackets = (lhs ++ pre, rhs ++ post)}))
+       UGen (CPrimitive p) -> let (lhs, rhs) = primitiveBrackets p in UGen (CPrimitive (p {primitiveBrackets = (lhs ++ pre, rhs ++ post)}))
        UGen (CMce m rt) ->
          if mce_is_direct_proxy m
          then UGen (CMce (mce_map rw_proxy m) rt)
          else err
        _ -> err
+
+-- | Retrieve Brackets from UGen.
+ugenBrackets :: UGen -> Brackets
+ugenBrackets u =
+  case u of
+    UGen (CConstant c) -> constantBrackets c
+    UGen (CPrimitive p) -> primitiveBrackets p
+    _ -> emptyBrackets
 
 -- * Validators
 
@@ -603,7 +632,7 @@ constant :: Real n => n -> UGen
 constant = Constant_U . Constant . realToFrac
 -}
 constant :: Real n => n -> UGen
-constant = UGen . CConstant . Constant . realToFrac
+constant = UGen . CConstant . flip Constant emptyBrackets . realToFrac
 
 -- | Type specialised 'constant'.
 int_to_ugen :: Int -> UGen
@@ -803,9 +832,9 @@ mkBinaryOperator_optimise_constants i f o a b =
    let g [x,y] = f x y
        g _ = error "mkBinaryOperator: non binary input"
        r = case (a,b) of
-             (UGen (CConstant (Constant a')),_) ->
+             (UGen (CConstant (Constant a' ([],[]))),_) ->
                  if o (Left a') then Just b else Nothing
-             (_,UGen (CConstant (Constant b'))) ->
+             (_,UGen (CConstant (Constant b' ([],[])))) ->
                  if o (Right b') then Just a else Nothing
              _ -> Nothing
    in fromMaybe (mkOperator g "BinaryOpUGen" [a, b] (fromEnum i)) r
@@ -983,17 +1012,17 @@ instance Num UGen where
     (*) = mkBinaryOperator_optimise_constants Mul (*) (`elem` [Left 1,Right 1])
     abs = mkUnaryOperator Abs abs
     signum = mkUnaryOperator Sign signum
-    fromInteger = UGen . CConstant . Constant . fromInteger
+    fromInteger = UGen . CConstant . flip Constant ([],[]) . fromInteger
 
 -- | Unit generators are fractional.
 instance Fractional UGen where
     recip = mkUnaryOperator Recip recip
     (/) = mkBinaryOperator_optimise_constants FDiv (/) (Right 1 ==)
-    fromRational = UGen . CConstant . Constant . fromRational
+    fromRational = UGen . CConstant . flip Constant ([],[]) . fromRational
 
 -- | Unit generators are floating point.
 instance Floating UGen where
-    pi = UGen (CConstant (Constant pi))
+    pi = UGen (CConstant (Constant pi ([],[])))
     exp = mkUnaryOperator Exp exp
     log = mkUnaryOperator Log log
     sqrt = mkUnaryOperator Sqrt sqrt
@@ -1014,8 +1043,8 @@ instance Floating UGen where
 
 -- | Unit generators are real.
 instance Real UGen where
-    toRational (UGen (CConstant (Constant n))) = toRational n
-    toRational _ = error "UGen.toRational: non-constant"
+    toRational (UGen (CConstant (Constant n ([],[])))) = toRational n
+    toRational _ = error "UGen.toRational: only un-bracketed constants considered"
 
 -- | Unit generators are integral.
 instance Integral UGen where
@@ -1024,8 +1053,8 @@ instance Integral UGen where
     quotRem a b = (quot a b, rem a b)
     div = mkBinaryOperator IDiv (error "UGen.div")
     mod = mkBinaryOperator Mod (error "UGen.mod")
-    toInteger (UGen (CConstant (Constant n))) = floor n
-    toInteger _ = error "UGen.toInteger: non-constant"
+    toInteger (UGen (CConstant (Constant n ([],[])))) = floor n
+    toInteger _ = error "UGen.toInteger: only un-bracketed constants considered"
 
 instance RealFrac UGen where
   properFraction = error "UGen.properFraction, see properFractionE"
@@ -1052,8 +1081,8 @@ instance Ord UGen where
 instance Enum UGen where
     succ u = u + 1
     pred u = u - 1
-    toEnum n = UGen (CConstant (Constant (fromIntegral n)))
-    fromEnum (UGen (CConstant (Constant n))) = truncate n
+    toEnum n = UGen (CConstant (Constant (fromIntegral n) ([],[])))
+    fromEnum (UGen (CConstant (Constant n ([],[])))) = truncate n
     fromEnum _ = error "UGen.fromEnum: non-constant"
     enumFrom = iterate (+1)
     enumFromThen n m = iterate (+(m-n)) n
@@ -1062,11 +1091,13 @@ instance Enum UGen where
         let p = if n' >= n then (>=) else (<=)
         in takeWhile (p (m + (n'-n)/2)) (enumFromThen n n')
 
--- | Unit generators are stochastic.
+{- | Unit generators are stochastic.
+     Only un-bracketed constant values are considered.
+-}
 instance Random.Random UGen where
-    randomR (UGen (CConstant (Constant l)),UGen (CConstant (Constant r))) g =
+    randomR (UGen (CConstant (Constant l ([],[]))), UGen (CConstant (Constant r ([],[])))) g =
         let (n, g') = Random.randomR (l,r) g
-        in (UGen (CConstant (Constant n)), g')
+        in (UGen (CConstant (Constant n ([],[]))), g')
     randomR _ _ = error "UGen.randomR: non constant (l,r)"
     random = Random.randomR (-1.0, 1.0)
 

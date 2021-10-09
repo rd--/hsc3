@@ -104,6 +104,7 @@ Library
                    Sound.SC3.UGen.Bindings.HW.External.SC3_Plugins
                    Sound.SC3.UGen.Bindings.HW.External.Wavelets
                    Sound.SC3.UGen.Bindings.HW.External.Zita
+                   Sound.SC3.UGen.Bracketed
                    Sound.SC3.UGen.Enum
                    Sound.SC3.UGen.Envelope
                    Sound.SC3.UGen.Event
