@@ -1,4 +1,4 @@
--- rSmplrIndex ; event control ; stereo ; requires loaded bosendorfer (or equivalent) sample data
+-- rSmplrIndex ; event control ; stereo ; requires=b0 ; loaded bosendorfer (or equivalent) sample data
 let f (_,g,x,y,z,_,_,_,_,_,_) =
       let s_mnn = [21,23,24,26,28,29,31,33,35,36,38,40,41,43,45,47,48,50,52,53,55,57,59
                   ,60,62,64,65,67,69,71,72,74,76,77,79,81,83,84,86,88,89,91,93,95,96,98
@@ -13,7 +13,7 @@ let f (_,g,x,y,z,_,_,_,_,_,_) =
       in sig * z * lagUD g 0 4
 in mix (eventVoicer 16 f) * control kr "gain" 1
 
--- rSmplrIndex ; event control ; stereo ; requires data table and loaded sample data
+-- rSmplrIndex ; event control ; stereo ; requires=tbl,b0 ; data table and loaded sample data
 let f (_,g,x,y,z,_,_,_,_,_,_) =
       let tbl = control kr "tbl" 0
           lhs = bufRd 1 kr tbl 0 NoLoop NoInterpolation
@@ -27,7 +27,7 @@ let f (_,g,x,y,z,_,_,_,_,_,_) =
       in sig * z * lagUD g 0 4
 in mix (eventVoicer 16 f) * control kr "gain" 1
 
--- rSmplrIndex ; event control ; mono ; requires data table and loaded sample data
+-- rSmplrIndex ; event control ; mono ; requires=tbl,b0 data table and loaded sample data
 let f (_,g,x,y,z,o,_,_,_,_,_) =
       let tbl = control kr "tbl" 0
           lhs = bufRd 1 kr tbl 0 NoLoop NoInterpolation
@@ -47,9 +47,9 @@ hsc3-smplr load pf --dyn=008 --b0=100
 ---- ; load SFZ sample data
 import Sound.OSC {- hosc -}
 import Sound.SC3.Data.SFZ {- hsc3-data -}
-sfz_fn = "/home/rohan/data/audio/instr/bosendorfer/008.sfz"
-sfz_fn = "/home/rohan/data/audio/instr/farfisa/aad/dolce-8.sfz"
-sfz_fn = "/home/rohan/data/audio/instr/casacota/zell_1737_415_MeanTone5/8_i.sfz"
+sfz_fn = sfResolve "instr/bosendorfer/008.sfz"
+sfz_fn = sfResolve "instr/farfisa/aad/dolce-8.sfz"
+sfz_fn = sfResolve "instr/casacota/zell_1737_415_MeanTone5/8_i.sfz"
 (ctl,glb,rgn) <- sfz_load_data sfz_fn
 tbl = map ((\(k,_,_) -> k) . sfz_region_key) rgn
 withSC3 (sendMessage (b_alloc_setn1 0 0 (map fromIntegral tbl)))

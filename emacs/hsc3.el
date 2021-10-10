@@ -278,8 +278,10 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
      nil
      (cdr hsc3-interpreter))
     (hsc3-set-prompt)
-    (if hsc3-auto-import-modules (hsc3-import-standard-modules))
-    (hsc3-send-line "scsynth <- newScsynth")
+    (if hsc3-auto-import-modules
+        (progn
+          (hsc3-import-standard-modules)
+          (hsc3-init-scsynth)))
     (hsc3-see-haskell)))
 
 (defun hsc3-interrupt-haskell ()
@@ -388,6 +390,11 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (mapc
    'hsc3-send-line
    (split-string (hsc3-load-file (concat hsc3-directory "lib/hsc3-std-imports.hs")) "\n")))
+
+(defun hsc3-init-scsynth ()
+  "Initialise the scsynth interpreter variable."
+  (interactive)
+  (hsc3-send-line "scsynth <- newScsynth"))
 
 (defun hsc3-set-prompt ()
   "Set ghci prompt to hsc3> and the continuation prompt to nil."

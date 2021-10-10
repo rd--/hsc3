@@ -14,17 +14,17 @@ let rate = mouseX kr 1 200 Linear 0.1
 in sinOsc ar (x * 500 + 500) 0 * 0.1
 
 -- phasor ; as phase input to bufRd ; requires=buf
-let b = control kr "buf" 0
+let (b, nc) = (control kr "buf" 0, 2)
     ph = phasor ar 0 (bufRateScale kr b) 0 (bufFrames kr b) 0
-in bufRd 1 ar b ph Loop NoInterpolation
+in bufRd nc ar b ph Loop NoInterpolation
 
--- phasor ; audio rate oscillator as phase input to bufRd ; requires=buf
-let b = control kr "buf" 0
+-- phasor ; audio rate oscillator as phase input to bufRd ; requires=buf (non-wavetable format)
+let (b, nc) = (control kr "buf" 0, 2)
     f = 440
     fr = bufFrames kr b
     rt = f * (fr / sampleRate)
     ph = phasor ar b (rt * bufRateScale kr b) 0 fr 0
-in bufRdL 1 ar b ph Loop * 0.1
+in bufRdL nc ar b ph Loop * 0.1
 
 -- phasor ; as impulse with reset
 let impulse_reset freq reset =
@@ -37,26 +37,19 @@ let impulse_reset freq reset =
     im' = sinOsc ar 220 0 * decay2 (ck + im) 0.01 0.5 * 0.1
 in mce2 x' im'
 
--- phasor ; frequency: rate = (end - start) * freq / sample-rate ; precision is an issue.
-let f = mouseX kr 220 880 Exponential 0.1
-    tr = impulse ar f 0
-    sr = sampleRate
-    x = phasor ar tr (two_pi * f / sr) 0 two_pi 0
-in sin x * 0.1
-
--- phasor ; as saw
-let f0 = midiCps (mouseX kr 36 96 Linear 0.2)
-in phasor ar 0 (f0 * sampleDur) (-1) 1 0 * 0.1
-
 -- phasor ; as sinOsc
 let f0 = midiCps (mouseX kr 36 96 Linear 0.2)
     ph = phasor ar 0 (f0 * sampleDur) 0 1 0 * two_pi
 in sin ph * 0.1
 
--- phasor ; as sinOsc, but with precision issues
+-- phasor ; as sinOsc with trigger ; triggers cause discontinuities (precision?)
 let f0 = midiCps (mouseX kr 36 96 Linear 0.2)
     ph = phasor ar (impulse ar f0 0) (f0 * sampleDur) 0 1 0 * two_pi
 in sin ph * 0.1
+
+-- phasor ; as saw
+let f0 = midiCps (mouseX kr 36 96 Linear 0.2)
+in phasor ar 0 (f0 * sampleDur) (-1) 1 0 * 0.1
 
 -- phasor ; approximation of square wave ; sync ; http://listarc.bham.ac.uk/lists/sc-users/msg69869.html
 let freq = mouseX kr 200 4000 Exponential 0.2

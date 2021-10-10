@@ -4,8 +4,8 @@ let b = control kr "buf" 0
 in mrg2 o (recordBuf ar b 0 1 0 1 NoLoop 1 RemoveSynth o)
 
 -- recordBuf ; requires=buf ; play recorded buffer back (ie. test)
-let b = control kr "buf" 0
-in playBuf 1 ar b 1 1 0 NoLoop RemoveSynth
+let (b, nc) = (control kr "buf" 0, 1)
+in playBuf nc ar b 1 1 0 NoLoop RemoveSynth
 
 -- recordBuf ; mix second signal equally with existing signal, replay to hear
 let b = control kr "buf" 0
@@ -13,9 +13,9 @@ let b = control kr "buf" 0
 in mrg2 o (recordBuf ar b 0 0.5 0.5 1 NoLoop 1 RemoveSynth o)
 
 -- recordBuf ; mce
-let b = mce2 (control kr "buf1" 0) (control kr "buf2" 0)
+let b = control kr "buf" 0
     o = sinOsc ar (mce2 110 220) 0 * 0.1
-in mrg2 o (recordBuf ar b 0 0.5 0.5 1 NoLoop 1 RemoveSynth (mce1 o))
+in mrg2 o (recordBuf ar (mce2 b b) 0 0.5 0.5 1 NoLoop 1 RemoveSynth (mce1 o))
 
 ---- ; setup
 withSC3 (async (b_alloc 0 (48000 * 4) 1))

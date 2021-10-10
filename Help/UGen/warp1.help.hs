@@ -1,9 +1,8 @@
--- warp1 ; requires=buf ; interp=2=linear
-let nc = 1
-    b = control kr "buf" 0
+-- warp1 ; requires=buf ; interp=2=linear ; nc=2
+let (b, nc) = (control kr "buf" 0, 2)
     p = linLin (lfSaw kr 0.05 0) (-1) 1 0 1
     x = mouseX kr 0.5 2 Linear 0.1
-in warp1 nc b p x 0.1 (-1) 8 0.1 2
+in warp1 nc b p x 0.1 (-1) 8 0.1 2 * 0.5
 
 -- warp1 ; real-time (delayed) input, localBuf
 let sz = 8192
@@ -29,5 +28,6 @@ in mix (eventVoicer 16 f) * control kr "gain" 2
 
 ---- ; setup
 ld fn = withSC3 (async (b_allocRead 0 (sfResolve fn) 0 0))
-ld "instr/celeste/long/13-C4-long.wav"
-ld "instr/celeste/long/25-C5-long.wav"
+ld "pf-c5.aif" -- stereo
+ld "instr/celeste/long/13-C4-long.wav" -- mono
+ld "instr/celeste/long/25-C5-long.wav" -- mono

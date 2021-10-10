@@ -61,6 +61,7 @@ sfPath = getEnv "SFPATH"
      If fn is either absolute or names a relative file and if that file exists it is returned.
      If sdDir/fn exists it is returned.
      Else each directory at sfPath is searched (recursively) in turn.
+     Despite the name this will find any file type along the SFDIR and SFPATH, i.e. .sfz files &etc.
 
 > mapM sfFindFile ["/home/rohan/data/audio/metal.wav", "pf-c5.aif", "20.2-LW+RD.flac"]
 -}

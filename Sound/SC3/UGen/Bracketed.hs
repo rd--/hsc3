@@ -16,6 +16,7 @@ import Sound.SC3.UGen.Bindings.DB {- hsc3 -}
 import Sound.SC3.UGen.Type {- hsc3 -}
 import Sound.SC3.UGen.UGen {- hsc3 -}
 import Sound.SC3.Server.Command.Plain {- hsc3 -}
+import Sound.SC3.Server.Enum {- hsc3 -}
 
 {- | Number of channels, either sfNc or the length of readChan.
      Checks requested channels are in range.
@@ -68,3 +69,26 @@ sndfileRead (bufId, ctlName, readChan) sndFileName =
       buf = if null ctlName then constant bufId else control kr ctlName (fromIntegral bufId)
       bufNc = readChanToNc sfNc readChan
   in (bracketUGen buf ([b_allocReadChannel bufId fileName 0 0 readChan], [b_free bufId]), bufNc, constant sfSr, constant sfNf)
+
+-- | Bracketed b_gen sine1
+bGenSine1 :: (Buffer_Id, String, Int) -> [B_Gen] -> [Double] -> UGen
+bGenSine1 (bufId, ctlName, numFrames) flags param =
+  let buf = if null ctlName then constant bufId else control kr ctlName (fromIntegral bufId)
+      bufNc = 1
+  in bracketUGen buf ([b_alloc bufId numFrames bufNc, b_gen_sine1 bufId flags param], [b_free bufId])
+
+-- | bGenSine1 with standard wavetable flags.
+bGenSine1Tbl :: (Buffer_Id, String, Int) -> [Double] -> UGen
+bGenSine1Tbl opt = bGenSine1 opt [Normalise, Wavetable, Clear]
+
+-- | Bracketed b_gen sine1
+bGenCheby :: (Buffer_Id, String, Int) -> [B_Gen] -> [Double] -> UGen
+bGenCheby (bufId, ctlName, numFrames) flags param =
+  let buf = if null ctlName then constant bufId else control kr ctlName (fromIntegral bufId)
+      bufNc = 1
+  in bracketUGen buf ([b_alloc bufId numFrames bufNc, b_gen_cheby bufId flags param], [b_free bufId])
+
+-- | bGenCheby with standard wavetable flags.
+bGenChebyTbl :: (Buffer_Id, String, Int) -> [Double] -> UGen
+bGenChebyTbl opt = bGenCheby opt [Normalise, Wavetable, Clear]
+
