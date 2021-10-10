@@ -1,4 +1,5 @@
-    Sound.SC3.Lang.Help.viewServerHelp "/b_allocReadChannel"
+---- ;help
+Sound.SC3.sc3_scdoc_help_server_command_open False "/b_allocReadChannel"
 
 > import Data.List {- base -}
 > import Data.List.Split {- split -}

@@ -26,9 +26,8 @@ let n = 10
 in saw ar f * 0.1
 
 -- select ; buffer segment player ; requires=buf
-let nc = 2
-    buf = control kr "buf" 0
-    n_segments = control_m kr "nseg" 32 (1,64,"lin")
+let (buf, nc) = (control kr "buf" 0, 2)
+    n_segments = control_m kr "nseg" 32 (1, 64, "lin")
     sel = control_m kr "sel" 0 (0,3,"lin")
     buf_size = bufFrames kr buf
     segment_size = bufFrames kr buf / n_segments
@@ -41,6 +40,5 @@ let nc = 2
     zero = select sel (demand tr 0 (ix * segment_size))
 in bufRdN nc ar buf (zero + phase) NoLoop * 0.1
 
----- ; setup ; nc=2
-{buf = 0 ; fn = sfResolve "amen.wav"}
-withSC3 (async (b_allocRead buf fn 0 0))
+---- ; buffer setup (nc = 2)
+withSC3 (async (b_allocRead 0 (sfResolve "amen.wav") 0 0))
