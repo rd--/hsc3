@@ -1,4 +1,12 @@
--- | Bracketed UGens.
+{- | Bracketed UGens.
+
+'Brackets' are a pair of sequences of OpenSoundControl messages that can be attached to UGen values.
+One sequence (called /pre/) is to be sent before the graph the UGen belongs to is started,
+the other (called /post/) is to be sent afterwards.
+The functions defined here return UGens with Brackets.
+They're designed so that they can be used to write ordinary graphs with ordinary control parameters.
+The brackets contain instructions that would otherwise be given and executed outside of the graph context.
+-}
 module Sound.SC3.UGen.Bracketed where
 
 import Sound.SC3.Common.Enum {- hsc3 -}
@@ -11,7 +19,7 @@ import Sound.SC3.Server.Command.Plain {- hsc3 -}
 
 {- | diskIn with brackets to allocate and read and then close and free buffer.
      Ignoring the brackets, this is equivalent to writing a diskIn UGen with
-     the number of channels derived from the file and a buffer size of 65536.
+     the number of channels derived from the named file.
 -}
 sndfileIn :: (Buffer_Id, String) -> FilePath -> Loop UGen -> UGen
 sndfileIn (bufId, ctlName) sndFileName loop =
