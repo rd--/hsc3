@@ -77,7 +77,7 @@ u_node_is_u n = case n of {U_Node_U {} -> True; _ -> False}
 u_node_k_to_control :: U_Node -> Control
 u_node_k_to_control nd =
   case nd of
-    U_Node_K _ rt ix nm df ty mt -> Control rt ix nm df (ty == Rate.K_TriggerRate) mt
+    U_Node_K _ rt ix nm df ty mt -> Control rt ix nm df (ty == Rate.K_TriggerRate) mt emptyBrackets
     _ -> error "u_node_k_to_control?"
 
 -- | Derive "user" name for U_Node
@@ -375,7 +375,7 @@ ug_mk_node_c (Constant x _b) g =
 
 -- | Insert a control node into the 'U_Graph'.
 ug_push_k :: Control -> U_Graph -> (U_Node,U_Graph)
-ug_push_k (Control r ix nm d tr meta) g =
+ug_push_k (Control r ix nm d tr meta _brk) g =
     let n = U_Node_K (ug_next_id g) r ix nm d (Rate.ktype r tr) meta
     in (n,g {ug_controls = n : ug_controls g
             ,ug_next_id = ug_next_id g + 1})

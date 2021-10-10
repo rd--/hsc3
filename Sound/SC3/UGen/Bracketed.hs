@@ -2,37 +2,38 @@
 module Sound.SC3.UGen.Bracketed where
 
 import Sound.SC3.Common.Enum {- hsc3 -}
+import Sound.SC3.Common.Rate {- hsc3 -}
 import Sound.SC3.Common.SoundFile {- hsc3 -}
 import Sound.SC3.UGen.Bindings.DB {- hsc3 -}
 import Sound.SC3.UGen.Type {- hsc3 -}
+import Sound.SC3.UGen.UGen {- hsc3 -}
 import Sound.SC3.Server.Command.Plain {- hsc3 -}
 
 {- | diskIn with brackets to allocate and read and then close and free buffer.
-
-sinOsc ar 440 0 + sndfileIn 0 "20.2-LW+RD.flac" Loop
+     Ignoring the brackets, this is equivalent to writing a diskIn UGen with
+     the number of channels derived from the file and a buffer size of 65536.
 -}
-sndfileIn :: Buffer_Id -> FilePath -> Loop UGen -> UGen
-sndfileIn bufId sndFileName loop =
+sndfileIn :: (Buffer_Id, String) -> FilePath -> Loop UGen -> UGen
+sndfileIn (bufId, ctlName) sndFileName loop =
   let fileName = sfResolve sndFileName
       (nc,_sr,_nf) = sfInfo fileName
       bufSize = 65536
+      buf = if null ctlName then constant bufId else control kr ctlName (fromIntegral bufId)
   in bracketUGen
-     (diskIn nc (constant bufId) loop)
+     (diskIn nc buf loop)
      ([b_alloc bufId bufSize nc, b_read bufId fileName 0 (-1) 0 True]
      ,[b_close bufId, b_free bufId])
 
-{- | b_allocRead with brackets to allocate and read and then free a buffer.
-     Returns bufId as a bracketed constant, and basic sound file information,
-     (numberOfChannels, sampleRate, numberOfFrames).
-
-let (buf, nc, sr, nf) = sndfileRead 0 "metal.wav"
-    tr = impulse ar (nf / sr) 0
-    ph = phasor ar tr (sr / sampleRate) 0 nf 0
-in bufRdL nc ar buf ph NoLoop
-
+{- | Returns Buffer_Id as a bracketed buffer identifier UGen
+     along with basic sound file information: numberOfChannels, sampleRate, numberOfFrames.
+     If ctlName is empty the buffer is returned as a constant, else as a control with the given name.
+     The brackets will allocate and read and then free the buffer.
+     Ignoring the brackets, and the sample rate and frame count,
+     this can be used to write the synthdefs that function the same as if just having a buffer control input.
 -}
-sndfileRead :: Buffer_Id -> FilePath -> (UGen, Int, UGen, UGen)
-sndfileRead bufId sndFileName =
+sndfileRead :: (Buffer_Id, String) -> FilePath -> (UGen, Int, UGen, UGen)
+sndfileRead (bufId, ctlName) sndFileName =
   let fileName = sfResolve sndFileName
       (nc,sr,nf) = sfInfo fileName
-  in (bracketUGen (constant bufId) ([b_allocRead bufId fileName 0 0], [b_free bufId]), nc, constant sr, constant nf)
+      buf = if null ctlName then constant bufId else control kr ctlName (fromIntegral bufId)
+  in (bracketUGen buf ([b_allocRead bufId fileName 0 0], [b_free bufId]), nc, constant sr, constant nf)

@@ -11,3 +11,4 @@ import Sound.SC3.Server.Nrt as S
 import Sound.SC3.Server.Nrt.Edit as S
 import Sound.SC3.Server.Param as S
 import Sound.SC3.Server.Recorder as S
+import Sound.SC3.Server.Scsynth as S

@@ -52,8 +52,11 @@ maybe_async_at t m =
     then async_ m
     else sendBundle (bundle t [m])
 
+-- | Hostname and port number.
+type SC3_Address = (String, Int)
+
 -- | Local host (ie. @127.0.0.1@) at port 'sc3_port_def'
-sc3_default_udp :: (String,Int)
+sc3_default_udp :: SC3_Address
 sc3_default_udp = (Options.sc3_addr_def,Options.sc3_port_def)
 
 -- | Maximum packet size, in bytes, that can be sent over UDP.
@@ -62,7 +65,7 @@ sc3_udp_limit :: Num n => n
 sc3_udp_limit = 65507
 
 -- | Bracket @SC3@ communication at indicated host and port.
-withSC3At :: (String,Int) -> Connection UDP a -> IO a
+withSC3At :: SC3_Address -> Connection UDP a -> IO a
 withSC3At (h,p) = withTransport (openUDP h p)
 
 -- | Bracket @SC3@ communication, ie. 'withSC3At' 'sc3_default_udp'.
@@ -84,13 +87,13 @@ withSC3_tm tm = timeout_r tm . withSC3
 -- | Run /f/ at /k/ scsynth servers with sequential port numbers starting at 'Options.sc3_port_def'.
 --
 -- > withSC3AtSeq sc3_default_udp 2 (sendMessage status >> waitReply "/status.reply")
-withSC3AtSeq :: (String,Int) -> Int -> Connection UDP a -> IO [a]
+withSC3AtSeq :: SC3_Address -> Int -> Connection UDP a -> IO [a]
 withSC3AtSeq (h,p) k f = do
   let mk_udp i = openUDP h (p + i)
   mapM (\i -> withTransport (mk_udp i) f) [0 .. k - 1]
 
 -- | 'void' of 'withSC3AtSeq'.
-withSC3AtSeq_ :: (String,Int) -> Int -> Connection UDP a -> IO ()
+withSC3AtSeq_ :: SC3_Address -> Int -> Connection UDP a -> IO ()
 withSC3AtSeq_ loc k = void . withSC3AtSeq loc k
 
 -- * Server control
@@ -206,11 +209,11 @@ instance Audible UGen.UGen where
     playAt = playUGen
 
 -- | 'withSC3At' of 'playAt'.
-auditionAt :: Audible e => (String,Int) -> Play_Opt -> e -> IO ()
+auditionAt :: Audible e => SC3_Address -> Play_Opt -> e -> IO ()
 auditionAt loc opt = withSC3At loc . playAt opt
 
 -- | 'withSC3AtSeq' of 'playAt'.
-auditionAtSeq :: Audible e => (String,Int) -> Play_Opt -> Int -> e -> IO ()
+auditionAtSeq :: Audible e => SC3_Address -> Play_Opt -> Int -> e -> IO ()
 auditionAtSeq loc opt k = withSC3AtSeq_ loc k . playAt opt
 
 -- | Default 'Play_Opt', ie. (-1,addToHead,1,[])

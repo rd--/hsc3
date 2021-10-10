@@ -2,6 +2,7 @@
 module Sound.SC3.UGen (module U) where
 
 import Sound.SC3.UGen.Analysis as U
+import Sound.SC3.UGen.Bracketed as U
 import Sound.SC3.UGen.Envelope as U
 import Sound.SC3.UGen.Enum as U
 import Sound.SC3.UGen.Event as U

@@ -7,6 +7,7 @@ import Sound.SC3.Common.Rate
 import Sound.SC3.Server.Command.Plain
 import Sound.SC3.Server.Enum
 import Sound.SC3.Server.Nrt
+import Sound.SC3.Server.Nrt.Render
 import Sound.SC3.Server.Synthdef
 import Sound.SC3.UGen.Bindings.DB
 import Sound.SC3.UGen.Type

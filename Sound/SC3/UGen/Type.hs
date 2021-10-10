@@ -130,7 +130,8 @@ data Control = Control {controlOperatingRate :: Rate
                        ,controlName :: String
                        ,controlDefault :: Sample
                        ,controlTriggered :: Bool
-                       ,controlMeta :: Maybe (Control_Meta Sample)}
+                       ,controlMeta :: Maybe (Control_Meta Sample)
+                       ,controlBrackets :: Brackets}
                deriving (Ord, Eq, Read, Show)
 
 -- | Labels.
@@ -580,8 +581,8 @@ mce_is_direct_proxy m =
 -- * Bracketed
 
 {- | Attach Brackets (initialisation and cleanup message sequences) to UGen.
-     For simplicity and clarity, brackets can only be attached to Primitive UGen nodes.
-     This will look into the leftmost proxy
+     For simplicity and clarity, brackets can only be attached to Primitive, Constant and Control nodes.
+     This will look into the direct (immediate) proxies of a Primitive.
 -}
 bracketUGen :: UGen -> Brackets -> UGen
 bracketUGen u (pre, post) =
@@ -593,6 +594,7 @@ bracketUGen u (pre, post) =
           _ -> err
   in case u of
        UGen (CConstant c) -> let (lhs, rhs) = constantBrackets c in UGen (CConstant (c {constantBrackets = (lhs ++ pre, rhs ++ post)}))
+       UGen (CControl c) -> let (lhs, rhs) = controlBrackets c in UGen (CControl (c {controlBrackets = (lhs ++ pre, rhs ++ post)}))
        UGen (CPrimitive p) -> let (lhs, rhs) = primitiveBrackets p in UGen (CPrimitive (p {primitiveBrackets = (lhs ++ pre, rhs ++ post)}))
        UGen (CMce m rt) ->
          if mce_is_direct_proxy m
@@ -605,6 +607,7 @@ ugenBrackets :: UGen -> Brackets
 ugenBrackets u =
   case u of
     UGen (CConstant c) -> constantBrackets c
+    UGen (CControl c) -> controlBrackets c
     UGen (CPrimitive p) -> primitiveBrackets p
     _ -> emptyBrackets
 

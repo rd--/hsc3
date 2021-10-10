@@ -74,7 +74,7 @@ ugenHasAnyBrackets = (/= ([],[])) . ugenCollectBrackets
 
 -- | Control input node constructor.
 control_f64 :: Rate.Rate -> Maybe Int -> String -> Sample -> UGen
-control_f64 r ix nm d = UGen (CControl (Control r ix nm d False Nothing))
+control_f64 r ix nm d = UGen (CControl (Control r ix nm d False Nothing emptyBrackets))
 
 -- | Control input node constructor.
 --
@@ -87,7 +87,7 @@ control r = control_f64 r Nothing
 control_m :: Rate.Rate -> String -> Double -> Control_Meta_T3 Double -> UGen
 control_m rt nm df meta =
     let m = control_meta_t3 id meta
-    in UGen (CControl (Control rt Nothing nm df False (Just m)))
+    in UGen (CControl (Control rt Nothing nm df False (Just m) emptyBrackets))
 
 -- | Generate group of two controls.  Names are generated according to 'control_group_suffixes'
 control_pair :: Control_Group -> Rate.Rate -> String -> (Double,Double) -> Control_Meta_T3 Double -> (UGen,UGen)
@@ -95,8 +95,8 @@ control_pair grp rt nm (df1,df2) meta =
     let m = (control_meta_t3 id meta) {controlGroup = Just grp}
     in case control_group_suffixes grp of
          [lhs,rhs] ->
-           (UGen (CControl (Control rt Nothing (nm ++ lhs) df1 False (Just m)))
-           ,UGen (CControl (Control rt Nothing (nm ++ rhs) df2 False (Just m))))
+           (UGen (CControl (Control rt Nothing (nm ++ lhs) df1 False (Just m) emptyBrackets))
+           ,UGen (CControl (Control rt Nothing (nm ++ rhs) df2 False (Just m) emptyBrackets)))
          _ -> error "control_pair"
 
 -- | Generate range controls.  Names are generated according to 'control_group_suffixes'
@@ -105,7 +105,7 @@ control_rng = control_pair Control_Range
 
 -- | Triggered (kr) control input node constructor.
 trigControl_f64 :: Maybe Int -> String -> Sample -> UGen
-trigControl_f64 ix nm d = UGen (CControl (Control Rate.ControlRate ix nm d True Nothing))
+trigControl_f64 ix nm d = UGen (CControl (Control Rate.ControlRate ix nm d True Nothing emptyBrackets))
 
 -- | Triggered (kr) control input node constructor.
 trigControl :: String -> Double -> UGen

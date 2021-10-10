@@ -12,19 +12,21 @@ let b = control kr "buf" 0
 in bufRdL 1 ar 0 p NoLoop
 
 -- sweep ; backwards, variable offset ; requires=buf
-let n = lfNoise0Id 'α' kr 15
+let b = control kr "buf" 0
+    n = lfNoise0Id 'α' kr 15
     x = mouseX kr 0.5 10 Exponential 0.1
     t = impulse ar x 0
-    r = bufSampleRate kr 0
-    p = sweep t (negate r) + (bufFrames kr 0 * n)
-in bufRdL 1 ar 0 p NoLoop
+    r = bufSampleRate kr b
+    p = sweep t (negate r) + (bufFrames kr b * n)
+in bufRdL 1 ar b p NoLoop
 
 -- sweep ; raising rate ; requires=buf
-let x = mouseX kr 0.5 10 Exponential 0.1
+let b = control kr "buf" 0
+    x = mouseX kr 0.5 10 Exponential 0.1
     t = impulse ar x 0
     r = sweep t 2 + 0.5
-    p = sweep t (bufSampleRate kr 0 * r)
-in bufRdL 1 ar 0 p NoLoop
+    p = sweep t (bufSampleRate kr b * r)
+in bufRdL 1 ar b p NoLoop
 
 -- sweep ; f0 (sc-users, 2012-02-09)
 let lf = range 0.01 1.25 (lfNoise2Id 'α' kr 1)

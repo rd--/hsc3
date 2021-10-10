@@ -2,10 +2,10 @@
 
 ;;; Commentary:
 
-;; Indentation and font locking is courtesy `haskell' mode (debian=haskell-mode).
-;; Inter-process communication is courtesy `comint'.
-;; Symbol at point acquisition is courtesy `thingatpt'.
-;; Directory search facilities are courtesy `find-lisp'.
+; Indentation and font locking is courtesy `haskell' mode (debian=haskell-mode).
+; Inter-process communication is courtesy `comint'.
+; Symbol at point acquisition is courtesy `thingatpt'.
+; Directory search facilities are courtesy `find-lisp'.
 
 (require 'haskell)
 (require 'comint)
@@ -172,7 +172,12 @@ If STR has a newline the layout is adjusted accordingly."
   "Send region text with haskell function FN to be applied."
   (hsc3-send-text-fn fn (hsc3-region-string)))
 
-(defun hsc3-play-region (k)
+(defun hsc3-play-region ()
+  "Play region at scsynth."
+  (interactive)
+  (hsc3-send-region-fn "Sound.SC3.scsynthPlay scsynth"))
+
+(defun hsc3-play-region-at (k)
   "Play region at scsynth.  The (one-indexed) prefix agument K indicates which server to send to."
   (interactive "p")
   (hsc3-send-region-fn
@@ -255,7 +260,7 @@ If STR has a newline the layout is adjusted accordingly."
 (defun hsc3-reset-scsynth ()
   "Send SC3 reset instruction to haskell."
   (interactive)
-  (hsc3-with-sc3 "Sound.SC3.reset"))
+  (hsc3-send-line "Sound.SC3.scsynthReset scsynth"))
 
 (defun hsc3-start-haskell ()
   "Start the hsc3 haskell process.
@@ -272,6 +277,9 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
      (car hsc3-interpreter)
      nil
      (cdr hsc3-interpreter))
+    (hsc3-set-prompt)
+    (if hsc3-auto-import-modules (hsc3-import-standard-modules))
+    (hsc3-send-line "scsynth <- newScsynth")
     (hsc3-see-haskell)))
 
 (defun hsc3-interrupt-haskell ()
@@ -392,8 +400,6 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
  (interactive)
   (if (not (comint-check-proc hsc3-buffer))
       (hsc3-start-haskell)
-   (hsc3-set-prompt)
-   (if hsc3-auto-import-modules (hsc3-import-standard-modules))
    (delete-other-windows)
    (split-window-vertically)
    (with-current-buffer hsc3-buffer

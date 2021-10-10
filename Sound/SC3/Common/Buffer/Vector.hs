@@ -1,4 +1,4 @@
--- | 'V.Vector' variants of "Sound.SC3.Common.Buffer".
+-- | Vector variants of "Sound.SC3.Common.Buffer".
 module Sound.SC3.Common.Buffer.Vector where
 
 import qualified Data.Vector.Storable as V {- vector -}

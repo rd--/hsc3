@@ -137,7 +137,7 @@ control_spec_seq_print = intercalate ";" . map control_spec_print
 control_spec_to_control :: ControlSpec Double -> Control
 control_spec_to_control (cnm,def,(lhs,rhs,wrp)) =
   let grp = if last cnm `elem` "[]" then Just Control_Range else Nothing
-  in Control ControlRate Nothing cnm def False (Just (Control_Meta lhs rhs wrp 0 "" grp))
+  in Control ControlRate Nothing cnm def False (Just (Control_Meta lhs rhs wrp 0 "" grp)) emptyBrackets
 
 {- | See SCClassLibrary/Common/Control/Spec:ControlSpec.initClass
 

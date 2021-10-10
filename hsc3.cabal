@@ -82,10 +82,13 @@ Library
                    Sound.SC3.Server.Monad
                    Sound.SC3.Server.Nrt
                    Sound.SC3.Server.Nrt.Edit
+                   Sound.SC3.Server.Nrt.Render
+                   Sound.SC3.Server.Nrt.Stat
                    Sound.SC3.Server.Nrt.UGen
                    Sound.SC3.Server.Options
                    Sound.SC3.Server.Param
                    Sound.SC3.Server.Recorder
+                   Sound.SC3.Server.Scsynth
                    Sound.SC3.Server.Status
                    Sound.SC3.Server.Synthdef
                    Sound.SC3.Server.Transport.FD

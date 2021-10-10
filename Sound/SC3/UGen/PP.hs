@@ -26,7 +26,7 @@ ugen_concise_pp u =
         k = 5
     in case u of
          UGen (CConstant (Constant n _)) -> real_pp k n
-         UGen (CControl (Control _ _ nm def _ _)) -> nm ++ "=" ++ real_pp k def
+         UGen (CControl (Control _ _ nm def _ _ _)) -> nm ++ "=" ++ real_pp k def
          UGen (CLabel (Label s)) -> bracketed ('"','"') s
          UGen (CPrimitive p) -> prim_pp p
          UGen (CProxy (Proxy p n _)) -> ugen_concise_pp p ++ "@" ++ show n
