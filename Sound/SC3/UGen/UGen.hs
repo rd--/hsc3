@@ -10,6 +10,7 @@ import qualified Data.List.Split as Split {- split -}
 import qualified Sound.SC3.Common.Envelope as Envelope {- hsc3 -}
 import qualified Sound.SC3.Common.Base as Base {- hsc3 -}
 import qualified Sound.SC3.Common.Math.Operator as Operator {- hsc3 -}
+import qualified Sound.SC3.Common.Mce as Mce {- hsc3 -}
 import qualified Sound.SC3.Common.Rate as Rate {- hsc3 -}
 import qualified Sound.SC3.Common.UId as UId {- hsc3 -}
 
@@ -189,7 +190,7 @@ mceChannel n u =
 mceChannelWrap :: Int -> UGen -> UGen
 mceChannelWrap n u =
     case u of
-      UGen (CMce m _) -> mceProxies m !! (n `mod` length m)
+      UGen (CMce m _) -> mceProxies m !! (n `mod` Mce.mce_length m)
       _ -> u
 
 -- | Transpose rows and columns, ie. {{a,b},{c,d}} to {{a,c},{b,d}}.

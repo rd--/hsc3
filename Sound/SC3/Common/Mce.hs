@@ -1,35 +1,40 @@
-{-# Language DeriveFunctor, DeriveFoldable, DeriveTraversable #-}
-
 -- | The SC3 multiple channel expansion rules over an abstract type.
 module Sound.SC3.Common.Mce where
 
 -- | Multiple channel expansion.
 data Mce t = Mce_Unit t | Mce_Vector [t]
-             deriving (Functor, Foldable, Traversable, Ord, Eq, Read, Show)
+             deriving (Ord, Eq, Read, Show)
 
+-- | fromList for Mce.
 mce_from_list :: [t] -> Mce t
 mce_from_list = Mce_Vector
 
--- | Elements at 'MCE'.
+-- | toList for Mce.
 mce_elem :: Mce t -> [t]
 mce_elem m =
     case m of
       Mce_Unit e -> [e]
       Mce_Vector e -> e
 
--- | Extend 'Mce' to specified degree, only at initial depth.
+-- | Length, or perhaps rather width, of Mce.
+mce_length :: Mce a -> Int
+mce_length = length . mce_elem
+
+-- | Extend 'Mce' to specified degree.
 mce_extend :: Int -> Mce n -> Mce n
 mce_extend n m =
     case m of
       Mce_Unit e -> Mce_Vector (replicate n e)
       Mce_Vector e -> if length e > n then error "mce_extend?" else Mce_Vector (take n (cycle e))
 
--- | Apply /f/ at elements of /m/.
+-- | fmap for Mce, apply /f/ at elements of /m/.
 mce_map :: (a -> b) -> Mce a -> Mce b
 mce_map f m =
     case m of
       Mce_Unit e -> Mce_Unit (f e)
       Mce_Vector e -> Mce_Vector (map f e)
+
+instance Functor Mce where fmap = mce_map
 
 -- | Apply /f/ pairwise at elements of /m1/ and /m2/.
 mce_binop :: (a -> b -> c) -> Mce a -> Mce b -> Mce c
@@ -57,7 +62,13 @@ instance Fractional n => Fractional (Mce n) where
     fromRational = Mce_Unit . fromRational
 
 {-
+
+If UGen is any of Functor, Foldable, Traversable, then Mce must be as well.
+
+{-# Language DeriveFunctor, DeriveFoldable, DeriveTraversable #-}
+
 Should Mce be a Tree?
 import qualified Data.Tree as Tree {- containers -}
 type Mce t = Tree.Tree [t]
+
 -}
