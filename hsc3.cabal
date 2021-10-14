@@ -63,6 +63,7 @@ Library
                    Sound.SC3.Common.Monad
                    Sound.SC3.Common.Monad.Operators
                    Sound.SC3.Common.Rate
+                   Sound.SC3.Common.Random
                    Sound.SC3.Common.SoundFile
                    Sound.SC3.Common.UId
                    Sound.SC3.Common.Unsafe
