@@ -1,7 +1,9 @@
--- | Linear congruential generator and related utilities
+-- | Linear congruential generator and related utilities.  Ordinarily use System.Random.
 module Sound.SC3.Common.Random where
 
+import Data.Bits {- base -}
 import Data.Int {- base -}
+import Data.Word {- base -}
 import System.CPUTime {- base -}
 
 -- | Linear congruential generator given modulo function for type.
@@ -10,55 +12,44 @@ import System.CPUTime {- base -}
 lcg :: Num t => (t -> t) -> t -> t -> t -> t
 lcg modFunc a c x0 = modFunc (a * x0 + c)
 
--- | 'Int32' linear congruential generator, hence signed modulo of @2^32@.
-lcgInt32 :: Int32 -> Int32 -> Int32 -> Int32
-lcgInt32 = lcg id
+{- | 'lcg' 6364136223846793005 1442695040888963407, so in (0, 18446744073709551615)
 
--- | 'Int64' linear congruential generator, hence signed modulo of @2^64@.
-lcgInt64 :: Int64 -> Int64 -> Int64 -> Int64
-lcgInt64 = lcg id
-
-{- | 'lcgInt64' 6364136223846793005 1442695040888963407, so in (minBound,maxBound).
-
-> take 5 (iterate lcgInt64Knuth 147092873413)
-> (maxBound :: Int64) == 9223372036854775807
+> take 5 (iterate lcgWord64Knuth 147092873413)
+> (maxBound :: Word64) == (2 ^ 64 - 1)
 -}
-lcgInt64Knuth :: Int64 -> Int64
-lcgInt64Knuth = lcgInt64 6364136223846793005 1442695040888963407
+lcgWord64Knuth :: Word64 -> Word64
+lcgWord64Knuth = lcg id 6364136223846793005 1442695040888963407
 
-{- | 'lcgInt32' 1103515245 12345
+{- | 'lcg' 1103515245 12345, so in (-2147483648, 2147483647)
 
 > take 5 (iterate lcgInt32Glibc 873413)
-> (maxBound :: Int32) == 2147483647
+> (minBound :: Int32,maxBound :: Int32) == (-2147483648, 2147483647)
 -}
 lcgInt32Glibc :: Int32 -> Int32
-lcgInt32Glibc = lcgInt32 1103515245 12345
+lcgInt32Glibc = lcg id 1103515245 12345
 
--- | Run getCPUTime and convert to Int64
-cpuTimeSeedInt64 :: IO Int64
-cpuTimeSeedInt64 = fmap (fromIntegral . flip div cpuTimePrecision) getCPUTime
+-- | Run getCPUTime and convert to Word64
+cpuTimeSeedWord64 :: IO Word64
+cpuTimeSeedWord64 = fmap (fromIntegral . flip div cpuTimePrecision) getCPUTime
 
 -- | Run getCPUTime and convert to Int32
 cpuTimeSeedInt32 :: IO Int32
 cpuTimeSeedInt32 = fmap (fromIntegral . flip div cpuTimePrecision) getCPUTime
 
-{- | lcgInt64Knuth seeded by cpuTimeSeedInt64
+-- | Iterate lcgWord64Knuth using cpuTimeSeedWord64.
+lcgWord64KnuthCpuTime :: IO [Word64]
+lcgWord64KnuthCpuTime = fmap (iterate lcgWord64Knuth) cpuTimeSeedWord64
 
-> fmap (take 4) lcgInt64CpuTime
+{- | Convert Word64 to Double in range (0, 1).
+     Shifts input right 11 places (ie. discards 11 least significant bits) then divide by 2^53.
 -}
-lcgInt64CpuTime :: IO [Int64]
-lcgInt64CpuTime = fmap (iterate lcgInt64Knuth) cpuTimeSeedInt64
+word64ToUnitDouble :: Word64 -> Double
+word64ToUnitDouble n = realToFrac (shiftR n 11) / realToFrac (shiftL (1 :: Word64) 53)
 
-{- | lcgInt64Knuth seeded by cpuTimeSeedInt64
+{- | word64ToUnitDouble of lcgWord64KnuthCpuTime
 
-> fmap (map int64ToUnitRational . take 2) lcgInt64CpuTime
+> x <- fmap (take 256) lcgDoubleKnuthCpuTime
+> Sound.SC3.Plot.plot_p1_ln [x]
 -}
-int64ToUnitRational :: Int64 -> Rational
-int64ToUnitRational n = fromIntegral n / fromIntegral (maxBound :: Int64)
-
-{- | realToFrac of int64ToUnitRational
-
-> fmap (map int64ToUnitDouble . take 4) lcgInt64CpuTime
--}
-int64ToUnitDouble :: Int64 -> Double
-int64ToUnitDouble = realToFrac . int64ToUnitRational
+lcgDoubleKnuthCpuTime :: IO [Double]
+lcgDoubleKnuthCpuTime = fmap (map word64ToUnitDouble) lcgWord64KnuthCpuTime
