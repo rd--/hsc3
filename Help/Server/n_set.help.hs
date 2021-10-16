@@ -1,1 +1,2 @@
-    Sound.SC3.Lang.Help.viewServerHelp "/n_set"
+---- ; help
+Sound.SC3.sc3_scdoc_help_server_command_open False "/n_set"

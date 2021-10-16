@@ -16,6 +16,15 @@ let e = envXYC [(0,0,EnvNum (-0.5)),(0.4,pi,EnvNum 0.5),(1,two_pi,EnvLin)]
     o = sinOsc kr 0 (envGen kr 1 1 0 2 DoNothing (env_circle_0 e))
 in (soundIn 0 + pinkNoiseId 'α' ar * 0.1) * range 0.25 1 o
 
+-- envGen ; impulse train with curvature ; see below for control messages ; https://fredrikolofsson.com/f0blog/impulse-train/
+let go = trigControl "go" 1 -- trigger
+    dur = control kr "dur" 1 -- total duration in seconds (also frequency)
+    cur = control kr "cur" 0 -- curvature or 'shape'. 0 = pulses at regular intervals
+    num = control kr "num" 8 -- number of impulses per duration
+    amp = control kr "amp" 1 -- gain
+    env = envGen ar go 1 0 1 DoNothing (envelope [0, 0, 1] [0, dur] [EnvNum cur])
+in changed (ceil (env * num)) 0 * amp
+
 {---- ; see also help files for the following envelope constructors
 
 - envADSR
@@ -32,6 +41,12 @@ in (soundIn 0 + pinkNoiseId 'α' ar * 0.1) * range 0.25 1 o
 - envXYC
 
 -}
+
+---- ; set impulse train controls
+set = withSC3 . sendMessage . n_set (-1)
+set [("go", 1), ("cur", 3), ("num", 18)] -- start slow and go faster
+set [("go", 1), ("cur", -2), ("num", 18)] -- slower and slower
+set [("go", 1), ("amp", 0.2), ("cur", 0), ("dur", 0.5), ("num", 200)] -- 200 for half a second = 400 Hz
 
 ---- ; drawings
 let e = envelope [6000,700,100] [1,1] [EnvExp,EnvLin]
