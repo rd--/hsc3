@@ -10,14 +10,15 @@ import Sound.SC3.Common.UId {- hsc3 -}
 import qualified Sound.SC3.UGen.Math as Math {- hsc3 -}
 import Sound.SC3.UGen.Type {- hsc3 -}
 
--- | Construct a list of UGens.
+-- | Construct a list of UGens by applying f to consecutive identifiers (from z) and indices (from 0).
 listFillId :: (Integral n, ID z, Enum z) => z -> Int -> (z -> n -> UGen) -> [UGen]
 listFillId z n f = zipWith f [z..] [0 .. fromIntegral n - 1]
 
--- | Construct a list of UGens.
+-- | Construct a list of UGens by applying f at consecutive indices (from 0).
 listFillM :: (UId m, Integral n) => Int -> (n -> m UGen) -> m [UGen]
 listFillM n f = mapM f [0 .. fromIntegral n - 1]
 
+-- | Construct a list of UGens by applying f at consecutive indices (from 0).
 listFill :: Integral n => Int -> (n -> UGen) -> [UGen]
 listFill n f = map f [0 .. fromIntegral n - 1]
 
@@ -29,7 +30,7 @@ mceConst n = mce . replicate n
 mceGenId :: ID z => (Id -> UGen) -> Int -> z -> UGen
 mceGenId f n = mce . map f . id_seq n
 
--- | Monad/applicative variant of mce_gen.
+-- | Applicative variant of mceGenId.
 mceGenM :: Applicative f => f UGen -> Int -> f UGen
 mceGenM f n = fmap mce (replicateM n f)
 
@@ -63,7 +64,7 @@ mixTo n u =
     let xs = transpose (Split.chunksOf n (mceChannels u))
     in mce (map Math.sum_opt xs)
 
--- | Construct and sum a set of UGens.
+-- | 'mix' of 'mceFill'
 mixFill :: Integral n => Int -> (n -> UGen) -> UGen
 mixFill n = mix . mceFill n
 
@@ -75,10 +76,10 @@ mixFillInt = mixFill
 mixFillUGen :: Int -> (UGen -> UGen) -> UGen
 mixFillUGen = mixFill
 
--- | Construct and sum a set of ID UGens.
+-- | 'mix' of 'mceFillId'
 mixFillId :: (Integral n, ID z, Enum z) => z -> Int -> (z -> n -> UGen) -> UGen
 mixFillId z n = mix . mceFillId z n
 
 -- | Monad variant on mixFill.
-mixFillM :: (Integral n,Monad m) => Int -> (n -> m UGen) -> m UGen
+mixFillM :: (Integral n, Monad m) => Int -> (n -> m UGen) -> m UGen
 mixFillM n f = fmap Math.sum_opt (mapM f [0 .. fromIntegral n - 1])

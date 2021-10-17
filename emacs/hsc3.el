@@ -18,8 +18,9 @@
   "The name of the hsc3 haskell process buffer."
   :type 'string)
 
-(defvar hsc3-interpreter (list "ghci")
-  "The name of the haskell interpreter (default=\"ghci\").")
+(defcustom hsc3-interpreter (list "ghci")
+  "The name of the haskell interpreter (default=\"ghci\")."
+  :type '(repeat string))
 
 (defvar hsc3-directory nil
   "The hsc3 directory (default=nil).")
@@ -31,8 +32,9 @@ These can be fetched from the SuperCollider archives by typing:
 
 git checkout 2495f4f61c0955001169d28142543aabbe1bedcb build/old_rtf_help.tar.gz")
 
-(defvar hsc3-auto-import-modules nil
-  "Flag to decide if the hsc3 standard module set is imported on startup (default=nil).")
+(defcustom hsc3-auto-import-modules nil
+  "Flag to decide if the hsc3 standard module set is imported on startup (default=nil)."
+  :type 'boolean)
 
 (defun hsc3-chunk-string (n s)
   "Split the string S into chunks of N characters."

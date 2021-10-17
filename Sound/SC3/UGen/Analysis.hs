@@ -18,7 +18,7 @@ ugen_primitive_set u =
       UGen (CLabel _) -> []
       UGen (CPrimitive p) -> [p]
       UGen (CProxy p) -> ugen_primitive_set (proxySource p)
-      UGen (CMce m _) -> concatMap ugen_primitive_set (Mce.mce_elem m)
+      UGen (CMce m _) -> concatMap ugen_primitive_set (Mce.mce_to_list m)
       UGen (CMrg m _) -> ugen_primitive_set (mrgLeft m)
 
 -- | Heuristic based on primitive name (@FFT@, @PV_@).  Note that

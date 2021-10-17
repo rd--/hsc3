@@ -378,14 +378,14 @@ isSink :: UGen -> Bool
 isSink u =
     case mrg_leftmost u of
       Primitive_U p -> null (ugenOutputs p)
-      Mce_U m -> all isSink (mce_elem m)
+      Mce_U m -> all isSink (mce_to_list m)
       _ -> False
 -}
 isSink :: UGen -> Bool
 isSink u =
     case mrg_leftmost u of
       UGen (CPrimitive p) -> null (ugenOutputs p)
-      UGen (CMce m _) -> all isSink (mce_elem m)
+      UGen (CMce m _) -> all isSink (mce_to_list m)
       _ -> False
 
 -- | See into 'Proxy_U'.
@@ -429,23 +429,23 @@ mce :: [UGen] -> UGen
 mce xs =
     case xs of
       [] -> error "mce: []"
-      [x] -> Mce_U (Mce_Unit x)
+      [x] -> Mce_U (Mce_Scalar x)
       _ -> Mce_U (Mce_Vector xs)
 -}
 mce :: [UGen] -> UGen
 mce xs =
     case xs of
       [] -> error "mce: []"
-      [x] -> UGen (CMce (Mce_Unit x) (rateOf x))
-      _ -> UGen (CMce (Mce_Vector xs) (maximum (map rateOf xs)))
+      [x] -> UGen (CMce (Mce_Scalar x) (rateOf x))
+      _ -> UGen (CMce (mce_from_list xs) (maximum (map rateOf xs)))
 
--- | Type specified 'mce_elem'.
+-- | Type specified 'mce_to_list'.
 {-
 mceProxies :: Mce UGen -> [UGen]
-mceProxies = mce_elem
+mceProxies = mce_to_list
 -}
 mceProxies :: Mce UGen -> [UGen]
-mceProxies = mce_elem
+mceProxies = mce_to_list
 
 -- | Multiple channel expansion node ('Mce_U') predicate.  Sees into Mrg.
 {-
@@ -464,7 +464,7 @@ isMce u =
 circuitChannels :: Circuit UGen -> [UGen]
 circuitChannels u =
     case u of
-      CMce m _ -> mce_elem m
+      CMce m _ -> mce_to_list m
       CMrg (Mrg x y) rt -> let r:rs = mceChannels x in UGen (CMrg (Mrg r y) rt) : rs
       _ -> [UGen u]
 
@@ -473,7 +473,7 @@ circuitChannels u =
 mceChannels :: UGen -> [UGen]
 mceChannels u =
     case u of
-      Mce_U m -> mce_elem m
+      Mce_U m -> mce_to_list m
       Mrg_U (Mrg x y) -> let r:rs = mceChannels x in Mrg_U (Mrg r y) : rs
       _ -> [u]
 -}
@@ -561,7 +561,7 @@ mceBuild :: ([UGen] -> UGen) -> [UGen] -> UGen
 mceBuild f i =
     case mceInputTransform i of
       Nothing -> f i
-      Just i' -> let xs = map (mceBuild f) i' in UGen (CMce (Mce_Vector xs) (maximum (map rateOf xs)))
+      Just i' -> let xs = map (mceBuild f) i' in UGen (CMce (mce_from_list xs) (maximum (map rateOf xs)))
 
 {- | True if Mce is an immediate proxy for a multiple-out Primitive.
      This is useful when disassembling graphs, ie. ugen_graph_forth_pp at hsc3-db.
@@ -570,9 +570,9 @@ mceBuild f i =
 mce_is_direct_proxy :: Mce UGen -> Bool
 mce_is_direct_proxy m =
     case m of
-      Mce_Unit _ -> False
-      Mce_Vector v ->
-          let p = map un_proxy v
+      Mce_Scalar _ -> False
+      Mce_Vector _ ->
+          let p = map un_proxy (mce_to_list m)
               p' = catMaybes p
           in all isJust p &&
              length (nub (map proxySource p')) == 1 &&
@@ -695,7 +695,7 @@ rateOf (UGen c) = circuitRateOf c
 proxify :: UGen -> UGen
 proxify u =
     case u of
-      Mce_U m -> mce (map proxify (mce_elem m))
+      Mce_U m -> mce (map proxify (mce_to_list m))
       Mrg_U m -> mrg [proxify (mrgLeft m), mrgRight m]
       Primitive_U p ->
           let o = ugenOutputs p
@@ -708,7 +708,7 @@ proxify u =
 proxify :: UGen -> UGen
 proxify u =
     case u of
-      UGen (CMce m _) -> mce (map proxify (mce_elem m))
+      UGen (CMce m _) -> mce (map proxify (mce_to_list m))
       UGen (CMrg m _) -> mrg [proxify (mrgLeft m), mrgRight m]
       UGen (CPrimitive p) ->
           let o = ugenOutputs p

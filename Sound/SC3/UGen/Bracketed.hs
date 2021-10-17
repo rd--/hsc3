@@ -1,12 +1,17 @@
 {- | Bracketed UGens.
 
-UGen brackets are a pair of OpenSoundControl message sequences that are attached to UGen values.
+ScSynth is controlled using OpenSoundControl (Osc) messages.
+One family of messages allocate, set and free Buffers.
+UGen graphs (SynthDef files) that require Buffers do not contain the messages to manage them.
+These messages (instructions) are ordinarily written outside of the graph context.
+
+The bracketUGen function attaches a pair of Osc message sequences to a UGen value.
 The first sequence is to be sent before the graph the UGen belongs to is started, the other after it has ended.
-The brackets contain instructions that would otherwise be written outside of the graph context.
+The messages are stored in the UGen type, but are not written to the SynthDef file representing the UGen graph.
+scsynthPlayAt reads and sends UGen bracket messages, in addition to the UGen graph itself.
+
 The functions defined here return UGen values with brackets attached to them.
-It is possible to use these functions to write the same graphs as would be written without the brackets,
-i.e. with control and channel count inputs.
-scsynthPlayAt will read and send UGen bracket messages.
+
 -}
 module Sound.SC3.UGen.Bracketed where
 
@@ -34,12 +39,13 @@ readChanToNc sfNc readChan =
        else error "readChanToNc: channel error"
 
 {- | diskIn or vDiskIn with brackets to 1. allocate and read and then 2. close and free buffer.
-     Ignoring the brackets, this is equivalent to writing a diskIn UGen,
+     If ctlName is empty the buffer is returned as a constant, else as a control with the given name.
+     Ignoring the brackets, this is equivalent to writing a diskIn or vDiskIn UGen,
      with the number of channels given by readChan or derived from the named file.
      If readChan is empty all channels are read.
 -}
-sndfileDiskIn :: (Buffer_Id, String, [Int]) -> FilePath -> Maybe UGen -> Loop UGen -> UGen
-sndfileDiskIn (bufId, ctlName, readChan) sndFileName maybeRate loop =
+sndfileDiskIn :: (String, Buffer_Id, [Int]) -> FilePath -> Maybe UGen -> Loop UGen -> UGen
+sndfileDiskIn (ctlName, bufId, readChan) sndFileName maybeRate loop =
   let fileName = sfResolve sndFileName
       (sfNc,_sr,_nf) = sfInfo fileName
       bufSize = 65536
@@ -51,23 +57,22 @@ sndfileDiskIn (bufId, ctlName, readChan) sndFileName maybeRate loop =
      ,[b_close bufId, b_free bufId])
 
 -- | diskIn form of sndfileDiskIn
-sndfileIn :: (Buffer_Id, String, [Int]) -> FilePath -> Loop UGen -> UGen
+sndfileIn :: (String, Buffer_Id, [Int]) -> FilePath -> Loop UGen -> UGen
 sndfileIn opt sndFileName loop = sndfileDiskIn opt sndFileName Nothing loop
 
 -- | vDiskIn form of sndfileDiskIn
-sndfileVarIn :: (Buffer_Id, String, [Int]) -> FilePath -> UGen -> Loop UGen -> UGen
+sndfileVarIn :: (String, Buffer_Id, [Int]) -> FilePath -> UGen -> Loop UGen -> UGen
 sndfileVarIn opt sndFileName rate loop = sndfileDiskIn opt sndFileName (Just rate) loop
 
 {- | Returns Buffer_Id as a bracketed buffer identifier UGen,
      along with basic sound file information: numberOfChannels, sampleRate, numberOfFrames.
      If ctlName is empty the buffer is returned as a constant, else as a control with the given name.
      The brackets will 1. allocate and read and then 2. free the buffer.
-     Ignoring the brackets, and the sample rate and frame count,
-     this can be used to write the synthdefs that are the same as if just having a buffer control input.
+     Ignoring the brackets, and the sample rate and frame count, this is equivalent to declaring a buffer identifier.
      If readChan is empty all channels are read.
 -}
-sndfileRead :: (Buffer_Id, String, [Int]) -> FilePath -> (UGen, Int, UGen, UGen)
-sndfileRead (bufId, ctlName, readChan) sndFileName =
+sndfileRead :: (String, Buffer_Id, [Int]) -> FilePath -> (UGen, Int, UGen, UGen)
+sndfileRead (ctlName, bufId, readChan) sndFileName =
   let fileName = sfResolve sndFileName
       (sfNc, sfSr, sfNf) = sfInfo fileName
       buf = if null ctlName then constant bufId else control kr ctlName (fromIntegral bufId)
@@ -77,26 +82,25 @@ sndfileRead (bufId, ctlName, readChan) sndFileName =
 {- | Bracketed b_gen sine1
      If ctlName is empty the buffer is returned as a constant, else as a control with the given name.
 -}
-bGenSine1 :: (Buffer_Id, String, Int) -> [B_Gen] -> [Double] -> UGen
-bGenSine1 (bufId, ctlName, numFrames) flags param =
+bGenSine1 :: (String, Buffer_Id, Int) -> [B_Gen] -> [Double] -> UGen
+bGenSine1 (ctlName, bufId, numFrames) flags param =
   let buf = if null ctlName then constant bufId else control kr ctlName (fromIntegral bufId)
       bufNc = 1
   in bracketUGen buf ([b_alloc bufId numFrames bufNc, b_gen_sine1 bufId flags param], [b_free bufId])
 
 -- | bGenSine1 with standard wavetable flags (normalise and wavetable and clear).
-bGenSine1Tbl :: (Buffer_Id, String, Int) -> [Double] -> UGen
+bGenSine1Tbl :: (String, Buffer_Id, Int) -> [Double] -> UGen
 bGenSine1Tbl opt = bGenSine1 opt [Normalise, Wavetable, Clear]
 
 {- | Bracketed b_gen sine1
      If ctlName is empty the buffer is returned as a constant, else as a control with the given name.
 -}
-bGenCheby :: (Buffer_Id, String, Int) -> [B_Gen] -> [Double] -> UGen
-bGenCheby (bufId, ctlName, numFrames) flags param =
+bGenCheby :: (String, Buffer_Id, Int) -> [B_Gen] -> [Double] -> UGen
+bGenCheby (ctlName, bufId, numFrames) flags param =
   let buf = if null ctlName then constant bufId else control kr ctlName (fromIntegral bufId)
       bufNc = 1
   in bracketUGen buf ([b_alloc bufId numFrames bufNc, b_gen_cheby bufId flags param], [b_free bufId])
 
 -- | bGenCheby with standard wavetable flags (normalise and wavetable and clear).
-bGenChebyTbl :: (Buffer_Id, String, Int) -> [Double] -> UGen
+bGenChebyTbl :: (String, Buffer_Id, Int) -> [Double] -> UGen
 bGenChebyTbl opt = bGenCheby opt [Normalise, Wavetable, Clear]
-
