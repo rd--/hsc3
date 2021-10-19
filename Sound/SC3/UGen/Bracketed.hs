@@ -1,14 +1,14 @@
 {- | Bracketed UGens.
 
-ScSynth is controlled using OpenSoundControl (Osc) messages.
+ScSynth is controlled by sending instructions in the form of Open Sound Control (OSC) messages.
 One family of messages allocate, set and free Buffers.
-UGen graphs (SynthDef files) that require Buffers do not contain the messages to manage them.
-These messages (instructions) are ordinarily written outside of the graph context.
+UGen graphs that utilise Buffers don't contain the messages to manage them.
+These messages are ordinarily written and sent outside of the graph context.
 
-The bracketUGen function attaches a pair of Osc message sequences to a UGen value.
+The bracketUGen function attaches a pair of OSC message sequences to a UGen value.
 The first sequence is to be sent before the graph the UGen belongs to is started, the other after it has ended.
 The messages are stored in the UGen type, but are not written to the SynthDef file representing the UGen graph.
-scsynthPlayAt reads and sends UGen bracket messages, in addition to the UGen graph itself.
+The scsynthPlayAt function reads and sends UGen bracket messages, in addition to the UGen graph itself.
 
 The functions defined here return UGen values with brackets attached to them.
 
