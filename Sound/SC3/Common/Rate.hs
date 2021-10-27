@@ -29,6 +29,15 @@ rateAbbrev rt =
   fromMaybe (error "rateAbbrev?")
   (lookup (fromEnum rt) (zip [0..] (words "ir kr ar dr")))
 
+{- | Standard SuperCollider rate abbreviations.
+
+> map rateName [minBound .. maxBound] == ["scalar","control","audio","demand"]
+-}
+rateName :: Rate -> String
+rateName rt =
+  fromMaybe (error "rateName?")
+  (lookup (fromEnum rt) (zip [0..] (words "scalar control audio demand")))
+
 -- | Integer rate identifier, as required for scsynth bytecode.
 rateId :: Rate -> Int
 rateId = fromEnum
