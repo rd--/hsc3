@@ -220,79 +220,79 @@ data UGen
 -}
 
 instance EqE UGen where
-    equal_to = mkBinaryOperator EQ_ Math.sc3_eq
-    not_equal_to = mkBinaryOperator NE Math.sc3_neq
+    equal_to = mkBinaryOperator OpEq Math.sc3_eq
+    not_equal_to = mkBinaryOperator OpNe Math.sc3_neq
 
 instance OrdE UGen where
-    less_than = mkBinaryOperator LT_ Math.sc3_lt
-    less_than_or_equal_to = mkBinaryOperator LE Math.sc3_lte
-    greater_than = mkBinaryOperator GT_ Math.sc3_gt
-    greater_than_or_equal_to = mkBinaryOperator GE Math.sc3_gte
+    less_than = mkBinaryOperator OpLt Math.sc3_lt
+    less_than_or_equal_to = mkBinaryOperator OpLe Math.sc3_lte
+    greater_than = mkBinaryOperator OpGt Math.sc3_gt
+    greater_than_or_equal_to = mkBinaryOperator OpGe Math.sc3_gte
 
 -- | 'UGen' form or 'Math.sc3_round_to'.
 roundTo :: UGen -> UGen -> UGen
-roundTo = mkBinaryOperator Round Math.sc3_round_to
+roundTo = mkBinaryOperator OpRound Math.sc3_round_to
 
 instance RealFracE UGen where
     properFractionE = error "UGen.properFractionE"
     truncateE = error "UGen.truncateE"
     roundE i = roundTo i 1
-    ceilingE = mkUnaryOperator Ceil ceilingE
-    floorE = mkUnaryOperator Floor floorE
+    ceilingE = mkUnaryOperator OpCeil ceilingE
+    floorE = mkUnaryOperator OpFloor floorE
 
 instance UnaryOp UGen where
-    ampDb = mkUnaryOperator AmpDb ampDb
-    asFloat = mkUnaryOperator AsFloat asFloat
-    asInt = mkUnaryOperator AsInt asInt
-    cpsMidi = mkUnaryOperator CpsMidi cpsMidi
-    cpsOct = mkUnaryOperator CpsOct cpsOct
-    cubed = mkUnaryOperator Cubed cubed
-    dbAmp = mkUnaryOperator DbAmp dbAmp
-    distort = mkUnaryOperator Distort distort
-    frac = mkUnaryOperator Frac frac
-    isNil = mkUnaryOperator IsNil isNil
-    log10 = mkUnaryOperator Log10 log10
-    log2 = mkUnaryOperator Log2 log2
-    midiCps = mkUnaryOperator MidiCps midiCps
-    midiRatio = mkUnaryOperator MidiRatio midiRatio
-    notE = mkUnaryOperator Not notE
-    notNil = mkUnaryOperator NotNil notNil
-    octCps = mkUnaryOperator OctCps octCps
-    ramp_ = mkUnaryOperator Ramp_ ramp_
-    ratioMidi = mkUnaryOperator RatioMidi ratioMidi
-    softClip = mkUnaryOperator SoftClip softClip
-    squared = mkUnaryOperator Squared squared
+    ampDb = mkUnaryOperator OpAmpDb ampDb
+    asFloat = mkUnaryOperator OpAsFloat asFloat
+    asInt = mkUnaryOperator OpAsInt asInt
+    cpsMidi = mkUnaryOperator OpCpsMidi cpsMidi
+    cpsOct = mkUnaryOperator OpCpsOct cpsOct
+    cubed = mkUnaryOperator OpCubed cubed
+    dbAmp = mkUnaryOperator OpDbAmp dbAmp
+    distort = mkUnaryOperator OpDistort distort
+    frac = mkUnaryOperator OpFrac frac
+    isNil = mkUnaryOperator OpIsNil isNil
+    log10 = mkUnaryOperator OpLog10 log10
+    log2 = mkUnaryOperator OpLog2 log2
+    midiCps = mkUnaryOperator OpMidiCps midiCps
+    midiRatio = mkUnaryOperator OpMidiRatio midiRatio
+    notE = mkUnaryOperator OpNot notE
+    notNil = mkUnaryOperator OpNotNil notNil
+    octCps = mkUnaryOperator OpOctCps octCps
+    ramp_ = mkUnaryOperator OpRamp ramp_
+    ratioMidi = mkUnaryOperator OpRatioMidi ratioMidi
+    softClip = mkUnaryOperator OpSoftClip softClip
+    squared = mkUnaryOperator OpSquared squared
 
 instance BinaryOp UGen where
-    iDiv = mkBinaryOperator IDiv iDiv
-    modE = mkBinaryOperator Mod Fixed.mod'
-    lcmE = mkBinaryOperator LCM lcmE
-    gcdE = mkBinaryOperator GCD gcdE
-    roundUp = mkBinaryOperator RoundUp roundUp
-    trunc = mkBinaryOperator Trunc trunc
-    atan2E = mkBinaryOperator Atan2 atan2E
-    hypot = mkBinaryOperator Hypot hypot
-    hypotx = mkBinaryOperator Hypotx hypotx
-    fill = mkBinaryOperator Fill fill
-    ring1 = mkBinaryOperator Ring1 ring1
-    ring2 = mkBinaryOperator Ring2 ring2
-    ring3 = mkBinaryOperator Ring3 ring3
-    ring4 = mkBinaryOperator Ring4 ring4
-    difSqr = mkBinaryOperator DifSqr difSqr
-    sumSqr = mkBinaryOperator SumSqr sumSqr
-    sqrSum = mkBinaryOperator SqrSum sqrSum
-    sqrDif = mkBinaryOperator SqrDif sqrDif
-    absDif = mkBinaryOperator AbsDif absDif
-    thresh = mkBinaryOperator Thresh thresh
-    amClip = mkBinaryOperator AmClip amClip
-    scaleNeg = mkBinaryOperator ScaleNeg scaleNeg
-    clip2 = mkBinaryOperator Clip2 clip2
-    excess = mkBinaryOperator Excess excess
-    fold2 = mkBinaryOperator Fold2 fold2
-    wrap2 = mkBinaryOperator Wrap2 wrap2
-    firstArg = mkBinaryOperator FirstArg firstArg
-    randRange = mkBinaryOperator RandRange randRange
-    exprandRange = mkBinaryOperator ExpRandRange exprandRange
+    iDiv = mkBinaryOperator OpIdiv iDiv
+    modE = mkBinaryOperator OpMod Fixed.mod'
+    lcmE = mkBinaryOperator OpLcm lcmE
+    gcdE = mkBinaryOperator OpGcd gcdE
+    roundUp = mkBinaryOperator OpRoundUp roundUp
+    trunc = mkBinaryOperator OpTrunc trunc
+    atan2E = mkBinaryOperator OpAtan2 atan2E
+    hypot = mkBinaryOperator OpHypot hypot
+    hypotx = mkBinaryOperator OpHypotx hypotx
+    fill = mkBinaryOperator OpFill fill
+    ring1 = mkBinaryOperator OpRing1 ring1
+    ring2 = mkBinaryOperator OpRing2 ring2
+    ring3 = mkBinaryOperator OpRing3 ring3
+    ring4 = mkBinaryOperator OpRing4 ring4
+    difSqr = mkBinaryOperator OpDifSqr difSqr
+    sumSqr = mkBinaryOperator OpSumSqr sumSqr
+    sqrSum = mkBinaryOperator OpSqrSum sqrSum
+    sqrDif = mkBinaryOperator OpSqrDif sqrDif
+    absDif = mkBinaryOperator OpAbsDif absDif
+    thresh = mkBinaryOperator OpThresh thresh
+    amClip = mkBinaryOperator OpAmClip amClip
+    scaleNeg = mkBinaryOperator OpScaleNeg scaleNeg
+    clip2 = mkBinaryOperator OpClip2 clip2
+    excess = mkBinaryOperator OpExcess excess
+    fold2 = mkBinaryOperator OpFold2 fold2
+    wrap2 = mkBinaryOperator OpWrap2 wrap2
+    firstArg = mkBinaryOperator OpFirstArg firstArg
+    randRange = mkBinaryOperator OpRandRange randRange
+    exprandRange = mkBinaryOperator OpExpRandRange exprandRange
 
 --instance MulAdd UGen where mul_add = mulAdd
 
@@ -1008,38 +1008,38 @@ add_optimise = sum3_optimise . mul_add_optimise
 
 -- | Unit generators are numbers.
 instance Num UGen where
-    negate = mkUnaryOperator Neg negate
+    negate = mkUnaryOperator OpNeg negate
     (+) = fmap add_optimise .
-          mkBinaryOperator_optimise_constants Add (+) (`elem` [Left 0,Right 0])
-    (-) = mkBinaryOperator_optimise_constants Sub (-) (Right 0 ==)
-    (*) = mkBinaryOperator_optimise_constants Mul (*) (`elem` [Left 1,Right 1])
-    abs = mkUnaryOperator Abs abs
-    signum = mkUnaryOperator Sign signum
+          mkBinaryOperator_optimise_constants OpAdd (+) (`elem` [Left 0,Right 0])
+    (-) = mkBinaryOperator_optimise_constants OpSub (-) (Right 0 ==)
+    (*) = mkBinaryOperator_optimise_constants OpMul (*) (`elem` [Left 1,Right 1])
+    abs = mkUnaryOperator OpAbs abs
+    signum = mkUnaryOperator OpSign signum
     fromInteger = UGen . CConstant . flip Constant ([],[]) . fromInteger
 
 -- | Unit generators are fractional.
 instance Fractional UGen where
-    recip = mkUnaryOperator Recip recip
-    (/) = mkBinaryOperator_optimise_constants FDiv (/) (Right 1 ==)
+    recip = mkUnaryOperator OpRecip recip
+    (/) = mkBinaryOperator_optimise_constants OpFdiv (/) (Right 1 ==)
     fromRational = UGen . CConstant . flip Constant ([],[]) . fromRational
 
 -- | Unit generators are floating point.
 instance Floating UGen where
     pi = UGen (CConstant (Constant pi ([],[])))
-    exp = mkUnaryOperator Exp exp
-    log = mkUnaryOperator Log log
-    sqrt = mkUnaryOperator Sqrt sqrt
-    (**) = mkBinaryOperator_optimise_constants Pow (**) (Right 1 ==)
+    exp = mkUnaryOperator OpExp exp
+    log = mkUnaryOperator OpLog log
+    sqrt = mkUnaryOperator OpSqrt sqrt
+    (**) = mkBinaryOperator_optimise_constants OpPow (**) (Right 1 ==)
     logBase a b = log b / log a
-    sin = mkUnaryOperator Sin sin
-    cos = mkUnaryOperator Cos cos
-    tan = mkUnaryOperator Tan tan
-    asin = mkUnaryOperator ArcSin asin
-    acos = mkUnaryOperator ArcCos acos
-    atan = mkUnaryOperator ArcTan atan
-    sinh = mkUnaryOperator SinH sinh
-    cosh = mkUnaryOperator CosH cosh
-    tanh = mkUnaryOperator TanH tanh
+    sin = mkUnaryOperator OpSin sin
+    cos = mkUnaryOperator OpCos cos
+    tan = mkUnaryOperator OpTan tan
+    asin = mkUnaryOperator OpArcSin asin
+    acos = mkUnaryOperator OpArcCos acos
+    atan = mkUnaryOperator OpArcTan atan
+    sinh = mkUnaryOperator OpSinH sinh
+    cosh = mkUnaryOperator OpCosH cosh
+    tanh = mkUnaryOperator OpTanH tanh
     asinh x = log (sqrt (x*x+1) + x)
     acosh x = log (sqrt (x*x-1) + x)
     atanh x = (log (1+x) - log (1-x)) / 2
@@ -1051,11 +1051,11 @@ instance Real UGen where
 
 -- | Unit generators are integral.
 instance Integral UGen where
-    quot = mkBinaryOperator IDiv (error "UGen.quot")
-    rem = mkBinaryOperator Mod (error "UGen.rem")
+    quot = mkBinaryOperator OpIdiv (error "UGen.quot")
+    rem = mkBinaryOperator OpMod (error "UGen.rem")
     quotRem a b = (quot a b, rem a b)
-    div = mkBinaryOperator IDiv (error "UGen.div")
-    mod = mkBinaryOperator Mod (error "UGen.mod")
+    div = mkBinaryOperator OpIdiv (error "UGen.div")
+    mod = mkBinaryOperator OpMod (error "UGen.mod")
     toInteger (UGen (CConstant (Constant n ([],[])))) = floor n
     toInteger _ = error "UGen.toInteger: only un-bracketed constants considered"
 
@@ -1077,8 +1077,8 @@ instance Ord UGen where
     _ > _ = error "UGen.>, see >*"
     (UGen (CConstant a)) >= (UGen (CConstant b)) = a >= b
     _ >= _ = error "UGen.>=, see >=*"
-    min = mkBinaryOperator Min min
-    max = mkBinaryOperator Max max
+    min = mkBinaryOperator OpMin min
+    max = mkBinaryOperator OpMax max
 
 -- | Unit generators are enumerable.
 instance Enum UGen where
@@ -1106,10 +1106,10 @@ instance Random.Random UGen where
 
 -- | UGens are bit patterns.
 instance Bits UGen where
-    (.&.) = mkBinaryOperator BitAnd undefined
-    (.|.) = mkBinaryOperator BitOr undefined
-    xor = mkBinaryOperator BitXor undefined
-    complement = mkUnaryOperator BitNot undefined
+    (.&.) = mkBinaryOperator OpBitAnd undefined
+    (.|.) = mkBinaryOperator OpBitOr undefined
+    xor = mkBinaryOperator OpBitXor undefined
+    complement = mkUnaryOperator OpBitNot undefined
     shift = error "UGen.shift"
     rotate = error "UGen.rotate"
     bitSize = error "UGen.bitSize"

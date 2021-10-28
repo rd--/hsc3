@@ -29,61 +29,64 @@ import qualified Sound.SC3.Common.Math as Math {- hsc3 -}
 > zip (map show [minBound :: SC3_Unary_Op .. maxBound]) [0..]
 -}
 data SC3_Unary_Op
-            = Neg -- -
-            | Not -- !
-            | IsNil
-            | NotNil
-            | BitNot
-            | Abs -- 5
-            | AsFloat
-            | AsInt
-            | Ceil -- 8
-            | Floor -- 9
-            | Frac -- 10
-            | Sign
-            | Squared -- 12
-            | Cubed
-            | Sqrt -- 14
-            | Exp -- 15
-            | Recip -- 16
-            | MidiCps -- 17
-            | CpsMidi
-            | MidiRatio
-            | RatioMidi -- 20
-            | DbAmp
-            | AmpDb
-            | OctCps
-            | CpsOct
-            | Log -- 25 (natural, base e)
-            | Log2 -- 26 (base 2)
-            | Log10 -- 27 (base 10)
-            | Sin -- 28
-            | Cos -- 29
-            | Tan -- 30
-            | ArcSin
-            | ArcCos
-            | ArcTan
-            | SinH
-            | CosH -- 35
-            | TanH -- 36
-            | Rand_ -- UGen
-            | Rand2
-            | LinRand_ -- UGen
-            | BiLinRand -- 40
-            | Sum3Rand
-            | Distort -- 42
-            | SoftClip -- 43
-            | Coin
-            | DigitValue
-            | Silence
-            | Thru
-            | RectWindow
-            | HanWindow
-            | WelchWindow
-            | TriWindow
-            | Ramp_ -- UGen
-            | SCurve
-              deriving (Eq,Show,Enum,Bounded,Read)
+  = OpNeg -- -
+  | OpNot -- !
+  | OpIsNil
+  | OpNotNil
+  | OpBitNot
+  | OpAbs -- 5
+  | OpAsFloat
+  | OpAsInt
+  | OpCeil -- 8
+  | OpFloor -- 9
+  | OpFrac -- 10
+  | OpSign
+  | OpSquared -- 12
+  | OpCubed
+  | OpSqrt -- 14
+  | OpExp -- 15
+  | OpRecip -- 16
+  | OpMidiCps -- 17
+  | OpCpsMidi
+  | OpMidiRatio
+  | OpRatioMidi -- 20
+  | OpDbAmp
+  | OpAmpDb
+  | OpOctCps
+  | OpCpsOct
+  | OpLog -- 25 (natural, base e)
+  | OpLog2 -- 26 (base 2)
+  | OpLog10 -- 27 (base 10)
+  | OpSin -- 28
+  | OpCos -- 29
+  | OpTan -- 30
+  | OpArcSin
+  | OpArcCos
+  | OpArcTan
+  | OpSinH
+  | OpCosH -- 35
+  | OpTanH -- 36
+  | OpRand -- UGen
+  | OpRand2
+  | OpLinRand -- UGen
+  | OpBiLinRand -- 40
+  | OpSum3Rand
+  | OpDistort -- 42
+  | OpSoftClip -- 43
+  | OpCoin
+  | OpDigitValue
+  | OpSilence
+  | OpThru
+  | OpRectWindow
+  | OpHanWindow
+  | OpWelchWindow
+  | OpTriWindow
+  | OpRamp -- UGen
+  | OpScurve
+  deriving (Eq,Show,Enum,Bounded,Read)
+
+sc3_unary_op_name :: SC3_Unary_Op -> String
+sc3_unary_op_name = drop 2 . show
 
 -- | Type-specialised 'Base.parse_enum'.
 --
@@ -95,7 +98,7 @@ parse_unary = Base.parse_enum
 --
 -- > map fst sc3_unary_op_tbl
 sc3_unary_op_tbl :: [(String,Int)]
-sc3_unary_op_tbl = zip (map show [Neg .. SCurve]) [0..]
+sc3_unary_op_tbl = zip (map sc3_unary_op_name [minBound .. maxBound]) [0..]
 
 -- | Table of symbolic names for standard unary operators.
 unary_sym_tbl :: [(SC3_Unary_Op,String)]
@@ -104,8 +107,8 @@ unary_sym_tbl = [] -- (Neg,"-"),(Not,"!")
 -- | Lookup possibly symbolic name for standard unary operators.
 unaryName :: Int -> String
 unaryName n =
-    let e = toEnum n
-    in fromMaybe (show e) (lookup e unary_sym_tbl)
+  let e = toEnum n
+  in fromMaybe (sc3_unary_op_name e) (lookup e unary_sym_tbl)
 
 -- | Given name of unary operator derive index.
 --
@@ -132,60 +135,63 @@ is_unary cr = isJust . unaryIndex cr
 --
 -- > zip (map show [minBound :: SC3_Binary_Op .. maxBound]) [0..]
 data SC3_Binary_Op
-            = Add -- 0
-            | Sub -- 1
-            | Mul -- 2
-            | IDiv -- 3
-            | FDiv -- 4
-            | Mod -- 5
-            | EQ_ -- 6
-            | NE -- 7
-            | LT_ -- 8
-            | GT_ -- 9
-            | LE -- 10
-            | GE -- 11
-            | Min -- 12
-            | Max -- 13
-            | BitAnd -- 14
-            | BitOr -- 15
-            | BitXor
-            | LCM -- 17
-            | GCD -- 18
-            | Round -- 19
-            | RoundUp -- 20
-            | Trunc -- 21
-            | Atan2
-            | Hypot
-            | Hypotx
-            | Pow -- 25
-            | ShiftLeft -- 26
-            | ShiftRight -- 27
-            | UnsignedShift
-            | Fill
-            | Ring1 -- 30
-            | Ring2
-            | Ring3
-            | Ring4
-            | DifSqr
-            | SumSqr -- 35
-            | SqrSum
-            | SqrDif
-            | AbsDif
-            | Thresh
-            | AmClip -- 40
-            | ScaleNeg
-            | Clip2 -- 42
-            | Excess
-            | Fold2
-            | Wrap2
-            | FirstArg
-            | RandRange
-            | ExpRandRange
-              deriving (Eq,Show,Enum,Bounded,Read)
+  = OpAdd -- 0
+  | OpSub -- 1
+  | OpMul -- 2
+  | OpIdiv -- 3
+  | OpFdiv -- 4
+  | OpMod -- 5
+  | OpEq -- 6
+  | OpNe -- 7
+  | OpLt -- 8
+  | OpGt -- 9
+  | OpLe -- 10
+  | OpGe -- 11
+  | OpMin -- 12
+  | OpMax -- 13
+  | OpBitAnd -- 14
+  | OpBitOr -- 15
+  | OpBitXor
+  | OpLcm -- 17
+  | OpGcd -- 18
+  | OpRound -- 19
+  | OpRoundUp -- 20
+  | OpTrunc -- 21
+  | OpAtan2
+  | OpHypot
+  | OpHypotx
+  | OpPow -- 25
+  | OpShiftLeft -- 26
+  | OpShiftRight -- 27
+  | OpUnsignedShift
+  | OpFill
+  | OpRing1 -- 30
+  | OpRing2
+  | OpRing3
+  | OpRing4
+  | OpDifSqr
+  | OpSumSqr -- 35
+  | OpSqrSum
+  | OpSqrDif
+  | OpAbsDif
+  | OpThresh
+  | OpAmClip -- 40
+  | OpScaleNeg
+  | OpClip2 -- 42
+  | OpExcess
+  | OpFold2
+  | OpWrap2
+  | OpFirstArg
+  | OpRandRange
+  | OpExpRandRange
+  deriving (Eq,Show,Enum,Bounded,Read)
+
+sc3_binary_op_name :: SC3_Binary_Op -> String
+sc3_binary_op_name = drop 2 . show
 
 -- | Table of operator names (non-symbolic) and indices.
 sc3_binary_op_tbl :: [(String,Int)]
-sc3_binary_op_tbl = zip (map show [Add .. ExpRandRange]) [0..]
+sc3_binary_op_tbl = zip (map sc3_binary_op_name [minBound .. maxBound]) [0..]
 
 -- | Type-specialised 'parse_enum'.
 parse_binary :: Base.Case_Rule -> String -> Maybe SC3_Binary_Op
@@ -194,36 +200,36 @@ parse_binary = Base.parse_enum
 -- | Table of symbolic names for standard binary operators.
 binary_sym_tbl :: [(SC3_Binary_Op,String)]
 binary_sym_tbl =
-    [(Add,"+")
-    ,(Sub,"-")
-    ,(Mul,"*")
-    ,(FDiv,"/")
-    ,(Mod,"%")
-    ,(EQ_,"==")
-    ,(NE,"/=") -- or !=
-    ,(LT_,"<")
-    ,(GT_,">")
-    ,(LE,"<=")
-    ,(GE,">=")
-    ,(BitAnd,".&.") -- or &
-    ,(BitOr,".|.") -- or |
-    ,(Pow,"**")]
+    [(OpAdd,"+")
+    ,(OpSub,"-")
+    ,(OpMul,"*")
+    ,(OpFdiv,"/")
+    ,(OpMod,"%")
+    ,(OpEq,"==")
+    ,(OpNe,"/=") -- or !=
+    ,(OpLt,"<")
+    ,(OpGt,">")
+    ,(OpLe,"<=")
+    ,(OpGe,">=")
+    ,(OpBitAnd,".&.") -- or &
+    ,(OpBitOr,".|.") -- or |
+    ,(OpPow,"**")]
 
 -- | Table of operator names (non-symbolic) and indices.
 --
 -- > map fst sc3_binary_op_sym_tbl
 sc3_binary_op_sym_tbl :: [(String,Int)]
 sc3_binary_op_sym_tbl =
-  let f x = fromMaybe (show x) (lookup x binary_sym_tbl)
-  in zip (map f [Add .. ExpRandRange]) [0..]
+  let f x = fromMaybe (sc3_binary_op_name x) (lookup x binary_sym_tbl)
+  in zip (map f [minBound .. maxBound]) [0..]
 
 -- | Lookup possibly symbolic name for standard binary operators.
 --
 -- > map binaryName [1,2,8,12] == ["-","*","<","Min"]
 binaryName :: Int -> String
 binaryName n =
-    let e = toEnum n
-    in fromMaybe (show e) (lookup e binary_sym_tbl)
+  let e = toEnum n
+  in fromMaybe (sc3_binary_op_name e) (lookup e binary_sym_tbl)
 
 -- | Given name of binary operator derive index.
 --
@@ -461,24 +467,24 @@ instance BinaryOp Double where
 -- | Association table for 'SC3_Binary_Op' to haskell function implementing operator.
 binop_hs_tbl :: (Real n,Floating n,RealFrac n) => [(SC3_Binary_Op,n -> n -> n)]
 binop_hs_tbl =
-    [(Add,(+))
-    ,(Sub,(-))
-    ,(FDiv,(/))
-    ,(IDiv,Math.sc3_idiv)
-    ,(Mod,Math.sc3_mod)
-    ,(EQ_,Math.sc3_eq)
-    ,(NE,Math.sc3_neq)
-    ,(LT_,Math.sc3_lt)
-    ,(LE,Math.sc3_lte)
-    ,(GT_,Math.sc3_gt)
-    ,(GE,Math.sc3_gte)
-    ,(Min,min)
-    ,(Max,max)
-    ,(Mul,(*))
-    ,(Pow,(**))
-    ,(Min,min)
-    ,(Max,max)
-    ,(Round,Math.sc3_round_to)]
+    [(OpAdd,(+))
+    ,(OpSub,(-))
+    ,(OpFdiv,(/))
+    ,(OpIdiv,Math.sc3_idiv)
+    ,(OpMod,Math.sc3_mod)
+    ,(OpEq,Math.sc3_eq)
+    ,(OpNe,Math.sc3_neq)
+    ,(OpLt,Math.sc3_lt)
+    ,(OpLe,Math.sc3_lte)
+    ,(OpGt,Math.sc3_gt)
+    ,(OpGe,Math.sc3_gte)
+    ,(OpMin,min)
+    ,(OpMax,max)
+    ,(OpMul,(*))
+    ,(OpPow,(**))
+    ,(OpMin,min)
+    ,(OpMax,max)
+    ,(OpRound,Math.sc3_round_to)]
 
 -- | 'lookup' 'binop_hs_tbl' via 'toEnum'.
 binop_special_hs :: (RealFrac n,Floating n) => Int -> Maybe (n -> n -> n)
@@ -487,20 +493,20 @@ binop_special_hs z = lookup (toEnum z) binop_hs_tbl
 -- | Association table for 'Unary' to haskell function implementing operator.
 uop_hs_tbl :: (RealFrac n,Floating n) => [(SC3_Unary_Op,n -> n)]
 uop_hs_tbl =
-    [(Neg,negate)
-    ,(Not,\z -> if z > 0 then 0 else 1)
-    ,(Abs,abs)
-    ,(Ceil,Math.sc3_ceiling)
-    ,(Floor,Math.sc3_floor)
-    ,(Squared,\z -> z * z)
-    ,(Cubed,\z -> z * z * z)
-    ,(Sqrt,sqrt)
-    ,(Recip,recip)
-    ,(MidiCps,Math.midi_to_cps)
-    ,(CpsMidi,Math.cps_to_midi)
-    ,(Sin,sin)
-    ,(Cos,cos)
-    ,(Tan,tan)]
+    [(OpNeg,negate)
+    ,(OpNot,\z -> if z > 0 then 0 else 1)
+    ,(OpAbs,abs)
+    ,(OpCeil,Math.sc3_ceiling)
+    ,(OpFloor,Math.sc3_floor)
+    ,(OpSquared,\z -> z * z)
+    ,(OpCubed,\z -> z * z * z)
+    ,(OpSqrt,sqrt)
+    ,(OpRecip,recip)
+    ,(OpMidiCps,Math.midi_to_cps)
+    ,(OpCpsMidi,Math.cps_to_midi)
+    ,(OpSin,sin)
+    ,(OpCos,cos)
+    ,(OpTan,tan)]
 
 -- | 'lookup' 'uop_hs_tbl' via 'toEnum'.
 uop_special_hs :: (RealFrac n,Floating n) => Int -> Maybe (n -> n)

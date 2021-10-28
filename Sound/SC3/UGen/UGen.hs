@@ -295,33 +295,33 @@ envelope_to_ienvgen_ugen =
 
 -- * Bitwise
 
--- | 'Operator.BitAnd'
+-- | 'Operator.OpBitAnd'
 bitAnd :: UGen -> UGen -> UGen
-bitAnd = mkBinaryOperator Operator.BitAnd undefined
+bitAnd = mkBinaryOperator Operator.OpBitAnd undefined
 
--- | 'Operator.BitOr'
+-- | 'Operator.OpBitOr'
 bitOr :: UGen -> UGen -> UGen
-bitOr = mkBinaryOperator Operator.BitOr undefined
+bitOr = mkBinaryOperator Operator.OpBitOr undefined
 
--- | 'Operator.BitXor'
+-- | 'Operator.OpBitXor'
 bitXOr :: UGen -> UGen -> UGen
-bitXOr = mkBinaryOperator Operator.BitXor undefined
+bitXOr = mkBinaryOperator Operator.OpBitXor undefined
 
--- | 'Operator.BitNot'
+-- | 'Operator.OpBitNot'
 bitNot :: UGen -> UGen
-bitNot = mkUnaryOperator Operator.BitNot undefined
+bitNot = mkUnaryOperator Operator.OpBitNot undefined
 
--- | 'Operator.ShiftLeft'
+-- | 'Operator.OpShiftLeft'
 shiftLeft :: UGen -> UGen -> UGen
-shiftLeft = mkBinaryOperator Operator.ShiftLeft undefined
+shiftLeft = mkBinaryOperator Operator.OpShiftLeft undefined
 
--- | 'Operator.ShiftRight'
+-- | 'Operator.OpShiftRight'
 shiftRight :: UGen -> UGen -> UGen
-shiftRight = mkBinaryOperator Operator.ShiftRight undefined
+shiftRight = mkBinaryOperator Operator.OpShiftRight undefined
 
--- | 'Operator.UnsignedShift'
+-- | 'Operator.OpUnsignedShift'
 unsignedShift :: UGen -> UGen -> UGen
-unsignedShift = mkBinaryOperator Operator.UnsignedShift undefined
+unsignedShift = mkBinaryOperator Operator.OpUnsignedShift undefined
 
 -- | 'shiftLeft' operator.
 (.<<.) :: UGen -> UGen -> UGen

@@ -396,7 +396,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
 (defun hsc3-init-scsynth ()
   "Initialise the scsynth interpreter variable."
   (interactive)
-  (hsc3-send-line "scsynth <- newScsynth"))
+  (hsc3-send-line "scsynth <- Sound.SC3.Server.Scsynth.newScsynth"))
 
 (defun hsc3-set-prompt ()
   "Set ghci prompt to hsc3> and the continuation prompt to nil."
