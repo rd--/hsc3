@@ -66,9 +66,9 @@ data SC3_Unary_Op
   | OpSinH
   | OpCosH -- 35
   | OpTanH -- 36
-  | OpRand -- UGen
+  | OpRand_ -- UGen
   | OpRand2
-  | OpLinRand -- UGen
+  | OpLinRand_ -- UGen
   | OpBiLinRand -- 40
   | OpSum3Rand
   | OpDistort -- 42
@@ -81,10 +81,11 @@ data SC3_Unary_Op
   | OpHanWindow
   | OpWelchWindow
   | OpTriWindow
-  | OpRamp -- UGen
+  | OpRamp_ -- UGen
   | OpScurve
   deriving (Eq,Show,Enum,Bounded,Read)
 
+-- | Enum name without Op prefix.
 sc3_unary_op_name :: SC3_Unary_Op -> String
 sc3_unary_op_name = drop 2 . show
 
@@ -187,6 +188,7 @@ data SC3_Binary_Op
   | OpExpRandRange
   deriving (Eq,Show,Enum,Bounded,Read)
 
+-- | Enum name without Op prefix.
 sc3_binary_op_name :: SC3_Binary_Op -> String
 sc3_binary_op_name = drop 2 . show
 

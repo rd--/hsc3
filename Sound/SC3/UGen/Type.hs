@@ -258,7 +258,7 @@ instance UnaryOp UGen where
     notE = mkUnaryOperator OpNot notE
     notNil = mkUnaryOperator OpNotNil notNil
     octCps = mkUnaryOperator OpOctCps octCps
-    ramp_ = mkUnaryOperator OpRamp ramp_
+    ramp_ = mkUnaryOperator OpRamp_ ramp_
     ratioMidi = mkUnaryOperator OpRatioMidi ratioMidi
     softClip = mkUnaryOperator OpSoftClip softClip
     squared = mkUnaryOperator OpSquared squared
