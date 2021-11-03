@@ -265,7 +265,8 @@ ugen_operator_name nm n =
 
 {- | Order of lookup: binary then unary.
 
-> map (resolve_operator Sound.SC3.Common.Base.CI) (words "+ - ADD SUB NEG")
+> map (resolve_operator Sound.SC3.Common.Base.CI) (words "+ - ADD SUB NEG ABS")
+> map (resolve_operator Sound.SC3.Common.Base.CS) (words "Abs")
 -}
 resolve_operator :: Base.Case_Rule -> String -> (String,Maybe Int)
 resolve_operator cr nm =

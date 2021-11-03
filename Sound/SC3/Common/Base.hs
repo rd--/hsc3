@@ -75,9 +75,10 @@ string_eq cr x y = if is_ci cr then map toLower x == map toLower y else x == y
 rlookup_str :: Case_Rule -> String -> [(a,String)] -> Maybe a
 rlookup_str = rlookup_by . string_eq
 
--- | 'Enum' parser with 'Case_Rule'.
---
--- > parse_enum CI "FALSE" == Just False
+{- | 'Enum' parser with 'Case_Rule'.
+
+> parse_enum CI "FALSE" == Just False
+-}
 parse_enum :: (Show t,Enum t,Bounded t) => Case_Rule -> String -> Maybe t
 parse_enum cr nm =
     let u = [minBound .. maxBound]
