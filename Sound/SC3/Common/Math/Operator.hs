@@ -88,11 +88,12 @@ data SC3_Unary_Op
 sc3_unary_op_name :: SC3_Unary_Op -> String
 sc3_unary_op_name = drop 2 . show
 
--- | Type-specialised 'Base.parse_enum'.
---
--- > mapMaybe (parse_unary Base.CS) (words "Abs Rand_") == [Abs,Rand_]
+{- | 'Base.parse_enum' with Op prefix.
+
+> mapMaybe (parse_unary Base.CS) (words "Abs Rand") == [OpAbs,OpRand]
+-}
 parse_unary :: Base.Case_Rule -> String -> Maybe SC3_Unary_Op
-parse_unary = Base.parse_enum
+parse_unary cr = Base.parse_enum cr . (++) "Op"
 
 -- | Table of operator names (non-symbolic) and indices.
 --
@@ -193,9 +194,12 @@ sc3_binary_op_name = drop 2 . show
 sc3_binary_op_tbl :: [(String,Int)]
 sc3_binary_op_tbl = zip (map sc3_binary_op_name [minBound .. maxBound]) [0..]
 
--- | Type-specialised 'parse_enum'.
+{- | 'parse_enum' with Op prefix.
+
+> parse_binary Base.CI "mul" == Just OpMul
+-}
 parse_binary :: Base.Case_Rule -> String -> Maybe SC3_Binary_Op
-parse_binary = Base.parse_enum
+parse_binary cr = Base.parse_enum cr . (++) "Op"
 
 -- | Table of symbolic names for standard binary operators.
 binary_sym_tbl :: [(SC3_Binary_Op,String)]
@@ -231,11 +235,12 @@ binaryName n =
   let e = toEnum n
   in fromMaybe (sc3_binary_op_name e) (lookup e binary_sym_tbl)
 
--- | Given name of binary operator derive index.
---
--- > mapMaybe (binaryIndex Base.CI) (words "* MUL RING1 +") == [2,2,30,0]
--- > binaryIndex Base.CI "SINOSC" == Nothing
--- > map (\x -> (x,binaryIndex Base.CI x)) (map snd binary_sym_tbl)
+{- | Given name of binary operator derive index.
+
+> mapMaybe (binaryIndex Base.CI) (words "* MUL RING1 +") == [2,2,30,0]
+> binaryIndex Base.CI "SINOSC" == Nothing
+> map (\x -> (x,binaryIndex Base.CI x)) (map snd binary_sym_tbl)
+-}
 binaryIndex :: Base.Case_Rule -> String -> Maybe Int
 binaryIndex cr nm =
     let ix = Base.rlookup_str cr nm binary_sym_tbl
@@ -258,9 +263,10 @@ ugen_operator_name nm n =
       "BinaryOpUGen" -> Just (binaryName n)
       _ -> Nothing
 
--- | Order of lookup: binary then unary.
---
--- > map (resolve_operator Sound.SC3.Common.Base.CI) (words "+ - ADD SUB NEG")
+{- | Order of lookup: binary then unary.
+
+> map (resolve_operator Sound.SC3.Common.Base.CI) (words "+ - ADD SUB NEG")
+-}
 resolve_operator :: Base.Case_Rule -> String -> (String,Maybe Int)
 resolve_operator cr nm =
     case binaryIndex cr nm of

@@ -377,7 +377,9 @@ rand0M = randM 0
 rand0 :: UGen -> UGen
 rand0 = liftUnsafe1 rand0M
 
--- | 'rand' with left edge set to negative /n/.
+{- | 'rand' with left edge set to negative /n/.
+     Note rand2 is also a UnaryOp UGen, however hsc3 does not store Ids for operators.
+-}
 rand2Id :: ID a => a -> UGen -> UGen
 rand2Id z n = randId z (negate n) n
 
