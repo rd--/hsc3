@@ -17,16 +17,17 @@ c_rand z l r = fst (randomR (l,r) (mkStdGen z))
 c_irand :: (Num b, RealFrac a, Random a) => Int -> a -> a -> b
 c_irand z l r = fromInteger (round (c_rand z l r))
 
--- | Optimise 'UGen' graph by re-writing 'rand' and 'iRand' UGens that
--- have 'Constant' inputs.  This, of course, changes the nature of the
--- graph, it is no longer randomised at the server.  It's a useful
--- transformation for very large graphs which are being constructed
--- and sent each time the graph is played.
---
--- > import Sound.SC3.UGen.Dot {- hsc3-dot -}
---
--- > let u = sinOsc AR (rand 'a' 220 440) 0 * 0.1
--- > in draw (u + ugen_optimise_ir_rand u)
+{- | Optimise 'UGen' graph by re-writing 'rand' and 'iRand' UGens that
+ have 'Constant' inputs.  This, of course, changes the nature of the
+ graph, it is no longer randomised at the server.  It's a useful
+ transformation for very large graphs which are being constructed
+ and sent each time the graph is played.
+
+> import Sound.SC3.UGen.Dot {- hsc3-dot -}
+
+> let u = sinOsc ar (randId 'a' 220 440) 0 * 0.1
+> draw (u + ugen_optimise_ir_rand u)
+-}
 ugen_optimise_ir_rand :: UGen -> UGen
 ugen_optimise_ir_rand =
   let f u =
@@ -55,23 +56,26 @@ ugen_optimise_ir_rand =
           _ -> u
         in ugenTraverse (const False) f
 
--- | Optimise 'UGen' graph by re-writing binary operators with
--- 'Constant' inputs.  The standard graph constructors already do
--- this, however subsequent optimisations, ie. 'ugen_optimise_ir_rand'
--- can re-introduce these sub-graphs, and the /Plain/ graph
--- constructors are un-optimised.
---
--- > let u = constant
--- > u 5 * u 10 == u 50
--- > u 5 ==* u 5 == u 1
--- > u 5 >* u 4 == u 1
--- > u 5 <=* u 5 == u 1
--- > abs (u (-1)) == u 1
--- > u 5 / u 2 == u 2.5
---
--- > let {u = lfPulse AR (2 ** rand 'α' (-9) 1) 0 0.5
--- >     ;u' = ugen_optimise_ir_rand u}
--- > in draw (mix (mce [u,u',ugen_optimise_const_operator u']))
+{- | Optimise 'UGen' graph by re-writing binary operators with
+ 'Constant' inputs.  The standard graph constructors already do
+ this, however subsequent optimisations, ie. 'ugen_optimise_ir_rand'
+ can re-introduce these sub-graphs, and the /Plain/ graph
+ constructors are un-optimised.
+
+> let u = constant
+> u 5 * u 10 == u 50
+> u 5 ==** u 5 == u 1
+> u 5 >** u 4 == u 1
+> u 5 <=** u 5 == u 1
+> abs (u (-1)) == u 1
+> u 5 / u 2 == u 2.5
+> min (u 2) (u 3) == u 2
+> max (u 1) (u 3) == u 3
+
+> let u = lfPulse ar (2 ** randId 'α' (-9) 1) 0 0.5
+> let u' = ugen_optimise_ir_rand u
+> draw (mix (mce [u,u',ugen_optimise_const_operator u']))
+-}
 ugen_optimise_const_operator :: UGen -> UGen
 ugen_optimise_const_operator =
   let f u =

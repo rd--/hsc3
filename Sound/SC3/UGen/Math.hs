@@ -15,6 +15,16 @@ dinf = Type.constant (9e8 :: Type.Sample)
 ceil :: Type.UGen -> Type.UGen
 ceil = Operator.ceilingE
 
+-- | Midi note number and velocity data is in (0, 127).  This maps (0,1) to (0,127), i.e. is it (* 127).
+unitMidi :: Num t  => t -> t
+unitMidi = (*) 127
+
+{- | midiCps of (0,1) scaled to (0,127).
+     To make control signal data uniform, all control signals are in (0, 1).
+-}
+unitCps :: Operator.UnaryOp t  => t -> t
+unitCps = Operator.midiCps . (* 127)
+
 -- | Optimised UGen sum function.
 sum_opt :: [Type.UGen] -> Type.UGen
 sum_opt = Math.sum_opt_f Bindings.sum3 Bindings.sum4

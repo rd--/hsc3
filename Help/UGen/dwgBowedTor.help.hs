@@ -19,7 +19,7 @@ in pan2 (s6 * 0.1) pan 1
 
 -- dwgBowedTor ; event control
 let f (_,g,_,y,z,o,rx,ry,p,_,_) =
-      let freq = midiCps p
+      let freq = unitCps p
           s1 = X.dwgBowedTor ar freq z (0.5 + rx) 1 y 0.1 0.25 31 (0.55 + ry) 2 (5.2 + z) 1 3000 1.8 * g * z
           s2 = X.dwgSoundBoard s1 20 20 0.8 199 211 223 227 229 233 239 241
           s3 = bpf s2 118 1 + s2

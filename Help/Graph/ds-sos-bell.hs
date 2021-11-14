@@ -1,7 +1,7 @@
 -- https://github.com/supercollider-quarks/SynthDefPool/blob/master/pool/sos_bell.scd (ds)
 let f (_,g,_,_,z,o,_,_,p,_,_) =
       let mce_mean x = sum (mceChannels x) / fromIntegral (mceDegree_err x)
-          freq = midiCps (p - 12)
+          freq = unitCps p / 2
           amp = z * g * 16
           pan = o * 2 - 1
           -- Stretched harmonic series
@@ -24,7 +24,7 @@ in mix (eventVoicer 16 f) * control kr "gain" 1
 -- https://github.com/supercollider-quarks/SynthDefPool/blob/master/pool/sos_bell.scd (ds) ; id
 let f (c,g,_,_,z,o,_,_,p,_,_) =
       let mce_mean x = sum (mceChannels x) / fromIntegral (mceDegree_err x)
-          freq = midiCps (p - 12)
+          freq = unitCps p / 2
           amp = z * g * 16
           pan = o * 2 - 1
           -- Stretched harmonic series

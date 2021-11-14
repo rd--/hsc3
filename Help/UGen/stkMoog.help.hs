@@ -33,7 +33,7 @@ in X.stkMoog ar freq filterQ sweeprate vibfreq vibgain gain 1
 
 -- stkMoog ; event control
 let f (_,g,_,y,z,o,rx,ry,p,px,_) =
-      let freq = midiCps (p + px)
+      let freq = midiCps (p * 127 + px)
           filterQ = y * 128
           sweeprate = rx * 16
           vibfreq = y * 64

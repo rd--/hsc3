@@ -22,14 +22,14 @@ in resonz (pinkNoise ar) f rq
 
 -- resonz ; pinkNoise ; event control
 let f (_,g,_,y,z,o,_,_,p,_,_) =
-      pan2 (resonz (pinkNoise ar) (midiCps p) (y * 0.25) * 24) (o * 2 - 1) (z * g)
+      pan2 (resonz (pinkNoise ar) (unitCps p) (y * 0.25) * 24) (o * 2 - 1) (z * g)
 in mix (eventVoicer 16 f) * control kr "gain" 1
 
 -- resonz ; pinkNoise ; event control
 let f (_,g,_,y,z,o,rx,_,p,_,_) =
       let (gt,_) = eventGateReset g p
           e = envGen kr gt 1 0 1 DoNothing (envPerc 0.01 (1 + rx))
-          f = midiCps p {- centre frequency -}
+          f = unitCps p {- centre frequency -}
           rq = linLin y 0 1 0.05 0.25 / f {- 1/Q (reciprocal of Q) -}
           scl = 900
       in pan2 (resonz (pinkNoise ar) f rq * scl * z) (o * 2 - 1) e

@@ -1,2 +1,2 @@
 -- hpz2
-let n = whiteNoiseId 'α' ar in hpz2 (n * 0.25)
+hpz2 (whiteNoiseId 'α' ar) * 0.1

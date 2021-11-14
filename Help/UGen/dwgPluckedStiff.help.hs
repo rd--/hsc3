@@ -37,7 +37,7 @@ in pan2 ps pan 0.1
 
 -- dwgPluckedStiff ; event control
 let f (_,g,_,y,z,o,rx,_,p,_,_) =
-      let freq = midiCps p
+      let freq = unitCps p
           c3 = 20
           inp = let e = envelope [0,1,1,0] [0.001,0.006,0.0005] (map EnvNum [5,-5,-8])
                 in z * lfClipNoiseId 'α' ar 2000 * envGen ar g 1 0 1 DoNothing e

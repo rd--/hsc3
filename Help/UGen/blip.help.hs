@@ -17,9 +17,9 @@ let f (_,g,x,y,z,o,_,_,_,_,_) = pan2 (blip ar (midiCps (x * 13 + 48)) (y * 10 + 
 in mix (eventVoicer 16 f) * control kr "gain" 0.5
 
 -- blip ; event control (p)
-let f (_,g,_,_,z,o,_,_,p,px,py) =
-      let f0 = midiCps (p + px)
-          nh = max 0 py * 10 + 1
+let f (_,g,_,_,z,o,rx,_,p,px,_) =
+      let f0 = midiCps (p * 127 + px)
+          nh = max 0 rx * 10 + 1
       in pan2 (blip ar f0 nh) (o * 2 - 1) (g * z)
 in mix (eventVoicer 16 f) * control kr "gain" 0.5
 

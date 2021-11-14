@@ -60,6 +60,9 @@ uid_st_eval
 -- whiteNoise ; silence
 let n = whiteNoise ar in (n - n) * 0.05
 
+-- whitenoise ; violetnoise (one point difference)
+hpz1 (whiteNoiseId 'α' ar) * 0.1
+
 ---- ; drawings
 Sound.SC3.Plot.plot_ugen1 0.01 (whiteNoiseId 'γ' ar)
 Sound.SC3.Plot.plot_ugen1 0.05 (lpf (whiteNoiseId 'γ' ar) 500)

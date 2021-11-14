@@ -29,7 +29,7 @@ in Protect.uclone_all 'η' 2 (klank noise 1 0 1 spec)
 -- resonators harmonic series (jmcc) #2 ; event control
 let f (_,g,_,y,z,o,rx,_,p,_,_) =
       let nharm = 12
-          spec _ = let freq = midiCps p
+          spec _ = let freq = unitCps p
                        series n i j = case n of {0 -> []; _ -> i : series (n - 1) (i + j) j}
                    in klankSpec_mce
                       (mce (series nharm freq freq) + (X.rRandN nharm (-0.5) 0.5) * rx)
@@ -45,7 +45,7 @@ let f (c,g,_,y,z,o,rx,ry,p,_,_) =
           enumFromN e i = let j = fromEnum e in [j .. j + i]
           nharm = 12
           noise = brownNoiseId (c,'α') ar * 0.001
-          freq = midiCps p
+          freq = unitCps p
           resFreqs = zipWith (+)
                      (series nharm freq freq)
                      (map (\k -> rand2Id (c,'γ',k) 0.5 * rx) (enumFromN 'δ' nharm))

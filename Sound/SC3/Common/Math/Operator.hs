@@ -278,6 +278,10 @@ resolve_operator cr nm =
                    Just sp -> ("UnaryOpUGen",Just sp)
                    _ -> (nm,Nothing)
 
+-- | Case-insensitive resolve_operator.
+resolve_operator_ci :: String -> (String,Maybe Int)
+resolve_operator_ci = resolve_operator Base.CI
+
 -- * Classes
 
 -- | Variant on 'Eq' class, result is of the same type as the values compared.

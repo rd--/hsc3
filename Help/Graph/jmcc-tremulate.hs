@@ -15,7 +15,7 @@ let f = randId 'α' 500 900
 in mix (pan2 o l a)
 
 -- tremulate (jmcc) #1 ; event control
-let f (_,g,x,y,z,o,rx,ry,_,_,_) =
+let f (_,g,x,_,z,o,rx,ry,_,_,_) =
       let s = fSinOsc ar ((x * 400 + 500) * mce [1,1.2,1.5,1.8]) 0
           r = X.rRandN 4 30 90
           a = max 0 (lfNoise2 kr (r * (0.75 + rx))) * z
@@ -24,7 +24,7 @@ let f (_,g,x,y,z,o,rx,ry,_,_,_) =
 in combN (mix (eventVoicer 16 f) * control kr "gain" 0.5) 0.1 0.1 1
 
 -- tremulate (jmcc) #1 ; event control ; id
-let f (_,g,x,y,z,o,rx,ry,_,_,_) =
+let f (_,g,x,_,z,o,rx,ry,_,_,_) =
       let s = fSinOsc ar ((x * 400 + 500) * mce [1,1.2,1.5,1.8]) 0
           r = X.rRandNId 4 'β' 30 90
           a = max 0 (lfNoise2Id 'γ' kr (r * (0.75 + rx))) * z
