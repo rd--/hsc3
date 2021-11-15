@@ -14,9 +14,10 @@ import Sound.SC3.UGen.UGen {- hsc3 -}
 
 -- * Event
 
-{- | (v,w/gate,x,y,z/force,orientation,radius-x,radius-y,pitch,pitch-x,pitch-y)
+{- | (v, w, x, y, z, o, rx, ry, p, px, _)
 
-     v = voice/channel
+     v = voice, w = gate, z = force/pressure,
+     o = orientation/angle, r = radius, p = pitch
 -}
 type Event t = (Int,t,t,t,t,t,t,t,t,t,t)
 
@@ -30,7 +31,7 @@ event_from_list v l =
 {- | (eventAddr, eventIncr, eventZero)
 
 eventAddr = k0 = index of control bus zero for event system,
-eventIncr = stp = voice index incremennt,
+eventIncr = stp = voice index increment,
 eventZero = c0 = offset for event voices at current server
 -}
 type EventMeta t = (t, t, t)
@@ -69,40 +70,27 @@ eventGateReset g p = let tr = changed p 0.01 + changed g 0.01 in (gateReset g tr
 
 -- * Ctl
 
--- | Sequence of 16 continous controller inputs in range (0-1).
-type Ctl16 = (UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen)
-
--- | k0 = index of control bus zero for ctl system, c = ctl channel or voice (zero indexed)
-ctl16Addr :: UGen -> UGen -> Ctl16
-ctl16Addr k0 c =
-  let u = in' 16 ControlRate (k0 + (c * 16))
-  in case mceChannels u of
-       [cc0,cc1,cc2,cc3,cc4,cc5,cc6,cc7,cc8,cc9,cc10,cc11,cc12,cc13,cc14,cc15] ->
-         (cc0,cc1,cc2,cc3,cc4,cc5,cc6,cc7,cc8,cc9,cc10,cc11,cc12,cc13,cc14,cc15)
-       _ -> error "ctl16Addr?"
-
--- | c0 = index of voice (channel) zero for ctl set, n = number of voices (channels)
-ctl16VoicerAddr :: UGen -> UGen -> Int -> (Int -> Ctl16 -> UGen) -> UGen
-ctl16VoicerAddr k0 c0 n f = mce (map (\c -> f c (ctl16Addr k0 (c0 + constant c))) [0 .. n - 1])
-
--- | 'ctl16Addr' with 'control' inputs for /Ctl16Addr/ and /Ctl16Zero/.
-ctl16 :: Ctl16
-ctl16 = ctl16Addr (control ControlRate "Ctl16Addr" 11000) (control ControlRate "Ctl16Zero" 0)
-
--- | 'ctlVoicerAddr' with 'control' inputs for /CtlAddr/ and /CtlZero/.
-ctl16Voicer :: Int -> (Int -> Ctl16 -> UGen) -> UGen
-ctl16Voicer = ctl16VoicerAddr (control ControlRate "Ctl16Addr" 11000) (control ControlRate "Ctl16Zero" 0)
-
--- | First eight elements of Ctl16.
+-- | Sequence of 8 continous controller inputs in range (0-1).
 type Ctl8 = (UGen,UGen,UGen,UGen,UGen,UGen,UGen,UGen)
 
--- | Select first eight elements of Ctl.
-ctl16_to_ctl8 :: Ctl16 -> Ctl8
-ctl16_to_ctl8 (cc0,cc1,cc2,cc3,cc4,cc5,cc6,cc7,_,_,_,_,_,_,_,_) = (cc0,cc1,cc2,cc3,cc4,cc5,cc6,cc7)
+-- | k0 = index of control bus zero
+ctl8At :: Int -> Ctl8
+ctl8At k0 =
+  let u = in' 8 kr (constant k0)
+  in case mceChannels u of
+       [cc0,cc1,cc2,cc3,cc4,cc5,cc6,cc7] -> (cc0,cc1,cc2,cc3,cc4,cc5,cc6,cc7)
+       _ -> error "ctl8At?"
 
--- | 'ctl16Voicer' of 'ctl_to_ctl8'
+-- | 'ctlVoicerAddr' with 'control' inputs for /CtlAddr/ and /CtlZero/.
 ctl8Voicer :: Int -> (Int -> Ctl8 -> UGen) -> UGen
-ctl8Voicer k0 f = ctl16Voicer k0 (\n c -> f n (ctl16_to_ctl8 c))
+ctl8Voicer n f = mce (map (\c -> f c (ctl8At (11000 + (8 * c)))) [0 .. n - 1])
+
+-- | Sequence of 16 continous controller inputs arranged as two Ctl8 sequences.
+type Ctl16 = (Ctl8,Ctl8)
+
+-- | 'ctl16VoicerAddr' with 'control' inputs for /CtlAddr/ and /CtlZero/.
+ctl16Voicer :: Int -> (Int -> Ctl16 -> UGen) -> UGen
+ctl16Voicer n f = mce (map (\c -> let i = 11000 + (16 * c) in f c (ctl8At i,ctl8At (i + 8))) [0 .. n - 1])
 
 -- * Names
 
