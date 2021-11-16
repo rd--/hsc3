@@ -41,26 +41,26 @@ eventMetaDefault = (13000, 10, 0)
 
 eventMetaControls :: EventMeta Int -> EventMeta UGen
 eventMetaControls (p,q,r) =
-  let k nm i = control ControlRate nm (fromIntegral i)
-  in (k"eventAddr" p, k "eventIncr" q, k "eventZero" r)
+  let k nm i = control kr nm (fromIntegral i)
+  in (k "eventAddr" p, k "eventIncr" q, k "eventZero" r)
 
--- | c = event channel or voice (zero indexed)
+-- | c = event number (zero indexed)
 eventAddr :: (UGen,UGen,UGen) -> Int -> Event UGen
 eventAddr (k0, stp, c0) c =
-  let u = in' 10 ControlRate (k0 + ((c0 + fromIntegral c) * stp))
+  let u = in' 10 kr (k0 + ((c0 + fromIntegral c) * stp))
   in event_from_list c (mceChannels u)
 
 -- | c0 = index of voice (channel) zero for event set, n = number of voices (channels)
 eventVoicerAddr :: EventMeta UGen -> Int -> (Event UGen -> UGen) -> UGen
 eventVoicerAddr m n f = mce (map (\c -> f (eventAddr m c)) [0 .. n - 1])
 
--- | 'eventAddr' with 'control' inputs for /eventAddr/, /eventIncr/ and /eventZero/.
-event :: Int -> Event UGen
-event = eventAddr (eventMetaControls eventMetaDefault)
+-- | 'eventVoicerAddr' with default (addr, inct, zero).
+eventVoicer :: Int -> (Event UGen -> UGen) -> UGen
+eventVoicer = eventVoicerAddr eventMetaDefault
 
 -- | 'eventVoicerAddr' with 'control' inputs for /eventAddr/, /eventIncr/ and /eventZero/.
-eventVoicer :: Int -> (Event UGen -> UGen) -> UGen
-eventVoicer = eventVoicerAddr (eventMetaControls eventMetaDefault)
+eventVoicerParam :: Int -> (Event UGen -> UGen) -> UGen
+eventVoicerParam = eventVoicerAddr (eventMetaControls eventMetaDefault)
 
 {- | Given /g/ and /p/ fields of an 'Event' derive a 'gateReset' from g
 and a trigger derived from monitoring /g/ and /p/ for changed values.
