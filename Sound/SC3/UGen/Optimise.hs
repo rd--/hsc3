@@ -75,6 +75,8 @@ ugen_optimise_ir_rand =
 > let u = lfPulse ar (2 ** randId 'α' (-9) 1) 0 0.5
 > let u' = ugen_optimise_ir_rand u
 > draw (mix (mce [u,u',ugen_optimise_const_operator u']))
+
+> ugen_optimise_const_operator (Bindings.mulAdd 3 1 0) == 3
 -}
 ugen_optimise_const_operator :: UGen -> UGen
 ugen_optimise_const_operator =
@@ -103,6 +105,7 @@ ugen_optimise_const_operator =
                 ([],[]) -> case uop_special_hs z of
                              Just fn -> UGen (CConstant (Constant (fn i) ([],[])))
                              _ -> u
+              Primitive _ "MulAdd" [i, m, a] [_] _ _ ([],[]) -> mulAddOptimised i m a
               _ -> u
           _ -> u
   in ugenTraverse (const False) f

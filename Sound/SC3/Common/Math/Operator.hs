@@ -181,7 +181,7 @@ data SC3_Binary_Op
   | OpScaleNeg
   | OpClip2 -- 42
   | OpExcess
-  | OpFold2
+  | OpFold2 -- 44
   | OpWrap2
   | OpFirstArg
   | OpRandRange
