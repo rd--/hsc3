@@ -2373,17 +2373,17 @@ rtRandN nc = liftUnsafe3 (rtRandNM nc)
 
 -- | (Undocumented class)
 --
---  RTScramble [InitialisationRate,ControlRate] trigger=0 *inputs=0;    MCE=1, FILTER: TRUE, NONDET
-rtScrambleId :: ID a => a -> UGen -> UGen -> UGen
-rtScrambleId z trigger inputs = mkUGen Nothing [InitialisationRate,ControlRate] (Right [0]) "RTScramble" [trigger] (Just [inputs]) (length (mceChannels inputs) + 0) (Special 0) (toUId z)
+--  TScramble [InitialisationRate,ControlRate] trigger=0 *inputs=0;    MCE=1, FILTER: TRUE, NONDET
+tScrambleId :: ID a => a -> UGen -> UGen -> UGen
+tScrambleId z trigger inputs = mkUGen Nothing [InitialisationRate,ControlRate] (Right [0]) "TScramble" [trigger] (Just [inputs]) (length (mceChannels inputs) + 0) (Special 0) (toUId z)
 
--- | Monad variant of RTScramble.
-rtScrambleM :: UId m => UGen -> UGen -> m UGen
-rtScrambleM = liftUId2 rtScrambleId
+-- | Monad variant of TScramble.
+tScrambleM :: UId m => UGen -> UGen -> m UGen
+tScrambleM = liftUId2 tScrambleId
 
--- | Unsafe variant of RTScramble.
-rtScramble ::  UGen -> UGen -> UGen
-rtScramble = liftUnsafe2 rtScrambleM
+-- | Unsafe variant of TScramble.
+tScramble ::  UGen -> UGen -> UGen
+tScramble = liftUnsafe2 tScrambleM
 
 -- | (Undocumented class)
 --

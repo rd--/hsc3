@@ -47,11 +47,11 @@ data SC3_Unary_Op
   | OpExp -- 15
   | OpRecip -- 16
   | OpMidiCps -- 17
-  | OpCpsMidi
+  | OpCpsMidi -- 18
   | OpMidiRatio
   | OpRatioMidi -- 20
-  | OpDbAmp
-  | OpAmpDb
+  | OpDbAmp -- 21
+  | OpAmpDb -- 22
   | OpOctCps
   | OpCpsOct
   | OpLog -- 25 (natural, base e)
