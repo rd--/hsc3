@@ -56,7 +56,7 @@ There is also, more obliquely related:
 
 ©
 [rohan drape](http://rohandrape.net/)
-and others, 2005-2021,
+and others, 2005-2022,
 [gpl-3](http://gnu.org/copyleft/)
 
 with contributions by:

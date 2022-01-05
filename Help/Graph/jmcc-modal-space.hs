@@ -55,7 +55,7 @@ in mix (eventVoicer 16 f) * control kr "gain" 1
 -- modal space (jmcc) #8 ; event control ; modeless
 let f (_,g,_,y,z,_,_,_,p,_,_) =
       let ms1 n r =
-            let o = sinOsc ar (midiCps (p + r + n * y * 0.08)) 0 * 0.1
+            let o = sinOsc ar (midiCps (p * 127 + r + n * y * 0.08)) 0 * 0.1
                 t = lfPulse ar (midiCps (mce2 48 55)) 0 0.15
                 d = rlpf t (midiCps (sinOsc kr 0.1 0 * 10 + r)) 0.1 * 0.1
                 m = o + d
