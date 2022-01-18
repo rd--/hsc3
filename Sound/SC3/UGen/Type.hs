@@ -624,7 +624,7 @@ checkInput u =
 checkInput :: UGen -> UGen
 checkInput u =
     if isSink u
-    then error ("checkInput: " ++ show u)
+    then error ("checkInput: input is sink: " ++ show u)
     else u
 
 -- * Constructors
