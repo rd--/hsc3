@@ -1,5 +1,6 @@
--- | Binary 'Graph Definition' as understood by @scsynth@.
---   There are both encoders and decoders.
+{- | Binary 'Graph Definition' as understood by @scsynth@.
+     There are both encoders and decoders.
+-}
 module Sound.SC3.Server.Graphdef where
 
 import Control.Monad {- base -}

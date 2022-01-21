@@ -1,3 +1,6 @@
+{- | .scsyndef file encoded in plain text.
+     There are reader and writer functions.
+-}
 module Sound.SC3.Server.Graphdef.Text where
 
 import Control.Monad {- base -}
