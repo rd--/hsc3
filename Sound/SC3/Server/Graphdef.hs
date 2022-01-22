@@ -232,7 +232,10 @@ enc_bytestring =
   (L.concat,encode_pstr,Byte.encode_i8,Byte.encode_i16,Byte.encode_i32,encode_sample
   ,const L.empty)
 
--- | Pascal (length prefixed) encoding of 'Name'.
+{- | Pascal (length prefixed) encoding of 'Name'.
+
+> L.unpack (encode_pstr (ascii "string")) ==  [6, 115, 116, 114, 105, 110, 103]
+-}
 encode_pstr :: Name -> L.ByteString
 encode_pstr = L.pack . Cast.str_pstr . Datum.ascii_to_string
 
@@ -291,9 +294,11 @@ encode_graphdef_f enc (Graphdef nm cs ks us) =
 encode_graphdef :: Graphdef -> L.ByteString
 encode_graphdef = encode_graphdef_f enc_bytestring
 
--- | "SCgf" encoded as 32-bit unsigned integer.
---
--- > Byte.decode_i32 (Byte.encode_ascii (Datum.ascii "SCgf"))
+{- | "SCgf" encoded as 32-bit unsigned integer.
+
+> map fromEnum "SCgf" == [83, 67, 103, 102]
+> Byte.decode_i32 (Byte.encode_ascii (Datum.ascii "SCgf"))
+-}
 scgf_i32 :: Num n => n
 scgf_i32 = 1396926310
 
