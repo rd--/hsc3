@@ -63,25 +63,25 @@ data SC3_Unary_Op
   | OpArcSin
   | OpArcCos
   | OpArcTan
-  | OpSinH
-  | OpCosH -- 35
-  | OpTanH -- 36
-  | OpRand_ -- UGen
+  | OpSinh
+  | OpCosh -- 35
+  | OpTanh -- 36
+  | OpRand_ -- 37 ; UGen
   | OpRand2
-  | OpLinRand_ -- UGen
+  | OpLinRand_ -- 39 ; UGen
   | OpBiLinRand -- 40
   | OpSum3Rand
   | OpDistort -- 42
   | OpSoftClip -- 43
   | OpCoin
-  | OpDigitValue
+  | OpDigitValue -- 45
   | OpSilence
   | OpThru
   | OpRectWindow
   | OpHanWindow
-  | OpWelchWindow
+  | OpWelchWindow -- 50
   | OpTriWindow
-  | OpRamp_ -- UGen
+  | OpRamp_ -- 52 ; UGen
   | OpScurve
   deriving (Eq,Show,Enum,Bounded,Read)
 
