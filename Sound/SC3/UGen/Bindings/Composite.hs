@@ -407,7 +407,7 @@ selectX ix xs =
 
 -- | Set local buffer values.
 setBuf' :: UGen -> [UGen] -> UGen -> UGen
-setBuf' b xs o = setBuf b o (fromIntegral (length xs)) (mce xs)
+setBuf' b xs o = Sound.SC3.UGen.Bindings.DB.setBuf b o (fromIntegral (length xs)) (mce xs)
 
 -- | Silence.
 silent :: Int -> UGen
