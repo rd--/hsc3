@@ -1037,9 +1037,9 @@ instance Floating UGen where
     asin = mkUnaryOperator OpArcSin asin
     acos = mkUnaryOperator OpArcCos acos
     atan = mkUnaryOperator OpArcTan atan
-    sinh = mkUnaryOperator OpSinH sinh
-    cosh = mkUnaryOperator OpCosH cosh
-    tanh = mkUnaryOperator OpTanH tanh
+    sinh = mkUnaryOperator OpSinh sinh
+    cosh = mkUnaryOperator OpCosh cosh
+    tanh = mkUnaryOperator OpTanh tanh
     asinh x = log (sqrt (x*x+1) + x)
     acosh x = log (sqrt (x*x-1) + x)
     atanh x = (log (1+x) - log (1-x)) / 2
