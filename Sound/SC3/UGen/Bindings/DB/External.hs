@@ -2161,9 +2161,9 @@ rDelaySetBuf rate bufnum in_ spec = mkUGen Nothing [AudioRate] (Left rate) "RDel
 
 -- | (Undocumented class)
 --
---  RDustR [AudioRate] iot_min=0.1 iot_max=1
-rDustRId :: ID a => a -> Rate -> UGen -> UGen -> UGen
-rDustRId z rate iot_min iot_max = mkUGen Nothing [AudioRate] (Left rate) "RDustR" [iot_min,iot_max] Nothing 1 (Special 0) (toUId z)
+--  dustRange [AudioRate] iot_min=0.1 iot_max=1
+dustRangeId :: ID a => a -> Rate -> UGen -> UGen -> UGen
+dustRangeId z rate iot_min iot_max = mkUGen Nothing [AudioRate] (Left rate) "DustRange" [iot_min,iot_max] Nothing 1 (Special 0) (toUId z)
 
 -- | (Undocumented class)
 --
