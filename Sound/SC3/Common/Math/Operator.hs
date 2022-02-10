@@ -40,7 +40,7 @@ data SC3_Unary_Op
   | OpCeil -- 8
   | OpFloor -- 9
   | OpFrac -- 10
-  | OpSign
+  | OpSign -- 11
   | OpSquared -- 12
   | OpCubed
   | OpSqrt -- 14
