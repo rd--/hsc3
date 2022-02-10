@@ -1,5 +1,5 @@
 -- spe (jmcc)
-let rapf i = allpassN i 0.05 (X.rRandN 2 0 0.05) 4
+let rapf i = allpassN i 0.05 (X.randN 2 0 0.05) 4
     src = let t = impulse kr 9 0
               e = envGen kr t 0.1 0 1 DoNothing (envPerc 0.1 1)
               s = mce [00,03,02,07

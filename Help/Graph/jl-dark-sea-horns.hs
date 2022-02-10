@@ -2,7 +2,7 @@
 let n = lfNoise1
     x = localIn' 2 ar
     a = tanh (sinOsc ar 65 (x * lfNoise1 ar 0.1 * 3) * lfNoise1 ar 3 * 6)
-    f i = allpassN i 0.3 (X.rRandN 2 0.1 0.3) 5
+    f i = allpassN i 0.3 (X.randN 2 0.1 0.3) 5
     o = tanh (iter 9 f a)
 in mrg2 (o * 0.2) (localOut o)
 
@@ -10,6 +10,6 @@ in mrg2 (o * 0.2) (localOut o)
 let n = lfNoise1Id
     x = localIn' 2 ar
     a = tanh (sinOsc ar 65 (x * n 'α' ar 0.1 * 3) * n 'β' ar 3 * 6)
-    f z i = allpassN i 0.3 (X.rRandNId 2 (z,'γ') 0.1 0.3) 5
+    f z i = allpassN i 0.3 (X.randNId 2 (z,'γ') 0.1 0.3) 5
     o = tanh (useqId 'δ' 9 f a)
 in mrg2 (o * 0.2) (localOut o)

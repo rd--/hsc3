@@ -2167,17 +2167,17 @@ rDustRId z rate iot_min iot_max = mkUGen Nothing [AudioRate] (Left rate) "RDustR
 
 -- | (Undocumented class)
 --
---  RExpRandN [InitialisationRate] lo=0 hi=1;    NC INPUT: True, NONDET
-rExpRandNId :: ID a => Int -> a -> UGen -> UGen -> UGen
-rExpRandNId numChannels z lo hi = mkUGen Nothing [InitialisationRate] (Left InitialisationRate) "RExpRandN" [lo,hi] Nothing numChannels (Special 0) (toUId z)
+--  ExpRandN [InitialisationRate] lo=0 hi=1;    NC INPUT: True, NONDET
+expRandNId :: ID a => Int -> a -> UGen -> UGen -> UGen
+expRandNId numChannels z lo hi = mkUGen Nothing [InitialisationRate] (Left InitialisationRate) "ExpRandN" [lo,hi] Nothing numChannels (Special 0) (toUId z)
 
--- | Monad variant of RExpRandN.
-rExpRandNM :: UId m => Int -> UGen -> UGen -> m UGen
-rExpRandNM nc = liftUId2 (rExpRandNId nc)
+-- | Monad variant of ExpRandN.
+expRandNM :: UId m => Int -> UGen -> UGen -> m UGen
+expRandNM nc = liftUId2 (expRandNId nc)
 
--- | Unsafe variant of RExpRandN.
-rExpRandN ::  Int -> UGen -> UGen -> UGen
-rExpRandN nc = liftUnsafe2 (rExpRandNM nc)
+-- | Unsafe variant of ExpRandN.
+expRandN ::  Int -> UGen -> UGen -> UGen
+expRandN nc = liftUnsafe2 (expRandNM nc)
 
 -- | (Undocumented class)
 --
@@ -2187,17 +2187,17 @@ rFreezer bufnum left right gain increment incrementOffset incrementRandom rightR
 
 -- | (Undocumented class)
 --
---  RIRandN [] numChannels=2 lo=0 hi=127
-rIRandNId :: ID a => a -> Int -> UGen -> UGen -> UGen
-rIRandNId z numChannels lo hi = mkUGen Nothing [InitialisationRate] (Left InitialisationRate) "RIRandN" [lo,hi] Nothing numChannels (Special 0) (toUId z)
+--  IRandN [] numChannels=2 lo=0 hi=127
+iRandNId :: ID a => a -> Int -> UGen -> UGen -> UGen
+iRandNId z numChannels lo hi = mkUGen Nothing [InitialisationRate] (Left InitialisationRate) "IRandN" [lo,hi] Nothing numChannels (Special 0) (toUId z)
 
--- | Monad variant of RIRandN.
-rIRandNM :: UId m => Int -> UGen -> UGen -> m UGen
-rIRandNM nc = liftUId2 (rIRandNId nc)
+-- | Monad variant of IRandN.
+iRandNM :: UId m => Int -> UGen -> UGen -> m UGen
+iRandNM nc = liftUId2 (iRandNId nc)
 
--- | Unsafe variant of RIRandN.
-rIRandN ::  Int -> UGen -> UGen -> UGen
-rIRandN nc = liftUnsafe2 (rIRandNM nc)
+-- | Unsafe variant of IRandN.
+iRandN ::  Int -> UGen -> UGen -> UGen
+iRandN nc = liftUnsafe2 (iRandNM nc)
 
 -- | TB303 Filter Emulation
 --
@@ -2213,17 +2213,17 @@ rLagC in_ timeUp curveUp timeDown curveDown = mkUGen Nothing [ControlRate] (Righ
 
 -- | (Undocumented class)
 --
---  RLinRandN [InitialisationRate] lo=0 hi=1 minmax=0;    NC INPUT: True, NONDET
-rLinRandNId :: ID a => Int -> a -> UGen -> UGen -> UGen -> UGen
-rLinRandNId numChannels z lo hi minmax = mkUGen Nothing [InitialisationRate] (Left InitialisationRate) "RLinRandN" [lo,hi,minmax] Nothing numChannels (Special 0) (toUId z)
+--  LinRandN [InitialisationRate] lo=0 hi=1 minmax=0;    NC INPUT: True, NONDET
+linRandNId :: ID a => Int -> a -> UGen -> UGen -> UGen -> UGen
+linRandNId numChannels z lo hi minmax = mkUGen Nothing [InitialisationRate] (Left InitialisationRate) "LinRandN" [lo,hi,minmax] Nothing numChannels (Special 0) (toUId z)
 
--- | Monad variant of RLinRandN.
-rLinRandNM :: UId m => Int -> UGen -> UGen -> UGen -> m UGen
-rLinRandNM nc = liftUId3 (rLinRandNId nc)
+-- | Monad variant of LinRandN.
+linRandNM :: UId m => Int -> UGen -> UGen -> UGen -> m UGen
+linRandNM nc = liftUId3 (linRandNId nc)
 
--- | Unsafe variant of RLinRandN.
-rLinRandN ::  Int -> UGen -> UGen -> UGen -> UGen
-rLinRandN nc = liftUnsafe3 (rLinRandNM nc)
+-- | Unsafe variant of LinRandN.
+linRandN ::  Int -> UGen -> UGen -> UGen -> UGen
+linRandN nc = liftUnsafe3 (linRandNM nc)
 
 -- | (Undocumented class)
 --
@@ -2281,17 +2281,17 @@ rpvDecayTbl fft_buf decay_rate_buf history_buf = mkUGen Nothing [ControlRate] (L
 
 -- | (Undocumented class)
 --
---  RRandN [InitialisationRate] lo=0 hi=1;    NC INPUT: True, NONDET
-rRandNId :: ID a => Int -> a -> UGen -> UGen -> UGen
-rRandNId numChannels z lo hi = mkUGen Nothing [InitialisationRate] (Left InitialisationRate) "RRandN" [lo,hi] Nothing numChannels (Special 0) (toUId z)
+--  RandN [InitialisationRate] lo=0 hi=1;    NC INPUT: True, NONDET
+randNId :: ID a => Int -> a -> UGen -> UGen -> UGen
+randNId numChannels z lo hi = mkUGen Nothing [InitialisationRate] (Left InitialisationRate) "RandN" [lo,hi] Nothing numChannels (Special 0) (toUId z)
 
--- | Monad variant of RRandN.
-rRandNM :: UId m => Int -> UGen -> UGen -> m UGen
-rRandNM nc = liftUId2 (rRandNId nc)
+-- | Monad variant of RandN.
+randNM :: UId m => Int -> UGen -> UGen -> m UGen
+randNM nc = liftUId2 (randNId nc)
 
--- | Unsafe variant of RRandN.
-rRandN ::  Int -> UGen -> UGen -> UGen
-rRandN nc = liftUnsafe2 (rRandNM nc)
+-- | Unsafe variant of RandN.
+randN ::  Int -> UGen -> UGen -> UGen
+randN nc = liftUnsafe2 (randNM nc)
 
 -- | (Undocumented class)
 --
@@ -2331,45 +2331,45 @@ rSmplrIndex rate buf size mnn = mkUGen Nothing [ControlRate] (Left rate) "RSmplr
 
 -- | (Undocumented class)
 --
---  RTExpRandN [ControlRate] lo=0 hi=1 trigger=0;    NC INPUT: True, FILTER: TRUE, NONDET
-rtExpRandNId :: ID a => Int -> a -> UGen -> UGen -> UGen -> UGen
-rtExpRandNId numChannels z lo hi trigger = mkUGen Nothing [ControlRate] (Right [2]) "RTExpRandN" [lo,hi,trigger] Nothing numChannels (Special 0) (toUId z)
+--  TExpRandN [ControlRate] lo=0 hi=1 trigger=0;    NC INPUT: True, FILTER: TRUE, NONDET
+tExpRandNId :: ID a => Int -> a -> UGen -> UGen -> UGen -> UGen
+tExpRandNId numChannels z lo hi trigger = mkUGen Nothing [ControlRate] (Right [2]) "TExpRandN" [lo,hi,trigger] Nothing numChannels (Special 0) (toUId z)
 
--- | Monad variant of RTExpRandN.
-rtExpRandNM :: UId m => Int -> UGen -> UGen -> UGen -> m UGen
-rtExpRandNM nc = liftUId3 (rtExpRandNId nc)
+-- | Monad variant of TExpRandN.
+tExpRandNM :: UId m => Int -> UGen -> UGen -> UGen -> m UGen
+tExpRandNM nc = liftUId3 (tExpRandNId nc)
 
--- | Unsafe variant of RTExpRandN.
-rtExpRandN ::  Int -> UGen -> UGen -> UGen -> UGen
-rtExpRandN nc = liftUnsafe3 (rtExpRandNM nc)
-
--- | (Undocumented class)
---
---  RTLinRandN [ControlRate] lo=0 hi=1 minmax=0 trigger=0;    NC INPUT: True, FILTER: TRUE, NONDET
-rtLinRandNId :: ID a => Int -> a -> UGen -> UGen -> UGen -> UGen -> UGen
-rtLinRandNId numChannels z lo hi minmax trigger = mkUGen Nothing [ControlRate] (Right [3]) "RTLinRandN" [lo,hi,minmax,trigger] Nothing numChannels (Special 0) (toUId z)
-
--- | Monad variant of RTLinRandN.
-rtLinRandNM :: UId m => Int -> UGen -> UGen -> UGen -> UGen -> m UGen
-rtLinRandNM nc = liftUId4 (rtLinRandNId nc)
-
--- | Unsafe variant of RTLinRandN.
-rtLinRandN ::  Int -> UGen -> UGen -> UGen -> UGen -> UGen
-rtLinRandN nc = liftUnsafe4 (rtLinRandNM nc)
+-- | Unsafe variant of TExpRandN.
+tExpRandN ::  Int -> UGen -> UGen -> UGen -> UGen
+tExpRandN nc = liftUnsafe3 (tExpRandNM nc)
 
 -- | (Undocumented class)
 --
---  RTRandN [ControlRate] lo=0 hi=1 trigger=0;    NC INPUT: True, FILTER: TRUE, NONDET
-rtRandNId :: ID a => Int -> a -> UGen -> UGen -> UGen -> UGen
-rtRandNId numChannels z lo hi trigger = mkUGen Nothing [ControlRate] (Right [2]) "RTRandN" [lo,hi,trigger] Nothing numChannels (Special 0) (toUId z)
+--  TLinRandN [ControlRate] lo=0 hi=1 minmax=0 trigger=0;    NC INPUT: True, FILTER: TRUE, NONDET
+tLinRandNId :: ID a => Int -> a -> UGen -> UGen -> UGen -> UGen -> UGen
+tLinRandNId numChannels z lo hi minmax trigger = mkUGen Nothing [ControlRate] (Right [3]) "TLinRandN" [lo,hi,minmax,trigger] Nothing numChannels (Special 0) (toUId z)
 
--- | Monad variant of RTRandN.
-rtRandNM :: UId m => Int -> UGen -> UGen -> UGen -> m UGen
-rtRandNM nc = liftUId3 (rtRandNId nc)
+-- | Monad variant of TLinRandN.
+tLinRandNM :: UId m => Int -> UGen -> UGen -> UGen -> UGen -> m UGen
+tLinRandNM nc = liftUId4 (tLinRandNId nc)
 
--- | Unsafe variant of RTRandN.
-rtRandN ::  Int -> UGen -> UGen -> UGen -> UGen
-rtRandN nc = liftUnsafe3 (rtRandNM nc)
+-- | Unsafe variant of TLinRandN.
+tLinRandN ::  Int -> UGen -> UGen -> UGen -> UGen -> UGen
+tLinRandN nc = liftUnsafe4 (tLinRandNM nc)
+
+-- | (Undocumented class)
+--
+--  TRandN [ControlRate] lo=0 hi=1 trigger=0;    NC INPUT: True, FILTER: TRUE, NONDET
+tRandNId :: ID a => Int -> a -> UGen -> UGen -> UGen -> UGen
+tRandNId numChannels z lo hi trigger = mkUGen Nothing [ControlRate] (Right [2]) "TRandN" [lo,hi,trigger] Nothing numChannels (Special 0) (toUId z)
+
+-- | Monad variant of TRandN.
+tRandNM :: UId m => Int -> UGen -> UGen -> UGen -> m UGen
+tRandNM nc = liftUId3 (tRandNId nc)
+
+-- | Unsafe variant of TRandN.
+tRandN ::  Int -> UGen -> UGen -> UGen -> UGen
+tRandN nc = liftUnsafe3 (tRandNM nc)
 
 -- | (Undocumented class)
 --

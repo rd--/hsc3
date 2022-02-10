@@ -1,6 +1,6 @@
 -- sidereal time (jmcc) #9 ; texture=overlap,4,4,6,inf
 let p = 15
-    i = let y _ = klankSpec_mce (X.rExpRandN p 100 6000) (mceConst p 1) (X.rRandN p 2 6)
+    i = let y _ = klankSpec_mce (X.expRandN p 100 6000) (mceConst p 1) (X.randN p 2 6)
         in mceFill 2 y
     f = xLine kr (expRand 40 300) (expRand 40 300) 12 DoNothing
     t = let e = lfNoise2 kr (rand 0 8)
@@ -10,8 +10,8 @@ in combN o 0.6 (rand 0.1 0.6) 8 + mceReverse o
 
 -- sidereal time (jmcc) #9 ; texture=overlap,4,4,6,inf ; id
 let p = 15
-    i = let y z _ = let fr = X.rExpRandNId p (z,'β') 100 6000
-                        rt = X.rRandNId p (z,'δ') 2 6
+    i = let y z _ = let fr = X.expRandNId p (z,'β') 100 6000
+                        rt = X.randNId p (z,'δ') 2 6
                     in klankSpec_mce fr (mceConst p 1) rt
         in mceFillId 'ε' 2 y
     f = xLine kr (expRandId 'ζ' 40 300) (expRandId 'η' 40 300) 12 DoNothing

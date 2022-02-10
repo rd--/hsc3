@@ -22,8 +22,8 @@ let t4 = 7.9365079365
       in pan2 s l g
     sig =
       let n = 30
-          l = mceChannels (X.rRandN n (-1) 1)
-          f0 = mceChannels (X.rRandN n 200 800)
+          l = mceChannels (X.randN n (-1) 1)
+          f0 = mceChannels (X.randN n 200 800)
           f1 = take n (cycle [29, 87.5, 116, 175, 233, 350, 524, 880, 1048, 1760])
       in sum (zipWith3 mk_saw f0 f1 l)
 in rvb sig

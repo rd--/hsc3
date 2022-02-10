@@ -13,13 +13,13 @@ let s1 _ =
           l1 = onePole l0 0.33
           (l1l,l1r) = unmce2 l1
           l2 = rotate2 l1l l1r 0.23
-          l3 = allpassN l2 0.05 (X.rRandN 2 0.01 0.05) 2
+          l3 = allpassN l2 0.05 (X.randN 2 0.01 0.05) 2
           l4 = delayN l3 0.3 (mce2 0.17 0.23)
-          l5 = allpassN l4 0.05 (X.rRandN 2 0.03 0.15) 2
+          l5 = allpassN l4 0.05 (X.randN 2 0.03 0.15) 2
           l6 = leakDC l5 0.995
           l7 = l6 + i
       in mrg [l7,localOut l7]
-    r_allpass i = allpassN i 0.03 (X.rRandN 2 0.005 0.02) 1
+    r_allpass i = allpassN i 0.03 (X.randN 2 0.005 0.02) 1
     s3 = s2 + mixFill 8 s1
 in rev_f (iter 4 r_allpass s3)
 
@@ -38,13 +38,13 @@ let s1 z _ =
           l1 = onePole l0 0.33
           (l1l,l1r) = unmce2 l1
           l2 = rotate2 l1l l1r 0.23
-          l3 = allpassN l2 0.05 (X.rRandNId 2 'θ' 0.01 0.05) 2
+          l3 = allpassN l2 0.05 (X.randNId 2 'θ' 0.01 0.05) 2
           l4 = delayN l3 0.3 (mce2 0.17 0.23)
-          l5 = allpassN l4 0.05 (X.rRandNId 2 'ι' 0.03 0.15) 2
+          l5 = allpassN l4 0.05 (X.randNId 2 'ι' 0.03 0.15) 2
           l6 = leakDC l5 0.995
           l7 = l6 + i
       in mrg [l7,localOut l7]
-    r_allpass z i = allpassN i 0.03 (X.rRandNId 2 (z,'ζ') 0.005 0.02) 1
+    r_allpass z i = allpassN i 0.03 (X.randNId 2 (z,'ζ') 0.005 0.02) 1
     s3 = s2 + mixFillId 'κ' 8 s1
 in rev_f (useqId 'λ' 4 r_allpass s3)
 
@@ -60,13 +60,13 @@ let s1 =
           l1 = onePole l0 0.33
           (l1l,l1r) = unmce2 l1
           l2 = rotate2 l1l l1r 0.23
-          l3 = allpassN l2 0.05 (X.rRandN 2 0.01 0.05) 2
+          l3 = allpassN l2 0.05 (X.randN 2 0.01 0.05) 2
           l4 = delayN l3 0.3 (mce2 0.17 0.23)
-          l5 = allpassN l4 0.05 (X.rRandN 2 0.03 0.15) 2
+          l5 = allpassN l4 0.05 (X.randN 2 0.03 0.15) 2
           l6 = leakDC l5 0.995
           l7 = l6 + i
       in mrg [l7,localOut l7]
-    r_allpass i = allpassN i 0.03 (X.rRandN 2 0.005 0.02) 1
+    r_allpass i = allpassN i 0.03 (X.randN 2 0.005 0.02) 1
 in rev_f (iter 4 r_allpass s1)
 
 -- tank (jmcc) ; event control ; id
@@ -81,11 +81,11 @@ let s1 =
           l1 = onePole l0 0.33
           (l1l,l1r) = unmce2 l1
           l2 = rotate2 l1l l1r 0.23
-          l3 = allpassN l2 0.05 (X.rRandNId 2 'θ' 0.01 0.05) 2
+          l3 = allpassN l2 0.05 (X.randNId 2 'θ' 0.01 0.05) 2
           l4 = delayN l3 0.3 (mce2 0.17 0.23)
-          l5 = allpassN l4 0.05 (X.rRandNId 2 'ι' 0.03 0.15) 2
+          l5 = allpassN l4 0.05 (X.randNId 2 'ι' 0.03 0.15) 2
           l6 = leakDC l5 0.995
           l7 = l6 + i
       in mrg [l7,localOut l7]
-    r_allpass z i = allpassN i 0.03 (X.rRandNId 2 (z,'ζ') 0.005 0.02) 1
+    r_allpass z i = allpassN i 0.03 (X.randNId 2 (z,'ζ') 0.005 0.02) 1
 in rev_f (useqId 'λ' 4 r_allpass s1)
