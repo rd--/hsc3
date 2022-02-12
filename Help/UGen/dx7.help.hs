@@ -1,4 +1,4 @@
--- rdx7 ; texture node ; data at local buffer
+-- dx7 ; texture node ; data at local buffer
 let vc = [[25,21,98,38,99, 0,99, 0,36,17,87,2,1,0,0,0,59,0, 1,1,8]
          ,[66,69,60,35, 0, 0,98, 0, 0, 0, 4,0,0,0,0,1,90,0, 1,0,8]
          ,[25,21,98,38,99, 0,99, 2,35,15,79,3,1,1,0,0,91,1, 0,0,6]
@@ -14,11 +14,11 @@ let vc = [[25,21,98,38,99, 0,99, 0,36,17,87,2,1,0,0,0,59,0, 1,1,8]
     reset_ = 0
     data_ = 0
     buf = asLocalBufId 'ε' (map constant (concat vc))
-    s = pan2 (X.rdx7 ar buf gate_ reset_ data_ 0 mnn vel 0x2000 0 0 0) loc 1
+    s = pan2 (X.dx7 ar buf gate_ reset_ data_ 0 mnn vel 0x2000 0 0 0) loc 1
     d = detectSilence s 0.001 0.1 RemoveSynth
 in mrg [out 0 s,d]
 
--- rdx7 ; event control ; data at local buffer
+-- dx7 ; event control ; data at local buffer
 let f (_,g,x,_,z,o,_,_,p,_,_) =
       let vc = [[25,21,98,38,99, 0,99, 0,36,17,87,2,1,0,0,0,59,0, 1,1,8]
                ,[66,69,60,35, 0, 0,98, 0, 0, 0, 4,0,0,0,0,1,90,0, 1,0,8]
@@ -29,10 +29,10 @@ let f (_,g,x,_,z,o,_,_,p,_,_) =
                ,[99,99,99,99,50,50,50,50,3,2,1,29,99,1,0,0,0,1,24]]
           buf = asLocalBufId 'ε' (map constant (concat vc))
           x0 = latch x g
-      in pan2 (X.rdx7 ar buf g 0 0 0 (p * 127) z (0x2000 * (x - x0)) 0 0 0) (o * 2 - 1) 1
+      in pan2 (X.dx7 ar buf g 0 0 0 (p * 127) z (0x2000 * (x - x0)) 0 0 0) (o * 2 - 1) 1
 in mix (eventVoicer 16 f) * control kr "gain" 1
 
--- rdx7 ; data at shared buffer ; external control
+-- dx7 ; data at shared buffer ; external control
 let buf = control kr "dat" 100
     gate_ = control kr "gate" 0
     reset = control kr "reset" 0
@@ -44,9 +44,9 @@ let buf = control kr "dat" 100
     mw = 0
     bc = 0
     fc = 0
-in X.rdx7 ar buf gate_ reset data_ vc mnn vel pw mw bc fc
+in X.dx7 ar buf gate_ reset data_ vc mnn vel pw mw bc fc
 
--- rdx7 ; data at shared buffer
+-- dx7 ; data at shared buffer
 let nv = 32 -- 221
     buf = control kr "dat" 100
     tr = dustId 'α' kr 2.0
@@ -57,15 +57,15 @@ let nv = 32 -- 221
     mnn = tRandId 'γ' 56.5 57.5 tr -- fractional midi note number -- 60 61
     vel = tRandId 'δ' 10 29 tr
     loc = tRandId 'ε' (-1) 1 tr
-in pan2 (X.rdx7 ar buf gate_ reset_ data_ vc mnn vel 0x2000 0 0 0) loc 1
+in pan2 (X.dx7 ar buf gate_ reset_ data_ vc mnn vel 0x2000 0 0 0) loc 1
 
--- rdx7 ; event control ; data at shared buffer
+-- dx7 ; event control ; data at shared buffer
 let f (_,g,x,_,z,o,_,_,p,_,_) =
       let buf = control kr "buf" 100
           vc = control_m kr "vc" 0 (0,31,"lin")
           x0 = latch x g
           pw = 0x2000 * (1 + (x - x0) * 2)
-          s = X.rdx7 ar buf g 0 0 vc (p * 127) (z * 99) pw 0 0 0
+          s = X.dx7 ar buf g 0 0 vc (p * 127) (z * 99) pw 0 0 0
       in pan2 s (o * 2 - 1) 1
 in mix (eventVoicer 16 f) * control_m kr "gain" 1 (0,4,"amp")
 
@@ -95,7 +95,7 @@ withSC3 (sendMessage (n_set1 1 "data" 0.0))
 withSC3 (sendMessage (n_set1 1 "mnn" 69.0))
 withSC3 (sendMessage (n_set1 1 "vel" 10.0))
 
-{---- RDX7
+{---- DX7
 
 An SC3 UGen of the
 [Levien](https://github.com/google/music-synthesizer-for-android) /

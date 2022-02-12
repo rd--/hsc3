@@ -2113,9 +2113,9 @@ qitch rate in_ databufnum ampThreshold algoflag ampbufnum minfreq maxfreq = mkUG
 
 -- | (Undocumented class)
 --
---  RBezier [ControlRate,AudioRate] haltAfter=100 dx=0.0001 freq=440 phase=0 *param=0;    MCE=1
-rBezier :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-rBezier rate haltAfter dx freq phase param = mkUGen Nothing [ControlRate,AudioRate] (Left rate) "RBezier" [haltAfter,dx,freq,phase] (Just [param]) 1 (Special 0) NoId
+--  Bezier [ControlRate,AudioRate] haltAfter=100 dx=0.0001 freq=440 phase=0 *param=0;    MCE=1
+bezier :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+bezier rate haltAfter dx freq phase param = mkUGen Nothing [ControlRate,AudioRate] (Left rate) "Bezier" [haltAfter,dx,freq,phase] (Just [param]) 1 (Special 0) NoId
 
 -- | rotating clock divider
 --
@@ -2131,9 +2131,9 @@ rdl rate numChannels inputArray = mkUGen Nothing [AudioRate] (Left rate) "RDL" [
 
 -- | (Undocumented class)
 --
---  RDX7 [AudioRate] bufnum=0 on=0 off=0 data=0 vc=0 mnn=60 vel=99 pw=0 mw=0 bc=0 fc=0
-rdx7 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-rdx7 rate bufnum on off data_ vc mnn vel pw mw bc fc = mkUGen Nothing [AudioRate] (Left rate) "RDX7" [bufnum,on,off,data_,vc,mnn,vel,pw,mw,bc,fc] Nothing 1 (Special 0) NoId
+--  DX7 [AudioRate] bufnum=0 on=0 off=0 data=0 vc=0 mnn=60 vel=99 pw=0 mw=0 bc=0 fc=0
+dx7 :: Rate -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+dx7 rate bufnum on off data_ vc mnn vel pw mw bc fc = mkUGen Nothing [AudioRate] (Left rate) "DX7" [bufnum,on,off,data_,vc,mnn,vel,pw,mw,bc,fc] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
