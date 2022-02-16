@@ -48,7 +48,7 @@ data SC3_Unary_Op
   | OpRecip -- 16
   | OpMidiCps -- 17
   | OpCpsMidi -- 18
-  | OpMidiRatio
+  | OpMidiRatio -- 19
   | OpRatioMidi -- 20
   | OpDbAmp -- 21
   | OpAmpDb -- 22

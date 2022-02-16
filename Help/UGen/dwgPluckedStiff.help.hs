@@ -33,7 +33,7 @@ let sequId e s tr = demand tr 0 (dseqId e dinf (mce s))
     fB = tRandId 'μ' 1.0 4.0 t -- inharmonicity factor (def = 2.0)
     ps = X.dwgPluckedStiff ar freq amp gate_ pos c1 c3 inp release fB
     pan = tRandId 'ο' (-1) 1 t
-in pan2 ps pan 0.1
+in mix (pan2 ps pan 0.1)
 
 -- dwgPluckedStiff ; event control
 let f (_,g,_,y,z,o,rx,_,p,_,_) =

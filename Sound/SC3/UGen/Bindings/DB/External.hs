@@ -2181,9 +2181,9 @@ expRandN nc = liftUnsafe2 (expRandNM nc)
 
 -- | (Undocumented class)
 --
---  RFreezer [AudioRate] bufnum=0 left=0 right=1 gain=1 increment=1 incrementOffset=0 incrementRandom=0 rightRandom=0 syncPhaseTrigger=0 randomizePhaseTrigger=0 numberOfLoops=4
-rFreezer :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-rFreezer bufnum left right gain increment incrementOffset incrementRandom rightRandom syncPhaseTrigger randomizePhaseTrigger numberOfLoops = mkUGen Nothing [AudioRate] (Left AudioRate) "RFreezer" [bufnum,left,right,gain,increment,incrementOffset,incrementRandom,rightRandom,syncPhaseTrigger,randomizePhaseTrigger,numberOfLoops] Nothing 1 (Special 0) NoId
+--  Freezer [AudioRate] bufnum=0 left=0 right=1 gain=1 increment=1 incrementOffset=0 incrementRandom=0 rightRandom=0 syncPhaseTrigger=0 randomizePhaseTrigger=0 numberOfLoops=4
+freezer :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+freezer bufnum left right gain increment incrementOffset incrementRandom rightRandom syncPhaseTrigger randomizePhaseTrigger numberOfLoops = mkUGen Nothing [AudioRate] (Left AudioRate) "Freezer" [bufnum,left,right,gain,increment,incrementOffset,incrementRandom,rightRandom,syncPhaseTrigger,randomizePhaseTrigger,numberOfLoops] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
@@ -2269,9 +2269,9 @@ rmShelf2 rate in_ freq k = mkUGen Nothing [AudioRate] (Left rate) "RMShelf2" [in
 
 -- | (Undocumented class)
 --
---  RObxdFilter [AudioRate] in=0 cutoff=440 resonance=0 multimode=0.5 bandpass=0 fourpole=0
-rObxdFilter :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-rObxdFilter in_ cutoff resonance multimode bandpass fourpole = mkUGen Nothing [AudioRate] (Right [0]) "RObxdFilter" [in_,cutoff,resonance,multimode,bandpass,fourpole] Nothing 1 (Special 0) NoId
+--  ObxdFilter [AudioRate] in=0 cutoff=440 resonance=0 multimode=0.5 bandpass=0 fourpole=0
+obxdFilter :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+obxdFilter in_ cutoff resonance multimode bandpass fourpole = mkUGen Nothing [AudioRate] (Right [0]) "ObxdFilter" [in_,cutoff,resonance,multimode,bandpass,fourpole] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
@@ -2296,26 +2296,26 @@ randN nc = liftUnsafe2 (randNM nc)
 -- | (Undocumented class)
 --
 --  RSVFBP [AudioRate] in=0 freq=440 q=0
-rsvfbp :: UGen -> UGen -> UGen -> UGen
-rsvfbp in_ freq q = mkUGen Nothing [AudioRate] (Right [0]) "RSVFBP" [in_,freq,q] Nothing 1 (Special 0) NoId
+svfBp :: UGen -> UGen -> UGen -> UGen
+svfBp in_ freq q = mkUGen Nothing [AudioRate] (Right [0]) "SvfBp" [in_,freq,q] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
---  RSVFHP [AudioRate] in=0 freq=440 q=0
-rsvfhp :: UGen -> UGen -> UGen -> UGen
-rsvfhp in_ freq q = mkUGen Nothing [AudioRate] (Right [0]) "RSVFHP" [in_,freq,q] Nothing 1 (Special 0) NoId
+--  SvfHp [AudioRate] in=0 freq=440 q=0
+svfHp :: UGen -> UGen -> UGen -> UGen
+svfHp in_ freq q = mkUGen Nothing [AudioRate] (Right [0]) "SvfHp" [in_,freq,q] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
---  RSVFLP [AudioRate] in=0 freq=440 q=0
-rsvflp :: UGen -> UGen -> UGen -> UGen
-rsvflp in_ freq q = mkUGen Nothing [AudioRate] (Right [0]) "RSVFLP" [in_,freq,q] Nothing 1 (Special 0) NoId
+--  SvflP [AudioRate] in=0 freq=440 q=0
+svfLp :: UGen -> UGen -> UGen -> UGen
+svfLp in_ freq q = mkUGen Nothing [AudioRate] (Right [0]) "SvfLp" [in_,freq,q] Nothing 1 (Special 0) NoId
 
 -- | (Undocumented class)
 --
---  RShufflerB [AudioRate] bufnum=0 readLocationMinima=0.01 readLocationMaxima=0.02 readIncrementMinima=1 readIncrementMaxima=1 durationMinima=0.2 durationMaxima=0.2 envelopeAmplitudeMinima=0.5 envelopeAmplitudeMaxima=0.5 envelopeShapeMinima=0.5 envelopeShapeMaxima=0.5 envelopeSkewMinima=0.5 envelopeSkewMaxima=0.5 stereoLocationMinima=0.5 stereoLocationMaxima=0.5 interOffsetTimeMinima=0.05 interOffsetTimeMaxima=0.01 ftableReadLocationIncrement=1 readIncrementQuanta=0 interOffsetTimeQuanta=0
-rShufflerB :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
-rShufflerB bufnum readLocationMinima readLocationMaxima readIncrementMinima readIncrementMaxima durationMinima durationMaxima envelopeAmplitudeMinima envelopeAmplitudeMaxima envelopeShapeMinima envelopeShapeMaxima envelopeSkewMinima envelopeSkewMaxima stereoLocationMinima stereoLocationMaxima interOffsetTimeMinima interOffsetTimeMaxima ftableReadLocationIncrement readIncrementQuanta interOffsetTimeQuanta = mkUGen Nothing [AudioRate] (Left AudioRate) "RShufflerB" [bufnum,readLocationMinima,readLocationMaxima,readIncrementMinima,readIncrementMaxima,durationMinima,durationMaxima,envelopeAmplitudeMinima,envelopeAmplitudeMaxima,envelopeShapeMinima,envelopeShapeMaxima,envelopeSkewMinima,envelopeSkewMaxima,stereoLocationMinima,stereoLocationMaxima,interOffsetTimeMinima,interOffsetTimeMaxima,ftableReadLocationIncrement,readIncrementQuanta,interOffsetTimeQuanta] Nothing 2 (Special 0) NoId
+--  ShufflerB [AudioRate] bufnum=0 readLocationMinima=0.01 readLocationMaxima=0.02 readIncrementMinima=1 readIncrementMaxima=1 durationMinima=0.2 durationMaxima=0.2 envelopeAmplitudeMinima=0.5 envelopeAmplitudeMaxima=0.5 envelopeShapeMinima=0.5 envelopeShapeMaxima=0.5 envelopeSkewMinima=0.5 envelopeSkewMaxima=0.5 stereoLocationMinima=0.5 stereoLocationMaxima=0.5 interOffsetTimeMinima=0.05 interOffsetTimeMaxima=0.01 ftableReadLocationIncrement=1 readIncrementQuanta=0 interOffsetTimeQuanta=0
+shufflerB :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
+shufflerB bufnum readLocationMinima readLocationMaxima readIncrementMinima readIncrementMaxima durationMinima durationMaxima envelopeAmplitudeMinima envelopeAmplitudeMaxima envelopeShapeMinima envelopeShapeMaxima envelopeSkewMinima envelopeSkewMaxima stereoLocationMinima stereoLocationMaxima interOffsetTimeMinima interOffsetTimeMaxima ftableReadLocationIncrement readIncrementQuanta interOffsetTimeQuanta = mkUGen Nothing [AudioRate] (Left AudioRate) "ShufflerB" [bufnum,readLocationMinima,readLocationMaxima,readIncrementMinima,readIncrementMaxima,durationMinima,durationMaxima,envelopeAmplitudeMinima,envelopeAmplitudeMaxima,envelopeShapeMinima,envelopeShapeMaxima,envelopeSkewMinima,envelopeSkewMaxima,stereoLocationMinima,stereoLocationMaxima,interOffsetTimeMinima,interOffsetTimeMaxima,ftableReadLocationIncrement,readIncrementQuanta,interOffsetTimeQuanta] Nothing 2 (Special 0) NoId
 
 -- | (Undocumented class)
 --
