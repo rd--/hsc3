@@ -24,7 +24,7 @@ let b = control kr "buf" 0
     pos = mouseX kr 0 (bufDur kr b) Linear 0.1
     n0 = whiteNoiseId 'α' kr
     n1 = whiteNoiseId 'β' kr
-    rate = shiftLeft 1.2 (roundTo (n0 * 3) 1)
+    rate = 1.2 ** (roundTo (n0 * 3) 1) -- or shiftLeft in place of **
 in tGrains 2 clk b rate pos dur (n1 * 0.6) 0.25 2
 
 -- tGrains ; demand UGens as inputs ; requires=buf
@@ -67,5 +67,8 @@ in mix (eventVoicer 16 f) * control kr "gain" 2
 
 ---- ; setup
 ld fn = withSC3 (async (b_allocRead 0 (sfResolve fn) 0 0))
+ld "instr/crotales/crotale05(D).wav"
 ld "metal.wav" -- mono
+ld "instr/celeste/long/22-A4-long.wav" -- mono
+ld "instr/celeste/long/25-C5-long.wav" -- mono
 ld "instr/celeste/long/37-C6-long.wav" -- mono

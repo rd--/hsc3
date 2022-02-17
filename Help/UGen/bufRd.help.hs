@@ -32,6 +32,8 @@ withSC3 (async (b_allocRead 0 (sfResolve "metal.wav") 0 0))
 
 ---- ; setup ; nc=2
 withSC3 (async (b_allocRead 0 (sfResolve "pf-c5.aif") 0 0))
+withSC3 (async (b_allocRead 0 (sfResolve "instr/bosendorfer/008/C5.aif") 0 0))
+withSC3 (async (b_allocRead 0 (sfResolve "instr/bosendorfer/032/C4.aif") 0 0))
 
 ---- ; setup ; nc=1 gen=sine1 ; allocate and generate (non-wavetable) buffer
 withSC3 (mapM_ maybe_async [b_alloc 0 256 1,b_gen_sine1 0 [Normalise, Clear] [1, 1/2, 1/3, 1/4, 1/5]])
