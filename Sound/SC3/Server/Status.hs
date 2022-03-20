@@ -16,6 +16,7 @@ import qualified Data.Tree as T {- containers -}
 import qualified Safe {- safe -}
 
 import Sound.OSC.Datum {- hosc -}
+import Sound.OSC.Datum.Pp {- hosc -}
 
 import Sound.SC3.Server.Command.Plain
 
