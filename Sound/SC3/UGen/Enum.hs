@@ -1,9 +1,9 @@
 -- | Data types for enumerated and non signal unit generator inputs.
 module Sound.SC3.UGen.Enum where
 
-import Sound.SC3.Common.Envelope
-import Sound.SC3.Common.Enum
-import Sound.SC3.UGen.Type
+import Sound.SC3.Common.Envelope {- hsc3 -}
+import Sound.SC3.Common.Enum {- hsc3 -}
+import Sound.SC3.UGen.Type {- hsc3 -}
 
 -- | Type specialised ('UGen') envelope curve.
 type EnvCurve = Envelope_Curve UGen

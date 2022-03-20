@@ -6,11 +6,11 @@ import Data.Maybe {- base -}
 
 import Sound.OSC.Core {- hosc -}
 
-import qualified Sound.SC3.Common.Base as B
-import qualified Sound.SC3.Server.Command.Enum as C
-import qualified Sound.SC3.Server.Enum as E
-import qualified Sound.SC3.Server.Graphdef as G
-import qualified Sound.SC3.Server.Synthdef as S
+import qualified Sound.SC3.Common.Base as Common.Base
+import qualified Sound.SC3.Server.Command.Enum as Server.Command.Enum
+import qualified Sound.SC3.Server.Enum as Server.Enum
+import qualified Sound.SC3.Server.Graphdef as Server.Graphdef
+import qualified Sound.SC3.Server.Synthdef as Server.Synthdef
 
 cmd_check_arg :: String -> (t -> Bool) -> t -> t
 cmd_check_arg e f x = if not (f x) then error e else x
@@ -51,7 +51,7 @@ b_close b = message "/b_close" [b_bufnum b]
 
 -- | Fill ranges of sample values.
 b_fill :: (Integral i,Real n) => i -> [(i,i,n)] -> Message
-b_fill b l = message "/b_fill" (b_bufnum b : B.mk_triples int32 int32 float l)
+b_fill b l = message "/b_fill" (b_bufnum b : Common.Base.mk_triples int32 int32 float l)
 
 -- | Free buffer data. (Asynchronous)
 b_free :: Integral i => i -> Message
@@ -62,20 +62,20 @@ b_gen :: Integral i => i -> String -> [Datum] -> Message
 b_gen b name arg = message "/b_gen" (b_bufnum b : string name : arg)
 
 -- | Call @sine1@ 'b_gen' command.
-b_gen_sine1 :: (Integral i,Real n) => i -> [E.B_Gen] -> [n] -> Message
-b_gen_sine1 z f n = b_gen z "sine1" (int32 (E.b_gen_flag f) : map float n)
+b_gen_sine1 :: (Integral i,Real n) => i -> [Server.Enum.B_Gen] -> [n] -> Message
+b_gen_sine1 z f n = b_gen z "sine1" (int32 (Server.Enum.b_gen_flag f) : map float n)
 
 -- | Call @sine2@ 'b_gen' command.
-b_gen_sine2 :: (Integral i,Real n) => i -> [E.B_Gen] -> [(n,n)] -> Message
-b_gen_sine2 z f n = b_gen z "sine2" (int32 (E.b_gen_flag f) : B.mk_duples float float n)
+b_gen_sine2 :: (Integral i,Real n) => i -> [Server.Enum.B_Gen] -> [(n,n)] -> Message
+b_gen_sine2 z f n = b_gen z "sine2" (int32 (Server.Enum.b_gen_flag f) : Common.Base.mk_duples float float n)
 
 -- | Call @sine3@ 'b_gen' command.
-b_gen_sine3 :: (Integral i,Real n) => i -> [E.B_Gen] -> [(n,n,n)] -> Message
-b_gen_sine3 z f n = b_gen z "sine3" (int32 (E.b_gen_flag f) : B.mk_triples float float float n)
+b_gen_sine3 :: (Integral i,Real n) => i -> [Server.Enum.B_Gen] -> [(n,n,n)] -> Message
+b_gen_sine3 z f n = b_gen z "sine3" (int32 (Server.Enum.b_gen_flag f) : Common.Base.mk_triples float float float n)
 
 -- | Call @cheby@ 'b_gen' command.
-b_gen_cheby :: (Integral i,Real n) => i -> [E.B_Gen] -> [n] -> Message
-b_gen_cheby z f n = b_gen z "cheby" (int32 (E.b_gen_flag f) : map float n)
+b_gen_cheby :: (Integral i,Real n) => i -> [Server.Enum.B_Gen] -> [n] -> Message
+b_gen_cheby z f n = b_gen z "cheby" (int32 (Server.Enum.b_gen_flag f) : map float n)
 
 -- | Call @copy@ 'b_gen' command.
 b_gen_copy :: Integral i => i -> i -> i -> i -> Maybe i -> Message
@@ -89,7 +89,7 @@ b_get b i = message "/b_get" (b_bufnum b : map int32 i)
 
 -- | Get ranges of sample values.
 b_getn :: Integral i => i -> [(i,i)] -> Message
-b_getn b l = message "/b_getn" (b_bufnum b : B.mk_duples b_ix b_size l)
+b_getn b l = message "/b_getn" (b_bufnum b : Common.Base.mk_duples b_ix b_size l)
 
 -- | Request \/b_info messages.
 b_query :: Integral i => [i] -> Message
@@ -108,7 +108,7 @@ b_readChannel b p f n f' z cs = message "/b_readChannel" ([b_bufnum b,string p,i
 
 -- | Set sample values.
 b_set :: (Integral i,Real n) => i -> [(i,n)] -> Message
-b_set b l = message "/b_set" (b_bufnum b : B.mk_duples int32 float l)
+b_set b l = message "/b_set" (b_bufnum b : Common.Base.mk_duples int32 float l)
 
 -- | Set ranges of sample values.
 b_setn :: (Integral i,Real n) => i -> [(i,[n])] -> Message
@@ -117,10 +117,10 @@ b_setn b l =
     in message "/b_setn" (b_bufnum b : concatMap f l)
 
 -- | Write sound file data. (Asynchronous)
-b_write :: Integral i => i -> String -> E.SoundFileFormat -> E.SampleFormat -> i -> i -> Bool -> Message
+b_write :: Integral i => i -> String -> Server.Enum.SoundFileFormat -> Server.Enum.SampleFormat -> i -> i -> Bool -> Message
 b_write b p h t f s z =
-    let h' = string (E.soundFileFormatString h)
-        t' = string (E.sampleFormatString t)
+    let h' = string (Server.Enum.soundFileFormatString h)
+        t' = string (Server.Enum.sampleFormatString t)
     in message "/b_write" [b_bufnum b,string p,h',t',int32 f,int32 s,int32 (fromEnum z)]
 
 -- | Zero sample data. (Asynchronous)
@@ -131,7 +131,7 @@ b_zero b = message "/b_zero" [b_bufnum b]
 
 -- |  Fill ranges of bus values.
 c_fill :: (Integral i,Real n) => [(i,i,n)] -> Message
-c_fill = message "/c_fill" . B.mk_triples int32 int32 float
+c_fill = message "/c_fill" . Common.Base.mk_triples int32 int32 float
 
 -- | Get bus values.
 c_get :: Integral i => [i] -> Message
@@ -139,11 +139,11 @@ c_get = message "/c_get" . map int32
 
 -- | Get ranges of bus values.
 c_getn :: Integral i => [(i,i)] -> Message
-c_getn = message "/c_getn" . B.mk_duples int32 int32
+c_getn = message "/c_getn" . Common.Base.mk_duples int32 int32
 
 -- | Set bus values.
 c_set :: (Integral i,Real n) => [(i,n)] -> Message
-c_set = message "/c_set" . B.mk_duples int32 float
+c_set = message "/c_set" . Common.Base.mk_duples int32 float
 
 -- | Set ranges of bus values.
 c_setn :: (Integral i,Real n) => [(i,[n])] -> Message
@@ -157,13 +157,13 @@ c_setn l =
 d_recv_bytes :: BLOB -> Message
 d_recv_bytes b = message "/d_recv" [Blob b]
 
--- | 'G.Graphdef' encoding variant.
-d_recv_gr :: G.Graphdef -> Message
-d_recv_gr = d_recv_bytes . G.encode_graphdef
+-- | Graphdef encoding variant.
+d_recv_gr :: Server.Graphdef.Graphdef -> Message
+d_recv_gr = d_recv_bytes . Server.Graphdef.encode_graphdef
 
--- | 'S.Synthdef' encoding variant.
-d_recv :: S.Synthdef -> Message
-d_recv = d_recv_bytes . S.synthdefData
+-- | Synthdef encoding variant.
+d_recv :: Server.Synthdef.Synthdef -> Message
+d_recv = d_recv_bytes . Server.Synthdef.synthdefData
 
 -- | Load an instrument definition from a named file. (Asynchronous)
 d_load :: String -> Message
@@ -189,19 +189,19 @@ g_freeAll = message "/g_freeAll" . map int32
 
 -- | Add node to head of group.
 g_head :: Integral i => [(i,i)] -> Message
-g_head = message "/g_head" . B.mk_duples int32 int32
+g_head = message "/g_head" . Common.Base.mk_duples int32 int32
 
 -- | Create a new group.
-g_new :: Integral i => [(i,E.AddAction,i)] -> Message
-g_new = message "/g_new" . B.mk_triples int32 (int32 . fromEnum) int32
+g_new :: Integral i => [(i,Server.Enum.AddAction,i)] -> Message
+g_new = message "/g_new" . Common.Base.mk_triples int32 (int32 . fromEnum) int32
 
 -- | Add node to tail of group.
 g_tail :: Integral i => [(i,i)] -> Message
-g_tail = message "/g_tail" . B.mk_duples int32 int32
+g_tail = message "/g_tail" . Common.Base.mk_duples int32 int32
 
 -- | Post a representation of a group's node subtree, optionally including the current control values for synths.
 g_dumpTree :: Integral i => [(i,Bool)] -> Message
-g_dumpTree = message "/g_dumpTree" . B.mk_duples int32 (int32 . fromEnum)
+g_dumpTree = message "/g_dumpTree" . Common.Base.mk_duples int32 (int32 . fromEnum)
 
 -- | Request a representation of a group's node subtree, optionally including the current control values for synths.
 --
@@ -227,9 +227,9 @@ g_dumpTree = message "/g_dumpTree" . B.mk_duples int32 (int32 . fromEnum)
 -- >     ] * M
 -- > ] * the number of nodes in the subtree
 --
--- N.B. The order of nodes corresponds to their execution order on the server. Thus child nodes (those contained within a group) are listed immediately following their parent.
+-- N.Common.Base. The order of nodes corresponds to their execution order on the server. Thus child nodes (those contained within a group) are listed immediately following their parent.
 g_queryTree :: Integral i => [(i,Bool)] -> Message
-g_queryTree = message "/g_queryTree" . B.mk_duples int32 (int32 . fromEnum)
+g_queryTree = message "/g_queryTree" . Common.Base.mk_duples int32 (int32 . fromEnum)
 
 -- * Node commands (n_)
 
@@ -239,35 +239,35 @@ n_id = int32 . cmd_check_arg "node-id < -1?" (>= (-1))
 
 -- | Place a node after another.
 n_after :: Integral i => [(i,i)] -> Message
-n_after = message "/n_after" . B.mk_duples n_id n_id
+n_after = message "/n_after" . Common.Base.mk_duples n_id n_id
 
 -- | Place a node before another.
 n_before :: Integral i => [(i,i)] -> Message
-n_before = message "/n_before" . B.mk_duples int32 int32
+n_before = message "/n_before" . Common.Base.mk_duples int32 int32
 
 -- | Fill ranges of a node's control values.
 n_fill :: (Integral i,Real f) => i -> [(String,i,f)] -> Message
-n_fill n l = message "/n_fill" (n_id n : B.mk_triples string int32 float l)
+n_fill n l = message "/n_fill" (n_id n : Common.Base.mk_triples string int32 float l)
 
 -- | Delete a node.
 n_free :: Integral i => [i] -> Message
 n_free = message "/n_free" . map n_id
 
 n_map :: Integral i => i -> [(String,i)] -> Message
-n_map n l = message "/n_map" (n_id n : B.mk_duples string int32 l)
+n_map n l = message "/n_map" (n_id n : Common.Base.mk_duples string int32 l)
 
 -- | Map a node's controls to read from buses.
 --   n_mapn only works if the control is given as an index and not as a name (3.8.0).
 n_mapn :: Integral i => i -> [(i,i,i)] -> Message
-n_mapn n l = message "/n_mapn" (n_id n : B.mk_triples int32 int32 int32 l)
+n_mapn n l = message "/n_mapn" (n_id n : Common.Base.mk_triples int32 int32 int32 l)
 
 -- | Map a node's controls to read from an audio bus.
 n_mapa :: Integral i => i -> [(String,i)] -> Message
-n_mapa n l = message "/n_mapa" (n_id n : B.mk_duples string int32 l)
+n_mapa n l = message "/n_mapa" (n_id n : Common.Base.mk_duples string int32 l)
 
 -- | Map a node's controls to read from audio buses.
 n_mapan :: Integral i => i -> [(String,i,i)] -> Message
-n_mapan n l = message "/n_mapan" (n_id n : B.mk_triples string int32 int32 l)
+n_mapan n l = message "/n_mapan" (n_id n : Common.Base.mk_triples string int32 int32 l)
 
 -- | Get info about a node.
 n_query :: Integral i => [i] -> Message
@@ -275,11 +275,11 @@ n_query = message "/n_query" . map n_id
 
 -- | Turn node on or off.
 n_run :: Integral i => [(i,Bool)] -> Message
-n_run = message "/n_run" . B.mk_duples n_id (int32 . fromEnum)
+n_run = message "/n_run" . Common.Base.mk_duples n_id (int32 . fromEnum)
 
 -- | Set a node's control values.
 n_set :: (Integral i,Real n) => i -> [(String,n)] -> Message
-n_set n c = message "/n_set" (n_id n : B.mk_duples string float c)
+n_set n c = message "/n_set" (n_id n : Common.Base.mk_duples string float c)
 
 -- | Set ranges of a node's control values.
 -- n_mapn and n_setn only work if the control is given as an index and not as a name.
@@ -293,14 +293,14 @@ n_trace :: Integral i => [i] -> Message
 n_trace = message "/n_trace" . map int32
 
 -- | Move an ordered sequence of nodes.
-n_order :: Integral i => E.AddAction -> i -> [i] -> Message
+n_order :: Integral i => Server.Enum.AddAction -> i -> [i] -> Message
 n_order a n ns = message "/n_order" (int32 (fromEnum a) : int32 n : map int32 ns)
 
 -- * Par commands (p_)
 
 -- | Create a new parallel group (supernova specific).
-p_new :: Integral i => [(i,E.AddAction,i)] -> Message
-p_new = message "/p_new" . B.mk_triples int32 (int32 . fromEnum) int32
+p_new :: Integral i => [(i,Server.Enum.AddAction,i)] -> Message
+p_new = message "/p_new" . Common.Base.mk_triples int32 (int32 . fromEnum) int32
 
 -- * Synthesis node commands (s_)
 
@@ -310,11 +310,11 @@ s_get n i = message "/s_get" (n_id n : map string i)
 
 -- | Get ranges of control values.
 s_getn :: Integral i => i -> [(String,i)] -> Message
-s_getn n l = message "/s_getn" (n_id n : B.mk_duples string int32 l)
+s_getn n l = message "/s_getn" (n_id n : Common.Base.mk_duples string int32 l)
 
 -- | Create a new synth.
-s_new :: (Integral i,Real n) => String -> i -> E.AddAction -> i -> [(String,n)] -> Message
-s_new n i a t c = message "/s_new" (string n : int32 i : int32 (fromEnum a) : int32 t : B.mk_duples string float c)
+s_new :: (Integral i,Real n) => String -> i -> Server.Enum.AddAction -> i -> [(String,n)] -> Message
+s_new n i a t c = message "/s_new" (string n : int32 i : int32 (fromEnum a) : int32 t : Common.Base.mk_duples string float c)
 
 -- | Auto-reassign synth's ID to a reserved value.
 s_noid :: Integral i => [i] -> Message
@@ -337,15 +337,15 @@ clearSched :: Message
 clearSched = message "/clearSched" []
 
 -- | Select printing of incoming Open Sound Control messages.
-dumpOSC :: E.PrintLevel -> Message
+dumpOSC :: Server.Enum.PrintLevel -> Message
 dumpOSC c = message "/dumpOSC" [int32 (fromEnum c)]
 
 -- | Set error posting scope and mode.
-errorMode :: E.ErrorScope -> E.ErrorMode -> Message
+errorMode :: Server.Enum.ErrorScope -> Server.Enum.ErrorMode -> Message
 errorMode scope mode =
     let e = case scope of
-              E.Globally -> fromEnum mode
-              E.Locally  -> -1 - fromEnum mode
+              Server.Enum.Globally -> fromEnum mode
+              Server.Enum.Locally  -> -1 - fromEnum mode
     in message "/error" [int32 e]
 
 -- | Select reception of notification messages. (Asynchronous)
@@ -373,7 +373,7 @@ sync sid = message "/sync" [int32 sid]
 -- | Add a completion packet to an existing asynchronous command.
 with_completion_packet :: Message -> Packet -> Message
 with_completion_packet (Message c xs) cm =
-    if c `elem` C.async_cmds
+    if c `elem` Server.Command.Enum.async_cmds
     then let xs' = xs ++ [Blob (encodePacket cm)]
          in Message c xs'
     else error ("with_completion_packet: not async: " ++ c)
@@ -439,7 +439,7 @@ n_set1 :: (Integral i,Real n) => i -> String -> n -> Message
 n_set1 n k v = n_set n [(k,v)]
 
 -- | @s_new@ with no parameters.
-s_new0 :: Integral i => String -> i -> E.AddAction -> i -> Message
+s_new0 :: Integral i => String -> i -> Server.Enum.AddAction -> i -> Message
 s_new0 n i a t = s_new n i a t ([]::[(String,Double)])
 
 -- * Buffer segmentation and indices
@@ -462,7 +462,7 @@ b_segment n m =
 b_indices :: Integral i => i -> i -> i -> [(i,i)]
 b_indices n m k =
     let s = b_segment n m
-        i = 0 : B.dx_d s
+        i = 0 : Common.Base.dx_d s
     in zip (map (+ k) i) s
 
 -- * UGen commands.

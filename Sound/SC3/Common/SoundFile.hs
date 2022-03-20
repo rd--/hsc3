@@ -1,13 +1,14 @@
 -- | Sound file functions.
 module Sound.SC3.Common.SoundFile where
 
-import System.Directory {- directory -}
 import System.Environment {- base -}
-import System.FilePath {- filepath -}
 import System.IO.Unsafe {- base -}
 import System.Process {- process -}
 
-import qualified Data.List.Split as Split {- split -}
+import System.Directory {- directory -}
+import System.FilePath {- filepath -}
+
+import qualified Sound.SC3.Common.Base {- hsc3 -}
 
 {- | Find the file fn (case-sensitively) starting from dir.
      Runs the system command "find" (so UNIX only).
@@ -68,7 +69,7 @@ sfPath = getEnv "SFPATH"
 sfFindFile :: FilePath -> IO (Maybe FilePath)
 sfFindFile fn = do
   dir <- sfDir
-  path <- fmap (Split.splitOn ":") sfPath
+  path <- fmap (Sound.SC3.Common.Base.string_split_at_char ':') sfPath
   isFn <- doesFileExist fn
   isDir <- doesFileExist (dir </> fn)
   if isFn then return (Just fn) else if isDir then return (Just (dir </> fn)) else findFileAtOrFromPath path fn

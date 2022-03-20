@@ -2,6 +2,7 @@
 module Sound.SC3.UGen.HS where
 
 import Data.List {- base -}
+
 import qualified System.Random as R {- random -}
 
 import Sound.SC3.Common.Math

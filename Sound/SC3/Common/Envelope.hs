@@ -4,8 +4,8 @@ module Sound.SC3.Common.Envelope where
 import Data.List {- base -}
 import Data.Maybe {- base -}
 
-import qualified Sound.SC3.Common.Base as Base
-import qualified Sound.SC3.Common.Math.Interpolate as I
+import qualified Sound.SC3.Common.Base as Base {- hsc3 -}
+import qualified Sound.SC3.Common.Math.Interpolate as Interpolate {- hsc3 -}
 
 -- * Curve
 
@@ -56,17 +56,17 @@ env_curve_value e =
       _ -> 0
 
 -- | 'Interpolation_F' of 'Envelope_Curve'.
-env_curve_interpolation_f :: (Ord t, Floating t) => Envelope_Curve t -> I.Interpolation_F t
+env_curve_interpolation_f :: (Ord t, Floating t) => Envelope_Curve t -> Interpolate.Interpolation_F t
 env_curve_interpolation_f c =
     case c of
-      EnvStep -> I.step
-      EnvLin -> I.linear
-      EnvExp -> I.exponential
-      EnvSin -> I.sine
-      EnvWelch -> I.welch
-      EnvNum n -> I.curve n
-      EnvSqr -> I.squared
-      EnvCub -> I.cubed
+      EnvStep -> Interpolate.step
+      EnvLin -> Interpolate.linear
+      EnvExp -> Interpolate.exponential
+      EnvSin -> Interpolate.sine
+      EnvWelch -> Interpolate.welch
+      EnvNum n -> Interpolate.curve n
+      EnvSqr -> Interpolate.squared
+      EnvCub -> Interpolate.cubed
       EnvHold -> undefined
 
 -- | Apply /f/ to 'EnvNum' value.
@@ -336,7 +336,7 @@ envCoord xy dur amp c = envXYC (map (\(x,y) -> (x * dur,y * amp,c)) xy)
 --
 -- > envPairs [(0, 1), (3, 1.4), (2.1, 0.5)] EnvSin
 envPairs :: (Num n,Ord n) => [(n,n)] -> Envelope_Curve n -> Envelope n
-envPairs xy = envCoord (sortOn fst xy) 1 1
+envPairs xy = envCoord (Base.sort_on fst xy) 1 1
 
 -- | Percussive envelope, with attack, release, level and curve inputs.
 envPerc_c :: Num a => a -> a -> a -> Envelope_Curve_2 a -> Envelope a
@@ -511,4 +511,4 @@ envXYC xyc =
 --
 -- > envXYC_sort [(0, 1, EnvSin), (3, 1.4, EnvLin), (2.1, 0.5, EnvLin)]
 envXYC_sort :: (Num n,Ord n) => [(n,n,Envelope_Curve n)] -> Envelope n
-envXYC_sort = envXYC . sortOn (\(x,_,_) -> x)
+envXYC_sort = envXYC . Base.sort_on (\(x,_,_) -> x)

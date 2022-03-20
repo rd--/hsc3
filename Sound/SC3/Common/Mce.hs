@@ -1,7 +1,7 @@
 -- | The SC3 multiple channel expansion rules over an abstract type.
 module Sound.SC3.Common.Mce where
 
-import Data.List {- base -}
+import qualified Sound.SC3.Common.Base {- hsc3 -}
 
 {- | Multiple channel expansion.
      The Mce type is a tree, however in hsc3 Mce_Vector will always hold Mce_Scalar elements.
@@ -56,7 +56,7 @@ mce_show m =
   let bracketed (l,r) x = l : x ++ [r]
   in case m of
        Mce_Scalar e -> show e
-       Mce_Vector e -> bracketed ('[',']') (intercalate ", " (map mce_show e))
+       Mce_Vector e -> bracketed ('[',']') (Sound.SC3.Common.Base.concat_intersperse ", " (map mce_show e))
 
 -- | Read value from Mce_Scalar, error if Mce is Mce_Vector
 mce_scalar_value :: Mce t -> t

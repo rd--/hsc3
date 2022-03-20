@@ -5,7 +5,6 @@ import qualified Data.Fixed {- base -}
 import Data.Maybe {- base -}
 import Data.Ratio {- base -}
 import qualified Numeric {- base -}
-import qualified Text.Read {- base/ghc -}
 
 import qualified Sound.SC3.Common.Base as Common.Base {- hsc3 -}
 
@@ -725,7 +724,7 @@ real_pp k n =
 
 -- | Type-specialised 'Text.Read.readMaybe'.
 parse_double :: String -> Maybe Double
-parse_double = Text.Read.readMaybe
+parse_double = Common.Base.reads_exact
 
 -- * Optimiser
 

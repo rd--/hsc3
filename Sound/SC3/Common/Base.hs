@@ -4,6 +4,7 @@ module Sound.SC3.Common.Base where
 import Data.Char {- base -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
+import Data.Ord {- base -}
 
 -- * Function
 
@@ -38,6 +39,12 @@ type Fn11 a b c d e f g h i j k l = a -> b -> c -> d -> e -> f -> g -> h -> i ->
 iter :: Int -> (a -> a) -> a -> a
 iter n f x = if n == 0 then x else f (iter (n - 1) f x)
 
+-- * Functor
+
+-- | This is the same function as Control.Monad.void, which however hugs does not know of.
+fvoid :: Functor f => f a -> f ()
+fvoid = fmap (const ())
+
 -- * Read
 
 -- | Variant of 'reads' requiring exact match.
@@ -46,6 +53,19 @@ reads_exact s =
     case reads s of
       [(r,"")] -> Just r
       _ -> Nothing
+
+-- * String
+
+{- | Similar to Data.List.Split.splitOn, which however hugs doesn't know of.
+
+> string_split_at_char ':' "/usr/local/bin:/usr/bin:/bin" == ["/usr/local/bin","/usr/bin","/bin"]
+> string_split_at_char ':' "/usr/local/bin" == ["/usr/local/bin"]
+-}
+string_split_at_char :: Char -> String -> [String]
+string_split_at_char c s =
+  case break (== c) s of
+    (lhs,[]) -> [lhs]
+    (lhs,_:rhs) -> lhs : string_split_at_char c rhs
 
 -- * String / Case
 
@@ -191,6 +211,27 @@ at_with_error_message msg list index =
   if index >= length list
   then error ("!!: index out of range: " ++ msg)
   else list !! index
+
+-- | concat of intersperse.  This is the same function as intercalate, which hugs doesn't know of.
+concat_intersperse :: [a] -> [[a]] -> [a]
+concat_intersperse x = concat . intersperse x
+
+{- | Similar to Data.List.Split.splitOn, which however hugs doesn't know of.
+
+> list_split_at_elem ' ' "a sequence of words" == ["a","sequence","of","words"]
+-}
+list_split_at_elem :: Eq t => t -> [t] -> [[t]]
+list_split_at_elem c s =
+  case break (== c) s of
+    (lhs,[]) -> [lhs]
+    (lhs,_:rhs) -> lhs : list_split_at_elem c rhs
+
+{- | Data.List.sortOn, which however hugs does not know of.
+
+> sort_on snd [('a',1),('b',0)] == [('b',0),('a',1)]
+-}
+sort_on :: (Ord b) => (a -> b) -> [a] -> [a]
+sort_on = sortBy . comparing
 
 -- * Tuples
 

@@ -1,4 +1,4 @@
--- | Interpolation functions, ie. for envelope segments.
+-- | Interpolation functions, ie. for envelope segments.  Present naming is for qualified import.
 module Sound.SC3.Common.Math.Interpolate where
 
 import Sound.SC3.Common.Math {- hsc3 -}

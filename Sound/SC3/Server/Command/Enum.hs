@@ -4,7 +4,7 @@ module Sound.SC3.Server.Command.Enum where
 import Data.List {- base -}
 import Data.Maybe {- base -}
 
-import Sound.OSC.Packet {- hosc -}
+import qualified Sound.OSC.Packet as Osc {- hosc -}
 
 -- | SC3 server commands are strings.
 type SC3_Command = String
@@ -128,14 +128,14 @@ async_cmds =
 --
 -- > import Sound.SC3
 -- > map isAsync [b_close 0,n_set1 0 "0" 0,status] == [True,False,False]
-isAsync :: Message -> Bool
-isAsync (Message a _) = a `elem` async_cmds
+isAsync :: Osc.Message -> Bool
+isAsync (Osc.Message a _) = a `elem` async_cmds
 
 -- | Asynchronous commands are at the left.  This function should
 -- preserve the ordering of both branches.
 --
 -- > partition_async [b_close 0,n_set1 0 "0" 0]
-partition_async :: [Message] -> ([Message],[Message])
+partition_async :: [Osc.Message] -> ([Osc.Message],[Osc.Message])
 partition_async = partition isAsync
 
 -- | Types & names for @b_info@ message fields.

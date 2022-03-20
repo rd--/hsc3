@@ -3,9 +3,9 @@ module Sound.SC3.Common.Buffer.Array where
 
 import qualified Data.Array as A {- array -}
 
-import qualified Sound.SC3.Common.Buffer as SC3
+import qualified Sound.SC3.Common.Buffer as  Common.Buffer {- hsc3 -}
 
--- | 'SC3.clipAt'.
+-- | 'Common.Buffer.clipAt'.
 clipAt :: Int -> A.Array Int a -> a
 clipAt ix c =
     let (l,r) = A.bounds c
@@ -17,7 +17,7 @@ clipAt ix c =
 -- > blendAt 0 (A.listArray (0,2) [2,5,6]) == 2
 -- > blendAt 0.4 (A.listArray (0,2) [2,5,6]) == 3.2
 blendAt :: RealFrac a => a -> A.Array Int a -> a
-blendAt = SC3.blendAtBy clipAt
+blendAt = Common.Buffer.blendAtBy clipAt
 
 -- | 'C.resamp1'.
 --
@@ -26,6 +26,6 @@ blendAt = SC3.blendAtBy clipAt
 resamp1 :: RealFrac n => Int -> A.Array Int n -> A.Array Int n
 resamp1 n c =
     let (_,r) = A.bounds c
-        gen = SC3.resamp1_gen n (r + 1) clipAt c
+        gen = Common.Buffer.resamp1_gen n (r + 1) clipAt c
         rs = map gen [0 .. n - 1]
     in A.listArray (0,n - 1) rs
