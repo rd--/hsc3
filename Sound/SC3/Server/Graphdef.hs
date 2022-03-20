@@ -23,8 +23,8 @@ import qualified Sound.SC3.Common.Rate as Rate {- hsc3 -}
 
 -- * Type
 
--- | Names are ASCII strings (ie. ByteString.Char8)
-type Name = Datum.ASCII
+-- | Names are Ascii strings (ie. ByteString.Char8)
+type Name = Datum.Ascii
 
 -- | Controls are a name and a ugen-index.
 type Control = (Name,Int)

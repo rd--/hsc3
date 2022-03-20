@@ -18,7 +18,7 @@ import Sound.SC3.Server.Graphdef {- hsc3 -}
 -- | * PRINT
 
 -- | Print string.  Strings must not have internal whitespace or semi-colons.
-print_string :: Datum.ASCII -> String
+print_string :: Datum.Ascii -> String
 print_string a =
   let s = Datum.ascii_to_string a
   in if any isSpace s || ';' `elem` s then error "print_string" else s

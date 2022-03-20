@@ -58,7 +58,7 @@ pv_HainsworthFoote buf h f thr wt = C.mkOsc ar "PV_HainsworthFoote" [buf,h,f,thr
 pv_JensenAndersen :: UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen -> UGen
 pv_JensenAndersen buffer propsc prophfe prophfc propsf threshold waittime = C.mkOsc ar "PV_JensenAndersen" [buffer,propsc,prophfe,prophfc,propsf,threshold,waittime] 1
 
--- | ASCII string to length prefixed list of constant UGens.
+-- | Ascii string to length prefixed list of constant UGens.
 --
 -- > string_to_ugens "/label" == map fromIntegral [6,47,108,97,98,101,108]
 string_to_ugens :: String -> [UGen]

@@ -90,12 +90,12 @@ queryTree_ctl :: (Datum,Datum) -> Query_Ctl
 queryTree_ctl (p,q) =
     let err msg val = error (show ("queryTree_ctl",msg,val))
         f d = case d of
-                ASCII_String nm -> Left (C.unpack nm)
+                Ascii_String nm -> Left (C.unpack nm)
                 Int32 ix -> Right (fromIntegral ix)
                 _ -> err "string/int32" d
         g d = case d of
                 Float k -> Left (realToFrac k)
-                ASCII_String b -> case C.unpack b of
+                Ascii_String b -> case C.unpack b of
                                     'c' : n -> Right (read n)
                                     _ -> err "c:_" d
                 _ -> err "float/string" d
@@ -136,7 +136,7 @@ queryTree_group rc gid nc =
 queryTree_child :: Bool -> [Datum] -> (Query_Node,[Datum])
 queryTree_child rc d =
     case d of
-      Int32 nid : Int32 (-1) : ASCII_String nm : d' ->
+      Int32 nid : Int32 (-1) : Ascii_String nm : d' ->
           queryTree_synth rc (fromIntegral nid) (C.unpack nm) d'
       Int32 gid : Int32 nc : d' ->
           queryTree_group rc (fromIntegral gid) (fromIntegral nc) d'
