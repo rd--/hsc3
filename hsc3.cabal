@@ -43,6 +43,7 @@ Library
   Exposed-modules: Sound.SC3
                    Sound.SC3.Common
                    Sound.SC3.Common.Base
+                   Sound.SC3.Common.Base.System
                    Sound.SC3.Common.Buffer
                    Sound.SC3.Common.Buffer.Array
                    Sound.SC3.Common.Buffer.Gen

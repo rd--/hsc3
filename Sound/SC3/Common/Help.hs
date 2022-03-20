@@ -11,7 +11,7 @@ import System.Process {- process -}
 
 import qualified Data.List.Split as Split {- split -}
 
-import qualified Sound.SC3.Common.Base as Base {- hsc3 -}
+import qualified Sound.SC3.Common.Base.System as Base.System {- hsc3 -}
 
 -- * RTF
 
@@ -50,7 +50,7 @@ sc3_rtf_to_scd rtf_fn scd_fn = do
 -- | 'sc3_rtf_to_scd' of 'sc3_rtf_find_file_err', writing output to TMPDIR
 sc3_rtf_help_translate :: String -> IO FilePath
 sc3_rtf_help_translate nm = do
-  tmp <- Base.get_env_default "TMPDIR" "/tmp"
+  tmp <- Base.System.get_env_default "TMPDIR" "/tmp"
   rtf_fn <- sc3_rtf_find_file_err (nm <.> "*rtf")
   let scd_fn = tmp </> takeFileName rtf_fn -<.> "scd"
   sc3_rtf_to_scd rtf_fn scd_fn
@@ -80,7 +80,7 @@ sc3_scdoc_help_dir :: IO String
 sc3_scdoc_help_dir = do
   h <- getEnv "HOME"
   let d = h </> ".local/share/SuperCollider/Help"
-  Base.get_env_default "SC3_SCDOC_HTML_HELP_DIR" d
+  Base.System.get_env_default "SC3_SCDOC_HTML_HELP_DIR" d
 
 -- | Path to indicated SC3 class help file.
 --
@@ -130,7 +130,7 @@ sc3_scdoc_help_path s = do
 {- | Open SC3 help path, either the local file or the online version.
      Use @BROWSER@ or @x-www-browser@.
 
-> Base.get_env_default "BROWSER" "x-www-browser"
+> Base.System.get_env_default "BROWSER" "x-www-browser"
 
 > sc3_scdoc_help_open True (sc3_scdoc_help_path "SinOsc")
 > sc3_scdoc_help_open True (sc3_scdoc_help_path "Collection.*fill")
@@ -139,7 +139,7 @@ sc3_scdoc_help_path s = do
 sc3_scdoc_help_open :: Bool -> String -> IO ()
 sc3_scdoc_help_open use_loc p = do
   d <- sc3_scdoc_help_dir
-  b <- Base.get_env_default "BROWSER" "x-www-browser"
+  b <- Base.System.get_env_default "BROWSER" "x-www-browser"
   let u = if use_loc then "file://" ++ (d </> p) else sc3_scdoc_help_url ++ p
   void (System.Process.rawSystem b [u])
 

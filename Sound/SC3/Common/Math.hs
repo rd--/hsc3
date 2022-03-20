@@ -5,9 +5,9 @@ import qualified Data.Fixed {- base -}
 import Data.Maybe {- base -}
 import Data.Ratio {- base -}
 import qualified Numeric {- base -}
-import qualified Text.Read {- base -}
+import qualified Text.Read {- base/ghc -}
 
-import qualified Safe {- safe -}
+import qualified Sound.SC3.Common.Base as Common.Base {- hsc3 -}
 
 -- | Half pi.
 --
@@ -276,7 +276,7 @@ degree_to_key s n d =
     let l = length s
         d' = round d
         a = (d - fromIntegral d') * 10.0 * (n / 12.0)
-    in (n * fromIntegral (d' `div` l)) + Safe.atNote "degree_to_key" s (d' `mod` l) + a
+    in (n * fromIntegral (d' `div` l)) + Common.Base.at_with_error_message "degree_to_key" s (d' `mod` l) + a
 
 {- | One-indexed piano key number (for standard 88 key piano) to midi note number.
 
