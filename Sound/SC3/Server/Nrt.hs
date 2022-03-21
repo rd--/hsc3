@@ -6,8 +6,8 @@ import System.IO {- base -}
 
 import qualified Data.ByteString.Lazy as B {- bytestring -}
 
-import Sound.OSC.Core {- hosc -}
-import qualified Sound.OSC.Coding.Byte as Byte {- hosc -}
+import Sound.Osc.Core {- hosc -}
+import qualified Sound.Osc.Coding.Byte as Byte {- hosc -}
 
 -- | Encode Bundle and prefix with encoded length.
 oscWithSize :: Bundle -> B.ByteString
@@ -31,7 +31,7 @@ encodeNrt = B.concat . map oscWithSize . nrt_bundles
 
 {- | Write an 'Nrt' score.
 
-> import Sound.OSC {- hosc -}
+> import Sound.Osc {- hosc -}
 > import Sound.SC3 {- hsc3 -}
 > m1 = g_new [(1, AddToTail, 0)]
 > m2 = d_recv (synthdef "sin" (out 0 (sinOsc AR 660 0 * 0.15)))

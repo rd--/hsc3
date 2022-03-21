@@ -529,7 +529,7 @@ whiteNoiseN k = liftUnsafe1 (whiteNoiseMN k)
 
 > import Sound.SC3 {- hsc3 -}
 > audition (wrapOut (Just 1) (sinOsc ar 440 0 * 0.1))
-> import Sound.OSC {- hosc -}
+> import Sound.Osc {- hosc -}
 > withSC3 (sendMessage (n_set1 (-1) "gate" 0))
 -}
 wrapOut :: Maybe Double -> UGen -> UGen

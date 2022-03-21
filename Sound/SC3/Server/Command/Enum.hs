@@ -4,7 +4,7 @@ module Sound.SC3.Server.Command.Enum where
 import Data.List {- base -}
 import Data.Maybe {- base -}
 
-import qualified Sound.OSC.Packet as Osc {- hosc -}
+import qualified Sound.Osc.Packet as Osc {- hosc -}
 
 -- | SC3 server commands are strings.
 type SC3_Command = String

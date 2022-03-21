@@ -6,12 +6,12 @@
 -- @\/sync@ barrier.
 module Sound.SC3.Server.Command.Completion where
 
-import Sound.OSC {- hosc -}
+import Sound.Osc.Core {- hosc -}
 
 import Sound.SC3.Server.Enum
 import Sound.SC3.Server.Synthdef
 
--- | Encode an OSC packet as an OSC blob.
+-- | Encode an Osc packet as an Osc blob.
 encode_blob :: Packet -> Datum
 encode_blob = Blob . encodePacket
 

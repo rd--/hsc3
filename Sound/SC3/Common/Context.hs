@@ -38,7 +38,7 @@ std_context =
   ,("Data.Function",Nothing,"base")
   ,("Data.List",Nothing,"base")
   ,("System.Random",Nothing,"random")
-  ,("Sound.OSC",Nothing,"hosc")
+  ,("Sound.Osc",Nothing,"hosc")
   ,("Sound.SC3",Nothing,"hsc3")
   ,("Sound.SC3.Common.Base",Just "Sound.SC3.Common.Base","hsc3")
   ,("Sound.SC3.Common.Buffer.Gen",Just "Gen","hsc3")

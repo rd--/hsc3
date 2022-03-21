@@ -11,7 +11,7 @@ import Sound.SC3.Server.Nrt
 
 The sound file type is inferred from the file name extension.
 Structure is:
-OSC file name,
+Osc file name,
 input audio file name and input number of channels (use ("_",0) for no input file),
 output audio file name and output number of channels,
 sample rate (int),

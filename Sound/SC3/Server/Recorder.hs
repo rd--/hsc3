@@ -1,7 +1,8 @@
 -- | Recording scsynth.
 module Sound.SC3.Server.Recorder where
 
-import Sound.OSC {- hosc -}
+import Sound.Osc.Datum {- hosc -}
+import Sound.Osc.Packet {- hosc -}
 
 import Sound.SC3.Common.Rate
 import Sound.SC3.Server.Command
@@ -86,7 +87,7 @@ rec_end_m r =
 {- | 'Nrt' score for recorder, if 'rec_dur' is given schedule 'rec_end_m'.
 
 > import Sound.SC3
-> withSC3 (Sound.OSC.sendMessage (dumpOSC TextPrinter))
+> withSC3 (Sound.Osc.sendMessage (dumpOSC TextPrinter))
 > audition (out 0 (sinOsc ar (mce2 440 441) 0 * 0.1))
 > let rc = default_SC3_Recorder {rec_dur = Just 5.0}
 > nrt_audition (sc3_recorder rc)

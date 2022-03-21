@@ -239,8 +239,8 @@ binaryName n =
 
 {- | Given name of binary operator derive index.
 
-> mapMaybe (binaryIndex Base.CI) (words "* MUL RING1 +") == [2,2,30,0]
-> binaryIndex Base.CI "SINOSC" == Nothing
+> mapMaybe (binaryIndex Base.CI) (words "* mul ring1 +") == [2,2,30,0]
+> binaryIndex Base.CI "sinosc" == Nothing
 > map (\x -> (x,binaryIndex Base.CI x)) (map snd binary_sym_tbl)
 -}
 binaryIndex :: Base.Case_Rule -> String -> Maybe Int

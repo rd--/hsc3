@@ -4,7 +4,7 @@ module Sound.SC3.Server.Command.Generic where
 import Data.List {- base -}
 import Data.Maybe {- base -}
 
-import Sound.OSC.Core {- hosc -}
+import Sound.Osc.Core {- hosc -}
 
 import qualified Sound.SC3.Common.Base as Common.Base
 import qualified Sound.SC3.Server.Command.Enum as Server.Command.Enum

@@ -11,7 +11,7 @@ import qualified Numeric {- base -}
 
 import qualified Control.Monad.State as S {- mtl -}
 
-import qualified Sound.OSC.Datum as Datum {- hosc -}
+import qualified Sound.Osc.Datum as Datum {- hosc -}
 
 import Sound.SC3.Server.Graphdef {- hsc3 -}
 

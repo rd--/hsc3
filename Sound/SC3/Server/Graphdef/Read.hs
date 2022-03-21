@@ -1,7 +1,7 @@
 -- | Decode (read) a 'Graphdef' into a 'Graph'.
 module Sound.SC3.Server.Graphdef.Read where
 
-import Sound.OSC.Datum {- hosc -}
+import qualified Sound.Osc.Datum as Datum {- hosc -}
 
 import qualified Sound.SC3.Common.Rate as Rate {- hsc3 -}
 import qualified Sound.SC3.Common.UId as UId {- hsc3 -}
@@ -12,7 +12,7 @@ import qualified Sound.SC3.UGen.Type as Type {- hsc3 -}
 control_to_node :: Graphdef.Graphdef -> UId.Id -> (Graphdef.Control,Type.Sample) -> Graph.U_Node
 control_to_node g z ((nm,ix),v) =
     let z' = Graphdef.graphdef_control_nid g z
-        nm' = ascii_to_string nm
+        nm' = Datum.ascii_to_string nm
     in Graph.U_Node_K z' Rate.ControlRate (Just ix) nm' v Rate.K_ControlRate Nothing
 
 -- | Note: Graphs with multiple Control UGens are not accounted for.
@@ -33,7 +33,7 @@ ugen_to_node g z u =
     let (name,rate,inputs,outputs,special) = u
         z' = Graphdef.graphdef_ugen_nid g z
         rate' = toEnum rate
-        name' = ascii_to_string name
+        name' = Datum.ascii_to_string name
         inputs' = map (input_to_from_port g) inputs
         outputs' = map toEnum outputs
         special' = Type.Special special
@@ -44,7 +44,7 @@ graphdef_to_graph g =
     let constants_nd = zipWith Graph.U_Node_C [0..] (Graphdef.graphdef_constants g)
         controls_nd = zipWith (control_to_node g) [0 ..] (Graphdef.graphdef_controls g)
         ugens_nd = zipWith (ugen_to_node g) [0 ..] (Graphdef.graphdef_ugens g)
-        nm = ascii_to_string (Graphdef.graphdef_name g)
+        nm = Datum.ascii_to_string (Graphdef.graphdef_name g)
         gr = Graph.U_Graph (-1) constants_nd controls_nd ugens_nd
     in (nm,gr) -- S.Synthdef nm gr
 

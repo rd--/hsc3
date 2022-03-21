@@ -5,7 +5,7 @@ import Data.Maybe {- base -}
 
 import qualified Data.IntMap as M {- containers -}
 
-import qualified Sound.OSC.Datum as Datum {- hosc -}
+import qualified Sound.Osc.Datum as Datum {- hosc -}
 
 import qualified Sound.SC3.Common.Rate as Rate {- hsc3 -}
 import qualified Sound.SC3.Common.UId as UId {- hsc3 -}

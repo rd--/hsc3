@@ -1,8 +1,8 @@
--- | /FD/ variant of interaction with the scsynth server.
+-- | /Fd/ variant of interaction with the scsynth server.
 --
 -- This duplicates functions at 'Sound.SC3.Server.Transport.Monad' and
 -- at some point at least part of the duplication will be removed.
-module Sound.SC3.Server.Transport.FD where
+module Sound.SC3.Server.Transport.Fd where
 
 import Control.Monad {- base -}
 import qualified Data.ByteString.Lazy as L {- bytestring -}
@@ -10,7 +10,7 @@ import Data.List {- base -}
 import qualified Data.List.Split as Split {- split -}
 import System.FilePath {- filepath -}
 
-import Sound.OSC.FD {- hosc -}
+import Sound.Osc.Fd {- hosc -}
 
 import Sound.SC3.Server.Command
 import Sound.SC3.Server.Enum
@@ -39,8 +39,8 @@ maybe_async_at fd t m =
     else sendBundle fd (bundle t [m])
 
 -- | Bracket @SC3@ communication.
-withSC3 :: (UDP -> IO a) -> IO a
-withSC3 = withTransport (openUDP "127.0.0.1" sc3_port_def)
+withSC3 :: (Udp -> IO a) -> IO a
+withSC3 = withTransport (openUdp "127.0.0.1" sc3_port_def)
 
 -- * Server control
 

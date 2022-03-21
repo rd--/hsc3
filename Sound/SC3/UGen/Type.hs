@@ -12,7 +12,7 @@ import Text.Printf {- base -}
 import qualified Safe {- safe -}
 import qualified System.Random as Random {- random -}
 
-import qualified Sound.OSC as Osc {- hosc -}
+import qualified Sound.Osc as Osc {- hosc -}
 
 import qualified Sound.SC3.Common.Math as Math
 import Sound.SC3.Common.Math.Operator

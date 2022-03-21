@@ -22,7 +22,7 @@ synthdef = Synthdef
 
 {- | The SC3 /default/ instrument 'Synthdef', see 'default_ugen_graph'.
 
-> import Sound.OSC {- hosc -}
+> import Sound.Osc {- hosc -}
 > import Sound.SC3 {- hsc3 -}
 > withSC3 (sendMessage (d_recv defaultSynthdef))
 > audition defaultSynthdef

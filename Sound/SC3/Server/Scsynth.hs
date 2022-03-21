@@ -12,7 +12,7 @@ module Sound.SC3.Server.Scsynth where
 
 import Data.IORef {- base -}
 
-import qualified Sound.OSC as Osc {- hosc -}
+import qualified Sound.Osc.Packet as Osc {- hosc -}
 
 import Sound.SC3.Server.Transport.Monad {- hsc3 -}
 import Sound.SC3.UGen.Type {- hsc3 -}

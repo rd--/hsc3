@@ -14,9 +14,9 @@ import qualified Data.Binary.IEEE754 as IEEE754 {- data-binary-ieee754 -}
 import qualified Data.ByteString.Lazy as L {- bytestring -}
 import qualified Safe {- safe -}
 
-import qualified Sound.OSC.Coding.Byte as Byte {- hosc -}
-import qualified Sound.OSC.Coding.Cast as Cast {- hosc -}
-import qualified Sound.OSC.Datum as Datum {- hosc -}
+import qualified Sound.Osc.Coding.Byte as Byte {- hosc -}
+import qualified Sound.Osc.Coding.Cast as Cast {- hosc -}
+import qualified Sound.Osc.Datum as Datum {- hosc -}
 
 import qualified Sound.SC3.Common.Math.Operator as Operator {- hsc3 -}
 import qualified Sound.SC3.Common.Rate as Rate {- hsc3 -}

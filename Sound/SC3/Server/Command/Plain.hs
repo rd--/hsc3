@@ -1,7 +1,8 @@
 -- | Functions from "Sound.SC3.Server.Command.Generic" specialised to 'Int' and 'Double'.
 module Sound.SC3.Server.Command.Plain where
 
-import Sound.OSC.Core (BLOB,Datum,Message) {- hosc -}
+import Sound.Osc.Datum (Blob,Datum) {- hosc3 -}
+import Sound.Osc.Packet (Message) {- hosc -}
 
 import qualified Sound.SC3.Server.Command.Generic as G
 import qualified Sound.SC3.Server.Enum as E
@@ -122,7 +123,7 @@ c_setn = G.c_setn
 -- * Instrument definition commands (d_)
 
 -- | Install a bytecode instrument definition. (Asynchronous)
-d_recv_bytes :: BLOB -> Message
+d_recv_bytes :: Blob -> Message
 d_recv_bytes = G.d_recv_bytes
 
 -- | 'Graphdef' encoding variant.
@@ -274,8 +275,8 @@ clearSched :: Message
 clearSched = G.clearSched
 
 -- | Select printing of incoming Open Sound Control messages.
-dumpOSC :: E.PrintLevel -> Message
-dumpOSC = G.dumpOSC
+dumpOsc :: E.PrintLevel -> Message
+dumpOsc = G.dumpOSC
 
 -- | Set error posting scope and mode.
 errorMode :: E.ErrorScope -> E.ErrorMode -> Message

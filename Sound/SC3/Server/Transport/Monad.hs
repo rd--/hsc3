@@ -12,7 +12,7 @@ import qualified Data.List.Split as Split {- split -}
 import qualified Data.Tree as Tree {- containers -}
 import qualified Safe {- safe -}
 
-import Sound.OSC {- hosc -}
+import Sound.Osc {- hosc -}
 
 import qualified Sound.SC3.Server.Command as Command
 import qualified Sound.SC3.Server.Command.Generic as Generic
@@ -34,19 +34,19 @@ import qualified Sound.SC3.Server.Transport.FD as FD
 -- * hosc variants
 
 -- | 'sendMessage' and 'waitReply' for a @\/done@ reply.
-async :: DuplexOSC m => Message -> m Message
+async :: DuplexOsc m => Message -> m Message
 async m = sendMessage m >> waitReply "/done"
 
 -- | 'void' of 'async'.
-async_ :: DuplexOSC m => Message -> m ()
+async_ :: DuplexOsc m => Message -> m ()
 async_ = void . async
 
 -- | If 'isAsync' then 'async_' else 'sendMessage'.
-maybe_async :: DuplexOSC m => Message -> m ()
+maybe_async :: DuplexOsc m => Message -> m ()
 maybe_async m = if Command.isAsync m then async_ m else sendMessage m
 
 -- | Variant that timestamps synchronous messages.
-maybe_async_at :: DuplexOSC m => Time -> Message -> m ()
+maybe_async_at :: DuplexOsc m => Time -> Message -> m ()
 maybe_async_at t m =
     if Command.isAsync m
     then async_ m
@@ -59,53 +59,53 @@ type SC3_Address = (String, Int)
 sc3_default_udp :: SC3_Address
 sc3_default_udp = (Options.sc3_addr_def,Options.sc3_port_def)
 
--- | Maximum packet size, in bytes, that can be sent over UDP.
+-- | Maximum packet size, in bytes, that can be sent over Udp.
 --   However, see also <https://tools.ietf.org/html/rfc2675>
 sc3_udp_limit :: Num n => n
 sc3_udp_limit = 65507
 
 -- | Bracket @SC3@ communication at indicated host and port.
-withSC3At :: SC3_Address -> Connection UDP a -> IO a
-withSC3At (h,p) = withTransport (openUDP h p)
+withSC3At :: SC3_Address -> Connection Udp a -> IO a
+withSC3At (h,p) = withTransport (openUdp h p)
 
 -- | Bracket @SC3@ communication, ie. 'withSC3At' 'sc3_default_udp'.
 --
 -- > import Sound.SC3.Server.Command
 --
 -- > withSC3 (sendMessage status >> waitReply "/status.reply")
-withSC3 :: Connection UDP a -> IO a
+withSC3 :: Connection Udp a -> IO a
 withSC3 = withSC3At sc3_default_udp
 
 -- | 'void' of 'withSC3'.
-withSC3_ :: Connection UDP a -> IO ()
+withSC3_ :: Connection Udp a -> IO ()
 withSC3_ = void . withSC3
 
 -- | 'timeout_r' of 'withSC3'
-withSC3_tm :: Double -> Connection UDP a -> IO (Maybe a)
+withSC3_tm :: Double -> Connection Udp a -> IO (Maybe a)
 withSC3_tm tm = timeout_r tm . withSC3
 
 -- | Run /f/ at /k/ scsynth servers with sequential port numbers starting at 'Options.sc3_port_def'.
 --
 -- > withSC3AtSeq sc3_default_udp 2 (sendMessage status >> waitReply "/status.reply")
-withSC3AtSeq :: SC3_Address -> Int -> Connection UDP a -> IO [a]
+withSC3AtSeq :: SC3_Address -> Int -> Connection Udp a -> IO [a]
 withSC3AtSeq (h,p) k f = do
-  let mk_udp i = openUDP h (p + i)
+  let mk_udp i = openUdp h (p + i)
   mapM (\i -> withTransport (mk_udp i) f) [0 .. k - 1]
 
 -- | 'void' of 'withSC3AtSeq'.
-withSC3AtSeq_ :: SC3_Address -> Int -> Connection UDP a -> IO ()
+withSC3AtSeq_ :: SC3_Address -> Int -> Connection Udp a -> IO ()
 withSC3AtSeq_ loc k = void . withSC3AtSeq loc k
 
 -- * Server control
 
 -- | Free all nodes ('g_freeAll') at group @1@.
-stop :: SendOSC m => m ()
+stop :: SendOsc m => m ()
 stop = sendMessage (Command.g_freeAll [1])
 
 -- * Composite
 
 -- | Runs 'clearSched' and then frees and re-creates groups @1@ and @2@.
-reset :: SendOSC m => m ()
+reset :: SendOsc m => m ()
 reset =
     let m = [Command.clearSched
             ,Command.n_free [1,2]
@@ -231,7 +231,7 @@ auditionSeq = auditionAtSeq sc3_default_udp def_play_opt
 -- * Notifications
 
 -- | Turn on notifications, run /f/, turn off notifications, return result.
-withNotifications :: DuplexOSC m => m a -> m a
+withNotifications :: DuplexOsc m => m a -> m a
 withNotifications f = do
   async_ (Command.notify True)
   r <- f
@@ -243,7 +243,7 @@ withNotifications f = do
 -- | Variant of 'b_getn1' that waits for return message and unpacks it.
 --
 -- > withSC3_tm 1.0 (b_getn1_data 0 (0,5))
-b_getn1_data :: DuplexOSC m => Int -> (Int,Int) -> m [Double]
+b_getn1_data :: DuplexOsc m => Int -> (Int,Int) -> m [Double]
 b_getn1_data b s = do
   let f m = let (_,_,_,r) = Command.unpack_b_setn_err m in r
   sendMessage (Command.b_getn1 b s)
@@ -253,7 +253,7 @@ b_getn1_data b s = do
 -- messages to /n/ elements.
 --
 -- > withSC3_tm 1.0 (b_getn1_data_segment 1 0 (0,5))
-b_getn1_data_segment :: DuplexOSC m =>
+b_getn1_data_segment :: DuplexOsc m =>
                         Int -> Int -> (Int,Int) -> m [Double]
 b_getn1_data_segment n b (i,j) = do
   let ix = Command.b_indices n j i
@@ -261,7 +261,7 @@ b_getn1_data_segment n b (i,j) = do
   return (concat d)
 
 -- | Variant of 'b_getn1_data_segment' that gets the entire buffer.
-b_fetch :: DuplexOSC m => Int -> Int -> m [[Double]]
+b_fetch :: DuplexOsc m => Int -> Int -> m [[Double]]
 b_fetch n b = do
   let f m = let (_,nf,nc,_) = Command.unpack_b_info_err m
                 ix = (0,nf * nc)
@@ -273,7 +273,7 @@ b_fetch n b = do
 -- | First channel of 'b_fetch', errors if there is no data.
 --
 -- > withSC3 (b_fetch1 512 123456789)
-b_fetch1 :: DuplexOSC m => Int -> Int -> m [Double]
+b_fetch1 :: DuplexOsc m => Int -> Int -> m [Double]
 b_fetch1 n b = fmap (Safe.headNote "b_fetch1: no data") (b_fetch n b)
 
 -- | Combination of 'b_query1_unpack' and 'b_fetch'.
@@ -284,7 +284,7 @@ b_fetch_hdr k b = do
   return (q,d)
 
 -- | 'b_info_unpack_err' of 'b_query1'.
-b_query1_unpack_generic :: (DuplexOSC m,Num n,Fractional r) => Int -> m (n,n,n,r)
+b_query1_unpack_generic :: (DuplexOsc m,Num n,Fractional r) => Int -> m (n,n,n,r)
 b_query1_unpack_generic n = do
   sendMessage (Command.b_query1 n)
   q <- waitReply "/b_info"
@@ -293,11 +293,11 @@ b_query1_unpack_generic n = do
 -- | Type specialised 'b_query1_unpack_generic'.
 --
 -- > withSC3 (b_query1_unpack 0)
-b_query1_unpack :: DuplexOSC m => Command.Buffer_Id -> m (Int,Int,Int,Double)
+b_query1_unpack :: DuplexOsc m => Command.Buffer_Id -> m (Int,Int,Int,Double)
 b_query1_unpack = b_query1_unpack_generic
 
 -- | Variant of 'c_getn1' that waits for the reply and unpacks the data.
-c_getn1_data :: (DuplexOSC m,Floating t) => (Int,Int) -> m [t]
+c_getn1_data :: (DuplexOsc m,Floating t) => (Int,Int) -> m [t]
 c_getn1_data s = do
   let f d = case d of
               Int32 _:Int32 _:x -> mapMaybe datum_floating x
@@ -306,22 +306,22 @@ c_getn1_data s = do
   fmap f (waitDatum "/c_setn")
 
 -- | Apply /f/ to result of 'n_query'.
-n_query1_unpack_f :: DuplexOSC m => (Message -> t) -> Command.Node_Id -> m t
+n_query1_unpack_f :: DuplexOsc m => (Message -> t) -> Command.Node_Id -> m t
 n_query1_unpack_f f n = do
   sendMessage (Command.n_query [n])
   r <- waitReply "/n_info"
   return (f r)
 
 -- | Variant of 'n_query' that waits for and unpacks the reply.
-n_query1_unpack :: DuplexOSC m => Command.Node_Id -> m (Maybe (Int,Int,Int,Int,Int,Maybe (Int,Int)))
+n_query1_unpack :: DuplexOsc m => Command.Node_Id -> m (Maybe (Int,Int,Int,Int,Int,Maybe (Int,Int)))
 n_query1_unpack = n_query1_unpack_f Command.unpack_n_info
 
 -- | Variant of 'n_query1_unpack' that returns plain (un-lifted) result.
-n_query1_unpack_plain :: DuplexOSC m => Command.Node_Id -> m [Int]
+n_query1_unpack_plain :: DuplexOsc m => Command.Node_Id -> m [Int]
 n_query1_unpack_plain = n_query1_unpack_f Command.unpack_n_info_plain
 
 -- | Variant of 'g_queryTree' that waits for and unpacks the reply.
-g_queryTree1_unpack :: DuplexOSC m => Command.Group_Id -> m Status.Query_Node
+g_queryTree1_unpack :: DuplexOsc m => Command.Group_Id -> m Status.Query_Node
 g_queryTree1_unpack n = do
   sendMessage (Command.g_queryTree [(n,True)])
   r <- waitReply "/g_queryTree.reply"
@@ -332,29 +332,29 @@ g_queryTree1_unpack n = do
 -- | Collect server status information.
 --
 -- > withSC3 serverStatus >>= mapM putStrLn
-serverStatus :: DuplexOSC m => m [String]
+serverStatus :: DuplexOsc m => m [String]
 serverStatus = fmap Status.statusFormat serverStatusData
 
 -- | Collect server status information.
 --
 -- > withSC3 server_status_concise >>= putStrLn
-server_status_concise :: DuplexOSC m => m String
+server_status_concise :: DuplexOsc m => m String
 server_status_concise = fmap Status.status_format_concise serverStatusData
 
 -- | Read nominal sample rate of server.
 --
 -- > withSC3 serverSampleRateNominal
-serverSampleRateNominal :: DuplexOSC m => m Double
+serverSampleRateNominal :: DuplexOsc m => m Double
 serverSampleRateNominal = fmap (Status.extractStatusField 7) serverStatusData
 
 -- | Read actual sample rate of server.
 --
 -- > withSC3 serverSampleRateActual
-serverSampleRateActual :: DuplexOSC m => m Double
+serverSampleRateActual :: DuplexOsc m => m Double
 serverSampleRateActual = fmap (Status.extractStatusField 8) serverStatusData
 
 -- | Retrieve status data from server.
-serverStatusData :: DuplexOSC m => m [Datum]
+serverStatusData :: DuplexOsc m => m [Datum]
 serverStatusData = do
   sendMessage Command.status
   waitDatum "/status.reply"
@@ -364,7 +364,7 @@ serverStatusData = do
 -- | Collect server node tree information.
 --
 -- > withSC3 serverTree >>= mapM_ putStrLn
-serverTree :: DuplexOSC m => m [String]
+serverTree :: DuplexOsc m => m [String]
 serverTree = do
   qt <- g_queryTree1_unpack 0
   let tr = Status.queryTree_rt qt

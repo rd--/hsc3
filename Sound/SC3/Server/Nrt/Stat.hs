@@ -1,7 +1,8 @@
 -- | Nrt statistics.
 module Sound.SC3.Server.Nrt.Stat where
 
-import Sound.OSC.Core {- hosc -}
+import Sound.Osc.Datum {- hosc -}
+import Sound.Osc.Packet {- hosc -}
 
 import Sound.SC3.Common.Base {- hsc3 -}
 import Sound.SC3.Server.Nrt {- hsc3 -}

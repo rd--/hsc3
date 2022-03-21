@@ -68,7 +68,7 @@ Library
                    Sound.SC3.Common.SoundFile
                    Sound.SC3.Common.UId
                    Sound.SC3.Common.Unsafe
-                   Sound.SC3.FD
+                   Sound.SC3.Fd
                    Sound.SC3.Server
                    Sound.SC3.Server.Command
                    Sound.SC3.Server.Command.Completion
@@ -80,7 +80,7 @@ Library
                    Sound.SC3.Server.Graphdef.Graph
                    Sound.SC3.Server.Graphdef.Read
                    Sound.SC3.Server.Graphdef.Text
-                   Sound.SC3.Server.FD
+                   Sound.SC3.Server.Fd
                    Sound.SC3.Server.Monad
                    Sound.SC3.Server.Nrt
                    Sound.SC3.Server.Nrt.Edit
@@ -93,7 +93,7 @@ Library
                    Sound.SC3.Server.Scsynth
                    Sound.SC3.Server.Status
                    Sound.SC3.Server.Synthdef
-                   Sound.SC3.Server.Transport.FD
+                   Sound.SC3.Server.Transport.Fd
                    Sound.SC3.Server.Transport.Monad
                    Sound.SC3.UGen
                    Sound.SC3.UGen.Analysis

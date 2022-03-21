@@ -233,6 +233,34 @@ list_split_at_elem c s =
 sort_on :: (Ord b) => (a -> b) -> [a] -> [a]
 sort_on = sortBy . comparing
 
+{- | Inserts at the first position where it compares less but not equal to the next element.
+
+> import Data.Function {- base -}
+> insertBy (compare `on` fst) (3,'x') (zip [1..5] ['a'..])
+> insertBy_post (compare `on` fst) (3,'x') (zip [1..5] ['a'..])
+-}
+insertBy_post :: (a -> a -> Ordering) -> a -> [a] -> [a]
+insertBy_post cmp e l =
+    case l of
+      [] -> [e]
+      h:l' -> case cmp e h of
+                LT -> e : l
+                _ -> h : insertBy_post cmp e l'
+
+-- | 'insertBy_post' using 'compare'.
+insert_post :: Ord t => t -> [t] -> [t]
+insert_post = insertBy_post compare
+
+-- | Apply /f/ at all but last element, and /g/ at last element.
+--
+-- > at_last (* 2) negate [1..4] == [2,4,6,-4]
+at_last :: (a -> b) -> (a -> b) -> [a] -> [b]
+at_last f g x =
+    case x of
+      [] -> []
+      [i] -> [g i]
+      i:x' -> f i : at_last f g x'
+
 -- * Tuples
 
 -- | Zip two 4-tuples.
