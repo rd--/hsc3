@@ -154,7 +154,7 @@ c_setn l =
 -- * Instrument definition commands (d_)
 
 -- | Install a bytecode instrument definition. (Asynchronous)
-d_recv_bytes :: BLOB -> Message
+d_recv_bytes :: Blob -> Message
 d_recv_bytes b = message "/d_recv" [Blob b]
 
 -- | Graphdef encoding variant.
