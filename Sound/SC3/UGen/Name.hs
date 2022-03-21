@@ -8,8 +8,8 @@ Lisp names are given by lower-casing everything and adding hyphens before edges.
 module Sound.SC3.UGen.Name where
 
 import Data.Char {- base -}
-import Data.List.Split {- split -}
 
+import Sound.SC3.Common.Base {- hsc3 -}
 import Sound.SC3.Common.Rate {- hsc3 -}
 
 {-
@@ -67,12 +67,13 @@ sc3_name_to_lisp_name s =
     let f (c,e) = if e then ['-',c] else if c == '_' then [] else [c]
     in concatMap f (zip (map toLower s) (sc3_name_edges s))
 
--- | SC3 UGen /names/ are given with rate suffixes if oscillators, without if filters.
---
--- > map sc3_ugen_name_sep (words "SinOsc.ar LPF *")
+{- | SC3 UGen /names/ are given with rate suffixes if oscillators, without if filters.
+
+> map sc3_ugen_name_sep (words "SinOsc.ar LPF *")
+-}
 sc3_ugen_name_sep :: String -> Maybe (String,Maybe Rate)
 sc3_ugen_name_sep u =
-    case splitOn "." u of
+    case string_split_at_char '.' u of
       [nm,rt] -> Just (nm,rate_parse (map toUpper rt))
       [nm] -> Just (nm,Nothing)
       _ -> Nothing
