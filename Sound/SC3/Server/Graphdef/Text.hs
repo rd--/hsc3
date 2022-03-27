@@ -31,6 +31,7 @@ enc_text com_f =
 
 {- | 'encode_graphdef_f' of 'enc_text' with optional semi-colon delimited comments.
 
+> import Sound.SC3.Server.Graphdef.Binary
 > dir = "/home/rohan/sw/rsc3-disassembler/scsyndef/"
 > pp nm = read_graphdef_file (dir ++ nm) >>= putStrLn . print_graphdef True
 > pp "simple.scsyndef"
