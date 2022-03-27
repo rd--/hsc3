@@ -15,6 +15,7 @@ import Sound.Osc.Fd {- hosc -}
 import Sound.SC3.Server.Command
 import Sound.SC3.Server.Enum
 import qualified Sound.SC3.Server.Graphdef as Graphdef
+import qualified Sound.SC3.Server.Graphdef.Binary as Graphdef
 import Sound.SC3.Server.Nrt
 import Sound.SC3.Server.Options
 import Sound.SC3.Server.Status

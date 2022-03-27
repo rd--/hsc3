@@ -1,21 +1,15 @@
 {- | Binary 'Graph Definition' as understood by @scsynth@.
-     There are both encoders and decoders.
+     There are both binary and text encoders and decoders.
 -}
 module Sound.SC3.Server.Graphdef where
 
 import Control.Monad {- base -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
-import System.FilePath {- filepath -}
 import Text.Printf {- base -}
 
-import qualified Data.Binary.Get as Get {- binary -}
-import qualified Data.Binary.IEEE754 as IEEE754 {- data-binary-ieee754 -}
-import qualified Data.ByteString.Lazy as L {- bytestring -}
 import qualified Safe {- safe -}
 
-import qualified Sound.Osc.Coding.Byte as Byte {- hosc -}
-import qualified Sound.Osc.Coding.Cast as Cast {- hosc -}
 import qualified Sound.Osc.Datum as Datum {- hosc -}
 
 import qualified Sound.SC3.Common.Math.Operator as Operator {- hsc3 -}
@@ -120,28 +114,21 @@ graphdef_control_nid g = (+) (length (graphdef_constants g))
 graphdef_ugen_nid :: Graphdef -> Int -> Int
 graphdef_ugen_nid g n = graphdef_control_nid g 0 + length (graphdef_controls g) + n
 
--- * BINARY GET (version 0|1 or 2)
+{- | "SCgf" encoded as 32-bit unsigned integer.
 
--- | Get a 'Name' (Pascal string).
-get_pstr :: Get.Get Name
-get_pstr = do
-  n <- fmap fromIntegral Get.getWord8
-  fmap Byte.decode_ascii (Get.getLazyByteString n)
+> map fromEnum "SCgf" == [83, 67, 103, 102]
+> Byte.decode_i32 (Byte.encode_ascii (Datum.ascii "SCgf"))
+-}
+scgf_i32 :: Num n => n
+scgf_i32 = 1396926310
+
+-- * Get
 
 -- | Get functions for Graphdef types, (str_f,i8_f,i16_f,i32_f,f32_f)
-type GET_F m = (m Name,m Int,m Int,m Int,m Double)
-
--- | GET_F for binary .scsyndef files.
-binary_get_f :: GET_F Get.Get
-binary_get_f =
-  (get_pstr
-  ,fmap fromIntegral Get.getInt8
-  ,fmap fromIntegral Get.getInt16be
-  ,fmap fromIntegral Get.getInt32be
-  ,fmap realToFrac IEEE754.getFloat32be)
+type Get_Functions m = (m Name,m Int,m Int,m Int,m Double)
 
 -- | Get a 'Control'.
-get_control :: Monad m => (GET_F m,m Int) -> m Control
+get_control :: Monad m => (Get_Functions m,m Int) -> m Control
 get_control ((get_str,_,_,_,_),get_i) = do
   nm <- get_str
   ix <- get_i
@@ -152,7 +139,7 @@ get_input :: Monad m => m Int -> m Input
 get_input get_i = liftM2 Input get_i get_i
 
 -- | Get a 'UGen'
-get_ugen :: Monad m => (GET_F m,m Int) -> m UGen
+get_ugen :: Monad m => (Get_Functions m,m Int) -> m UGen
 get_ugen ((get_str,get_i8,get_i16,_,_),get_i) = do
   name <- get_str
   rate <- get_i8
@@ -168,7 +155,7 @@ get_ugen ((get_str,get_i8,get_i16,_,_),get_i) = do
          ,special)
 
 -- | Get a 'Graphdef'. Supports version 0|1 and version 2 files.  Ignores variants.
-get_graphdef :: Monad m => GET_F m -> m Graphdef
+get_graphdef :: Monad m => Get_Functions m -> m Graphdef
 get_graphdef c@(get_str,_,get_i16,get_i32,get_f32) = do
   magic <- get_i32
   version <- get_i32
@@ -197,63 +184,18 @@ get_graphdef c@(get_str,_,get_i16,get_i32,get_f32) = do
                    (zip controls control_defaults)
                    ugens)
 
--- * READ
-
-{- | Read Graphdef from .scsyndef file.
-
-> dir = "/home/rohan/sw/rsc3-disassembler/scsyndef/"
-> pp nm = read_graphdef_file (dir ++ nm) >>= putStrLn . graphdef_stat
-> pp "simple.scsyndef"
-> pp "with-ctl.scsyndef"
-> pp "mce.scsyndef"
-> pp "mrg.scsyndef"
--}
-read_graphdef_file :: FilePath -> IO Graphdef
-read_graphdef_file nm = do
-  b <- L.readFile nm
-  return (Get.runGet (get_graphdef binary_get_f) b)
-
--- * STAT
-
--- | 'read_graphdef_file' and run 'graphdef_stat'.
-scsyndef_stat :: FilePath -> IO String
-scsyndef_stat fn = do
-  g <- read_graphdef_file fn
-  return (graphdef_stat g)
-
 -- * Encode (version zero)
 
--- | (join_f,str_f,i8_f,i16_f,i32_f,f32_f,com_f)
-type ENCODE_F t = ([t] -> t,Name -> t,Int -> t,Int -> t,Int -> t,Double -> t,String -> t)
+-- | Encode functions for Graphdef types (join_f,str_f,i8_f,i16_f,i32_f,f32_f,com_f)
+type Encode_Functions t = ([t] -> t,Name -> t,Int -> t,Int -> t,Int -> t,Double -> t,String -> t)
 
--- | 'ENCODE_F' for 'L.ByteString'
-enc_bytestring :: ENCODE_F L.ByteString
-enc_bytestring =
-  (L.concat,encode_pstr,Byte.encode_i8,Byte.encode_i16,Byte.encode_i32,encode_sample
-  ,const L.empty)
-
-{- | Pascal (length prefixed) encoding of 'Name'.
-
-> L.unpack (encode_pstr (ascii "string")) ==  [6, 115, 116, 114, 105, 110, 103]
--}
-encode_pstr :: Name -> L.ByteString
-encode_pstr = L.pack . Cast.str_pstr . Datum.ascii_to_string
-
-encode_input_f :: ENCODE_F t -> Input -> t
+encode_input_f :: Encode_Functions t -> Input -> t
 encode_input_f (join_f,_,_,i16_f,_,_,_) (Input u p) = join_f (map i16_f [u,p])
 
--- | Byte-encode 'Input'.
-encode_input :: Input -> L.ByteString
-encode_input = encode_input_f enc_bytestring
-
-encode_control_f :: ENCODE_F t -> Control -> t
+encode_control_f :: Encode_Functions t -> Control -> t
 encode_control_f (join_f,str_f,_,i16_f,_,_,_) (nm,k) = join_f [str_f nm,i16_f k]
 
--- | Byte-encode 'Control'.
-encode_control :: Control -> L.ByteString
-encode_control = encode_control_f enc_bytestring
-
-encode_ugen_f :: ENCODE_F t -> UGen -> t
+encode_ugen_f :: Encode_Functions t -> UGen -> t
 encode_ugen_f enc (nm,r,i,o,s) =
   let (join_f,str_f,i8_f,i16_f,_,_,com_f) = enc
   in join_f [com_f "ugen-name",str_f nm
@@ -265,15 +207,7 @@ encode_ugen_f enc (nm,r,i,o,s) =
             ,com_f "ugen-output-rates",join_f (map i8_f o)
             ]
 
--- | Byte-encode 'UGen'.
-encode_ugen :: UGen -> L.ByteString
-encode_ugen = encode_ugen_f enc_bytestring
-
--- | Encode 'Sample' as 32-bit IEEE float.
-encode_sample :: Sample -> L.ByteString
-encode_sample = Byte.encode_f32 . realToFrac
-
-encode_graphdef_f :: ENCODE_F t -> Graphdef -> t
+encode_graphdef_f :: Encode_Functions t -> Graphdef -> t
 encode_graphdef_f enc (Graphdef nm cs ks us) =
     let (join_f,str_f,_,i16_f,i32_f,f32_f,com_f) = enc
         (ks_ctl,ks_def) = unzip ks
@@ -289,31 +223,6 @@ encode_graphdef_f enc (Graphdef nm cs ks us) =
               ,com_f "controls",join_f (map (encode_control_f enc) ks_ctl)
               ,com_f "number-of-ugens",i16_f (length us)
               ,join_f (map (encode_ugen_f enc) us)]
-
--- | Encode 'Graphdef'.
-encode_graphdef :: Graphdef -> L.ByteString
-encode_graphdef = encode_graphdef_f enc_bytestring
-
-{- | "SCgf" encoded as 32-bit unsigned integer.
-
-> map fromEnum "SCgf" == [83, 67, 103, 102]
-> Byte.decode_i32 (Byte.encode_ascii (Datum.ascii "SCgf"))
--}
-scgf_i32 :: Num n => n
-scgf_i32 = 1396926310
-
--- * IO
-
--- | Write 'Graphdef' to indicated file.
-graphdefWrite :: FilePath -> Graphdef -> IO ()
-graphdefWrite fn = L.writeFile fn . encode_graphdef
-
--- | Write 'Graphdef' to indicated directory.  The filename is the
--- 'graphdef_name' with the appropriate extension (@scsyndef@).
-graphdefWrite_dir :: FilePath -> Graphdef -> IO ()
-graphdefWrite_dir dir s =
-    let fn = dir </> Datum.ascii_to_string (graphdef_name s) <.> "scsyndef"
-    in graphdefWrite fn s
 
 -- * Stat
 
@@ -355,6 +264,7 @@ graphdef_dump_ugens_str (Graphdef _nm cs _ks us) = zipWith (ugen_dump_ugen_str c
 
 {- | 'putStrLn' of 'unlines' of 'graphdef_dump_ugens_str'
 
+> import Sound.SC3.Server.Graphdef
 > dir = "/home/rohan/sw/rsc3-disassembler/scsyndef/"
 > pp nm = read_graphdef_file (dir ++ nm) >>= graphdef_dump_ugens
 > pp "simple.scsyndef"

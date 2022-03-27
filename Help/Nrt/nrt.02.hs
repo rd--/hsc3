@@ -1,4 +1,4 @@
-import Sound.OSC {- hosc3 -}
+import Sound.Osc.Packet {- hosc3 -}
 import Sound.SC3 {- hsc3 -}
 
 sy :: Synthdef

@@ -1,4 +1,5 @@
 ---- ;
+
 Phase cancellation, the `offsetOut` at bus 0 should cancel, the `out` at
 bus 1 doesn't (or at least is exceedingly unlikely to).
 

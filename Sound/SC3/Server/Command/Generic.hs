@@ -10,6 +10,7 @@ import qualified Sound.SC3.Common.Base as Common.Base
 import qualified Sound.SC3.Server.Command.Enum as Server.Command.Enum
 import qualified Sound.SC3.Server.Enum as Server.Enum
 import qualified Sound.SC3.Server.Graphdef as Server.Graphdef
+import qualified Sound.SC3.Server.Graphdef.Binary as Server.Graphdef
 import qualified Sound.SC3.Server.Synthdef as Server.Synthdef
 
 cmd_check_arg :: String -> (t -> Bool) -> t -> t

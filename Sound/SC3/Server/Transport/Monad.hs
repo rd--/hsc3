@@ -18,6 +18,7 @@ import qualified Sound.SC3.Server.Command as Command
 import qualified Sound.SC3.Server.Command.Generic as Generic
 import qualified Sound.SC3.Server.Enum as Enum
 import qualified Sound.SC3.Server.Graphdef as Graphdef
+import qualified Sound.SC3.Server.Graphdef.Binary as Graphdef
 import qualified Sound.SC3.Server.Nrt as Nrt
 import qualified Sound.SC3.Server.Options as Options
 import qualified Sound.SC3.Server.Status as Status
