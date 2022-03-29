@@ -1,5 +1,5 @@
 -- | Collection of modules that can be loaded into hugs.
-module Sound.SC3.Plain (module M) where
+module Sound.SC3.Hugs (module M) where
 
 import Sound.SC3.Common.Base as M
 import Sound.SC3.Common.Buffer as M
