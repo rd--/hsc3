@@ -170,16 +170,16 @@ sc3_scdoc_help_server_command_open use_loc =
 
 -- * Fragments
 
--- | Apply line function at string.
-on_lines :: ([String] -> [[String]]) -> String -> [String]
-on_lines f = map unlines . f . lines
+-- | Apply function at lines of string.
+on_lines_of :: ([String] -> [[String]]) -> String -> [String]
+on_lines_of f = map unlines . f . lines
 
 {- | Split text into fragments at empty lines.
      Hsc3 (and related projects) write help files as sets of distinct fragments.
      Fragments are separated by empty lines.
      A line containing the special character sequence ---- indicates the end of the fragments.
 
-> on_lines split_multiple_fragments ";a\nb\n\n\n;c\nd" == [";a\nb\n",";c\nd\n"]
+> on_lines_of split_multiple_fragments ";a\nb\n\n\n;c\nd" == [";a\nb\n",";c\nd\n"]
 -}
 split_multiple_fragments :: [String] -> [[String]]
 split_multiple_fragments = filter (not . null) . Split.splitOn [[]]
@@ -190,7 +190,7 @@ drop_post_graph_section = takeWhile (not . isInfixOf "----")
 
 -- | Read text fragments from file.
 read_file_fragments :: FilePath -> IO [String]
-read_file_fragments = fmap (on_lines (split_multiple_fragments . drop_post_graph_section)) . readFile
+read_file_fragments = fmap (on_lines_of (split_multiple_fragments . drop_post_graph_section)) . readFile
 
 -- | Read text fragments from set of files.
 read_file_set_fragments :: [FilePath] -> IO [String]
