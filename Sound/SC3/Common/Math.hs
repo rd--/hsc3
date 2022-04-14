@@ -737,3 +737,13 @@ sum_opt_f f3 f4 =
           p:q:r:l' -> recur (f3 p q r : l')
           _ -> sum l
   in recur
+
+-- * Sin
+
+{- | Taylor approximation of sin.
+
+> import Sound.SC3.Plot {- hsc3-plot -}
+> plot_p1_ln [map sin [-pi, -pi + 0.05 .. pi]]
+-}
+sin_taylor_approximation :: Floating a => a -> a
+sin_taylor_approximation x = x - (x ** 3) / (3 * 2) + (x ** 5) / (5 * 4 * 3 * 2) - (x ** 7) / (7 * 6 * 5 * 4 * 3 * 2) + (x ** 9) / (9 * 8 * 7 * 6 * 5 * 4 * 3 * 2)

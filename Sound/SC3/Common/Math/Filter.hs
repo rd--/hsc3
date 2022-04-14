@@ -46,3 +46,38 @@ resonz_coef (radians_per_sample,f,rq) =
         b2 = negate r2
         a0 = (1.0 - r2) * 0.5
     in (a0,b1,b2)
+
+-- * Pinking
+
+type Pinking_Param t = (t, t, t, t, t, t, t)
+
+{- | Sample rate variable pinking filter.
+
+https://www.musicdsp.org/en/latest/Filters/76-pink-noise-filter.html
+-}
+pinking_filter_freq_48000 :: Fractional t => Pinking_Param t
+pinking_filter_freq_48000 = (4752.456, 4030.961, 2784.711, 1538.461, 357.681, 70, 30)
+
+pinking_filter_freq_96000 :: Fractional t => Pinking_Param t
+pinking_filter_freq_96000 = (8227.219, 8227.219, 6388.570, 3302.754, 479.412, 151.070, 54.264)
+
+pinking_filter_freq_192000 :: Fractional t => Pinking_Param t
+pinking_filter_freq_192000 = (9211.912, 8621.096, 8555.228, 8292.754, 518.334, 163.712, 240.241)
+
+-- > pinking_filter_coef 48000 pinking_filter_freq_48000
+pinking_filter_coef :: Floating t => t -> Pinking_Param t -> Pinking_Param t
+pinking_filter_coef sr (f0, f1, f2, f3, f4, f5, f6) =
+  let f n = exp ((- 2) * pi * n / sr)
+  in (f f0, f f1, f f2, f f3, f f4, f f5, f f6)
+
+pinking_filter_next :: Floating t => Pinking_Param t -> Pinking_Param t -> t -> (t, Pinking_Param t)
+pinking_filter_next (k0, k1, k2, k3, k4, k5, k6) (m0, m1, m2, m3, m4, m5, m6) white =
+  let (b0, b1, b2, b3, b4, b5, b6) = ((k0 * white) + (k0 * m0)
+                                     ,(k1 * white) + (k1 * m1)
+                                     ,(k2 * white) + (k2 * m2)
+                                     ,(k3 * white) + (k3 * m3)
+                                     ,(k4 * white) + (k4 * m4)
+                                     ,(k5 * white) + (k5 * m5)
+                                     ,(k6 * white) + (k6 * m6))
+      pink = b0 + b1 + b2 + b3 + b4 + b5 + white - b6
+  in (pink, (b0, b1, b2, b3, b4, b5, b6))
