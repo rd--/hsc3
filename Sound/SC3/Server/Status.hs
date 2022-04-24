@@ -16,7 +16,7 @@ import qualified Data.Tree as T {- containers -}
 import qualified Safe {- safe -}
 
 import Sound.Osc.Datum {- hosc -}
-import Sound.Osc.Datum.Pp {- hosc -}
+import Sound.Osc.Text {- hosc -}
 
 import Sound.SC3.Server.Command.Plain
 
@@ -46,7 +46,7 @@ statusFields =
 statusFormat :: [Datum] -> [String]
 statusFormat d =
     let s = "***** SuperCollider Server Status *****"
-    in s : zipWith (++) (tail statusFields) (map (datum_pp_typed (Just 5)) (tail d))
+    in s : zipWith (++) (tail statusFields) (map (showDatum (Just 5)) (tail d))
 
 -- | Concise pretty printer, one line, omits PEAK-CPU and NOMINAL-SR.
 status_format_concise :: [Datum] -> String
