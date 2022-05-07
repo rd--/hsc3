@@ -31,7 +31,9 @@ import qualified Sound.SC3.UGen.Analysis as Analysis {- hsc3 -}
 -- | Port index.
 type Port_Index = Int
 
--- | Type to represent the left hand side of an edge in a unit generator graph.
+{- | Type to represent the left hand side of an edge in a unit generator graph.
+C = constant, K = control, U = ugen.
+-}
 data From_Port = From_Port_C {from_port_nid :: UId.Id}
                | From_Port_K {from_port_nid :: UId.Id,from_port_kt :: Rate.K_Type}
                | From_Port_U {from_port_nid :: UId.Id,from_port_idx :: Maybe Port_Index}
