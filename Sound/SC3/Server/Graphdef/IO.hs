@@ -9,7 +9,7 @@ import qualified Sound.SC3.Server.Graphdef.Text as Text {- hsc3 -}
 
 read_graphdef_file :: FilePath -> IO Graphdef
 read_graphdef_file fn =
-  if ".text.scsyndef" `isSuffixOf` fn
+  if ".scsyndef.text" `isSuffixOf` fn
   then Text.read_graphdef_file fn
   else Binary.read_graphdef_file fn
 
