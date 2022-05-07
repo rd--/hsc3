@@ -79,6 +79,7 @@ Library
                    Sound.SC3.Server.Graphdef
                    Sound.SC3.Server.Graphdef.Binary
                    Sound.SC3.Server.Graphdef.Graph
+                   Sound.SC3.Server.Graphdef.IO
                    Sound.SC3.Server.Graphdef.Read
                    Sound.SC3.Server.Graphdef.Text
                    Sound.SC3.Server.Fd

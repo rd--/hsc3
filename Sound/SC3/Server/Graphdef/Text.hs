@@ -65,3 +65,7 @@ read_graphdef :: String -> Graphdef
 read_graphdef txt =
   let delete_comments = filter (\x -> not (null x) && (head x /= ';'))
   in S.evalState (get_graphdef text_get_f) (concatMap words (delete_comments (lines txt)))
+
+read_graphdef_file :: FilePath -> IO Graphdef
+read_graphdef_file = fmap read_graphdef . readFile
+

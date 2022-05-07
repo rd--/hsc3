@@ -12,7 +12,7 @@ import Sound.SC3.UGen.Type
 
 -- | Variant of 'mkUGen'.
 mk_plain :: Rate -> String -> [UGen] -> Int -> Special -> UGenId -> UGen
-mk_plain r nm inp = mkUGen Nothing all_rates (Left r) nm inp Nothing
+mk_plain rt nm inp = mkUGen Nothing all_rates (Left rt) nm inp Nothing
 
 -- | Construct unary operator, the name can textual or symbolic.
 --
