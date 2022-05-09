@@ -54,9 +54,17 @@ list_read_f f = do
   S.put (tail l)
   return (f (head l))
 
+-- | Read function for floating point that admits inf and infinity.
+read_float :: (Fractional p, Read p) => String -> p
+read_float txt =
+  case map toLower txt of
+    "inf" -> 1 / 0
+    "infinity" -> 1 / 0
+    _ -> read txt
+
 -- | Get_Functions for text representation of Graphdef.
 text_get_f :: Get_Functions (S.StateT [String] Identity)
-text_get_f = (list_read_f Datum.ascii,list_read_f read,list_read_f read,list_read_f read,list_read_f read)
+text_get_f = (list_read_f Datum.ascii,list_read_f read,list_read_f read,list_read_f read,list_read_f read_float)
 
 -- | Read text representation of Graphdef, as written by 'print_graphdef'.
 --
