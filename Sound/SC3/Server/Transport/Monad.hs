@@ -13,6 +13,7 @@ import qualified Data.Tree as Tree {- containers -}
 import qualified Safe {- safe -}
 
 import Sound.Osc {- hosc -}
+import qualified Sound.Osc.Time.Timeout {- hosc -}
 
 import qualified Sound.SC3.Server.Command as Command
 import qualified Sound.SC3.Server.Command.Generic as Generic
@@ -83,7 +84,7 @@ withSC3_ = void . withSC3
 
 -- | 'timeout_r' of 'withSC3'
 withSC3_tm :: Double -> Connection Udp a -> IO (Maybe a)
-withSC3_tm tm = timeout_r tm . withSC3
+withSC3_tm tm = Sound.Osc.Time.Timeout.timeout_r tm . withSC3
 
 -- | Run /f/ at /k/ scsynth servers with sequential port numbers starting at 'Options.sc3_port_def'.
 --
