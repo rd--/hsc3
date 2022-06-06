@@ -276,7 +276,7 @@ clearSched = G.clearSched
 
 -- | Select printing of incoming Open Sound Control messages.
 dumpOsc :: E.PrintLevel -> Message
-dumpOsc = G.dumpOSC
+dumpOsc = G.dumpOsc
 
 -- | Set error posting scope and mode.
 errorMode :: E.ErrorScope -> E.ErrorMode -> Message

@@ -338,8 +338,8 @@ clearSched :: Message
 clearSched = message "/clearSched" []
 
 -- | Select printing of incoming Open Sound Control messages.
-dumpOSC :: Server.Enum.PrintLevel -> Message
-dumpOSC c = message "/dumpOSC" [int32 (fromEnum c)]
+dumpOsc :: Server.Enum.PrintLevel -> Message
+dumpOsc c = message "/dumpOSC" [int32 (fromEnum c)]
 
 -- | Set error posting scope and mode.
 errorMode :: Server.Enum.ErrorScope -> Server.Enum.ErrorMode -> Message
