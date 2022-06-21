@@ -1,4 +1,4 @@
--- | Envelope / UGen.
+-- | Envelope / Ugen.
 module Sound.SC3.UGen.Envelope where
 
 import Sound.SC3.Common.Enum

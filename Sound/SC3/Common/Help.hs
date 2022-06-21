@@ -1,4 +1,4 @@
--- | Functions to access to the SC3 RTF & HTML based help systems.
+-- | Functions to access to the Sc3 Rtf & Html based help systems.
 module Sound.SC3.Common.Help where
 
 import Control.Monad {- base -}
@@ -14,14 +14,14 @@ import qualified Data.List.Split as Split {- split -}
 
 import qualified Sound.SC3.Common.Base.System as Base.System {- hsc3 -}
 
--- * RTF
+-- * Rtf
 
--- | Directory containing SC3 RTF help files.
+-- | Directory containing Sc3 Rtf help files.
 sc3_rtf_help_dir :: IO FilePath
 sc3_rtf_help_dir = getEnv "SC3_RTF_HELP_DIR"
 
 {- | Find (case-insensitively) indicated file at 'sc3_rtf_help_dir'.
-     Runs the command "find -name" (so UNIX only).
+     Runs the command "find -name" (so Unix only).
 
 > sc3_rtf_find_file "SinOsc.help.rtf"
 > sc3_rtf_find_file "lfsaw.help.rtf"
@@ -69,9 +69,9 @@ sc3_rtf_help_scd_open (cmd,arg) nm = do
 sc3_rtf_help_scd_open_emacs :: String -> IO ()
 sc3_rtf_help_scd_open_emacs = sc3_rtf_help_scd_open ("emacsclient",["--no-wait"])
 
--- * SC-DOC
+-- * Sc-Doc (Html)
 
--- | URL for online SC-DOC SuperCollider documentation.
+-- | Url for online Sc-Doc SuperCollider documentation.
 sc3_scdoc_help_url :: String
 sc3_scdoc_help_url = "http://doc.sccode.org/"
 
@@ -83,37 +83,37 @@ sc3_scdoc_help_dir = do
   let d = h </> ".local/share/SuperCollider/Help"
   Base.System.get_env_default "SC3_SCDOC_HTML_HELP_DIR" d
 
--- | Path to indicated SC3 class help file.
+-- | Path to indicated Sc3 class help file.
 --
 -- > sc3_scdoc_help_class "SinOsc" == "Classes/SinOsc.html"
 sc3_scdoc_help_class :: String -> String
 sc3_scdoc_help_class c = "Classes" </> c <.> "html"
 
--- | Generate path to indicated SC3 operator help file.
+-- | Generate path to indicated Sc3 operator help file.
 --
 -- > sc3_scdoc_help_operator "+" == "Overviews/Operators.html#+"
 sc3_scdoc_help_operator :: String -> FilePath
 sc3_scdoc_help_operator = (++) "Overviews/Operators.html#"
 
--- | Generate path to indicated SC3 method help.
+-- | Generate path to indicated Sc3 method help.
 --
 -- > sc3_scdoc_help_method '*' ("C","m") == "Classes/C.html#*m"
 sc3_scdoc_help_method :: Char -> (String,String) -> FilePath
 sc3_scdoc_help_method z (c,m) = "Classes" </> c <.> "html#" ++ [z] ++ m
 
--- | Generate path to indicated SC3 class method help.
+-- | Generate path to indicated Sc3 class method help.
 --
 -- > sc3_scdoc_help_class_method ("C","m") == "Classes/C.html#*m"
 sc3_scdoc_help_class_method :: (String,String) -> FilePath
 sc3_scdoc_help_class_method = sc3_scdoc_help_method '*'
 
--- | Generate path to indicated SC3 instance method help.
+-- | Generate path to indicated Sc3 instance method help.
 --
 -- > sc3_scdoc_help_instance_method ("C","m") == "Classes/C.html#-m"
 sc3_scdoc_help_instance_method :: (String,String) -> FilePath
 sc3_scdoc_help_instance_method = sc3_scdoc_help_method '-'
 
-{- | SC3 help path documenting x.
+{- | Sc3 help path documenting x.
 
 > sc3_scdoc_help_path "Operator.distort" == "Overviews/Operators.html#.distort"
 > sc3_scdoc_help_path "Collection.*fill" == "Classes/Collection.html#*fill"
@@ -144,7 +144,7 @@ sc3_scdoc_help_open use_loc p = do
   let u = if use_loc then "file://" ++ (d </> p) else sc3_scdoc_help_url ++ p
   void (System.Process.rawSystem b [u])
 
-{- | Generate path to indicated SC3 instance method help.
+{- | Generate path to indicated Sc3 instance method help.
      Adds initial forward slash if not present.
 
 > let r = "Reference/Server-Command-Reference.html#/b_alloc"

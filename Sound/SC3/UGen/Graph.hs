@@ -1,14 +1,14 @@
 {- | 'U_Graph' and related types.
 
-The UGen type is recursive, inputs to UGens are UGens.
+The Ugen type is recursive, inputs to Ugens are Ugens.
 
-This makes writing UGen graphs simple, but manipulating them awkward.
+This makes writing Ugen graphs simple, but manipulating them awkward.
 
-UGen equality is structural, and can be slow to determine for some UGen graph structures.
+Ugen equality is structural, and can be slow to determine for some Ugen graph structures.
 
-A U_Node is a non-recursive notation for a UGen, all U_Nodes have unique identifiers.
+A U_Node is a non-recursive notation for a Ugen, all U_Nodes have unique identifiers.
 
-A U_Graph is constructed by a stateful traversal of a UGen.
+A U_Graph is constructed by a stateful traversal of a Ugen.
 
 A U_Graph is represented as a partioned (by type) set of U_Nodes, edges are implicit.
 
@@ -21,10 +21,10 @@ import Data.Maybe {- base -}
 
 import qualified Sound.SC3.Common.Rate as Rate {- hsc3 -}
 import qualified Sound.SC3.Common.UId as UId {- hsc3 -}
-import Sound.SC3.UGen.Type {- hsc3 -}
-import qualified Sound.SC3.UGen.UGen as UGen {- hsc3 -}
 
 import qualified Sound.SC3.UGen.Analysis as Analysis {- hsc3 -}
+import Sound.SC3.UGen.Type {- hsc3 -}
+import qualified Sound.SC3.UGen.UGen as UGen {- hsc3 -}
 
 -- * Types
 

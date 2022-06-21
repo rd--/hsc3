@@ -1,7 +1,8 @@
--- | Non-primitve math UGens.
+-- | Non-primitve math Ugens.
 module Sound.SC3.UGen.Math.Composite where
 
 import Sound.SC3.Common.Math.Operator
+
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen
 

@@ -1,10 +1,11 @@
--- | Optimisations of UGen graphs.
+-- | Optimisations of Ugen graphs.
 module Sound.SC3.UGen.Optimise where
 
 import System.Random {- random -}
 
 import Sound.SC3.Common.Math.Operator
 import Sound.SC3.Common.Rate
+
 import qualified Sound.SC3.UGen.Bindings.DB as Bindings {- hsc3 -}
 import Sound.SC3.UGen.Type
 import Sound.SC3.UGen.UGen

@@ -22,10 +22,12 @@ import Sound.SC3.Common.Rate as M
 import Sound.SC3.Common.Unsafe as M
 
 {-
+import Sound.SC3.Common.Base.System as M
 import Sound.SC3.Common.Help as M
 import Sound.SC3.Common.Math.Interpolate as M
 import Sound.SC3.Common.SoundFile as M
 import Sound.SC3.Common.UId as M
 -}
 
+import Sound.SC3.UGen.HS as M
 import Sound.SC3.UGen.Name as M

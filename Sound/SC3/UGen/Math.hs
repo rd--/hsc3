@@ -1,9 +1,10 @@
--- | UGen math
+-- | Ugen math
 module Sound.SC3.UGen.Math where
 
 import qualified Sound.SC3.Common.Math as Math
 import qualified Sound.SC3.Common.Math.Operator as Operator
 import qualified Sound.SC3.Common.UId as UId
+
 import qualified Sound.SC3.UGen.Bindings.DB as Bindings
 import qualified Sound.SC3.UGen.Type as Type
 

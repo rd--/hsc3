@@ -5,10 +5,10 @@ import Sound.SC3.Common.Envelope {- hsc3 -}
 import Sound.SC3.Common.Enum {- hsc3 -}
 import Sound.SC3.UGen.Type {- hsc3 -}
 
--- | Type specialised ('UGen') envelope curve.
+-- | Type specialised envelope curve.
 type EnvCurve = Envelope_Curve UGen
 
--- | Lift to 'UGen'.
+-- | Lift to UGen.
 from_buffer :: Buffer UGen -> UGen
 from_buffer b =
     case b of

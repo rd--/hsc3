@@ -11,7 +11,6 @@ The messages are stored in the UGen type, but are not written to the SynthDef fi
 The scsynthPlayAt function reads and sends UGen bracket messages, in addition to the UGen graph itself.
 
 The functions defined here return UGen values with brackets attached to them.
-
 -}
 module Sound.SC3.UGen.Bracketed where
 

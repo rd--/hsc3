@@ -5,6 +5,7 @@ import Data.List {- base -}
 
 import qualified System.Random as R {- random -}
 
+import Sound.SC3.Common.Base
 import Sound.SC3.Common.Math
 import qualified Sound.SC3.Common.Math.Filter as Filter
 
@@ -22,10 +23,7 @@ type F_U7 n = n -> n -> n -> n -> n -> n -> n -> n
 type F_U8 n = n -> n -> n -> n -> n -> n -> n -> n -> n
 type F_U9 n = n -> n -> n -> n -> n -> n -> n -> n -> n -> n
 
--- | T = tuple
-type T2 n = (n,n)
-type T3 n = (n,n,n)
-type T4 n = (n,n,n,n)
+-- | T = tuple (see Base for T2-T4)
 type T5 n = (n,n,n,n,n)
 type T6 n = (n,n,n,n,n,n)
 type T7 n = (n,n,n,n,n,n,n)

@@ -1,4 +1,4 @@
--- | The SC3 multiple channel expansion rules over an abstract type.
+-- | The Sc3 multiple channel expansion (mce) rules over an abstract type.
 module Sound.SC3.Common.Mce where
 
 import qualified Sound.SC3.Common.Base {- hsc3 -}
