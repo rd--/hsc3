@@ -17,5 +17,5 @@ import qualified Sound.Sc3.Ugen.Protect as Protect {- hsc3-rw -}
 import qualified Sound.Sc3.Ui.Html as Ui {- hsc3-ui -}
 import qualified Sound.Sc3.Ui.Plot as Ui {- hsc3-ui -}
 import qualified Sound.Sc3.Ui.Qarma as Ui {- hsc3-ui -}
-import qualified Sound.Sc3.Ui.ScLang as Ui {- hsc3-ui -}
-import qualified Sound.Sc3.Ui.ScLang.Control as Ui {- hsc3-ui -}
+import qualified Sound.Sc3.Ui.Sclang as Ui {- hsc3-ui -}
+import qualified Sound.Sc3.Ui.Sclang.Control as Ui {- hsc3-ui -}
