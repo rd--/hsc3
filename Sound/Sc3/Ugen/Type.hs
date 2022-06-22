@@ -421,7 +421,7 @@ mkUnaryOperator :: Sc3_Unary_Op -> (Sample -> Sample) -> Ugen -> Ugen
 mkUnaryOperator i f a =
     let g [x] = f x
         g _ = error "mkUnaryOperator: non unary input"
-    in mkOperator g "UnaryOpUgen" [a] (fromEnum i)
+    in mkOperator g "UnaryOpUGen" [a] (fromEnum i)
 
 -- | Binary math constructor with constant optimisation.
 --
@@ -446,14 +446,14 @@ mkBinaryOperator_optimise_constants i f o a b =
              (_,Constant_U (Constant b' ([],[]))) ->
                  if o (Right b') then Just a else Nothing
              _ -> Nothing
-   in fromMaybe (mkOperator g "BinaryOpUgen" [a, b] (fromEnum i)) r
+   in fromMaybe (mkOperator g "BinaryOpUGen" [a, b] (fromEnum i)) r
 
 -- | Plain (non-optimised) binary math constructor.
 mkBinaryOperator :: Sc3_Binary_Op -> (Sample -> Sample -> Sample) -> Ugen -> Ugen -> Ugen
 mkBinaryOperator i f a b =
    let g [x,y] = f x y
        g _ = error "mkBinaryOperator: non binary input"
-   in mkOperator g "BinaryOpUgen" [a, b] (fromEnum i)
+   in mkOperator g "BinaryOpUGen" [a, b] (fromEnum i)
 
 -- * Numeric instances
 
@@ -475,7 +475,7 @@ is_constant_of k u =
 is_math_binop :: Int -> Ugen -> Bool
 is_math_binop k u =
     case u of
-      Primitive_U (Primitive _ "BinaryOpUgen" [_,_] [_] (Special s) NoId _) -> s == k
+      Primitive_U (Primitive _ "BinaryOpUGen" [_,_] [_] (Special s) NoId _) -> s == k
       _ -> False
 
 -- | Is /u/ an ADD operator?
@@ -503,12 +503,12 @@ mul_add_optimise_direct u =
            else Just (max (max ri rj) rk,if rj > ri then (j,i,k) else (i,j,k))
   in case assert_is_add_operator "MUL-ADD" u of
        Primitive_U
-         (Primitive _ _ [Primitive_U (Primitive _ "BinaryOpUgen" [i,j] [_] (Special 2) NoId ([],[])),k] [_] _ NoId ([],[])) ->
+         (Primitive _ _ [Primitive_U (Primitive _ "BinaryOpUGen" [i,j] [_] (Special 2) NoId ([],[])),k] [_] _ NoId ([],[])) ->
          case reorder (i,j,k) of
            Just (rt,(p,q,r)) -> Primitive_U (Primitive rt "MulAdd" [p,q,r] [rt] (Special 0) NoId ([],[]))
            Nothing -> u
        Primitive_U
-         (Primitive _ _ [k,Primitive_U (Primitive _ "BinaryOpUgen" [i,j] [_] (Special 2) NoId ([],[]))] [_] _ NoId ([],[])) ->
+         (Primitive _ _ [k,Primitive_U (Primitive _ "BinaryOpUGen" [i,j] [_] (Special 2) NoId ([],[]))] [_] _ NoId ([],[])) ->
          case reorder (i,j,k) of
            Just (rt,(p,q,r)) -> Primitive_U (Primitive rt "MulAdd" [p,q,r] [rt] (Special 0) NoId ([],[]))
            Nothing -> u
@@ -531,9 +531,9 @@ mul_add_optimise u = if is_add_operator u then mul_add_optimise_direct u else u
 sum3_optimise_direct :: Ugen -> Ugen
 sum3_optimise_direct u =
   case assert_is_add_operator "SUM3" u of
-    Primitive_U (Primitive r _ [Primitive_U (Primitive _ "BinaryOpUgen" [i,j] [_] (Special 0) NoId ([],[])),k] [_] _ NoId ([],[])) ->
+    Primitive_U (Primitive r _ [Primitive_U (Primitive _ "BinaryOpUGen" [i,j] [_] (Special 0) NoId ([],[])),k] [_] _ NoId ([],[])) ->
       Primitive_U (Primitive r "Sum3" [i,j,k] [r] (Special 0) NoId ([],[]))
-    Primitive_U (Primitive r _ [k,Primitive_U (Primitive _ "BinaryOpUgen" [i,j] [_] (Special 0) NoId ([],[]))] [_] _ NoId ([],[])) ->
+    Primitive_U (Primitive r _ [k,Primitive_U (Primitive _ "BinaryOpUGen" [i,j] [_] (Special 0) NoId ([],[]))] [_] _ NoId ([],[])) ->
       Primitive_U (Primitive r "Sum3" [i,j,k] [r] (Special 0) NoId ([],[]))
     _ -> u
 

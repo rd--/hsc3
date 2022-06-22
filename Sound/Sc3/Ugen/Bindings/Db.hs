@@ -15,13 +15,13 @@ import Sound.Sc3.Ugen.Ugen
 --
 --  BinaryOpUgen [InitialisationRate,ControlRate,AudioRate,DemandRate] a=0 b=0;    FILTER: TRUE
 binaryOpUgen :: Ugen -> Ugen -> Ugen
-binaryOpUgen a b = mkUgen Nothing [InitialisationRate,ControlRate,AudioRate,DemandRate] (Right [0,1]) "BinaryOpUgen" [a,b] Nothing 1 (Special 0) NoId
+binaryOpUgen a b = mkUgen Nothing [InitialisationRate,ControlRate,AudioRate,DemandRate] (Right [0,1]) "BinaryOpUGen" [a,b] Nothing 1 (Special 0) NoId
 
 -- | Apply a unary operation to the values of an input ugen
 --
 --  UnaryOpUgen [InitialisationRate,ControlRate,AudioRate,DemandRate] a=0;    FILTER: TRUE
 unaryOpUgen :: Ugen -> Ugen
-unaryOpUgen a = mkUgen Nothing [InitialisationRate,ControlRate,AudioRate,DemandRate] (Right [0]) "UnaryOpUgen" [a] Nothing 1 (Special 0) NoId
+unaryOpUgen a = mkUgen Nothing [InitialisationRate,ControlRate,AudioRate,DemandRate] (Right [0]) "UnaryOpUGen" [a] Nothing 1 (Special 0) NoId
 
 -- | Audio to control rate converter.
 --

@@ -98,8 +98,8 @@ reconstruct_k_ugen u =
 ugen_qname :: String -> Types.Special -> (String,String)
 ugen_qname nm (Types.Special n) =
     case nm of
-      "UnaryOpUgen" -> ("uop CS",Operator.unaryName n)
-      "BinaryOpUgen" -> ("binop CS",Operator.binaryName n)
+      "UnaryOpUGen" -> ("uop CS",Operator.unaryName n)
+      "BinaryOpUGen" -> ("binop CS",Operator.binaryName n)
       _ -> ("ugen",nm)
 
 reconstruct_mce_str :: Graph.U_Node -> String

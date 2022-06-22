@@ -87,7 +87,7 @@ ugen_optimise_const_operator =
             case p of
               Primitive
                 _
-                "BinaryOpUgen"
+                "BinaryOpUGen"
                 [Constant_U (Constant l ([],[]))
                 ,Constant_U (Constant r ([],[]))]
                 [_]
@@ -98,7 +98,7 @@ ugen_optimise_const_operator =
                              _ -> u
               Primitive
                 _
-                "UnaryOpUgen"
+                "UnaryOpUGen"
                 [Constant_U (Constant i ([],[]))]
                 [_]
                 (Special z)

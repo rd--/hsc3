@@ -179,12 +179,6 @@ atsPartial rate atsbuffer partial filePointer freqMul freqAdd = mkUgen Nothing [
 atsSynth :: Rate -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
 atsSynth rate atsbuffer numPartials partialStart partialSkip filePointer freqMul freqAdd = mkUgen Nothing [AudioRate] (Left rate) "AtsSynth" [atsbuffer,numPartials,partialStart,partialSkip,filePointer,freqMul,freqAdd] Nothing 1 (Special 0) NoId
 
--- | (Undocumented class)
---
---  AtsUgen [] maxSize=0
-atsUgen :: Rate -> Ugen -> Ugen
-atsUgen rate maxSize = mkUgen Nothing [InitialisationRate,ControlRate,AudioRate,DemandRate] (Left rate) "AtsUgen" [maxSize] Nothing 1 (Special 0) NoId
-
 -- | Detect onsets and assess the nature of the attack slope
 --
 --  AttackSlope [ControlRate] input=0 windowsize=1024 peakpicksize=20 leak=0.999 energythreshold=0.01 sumthreshold=20 mingap=30 numslopesaveraged=10

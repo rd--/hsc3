@@ -261,8 +261,8 @@ is_binary cr = isJust . binaryIndex cr
 ugen_operator_name :: String -> Int -> Maybe String
 ugen_operator_name nm n =
     case nm of
-      "UnaryOpUgen" -> Just (unaryName n)
-      "BinaryOpUgen" -> Just (binaryName n)
+      "UnaryOpUGen" -> Just (unaryName n)
+      "BinaryOpUGen" -> Just (binaryName n)
       _ -> Nothing
 
 {- | Order of lookup: binary then unary.
@@ -273,9 +273,9 @@ ugen_operator_name nm n =
 resolve_operator :: Base.Case_Rule -> String -> (String,Maybe Int)
 resolve_operator cr nm =
     case binaryIndex cr nm of
-      Just sp -> ("BinaryOpUgen",Just sp)
+      Just sp -> ("BinaryOpUGen",Just sp)
       Nothing -> case unaryIndex cr nm of
-                   Just sp -> ("UnaryOpUgen",Just sp)
+                   Just sp -> ("UnaryOpUGen",Just sp)
                    _ -> (nm,Nothing)
 
 -- | Case-insensitive resolve_operator.
