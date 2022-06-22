@@ -23,7 +23,7 @@ import qualified Sound.SC3.Common.Rate as Rate {- hsc3 -}
 import qualified Sound.SC3.Common.UId as UId {- hsc3 -}
 
 import qualified Sound.SC3.UGen.Analysis as Analysis {- hsc3 -}
-import Sound.SC3.UGen.Type {- hsc3 -}
+import Sound.SC3.UGen.Types {- hsc3 -}
 import qualified Sound.SC3.UGen.UGen as UGen {- hsc3 -}
 
 -- * Types
@@ -426,19 +426,19 @@ ug_mk_node_p n p g =
 ug_mk_node :: UGen -> U_Graph -> (U_Node,U_Graph)
 ug_mk_node u g =
     case u of
-      UGen (CConstant c) -> ug_mk_node_c c g
-      UGen (CControl k) -> ug_mk_node_k k g
-      UGen (CLabel _) -> error (show ("ug_mk_node: label",u))
-      UGen (CPrimitive p) -> ug_mk_node_u p g
-      UGen (CProxy p) ->
-          let (n,g') = ug_mk_node (proxySource p) g
+      Constant_U c -> ug_mk_node_c c g
+      Control_U k -> ug_mk_node_k k g
+      Label_U _ -> error (show ("ug_mk_node: label",u))
+      Primitive_U p -> ug_mk_node_u p g
+      Proxy_U p ->
+          let (n,g') = ug_mk_node_u (proxySource p) g
           in ug_mk_node_p n (proxyIndex p) g'
-      UGen (CMrg m _) ->
+      Mrg_U m ->
           let f g' l = case l of
                          [] -> g'
                          n:l' -> let (_,g'') = ug_mk_node n g' in f g'' l'
           in ug_mk_node (mrgLeft m) (f g (mceChannels (mrgRight m)))
-      UGen (CMce _ _) -> error (show ("ug_mk_node: mce",u))
+      Mce_U _ -> error (show ("ug_mk_node: mce",u))
 
 -- * Implicit
 

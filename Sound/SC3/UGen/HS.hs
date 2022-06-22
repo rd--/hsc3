@@ -1,4 +1,4 @@
--- | Haskell implementations of SC3 UGens.
+-- | Haskell implementations of Sc3 Ugens.
 module Sound.SC3.UGen.HS where
 
 import Data.List {- base -}

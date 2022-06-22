@@ -8,7 +8,7 @@ import Text.Printf {- base -}
 import qualified Sound.SC3.Common.Math.Operator as Operator
 import qualified Sound.SC3.Common.Rate as Rate
 import qualified Sound.SC3.UGen.Graph as Graph
-import qualified Sound.SC3.UGen.Type as Type
+import qualified Sound.SC3.UGen.Types as Types
 import qualified Sound.SC3.UGen.UGen as UGen
 
 -- | Generate label for 'Graph.From_Port'
@@ -73,11 +73,11 @@ reconstruct_c_str u =
         c = Graph.u_node_c_value u
     in printf "%s = constant (%f::Sample)" l c
 
-reconstruct_c_ugen :: Graph.U_Node -> Type.UGen
-reconstruct_c_ugen u = Type.constant (Graph.u_node_c_value u)
+reconstruct_c_ugen :: Graph.U_Node -> Types.UGen
+reconstruct_c_ugen u = Types.constant (Graph.u_node_c_value u)
 
 -- | Discards index.
-reconstruct_k_rnd :: Graph.U_Node -> (Rate.Rate,String,Type.Sample)
+reconstruct_k_rnd :: Graph.U_Node -> (Rate.Rate,String,Types.Sample)
 reconstruct_k_rnd u =
     let r = Graph.u_node_k_rate u
         n = Graph.u_node_k_name u
@@ -90,13 +90,13 @@ reconstruct_k_str u =
         (r,n,d) = reconstruct_k_rnd u
     in printf "%s = control %s \"%s\" %f" l (show r) n d
 
-reconstruct_k_ugen :: Graph.U_Node -> Type.UGen
+reconstruct_k_ugen :: Graph.U_Node -> Types.UGen
 reconstruct_k_ugen u =
     let (r,n,d) = reconstruct_k_rnd u
     in UGen.control_f64 r Nothing n d
 
-ugen_qname :: String -> Type.Special -> (String,String)
-ugen_qname nm (Type.Special n) =
+ugen_qname :: String -> Types.Special -> (String,String)
+ugen_qname nm (Types.Special n) =
     case nm of
       "UnaryOpUGen" -> ("uop CS",Operator.unaryName n)
       "BinaryOpUGen" -> ("binop CS",Operator.binaryName n)
@@ -127,7 +127,7 @@ reconstruct_u_str u =
         nd_s = let t = "%s = nondet \"%s\" (UId %d) %s [%s] %d"
                in printf t l n z (show r) i_l o
         c = case q of
-              "ugen" -> if Graph.u_node_u_ugenid u == Type.NoId then u_s else nd_s
+              "ugen" -> if Graph.u_node_u_ugenid u == Types.NoId then u_s else nd_s
               _ -> printf "%s = %s \"%s\" %s %s" l q n (show r) i_s
         m = reconstruct_mce_str u
     in if Graph.u_node_is_implicit_control u

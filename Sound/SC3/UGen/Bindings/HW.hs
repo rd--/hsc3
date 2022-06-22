@@ -4,8 +4,9 @@ module Sound.SC3.UGen.Bindings.HW where
 import Sound.SC3.Common.Rate
 import Sound.SC3.Common.UId
 import Sound.SC3.Common.Unsafe
+
 import qualified Sound.SC3.UGen.Bindings.HW.Construct as C
-import Sound.SC3.UGen.Type
+import Sound.SC3.UGen.Types
 import qualified Sound.SC3.UGen.UGen as U
 
 -- | Zero local buffer.

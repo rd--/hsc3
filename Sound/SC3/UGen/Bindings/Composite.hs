@@ -17,7 +17,7 @@ import Sound.SC3.UGen.Bindings.DB
 import Sound.SC3.UGen.Bindings.HW
 import Sound.SC3.UGen.Math
 import Sound.SC3.UGen.Mce
-import Sound.SC3.UGen.Type
+import Sound.SC3.UGen.Types
 import Sound.SC3.UGen.UGen
 
 -- | Generate a localBuf and use setBuf to initialise it.
@@ -424,7 +424,7 @@ soundIn :: UGen -> UGen
 soundIn u =
     let r = in' 1 ar (numOutputBuses + u)
     in case u of
-         UGen (CMce m _) ->
+         Mce_U m ->
              let n = mceProxies m
              in if all (==1) (zipWith (-) (tail n) n)
                 then in' (length n) ar (numOutputBuses + head n)

@@ -6,7 +6,8 @@ import Data.List {- base -}
 import qualified Sound.SC3.Common.Rate as Rate {- hsc3 -}
 import qualified Sound.SC3.UGen.Bindings.DB as DB {- hsc3 -}
 import qualified Sound.SC3.Common.Mce as Mce {- hsc3 -}
-import Sound.SC3.UGen.Type
+
+import Sound.SC3.UGen.Types
 
 {- | Ugen primitive set.
 Sees through Proxy and Mrg, possible multiple primitives for Mce.
@@ -14,13 +15,13 @@ Sees through Proxy and Mrg, possible multiple primitives for Mce.
 ugen_primitive_set :: UGen -> [Primitive UGen]
 ugen_primitive_set u =
     case u of
-      UGen (CConstant _) -> []
-      UGen (CControl _) -> []
-      UGen (CLabel _) -> []
-      UGen (CPrimitive p) -> [p]
-      UGen (CProxy p) -> ugen_primitive_set (proxySource p)
-      UGen (CMce m _) -> concatMap ugen_primitive_set (Mce.mce_to_list m)
-      UGen (CMrg m _) -> ugen_primitive_set (mrgLeft m)
+      Constant_U _ -> []
+      Control_U _ -> []
+      Label_U _ -> []
+      Primitive_U p -> [p]
+      Proxy_U p -> [proxySource p]
+      Mce_U m -> concatMap ugen_primitive_set (Mce.mce_to_list m)
+      Mrg_U m -> ugen_primitive_set (mrgLeft m)
 
 {- | Heuristic based on primitive name (FFT, PV_...).
 Note that IFFT is at /control/ rate, not PV_... rate.
@@ -80,6 +81,6 @@ ugen_remove_out_node u =
   let err = error "ugen_remove_out_node?"
       assert_is_output x = if x `elem` ["Out", "ReplaceOut", "OffsetOut"] then x else err
   in case u of
-       UGen (CPrimitive (Primitive Rate.AudioRate nm (_bus:inputs) [] _special _uid _brk)) -> (assert_is_output nm,mce inputs)
-       UGen (CMrg (Mrg lhs rhs) rt) -> let (nm,res) = ugen_remove_out_node lhs in (nm,UGen (CMrg (Mrg res rhs) rt))
+       Primitive_U (Primitive Rate.AudioRate nm (_bus:inputs) [] _special _uid _brk) -> (assert_is_output nm, mce inputs)
+       Mrg_U (Mrg lhs rhs) -> let (nm,res) = ugen_remove_out_node lhs in (nm,Mrg_U (Mrg res rhs))
        _ -> err

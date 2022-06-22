@@ -14,6 +14,12 @@ import qualified Sound.SC3.Common.Mce as Mce {- hsc3 -}
 import qualified Sound.SC3.Common.Rate as Rate {- hsc3 -}
 import qualified Sound.SC3.Common.UId as UId {- hsc3 -}
 
+import Sound.SC3.UGen.Brackets {- hsc3 -}
+import Sound.SC3.UGen.Control {- hsc3 -}
+import Sound.SC3.UGen.Label {- hsc3 -}
+import Sound.SC3.UGen.Mrg {- hsc3 -}
+import Sound.SC3.UGen.Primitive {- hsc3 -}
+import Sound.SC3.UGen.Proxy {- hsc3 -}
 import Sound.SC3.UGen.Type {- hsc3 -}
 
 -- | 'UId' of 'resolveID'.
@@ -34,14 +40,14 @@ ugenTraverse halt_f map_f u =
   else
     let recur = ugenTraverse halt_f map_f
     in case u of
-         UGen (CPrimitive p) ->
+         Primitive_U p ->
              let i = ugenInputs p
-             in map_f (UGen (CPrimitive (p {ugenInputs = map recur i})))
-         UGen (CProxy p) ->
-             let s = proxySource p -- UGen (CPrimitive (proxySource p))
-             in map_f (UGen (CProxy (p {proxySource = recur s})))
-         UGen (CMce m _) -> map_f (mce (map recur (mceProxies m)))
-         UGen (CMrg (Mrg l r) rt) -> map_f (UGen (CMrg (Mrg (recur l) (recur r)) rt))
+             in map_f (Primitive_U (p {ugenInputs = map recur i}))
+         Proxy_U (Proxy p ix) ->
+             let i = ugenInputs p
+             in map_f (Proxy_U (Proxy (p {ugenInputs = map recur i}) ix))
+         Mce_U m -> map_f (mce (map recur (mceProxies m)))
+         Mrg_U (Mrg l r) -> map_f (Mrg_U (Mrg (recur l) (recur r)))
          _ -> map_f u
 
 {- | Right fold of UGen graph.
@@ -53,10 +59,10 @@ ugenFoldr :: (UGen -> a -> a) -> a -> UGen -> a
 ugenFoldr f st u =
     let recur = flip (ugenFoldr f)
     in case u of
-         UGen (CPrimitive p) -> f u (foldr recur st (ugenInputs p))
-         UGen (CProxy p) -> f u (ugenFoldr f st (proxySource p))
-         UGen (CMce m _) -> f u (foldr recur st (mceProxies m))
-         UGen (CMrg (Mrg l r) _) -> f u (f l (f r st))
+         Primitive_U p -> f u (foldr recur st (ugenInputs p))
+         Proxy_U (Proxy p _) -> f u (foldr recur st (ugenInputs p)) -- ...
+         Mce_U m -> f u (foldr recur st (mceProxies m))
+         Mrg_U (Mrg l r) -> f u (f l (f r st))
          _ -> f u st
 
 -- | Fold over UGen and collect all bracketing messages from all Primitive nodes.
@@ -75,7 +81,7 @@ ugenHasAnyBrackets = (/= ([],[])) . ugenCollectBrackets
 
 -- | Control input node constructor.
 control_f64 :: Rate.Rate -> Maybe Int -> String -> Sample -> UGen
-control_f64 r ix nm d = UGen (CControl (Control r ix nm d False Nothing emptyBrackets))
+control_f64 r ix nm d = Control_U (Control r ix nm d False Nothing emptyBrackets)
 
 -- | Control input node constructor.
 --
@@ -88,7 +94,7 @@ control r = control_f64 r Nothing
 control_m :: Rate.Rate -> String -> Double -> Control_Meta_T3 Double -> UGen
 control_m rt nm df meta =
     let m = control_meta_t3 id meta
-    in UGen (CControl (Control rt Nothing nm df False (Just m) emptyBrackets))
+    in Control_U (Control rt Nothing nm df False (Just m) emptyBrackets)
 
 -- | Generate group of two controls.  Names are generated according to 'control_group_suffixes'
 control_pair :: Control_Group -> Rate.Rate -> String -> (Double,Double) -> Control_Meta_T3 Double -> (UGen,UGen)
@@ -96,8 +102,8 @@ control_pair grp rt nm (df1,df2) meta =
     let m = (control_meta_t3 id meta) {controlGroup = Just grp}
     in case control_group_suffixes grp of
          [lhs,rhs] ->
-           (UGen (CControl (Control rt Nothing (nm ++ lhs) df1 False (Just m) emptyBrackets))
-           ,UGen (CControl (Control rt Nothing (nm ++ rhs) df2 False (Just m) emptyBrackets)))
+           (Control_U (Control rt Nothing (nm ++ lhs) df1 False (Just m) emptyBrackets)
+           ,Control_U (Control rt Nothing (nm ++ rhs) df2 False (Just m) emptyBrackets))
          _ -> error "control_pair"
 
 -- | Generate range controls.  Names are generated according to 'control_group_suffixes'
@@ -106,7 +112,7 @@ control_rng = control_pair Control_Range
 
 -- | Triggered (kr) control input node constructor.
 trigControl_f64 :: Maybe Int -> String -> Sample -> UGen
-trigControl_f64 ix nm d = UGen (CControl (Control Rate.ControlRate ix nm d True Nothing emptyBrackets))
+trigControl_f64 ix nm d = Control_U (Control Rate.ControlRate ix nm d True Nothing emptyBrackets)
 
 -- | Triggered (kr) control input node constructor.
 trigControl :: String -> Double -> UGen
@@ -116,13 +122,13 @@ trigControl = trigControl_f64 Nothing
 control_set :: [UGen] -> [UGen]
 control_set =
     let f ix u = case u of
-                   UGen (CControl c) -> UGen (CControl (c {controlIndex = Just ix}))
+                   Control_U c -> Control_U (c {controlIndex = Just ix})
                    _ -> error "control_set: non control input?"
     in zipWith f [0..]
 
 -- | Multiple root graph node constructor (left input is output)
 mrg2 :: UGen -> UGen -> UGen
-mrg2 u = UGen . flip CMrg (rateOf u). Mrg u
+mrg2 u = Mrg_U . Mrg u
 
 -- * Multiple channel expansion
 
@@ -169,7 +175,7 @@ mce_map_ix f u = mce (map_ix f (mceChannels u))
 mceEdit :: ([UGen] -> [UGen]) -> UGen -> UGen
 mceEdit f u =
     case u of
-      UGen (CMce m _) -> mce (f (mceProxies m))
+      Mce_U m -> mce (f (mceProxies m))
       _ -> error "mceEdit: non Mce value"
 
 -- | Reverse order of channels at Mce.
@@ -180,7 +186,7 @@ mceReverse = mceEdit reverse
 mceChannel :: Int -> UGen -> UGen
 mceChannel n u =
     case u of
-      UGen (CMce m _) -> mceProxies m !! n
+      Mce_U m -> mceProxies m !! n
       _ -> if n == 0 then u else error "mceChannel: non Mce value, non ZERO index"
 
 {- | Obtain indexed channel at Mce, indicex wrap around.
@@ -190,7 +196,7 @@ mceChannel n u =
 mceChannelWrap :: Int -> UGen -> UGen
 mceChannelWrap n u =
     case u of
-      UGen (CMce m _) -> mceProxies m !! (n `mod` Mce.mce_length m)
+      Mce_U m -> mceProxies m !! (n `mod` Mce.mce_length m)
       _ -> u
 
 -- | Transpose rows and columns, ie. {{a,b},{c,d}} to {{a,c},{b,d}}.
@@ -244,8 +250,8 @@ halt_mce_transform = halt_mce_transform_f mceChannels
 prepare_root :: UGen -> UGen
 prepare_root u =
     case u of
-      UGen (CMce m _) -> mrg (mceProxies m)
-      UGen (CMrg m _) -> mrg2 (prepare_root (mrgLeft m)) (prepare_root (mrgRight m))
+      Mce_U m -> mrg (mceProxies m)
+      Mrg_U m -> mrg2 (prepare_root (mrgLeft m)) (prepare_root (mrgRight m))
       _ -> u
 
 -- * Multiple root graphs
@@ -254,7 +260,7 @@ prepare_root u =
 
 -- | Lift a 'String' to a UGen label (ie. for 'poll').
 label :: String -> UGen
-label = UGen . CLabel . Label
+label = Label_U . Label
 
 {- | Unpack a label to a length prefixed list of 'Constant's.  There
 is a special case for mce nodes, but it requires labels to be equal
@@ -267,12 +273,12 @@ done by the synthdef builder.
 unpackLabel :: Bool -> UGen -> [UGen]
 unpackLabel length_prefix u =
     case u of
-      UGen (CLabel (Label s)) ->
+      Label_U (Label s) ->
           let q = fromEnum '?'
               f c = if Data.Char.isAscii c then fromEnum c else q
               s' = map (fromIntegral . f) s
           in if length_prefix then fromIntegral (length s) : s' else s'
-      UGen (CMce m _) ->
+      Mce_U m ->
           let x = map (unpackLabel length_prefix) (mceProxies m)
           in if Base.equal_length_p x
              then map mce (transpose x)
@@ -333,18 +339,11 @@ unsignedShift = mkBinaryOperator Operator.OpUnsignedShift undefined
 
 -- * Rate Flow
 
-{- | Traverse graph rewriting audio rate nodes as control rate.
-     In the Circuit model rate information is stored not only at Primitive but also at Proxy and Mce and Mrg
--}
+-- | Traverse graph rewriting audio rate nodes as control rate.
 rewriteUGenRates :: (Rate.Rate -> Bool) -> Rate.Rate -> UGen -> UGen
 rewriteUGenRates sel_f set_rt =
   let f u = case u of
-              UGen (CPrimitive (Primitive rt nm i o s z b)) ->
-                UGen (CPrimitive (Primitive (if sel_f rt then set_rt else rt) nm i o s z b))
-              UGen (CProxy (Proxy src ix rt)) ->
-                UGen (CProxy (Proxy src ix (if sel_f rt then set_rt else rt)))
-              UGen (CMce m rt) -> UGen (CMce m (if sel_f rt then set_rt else rt))
-              UGen (CMrg m rt) -> UGen (CMrg m (if sel_f rt then set_rt else rt))
+              Primitive_U (Primitive rt nm i o s z b) -> Primitive_U (Primitive (if sel_f rt then set_rt else rt) nm i o s z b)
               _ -> u
   in ugenTraverse (const False) f -- requires endRewrite node (see rsc3-arf)
 

@@ -1,17 +1,17 @@
--- | The Sc3 multiple channel expansion (mce) rules over an abstract type.
+-- | The Sc3 multiple channel expansion (Mce) rules over an abstract type.
 module Sound.SC3.Common.Mce where
 
 import qualified Sound.SC3.Common.Base {- hsc3 -}
 
 {- | Multiple channel expansion.
-     The Mce type is a tree, however in hsc3 Mce_Vector will always hold Mce_Scalar elements.
+The Mce type is a tree, however in hsc3 Mce_Vector will always hold Mce_Scalar elements.
 -}
 data Mce t = Mce_Scalar t | Mce_Vector [Mce t]
              deriving (Ord, Eq, Read, Show)
 
 {- | There are two invariants:
-     1. Mce should not be empty, ie. Mce_Vector should not have a null list.
-     2. Scalar Mce values should not be written as one-place vectors.
+1. Mce should not be empty, ie. Mce_Vector should not have a null list.
+2. Scalar Mce values should not be written as one-place vectors.
 
 > mce_is_well_formed (Mce_Vector []) == False
 > mce_is_well_formed (Mce_Vector [Mce_Scalar 1]) == False
@@ -66,7 +66,7 @@ mce_scalar_value m =
     Mce_Vector _ -> error "mce_scalar_value: not Mce_Scalar"
 
 {- | Length, or perhaps rather width, of Mce.
-     Considers only the outermost level, i.e. mce_length is not necessarily the length of mce_to_list.
+Considers only the outermost level, i.e. mce_length is not necessarily the length of mce_to_list.
 -}
 mce_length :: Mce a -> Int
 mce_length m =
@@ -87,8 +87,8 @@ mce_depth m =
     Mce_Scalar _ -> 1
     Mce_Vector v -> if all mce_is_scalar v then 1 else 1 + maximum (map mce_depth v)
 
-{- | Extend 'Mce' to specified degree.
-     Considers only the outermost level.
+{- | Extend Mce to specified degree.
+Considers only the outermost level.
 -}
 mce_extend :: Int -> Mce t -> Mce t
 mce_extend n m =

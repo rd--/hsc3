@@ -8,9 +8,9 @@ import qualified Sound.SC3.Common.UId as UId {- hsc3 -}
 import qualified Sound.SC3.Server.Graphdef as Graphdef {- hsc3 -}
 import qualified Sound.SC3.Server.Graphdef.Binary as Graphdef {- hsc3 -}
 import qualified Sound.SC3.UGen.Graph as Graph {- hsc3 -}
-import qualified Sound.SC3.UGen.Type as Type {- hsc3 -}
+import qualified Sound.SC3.UGen.Types as Types {- hsc3 -}
 
-control_to_node :: Graphdef.Graphdef -> UId.Id -> (Graphdef.Control,Type.Sample) -> Graph.U_Node
+control_to_node :: Graphdef.Graphdef -> UId.Id -> (Graphdef.Control,Types.Sample) -> Graph.U_Node
 control_to_node g z ((nm,ix),v) =
     let z' = Graphdef.graphdef_control_nid g z
         nm' = Datum.ascii_to_string nm
@@ -37,8 +37,8 @@ ugen_to_node g z u =
         name' = Datum.ascii_to_string name
         inputs' = map (input_to_from_port g) inputs
         outputs' = map toEnum outputs
-        special' = Type.Special special
-    in Graph.U_Node_U z' rate' name' inputs' outputs' special' (Type.UId z')
+        special' = Types.Special special
+    in Graph.U_Node_U z' rate' name' inputs' outputs' special' (Types.UId z')
 
 graphdef_to_graph :: Graphdef.Graphdef -> (String,Graph.U_Graph)
 graphdef_to_graph g =

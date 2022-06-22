@@ -5,7 +5,8 @@ import Data.List {- split -}
 
 import Sound.SC3.Common.Math
 import Sound.SC3.Common.Mce
-import Sound.SC3.UGen.Type
+
+import Sound.SC3.UGen.Types
 import Sound.SC3.UGen.UGen
 
 {- | Print constants and labels directly,
@@ -22,11 +23,11 @@ ugen_concise_pp u =
         prim_pp (Primitive _ nm _ _ sp _ _) = ugen_user_name nm sp
         k = 5
     in case u of
-         UGen (CConstant (Constant n _)) -> real_pp k n
-         UGen (CControl (Control _ _ nm def _ _ _)) -> nm ++ "=" ++ real_pp k def
-         UGen (CLabel (Label s)) -> bracketed ('"','"') s
-         UGen (CPrimitive p) -> prim_pp p
-         UGen (CProxy (Proxy p n _)) -> ugen_concise_pp p ++ "@" ++ show n
-         UGen (CMce (Mce_Scalar s) _) -> ugen_concise_pp s
-         UGen (CMce (Mce_Vector v) _) -> bracketed ('[',']') (intercalate "," (map (ugen_concise_pp . mce_scalar_value) v))
-         UGen (CMrg (Mrg l r) _) -> unwords [ugen_concise_pp l,"&",ugen_concise_pp r]
+         Constant_U (Constant n _) -> real_pp k n
+         Control_U (Control _ _ nm def _ _ _) -> nm ++ "=" ++ real_pp k def
+         Label_U (Label s) -> bracketed ('"','"') s
+         Primitive_U p -> prim_pp p
+         Proxy_U (Proxy p n) -> prim_pp p ++ "@" ++ show n
+         Mce_U (Mce_Scalar s) -> ugen_concise_pp s
+         Mce_U (Mce_Vector v) -> bracketed ('[',']') (intercalate "," (map (ugen_concise_pp . mce_scalar_value) v))
+         Mrg_U (Mrg l r) -> unwords [ugen_concise_pp l,"&",ugen_concise_pp r]

@@ -112,6 +112,9 @@ Library
                    Sound.SC3.UGen.Bindings.HW.External.Wavelets
                    Sound.SC3.UGen.Bindings.HW.External.Zita
                    Sound.SC3.UGen.Bracketed
+                   Sound.SC3.UGen.Brackets
+                   Sound.SC3.UGen.Constant
+                   Sound.SC3.UGen.Control
                    Sound.SC3.UGen.Enum
                    Sound.SC3.UGen.Envelope
                    Sound.SC3.UGen.Event
@@ -120,15 +123,20 @@ Library
                    Sound.SC3.UGen.Graph.Transform
                    Sound.SC3.UGen.Help.Graph
                    Sound.SC3.UGen.HS
+                   Sound.SC3.UGen.Label
                    Sound.SC3.UGen.Math
                    Sound.SC3.UGen.Math.Composite
                    Sound.SC3.UGen.Mce
+                   Sound.SC3.UGen.Mrg
                    Sound.SC3.UGen.Name
                    --Sound.SC3.UGen.Netlist
                    Sound.SC3.UGen.Optimise
                    Sound.SC3.UGen.Plain
                    Sound.SC3.UGen.PP
+                   Sound.SC3.UGen.Primitive
+                   Sound.SC3.UGen.Proxy
                    Sound.SC3.UGen.Type
+                   Sound.SC3.UGen.Types
                    Sound.SC3.UGen.UGen
 
 Source-Repository  head

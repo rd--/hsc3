@@ -2,8 +2,9 @@
 module Sound.SC3.UGen.Bindings.HW.External.SC3_Plugins where
 
 import Sound.SC3.Common.Rate
+
 import qualified Sound.SC3.UGen.Bindings.HW.Construct as C
-import Sound.SC3.UGen.Type
+import Sound.SC3.UGen.Types
 import qualified Sound.SC3.UGen.UGen as U
 import qualified Sound.SC3.UGen.Bindings.DB.External as X
 

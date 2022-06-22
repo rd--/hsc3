@@ -10,7 +10,7 @@ import qualified Sound.Osc.Datum as Datum {- hosc -}
 import qualified Sound.SC3.Common.Rate as Rate {- hsc3 -}
 import qualified Sound.SC3.Common.UId as UId {- hsc3 -}
 import qualified Sound.SC3.UGen.Graph as Graph {- hsc3 -}
-import qualified Sound.SC3.UGen.Type as Type {- hsc3 -}
+import qualified Sound.SC3.UGen.Types as Types {- hsc3 -}
 import qualified Sound.SC3.Server.Graphdef as Graphdef {- hsc3 -}
 
 -- * Maps
@@ -63,7 +63,7 @@ make_control (_,_,ks,_,_) nd =
 make_ugen :: Encoding_Maps -> Graph.U_Node -> Graphdef.UGen
 make_ugen m n =
     case n of
-      Graph.U_Node_U _ r nm i o (Type.Special s) _ ->
+      Graph.U_Node_U _ r nm i o (Types.Special s) _ ->
           let i' = map (make_input m) i
           in (Datum.ascii nm,Rate.rateId r,i',map Rate.rateId o,s)
       _ -> error "encode_node_u: illegal input"

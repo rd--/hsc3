@@ -7,7 +7,7 @@ import Sound.SC3.Common.Math.Operator
 import Sound.SC3.Common.Rate
 
 import qualified Sound.SC3.UGen.Bindings.DB as Bindings {- hsc3 -}
-import Sound.SC3.UGen.Type
+import Sound.SC3.UGen.Types
 import Sound.SC3.UGen.UGen
 
 -- | Constant form of 'rand' UGen.
@@ -33,26 +33,26 @@ ugen_optimise_ir_rand :: UGen -> UGen
 ugen_optimise_ir_rand =
   let f u =
         case u of
-          UGen (CPrimitive p) ->
+          Primitive_U p ->
             case p of
               Primitive
                 InitialisationRate
                 "Rand"
-                [UGen (CConstant (Constant l ([],[])))
-                ,UGen (CConstant (Constant r ([],[])))]
+                [Constant_U (Constant l ([],[]))
+                ,Constant_U (Constant r ([],[]))]
                 [InitialisationRate]
                 _
                 (UId z)
-                ([],[]) -> UGen (CConstant (Constant (c_rand z l r) ([],[])))
+                ([],[]) -> Constant_U (Constant (c_rand z l r) ([],[]))
               Primitive
                 InitialisationRate
                 "IRand"
-                [UGen (CConstant (Constant l ([],[])))
-                ,UGen (CConstant (Constant r ([],[])))]
+                [Constant_U (Constant l ([],[]))
+                ,Constant_U (Constant r ([],[]))]
                 [InitialisationRate]
                 _
                 (UId z)
-                ([],[]) -> UGen (CConstant (Constant (c_irand z l r) ([],[])))
+                ([],[]) -> Constant_U (Constant (c_irand z l r) ([],[]))
               _ -> u
           _ -> u
         in ugenTraverse (const False) f
@@ -83,28 +83,28 @@ ugen_optimise_const_operator :: UGen -> UGen
 ugen_optimise_const_operator =
   let f u =
         case u of
-          UGen (CPrimitive p) ->
+          Primitive_U p ->
             case p of
               Primitive
                 _
                 "BinaryOpUGen"
-                [UGen (CConstant (Constant l ([],[])))
-                ,UGen (CConstant (Constant r ([],[])))]
+                [Constant_U (Constant l ([],[]))
+                ,Constant_U (Constant r ([],[]))]
                 [_]
                 (Special z)
                 _
                 ([],[]) -> case binop_special_hs z of
-                             Just fn -> UGen (CConstant (Constant (fn l r) ([],[])))
+                             Just fn -> Constant_U (Constant (fn l r) ([],[]))
                              _ -> u
               Primitive
                 _
                 "UnaryOpUGen"
-                [UGen (CConstant (Constant i ([],[])))]
+                [Constant_U (Constant i ([],[]))]
                 [_]
                 (Special z)
                 _
                 ([],[]) -> case uop_special_hs z of
-                             Just fn -> UGen (CConstant (Constant (fn i) ([],[])))
+                             Just fn -> Constant_U (Constant (fn i) ([],[]))
                              _ -> u
               Primitive _ "MulAdd" [i, m, a] [_] _ _ ([],[]) -> mulAddOptimised i m a
               _ -> u

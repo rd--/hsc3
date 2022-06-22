@@ -8,7 +8,8 @@ module Sound.SC3.UGen.Plain where
 import Sound.SC3.Common.Base
 import Sound.SC3.Common.Math.Operator
 import Sound.SC3.Common.Rate
-import Sound.SC3.UGen.Type
+
+import Sound.SC3.UGen.Types
 
 -- | Variant of 'mkUGen'.
 mk_plain :: Rate -> String -> [UGen] -> Int -> Special -> UGenId -> UGen

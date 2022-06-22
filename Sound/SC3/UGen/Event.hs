@@ -9,7 +9,7 @@ import Sound.SC3.Common.Math {- hsc3 -}
 import Sound.SC3.Common.Rate {- hsc3 -}
 import Sound.SC3.UGen.Bindings.DB {- hsc3 -}
 import Sound.SC3.UGen.Bindings.Composite {- hsc3 -}
-import Sound.SC3.UGen.Type {- hsc3 -}
+import Sound.SC3.UGen.Types {- hsc3 -}
 import Sound.SC3.UGen.UGen {- hsc3 -}
 
 -- * Event
