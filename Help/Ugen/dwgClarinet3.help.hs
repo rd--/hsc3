@@ -27,4 +27,4 @@ let f (_,g,x,y,z,o,rx,ry,_,_,_) =
           c3 = linLin o 0 1 5 9
           signal = X.dwgClarinet3 ar (freq * vib) pm pc m 1 0.01 c1 c3
       in pan2 (hpf signal 200) (o * 2 - 1) 1
-in mix (eventVoicer 16 f) * control kr "gain" 0.25
+in mix (voicer 16 f) * control kr "gain" 0.25

@@ -19,7 +19,7 @@ let f (_,g,_,_,z,o,_,_,p,_,_) =
                     e = envGen ar g 1 0 1 DoNothing e_dat
                 in mce_mean (sinOsc ar (mce2 (freq * 1.01) (freq * 0.47)) 0 * e)
       in pan2 (s4 + strike + hum) pan amp
-in mix (eventVoicer 16 f) * control kr "gain" 1
+in mix (voicer 16 f) * control kr "gain" 1
 
 -- https://github.com/supercollider-quarks/SynthDefPool/blob/master/pool/sos_bell.scd (ds) ; id
 let f (c,g,_,_,z,o,_,_,p,_,_) =
@@ -42,4 +42,4 @@ let f (c,g,_,_,z,o,_,_,p,_,_) =
                     e = envGen ar g 1 0 1 DoNothing e_dat
                 in mce_mean (sinOsc ar (mce2 (freq * 1.01) (freq * 0.47)) 0 * e)
       in pan2 (s4 + strike + hum) pan amp
-in mix (eventVoicer 16 f) * control kr "gain" 1
+in mix (voicer 16 f) * control kr "gain" 1

@@ -25,7 +25,7 @@ let f (_,g,x,y,z,o,_,_,_,_,_) =
           a2 = abs (a (tExpRand 6 24 g))
           sig = sinOsc ar (midiCps (x * 84 + 24)) (tRand 0 two_pi g)
       in pan2 (sig * a1 * a2) (o * 2 - 1) (z * lagUD g (y * 0.01) (y * 2))
-in mix (eventVoicer 16 f) * control kr "gain" 1
+in mix (voicer 16 f) * control kr "gain" 1
 
 -- zizle (jmcc) #SC3d1.5 ; event control ; id
 let f (c,g,x,y,z,o,_,_,_,_,_) =
@@ -36,4 +36,4 @@ let f (c,g,x,y,z,o,_,_,_,_,_) =
           a2 = abs (a (c,'ζ') (tExpRandId (c,'η') 6 24 g))
           sig = sinOsc ar (midiCps (x * 84 + 24)) (tRandId 'ι' 0 two_pi g)
       in pan2 (sig * a1 * a2) (o * 2 - 1) (z * lagUD g (y * 0.01) (y * 2))
-in mix (eventVoicer 16 f) * control kr "gain" 1
+in mix (voicer 16 f) * control kr "gain" 1

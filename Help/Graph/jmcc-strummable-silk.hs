@@ -38,7 +38,7 @@ let f (_,g,_,y,z,o,_,_,p,_,_) =
           param = klankSpec_mce freq (mce (replicate n 1)) (X.randN n 0.3 1)
       in pan2 (dynKlank plk 1 0 1 param) (o * 2 - 1) z
     r_allpass i = allpassN i 0.1 (X.randN 2 0 0.05) 4
-in iter 6 r_allpass (leakDC (lpf (mix (eventVoicer 16 f)) 12000) 0.995) * control kr "gain" 1
+in iter 6 r_allpass (leakDC (lpf (mix (voicer 16 f)) 12000) 0.995) * control kr "gain" 1
 
 -- strummable silk (jmcc) #11 ; event control ; id
 let f (c,g,_,y,z,o,_,_,p,_,_) =
@@ -50,4 +50,4 @@ let f (c,g,_,y,z,o,_,_,p,_,_) =
       in pan2 (dynKlank plk 1 0 1 param) (o * 2 - 1) z
     r_allpass z i = allpassN i 0.1 (X.randNId 2 (z,'ζ') 0 0.05) 4
     rev = useqId 'λ' 6 r_allpass
-in rev (leakDC (lpf (mix (eventVoicer 16 f)) 12000) 0.995) * control kr "gain" 1
+in rev (leakDC (lpf (mix (voicer 16 f)) 12000) 0.995) * control kr "gain" 1

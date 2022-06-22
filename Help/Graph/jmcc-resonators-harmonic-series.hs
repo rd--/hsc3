@@ -37,7 +37,7 @@ let f (_,g,_,y,z,o,rx,_,p,_,_) =
                       (X.randN nharm 0.5 4.5)
           gen n = dynKlank (brownNoise ar * 0.001) 1 0 1 (spec n)
       in pan2 (mceFill 2 gen)  (o * 2 - 1) (z * g)
-in mix (eventVoicer 16 f) * control kr "gain" 1
+in mix (voicer 16 f) * control kr "gain" 1
 
 -- resonators harmonic series (jmcc) #2 ; event control ; id
 let f (c,g,_,y,z,o,rx,ry,p,_,_) =
@@ -54,4 +54,4 @@ let f (c,g,_,y,z,o,rx,ry,p,_,_) =
             (map (\i -> 1 / (constant i + (2 * y))) [0 .. nharm - 1])
             (map (\k -> randId (c,'ε',k) 0.5 4.5 * (0.5 + ry)) (enumFromN 'ζ' nharm))
       in pan2 (Protect.uclone_all 'η' 2 (dynKlank noise 1 0 1 spec)) (o * 2 - 1) (z * g)
-in mix (eventVoicer 16 f) * control kr "gain" 1
+in mix (voicer 16 f) * control kr "gain" 1

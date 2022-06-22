@@ -48,7 +48,7 @@ let f (c,g,x,y,z,_,_,_,_,_,_) =
           k = klankSpec_mce fq (mce (replicate n 1)) dt
           s = dynKlank exc 1 0 1 k
       in softClip (dynKlank exc 1 0 1 k)
-in mix (eventVoicer 16 f) * control kr "gain" 1
+in mix (voicer 16 f) * control kr "gain" 1
 
 -- wind metals (jmcc) ; event-control ; id
 let f (c,g,x,y,z,_,_,_,_,_,_) =
@@ -64,4 +64,4 @@ let f (c,g,x,y,z,_,_,_,_,_,_) =
           k = klankSpec_mce fq (mce (replicate n 1)) dt
           s = dynKlank exc 1 0 1 k
       in softClip (dynKlank exc 1 0 1 k)
-in mix (eventVoicer 16 f) * control kr "gain" 1
+in mix (voicer 16 f) * control kr "gain" 1

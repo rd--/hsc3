@@ -41,7 +41,7 @@ let f (_,g,_,y,z,o,rx,ry,p,px,_) =
                                                          ,0.5,0,w ry 0.55 0.75,1.3,w o 0.75 0.95,1.3
                                                          ,1,0])
       in pan2 s (o * 2 - 1) (z * lagUD g 0 (1 + y * 0.65))
-in mix (eventVoicer 16 f) * control kr "gain" 0.5
+in mix (voicer 16 f) * control kr "gain" 0.5
 
 ---- ; drawings
 import Sound.SC3.Plot {- hsc3-plot -}

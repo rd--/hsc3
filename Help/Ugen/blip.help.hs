@@ -14,14 +14,14 @@ in blip ar fr nh * 0.2
 
 -- blip ; event control
 let f (_,g,x,y,z,o,_,_,_,_,_) = pan2 (blip ar (midiCps (x * 13 + 48)) (y * 10 + 1)) (o * 2 - 1) (g * z)
-in mix (eventVoicer 16 f) * control kr "gain" 0.5
+in mix (voicer 16 f) * control kr "gain" 0.5
 
 -- blip ; event control (p)
 let f (_,g,_,_,z,o,rx,_,p,px,_) =
       let f0 = midiCps (p * 127 + px)
           nh = max 0 rx * 10 + 1
       in pan2 (blip ar f0 nh) (o * 2 - 1) (g * z)
-in mix (eventVoicer 16 f) * control kr "gain" 0.5
+in mix (voicer 16 f) * control kr "gain" 0.5
 
 ---- ; drawings
 Sound.SC3.Plot.plot_ugen1 0.1 (blip ar 1000 20)

@@ -18,4 +18,4 @@ let f (c,g,x,y,z,o,_,_,_,_,_) =
           freq = midiCps (x * 24 + 36)
           exci = saw ar freq * z * g
       in pan2 (X.sonLPCSynthIn ar chain exci) (o * 2 - 1) 1
-in mix (eventVoicer 4 f) * control kr "gain" 1
+in mix (voicer 4 f) * control kr "gain" 1

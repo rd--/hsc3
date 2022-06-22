@@ -24,4 +24,4 @@ let f (c,g,x,y,z,o,rx,ry,_,_,_) =
           jetRa = linLin rx 0 1 0.25 0.85 * lagUD g 0.001 0.25
           signal = X.dwgFlute ar freq pm endr jetr jetRa 1 0.01
       in pan2 (hpf (lpf signal 6000) 200) (o * 2 - 1) 1
-in mix (eventVoicer 16 f) * control kr "gain" 0.25
+in mix (voicer 16 f) * control kr "gain" 0.25

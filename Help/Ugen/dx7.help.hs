@@ -30,7 +30,7 @@ let f (_,g,x,_,z,o,_,_,p,_,_) =
           buf = asLocalBufId 'ε' (map constant (concat vc))
           x0 = latch x g
       in pan2 (X.dx7 ar buf g 0 0 0 (p * 127) z (0x2000 * (x - x0)) 0 0 0) (o * 2 - 1) 1
-in mix (eventVoicer 16 f) * control kr "gain" 1
+in mix (voicer 16 f) * control kr "gain" 1
 
 -- dx7 ; data at shared buffer ; external control
 let buf = control kr "dat" 100
@@ -67,7 +67,7 @@ let f (_,g,x,_,z,o,_,_,p,_,_) =
           pw = 0x2000 * (1 + (x - x0) * 2)
           s = X.dx7 ar buf g 0 0 vc (p * 127) (z * 99) pw 0 0 0
       in pan2 s (o * 2 - 1) 1
-in mix (eventVoicer 16 f) * control_m kr "gain" 1 (0,4,"amp")
+in mix (voicer 16 f) * control_m kr "gain" 1 (0,4,"amp")
 
 ---- ; send init voice
 import qualified Sound.SC3.Data.Yamaha.DX7 as DX7 {- hsc3-data -}

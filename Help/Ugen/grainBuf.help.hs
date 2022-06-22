@@ -25,7 +25,7 @@ let f (_,g,x,y,z,o,rx,ry,_,_,_) =
           e = -1
           tr = impulse ar (y * 60 + 10) 0
       in grainBuf nc tr (ry * 0.5) buf (1 + (rx * 0.1)) x 2 o e 512 * z * g
-in mix (eventVoicer 16 f) * control kr "gain" 2
+in mix (voicer 16 f) * control kr "gain" 2
 
 ---- ; load buffer
 ld fn = withSC3 (async (b_allocRead 0 (sfResolve fn) 0 0))

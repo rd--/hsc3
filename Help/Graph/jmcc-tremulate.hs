@@ -21,7 +21,7 @@ let f (_,w,x,_,z,o,rx,ry,_,_,_) =
           a = max 0 (lfNoise2 kr (r * (0.75 + rx))) * z
           l = X.randN 4 (-1) 1
       in mix (pan2 s (l + (o * 2 - 1)) (a * lagUD w 0 (ry * 2)))
-in combN (mix (eventVoicer 16 f) * control kr "gain" 0.5) 0.1 0.1 1
+in combN (mix (voicer 16 f) * control kr "gain" 0.5) 0.1 0.1 1
 
 -- tremulate (jmcc) #1 ; event control ; id
 let f (_,g,x,_,z,o,rx,ry,_,_,_) =
@@ -30,4 +30,4 @@ let f (_,g,x,_,z,o,rx,ry,_,_,_) =
           a = max 0 (lfNoise2Id 'γ' kr (r * (0.75 + rx))) * z
           l = X.randNId 4 'δ' (-1) 1
       in mix (pan2 s (l + (o * 2 - 1)) (a * lagUD g 0 (ry * 2)))
-in combN (mix (eventVoicer 16 f) * control kr "gain" 0.5) 0.1 0.1 1
+in combN (mix (voicer 16 f) * control kr "gain" 0.5) 0.1 0.1 1

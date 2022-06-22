@@ -34,7 +34,7 @@ let f (c,g,x,y,z,o,rx,ry,_,_,_) =
           d7 = 239.0 * mul
           d8 = 241.0 * mul
       in pan2 (X.dwgSoundBoard sig c1 c3 mix d1 d2 d3 d4 d5 d6 d7 d8) (o * 2 - 1) 1
-in mix (eventVoicer 16 f) * control kr "gain" 1
+in mix (voicer 16 f) * control kr "gain" 1
 
 -- dwgSoundBoard ; pluck ; event control
 let f (_,g,x,y,z,o,rx,_,_,_,_) =
@@ -46,4 +46,4 @@ let f (_,g,x,y,z,o,rx,_,_,_,_) =
                 in X.dwgSoundBoard sig 20 20 (rx * 0.35)
                    (199 * m) (211 * m) (223 * m) (227 * m) (229 * m) (233 * m) (239 * m) (241 * m)
       in pan2 flt (o * 2 - 1) 1
-in mix (eventVoicer 16 f) * control kr "gain" 1
+in mix (voicer 16 f) * control kr "gain" 1

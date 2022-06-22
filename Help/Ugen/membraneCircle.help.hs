@@ -17,4 +17,4 @@ let f (_,g,x,y,z,o,_,_,_,_,_) =
           p = envPerc 0.0001 (1 - z)
           e = envGen kr g (z + y / 4) 0 0.1 DoNothing p
       in pan2 (X.membraneCircle ar (pinkNoiseId 'α' ar * e) tension loss) (o * 2 - 1) 1
-in mix (eventVoicer 6 f) * control kr "gain" 1
+in mix (voicer 6 f) * control kr "gain" 1

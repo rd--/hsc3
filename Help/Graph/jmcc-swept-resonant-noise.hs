@@ -37,7 +37,7 @@ let f (_,g,x,y,z,_,_,_,_,_,_) =
           f1 = midiCps (fSinOsc kr f0 0 * rand 0 24 + rand 36 84)
           sw = resonz (whiteNoise ar * 0.007) f1 0.1
       in mceFill 2 (flt sw) * z * lag g 0.1
-in mix (eventVoicer 16 f) * control kr "gain" 1
+in mix (voicer 16 f) * control kr "gain" 1
 
 -- swept resonant noise (jmcc) #2 ; event control ; id
 let f (c,g,x,y,z,_,_,_,_,_,_) =
@@ -52,4 +52,4 @@ let f (c,g,x,y,z,_,_,_,_,_,_) =
           f1 = midiCps (fSinOsc kr f0 0 * randId (c,'γ') 0 24 + randId (c,'δ') 36 84)
           sw = resonz (whiteNoiseId (c,'α') ar * 0.007) f1 0.1
       in mce (map (flt sw) ['ε','ζ']) * z * lag g 0.1
-in mix (eventVoicer 16 f) * control kr "gain" 1
+in mix (voicer 16 f) * control kr "gain" 1

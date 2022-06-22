@@ -1,4 +1,4 @@
--- | Event and Ctl systems for external control interfaces.
+-- | Continous controller event and Ctl systems for external control interfaces.
 module Sound.Sc3.Ugen.Event where
 
 import Data.List {- base -}
@@ -12,61 +12,65 @@ import Sound.Sc3.Ugen.Bindings.Composite {- hsc3 -}
 import Sound.Sc3.Ugen.Types {- hsc3 -}
 import Sound.Sc3.Ugen.Ugen {- hsc3 -}
 
--- * Event
+-- * Cc Event
 
 {- | (v, w, x, y, z, o, rx, ry, p, px, _)
 
      v = voice, w = gate, z = force/pressure,
      o = orientation/angle, r = radius, p = pitch
 -}
-type Event t = (Int,t,t,t,t,t,t,t,t,t,t)
+type CcEvent t = (Int, t, t, t, t, t, t, t, t, t, t)
 
 -- | Translate list to Event.
-event_from_list :: Num t => Int -> [t] -> Event t
-event_from_list v l =
+cc_event_from_list :: Num t => Int -> [t] -> CcEvent t
+cc_event_from_list v l =
   case l of
-    [w,x,y,z,o,rx,ry,p,px,py] -> (v,w,x,y,z,o,rx,ry,p,px,py)
-    _ -> error "event_from_list?"
+    [w, x, y, z, o, rx, ry, p, px, py] -> (v, w, x, y, z, o, rx, ry, p, px, py)
+    _ -> error "cc_event_from_list?"
 
-{- | (eventAddr, eventIncr, eventZero)
+{- | (ccEventAddr, ccEventIncr, ccEventZero)
 
-eventAddr = k0 = index of control bus zero for event system,
-eventIncr = stp = voice index increment,
-eventZero = c0 = offset for event voices at current server
+ccEventAddr = k0 = index of control bus zero for event system,
+ccEventIncr = stp = voice index increment,
+ccEventZero = c0 = offset for event voices at current server
 -}
-type EventMeta t = (t, t, t)
+type CcEventMeta t = (t, t, t)
 
-eventMetaDefault :: Num n => EventMeta n
-eventMetaDefault = (13000, 10, 0)
+ccEventMetaDefault :: Num n => CcEventMeta n
+ccEventMetaDefault = (13000, 10, 0)
 
-eventMetaControls :: EventMeta Int -> EventMeta Ugen
-eventMetaControls (p,q,r) =
+ccEventMetaControls :: CcEventMeta Int -> CcEventMeta Ugen
+ccEventMetaControls (p,q,r) =
   let k nm i = control kr nm (fromIntegral i)
-  in (k "eventAddr" p, k "eventIncr" q, k "eventZero" r)
+  in (k "ccEventAddr" p, k "ccEventIncr" q, k "ccEventZero" r)
 
 -- | c = event number (zero indexed)
-eventAddr :: (Ugen,Ugen,Ugen) -> Int -> Event Ugen
-eventAddr (k0, stp, c0) c =
+ccEventAddr :: (Ugen,Ugen,Ugen) -> Int -> CcEvent Ugen
+ccEventAddr (k0, stp, c0) c =
   let u = in' 10 kr (k0 + ((c0 + fromIntegral c) * stp))
-  in event_from_list c (mceChannels u)
+  in cc_event_from_list c (mceChannels u)
 
 -- | c0 = index of voice (channel) zero for event set, n = number of voices (channels)
-eventVoicerAddr :: EventMeta Ugen -> Int -> (Event Ugen -> Ugen) -> Ugen
-eventVoicerAddr m n f = mce (map (\c -> f (eventAddr m c)) [0 .. n - 1])
+ccEventVoicerAddr :: CcEventMeta Ugen -> Int -> (CcEvent Ugen -> Ugen) -> Ugen
+ccEventVoicerAddr m n f = mce (map (\c -> f (ccEventAddr m c)) [0 .. n - 1])
 
 -- | 'eventVoicerAddr' with default (addr, inct, zero).
-eventVoicer :: Int -> (Event Ugen -> Ugen) -> Ugen
-eventVoicer = eventVoicerAddr eventMetaDefault
+ccEventVoicer :: Int -> (CcEvent Ugen -> Ugen) -> Ugen
+ccEventVoicer = ccEventVoicerAddr ccEventMetaDefault
+
+-- | Synonym for ccEventVoicer.
+voicer :: Int -> (CcEvent Ugen -> Ugen) -> Ugen
+voicer = ccEventVoicer
 
 -- | 'eventVoicerAddr' with 'control' inputs for /eventAddr/, /eventIncr/ and /eventZero/.
-eventVoicerParam :: Int -> (Event Ugen -> Ugen) -> Ugen
-eventVoicerParam = eventVoicerAddr (eventMetaControls eventMetaDefault)
+ccEventVoicerParam :: Int -> (CcEvent Ugen -> Ugen) -> Ugen
+ccEventVoicerParam = ccEventVoicerAddr (ccEventMetaControls ccEventMetaDefault)
 
-{- | Given /g/ and /p/ fields of an 'Event' derive a 'gateReset' from g
+{- | Given /g/ and /p/ fields of an 'CcEvent' derive a 'gateReset' from g
 and a trigger derived from monitoring /g/ and /p/ for changed values.
 -}
-eventGateReset :: Ugen -> Ugen -> (Ugen, Ugen)
-eventGateReset g p = let tr = changed p 0.01 + changed g 0.01 in (gateReset g tr,tr)
+ccEventGateReset :: Ugen -> Ugen -> (Ugen, Ugen)
+ccEventGateReset g p = let tr = changed p 0.01 + changed g 0.01 in (gateReset g tr,tr)
 
 -- * Ctl
 

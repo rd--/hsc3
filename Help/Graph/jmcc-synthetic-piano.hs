@@ -31,7 +31,7 @@ let f (_,g,_,y,z,_,_,_,p,_,_) =
           l = ((p * 127 - 36) / 27) - 1
           cmb_ = sum_opt (map cmb [-0.05,0,0.04])
       in pan2 cmb_ l (1 + z)
-in mix (eventVoicer 16 f) * control kr "gain" 1
+in mix (voicer 16 f) * control kr "gain" 1
 
 -- synthetic piano (jmcc) #3 ; event-control ; id
 let f (c,g,_,y,z,_,_,_,p,_,_) =
@@ -42,4 +42,4 @@ let f (c,g,_,y,z,_,_,_,p,_,_) =
           l = ((p * 127 - 36) / 27) - 1
           cmb_ = sum_opt (zipWith cmb ['δ'..] [-0.05,0,0.04])
       in pan2 cmb_ l (1 + z)
-in mix (eventVoicer 16 f) * control kr "gain" 1
+in mix (voicer 16 f) * control kr "gain" 1

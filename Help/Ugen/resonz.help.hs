@@ -23,7 +23,7 @@ in resonz (pinkNoise ar) f rq
 -- resonz ; pinkNoise ; event control
 let f (_,g,_,y,z,o,_,_,p,_,_) =
       pan2 (resonz (pinkNoise ar) (unitCps p) (y * 0.25) * 24) (o * 2 - 1) (z * g)
-in mix (eventVoicer 16 f) * control kr "gain" 1
+in mix (voicer 16 f) * control kr "gain" 1
 
 -- resonz ; pinkNoise ; event control
 let f (_,g,_,y,z,o,rx,_,p,_,_) =
@@ -33,7 +33,7 @@ let f (_,g,_,y,z,o,rx,_,p,_,_) =
           rq = linLin y 0 1 0.05 0.25 / f {- 1/Q (reciprocal of Q) -}
           scl = 900
       in pan2 (resonz (pinkNoise ar) f rq * scl * z) (o * 2 - 1) e
-in mix (eventVoicer 16 f) * control kr "gain" 1
+in mix (voicer 16 f) * control kr "gain" 1
 
 {---- ; Q
 The Q factor of a resonator is defined as the center-frequency (cf) divided by the bandwidth (bw).

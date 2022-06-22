@@ -11,7 +11,7 @@ let f (_,g,x,y,z,_,_,_,_,_,_) =
           b0 = control kr "b0" 100
           sig = playBuf 2 ar (b0 + buf) (bufRateScale kr (b0 + buf) * rt0 * rt) g 0 NoLoop DoNothing
       in sig * z * lagUD g 0 4
-in mix (eventVoicer 16 f) * control kr "gain" 1
+in mix (voicer 16 f) * control kr "gain" 1
 
 -- rSmplrIndex ; event control ; stereo ; requires=tbl,b0 ; data table and loaded sample data
 let f (_,g,x,y,z,_,_,_,_,_,_) =
@@ -25,7 +25,7 @@ let f (_,g,x,y,z,_,_,_,_,_,_) =
           b0 = control kr "b0" 100
           sig = playBuf 2 ar (b0 + buf) (bufRateScale kr (b0 + buf) * rt0 * rt) g 0 NoLoop DoNothing
       in sig * z * lagUD g 0 4
-in mix (eventVoicer 16 f) * control kr "gain" 1
+in mix (voicer 16 f) * control kr "gain" 1
 
 -- rSmplrIndex ; event control ; mono ; requires=tbl,b0 data table and loaded sample data
 let f (_,g,x,y,z,o,_,_,_,_,_) =
@@ -39,7 +39,7 @@ let f (_,g,x,y,z,o,_,_,_,_,_) =
           b0 = control kr "b0" 100
           sig = playBuf 1 ar (b0 + buf) (bufRateScale kr (b0 + buf) * rt0 * rt) g 0 NoLoop DoNothing
       in pan2 sig (o * 2 - 1) (z * lagUD g 0.01 0.01)
-in mix (eventVoicer 16 f) * control kr "gain" 8
+in mix (voicer 16 f) * control kr "gain" 8
 
 ---- ; load bosdendorfer sample data
 hsc3-smplr load pf --dyn=008 --b0=100

@@ -16,7 +16,7 @@ let bias = control kr "bias" 0.25
           width = y
           sig = varSaw ar freq 0 width
       in pan2 (X.analogTape sig (bias + rx) (saturation + ry) (drive + o) 1 0) (o * 2 - 1) (z * g)
-in mix (eventVoicer 12 f) * control kr "gain" 1
+in mix (voicer 12 f) * control kr "gain" 1
 
 ---- ; drawings
 UI.ui_sc3_scope 2 0 (2 ^ 14) 0.75 "audio" 0

@@ -41,7 +41,7 @@ let f (_,g,x,y,z,_,_,_,p,_,_) =
           iota n i m = mce (take n (iterate (+ m) i))
           d = klankSpec_mce (iota 12 fq fq) (geom 12 1 r1) r2
       in softClip (dynKlank exc 1 0 1 d)
-in mix (eventVoicer 16 f) * control kr "gain" 0.75
+in mix (voicer 16 f) * control kr "gain" 0.75
 
 -- bowed string (jmcc) ; event control ; id
 let f (c,g,_,y,z,_,_,_,p,_,_) =
@@ -56,4 +56,4 @@ let f (c,g,_,y,z,_,_,_,p,_,_) =
           iota n i m = mce (take n (iterate (+ m) i))
           d = klankSpec_mce (iota 12 fq fq) (geom 12 1 r1) r2
       in softClip (dynKlank exc 1 0 1 d)
-in mix (eventVoicer 16 f) * control kr "gain" 0.75
+in mix (voicer 16 f) * control kr "gain" 0.75

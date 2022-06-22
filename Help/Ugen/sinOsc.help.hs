@@ -107,7 +107,7 @@ let f (c,g,_,_,z,o,rx,_,p,_,_) =
           s = sinOsc ar (lag (unitCps p) (rx * 2) + freq_mod) (tRand 0 (2 * pi) g)
           l = sinOsc kr o (tRand 0 pi g) * tRand 0.1 0.99 g
       in pan2 s l (lagUD g 0 1 * z * amp_mod)
-in mix (eventVoicer 16 f) * control kr "gain" 1.5
+in mix (voicer 16 f) * control kr "gain" 1.5
 
 -- sinOsc ; event control ; id
 let f (c,g,_,_,z,o,rx,_,p,_,_) =
@@ -116,7 +116,7 @@ let f (c,g,_,_,z,o,rx,_,p,_,_) =
           s = sinOsc ar (lag (unitCps p) (rx * 2) + freq_mod) (tRandId (c,'δ') 0 (2 * pi) g)
           l = sinOsc kr o (tRandId (c,'ε') 0 pi g) * tRandId (c,'ζ') 0.1 0.99 g
       in pan2 s l (lagUD g 0 1 * z * amp_mod)
-in mix (eventVoicer 16 f) * control kr "gain" 1.5
+in mix (voicer 16 f) * control kr "gain" 1.5
 
 -- sinOsc ; control_m inputs
 let f = control_m kr "mnn" 69 (0,127,"lin")

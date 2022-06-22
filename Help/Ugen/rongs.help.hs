@@ -29,4 +29,4 @@ let f (_,g,x,y,z,o,rx,ry,_,_,_) =
           cosFreq = 0.25
           sig = X.rongs ar tr tr f0 structure brightness damping accent stretch position loss modeNum cosFreq
       in pan2 (leakDC sig 0.995) (o * 2 - 1) (lagUD z 0 2)
-in mix (eventVoicer 6 f) * control kr "gain" 1
+in mix (voicer 6 f) * control kr "gain" 1

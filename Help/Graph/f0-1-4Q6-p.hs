@@ -11,4 +11,4 @@ let f (_,g,_,y,z,o,_,_,p,px,_) =
                 env = envGen ar g (latch z g) 0 1 DoNothing shp
             in sinOsc ar (midiCps (p * 127 + px) * frqs!!i + dets!!i) 0 * env * g
       in pan2 (mixFill 11 fn) (o * 2 - 1) 1
-in mix (eventVoicer 16 f) * control kr "gain" 0.75
+in mix (voicer 16 f) * control kr "gain" 0.75

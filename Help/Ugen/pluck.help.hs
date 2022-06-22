@@ -27,7 +27,7 @@ let f (c,g,x,y,z,o,_,_,_,_,_) =
           dl = dl_max * (1 - x * 0.9)
           sig = pluck n g dl_max dl 10 (y / 3)
       in pan2 sig (o * 2 - 1) 1
-in mix (eventVoicer 16 f) * control kr "gain" 2
+in mix (voicer 16 f) * control kr "gain" 2
 
 -- pluck ; event control ; gateReset
 let f (_,g,x,y,z,o,_,_,p,_,_) =
@@ -37,7 +37,7 @@ let f (_,g,x,y,z,o,_,_,p,_,_) =
           dx = x - latch x tr
           dl = 1 / midiCps (p * 127 + dx * 8)
       in pan2 (pluck n gt dl_max dl 10 (y / 3)) (o * 2 - 1) 1
-in mix (eventVoicer 16 f) * control kr "gain" 2
+in mix (voicer 16 f) * control kr "gain" 2
 
 -- pluck ; event control ; gateReset ; p+px
 let f (_,g,_,y,z,o,_,_,p,px,_) =
@@ -46,7 +46,7 @@ let f (_,g,_,y,z,o,_,_,p,px,_) =
           (gt,tr) = eventGateReset g p
           dl = 1 / midiCps (p * 127 + px * 1)
       in pan2 (pluck n gt dl_max dl 10 (y / 3)) (o * 2 - 1) 1
-in mix (eventVoicer 16 f) * control kr "gain" 2
+in mix (voicer 16 f) * control kr "gain" 2
 
 -- pluck ; https://scsynth.org/t/what-kind-of-synthesis-is-this/4318/17
 let tr = impulse ar (lfNoise2 kr 1 `in_exprange` (1,100)) 0

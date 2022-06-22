@@ -23,4 +23,4 @@ let f (_,g,x,y,z,o,rx,ry,p,px,_) =
           cf = midiCps (p * 127 + px)
           mf = (cf * 1.5) + ((1 - x) * z * cf)
       in grainFM 2 tr (ry * 0.25) cf mf (1 + (rx * 0.25)) o (-1) 512 * z * lagUD g 0 2
-in mix (eventVoicer 16 f) * control kr "gain" 0.5
+in mix (voicer 16 f) * control kr "gain" 0.5

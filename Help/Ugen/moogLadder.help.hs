@@ -14,7 +14,7 @@ let f (_,g,_,y,z,o,rx,ry,p,_,_) =
           res = rx + ry
           env = lagUD g 0.05 (2 - y * 2) * (2 - y) * z
       in pan2 (X.moogLadder (lfSaw ar f0 0) f1 res) (o * 2 - 1) env
-in mix (eventVoicer 16 f) * control kr "gain" 1
+in mix (voicer 16 f) * control kr "gain" 1
 
 -- moogLadder ; wind (Id)
 let mk k = let n = whiteNoiseId k ar

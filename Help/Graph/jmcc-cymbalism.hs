@@ -34,7 +34,7 @@ let f (_,g,x,y,z,_,_,_,_,_,_) =
           whn = whiteNoise ar * z * 0.1
           sig = decay (trig g controlDur) (y * 0.01) * whn
       in dynKlank sig 1 0 1 (mceTranspose spc)
-in mix (eventVoicer 16 f) * control kr "gain" 1
+in mix (voicer 16 f) * control kr "gain" 1
 
 -- cymbalism (jmcc) #2 ; event control ; id
 let f (c,g,x,y,z,_,_,_,_,_,_) =
@@ -49,4 +49,4 @@ let f (c,g,x,y,z,_,_,_,_,_,_) =
           whn = whiteNoiseId (c,'γ') ar * z * 0.1
           sig = decay (trig g controlDur) (y * 0.01) * whn
       in dynKlank sig 1 0 1 (mceTranspose spc)
-in mix (eventVoicer 16 f) * control kr "gain" 1
+in mix (voicer 16 f) * control kr "gain" 1

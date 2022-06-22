@@ -24,7 +24,7 @@ let f (_,g,x,y,z,o,rx,ry,_,_,_) =
           freqScale = linLin ry 0 1 0.75 1.25
           ol = linLin rx 0 1 2 16
       in pan2 (warp1 1 b x freqScale dur (-1) ol (ry * 0.75) 2) (o * 2 - 1) (z * g)
-in mix (eventVoicer 16 f) * control kr "gain" 2
+in mix (voicer 16 f) * control kr "gain" 2
 
 ---- ; setup
 ld fn = withSC3 (async (b_allocRead 0 (sfResolve fn) 0 0))
