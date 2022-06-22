@@ -5,17 +5,17 @@ import Data.Function {- base -}
 import Data.List {- base -}
 import System.Random {- random -}
 import Sound.Osc {- hosc -}
-import Sound.SC3 {- hsc3 -}
-import Sound.SC3.Common.Base {- hsc3 -}
-import qualified Sound.SC3.Common.Buffer.Gen as Gen {- hsc3 -}
-import qualified Sound.SC3.Common.Math.Filter.BEQ as Sound.SC3.Common.Math.Filter.BEQ {- hsc3 -}
-import qualified Sound.SC3.UGen.Bindings.DB.External as X {- hsc3 -}
-import qualified Sound.SC3.UGen.Bindings.Composite.External as X {- hsc3 -}
-import qualified Sound.SC3.UGen.Bindings.HW.External.SC3_Plugins as X {- hsc3 -}
-import qualified Sound.SC3.UGen.Bindings.HW.External.Zita as X {- hsc3 -}
-import qualified Sound.SC3.UGen.Protect as Protect {- hsc3-rw -}
-import qualified Sound.SC3.UI.HTML as UI {- hsc3-ui -}
-import qualified Sound.SC3.UI.Plot as UI {- hsc3-ui -}
-import qualified Sound.SC3.UI.Qarma as UI {- hsc3-ui -}
-import qualified Sound.SC3.UI.SCLang as UI {- hsc3-ui -}
-import qualified Sound.SC3.UI.SCLang.Control as UI {- hsc3-ui -}
+import Sound.Sc3 {- hsc3 -}
+import Sound.Sc3.Common.Base {- hsc3 -}
+import qualified Sound.Sc3.Common.Buffer.Gen as Gen {- hsc3 -}
+import qualified Sound.Sc3.Common.Math.Filter.Beq {- hsc3 -}
+import qualified Sound.Sc3.Ugen.Bindings.DB.External as X {- hsc3 -}
+import qualified Sound.Sc3.Ugen.Bindings.Composite.External as X {- hsc3 -}
+import qualified Sound.Sc3.Ugen.Bindings.Hw.External.Sc3_Plugins as X {- hsc3 -}
+import qualified Sound.Sc3.Ugen.Bindings.Hw.External.Zita as X {- hsc3 -}
+import qualified Sound.Sc3.Ugen.Protect as Protect {- hsc3-rw -}
+import qualified Sound.Sc3.Ui.Html as Ui {- hsc3-ui -}
+import qualified Sound.Sc3.Ui.Plot as Ui {- hsc3-ui -}
+import qualified Sound.Sc3.Ui.Qarma as Ui {- hsc3-ui -}
+import qualified Sound.Sc3.Ui.Sclang as Ui {- hsc3-ui -}
+import qualified Sound.Sc3.Ui.Sclang.Control as Ui {- hsc3-ui -}
