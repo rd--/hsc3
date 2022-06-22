@@ -55,10 +55,10 @@ maybe_async_at t m =
     else sendBundle (bundle t [m])
 
 -- | Hostname and port number.
-type SC3_Address = (String, Int)
+type Sc3_Address = (String, Int)
 
 -- | Local host (ie. @127.0.0.1@) at port 'sc3_port_def'
-sc3_default_udp :: SC3_Address
+sc3_default_udp :: Sc3_Address
 sc3_default_udp = (Options.sc3_addr_def,Options.sc3_port_def)
 
 -- | Maximum packet size, in bytes, that can be sent over Udp.
@@ -66,37 +66,37 @@ sc3_default_udp = (Options.sc3_addr_def,Options.sc3_port_def)
 sc3_udp_limit :: Num n => n
 sc3_udp_limit = 65507
 
--- | Bracket @SC3@ communication at indicated host and port.
-withSC3At :: SC3_Address -> Connection Udp a -> IO a
-withSC3At (h,p) = withTransport (openUdp h p)
+-- | Bracket @Sc3@ communication at indicated host and port.
+withSc3At :: Sc3_Address -> Connection Udp a -> IO a
+withSc3At (h,p) = withTransport (openUdp h p)
 
--- | Bracket @SC3@ communication, ie. 'withSC3At' 'sc3_default_udp'.
+-- | Bracket @Sc3@ communication, ie. 'withSc3At' 'sc3_default_udp'.
 --
 -- > import Sound.Sc3.Server.Command
 --
--- > withSC3 (sendMessage status >> waitReply "/status.reply")
-withSC3 :: Connection Udp a -> IO a
-withSC3 = withSC3At sc3_default_udp
+-- > withSc3 (sendMessage status >> waitReply "/status.reply")
+withSc3 :: Connection Udp a -> IO a
+withSc3 = withSc3At sc3_default_udp
 
--- | 'void' of 'withSC3'.
-withSC3_ :: Connection Udp a -> IO ()
-withSC3_ = void . withSC3
+-- | 'void' of 'withSc3'.
+withSc3_ :: Connection Udp a -> IO ()
+withSc3_ = void . withSc3
 
--- | 'timeout_r' of 'withSC3'
-withSC3_tm :: Double -> Connection Udp a -> IO (Maybe a)
-withSC3_tm tm = Sound.Osc.Time.Timeout.timeout_r tm . withSC3
+-- | 'timeout_r' of 'withSc3'
+withSc3_tm :: Double -> Connection Udp a -> IO (Maybe a)
+withSc3_tm tm = Sound.Osc.Time.Timeout.timeout_r tm . withSc3
 
 -- | Run /f/ at /k/ scsynth servers with sequential port numbers starting at 'Options.sc3_port_def'.
 --
--- > withSC3AtSeq sc3_default_udp 2 (sendMessage status >> waitReply "/status.reply")
-withSC3AtSeq :: SC3_Address -> Int -> Connection Udp a -> IO [a]
-withSC3AtSeq (h,p) k f = do
+-- > withSc3AtSeq sc3_default_udp 2 (sendMessage status >> waitReply "/status.reply")
+withSc3AtSeq :: Sc3_Address -> Int -> Connection Udp a -> IO [a]
+withSc3AtSeq (h,p) k f = do
   let mk_udp i = openUdp h (p + i)
   mapM (\i -> withTransport (mk_udp i) f) [0 .. k - 1]
 
--- | 'void' of 'withSC3AtSeq'.
-withSC3AtSeq_ :: SC3_Address -> Int -> Connection Udp a -> IO ()
-withSC3AtSeq_ loc k = void . withSC3AtSeq loc k
+-- | 'void' of 'withSc3AtSeq'.
+withSc3AtSeq_ :: Sc3_Address -> Int -> Connection Udp a -> IO ()
+withSc3AtSeq_ loc k = void . withSc3AtSeq loc k
 
 -- * Server control
 
@@ -168,7 +168,7 @@ run_bundle t0 b = do
 
 > let sc = Nrt [bundle 1 [s_new0 "default" (-1) AddToHead 1]
 >              ,bundle 2 [n_set1 (-1) "gate" 0]]
-> in withSC3 (nrt_play sc)
+> in withSc3 (nrt_play sc)
 
 -}
 nrt_play :: Transport m => Nrt.Nrt -> m ()
@@ -188,9 +188,9 @@ nrt_play_reorder s = do
   t <- liftIO time
   mapM_ (run_bundle t) (Bundle 0 b : r)
 
--- | 'withSC3' of 'nrt_play'.
+-- | 'withSc3' of 'nrt_play'.
 nrt_audition :: Nrt.Nrt -> IO ()
-nrt_audition = withSC3 . nrt_play
+nrt_audition = withSc3 . nrt_play
 
 -- * Audible
 
@@ -210,13 +210,13 @@ instance Audible Synthdef.Synthdef where
 instance Audible Ugen.Ugen where
     playAt = playUgen
 
--- | 'withSC3At' of 'playAt'.
-auditionAt :: Audible e => SC3_Address -> Play_Opt -> e -> IO ()
-auditionAt loc opt = withSC3At loc . playAt opt
+-- | 'withSc3At' of 'playAt'.
+auditionAt :: Audible e => Sc3_Address -> Play_Opt -> e -> IO ()
+auditionAt loc opt = withSc3At loc . playAt opt
 
--- | 'withSC3AtSeq' of 'playAt'.
-auditionAtSeq :: Audible e => SC3_Address -> Play_Opt -> Int -> e -> IO ()
-auditionAtSeq loc opt k = withSC3AtSeq_ loc k . playAt opt
+-- | 'withSc3AtSeq' of 'playAt'.
+auditionAtSeq :: Audible e => Sc3_Address -> Play_Opt -> Int -> e -> IO ()
+auditionAtSeq loc opt k = withSc3AtSeq_ loc k . playAt opt
 
 -- | Default 'Play_Opt', ie. (-1,addToHead,1,[])
 def_play_opt :: Play_Opt
@@ -244,7 +244,7 @@ withNotifications f = do
 
 -- | Variant of 'b_getn1' that waits for return message and unpacks it.
 --
--- > withSC3_tm 1.0 (b_getn1_data 0 (0,5))
+-- > withSc3_tm 1.0 (b_getn1_data 0 (0,5))
 b_getn1_data :: DuplexOsc m => Int -> (Int,Int) -> m [Double]
 b_getn1_data b s = do
   let f m = let (_,_,_,r) = Command.unpack_b_setn_err m in r
@@ -254,7 +254,7 @@ b_getn1_data b s = do
 -- | Variant of 'b_getn1_data' that segments individual 'b_getn'
 -- messages to /n/ elements.
 --
--- > withSC3_tm 1.0 (b_getn1_data_segment 1 0 (0,5))
+-- > withSc3_tm 1.0 (b_getn1_data_segment 1 0 (0,5))
 b_getn1_data_segment :: DuplexOsc m =>
                         Int -> Int -> (Int,Int) -> m [Double]
 b_getn1_data_segment n b (i,j) = do
@@ -274,7 +274,7 @@ b_fetch n b = do
 
 -- | First channel of 'b_fetch', errors if there is no data.
 --
--- > withSC3 (b_fetch1 512 123456789)
+-- > withSc3 (b_fetch1 512 123456789)
 b_fetch1 :: DuplexOsc m => Int -> Int -> m [Double]
 b_fetch1 n b = fmap (Safe.headNote "b_fetch1: no data") (b_fetch n b)
 
@@ -294,7 +294,7 @@ b_query1_unpack_generic n = do
 
 -- | Type specialised 'b_query1_unpack_generic'.
 --
--- > withSC3 (b_query1_unpack 0)
+-- > withSc3 (b_query1_unpack 0)
 b_query1_unpack :: DuplexOsc m => Command.Buffer_Id -> m (Int,Int,Int,Double)
 b_query1_unpack = b_query1_unpack_generic
 
@@ -333,25 +333,25 @@ g_queryTree1_unpack n = do
 
 -- | Collect server status information.
 --
--- > withSC3 serverStatus >>= mapM putStrLn
+-- > withSc3 serverStatus >>= mapM putStrLn
 serverStatus :: DuplexOsc m => m [String]
 serverStatus = fmap Status.statusFormat serverStatusData
 
 -- | Collect server status information.
 --
--- > withSC3 server_status_concise >>= putStrLn
+-- > withSc3 server_status_concise >>= putStrLn
 server_status_concise :: DuplexOsc m => m String
 server_status_concise = fmap Status.status_format_concise serverStatusData
 
 -- | Read nominal sample rate of server.
 --
--- > withSC3 serverSampleRateNominal
+-- > withSc3 serverSampleRateNominal
 serverSampleRateNominal :: DuplexOsc m => m Double
 serverSampleRateNominal = fmap (Status.extractStatusField 7) serverStatusData
 
 -- | Read actual sample rate of server.
 --
--- > withSC3 serverSampleRateActual
+-- > withSc3 serverSampleRateActual
 serverSampleRateActual :: DuplexOsc m => m Double
 serverSampleRateActual = fmap (Status.extractStatusField 8) serverStatusData
 
@@ -365,7 +365,7 @@ serverStatusData = do
 
 -- | Collect server node tree information.
 --
--- > withSC3 serverTree >>= mapM_ putStrLn
+-- > withSc3 serverTree >>= mapM_ putStrLn
 serverTree :: DuplexOsc m => m [String]
 serverTree = do
   qt <- g_queryTree1_unpack 0

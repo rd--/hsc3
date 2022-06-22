@@ -48,7 +48,7 @@ scsynthReset :: Scsynth -> IO ()
 scsynthReset (Scsynth mRef) = do
   onResetMessages <- readIORef mRef
   writeIORef mRef []
-  withSC3 (reset >> mapM_ maybe_async onResetMessages)
+  withSc3 (reset >> mapM_ maybe_async onResetMessages)
 
 {- | Play Ugen at Scsynth.
      Send any required initialisation messages and stores and onReset messages.
@@ -57,7 +57,7 @@ scsynthPlayAt :: Scsynth -> Play_Opt -> Ugen -> IO ()
 scsynthPlayAt scsynth opt ugen = do
   let (pre, post) = ugenCollectBrackets ugen
   if not (null post) then scsynthOnReset scsynth post else return ()
-  withSC3 (mapM_ maybe_async pre >> playAt opt ugen)
+  withSc3 (mapM_ maybe_async pre >> playAt opt ugen)
 
 -- | scsynthPlayAt with default options.
 scsynthPlay :: Scsynth -> Ugen -> IO ()

@@ -39,9 +39,9 @@ maybe_async_at fd t m =
     then void (async fd m)
     else sendBundle fd (bundle t [m])
 
--- | Bracket @SC3@ communication.
-withSC3 :: (Udp -> IO a) -> IO a
-withSC3 = withTransport (openUdp "127.0.0.1" sc3_port_def)
+-- | Bracket @Sc3@ communication.
+withSc3 :: (Udp -> IO a) -> IO a
+withSc3 = withTransport (openUdp "127.0.0.1" sc3_port_def)
 
 -- * Server control
 
@@ -91,9 +91,9 @@ run_bundle fd t0 b = do
 nrt_play :: Transport t => t -> Nrt -> IO ()
 nrt_play fd sc = time >>= \t0 -> mapM_ (run_bundle fd t0) (nrt_bundles sc)
 
--- | 'withSC3' of 'nrt_play'
+-- | 'withSc3' of 'nrt_play'
 nrt_audition :: Nrt -> IO ()
-nrt_audition sc = withSC3 (`nrt_play` sc)
+nrt_audition sc = withSc3 (`nrt_play` sc)
 
 -- * Audible
 
@@ -112,9 +112,9 @@ instance Audible Synthdef where
 instance Audible Ugen where
     play_id = playUgen
 
--- | 'withSC3' of 'play_id'
+-- | 'withSc3' of 'play_id'
 audition_id :: Audible e => Int -> e -> IO ()
-audition_id k e = withSC3 (\fd -> play_id k fd e)
+audition_id k e = withSc3 (\fd -> play_id k fd e)
 
 -- | 'audition_id' of @-1@.
 audition :: Audible e => e -> IO ()
@@ -135,7 +135,7 @@ withNotifications fd f = do
 
 -- | Variant of 'b_getn1' that waits for return message and unpacks it.
 --
--- > withSC3 (\fd -> b_getn1_data fd 0 (0,5))
+-- > withSc3 (\fd -> b_getn1_data fd 0 (0,5))
 b_getn1_data :: Transport t => t -> Int -> (Int,Int) -> IO [Double]
 b_getn1_data fd b s = do
   let f m = let (_,_,_,r) = unpack_b_setn_err m in r
@@ -145,7 +145,7 @@ b_getn1_data fd b s = do
 -- | Variant of 'b_getn1_data' that segments individual 'b_getn'
 -- messages to /n/ elements.
 --
--- > withSC3 (\fd -> b_getn1_data_segment fd 1 0 (0,5))
+-- > withSc3 (\fd -> b_getn1_data_segment fd 1 0 (0,5))
 b_getn1_data_segment :: Transport t => t -> Int -> Int -> (Int,Int) -> IO [Double]
 b_getn1_data_segment fd n b (i,j) = do
   let ix = b_indices n j i
