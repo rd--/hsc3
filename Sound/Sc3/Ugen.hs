@@ -13,5 +13,5 @@ import Sound.Sc3.Ugen.Mce as U
 import Sound.Sc3.Ugen.Name as U
 import Sound.Sc3.Ugen.Optimise as U
 import Sound.Sc3.Ugen.Pp as U
-import Sound.Sc3.Ugen.Type as U
+import Sound.Sc3.Ugen.Types as U
 import Sound.Sc3.Ugen.Ugen as U
