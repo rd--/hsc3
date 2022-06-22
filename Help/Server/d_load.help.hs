@@ -1,1 +1,1 @@
-    Sound.SC3.Lang.Help.viewServerHelp "/d_load"
+    Sound.Sc3.Lang.Help.viewServerHelp "/d_load"

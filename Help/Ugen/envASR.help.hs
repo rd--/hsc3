@@ -11,14 +11,14 @@ let g = control kr "env-gate" 1
 in sinOsc ar 440 0 * e
 
 ---- ; close gate message
-withSC3 (Sound.OSC.sendMessage (n_set1 (-1) "env-gate" 0))
+withSc3 (Sound.OSC.sendMessage (n_set1 (-1) "env-gate" 0))
 
 ---- ; help
-Sound.SC3.Lang.Help.viewSC3Help "Env.*asr"
-:i Sound.SC3.ASR
+Sound.Sc3.Lang.Help.viewSc3Help "Env.*asr"
+:i Sound.Sc3.ASR
 
 ---- ; drawings
-import Sound.SC3.Plot {- hsc3-plot -}
+import Sound.Sc3.Plot {- hsc3-plot -}
 plotEnvelope [envASR 0.1 1 1 (EnvNum (-4))
              ,envASR 0.3 0.25 1 EnvSin
              ,envASR 0.01 0.5 1.25 EnvLin]

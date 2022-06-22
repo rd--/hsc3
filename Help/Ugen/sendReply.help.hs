@@ -5,4 +5,4 @@ let s0 = lfNoise0Id 'α' kr 5
 in mrg [o,sendReply s0 0 "/send-reply" [s0,s1]]
 
 ---- ; receive reply
-withSC3 (withNotifications (Sound.OSC.waitReply "/send-reply"))
+withSc3 (withNotifications (Sound.OSC.waitReply "/send-reply"))

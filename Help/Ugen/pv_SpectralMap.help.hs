@@ -18,4 +18,4 @@ let freeze = control kr "freeze" 0
 in gVerb (ifft' c3) roomsize revtime 0.5 0.5 15 1 0.7 0.5 300
 
 ---- ; load sndfile
-withSC3 (async (b_allocRead 0 (sfResolve "metal.wav") 0 0))
+withSc3 (async (b_allocRead 0 (sfResolve "metal.wav") 0 0))

@@ -10,4 +10,4 @@ let f = lfNoise2Id 'α' kr 4
 in sinOsc ar (f * 400 + 450) 0 * 0.1
 
 ---- ; drawings ; lfNoise2 is bi-polar
-Sound.SC3.Plot.plot_ugen1 0.1 (lfNoise2Id 'α' ar 1000)
+Sound.Sc3.Plot.plot_ugen1 0.1 (lfNoise2Id 'α' ar 1000)

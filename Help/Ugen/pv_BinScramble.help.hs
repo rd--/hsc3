@@ -18,4 +18,4 @@ let a = soundIn 0
 in pan2 h 0 1
 
 ---- ; load sndfile
-withSC3 (async (b_allocRead 0 "/home/rohan/data/audio/pf-c5.aif" 0 0))
+withSc3 (async (b_allocRead 0 "/home/rohan/data/audio/pf-c5.aif" 0 0))

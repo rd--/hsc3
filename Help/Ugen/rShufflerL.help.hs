@@ -17,7 +17,7 @@ let n = 6
 in splay (X.rShufflerL o f d) 1 1 0 True
 
 ---- ; drawings
-Sound.SC3.Plot.plot_ugen_nrt (48000,64) 0.1 (X.rShufflerL (sinOsc ar 1200 0) 0.02 0.04)
+Sound.Sc3.Plot.plot_ugen_nrt (48000,64) 0.1 (X.rShufflerL (sinOsc ar 1200 0) 0.02 0.04)
 
 {---- Linear input shuffler
 

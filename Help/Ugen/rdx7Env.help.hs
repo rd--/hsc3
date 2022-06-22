@@ -7,7 +7,7 @@ let gate_ = control kr "gate" 0
 in sinOsc ar 440 0 * X.rdx7Env ar gate_ data_ r1 r2 r3 r4 l1 l2 l3 l4 ol
 
 ---- ; env set
-withSC3 (Sound.OSC.sendMessage (n_set (-1) [("r1",35.0),("r2",65),("r3",55),("r4",25)]))
-withSC3 (Sound.OSC.sendMessage (n_set (-1) [("l1",99.0),("l2",65),("l3",75),("l4",0)]))
-withSC3 (Sound.OSC.sendMessage (n_set1 (-1) "gate" 1.0))
-withSC3 (Sound.OSC.sendMessage (n_set1 (-1) "gate" 0.0))
+withSc3 (Sound.OSC.sendMessage (n_set (-1) [("r1",35.0),("r2",65),("r3",55),("r4",25)]))
+withSc3 (Sound.OSC.sendMessage (n_set (-1) [("l1",99.0),("l2",65),("l3",75),("l4",0)]))
+withSc3 (Sound.OSC.sendMessage (n_set1 (-1) "gate" 1.0))
+withSc3 (Sound.OSC.sendMessage (n_set1 (-1) "gate" 0.0))

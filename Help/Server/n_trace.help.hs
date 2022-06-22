@@ -1,7 +1,7 @@
-     Sound.SC3.Lang.Help.viewServerHelp "/n_trace"
+     Sound.Sc3.Lang.Help.viewServerHelp "/n_trace"
 
 > import Sound.OSC {- hosc -}
-> import Sound.SC3 {- hsc3 -}
+> import Sound.Sc3 {- hsc3 -}
 
 > m_01 =
 >   [d_recv defaultSynthdef
@@ -9,5 +9,5 @@
 
 > m_02 = n_trace [1,100]
 
-    > withSC3 (mapM_ maybe_async m_01)
-    > withSC3 (sendMessage m_02)
+    > withSc3 (mapM_ maybe_async m_01)
+    > withSc3 (sendMessage m_02)

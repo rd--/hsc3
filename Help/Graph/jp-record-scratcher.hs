@@ -11,4 +11,4 @@ let (buf, nc) = (control kr "buf" 0, 2)
 in dup (scr * e)
 
 ---- ; buffer setup
-withSC3 (async (b_allocRead 0 (sfResolve "pf-c5.aif") 0 0))
+withSc3 (async (b_allocRead 0 (sfResolve "pf-c5.aif") 0 0))

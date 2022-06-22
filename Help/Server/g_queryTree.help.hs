@@ -1,10 +1,10 @@
-    Sound.SC3.Lang.Help.viewServerHelp "/g_queryTree"
+    Sound.Sc3.Lang.Help.viewServerHelp "/g_queryTree"
 
 > import Sound.OSC {- hosc -}
-> import Sound.SC3 {- hsc3 -}
+> import Sound.Sc3 {- hsc3 -}
 > import qualified Data.Tree as T {- containers -}
 
-    withSC3 serverTree >>= mapM_ putStrLn
+    withSc3 serverTree >>= mapM_ putStrLn
 
 > g_00 =
 >   let f = control KR "freq" 440
@@ -14,13 +14,13 @@
 
 > m_02 = [d_recv d_01,g_new [(100,AddToTail,1)],s_new0 "saw" 1000 AddToTail 100]
 
-    > withSC3 (mapM_ maybe_async m_02)
+    > withSc3 (mapM_ maybe_async m_02)
 
-> run_query_tree = withSC3 (g_queryTree1_unpack 0)
+> run_query_tree = withSc3 (g_queryTree1_unpack 0)
 
     > qt <- run_query_tree
     > print qt
-    > withSC3 (sendMessage (g_dumpTree [(0,True)]))
+    > withSc3 (sendMessage (g_dumpTree [(0,True)]))
     > queryNode_to_group_seq qt
 
 There is support for extracting the node tree into the standard haskell

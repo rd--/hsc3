@@ -28,7 +28,7 @@ let f (_,g,x,y,z,o,rx,ry,_,_,_) =
 in mix (voicer 16 f) * control kr "gain" 2
 
 ---- ; load buffer
-ld fn = withSC3 (async (b_allocRead 0 (sfResolve fn) 0 0))
+ld fn = withSc3 (async (b_allocRead 0 (sfResolve fn) 0 0))
 ld "pf-c5.aif" -- mono
 ld "metal.wav" -- mono
 ld "instr/celeste/long/13-C4-long.wav" -- mono
@@ -37,4 +37,4 @@ ld "instr/celeste/long/37-C6-long.wav"
 ld "instr/celeste/long/49-C7-long.wav"
 
 fn = "/home/rohan/uc/the-center-is-between-us/visitants/flac/f/y.flac"
-withSC3 (async (b_allocRead 0 fn (48000 * 45) (48000 * 1)))
+withSc3 (async (b_allocRead 0 fn (48000 * 45) (48000 * 1)))

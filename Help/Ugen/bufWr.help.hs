@@ -15,5 +15,5 @@ let wr_rt = control kr "wr-rate" 1
 in bufRdL 1 ar b (phasor ar 0 (bufRateScale kr b * rd_rt) 0 (bufFrames kr b) 0) Loop
 
 ---- ; set read & write rates independently
-withSC3 (Sound.OSC.sendMessage (n_set1 1 "wr-rate" 0.5))
-withSC3 (Sound.OSC.sendMessage (n_set1 1 "rd-rate" 13.0))
+withSc3 (Sound.OSC.sendMessage (n_set1 1 "wr-rate" 0.5))
+withSc3 (Sound.OSC.sendMessage (n_set1 1 "rd-rate" 13.0))

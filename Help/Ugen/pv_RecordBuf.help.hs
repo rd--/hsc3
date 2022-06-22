@@ -9,7 +9,7 @@ in mrg2 i c1
 
 ---- ; load soundfile
 fn = sfResolve "a11wlk01.wav"
-withSC3 (async (b_allocRead 0 fn 0 0))
+withSc3 (async (b_allocRead 0 fn 0 0))
 
 ---- ; allocate analysis buffer ; duration=5, frame-size=1024, hop-size=0.25, sample-rate=48000
-withSC3 (async (b_alloc 10 (pv_calcPVRecSize 5 1024 0.25 48000) 1))
+withSc3 (async (b_alloc 10 (pv_calcPVRecSize 5 1024 0.25 48000) 1))

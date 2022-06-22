@@ -43,7 +43,7 @@ in changed (ceil (env * num)) 0 * amp
 -}
 
 ---- ; set impulse train controls
-set = withSC3 . sendMessage . n_set (-1)
+set = withSc3 . sendMessage . n_set (-1)
 set [("go", 1), ("cur", 3), ("num", 18)] -- start slow and go faster
 set [("go", 1), ("cur", -2), ("num", 18)] -- slower and slower
 set [("go", 1), ("amp", 0.2), ("cur", 0), ("dur", 0.5), ("num", 200)] -- 200 for half a second = 400 Hz
@@ -51,4 +51,4 @@ set [("go", 1), ("amp", 0.2), ("cur", 0), ("dur", 0.5), ("num", 200)] -- 200 for
 ---- ; drawings
 let e = envelope [6000,700,100] [1,1] [EnvExp,EnvLin]
 envelope_sc3_array e == Just [6000,2,-99,-99,700,1,2,0,100,1,1,0]
-Sound.SC3.Plot.plotEnvelope [e]
+Sound.Sc3.Plot.plotEnvelope [e]

@@ -1,5 +1,5 @@
-> import Sound.SC3 {- hsc3 -}
-> import qualified Sound.SC3.UGen.Bindings.DB.External as X {- hsc3 -}
+> import Sound.Sc3 {- hsc3 -}
+> import qualified Sound.Sc3.UGen.Bindings.DB.External as X {- hsc3 -}
 
 > fft_sz = 2048::Int
 > hop_sz = fft_sz `div` 2
@@ -8,7 +8,7 @@
 > tpv' b i = X.tpv (fft b i 0.5 1 1 0) (constant fft_sz) (constant hop_sz)
 > msg = [b_alloc 0 fft_sz 1,b_allocRead 1 fn_1 0 0]
 
-    > withSC3 (mapM_ async msg)
+    > withSc3 (mapM_ async msg)
 
 > g_01 =
 >     let i = playBuf 1 ar 1 (bufRateScale kr 1) 1 0 Loop DoNothing

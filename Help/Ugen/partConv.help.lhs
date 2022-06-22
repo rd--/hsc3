@@ -1,5 +1,5 @@
 > import Sound.OSC {- hosc -}
-> import Sound.SC3 {- hsc3 -}
+> import Sound.Sc3 {- hsc3 -}
 
 > f_01 :: Transport m => m UGen
 > f_01 = do
@@ -21,6 +21,6 @@
 >   sendMessage (partConv_preparePartConv ir_fd_b ir_td_b fft_size)
 >   return (partConv s (constant fft_size) (constant ir_fd_b))
 
-    g_01 <- withSC3 f_01
-    g_02 <- withSC3 (f_02 (g_01 * 0.1)
-    g_03 <- withSC3 (f_02 (soundIn 0))
+    g_01 <- withSc3 f_01
+    g_02 <- withSc3 (f_02 (g_01 * 0.1)
+    g_03 <- withSc3 (f_02 (soundIn 0))

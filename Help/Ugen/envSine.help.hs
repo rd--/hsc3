@@ -4,7 +4,7 @@ let s = envSine 9 0.1
 in sinOsc ar 440 0 * e
 
 ---- ; drawings
-Sound.SC3.Plot.plotEnvelope [envSine 9 1,envSine 3 0.25]
+Sound.Sc3.Plot.plotEnvelope [envSine 9 1,envSine 3 0.25]
 
 ---- ; help
-Sound.SC3.Lang.Help.viewSC3Help "Env.*sine"
+Sound.Sc3.Lang.Help.viewSc3Help "Env.*sine"

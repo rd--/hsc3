@@ -1,1 +1,1 @@
-    Sound.SC3.Lang.Help.viewServerHelp "/n_run"
+    Sound.Sc3.Lang.Help.viewServerHelp "/n_run"

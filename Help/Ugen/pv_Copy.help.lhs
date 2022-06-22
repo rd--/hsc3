@@ -1,4 +1,4 @@
-> import Sound.SC3 {- hsc3 -}
+> import Sound.Sc3 {- hsc3 -}
 
 Proof of concept, silence.  This graph is disallowed.  pv_Copy is
 required to run before the ifft of c0, which mutates c0, however that

@@ -1,1 +1,1 @@
-    Sound.SC3.Lang.Help.viewServerHelp "/g_head"
+    Sound.Sc3.Lang.Help.viewServerHelp "/g_head"

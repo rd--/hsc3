@@ -23,7 +23,7 @@ proc_01 = do
   t <- time
   mapM_ sendBundle (bnd_01 sr t)
 
-withSC3 proc_01
+withSc3 proc_01
 
 The cancellation isn't completely reliable though.  In supercollider language it seems
 to be better, though these _should_ be equivalent...

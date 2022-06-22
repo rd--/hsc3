@@ -40,7 +40,7 @@ let x = mouseX kr 1 0.07 Exponential 0.2
 in mix (g * o) * 0.1
 
 ---- ; drawings
-let plot_f tm du ph = Sound.SC3.Plot.plot_ugen1 tm (lfGauss ar du 0.12 ph Loop DoNothing)
+let plot_f tm du ph = Sound.Sc3.Plot.plot_ugen1 tm (lfGauss ar du 0.12 ph Loop DoNothing)
 plot_f 0.1 0.1 0 -- centred
 plot_f 0.1 0.1 (-1) -- shifting left
 plot_f 0.1 0.1 2 -- moving further away from the center

@@ -1,7 +1,7 @@
-     Sound.SC3.Lang.Help.viewServerHelp "/notify"
+     Sound.Sc3.Lang.Help.viewServerHelp "/notify"
 
 > import Sound.OSC {- hosc -}
-> import Sound.SC3 {- hsc3 -}
+> import Sound.Sc3 {- hsc3 -}
 
 > g_01 = sinOsc AR (rand 'α' 440 880) 0 * 0.1
 
@@ -14,4 +14,4 @@
 >   async_ (d_recv s_01)
 >   withNotifications (sendMessage m_01 >> waitReply "/n_go")
 
-    withSC3 (f_01 >>= \r -> liftIO (print r))
+    withSc3 (f_01 >>= \r -> liftIO (print r))

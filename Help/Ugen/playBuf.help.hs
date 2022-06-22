@@ -43,13 +43,13 @@ let n_buf = 61
 in playBuf 1 ar b r t 0 Loop DoNothing * 0.5
 
 ---- ; setup ; nc=1
-withSC3 (async (b_allocRead 0 (sfResolve "metal.wav") 0 0))
+withSc3 (async (b_allocRead 0 (sfResolve "metal.wav") 0 0))
 
 ---- ; setup ; nc=2
-withSC3 (async (b_allocRead 0 (sfResolve "pf-c5.aif") 0 0))
+withSc3 (async (b_allocRead 0 (sfResolve "pf-c5.aif") 0 0))
 
 ---- ; setup ; dir ; cnt=61
 dir = "/home/rohan/data/audio/instr/celeste/long/"
 dir_ls <- System.Directory.getDirectoryContents dir
 fn_seq = zip [0..] (sort (filter ((== ".wav") . System.FilePath.takeExtension) dir_ls))
-withSC3 (mapM_ async (map (\(ix,fn) -> b_allocRead ix (dir System.FilePath.</> fn) 0 0) fn_seq))
+withSc3 (mapM_ async (map (\(ix,fn) -> b_allocRead ix (dir System.FilePath.</> fn) 0 0) fn_seq))

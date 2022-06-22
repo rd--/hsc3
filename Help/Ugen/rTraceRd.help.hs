@@ -27,14 +27,14 @@ let b = asLocalBufId 'α' [0,-1,1/4, 1/4,0,1/2, 1/2,1,1/4, 3/4,0,0, 1,-1,1/4]
 in pan2 o l g
 
 ---- ; loading data from a CSV trace file
-import qualified Sound.SC3.Data.Trace as T {- hsc3-data -}
+import qualified Sound.Sc3.Data.Trace as T {- hsc3-data -}
 let fn = "/home/rohan/sw/hsc3-data/data/csv/trace/b.csv"
 tr <- T.trace_load_csv2 fn
 length tr == 3017
 let tr' = T.trace_normalise_t tr
 let d = concatMap (\(t,(x,y)) -> [t,x,y]) tr'
 length d == length tr * 3
-withSC3 (async (b_alloc_setn1 0 0 d) >> return ())
+withSc3 (async (b_alloc_setn1 0 0 d) >> return ())
 
 {----
 

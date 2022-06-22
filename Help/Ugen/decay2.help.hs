@@ -9,5 +9,5 @@ let s = fSinOsc ar 600 0 * 0.25
 in decay (impulse ar f 0) 0.2 * s
 
 ---- ; drawings ; attack and decay are a difference of two decays, hence inversion
-Sound.SC3.Plot.plot_ugen1 0.05 (decay2 (impulse ar 1 0) 0.001 0.01)
-Sound.SC3.Plot.plot_ugen1 0.05 (decay2 (impulse ar 1 0) 0.01 0.001)
+Sound.Sc3.Plot.plot_ugen1 0.05 (decay2 (impulse ar 1 0) 0.001 0.01)
+Sound.Sc3.Plot.plot_ugen1 0.05 (decay2 (impulse ar 1 0) 0.01 0.001)

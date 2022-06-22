@@ -1,8 +1,8 @@
 > import Sound.OSC {- hosc -}
-> import Sound.SC3 {- hsc3 -}
-> import qualified Sound.SC3.UGen.Bindings.DB.External as X {- hsc3 -}
+> import Sound.Sc3 {- hsc3 -}
+> import qualified Sound.Sc3.UGen.Bindings.DB.External as X {- hsc3 -}
 
-> import qualified Sound.SC3.Data.LPC as LPC {- hsc3-data -}
+> import qualified Sound.Sc3.Data.LPC as LPC {- hsc3-data -}
 
 > lpc_instr buf noise lpc =
 >   let x = mouseX kr 0.01 1.5 Linear 0.2
@@ -18,7 +18,7 @@
 > fn_02 = "/home/rohan/uc/invisible/clarity/lpc/z.01.lpc"
 
 > au_01 lpc noise = do
->   let d = map realToFrac (LPC.lpcSC3 lpc)
+>   let d = map realToFrac (LPC.lpcSc3 lpc)
 >   _ <- async (b_alloc 10 (length d) 1)
 >   mapM_ sendMessage (b_setn1_segmented 512 10 0 d)
 >   let s = lpc_instr 10 noise lpc
@@ -26,4 +26,4 @@
 
     lpc <- LPC.lpc_read_binary LPC.BigEndian fn_01
     lpc <- LPC.lpc_read_text fn_02
-    withSC3 (au_01 lpc (whiteNoiseId 'α' ar * 10))
+    withSc3 (au_01 lpc (whiteNoiseId 'α' ar * 10))

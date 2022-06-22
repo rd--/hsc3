@@ -1,1 +1,1 @@
-    Sound.SC3.Lang.Help.viewServerHelp "/b_set"
+    Sound.Sc3.Lang.Help.viewServerHelp "/b_set"

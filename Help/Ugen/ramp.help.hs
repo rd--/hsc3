@@ -15,6 +15,6 @@ let db = control kr "db" (-60)
 in sinOsc ar 110 0 * ramp (dbAmp db) dur
 
 ---- ; initiate ramps
-withSC3 (Sound.OSC.sendMessage (n_set 1 [("db",-6),("dur",1)]))
-withSC3 (Sound.OSC.sendMessage (n_set 1 [("db",-90),("dur",1)]))
+withSc3 (Sound.OSC.sendMessage (n_set 1 [("db",-6),("dur",1)]))
+withSc3 (Sound.OSC.sendMessage (n_set 1 [("db",-90),("dur",1)]))
 

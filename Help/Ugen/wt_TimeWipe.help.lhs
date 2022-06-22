@@ -1,5 +1,5 @@
-> import Sound.SC3 {- hsc3 -}
-> import Sound.SC3.UGen.Bindings.HW.External.Wavelets {- hsc3 -}
+> import Sound.Sc3 {- hsc3 -}
+> import Sound.Sc3.Ugen.Bindings.Hw.External.Wavelets {- hsc3 -}
 
 > g_01 =
 >     let i = whiteNoiseId 'α' ar * 0.2

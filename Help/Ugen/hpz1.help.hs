@@ -10,6 +10,6 @@ let n = lfNoise0Id 'α' ar 1000
 in mce [h,h `greater_than` 0,abs h `greater_than` 0]
 
 ---- ; drawings
-Sound.SC3.Plot.FFT.plot_ugen_fft1 0.05 (hpz1 (whiteNoiseId 'α' ar))
+Sound.Sc3.Plot.FFT.plot_ugen_fft1 0.05 (hpz1 (whiteNoiseId 'α' ar))
 
 

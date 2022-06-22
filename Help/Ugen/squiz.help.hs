@@ -22,4 +22,4 @@ let (b, nc) = (control kr "buf" 0, 2)
 in X.squiz p x y 0.1 * 0.1
 
 ---- ; setup ; nc=2
-withSC3 (async (b_allocRead 0 (sfResolve "pf-c5.aif") 0 0))
+withSc3 (async (b_allocRead 0 (sfResolve "pf-c5.aif") 0 0))

@@ -19,4 +19,4 @@ let f = xLine kr 1000 20000 10 RemoveSynth
 in lfClipNoiseId 'δ' ar f * 0.05
 
 ---- ; drawings
-Sound.SC3.Plot.plot_ugen1 0.1 (lfClipNoiseId 'α' ar 1000)
+Sound.Sc3.Plot.plot_ugen1 0.1 (lfClipNoiseId 'α' ar 1000)

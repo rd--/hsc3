@@ -1,8 +1,8 @@
-    Sound.SC3.Lang.Help.viewServerHelp "/b_getn"
+    Sound.Sc3.Lang.Help.viewServerHelp "/b_getn"
 
 > import Sound.OSC {- hosc -}
-> import Sound.SC3 {- hsc3 -}
-> import Sound.SC3.Plot {- hsc3-plot -}
+> import Sound.Sc3 {- hsc3 -}
+> import Sound.Sc3.Plot {- hsc3-plot -}
 
 Allocate and generate wavetable buffer (256 frames)
 
@@ -12,11 +12,11 @@ Allocate and generate wavetable buffer (256 frames)
 >   let f = [Normalise,Clear]
 >   sendMessage (b_gen_sine1 0 f [1,1/2,1/3,1/4,1/5])
 
-    > withSC3 x_00
+    > withSc3 x_00
 
 Run simple read...
 
-    > d0 <- withSC3 (b_getn1_data 0 (0,255))
+    > d0 <- withSc3 (b_getn1_data 0 (0,255))
 
 and draw buffer
 
@@ -28,7 +28,7 @@ Load sound file
 
 > m_00 = b_allocRead 1 fn_00 0 0
 
-    > withSC3 (async_ m_00)
+    > withSc3 (async_ m_00)
 
 Run segmented read (n-frames of data in m-frame segments)...
 
@@ -38,7 +38,7 @@ Run segmented read (n-frames of data in m-frame segments)...
 >       n = m * 3
 >   b_getn1_data_segment m 1 (0,n)
 
-    > d1 <- withSC3 x_01
+    > d1 <- withSc3 x_01
 
 and draw buffer
 

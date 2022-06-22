@@ -57,7 +57,7 @@ let b = control_m kr "buf" 0 (0,0,"lin")
 in X.freezer b lhs rhs amp incr incrO incrR wndR syncPh randPh dgr
 
 ---- ; allocate buffer 0, required for examples
-ld fn = withSC3 (async (b_allocRead 0 (sfResolve fn) 0 0))
+ld fn = withSc3 (async (b_allocRead 0 (sfResolve fn) 0 0))
 ld "instr/crotales/crotale05(D).wav"
 ld "saron-panerus-S-0-5.flac"
 ld "saron-panerus-S-0-6.flac"

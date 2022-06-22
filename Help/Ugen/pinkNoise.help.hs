@@ -26,6 +26,6 @@ mce2 (pinkNoiseId 'α' ar - pinkNoiseId 'α' ar) (pinkNoiseId 'α' ar - pinkNois
 let n = pinkNoiseId 'α' ar in (n - n) * 0.1
 
 ---- ; drawings
-Sound.SC3.Plot.plot_ugen1 0.1 (pinkNoiseId 'ε' ar)
-Sound.SC3.Plot.FFT.plot_ugen_fft1 0.1 (pinkNoiseId 'ζ' ar)
+Sound.Sc3.Plot.plot_ugen1 0.1 (pinkNoiseId 'ε' ar)
+Sound.Sc3.Plot.FFT.plot_ugen_fft1 0.1 (pinkNoiseId 'ζ' ar)
 UI.ui_sc3_scope_freq (600,400) 0

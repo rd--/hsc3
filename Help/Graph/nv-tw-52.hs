@@ -12,7 +12,7 @@ in gVerb (mix s) 99 5 0.5 0.5 15.0 1.0 0.7 0.5 300.0 / 10
 
 ---- ; calculation
 import Data.List.Split {- split -}
-import Sound.SC3.Lang.Collection {- hsc3-lang -}
+import Sound.Sc3.Lang.Collection {- hsc3-lang -}
 x = [[4, 4.5], [2, 3, 5, 6]]
 mul_ext p q = take (max (length p) (length q)) (zipWith (*) (cycle p) (cycle q))
 dot_x f p q = [f m n | m <- p, n <- q]

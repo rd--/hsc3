@@ -23,5 +23,5 @@ let f = X.randNId 50 'α' 50 5000
 in splay (lfTri ar f 0) 1 0.1 0 True
 
 ---- ; drawings
-Sound.SC3.Plot.plot_ugen1 0.1 (lfTri ar 40 0)
-Sound.SC3.Plot.plot_ugen1 0.1 (lfTri ar (xLine kr 1 800 0.1 DoNothing) 0)
+Sound.Sc3.Plot.plot_ugen1 0.1 (lfTri ar 40 0)
+Sound.Sc3.Plot.plot_ugen1 0.1 (lfTri ar (xLine kr 1 800 0.1 DoNothing) 0)

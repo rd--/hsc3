@@ -64,7 +64,7 @@ let n = whiteNoise ar in (n - n) * 0.05
 hpz1 (whiteNoiseId 'α' ar) * 0.1
 
 ---- ; drawings
-Sound.SC3.Plot.plot_ugen1 0.01 (whiteNoiseId 'γ' ar)
-Sound.SC3.Plot.plot_ugen1 0.05 (lpf (whiteNoiseId 'γ' ar) 500)
-Sound.SC3.Plot.FFT.plot_ugen_fft1 0.1 (whiteNoiseId 'α' ar)
+Sound.Sc3.Plot.plot_ugen1 0.01 (whiteNoiseId 'γ' ar)
+Sound.Sc3.Plot.plot_ugen1 0.05 (lpf (whiteNoiseId 'γ' ar) 500)
+Sound.Sc3.Plot.FFT.plot_ugen_fft1 0.1 (whiteNoiseId 'α' ar)
 UI.ui_sc3_scope_freq (600,400) 0

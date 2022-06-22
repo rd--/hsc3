@@ -46,9 +46,9 @@ let tr = trigControl "tr" 1
 in sinOsc ar sw 0 * 0.2
 
 ---- ; send new line segments to running sweeper
-withSC3 (Sound.OSC.sendMessage (n_set 1 [("st",660),("en",550),("tm",4),("tr",1)]))
-withSC3 (Sound.OSC.sendMessage (n_set 1 [("st",110),("en",990),("tm",1),("tr",1)]))
-withSC3 (Sound.OSC.sendMessage (n_set 1 [("tr",1)]))
+withSc3 (Sound.OSC.sendMessage (n_set 1 [("st",660),("en",550),("tm",4),("tr",1)]))
+withSc3 (Sound.OSC.sendMessage (n_set 1 [("st",110),("en",990),("tm",1),("tr",1)]))
+withSc3 (Sound.OSC.sendMessage (n_set 1 [("tr",1)]))
 
 ---- ; buffer setup
-withSC3 (async (b_allocRead 0 (sfResolve "pf-c5.aif") 0 0))
+withSc3 (async (b_allocRead 0 (sfResolve "pf-c5.aif") 0 0))

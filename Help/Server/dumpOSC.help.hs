@@ -1,7 +1,7 @@
-    Sound.SC3.Lang.Help.viewServerHelp "/dumpOSC"
+    Sound.Sc3.Lang.Help.viewServerHelp "/dumpOSC"
 
 > import Sound.OSC {- hosc -}
-> import Sound.SC3 {- hsc3 -}
+> import Sound.Sc3 {- hsc3 -}
 
 > ex_01 :: Transport m => m ()
 > ex_01 = do
@@ -11,5 +11,5 @@
 >   reset
 >   sendMessage (dumpOSC NoPrinter)
 
-    withSC3 ex_01
-    withSC3 (sendMessage (dumpOSC TextPrinter))
+    withSc3 ex_01
+    withSc3 (sendMessage (dumpOSC TextPrinter))

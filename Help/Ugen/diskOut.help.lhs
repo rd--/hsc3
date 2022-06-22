@@ -1,5 +1,5 @@
 > import Sound.OSC {- hosc -}
-> import Sound.SC3 {- hsc3 -}
+> import Sound.Sc3 {- hsc3 -}
 
 Example graph
 
@@ -34,16 +34,16 @@ Record incoming signal (or above...), print some informational traces...
 >   mapM_ async msg_02
 >   return ()
 
-    withSC3 act_01
+    withSc3 act_01
 
 Listen to recording (on loop...)
 
 > msg_03 = [b_alloc 0 65536 nc_01,b_read 0 fn_01 0 (-1) 0 True]
 
-    withSC3 (mapM_ async msg_03)
+    withSc3 (mapM_ async msg_03)
 
 > g_03 = diskIn nc_01 0 Loop
 
 Tidy up...
 
-    withSC3 (mapM_ async msg_02)
+    withSc3 (mapM_ async msg_02)

@@ -21,4 +21,4 @@ let b = control kr "buf" 0
 in tGrains 2 clk b rate pos dur pan 0.5 2
 
 ---- ; load sndfile
-withSC3 (async (b_allocRead 0 "/home/rohan/sw/hsc3-graphs/snd/2006-10-05.snd" 0 0))
+withSc3 (async (b_allocRead 0 "/home/rohan/sw/hsc3-graphs/snd/2006-10-05.snd" 0 0))

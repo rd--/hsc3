@@ -1,7 +1,7 @@
-    Sound.SC3.Lang.Help.viewServerHelp "/n_query"
+    Sound.Sc3.Lang.Help.viewServerHelp "/n_query"
 
 > import Sound.OSC {- hosc -}
-> import Sound.SC3 {- hsc3 -}
+> import Sound.Sc3 {- hsc3 -}
 
 > d_00 =
 >   let f = control KR "freq" 440
@@ -10,12 +10,12 @@
 
 > m_00 = s_new0 "saw" 1000 AddToTail 1
 
-   > withSC3 (async_ (d_recv d_00) >> sendMessage m_00)
+   > withSc3 (async_ (d_recv d_00) >> sendMessage m_00)
 
 > x_01 :: Transport m => m Message
 > x_01 = withNotifications $ do
 >   sendMessage (n_query [1000])
 >   waitReply "/n_info"
 
-    > r <- withSC3 x_01
+    > r <- withSc3 x_01
     > print r

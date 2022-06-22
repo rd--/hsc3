@@ -12,6 +12,6 @@ uid_st_eval (fmap (* 0.25) (dustM ar 200))
 uid_st_eval (fmap (* 0.15) (dustM ar (xLine kr 20000 2 10 RemoveSynth)))
 
 ---- ; drawings
-Sound.SC3.Plot.plot_ugen_nrt (48000,64) 0.1 (dustId 'γ' ar 300)
-Sound.SC3.Plot.plot_ugen_nrt (48000,64) 0.1 (dustId 'δ' ar (xLine kr 5000 100 0.1 RemoveSynth))
+Sound.Sc3.Plot.plot_ugen_nrt (48000,64) 0.1 (dustId 'γ' ar 300)
+Sound.Sc3.Plot.plot_ugen_nrt (48000,64) 0.1 (dustId 'δ' ar (xLine kr 5000 100 0.1 RemoveSynth))
 

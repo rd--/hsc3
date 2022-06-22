@@ -10,5 +10,5 @@ let samplesPerPeriod = 20
 in signum (dust2Id 'α' ar (sampleRate / samplesPerPeriod)) * 0.1
 
 ---- ; drawings
-Sound.SC3.Plot.plot_ugen1 0.1 (dust2Id 'γ' ar 400)
-Sound.SC3.Plot.plot_ugen1 0.1 (dust2Id 'γ' ar (xLine kr 5000 100 0.1 RemoveSynth))
+Sound.Sc3.Plot.plot_ugen1 0.1 (dust2Id 'γ' ar 400)
+Sound.Sc3.Plot.plot_ugen1 0.1 (dust2Id 'γ' ar (xLine kr 5000 100 0.1 RemoveSynth))

@@ -6,4 +6,4 @@ in hpf (saw ar 200 * 0.1) f
 hpf (whiteNoiseId 'α' ar) 1 * 0.1
 
 ---- ; drawings
-Sound.SC3.Plot.FFT.plot_ugen_fft1 0.05 (hpf (whiteNoiseId 'α' ar) 12000)
+Sound.Sc3.Plot.FFT.plot_ugen_fft1 0.05 (hpf (whiteNoiseId 'α' ar) 12000)

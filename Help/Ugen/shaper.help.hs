@@ -51,5 +51,5 @@ let f (_,g,_,y,z,o,_,_,p,_,_) =
 in mix (voicer 16 f) * control kr "gain" 1.0
 
 ---- ; drawings
-Sound.SC3.Plot.plot_p1_ln [Gen.cheby 256 [1, 0, 1, 1, 0, 1]]
-Sound.SC3.Plot.plot_p1_ln [Gen.chebyShaperTbl 256 [1, 0, 1, 1, 0, 1]]
+Sound.Sc3.Plot.plot_p1_ln [Gen.cheby 256 [1, 0, 1, 1, 0, 1]]
+Sound.Sc3.Plot.plot_p1_ln [Gen.chebyShaperTbl 256 [1, 0, 1, 1, 0, 1]]

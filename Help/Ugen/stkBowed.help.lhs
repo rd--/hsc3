@@ -1,5 +1,5 @@
-> import Sound.SC3 {- hsc3 -}
-> import Sound.SC3.UGen.Record.Plain.StkBowed {- hsc3-rec -}
+> import Sound.Sc3 {- hsc3 -}
+> import Sound.Sc3.UGen.Record.Plain.StkBowed {- hsc3-rec -}
 
 > g_01 = mkStkBowed stkBowedR
 

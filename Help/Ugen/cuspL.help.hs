@@ -17,8 +17,8 @@ let x = mouseX kr 0.9 1.1 Linear 0.1
 in sinOsc ar (n * 800 + 900) 0 * 0.1
 
 ---- ; drawings
-Sound.SC3.Plot.plot_ugen_nrt (600,1) 1.0 (cuspL ar 600 1.0 1.9 0)
+Sound.Sc3.Plot.plot_ugen_nrt (600,1) 1.0 (cuspL ar 600 1.0 1.9 0)
 
 ---- ; haskell implementation of equation
-cusp_hs a b = iterate (Sound.SC3.Common.Math.Noise.cusp_f a b) 0
-Sound.SC3.Plot.plot_p1_ln [take 600 (cusp_hs 1.0 1.9)]
+cusp_hs a b = iterate (Sound.Sc3.Common.Math.Noise.cusp_f a b) 0
+Sound.Sc3.Plot.plot_p1_ln [take 600 (cusp_hs 1.0 1.9)]

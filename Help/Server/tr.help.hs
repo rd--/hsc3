@@ -1,1 +1,1 @@
-    Sound.SC3.Lang.Help.viewServerHelp "/tr"
+    Sound.Sc3.Lang.Help.viewServerHelp "/tr"

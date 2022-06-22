@@ -18,4 +18,4 @@ let b = control kr "buf" 0
 in mrg2 o (recordBuf ar (mce2 b b) 0 0.5 0.5 1 NoLoop 1 RemoveSynth (mce1 o))
 
 ---- ; setup
-withSC3 (async (b_alloc 0 (48000 * 4) 1))
+withSc3 (async (b_alloc 0 (48000 * 4) 1))

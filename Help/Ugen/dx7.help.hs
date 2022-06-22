@@ -70,8 +70,8 @@ let f (_,g,x,_,z,o,_,_,p,_,_) =
 in mix (voicer 16 f) * control_m kr "gain" 1 (0,4,"amp")
 
 ---- ; send init voice
-import qualified Sound.SC3.Data.Yamaha.DX7 as DX7 {- hsc3-data -}
-import qualified Sound.SC3.Data.Yamaha.DX7.SC3 as DX7 {- hsc3-data -}
+import qualified Sound.Sc3.Data.Yamaha.DX7 as DX7 {- hsc3-data -}
+import qualified Sound.Sc3.Data.Yamaha.DX7.Sc3 as DX7 {- hsc3-data -}
 DX7.dx7_sc3_data_load 100 [DX7.dx7_init_voice]
 
 ---- ; load patch data from .hex.text file
@@ -88,16 +88,16 @@ length bnk == 32
 
 ---- ; send external control messages
 import Sound.OSC {- hosc -}
-withSC3 (sendMessage (n_set1 1 "vc" 0))
-withSC3 (sendMessage (n_set1 1 "gate" 1.0))
-withSC3 (sendMessage (n_set1 1 "gate" 0.0))
-withSC3 (sendMessage (n_set1 1 "data" 0.0))
-withSC3 (sendMessage (n_set1 1 "mnn" 69.0))
-withSC3 (sendMessage (n_set1 1 "vel" 10.0))
+withSc3 (sendMessage (n_set1 1 "vc" 0))
+withSc3 (sendMessage (n_set1 1 "gate" 1.0))
+withSc3 (sendMessage (n_set1 1 "gate" 0.0))
+withSc3 (sendMessage (n_set1 1 "data" 0.0))
+withSc3 (sendMessage (n_set1 1 "mnn" 69.0))
+withSc3 (sendMessage (n_set1 1 "vel" 10.0))
 
 {---- DX7
 
-An SC3 UGen of the
+An Sc3 UGen of the
 [Levien](https://github.com/google/music-synthesizer-for-android) /
 [Gauthier](https://github.com/asb2m10/dexed) DX7 emulator codes.
 

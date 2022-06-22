@@ -1,5 +1,5 @@
-    Sound.SC3.Lang.Help.viewServerHelp "/status"
+    Sound.Sc3.Lang.Help.viewServerHelp "/status"
 
-> import Sound.SC3 {- hsc3 -}
+> import Sound.Sc3 {- hsc3 -}
 
-    withSC3 serverStatus >>= mapM putStrLn
+    withSc3 serverStatus >>= mapM putStrLn

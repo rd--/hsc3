@@ -31,13 +31,13 @@ let tr = impulse kr (1/4) 0
 in splay (sinOsc ar (mce [f0,e,f1]) 0) 1 1 0 True * mce [0.05,0.1,0.05]
 
 ---- ; set target value & transition time and trigger
-withSC3 (sendMessage (n_set 1 [("en",550),("tm",4),("tr",1)]))
-withSC3 (sendMessage (n_set 1 [("en",990),("tm",1),("tr",1)]))
-withSC3 (sendMessage (n_set 1 [("en",110),("tm",2),("tr",1)]))
+withSc3 (sendMessage (n_set 1 [("en",550),("tm",4),("tr",1)]))
+withSc3 (sendMessage (n_set 1 [("en",990),("tm",1),("tr",1)]))
+withSc3 (sendMessage (n_set 1 [("en",110),("tm",2),("tr",1)]))
 
 ---- ; plotting
-Sound.SC3.Plot.plotEnvelope [envCoord [(0,0),(0.35,0.1),(0.55,1),(1,0)] 9 0.1 EnvLin]
-Sound.SC3.Plot.plotEnvelope [envCoord [(0,0),(0.15,0.6),(0.35,0.2),(1,0)] 6 0.1 EnvSin]
-Sound.SC3.Plot.plotEnvelope [envCoord [(0,0),(0.65,0.3),(0.85,0.7),(1,0)] 5 0.1 EnvCub]
-Sound.SC3.Plot.plotEnvelope [envCoord [(0,0.1),(0.25,0.6),(0.5,0.4),(1,0.4)] 7 0.1 EnvStep]
-Sound.SC3.Plot.plotEnvelope [envCoord (zip [-1,-0.7,0.7,1] [0,0.45,0.55,1]) 1 1 EnvLin]
+Sound.Sc3.Plot.plotEnvelope [envCoord [(0,0),(0.35,0.1),(0.55,1),(1,0)] 9 0.1 EnvLin]
+Sound.Sc3.Plot.plotEnvelope [envCoord [(0,0),(0.15,0.6),(0.35,0.2),(1,0)] 6 0.1 EnvSin]
+Sound.Sc3.Plot.plotEnvelope [envCoord [(0,0),(0.65,0.3),(0.85,0.7),(1,0)] 5 0.1 EnvCub]
+Sound.Sc3.Plot.plotEnvelope [envCoord [(0,0.1),(0.25,0.6),(0.5,0.4),(1,0.4)] 7 0.1 EnvStep]
+Sound.Sc3.Plot.plotEnvelope [envCoord (zip [-1,-0.7,0.7,1] [0,0.45,0.55,1]) 1 1 EnvLin]

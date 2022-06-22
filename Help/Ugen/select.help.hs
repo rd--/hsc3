@@ -41,4 +41,4 @@ let (buf, nc) = (control kr "buf" 0, 2)
 in bufRdN nc ar buf (zero + phase) NoLoop * 0.1
 
 ---- ; buffer setup (nc = 2)
-withSC3 (async (b_allocRead 0 (sfResolve "amen.wav") 0 0))
+withSc3 (async (b_allocRead 0 (sfResolve "amen.wav") 0 0))

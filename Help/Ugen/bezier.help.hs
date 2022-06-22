@@ -44,7 +44,7 @@ let f (_,g,_,y,z,o,rx,ry,p,px,_) =
 in mix (voicer 16 f) * control kr "gain" 0.5
 
 ---- ; drawings
-import Sound.SC3.Plot {- hsc3-plot -}
+import Sound.Sc3.Plot {- hsc3-plot -}
 let u = X.bezier ar 440 0 (mce [0,0,0.2,-1.3,0.3,-1.3,0.5,0,0.7,1.3,0.8,1.3,1,0]) * 0.1
 plot_ugen_nrt (48000,64) 0.012 u
 plot_ugen1 0.01 u

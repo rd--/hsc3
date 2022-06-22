@@ -18,4 +18,4 @@ let f = sinOsc ar 0.25 0.0 * 2500.0 + 2505.0
 in impulse ar f 0.0 * 0.1
 
 ---- ; drawings
-Sound.SC3.Plot.plot_ugen_nrt (48000,64) 1.0 (impulse ar 10 0)
+Sound.Sc3.Plot.plot_ugen_nrt (48000,64) 1.0 (impulse ar 10 0)

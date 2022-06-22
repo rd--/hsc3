@@ -1,6 +1,6 @@
-> import Sound.SC3 {- hsc3 -}
-> import qualified Sound.SC3.UGen.Bindings.HW.External.F0 as F0 {- hsc3 -}
-> import qualified Sound.SC3.Lang.Math as M
+> import Sound.Sc3 {- hsc3 -}
+> import qualified Sound.Sc3.UGen.Bindings.HW.External.F0 as F0 {- hsc3 -}
+> import qualified Sound.Sc3.Lang.Math as M
 
 > bits_to_int :: String -> Int
 > bits_to_int = M.parseBits

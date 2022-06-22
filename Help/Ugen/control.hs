@@ -24,8 +24,8 @@ let n = 1
 in sinOsc ar f p * a
 
 ---- ; set frequency and gate controls
-withSC3 (sendMessage (n_set1 1 "freq" 2200))
-withSC3 (sendMessage (n_set1 1 "gate" 1))
+withSc3 (sendMessage (n_set1 1 "freq" 2200))
+withSc3 (sendMessage (n_set1 1 "gate" 1))
 
 ---- ; command list ui to send messages to set oscillator frequency
 UI.ui_scsynth_command_list (map (\x -> n_set 1 [("freq1",55 * (x ** 2)),("amp1",0.1 * (1 / x))]) [1 .. 7])

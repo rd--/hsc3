@@ -15,6 +15,6 @@ in mce2 s1 s2 * 0.1
 
 ---- ; set fade time, then release gate
 import Sound.OSC {- hosc -}
-withSC3 (sendMessage (n_set1 (-1) "fadeTime" 5))
-withSC3 (sendMessage (n_set1 (-1) "gate" 0))
+withSc3 (sendMessage (n_set1 (-1) "fadeTime" 5))
+withSc3 (sendMessage (n_set1 (-1) "gate" 0))
 

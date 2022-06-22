@@ -35,4 +35,4 @@ mce2 (lfCub ar 800 0 * 0.1) (lfTri ar 800 0 * 0.1)
 let g f = f ar (xLine kr 100 8000 30 DoNothing) 0 * 0.1 in mce2 (g lfCub) (g lfTri)
 
 ---- ; drawings
-Sound.SC3.Plot.plot_ugen 0.1 (mce2 (sinOsc ar 20 0) (lfCub ar 20 0))
+Sound.Sc3.Plot.plot_ugen 0.1 (mce2 (sinOsc ar 20 0) (lfCub ar 20 0))

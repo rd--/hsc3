@@ -8,4 +8,4 @@ in mix (sinOsc ar f 0 * 0.1)
 
 ---- ; drawings
 let {a = lfNoise2Id 'α' ar 2000;b = slope a;c = slope b;m = 0.0002}
-Sound.SC3.Plot.plot_ugen 0.05 (mce [a,b * m,c * m * m])
+Sound.Sc3.Plot.plot_ugen 0.05 (mce [a,b * m,c * m * m])

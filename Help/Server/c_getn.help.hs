@@ -1,7 +1,7 @@
-    Sound.SC3.Lang.Help.viewServerHelp "/c_getn"
+    Sound.Sc3.Lang.Help.viewServerHelp "/c_getn"
 
 > import Sound.OSC {- hosc -}
-> import Sound.SC3 {- hsc3 -}
+> import Sound.Sc3 {- hsc3 -}
 
 Get control bus data.
 
@@ -11,9 +11,9 @@ Get control bus data.
 >   r <- waitReply "/c_setn"
 >   liftIO (print r)
 
-    withSC3 (sendMessage (c_setn [(0,[1,880,0.5])]))
-    withSC3 get_c
+    withSc3 (sendMessage (c_setn [(0,[1,880,0.5])]))
+    withSc3 get_c
 
 Function to get and unpack control bus data.
 
-    withSC3 (c_getn1_data (0,3))
+    withSc3 (c_getn1_data (0,3))

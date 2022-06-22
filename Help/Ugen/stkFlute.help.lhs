@@ -1,5 +1,5 @@
-> import Sound.SC3 {- hsc3 -}
-> import Sound.SC3.UGen.Record.Plain.StkFlute {- hsc3-rec -}
+> import Sound.Sc3 {- hsc3 -}
+> import Sound.Sc3.UGen.Record.Plain.StkFlute {- hsc3-rec -}
 
 ...not working...
 

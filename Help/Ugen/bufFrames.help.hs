@@ -10,4 +10,4 @@ let (b, nc) = (control kr "buf" 0, 2)
 in mix (bufRdL nc ar b p NoLoop) * 0.1
 
 ---- ; buffer setup
-withSC3 (async (b_allocRead 0 (sfResolve "pf-c5.aif") 0 0))
+withSc3 (async (b_allocRead 0 (sfResolve "pf-c5.aif") 0 0))

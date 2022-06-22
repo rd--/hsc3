@@ -11,13 +11,13 @@ let b0 = control kr "tbl0" 0
 in lfSaw ar (mce2 110 164) 0 * env * 0.1
 
 ---- ; setup
-withSC3 (mapM_ maybe_async [b_alloc 0 4096 1, b_gen_sine1 0 [Normalise, Wavetable, Clear] (map recip [13, 8, 55, 34, 5, 21, 3, 1, 2])])
-withSC3 (mapM_ maybe_async [b_alloc 1 4096 1, b_gen_sine1 1 [Normalise, Wavetable, Clear] (map recip [55, 34, 1, 3, 2, 13, 5, 8, 21])])
+withSc3 (mapM_ maybe_async [b_alloc 0 4096 1, b_gen_sine1 0 [Normalise, Wavetable, Clear] (map recip [13, 8, 55, 34, 5, 21, 3, 1, 2])])
+withSc3 (mapM_ maybe_async [b_alloc 1 4096 1, b_gen_sine1 1 [Normalise, Wavetable, Clear] (map recip [55, 34, 1, 3, 2, 13, 5, 8, 21])])
 
 ---- ; drawings (buffers)
-withSC3 (Sound.SC3.Plot.plot_wavetable 0)
-withSC3 (Sound.SC3.Plot.plot_wavetable 1)
+withSc3 (Sound.Sc3.Plot.plot_wavetable 0)
+withSc3 (Sound.Sc3.Plot.plot_wavetable 1)
 
 ---- ; drawings (lists, pre wavetable transform)
-Sound.SC3.Plot.plot_p1_ln [Gen.sine1_nrm 2048 (map recip [13, 8, 55, 34, 5, 21, 3, 1, 2])]
-Sound.SC3.Plot.plot_p1_ln [Gen.sine1_nrm 2048 (map recip [55, 34, 1, 3, 2, 13, 5, 8, 21])]
+Sound.Sc3.Plot.plot_p1_ln [Gen.sine1_nrm 2048 (map recip [13, 8, 55, 34, 5, 21, 3, 1, 2])]
+Sound.Sc3.Plot.plot_p1_ln [Gen.sine1_nrm 2048 (map recip [55, 34, 1, 3, 2, 13, 5, 8, 21])]

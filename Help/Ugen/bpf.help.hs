@@ -22,5 +22,5 @@ let n = bpf (whiteNoiseId 'α' ar) 10000 (xLine ar 2 0.002 20 DoNothing)
 in (n + o) * 0.1
 
 ---- ; drawings
-UI.ui_baudline 4096 50 "linear" 2
-Sound.SC3.Plot.FFT.plot_ugen_fft1 0.05 (bpf (whiteNoiseId 'α' ar) 440 0.01)
+Ui.ui_baudline 4096 50 "linear" 2
+Sound.Sc3.Plot.Fft.plot_ugen_fft1 0.05 (bpf (whiteNoiseId 'α' ar) 440 0.01)

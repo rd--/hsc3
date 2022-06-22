@@ -1,1 +1,1 @@
-    Sound.SC3.Lang.Help.viewServerHelp "/b_zero"
+    Sound.Sc3.Lang.Help.viewServerHelp "/b_zero"

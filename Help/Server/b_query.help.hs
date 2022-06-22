@@ -1,7 +1,7 @@
-    Sound.SC3.Lang.Help.viewServerHelp "/b_query"
+    Sound.Sc3.Lang.Help.viewServerHelp "/b_query"
 
 > import Sound.OSC {- hosc -}
-> import Sound.SC3 {- hsc3 -}
+> import Sound.Sc3 {- hsc3 -}
 
 Allocate and generate wavetable buffer
 
@@ -11,7 +11,7 @@ Allocate and generate wavetable buffer
 >   let f = [Normalise,Wavetable,Clear]
 >   sendMessage (b_gen_sine1 0 f [1,1/2,1/3,1/4,1/5])
 
-    withSC3 mk_b
+    withSc3 mk_b
 
 Query buffer
 
@@ -21,13 +21,13 @@ Query buffer
 >   r <- waitReply "/b_info"
 >   liftIO (print r)
 
-    withSC3 qr_b
+    withSc3 qr_b
 
 Variant that unpacks the result.
 
 Query is of (buffer-id/int,#-frames/int,#-channels/int,sample-rate/float).
 
-    withSC3 (b_query1_unpack 0)
+    withSc3 (b_query1_unpack 0)
 
 Play buffer
 
@@ -35,7 +35,7 @@ Play buffer
 
 Free buffer
 
-    withSC3 (async (b_free 0))
+    withSc3 (async (b_free 0))
 
 Query multiple un-allocated buffers
 
@@ -45,4 +45,4 @@ Query multiple un-allocated buffers
 >   r <- waitReply "/b_info"
 >   liftIO (print r)
 
-    withSC3 qr_unalloc
+    withSc3 qr_unalloc

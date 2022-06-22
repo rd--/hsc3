@@ -1,6 +1,6 @@
 > import Data.List {- base -}
 > import Sound.OSC {- hosc -}
-> import Sound.SC3 {- hsc3 -}
+> import Sound.Sc3 {- hsc3 -}
 
 > file_name = "/home/rohan/data/audio/instr/bosendorfer/064/C5.aif"
 
@@ -9,7 +9,7 @@
 >   _ <- async (b_alloc 10 1024 1)
 >   async (b_allocRead 11 file_name 0 0)
 
-    > withSC3 alloc_buf
+    > withSc3 alloc_buf
 
 > spectral_delay m p _ =
 >   let l = lfPar kr 0.5 0
@@ -51,5 +51,5 @@
 > g_03 = pv_au 1024 spectral_delay
 > g_04 = pv_au 1024 (bpf_sweep 1024)
 
-    > import Sound.SC3.UGen.Dot {- hsc3-dot -}
+    > import Sound.Sc3.UGen.Dot {- hsc3-dot -}
     > draw_svg (pv_g 1024 (bpf_sweep 1024))

@@ -27,7 +27,7 @@ let f (_,g,x,y,z,o,rx,ry,_,_,_) =
 in mix (voicer 16 f) * control kr "gain" 2
 
 ---- ; setup
-ld fn = withSC3 (async (b_allocRead 0 (sfResolve fn) 0 0))
+ld fn = withSc3 (async (b_allocRead 0 (sfResolve fn) 0 0))
 ld "pf-c5.aif" -- stereo
 ld "instr/celeste/long/13-C4-long.wav" -- mono
 ld "instr/celeste/long/25-C5-long.wav" -- mono

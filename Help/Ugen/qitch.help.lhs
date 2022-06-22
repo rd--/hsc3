@@ -1,13 +1,13 @@
-> import Sound.SC3 {- hsc3 -}
-> import qualified Sound.SC3.UGen.Bindings.DB.External as X {- hsc3 -}
+> import Sound.Sc3 {- hsc3 -}
+> import qualified Sound.Sc3.UGen.Bindings.DB.External as X {- hsc3 -}
 
 Load required data file (edit path as required)
 
     > import System.FilePath {- filepath -}
-    > d = "/home/rohan/opt/share/SuperCollider/Extensions/SC3plugins"
-    > d = "/usr/share/SuperCollider/Extensions/SC3plugins"
+    > d = "/home/rohan/opt/share/SuperCollider/Extensions/Sc3plugins"
+    > d = "/usr/share/SuperCollider/Extensions/Sc3plugins"
     > qf = d </> "PitchDetection/extraqitchfiles/QspeckernN2048SR48000.wav"
-    > withSC3 (async (b_allocRead 10 qf 0 0))
+    > withSc3 (async (b_allocRead 10 qf 0 0))
 
 Comparison of input frequency (x) and tracked oscillator frequency (f).
 Output is printed to the console by scsynth.

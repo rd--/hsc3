@@ -6,4 +6,4 @@ let b = control kr "buf" 0
 in X.bufGrain ar (impulse kr 10 0) y b x e 2
 
 ---- ; load buffer
-withSC3 (async (b_allocRead 0 (sfResolve "instr/celeste/long/13-C4-long.wav") 0 0))
+withSc3 (async (b_allocRead 0 (sfResolve "instr/celeste/long/13-C4-long.wav") 0 0))

@@ -41,5 +41,5 @@ in mix (sinOsc ar (1000 + o) 0) * 1/4 * 0.1
 
 ---- ; drawings
 UI.ui_baudline 4096 50 "linear" 2
-Sound.SC3.Plot.plot_ugen1 0.1 (lfSaw ar 50 0) -- ascending
-Sound.SC3.Plot.plot_ugen1 0.002 (lfSaw ar 5000 0)
+Sound.Sc3.Plot.plot_ugen1 0.1 (lfSaw ar 50 0) -- ascending
+Sound.Sc3.Plot.plot_ugen1 0.002 (lfSaw ar 5000 0)

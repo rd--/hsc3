@@ -17,22 +17,22 @@ in s * e * am
 
 ---- ; read audio file into memory
 let fn = "/home/rohan/rd/j/2019-04-21/FAIRLIGHT/IIX/REEDS/clarmdhi.snd"
-withSC3 (async (b_allocRead 0 fn 0 0))
+withSc3 (async (b_allocRead 0 fn 0 0))
 
 ---- ; send control messages
 import Sound.OSC {- hosc -}
-withSC3 (sendMessage (n_set 1 [("startLoop",5376),("endLoop",5504)]))
-withSC3 (sendMessage (n_set1 1 "amp" 0.15)) -- louder
-withSC3 (sendMessage (n_set1 1 "rate" (-1))) -- backwards
-withSC3 (sendMessage (n_set1 1 "rate" 1)) -- forwards
-withSC3 (sendMessage (n_set 1 [("startLoop",11000),("endLoop",11)])) -- change loop points
-withSC3 (sendMessage (n_set 1 [("startLoop",5000),("endLoop",15000)])) -- change loop points
-withSC3 (sendMessage (n_set1 1 "glide" 5)) -- 5 second glide
-withSC3 (sendMessage (n_set1 1 "rate" 2)) -- up an octave
-withSC3 (sendMessage (n_set1 1 "rate" (-1))) -- backwards
-withSC3 (sendMessage (n_set1 1 "rate" 1)) -- back to normal
-withSC3 (sendMessage (n_set1 1 "ipol" 1)) -- no interpolation
-withSC3 (sendMessage (n_set1 1 "ipol" 2)) -- linear interpolation
-withSC3 (sendMessage (n_set1 1 "ipol" 4)) -- cubic interpolation
-withSC3 (sendMessage (n_set1 1 "gate" 0)) -- release gate to hear post-loop
-withSC3 (sendMessage (n_set 1 [("loopRel",1),("gate",0)]) -- release instrument without post-loop
+withSc3 (sendMessage (n_set 1 [("startLoop",5376),("endLoop",5504)]))
+withSc3 (sendMessage (n_set1 1 "amp" 0.15)) -- louder
+withSc3 (sendMessage (n_set1 1 "rate" (-1))) -- backwards
+withSc3 (sendMessage (n_set1 1 "rate" 1)) -- forwards
+withSc3 (sendMessage (n_set 1 [("startLoop",11000),("endLoop",11)])) -- change loop points
+withSc3 (sendMessage (n_set 1 [("startLoop",5000),("endLoop",15000)])) -- change loop points
+withSc3 (sendMessage (n_set1 1 "glide" 5)) -- 5 second glide
+withSc3 (sendMessage (n_set1 1 "rate" 2)) -- up an octave
+withSc3 (sendMessage (n_set1 1 "rate" (-1))) -- backwards
+withSc3 (sendMessage (n_set1 1 "rate" 1)) -- back to normal
+withSc3 (sendMessage (n_set1 1 "ipol" 1)) -- no interpolation
+withSc3 (sendMessage (n_set1 1 "ipol" 2)) -- linear interpolation
+withSc3 (sendMessage (n_set1 1 "ipol" 4)) -- cubic interpolation
+withSc3 (sendMessage (n_set1 1 "gate" 0)) -- release gate to hear post-loop
+withSc3 (sendMessage (n_set 1 [("loopRel",1),("gate",0)]) -- release instrument without post-loop

@@ -1,4 +1,4 @@
-    Sound.SC3.Lang.Help.viewServerHelp "/n_setn"
+    Sound.Sc3.Lang.Help.viewServerHelp "/n_setn"
 
 At some point /n_setn was broken at scsynth, it no longer behaves as specified.
 

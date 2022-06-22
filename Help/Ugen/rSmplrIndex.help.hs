@@ -46,12 +46,12 @@ hsc3-smplr load pf --dyn=008 --b0=100
 
 ---- ; load SFZ sample data
 import Sound.OSC {- hosc -}
-import Sound.SC3.Data.SFZ {- hsc3-data -}
+import Sound.Sc3.Data.SFZ {- hsc3-data -}
 sfz_fn = sfResolve "instr/bosendorfer/008.sfz"
 sfz_fn = sfResolve "instr/farfisa/aad/dolce-8.sfz"
 sfz_fn = sfResolve "instr/casacota/zell_1737_415_MeanTone5/8_i.sfz"
 (ctl,glb,rgn) <- sfz_load_data sfz_fn
 tbl = map ((\(k,_,_) -> k) . sfz_region_key) rgn
-withSC3 (sendMessage (b_alloc_setn1 0 0 (map fromIntegral tbl)))
+withSc3 (sendMessage (b_alloc_setn1 0 0 (map fromIntegral tbl)))
 alloc_msg = zipWith (\b fn -> b_allocRead b fn 0 0) [100..] (map (sfz_region_sample_resolve sfz_fn ctl) rgn)
-withSC3 (mapM_ async alloc_msg)
+withSc3 (mapM_ async alloc_msg)

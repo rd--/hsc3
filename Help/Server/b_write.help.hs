@@ -1,1 +1,1 @@
-    Sound.SC3.Lang.Help.viewServerHelp "/b_write"
+    Sound.Sc3.Lang.Help.viewServerHelp "/b_write"

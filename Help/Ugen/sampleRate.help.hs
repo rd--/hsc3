@@ -4,4 +4,4 @@ let sr = 48000 {- 44100 -}
 in sinOsc ar f 0 * 0.1
 
 ---- ; server status ; extract nominal and actual sample rates from the synthesis server
-withSC3 (Control.Monad.liftM2 (,) serverSampleRateNominal serverSampleRateActual)
+withSc3 (Control.Monad.liftM2 (,) serverSampleRateNominal serverSampleRateActual)

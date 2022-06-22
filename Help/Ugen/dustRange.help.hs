@@ -13,7 +13,7 @@ let iot = 20 / sampleRate
 in trig d sampleDur * signum s * 0.1
 
 ---- ; drawings
-import Sound.SC3.Plot {- hsc3-plot -}
+import Sound.Sc3.Plot {- hsc3-plot -}
 plot_ugen_nrt (48000,64) 1.0 (X.dustRangeId 'δ' ar 0.1 0.1)
 plot_ugen_nrt (48000,64) 1.0 (X.dustRangeId 'ε' ar 0.1 0.1 + impulse ar 10 0 * 0.5)
 plot_ugen_nrt (48000,64) 0.1 (X.dustRangeId 'ζ' ar 0.0001 0.001)

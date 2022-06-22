@@ -461,7 +461,7 @@ smoothDecimator,
 [streson](?t=hsc3&e=Help/UGen/streson.help.hs)
 
 
-## Filters:BEQSuite
+## Filters:BeqSuite
 [bAllPass](?t=hsc3&e=Help/UGen/bAllPass.help.hs),
 [bBandPass](?t=hsc3&e=Help/UGen/bBandPass.help.hs),
 [bBandStop](?t=hsc3&e=Help/UGen/bBandStop.help.hs),

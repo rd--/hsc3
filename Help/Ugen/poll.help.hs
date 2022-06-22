@@ -29,4 +29,4 @@ let x = mouseX kr 200 260 Exponential 0.2
 in mrg2 o (poll t x 0 (label "polling..."))
 
 ---- ; set t control
-withSC3 (Sound.OSC.sendMessage (n_set1 (-1) "t" 1))
+withSc3 (Sound.OSC.sendMessage (n_set1 (-1) "t" 1))

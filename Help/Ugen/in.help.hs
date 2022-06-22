@@ -36,5 +36,5 @@ let wr = out 10 (mce2 (tRandId 'α' 220 2200 (dustId 'β' kr 1)) (dustId 'γ' kr
 in mrg2 rd wr
 
 ---- ; set value on a control bus
-withSC3 (Sound.OSC.sendMessage (c_set1 0 300))
-withSC3 (Sound.OSC.sendMessage (c_set1 0 600))
+withSc3 (Sound.OSC.sendMessage (c_set1 0 300))
+withSc3 (Sound.OSC.sendMessage (c_set1 0 600))

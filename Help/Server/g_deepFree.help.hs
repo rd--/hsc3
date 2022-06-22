@@ -1,1 +1,1 @@
-    Sound.SC3.Lang.Help.viewServerHelp "/g_deepFree"
+    Sound.Sc3.Lang.Help.viewServerHelp "/g_deepFree"

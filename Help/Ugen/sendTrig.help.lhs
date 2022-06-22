@@ -2,7 +2,7 @@
 > import Data.Maybe {- base -}
 
 > import Sound.OSC {- hosc -}
-> import Sound.SC3 {- hsc3 -}
+> import Sound.Sc3 {- hsc3 -}
 
 Retrieve a single message
 
@@ -14,7 +14,7 @@ Retrieve a single message
 > f_01 :: Transport m => m Message
 > f_01 = withNotifications (waitReply "/tr")
 
-    withSC3 f_01
+    withSc3 f_01
 
 Send random triggers, request notifications, then for each trigger start a synth (s_03).
 
@@ -42,4 +42,4 @@ Send random triggers, request notifications, then for each trigger start a synth
 >   async_ (d_recv s_03)
 >   repeatM_ f_02
 
-     withSC3 f_03
+     withSc3 f_03

@@ -1,4 +1,4 @@
--- fbSineC ; SC3 default values
+-- fbSineC ; Sc3 default values
 fbSineC ar (sampleRate / 2) 1 0.1 1.1 0.5 0.1 0.1 * 0.1
 
 -- fbSineC ; fb generating noise
@@ -23,9 +23,9 @@ let x = mouseX kr 1 12 Linear 0.1
 in fbSineC ar n0 n1 n2 n3 n4 0.1 0.1 * 0.1
 
 ---- ; drawings
-Sound.SC3.Plot.plot_ugen_nrt (600,1) 1.0 (fbSineC ar 600 1.0 4.0 1.1 0.5 0.1 0.1)
+Sound.Sc3.Plot.plot_ugen_nrt (600,1) 1.0 (fbSineC ar 600 1.0 4.0 1.1 0.5 0.1 0.1)
 
 ---- ; haskell implementation of equation
-import Sound.SC3.Common.Math.Noise {- hsc3 -}
+import Sound.Sc3.Common.Math.Noise {- hsc3 -}
 fbSineC_hs im fb a c = map fst (iterate (fbSine_f im fb a c) (0.1,0.1))
-Sound.SC3.Plot.plot_p1_ln [take 600 (fbSineC_hs 1.0 4.0 1.1 0.5)]
+Sound.Sc3.Plot.plot_p1_ln [take 600 (fbSineC_hs 1.0 4.0 1.1 0.5)]

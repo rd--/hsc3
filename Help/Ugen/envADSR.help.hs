@@ -31,10 +31,10 @@ let g = control kr "gate" 1
 in sinOsc ar 440 0 * e
 
 ---- ; close gate message
-withSC3 (Sound.OSC.sendMessage (n_set1 (-1) "gate" 0))
+withSc3 (Sound.OSC.sendMessage (n_set1 (-1) "gate" 0))
 
 ---- ; drawings
-import Sound.SC3.Plot {- hsc3 -}
+import Sound.Sc3.Plot {- hsc3 -}
 plotEnvelope [envADSR 0.75 0.75 0.5 0.75 1 (EnvNum (-4)) 0
              ,envADSR 0.02 0.2 0.25 1 1 (EnvNum (-4)) 0
              ,envADSR 0.001 0.2 0.25 1 1 (EnvNum (-4)) 0
@@ -42,7 +42,7 @@ plotEnvelope [envADSR 0.75 0.75 0.5 0.75 1 (EnvNum (-4)) 0
              ,envADSR 0.001 1.54 1 0.001 0.4 EnvSin 0]
 
 ---- ; help
-Sound.SC3.Lang.Help.viewSC3Help "Env.*adsr"
+Sound.Sc3.Lang.Help.viewSc3Help "Env.*adsr"
 
 ---- ; coord ; [0,3,2,-99,1,0.01,5,-4,0.5,0.3,5,-4,0,1,5,-4]
 envelope_sc3_array (envADSR 0.01 0.3 0.5 1 1 (EnvNum (-4)) 0)

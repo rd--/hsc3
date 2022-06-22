@@ -34,8 +34,8 @@ in splay (sinOsc ar n 0) s l c True
 
 ---- ; n_set control
 import Sound.OSC {- hosc -}
-withSC3 (sendMessage (n_set (-1) [("spread",1),("center",0)])) -- full stereo
-withSC3 (sendMessage (n_set (-1) [("spread",0.5),("center",0)])) -- less wide
-withSC3 (sendMessage (n_set (-1) [("spread",0),("center",0)])) -- mono center
-withSC3 (sendMessage (n_set (-1) [("spread",0.5),("center",0.5)])) -- from center to right
-withSC3 (sendMessage (n_set (-1) [("spread",0),("center",-1)])) -- all left
+withSc3 (sendMessage (n_set (-1) [("spread",1),("center",0)])) -- full stereo
+withSc3 (sendMessage (n_set (-1) [("spread",0.5),("center",0)])) -- less wide
+withSc3 (sendMessage (n_set (-1) [("spread",0),("center",0)])) -- mono center
+withSc3 (sendMessage (n_set (-1) [("spread",0.5),("center",0.5)])) -- from center to right
+withSc3 (sendMessage (n_set (-1) [("spread",0),("center",-1)])) -- all left

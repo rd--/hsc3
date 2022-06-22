@@ -1,8 +1,8 @@
 > import System.IO.Unsafe {- base -}
-> import Sound.SC3 {- hsc3 -}
-> import qualified Sound.SC3.UGen.Bindings.DB.External as X {- hsc3 -}
+> import Sound.Sc3 {- hsc3 -}
+> import qualified Sound.Sc3.UGen.Bindings.DB.External as X {- hsc3 -}
 
-> import qualified Sound.SC3.Data.ATS as ATS {- hsc3-data -}
+> import qualified Sound.Sc3.Data.ATS as ATS {- hsc3-data -}
 
 > ats_fn_0 = "/home/rohan/sw/hsc3-data/data/ats/pf-c5.4.ats"
 > ats_fn_1 = "/home/rohan/sw/hsc3-data/data/ats/metal.ats"
@@ -10,7 +10,7 @@
 load ATS file at scsynth
 
     > ATS.ats_load_sc3 0 ats_fn_0 -- ats_fn_1
-    > withSC3 (b_query1_unpack 0)
+    > withSc3 (b_query1_unpack 0)
 
 read ATS header
 

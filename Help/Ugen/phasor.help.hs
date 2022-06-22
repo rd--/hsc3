@@ -63,10 +63,10 @@ let freq = mouseX kr 200 4000 Exponential 0.2
 in pan2 (leakDC squareSig 0.995) 0 0.05
 
 ---- ; load sound file to buffer zero
-withSC3 (async (b_allocRead 0 (sfResolve "pf-c5.aif") 0 0))
+withSc3 (async (b_allocRead 0 (sfResolve "pf-c5.aif") 0 0))
 
 ---- ; allocate and generate (non-wavetable) buffer (see osc for wavetable oscillator)
-withSC3 (mapM_ maybe_async [b_alloc 0 8192 1,b_gen_sine1 0 [Normalise,Clear] [1]])
+withSc3 (mapM_ maybe_async [b_alloc 0 8192 1,b_gen_sine1 0 [Normalise,Clear] [1]])
 
 ---- ; drawings
 UI.ui_sc3_scope 2 0 4096 1 "audio" 0

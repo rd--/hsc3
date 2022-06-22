@@ -14,4 +14,4 @@ let x = mouseX kr (-1) 1 Linear 0.1
 in sinOsc ar 440 0 * e
 
 ---- ; run paused node (assuming no intermediate node is created)
-withSC3 (Sound.OSC.sendMessage (n_run [(-1, True)]))
+withSc3 (Sound.OSC.sendMessage (n_run [(-1, True)]))

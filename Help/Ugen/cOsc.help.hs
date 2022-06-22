@@ -22,8 +22,8 @@ let f g = g ar (control kr "tbl" 0) 200 (mouseX kr 0 4 Linear 0.2)
 in xFade2 (f cOsc) (f osc) (lfTri kr 0.1 0) 0.1
 
 ---- ; setup ; allocate and fill wavetable
-withSC3 (mapM_ maybe_async [b_alloc 0 512 1,b_gen_sine1 0 [Normalise,Wavetable,Clear] [1,1/2,1/3,1/4,1/5,1/6,1/7,1/8,1/9,1/10]])
+withSc3 (mapM_ maybe_async [b_alloc 0 512 1,b_gen_sine1 0 [Normalise,Wavetable,Clear] [1,1/2,1/3,1/4,1/5,1/6,1/7,1/8,1/9,1/10]])
 
 ---- ; drawings
-withSC3 (mapM_ maybe_async [b_alloc 1 512 1,b_gen_sine1 1 [Normalise,Wavetable,Clear] [1]])
-Sound.SC3.Plot.plot_ugen1 0.1 (cOsc ar 1 100 5)
+withSc3 (mapM_ maybe_async [b_alloc 1 512 1,b_gen_sine1 1 [Normalise,Wavetable,Clear] [1]])
+Sound.Sc3.Plot.plot_ugen1 0.1 (cOsc ar 1 100 5)

@@ -22,5 +22,5 @@ let u = [1,1,1,1]
 in mix (pan2 (klank t 1 0 1 s) l 0.25)
 
 ---- ; modal data
-import Sound.SC3.Data.Modal {- hsc3-data -}
+import Sound.Sc3.Data.Modal {- hsc3-data -}
 Just reson_freq = lookup "Spinel sphere (diameter=3.6675mm)" modal_frequencies

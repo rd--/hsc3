@@ -14,7 +14,7 @@ let z = sinOsc ar 400 (pi / 2) * mouseY kr 0.01 1 Exponential 0.2
 in shaper t z * 0.1
 
 ---- ; sine1 table setup ; allocate and generate wavetable buffer ; sin harmonics
-withSC3 (mapM_ maybe_async [b_alloc 0 8192 1, b_gen_sine1 0 [Normalise,Wavetable,Clear] [1, 1/2, 1/3, 1/4, 1/5]])
+withSc3 (mapM_ maybe_async [b_alloc 0 8192 1, b_gen_sine1 0 [Normalise,Wavetable,Clear] [1, 1/2, 1/3, 1/4, 1/5]])
 
 ---- ; print scsynth, the interpreter value that holds the reference that stores the end brackets
 scsynthPrint scsynth

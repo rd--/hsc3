@@ -25,7 +25,7 @@ let f (c,g,x,y,z,o,rx,_,p,px,_) =
 in mix (voicer 16 f) * control kr "gain" 0.2
 
 ---- ; control edits
-msg k v = withSC3 (Sound.OSC.sendMessage (n_set1 (-1) k v))
+msg k v = withSc3 (Sound.OSC.sendMessage (n_set1 (-1) k v))
 msg "low" 0.0
 msg "band" 0.0
 msg "high" 0.0

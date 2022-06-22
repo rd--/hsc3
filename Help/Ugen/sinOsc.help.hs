@@ -1,7 +1,7 @@
 -- sinOsc ; fixed frequency (hz) and initial-phase (radians)
 sinOsc ar (midiCps 69) 0 * 0.1 -- 415 440
 
--- sinOsc ; control input for frequency ; ie. withSC3 (Sound.OSC.sendMessage (n_set1 (-1) "mnn" 64))
+-- sinOsc ; control input for frequency ; ie. withSc3 (Sound.OSC.sendMessage (n_set1 (-1) "mnn" 64))
 sinOsc ar (midiCps (control kr "mnn" 69)) 0 * 0.25
 
 -- sinOsc ; modulate freq
@@ -152,6 +152,6 @@ let mratio = 4
 in tanh (pan2 sig 0 boost) * envgen 1 * amp
 
 ---- ; drawings
-UI.ui_baudline (4096 * 1) 50 "linear" 2
-Sound.SC3.Plot.plot_ugen_nrt (48000,64) 1.0 (sinOsc ar 1 0)
+Ui.ui_baudline (4096 * 1) 50 "linear" 2
+Sound.Sc3.Plot.plot_ugen_nrt (48000,64) 1.0 (sinOsc ar 1 0)
 (midiCps 60.5 / 16)

@@ -1,7 +1,7 @@
-> Sound.SC3.UGen.Help.viewSC3Help "DecodeB2"
-> Sound.SC3.UGen.DB.ugenSummary "DecodeB2"
+> Sound.Sc3.UGen.Help.viewSc3Help "DecodeB2"
+> Sound.Sc3.UGen.DB.ugenSummary "DecodeB2"
 
-> import Sound.SC3
+> import Sound.Sc3
 
 fails..., but so does sclang...
 

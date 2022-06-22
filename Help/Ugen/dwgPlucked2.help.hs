@@ -37,7 +37,7 @@ in pan2 ps pan 0.1
 -- dwgPlucked2 ; event control
 let f (_,g,x,y,z,o,rx,_,p,_,_) =
       let c3 = 20
-          (gt,tr) = eventGateReset g p
+          (gt,tr) = ccEventGateReset g p
           dx = latch x tr - x
           freq = midiCps (p * 127 + dx)
           inp = let e = envelope [0,1,1,0] [0.001,0.006,0.0005] (map EnvNum [5,-5,-8])

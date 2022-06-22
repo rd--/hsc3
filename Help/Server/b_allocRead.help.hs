@@ -1,15 +1,15 @@
 ---- ;help
-Sound.SC3.sc3_scdoc_help_server_command_open False "/b_allocRead"
+Sound.Sc3.sc3_scdoc_help_server_command_open False "/b_allocRead"
 
 > import Sound.OSC {- hosc -}
-> import Sound.SC3 {- hsc3 -}
+> import Sound.Sc3 {- hsc3 -}
 
 Read an audio file into a buffer.
 
 > f_00 = sfResolve "jonchaies.wav"
 > m_00 = b_allocRead 0 f_00 0 0
 
-    withSC3 (async m_00)
+    withSc3 (async m_00)
 
 Audio data is loaded in IEEE 32-bit form, so in-memory storage can be
 greater than on-disk storage.
@@ -33,7 +33,7 @@ Query buffer.
 >   r <- waitReply "/b_info"
 >   liftIO (print r)
 
-    withSC3 q_00
+    withSc3 q_00
 
 Play buffer.
 
@@ -46,17 +46,17 @@ Re-read file into buffer with the same identifier.  The existing
 buffer is freed but not before further memory is allocated,
 intermediate in-memory use is greater than final memory use.
 
-    withSC3 (async (b_allocRead 0 fn 0 0))
+    withSc3 (async (b_allocRead 0 fn 0 0))
 
 Free buffer.  Memory is immediately made free.
 
-    withSC3 (async (b_free 0))
+    withSc3 (async (b_free 0))
 
 Small sample buffer
 
 > f_01 = sfResolve "metal.wav"
 
-    withSC3 (async m_01)
+    withSc3 (async m_01)
 
 > m_01 :: Message
 > m_01 = b_allocRead 0 f_01 0 0

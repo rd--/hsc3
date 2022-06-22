@@ -9,8 +9,8 @@ let env = envStep [0,2,4,5,7,9,11,12,0] (take 9 (iterate (* 0.75) 1)) (Just 8) (
 in sinOsc ar (midiCps (envgen + 60)) 0 * 0.1
 
 ---- ; drawings
-Sound.SC3.Plot.plotEnvelope [envStep [0,2,4,5,7,9,11,12] (take 8 (iterate (* 0.75) 1)) Nothing Nothing]
+Sound.Sc3.Plot.plotEnvelope [envStep [0,2,4,5,7,9,11,12] (take 8 (iterate (* 0.75) 1)) Nothing Nothing]
 
 ---- ; help
-Sound.SC3.Lang.Help.viewSC3Help "Env.*step"
+Sound.Sc3.Lang.Help.viewSc3Help "Env.*step"
 

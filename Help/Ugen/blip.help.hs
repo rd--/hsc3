@@ -24,5 +24,5 @@ let f (_,g,_,_,z,o,rx,_,p,px,_) =
 in mix (voicer 16 f) * control kr "gain" 0.5
 
 ---- ; drawings
-Sound.SC3.Plot.plot_ugen1 0.1 (blip ar 1000 20)
-Sound.SC3.Plot.FFT.plot_ugen_fft1 0.1 (blip ar 1000 20)
+Sound.Sc3.Plot.plot_ugen1 0.1 (blip ar 1000 20)
+Sound.Sc3.Plot.FFT.plot_ugen_fft1 0.1 (blip ar 1000 20)

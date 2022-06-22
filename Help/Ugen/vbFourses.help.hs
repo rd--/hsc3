@@ -20,5 +20,5 @@ let w = lfPulse ar 1 0 0.5 * 100 + 100
 in leakDC (mceChannel 0 src) 0.995 * 0.4
 
 ---- ; drawings
-import Sound.SC3.Plot {- hsc3-plot -}
+import Sound.Sc3.Plot {- hsc3-plot -}
 plot_ugen_nrt (48000,64) 1 (X.vbFourses ar 0.5 (mce [800, 30, 710, 3, 10, 1, 7, 11]))

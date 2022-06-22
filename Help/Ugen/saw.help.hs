@@ -1,4 +1,4 @@
--- saw ; SC3 saw is descending
+-- saw ; Sc3 saw is descending
 saw ar (xLine kr 40 4000 6 RemoveSynth) * 0.1
 
 -- saw ; negation is ascending
@@ -21,5 +21,5 @@ in saw ar (tRandId 'a' 50 (xLine ar 50 5000 20 DoNothing) tr) * e * 0.1
 
 ---- ; drawings
 UI.ui_baudline 4096 50 "linear" 2
-Sound.SC3.Plot.plot_ugen1 0.1 (saw ar 50) -- descending
-Sound.SC3.Plot.plot_ugen1 0.002 (saw ar 5000) -- ragged
+Sound.Sc3.Plot.plot_ugen1 0.1 (saw ar 50) -- descending
+Sound.Sc3.Plot.plot_ugen1 0.002 (saw ar 5000) -- ragged

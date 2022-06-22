@@ -8,6 +8,6 @@ lfdNoise0Id 'α' ar (xLine kr 0.5 10000 3 RemoveSynth)
 lfdNoise0Id 'α' ar (xLine kr 1000 20000 10 RemoveSynth)
 
 ---- ; drawings
-Sound.SC3.Plot.plot_ugen1 0.1 (lfdNoise0Id 'γ' ar 1000)
-Sound.SC3.Plot.plot_ugen1 0.1 (lfdNoise1Id 'γ' ar 1000)
-Sound.SC3.Plot.plot_ugen1 0.1 (lfdNoise3Id 'γ' ar 1000)
+Sound.Sc3.Plot.plot_ugen1 0.1 (lfdNoise0Id 'γ' ar 1000)
+Sound.Sc3.Plot.plot_ugen1 0.1 (lfdNoise1Id 'γ' ar 1000)
+Sound.Sc3.Plot.plot_ugen1 0.1 (lfdNoise3Id 'γ' ar 1000)

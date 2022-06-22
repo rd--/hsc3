@@ -9,4 +9,4 @@ in mce2 z (ifft' h * 0.5)
 ---- ; load buf
 let fn = "/usr/share/SuperCollider/sounds/a11wlk01.wav"
 let fn = "/home/rohan/data/audio/instr/bosendorfer/064/C5.aif"
-withSC3 (async (b_allocRead 0 fn 0 0))
+withSc3 (async (b_allocRead 0 fn 0 0))

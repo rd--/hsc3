@@ -31,6 +31,6 @@ x = [[0.483,0.008,0.396,0.006,0.128,0.331,0.196,0],[0.005,0.015,0.194,0.481,0.03
 
 ---- ; send initial settings
 import Sound.OSC {- hosc -}
-withSC3 (sendMessage (c_setn1 (11000, replicate (16 * 8) 0)))
-withSC3 (sendBundle (bundle immediately (map c_setn1 (zip [11000, 11008..] x))))
+withSc3 (sendMessage (c_setn1 (11000, replicate (16 * 8) 0)))
+withSc3 (sendBundle (bundle immediately (map c_setn1 (zip [11000, 11008..] x))))
 (length x == 16, map length x == replicate 16 8, 16 * 8 == 128)

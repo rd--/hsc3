@@ -40,6 +40,6 @@ let (buf, nc) = (control kr "buf" 0, 2)
 in X.miClouds ar 0 0 size dens tex 1 1 0.5 0.6 0.6 0 (X.miClouds_mode "SPECTRAL") 1 0 input * 0.25
 
 ---- ; allocate buffer 0, required for examples
-ld fn = withSC3 (async (b_allocRead 0 (sfResolve fn) 0 0))
+ld fn = withSc3 (async (b_allocRead 0 (sfResolve fn) 0 0))
 ld "crotale05(D).wav"
 ld "saron-panerus-S-0-5.flac"

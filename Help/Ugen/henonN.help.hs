@@ -1,4 +1,4 @@
--- henonN ; with SC3 default initial parameters
+-- henonN ; with Sc3 default initial parameters
 let x = mouseX kr 20 sampleRate Linear 0.1
 in henonN ar x 1.4 0.3 0 0 * 0.1
 
@@ -20,10 +20,10 @@ let x = mouseX kr 1 1.4 Linear 0.1
 in sinOsc ar f 0 * 0.4
 
 ---- ; drawings
-Sound.SC3.Plot.plot_ugen1 0.1 (henonN ar 2500 1.4 0.3 0 0 * 0.1)
+Sound.Sc3.Plot.plot_ugen1 0.1 (henonN ar 2500 1.4 0.3 0 0 * 0.1)
 
 ---- ; haskell
-import qualified Sound.SC3.Common.Math.Noise as Math {- hsc3 -}
+import qualified Sound.Sc3.Common.Math.Noise as Math {- hsc3 -}
 henon_hs a b = map snd (iterate (Math.henon_f a b) (0.0,0.0))
-Sound.SC3.Plot.plot_p1_ln [take 600 (henon_hs 1.4 0.3)]
-Sound.SC3.Plot.plot_ugen_nrt (600,1) 1.0 (henonN ar 600 1.4 0.3 0 0)
+Sound.Sc3.Plot.plot_p1_ln [take 600 (henon_hs 1.4 0.3)]
+Sound.Sc3.Plot.plot_ugen_nrt (600,1) 1.0 (henonN ar 600 1.4 0.3 0 0)

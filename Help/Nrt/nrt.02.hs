@@ -1,5 +1,5 @@
 import Sound.Osc.Packet {- hosc3 -}
-import Sound.SC3 {- hsc3 -}
+import Sound.Sc3 {- hsc3 -}
 
 sy :: Synthdef
 sy = synthdef "sin" (out 0 (sinOsc ar (control kr "freq" 440) 0 * 0.2))

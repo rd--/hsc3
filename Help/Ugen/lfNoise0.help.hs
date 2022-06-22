@@ -19,7 +19,7 @@ lfNoise0Id 'α' ar (xLine kr 0.5 10000 3 RemoveSynth)
 lfNoise0Id 'α' ar (xLine kr 1000 20000 10 RemoveSynth)
 
 ---- ; drawings
-import Sound.SC3.Plot {- hsc3-plot -}
+import Sound.Sc3.Plot {- hsc3-plot -}
 plot_ugen1 0.1 (lfNoise0Id 'γ' ar 1000)
 plot_ugen1 0.1 (lfNoise1Id 'γ' ar 1000)
 plot_ugen1 0.1 (lfNoise2Id 'γ' ar 1000)

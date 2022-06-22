@@ -4,4 +4,4 @@ let n = pinkNoiseId 'α' ar + sinOsc ar 11000 0
 in decay s 0.05 * n
 
 ---- ; drawings
-Sound.SC3.Plot.plot_ugen1 0.05 (decay (impulse ar 1 0) 0.01)
+Sound.Sc3.Plot.plot_ugen1 0.05 (decay (impulse ar 1 0) 0.01)

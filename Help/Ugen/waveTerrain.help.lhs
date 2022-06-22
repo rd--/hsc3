@@ -1,5 +1,5 @@
-> import Sound.SC3 {- hsc3 -}
-> import qualified Sound.SC3.UGen.Bindings.DB.External as X {- hsc3 -}
+> import Sound.Sc3 {- hsc3 -}
+> import qualified Sound.Sc3.UGen.Bindings.DB.External as X {- hsc3 -}
 
 Terrain function, ie. (x,y) -> z
 
@@ -22,7 +22,7 @@ Create terrain given function.
 
 Confirm terrain
 
-    import Sound.SC3.Plot {- hsc3-plot -}
+    import Sound.Sc3.Plot {- hsc3-plot -}
     plot_p3_ln [gen_t ter_f]
 
 Create table.
@@ -35,7 +35,7 @@ Confirm table
 
 Send table to scsynth
 
-    withSC3 (async (b_alloc_setn1 0 0 tbl'))
+    withSc3 (async (b_alloc_setn1 0 0 tbl'))
 
 Hear terrain
 
@@ -56,7 +56,7 @@ Alternate terrain function.
 
 Free buffer
 
-    withSC3 (async (b_free 0))
+    withSc3 (async (b_free 0))
 
 Gerate mesh given terrain given function.
 
