@@ -18,7 +18,7 @@ import Sound.Sc3.Ugen.Bindings.Hw
 import Sound.Sc3.Ugen.Math
 import Sound.Sc3.Ugen.Mce
 import Sound.Sc3.Ugen.Types
-import Sound.Sc3.Ugen.Ugen
+import Sound.Sc3.Ugen.Util
 
 -- | Generate a localBuf and use setBuf to initialise it.
 asLocalBufId :: ID i => i -> [Ugen] -> Ugen

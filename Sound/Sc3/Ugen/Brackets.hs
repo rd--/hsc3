@@ -3,7 +3,7 @@ module Sound.Sc3.Ugen.Brackets where
 
 import Data.Bifunctor {- base -}
 
-import qualified Sound.Osc as Osc {- hosc -}
+import qualified Sound.Osc.Packet as Osc {- hosc -}
 
 {- | Brackets are two sets of Open Sound Control messages that can be associated with a Ugen.
 The first is to be run prior to the graph being executed, the other after it has ended.

@@ -24,7 +24,7 @@ import qualified Sound.Sc3.Common.Uid as Uid {- hsc3 -}
 
 import qualified Sound.Sc3.Ugen.Analysis as Analysis {- hsc3 -}
 import Sound.Sc3.Ugen.Types {- hsc3 -}
-import qualified Sound.Sc3.Ugen.Ugen as Ugen {- hsc3 -}
+import qualified Sound.Sc3.Ugen.Util as Util {- hsc3 -}
 
 -- * Types
 
@@ -84,7 +84,7 @@ u_node_k_to_control nd =
 
 -- | Derive "user" name for U_Node
 u_node_user_name :: U_Node -> String
-u_node_user_name n = Ugen.ugen_user_name (u_node_u_name n) (u_node_u_special n)
+u_node_user_name n = ugen_user_name (u_node_u_name n) (u_node_u_special n)
 
 -- | Type to represent a unit generator graph.
 data U_Graph = U_Graph {ug_next_id :: Uid.Id
@@ -521,7 +521,7 @@ ug_pv_validate g = maybe g error (ug_pv_check g)
 -}
 ugen_to_graph_direct :: Ugen -> U_Graph
 ugen_to_graph_direct u =
-    let (_,g) = ug_mk_node (Ugen.prepare_root u) ug_empty_graph
+    let (_,g) = ug_mk_node (Util.prepare_root u) ug_empty_graph
         g' = g {ug_ugens = reverse (ug_ugens g)
                ,ug_controls = u_node_sort_controls (ug_controls g)}
     in ug_pv_validate (ug_add_implicit g')
@@ -529,7 +529,7 @@ ugen_to_graph_direct u =
 {-
 ugen_to_graph_netlist :: Ugen -> U_Graph
 ugen_to_graph_netlist u =
-    let g = netlist_to_u_graph (ugenNetlist (Ugen.prepare_root u))
+    let g = netlist_to_u_graph (ugenNetlist (Util.prepare_root u))
         g' = g {ug_ugens = reverse (ug_ugens g)
                ,ug_controls = u_node_sort_controls (ug_controls g)}
     in ug_pv_validate (ug_add_implicit g')

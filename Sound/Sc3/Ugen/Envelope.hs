@@ -7,8 +7,8 @@ import Sound.Sc3.Common.Math.Operator
 import Sound.Sc3.Common.Rate
 
 import Sound.Sc3.Ugen.Bindings
-import Sound.Sc3.Ugen.Type
 import Sound.Sc3.Ugen.Ugen
+import Sound.Sc3.Ugen.Util
 
 {- | Trapezoidal envelope generator.
 

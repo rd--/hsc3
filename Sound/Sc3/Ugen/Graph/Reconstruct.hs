@@ -9,7 +9,7 @@ import qualified Sound.Sc3.Common.Math.Operator as Operator
 import qualified Sound.Sc3.Common.Rate as Rate
 import qualified Sound.Sc3.Ugen.Graph as Graph
 import qualified Sound.Sc3.Ugen.Types as Types
-import qualified Sound.Sc3.Ugen.Ugen as Ugen
+import qualified Sound.Sc3.Ugen.Util as Util
 
 -- | Generate label for 'Graph.From_Port'
 from_port_label :: Char -> Graph.From_Port -> String
@@ -45,7 +45,7 @@ reconstruct_graph_module :: String -> Graph.U_Graph -> [String]
 reconstruct_graph_module nm gr =
   let imp = ["import Sound.Sc3 {- hsc3 -}"
             ,"import Sound.Sc3.Common.Base {- hsc3 -}"
-            ,"import Sound.Sc3.Ugen.Plain {- hsc3 -}"]
+            ,"import Sound.Sc3.Util.Plain {- hsc3 -}"]
       (b0:bnd,res) = reconstruct_graph gr
       hs = ("  let " ++ b0) : map ("      " ++ ) bnd ++ ["  in " ++ res]
       pre = [nm ++ " :: Ugen",nm ++ " ="]
@@ -54,8 +54,8 @@ reconstruct_graph_module nm gr =
 {- | Generate a reconstruction of a 'Graph'.
 
 > import Sound.Sc3 {- hsc3 -}
-> import Sound.Sc3.Ugen.Graph {- hsc3 -}
-> import Sound.Sc3.Ugen.Graph.Reconstruct {- hsc3 -}
+> import Sound.Sc3.Util.Graph {- hsc3 -}
+> import Sound.Sc3.Util.Graph.Reconstruct {- hsc3 -}
 
 > let k = control KR "bus" 0
 > let o = sinOsc AR 440 0 + whiteNoise 'α' AR
@@ -93,7 +93,7 @@ reconstruct_k_str u =
 reconstruct_k_ugen :: Graph.U_Node -> Types.Ugen
 reconstruct_k_ugen u =
     let (r,n,d) = reconstruct_k_rnd u
-    in Ugen.control_f64 r Nothing n d
+    in Util.control_f64 r Nothing n d
 
 ugen_qname :: String -> Types.Special -> (String,String)
 ugen_qname nm (Types.Special n) =

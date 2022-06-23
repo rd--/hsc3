@@ -7,4 +7,4 @@ import Sound.Sc3.Ugen.Label as M
 import Sound.Sc3.Ugen.Mrg as M
 import Sound.Sc3.Ugen.Primitive as M
 import Sound.Sc3.Ugen.Proxy as M
-import Sound.Sc3.Ugen.Type as M
+import Sound.Sc3.Ugen.Ugen as M

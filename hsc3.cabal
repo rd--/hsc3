@@ -134,9 +134,9 @@ Library
                    Sound.Sc3.Ugen.Pp
                    Sound.Sc3.Ugen.Primitive
                    Sound.Sc3.Ugen.Proxy
-                   Sound.Sc3.Ugen.Type
                    Sound.Sc3.Ugen.Types
                    Sound.Sc3.Ugen.Ugen
+                   Sound.Sc3.Ugen.Util
 
 Source-Repository  head
   Type:            git

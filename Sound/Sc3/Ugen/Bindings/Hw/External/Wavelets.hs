@@ -3,7 +3,7 @@ module Sound.Sc3.Ugen.Bindings.Hw.External.Wavelets where
 
 import Sound.Sc3.Common.Rate
 import Sound.Sc3.Ugen.Bindings.Hw.Construct
-import Sound.Sc3.Ugen.Type
+import Sound.Sc3.Ugen.Ugen
 
 -- | Forward wavelet transform.
 dwt :: Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen

@@ -10,7 +10,7 @@ import Sound.Sc3.Common.Rate {- hsc3 -}
 import Sound.Sc3.Ugen.Bindings.Db {- hsc3 -}
 import Sound.Sc3.Ugen.Bindings.Composite {- hsc3 -}
 import Sound.Sc3.Ugen.Types {- hsc3 -}
-import Sound.Sc3.Ugen.Ugen {- hsc3 -}
+import Sound.Sc3.Ugen.Util {- hsc3 -}
 
 -- * Cc Event
 

@@ -8,9 +8,10 @@ import Sound.Sc3.Common.Math {- hsc3 -}
 import Sound.Sc3.Common.Rate {- hsc3 -}
 import Sound.Sc3.Common.Uid {- hsc3 -}
 import Sound.Sc3.Common.Unsafe {- hsc3 -}
+
 import Sound.Sc3.Ugen.Analysis  {- hsc3 -}
-import Sound.Sc3.Ugen.Type {- hsc3 -}
 import Sound.Sc3.Ugen.Ugen {- hsc3 -}
+import Sound.Sc3.Ugen.Util {- hsc3 -}
 
 import qualified Sound.Sc3.Ugen.Bindings.Db as Db {- hsc3 -}
 import qualified Sound.Sc3.Ugen.Bindings.Db.External as External {- hsc3 -}

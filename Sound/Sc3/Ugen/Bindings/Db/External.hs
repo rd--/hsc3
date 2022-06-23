@@ -8,8 +8,8 @@ import Sound.Sc3.Common.Uid
 import Sound.Sc3.Common.Unsafe
 
 import Sound.Sc3.Ugen.Primitive
-import Sound.Sc3.Ugen.Type
 import Sound.Sc3.Ugen.Ugen
+import Sound.Sc3.Ugen.Util
 
 -- | (Undocumented class)
 --

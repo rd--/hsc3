@@ -8,7 +8,7 @@ import qualified Data.List.Split as Split {- split -}
 
 import Sound.Sc3.Common.Uid {- hsc3 -}
 import qualified Sound.Sc3.Ugen.Math as Math {- hsc3 -}
-import Sound.Sc3.Ugen.Type {- hsc3 -}
+import Sound.Sc3.Ugen.Ugen {- hsc3 -}
 
 -- | Construct a list of Ugens by applying f to consecutive identifiers (from z) and indices (from 0).
 listFillId :: (Integral n, ID z, Enum z) => z -> Int -> (z -> n -> Ugen) -> [Ugen]

@@ -7,7 +7,6 @@ import Sound.Sc3.Common.Math
 import Sound.Sc3.Common.Mce
 
 import Sound.Sc3.Ugen.Types
-import Sound.Sc3.Ugen.Ugen
 
 {- | Print constants and labels directly,
      primitives as un-adorned names,
@@ -29,5 +28,5 @@ ugen_concise_pp u =
          Primitive_U p -> prim_pp p
          Proxy_U (Proxy p n) -> prim_pp p ++ "@" ++ show n
          Mce_U (Mce_Scalar s) -> ugen_concise_pp s
-         Mce_U (Mce_Vector v) -> bracketed ('[',']') (intercalate "," (map (ugen_concise_pp . mce_scalar_value) v))
+         Mce_U (Mce_Vector v) -> bracketed ('[',']') (concat (intersperse "," (map (ugen_concise_pp . mce_scalar_value) v))) -- hugs
          Mrg_U (Mrg l r) -> unwords [ugen_concise_pp l,"&",ugen_concise_pp r]

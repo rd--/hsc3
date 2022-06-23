@@ -5,7 +5,7 @@ import qualified Data.ByteString.Lazy as L {- bytestring -}
 
 import qualified Sound.Sc3.Ugen.Graph as Ugen.Graph {- hsc3 -}
 import qualified Sound.Sc3.Ugen.Help.Graph as Help.Graph {- hsc3 -}
-import qualified Sound.Sc3.Ugen.Type as Ugen {- hsc3 -}
+import qualified Sound.Sc3.Ugen.Ugen as Ugen {- hsc3 -}
 
 import qualified Sound.Sc3.Server.Graphdef as Graphdef {- hsc3 -}
 import qualified Sound.Sc3.Server.Graphdef.Binary as Graphdef {- hsc3 -}

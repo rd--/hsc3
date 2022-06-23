@@ -3,8 +3,8 @@ module Sound.Sc3.Ugen.Math.Composite where
 
 import Sound.Sc3.Common.Math.Operator
 
-import Sound.Sc3.Ugen.Type
 import Sound.Sc3.Ugen.Ugen
+import Sound.Sc3.Ugen.Util
 
 -- | Select /q/ or /r/ by /p/, ie. @if p == 1 then q else if p == 0 then r@.
 ugen_if :: Num a => a -> a -> a -> a

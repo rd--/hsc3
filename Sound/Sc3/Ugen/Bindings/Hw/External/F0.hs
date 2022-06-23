@@ -3,7 +3,7 @@ module Sound.Sc3.Ugen.Bindings.Hw.External.F0 where
 
 import Sound.Sc3.Common.Rate
 import qualified Sound.Sc3.Ugen.Bindings.Hw.Construct as C
-import Sound.Sc3.Ugen.Type
+import Sound.Sc3.Ugen.Ugen
 
 -- | Emulation of the sound generation hardware of the Atari TIA chip.
 atari2600 :: Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen

@@ -7,13 +7,13 @@ import Sound.Sc3.Common.Unsafe
 
 import qualified Sound.Sc3.Ugen.Bindings.Hw.Construct as C
 import Sound.Sc3.Ugen.Types
-import qualified Sound.Sc3.Ugen.Ugen as U
+import qualified Sound.Sc3.Ugen.Util as Util
 
 -- | Zero local buffer.
 --
 -- ClearBuf does not copy the buffer number through so this is an Mrg node.
 clearBuf :: Ugen -> Ugen
-clearBuf b = U.mrg2 b (C.mkOsc ir "ClearBuf" [b] 1)
+clearBuf b = Util.mrg2 b (C.mkOsc ir "ClearBuf" [b] 1)
 
 -- | Demand rate weighted random sequence generator.
 dwrandId :: ID i => i -> Ugen -> Ugen -> Ugen -> Ugen
@@ -21,7 +21,7 @@ dwrandId z repeats weights list_ =
     let n = mceDegree_err list_
         weights' = mceExtend n weights
         inp = repeats : constant n : weights'
-    in mkUgen Nothing [dr] (Left dr) "Dwrand" inp (Just [list_]) 1 (Special 0) (U.toUid z)
+    in mkUgen Nothing [dr] (Left dr) "Dwrand" inp (Just [list_]) 1 (Special 0) (Util.toUid z)
 
 dwrandM :: Uid m => Ugen -> Ugen -> Ugen -> m Ugen
 dwrandM = liftUid3 dwrandId
@@ -46,7 +46,7 @@ packFFT b sz from to z mp =
 -- | Poll value of input Ugen when triggered.
 poll :: Ugen -> Ugen -> Ugen -> Ugen -> Ugen
 poll trig_ in_ trigid label_ =
-  let q = U.unpackLabel True label_
+  let q = Util.unpackLabel True label_
   in C.mkFilter "Poll" ([trig_,in_,trigid] ++ q) 0
 
 -- | FFT onset detector.

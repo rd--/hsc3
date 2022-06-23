@@ -3,7 +3,8 @@ module Sound.Sc3.Ugen.Enum where
 
 import Sound.Sc3.Common.Envelope {- hsc3 -}
 import Sound.Sc3.Common.Enum {- hsc3 -}
-import Sound.Sc3.Ugen.Type {- hsc3 -}
+
+import Sound.Sc3.Ugen.Ugen {- hsc3 -}
 
 -- | Type specialised envelope curve.
 type EnvCurve = Envelope_Curve Ugen

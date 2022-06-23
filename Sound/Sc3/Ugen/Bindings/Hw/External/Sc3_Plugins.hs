@@ -5,7 +5,7 @@ import Sound.Sc3.Common.Rate
 
 import qualified Sound.Sc3.Ugen.Bindings.Hw.Construct as C
 import Sound.Sc3.Ugen.Types
-import qualified Sound.Sc3.Ugen.Ugen as U
+import qualified Sound.Sc3.Ugen.Util as Util
 import qualified Sound.Sc3.Ugen.Bindings.Db.External as X
 
 -- | Convert frequency value to value appropriate for AY tone inputs.
@@ -40,4 +40,4 @@ stkBowedI rt freq gate_ onamp offamp bowpressure bowposition vibfreq vibgain lou
 --  StkGlobals [ar] showWarnings=0.0 printErrors=0.0 rawfilepath=0.0
 stkGlobals :: Rate -> Ugen -> Ugen -> Ugen -> Ugen
 stkGlobals rate showWarnings printErrors rawfilepath =
-  mkUgen Nothing [ar] (Left rate) "StkGlobals" ([showWarnings,printErrors] ++ U.unpackLabel False rawfilepath) Nothing 1 (Special 0) NoId
+  mkUgen Nothing [ar] (Left rate) "StkGlobals" ([showWarnings,printErrors] ++ Util.unpackLabel False rawfilepath) Nothing 1 (Special 0) NoId

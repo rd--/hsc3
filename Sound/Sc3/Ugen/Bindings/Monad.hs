@@ -8,7 +8,7 @@ import Sound.Sc3.Common.Rate
 import Sound.Sc3.Common.Uid
 import Sound.Sc3.Ugen.Bindings.Db
 import Sound.Sc3.Ugen.Bindings.Hw
-import Sound.Sc3.Ugen.Type
+import Sound.Sc3.Ugen.Ugen
 
 -- | Clone a unit generator (mce . replicateM).
 clone :: Uid m => Int -> m Ugen -> m Ugen

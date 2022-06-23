@@ -17,9 +17,11 @@ module Sound.Sc3.Ugen.Bracketed where
 import Sound.Sc3.Common.Enum {- hsc3 -}
 import Sound.Sc3.Common.Rate {- hsc3 -}
 import Sound.Sc3.Common.SoundFile {- hsc3 -}
+
 import Sound.Sc3.Ugen.Bindings.Db {- hsc3 -}
-import Sound.Sc3.Ugen.Type {- hsc3 -}
 import Sound.Sc3.Ugen.Ugen {- hsc3 -}
+import Sound.Sc3.Ugen.Util {- hsc3 -}
+
 import Sound.Sc3.Server.Command.Plain {- hsc3 -}
 import Sound.Sc3.Server.Enum {- hsc3 -}
 

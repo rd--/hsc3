@@ -20,7 +20,7 @@ import Sound.Sc3.Server.Nrt
 import Sound.Sc3.Server.Options
 import Sound.Sc3.Server.Status
 import Sound.Sc3.Server.Synthdef
-import Sound.Sc3.Ugen.Type
+import Sound.Sc3.Ugen.Ugen
 
 -- * hosc variants
 

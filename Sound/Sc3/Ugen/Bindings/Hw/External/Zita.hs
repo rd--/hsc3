@@ -5,7 +5,7 @@ module Sound.Sc3.Ugen.Bindings.Hw.External.Zita where
 
 import Sound.Sc3.Common.Rate
 import Sound.Sc3.Ugen.Bindings.Hw.Construct
-import Sound.Sc3.Ugen.Type
+import Sound.Sc3.Ugen.Ugen
 
 -- | Parameter (name,value) pairs.
 zitaRev_param :: Num n => [(String,n,(n,n,String))]

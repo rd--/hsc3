@@ -11,7 +11,7 @@ import Sound.Sc3.Server.Nrt
 import Sound.Sc3.Server.Nrt.Render
 import Sound.Sc3.Server.Synthdef
 import Sound.Sc3.Ugen.Bindings.Db
-import Sound.Sc3.Ugen.Type
+import Sound.Sc3.Ugen.Ugen
 
 {- | Make Nrt score that runs Ugen for Time seconds to output bus zero.
      If Ugen is at ControlRate insert 'k2a' Ugen.

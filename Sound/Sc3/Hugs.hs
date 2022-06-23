@@ -9,7 +9,7 @@ import Sound.Sc3.Common.Enum as M
 import Sound.Sc3.Common.Envelope as M
 import Sound.Sc3.Common.Math as M
 import Sound.Sc3.Common.Math.Filter as M
-import Sound.Sc3.Common.Math.Filter.BEQ as M
+import Sound.Sc3.Common.Math.Filter.Beq as M
 import Sound.Sc3.Common.Math.Noise as M
 import Sound.Sc3.Common.Math.Operator as M
 import Sound.Sc3.Common.Math.Warp as M
@@ -29,5 +29,15 @@ import Sound.Sc3.Common.SoundFile as M
 import Sound.Sc3.Common.UId as M
 -}
 
-import Sound.Sc3.Ugen.HS as M
+import Sound.Sc3.Ugen.Brackets as M
+import Sound.Sc3.Ugen.Constant as M
+import Sound.Sc3.Ugen.Control as M
+import Sound.Sc3.Ugen.Hs as M
+import Sound.Sc3.Ugen.Label as M
+import Sound.Sc3.Ugen.Mrg as M
 import Sound.Sc3.Ugen.Name as M
+import Sound.Sc3.Ugen.Plain as M
+import Sound.Sc3.Ugen.Pp as M
+import Sound.Sc3.Ugen.Primitive as M
+import Sound.Sc3.Ugen.Proxy as M
+import Sound.Sc3.Ugen.Ugen as M

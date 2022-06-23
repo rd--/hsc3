@@ -15,8 +15,8 @@ import Data.IORef {- base -}
 import qualified Sound.Osc.Packet as Osc {- hosc -}
 
 import Sound.Sc3.Server.Transport.Monad {- hsc3 -}
-import Sound.Sc3.Ugen.Type {- hsc3 -}
 import Sound.Sc3.Ugen.Ugen {- hsc3 -}
+import Sound.Sc3.Ugen.Util {- hsc3 -}
 
 -- | Scsynth state.
 data Scsynth = Scsynth {scsynthResetMessages :: IORef [Osc.Message]}

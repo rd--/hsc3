@@ -25,7 +25,7 @@ import qualified Sound.Sc3.Server.Options as Options
 import qualified Sound.Sc3.Server.Status as Status
 import qualified Sound.Sc3.Server.Synthdef as Synthdef
 import qualified Sound.Sc3.Ugen.Bindings.Composite as Composite
-import qualified Sound.Sc3.Ugen.Type as Ugen
+import qualified Sound.Sc3.Ugen.Ugen as Ugen
 
 {-
 import qualified Control.Monad.IO.Class as M {- transformers -}

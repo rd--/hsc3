@@ -8,7 +8,7 @@ import Sound.Sc3.Common.Rate
 
 import qualified Sound.Sc3.Ugen.Bindings.Db as Bindings {- hsc3 -}
 import Sound.Sc3.Ugen.Types
-import Sound.Sc3.Ugen.Ugen
+import Sound.Sc3.Ugen.Util
 
 -- | Constant form of 'rand' Ugen.
 c_rand :: Random a => Int -> a -> a -> a
