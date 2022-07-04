@@ -507,7 +507,6 @@ ug_pv_check g =
 ug_pv_validate :: U_Graph -> U_Graph
 ug_pv_validate g = maybe g error (ug_pv_check g)
 
-
 -- * Ugen to U_Graph
 
 {- | Transform a unit generator into a graph.

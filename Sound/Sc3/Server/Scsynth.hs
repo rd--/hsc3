@@ -14,9 +14,10 @@ import Data.IORef {- base -}
 
 import qualified Sound.Osc.Packet as Osc {- hosc -}
 
-import Sound.Sc3.Server.Transport.Monad {- hsc3 -}
 import Sound.Sc3.Ugen.Ugen {- hsc3 -}
 import Sound.Sc3.Ugen.Util {- hsc3 -}
+
+import Sound.Sc3.Server.Transport.Monad {- hsc3 -}
 
 -- | Scsynth state.
 data Scsynth = Scsynth {scsynthResetMessages :: IORef [Osc.Message]}
@@ -25,7 +26,7 @@ data Scsynth = Scsynth {scsynthResetMessages :: IORef [Osc.Message]}
 newScsynth :: IO Scsynth
 newScsynth = fmap Scsynth (newIORef [])
 
--- | Print onReset messages. 
+-- | Print onReset messages.
 scsynthPrint :: Scsynth -> IO ()
 scsynthPrint (Scsynth mRef) = do
   m <- readIORef mRef
@@ -51,7 +52,7 @@ scsynthReset (Scsynth mRef) = do
   withSc3 (reset >> mapM_ maybe_async onResetMessages)
 
 {- | Play Ugen at Scsynth.
-     Send any required initialisation messages and stores and onReset messages.
+Send any required initialisation messages and stores and onReset messages.
 -}
 scsynthPlayAt :: Scsynth -> Play_Opt -> Ugen -> IO ()
 scsynthPlayAt scsynth opt ugen = do

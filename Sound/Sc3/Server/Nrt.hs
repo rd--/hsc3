@@ -6,13 +6,16 @@ import System.IO {- base -}
 
 import qualified Data.ByteString.Lazy as B {- bytestring -}
 
-import Sound.Osc.Core {- hosc -}
 import qualified Sound.Osc.Coding.Byte as Byte {- hosc -}
+import qualified Sound.Osc.Coding.Decode.Binary as Decode {- hosc3 -}
+import qualified Sound.Osc.Coding.Encode.Builder as Encode {- hosc3 -}
+import Sound.Osc.Datum {- hosc -}
+import Sound.Osc.Packet {- hosc -}
 
 -- | Encode Bundle and prefix with encoded length.
 oscWithSize :: Bundle -> B.ByteString
 oscWithSize o =
-    let b = encodeBundle o
+    let b = Encode.encodeBundle o
         l = Byte.encode_i32 (fromIntegral (B.length b))
     in B.append l b
 
@@ -55,7 +58,7 @@ decode_nrt_bundles s =
     let (p,q) = B.splitAt 4 s
         n = fromIntegral (Byte.decode_i32 p)
         (r,s') = B.splitAt n q
-        r' = decodeBundle r
+        r' = Decode.decodeBundle r
     in if B.null s'
        then [r']
        else r' : decode_nrt_bundles s'

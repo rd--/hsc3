@@ -5,12 +5,14 @@ import Sound.Osc.Datum {- hosc -}
 import Sound.Osc.Packet {- hosc -}
 
 import Sound.Sc3.Common.Rate
+
+import Sound.Sc3.Ugen.Bindings
+import Sound.Sc3.Ugen.Util
+
 import Sound.Sc3.Server.Command
 import Sound.Sc3.Server.Enum
 import Sound.Sc3.Server.Nrt
 import Sound.Sc3.Server.Synthdef
-import Sound.Sc3.Ugen.Bindings
-import Sound.Sc3.Ugen.Util
 
 -- | Parameters for recording scsynth.
 data SC3_Recorder =

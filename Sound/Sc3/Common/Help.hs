@@ -21,7 +21,7 @@ sc3_rtf_help_dir :: IO FilePath
 sc3_rtf_help_dir = getEnv "SC3_RTF_HELP_DIR"
 
 {- | Find (case-insensitively) indicated file at 'sc3_rtf_help_dir'.
-     Runs the command "find -name" (so Unix only).
+Runs the command "find -name" (so Unix only).
 
 > sc3_rtf_find_file "SinOsc.help.rtf"
 > sc3_rtf_find_file "lfsaw.help.rtf"
@@ -63,9 +63,10 @@ sc3_rtf_help_scd_open (cmd,arg) nm = do
   scd_fn <- sc3_rtf_help_translate nm
   System.Process.callProcess cmd (arg ++ [scd_fn])
 
--- | 'sc3_rtf_help_scd_open' with emacsclient --no-wait.
---
--- > sc3_rtf_help_scd_open_emacs "lfsaw"
+{- | 'sc3_rtf_help_scd_open' with emacsclient --no-wait.
+
+> sc3_rtf_help_scd_open_emacs "lfsaw"
+-}
 sc3_rtf_help_scd_open_emacs :: String -> IO ()
 sc3_rtf_help_scd_open_emacs = sc3_rtf_help_scd_open ("emacsclient",["--no-wait"])
 
@@ -83,33 +84,38 @@ sc3_scdoc_help_dir = do
   let d = h </> ".local/share/SuperCollider/Help"
   Base.System.get_env_default "SC3_SCDOC_HTML_HELP_DIR" d
 
--- | Path to indicated Sc3 class help file.
---
--- > sc3_scdoc_help_class "SinOsc" == "Classes/SinOsc.html"
+{- | Path to indicated Sc3 class help file.
+
+> sc3_scdoc_help_class "SinOsc" == "Classes/SinOsc.html"
+-}
 sc3_scdoc_help_class :: String -> String
 sc3_scdoc_help_class c = "Classes" </> c <.> "html"
 
--- | Generate path to indicated Sc3 operator help file.
---
--- > sc3_scdoc_help_operator "+" == "Overviews/Operators.html#+"
+{- | Generate path to indicated Sc3 operator help file.
+
+> sc3_scdoc_help_operator "+" == "Overviews/Operators.html#+"
+-}
 sc3_scdoc_help_operator :: String -> FilePath
 sc3_scdoc_help_operator = (++) "Overviews/Operators.html#"
 
--- | Generate path to indicated Sc3 method help.
---
--- > sc3_scdoc_help_method '*' ("C","m") == "Classes/C.html#*m"
+{- | Generate path to indicated Sc3 method help.
+
+> sc3_scdoc_help_method '*' ("C","m") == "Classes/C.html#*m"
+-}
 sc3_scdoc_help_method :: Char -> (String,String) -> FilePath
 sc3_scdoc_help_method z (c,m) = "Classes" </> c <.> "html#" ++ [z] ++ m
 
--- | Generate path to indicated Sc3 class method help.
---
--- > sc3_scdoc_help_class_method ("C","m") == "Classes/C.html#*m"
+{- | Generate path to indicated Sc3 class method help.
+
+> sc3_scdoc_help_class_method ("C","m") == "Classes/C.html#*m"
+-}
 sc3_scdoc_help_class_method :: (String,String) -> FilePath
 sc3_scdoc_help_class_method = sc3_scdoc_help_method '*'
 
--- | Generate path to indicated Sc3 instance method help.
---
--- > sc3_scdoc_help_instance_method ("C","m") == "Classes/C.html#-m"
+{- | Generate path to indicated Sc3 instance method help.
+
+> sc3_scdoc_help_instance_method ("C","m") == "Classes/C.html#-m"
+-}
 sc3_scdoc_help_instance_method :: (String,String) -> FilePath
 sc3_scdoc_help_instance_method = sc3_scdoc_help_method '-'
 
@@ -145,11 +151,10 @@ sc3_scdoc_help_open use_loc p = do
   void (System.Process.rawSystem b [u])
 
 {- | Generate path to indicated Sc3 instance method help.
-     Adds initial forward slash if not present.
+Adds initial forward slash if not present.
 
 > let r = "Reference/Server-Command-Reference.html#/b_alloc"
 > sc3_scdoc_help_server_command_path "b_alloc" == r
-
 -}
 sc3_scdoc_help_server_command_path :: String -> FilePath
 sc3_scdoc_help_server_command_path c =
@@ -175,9 +180,9 @@ on_lines_of :: ([String] -> [[String]]) -> String -> [String]
 on_lines_of f = map unlines . f . lines
 
 {- | Split text into fragments at empty lines.
-     Hsc3 (and related projects) write help files as sets of distinct fragments.
-     Fragments are separated by empty lines.
-     A line containing the special character sequence ---- indicates the end of the fragments.
+Hsc3 (and related projects) write help files as sets of distinct fragments.
+Fragments are separated by empty lines.
+A line containing the special character sequence ---- indicates the end of the fragments.
 
 > on_lines_of split_multiple_fragments ";a\nb\n\n\n;c\nd" == [";a\nb\n",";c\nd\n"]
 -}

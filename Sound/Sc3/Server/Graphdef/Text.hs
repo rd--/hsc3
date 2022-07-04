@@ -1,5 +1,5 @@
 {- | .scsyndef file encoded in plain text.
-     There are reader and writer functions.
+There are reader and writer functions.
 -}
 module Sound.Sc3.Server.Graphdef.Text where
 

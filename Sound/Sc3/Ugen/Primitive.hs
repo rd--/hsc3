@@ -1,4 +1,4 @@
--- | Sc Ugen primitive.
+-- | SuperCollider Ugen primitive.
 module Sound.Sc3.Ugen.Primitive where
 
 import Sound.Sc3.Common.Rate {- hsc3 -}

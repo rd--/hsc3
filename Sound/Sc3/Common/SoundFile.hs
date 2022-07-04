@@ -11,8 +11,8 @@ import System.FilePath {- filepath -}
 import qualified Sound.Sc3.Common.Base {- hsc3 -}
 
 {- | Find the file fn (case-sensitively) starting from dir.
-     Runs the system command "find" (so UNIX only).
-     Note that fn must be a file name not a relative path name.
+Runs the system command "find" (so UNIX only).
+Note that fn must be a file name not a relative path name.
 
 > findFileFromDirectory "/home/rohan/data/audio" "metal.wav"
 -}
@@ -26,8 +26,8 @@ findFileFromDirectory dir fn = do
 
 
 {- | Find the file fn starting from dir.
-     If dir/fn names a file return that file, else call findFileFromDirectory.
-     Note this will not find dir/p/q/r given q/r, the query must be either p/q/r or r.
+If dir/fn names a file return that file, else call findFileFromDirectory.
+Note this will not find dir/p/q/r given q/r, the query must be either p/q/r or r.
 
 > findFileAtOrFromDirectory "/home/rohan/data/audio" "instr/bosendorfer/072/C5.aif"
 -}
@@ -59,10 +59,10 @@ sfPath :: IO FilePath
 sfPath = getEnv "SFPATH"
 
 {- | Find file fn at 'sfDir' directly or along 'sfPath'.
-     If fn is either absolute or names a relative file and if that file exists it is returned.
-     If sdDir/fn exists it is returned.
-     Else each directory at sfPath is searched (recursively) in turn.
-     Despite the name this will find any file type along the SFDIR and SFPATH, i.e. .sfz files &etc.
+If fn is either absolute or names a relative file and if that file exists it is returned.
+If sdDir/fn exists it is returned.
+Else each directory at sfPath is searched (recursively) in turn.
+Despite the name this will find any file type along the SFDIR and SFPATH, i.e. .sfz files &etc.
 
 > mapM sfFindFile ["/home/rohan/data/audio/metal.wav", "pf-c5.aif", "20.2-LW+RD.flac"]
 -}
@@ -83,13 +83,13 @@ sfResolveFile fn = do
     Just r -> return r
 
 {- | Unsafe sfResolveFile.
-     For resolving sound file names at read only sound file archives this is quite safe.
+For resolving sound file names at read only sound file archives this is quite safe.
 -}
 sfResolve :: FilePath -> FilePath
 sfResolve = unsafePerformIO . sfResolveFile
 
 {- | Return the number of channels at fn.
-     Runs the system command "soxi" (so UNIX only).
+Runs the system command "soxi" (so UNIX only).
 
 > sfResolveFile "metal.wav" >>= sfNumChannels >>= print
 -}
@@ -97,7 +97,7 @@ sfNumChannels :: FilePath -> IO Int
 sfNumChannels fn = fmap read (System.Process.readProcess "soxi" ["-c", fn] "")
 
 {- | Return the sample rate of fn.
-     Runs the system command "soxi" (so UNIX only).
+Runs the system command "soxi" (so UNIX only).
 
 > sfResolveFile "metal.wav" >>= sfSampleRate >>= print
 -}
@@ -105,7 +105,7 @@ sfSampleRate :: FilePath -> IO Int
 sfSampleRate fn = fmap read (System.Process.readProcess "soxi" ["-r", fn] "")
 
 {- | Return the number of frames at fn.
-     Runs the system command "soxi" (so UNIX only).
+Runs the system command "soxi" (so UNIX only).
 
 > sfResolveFile "metal.wav" >>= sfFrameCount >>= print
 -}
@@ -113,7 +113,7 @@ sfFrameCount :: FilePath -> IO Int
 sfFrameCount fn = fmap read (System.Process.readProcess "soxi" ["-s", fn] "")
 
 {- | Return the number of channels, sample-rate and number of frames at fn.
-     Runs the system command "soxi" (so UNIX only).
+Runs the system command "soxi" (so UNIX only).
 
 > sfResolveFile "metal.wav" >>= sfMetadata >>= print
 -}
@@ -125,7 +125,7 @@ sfMetadata fn = do
   return (nc, sr, nf)
 
 {- | Unsafe sfMetadata.
-     For fetching sound file information from read only sound file archives this is quite safe.
+For fetching sound file information from read only sound file archives this is quite safe.
 
 > sfInfo (sfResolve "metal.wav") == (1,44100,1029664)
 > sfInfo (sfResolve "pf-c5.aif") == (2,44100,576377)

@@ -1,0 +1,2 @@
+There were previously modules Circuit and Netlist which implemented  the data-reify model.
+These have been deleted, however they're in the vcs history if required. (2022-07-05)

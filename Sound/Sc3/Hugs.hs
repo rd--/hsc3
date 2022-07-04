@@ -23,10 +23,12 @@ import Sound.Sc3.Common.Unsafe as M
 
 {-
 import Sound.Sc3.Common.Base.System as M
+import Sound.Sc3.Common.Buffer.Array as M
+import Sound.Sc3.Common.Buffer.Vector as M
 import Sound.Sc3.Common.Help as M
 import Sound.Sc3.Common.Math.Interpolate as M
 import Sound.Sc3.Common.SoundFile as M
-import Sound.Sc3.Common.UId as M
+import Sound.Sc3.Common.Uid as M
 -}
 
 import Sound.Sc3.Ugen.Brackets as M
@@ -41,3 +43,18 @@ import Sound.Sc3.Ugen.Pp as M
 import Sound.Sc3.Ugen.Primitive as M
 import Sound.Sc3.Ugen.Proxy as M
 import Sound.Sc3.Ugen.Ugen as M
+
+{-
+import Sound.Sc3.Ugen.Analysis as M
+-}
+
+import Sound.Sc3.Server.Enum as M
+import Sound.Sc3.Server.Options as M
+import Sound.Sc3.Server.Param as M
+
+{-
+import Sound.Sc3.Server.Command as M
+import Sound.Sc3.Server.Command.Plain as M
+import Sound.Sc3.Server.Graphdef.Text as M
+import Sound.Sc3.Server.Nrt as M
+-}

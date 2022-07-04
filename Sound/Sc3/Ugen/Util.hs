@@ -1,4 +1,4 @@
--- | Ugen data structure representation and associated functions.
+-- | Utility function over Ugen data structure.
 module Sound.Sc3.Ugen.Util where
 
 import qualified Data.Char {- base -}
@@ -121,10 +121,6 @@ control_set =
                    Control_U c -> Control_U (c {controlIndex = Just ix})
                    _ -> error "control_set: non control input?"
     in zipWith f [0..]
-
--- | Multiple root graph node constructor (left input is output)
-mrg2 :: Ugen -> Ugen -> Ugen
-mrg2 u = Mrg_U . Mrg u
 
 -- * Multiple channel expansion
 
@@ -252,6 +248,10 @@ prepare_root u =
 
 -- * Multiple root graphs
 
+-- | Multiple root graph node constructor (left input is output)
+mrg2 :: Ugen -> Ugen -> Ugen
+mrg2 u = Mrg_U . Mrg u
+
 -- * Labels
 
 -- | Lift a 'String' to a Ugen label (ie. for 'poll').
@@ -264,7 +264,6 @@ length.  Properly, 'poll' would not unpack the label, it would be
 done by the synthdef builder.
 
 > unpackLabel False (label "/tmp")
-
 -}
 unpackLabel :: Bool -> Ugen -> [Ugen]
 unpackLabel length_prefix u =

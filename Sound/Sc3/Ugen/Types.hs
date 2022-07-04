@@ -1,3 +1,4 @@
+-- | Composite module of all Ugen related types.
 module Sound.Sc3.Ugen.Types (module M) where
 
 import Sound.Sc3.Ugen.Brackets as M

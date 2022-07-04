@@ -3,9 +3,10 @@ module Sound.Sc3.Server.Enum where
 
 import Data.Maybe {- base -}
 
--- | Enumeration of possible locations to add new nodes (s_new and g_new).
---
--- > fromEnum AddToTail == 1
+{- | Enumeration of possible locations to add new nodes (s_new and g_new).
+
+> fromEnum AddToTail == 1
+-}
 data AddAction = AddToHead
                | AddToTail
                | AddBefore
@@ -17,34 +18,39 @@ data AddAction = AddToHead
 data B_Gen = Normalise | Wavetable | Clear
              deriving (Eq,Enum,Bounded,Show)
 
--- | 'B_Gen' to bit number.
---
--- > map b_gen_bit [minBound .. maxBound]
+{- | 'B_Gen' to bit number.
+
+> map b_gen_bit [minBound .. maxBound] == [0, 1, 2]
+-}
 b_gen_bit :: B_Gen -> Int
 b_gen_bit = fromEnum
 
--- | Set of 'B_Gen' to flag.
---
--- > b_gen_flag [minBound .. maxBound] == 7
+{- | Set of 'B_Gen' to flag.
+
+> b_gen_flag [minBound .. maxBound] == 7
+-}
 b_gen_flag :: [B_Gen] -> Int
 b_gen_flag = sum . map ((2 ^) . b_gen_bit)
 
 -- | Error posting scope.
-data ErrorScope = Globally  -- ^ Global scope
-                | Locally   -- ^ Bundle scope
-                  deriving (Eq,Show,Enum)
+data ErrorScope =
+  Globally  -- ^ Global scope
+  | Locally   -- ^ Bundle scope
+  deriving (Eq,Show,Enum)
 
 -- | Error posting mode.
-data ErrorMode = ErrorsOff  -- ^ Turn error posting off
-               | ErrorsOn   -- ^ Turn error posting on
-                 deriving (Eq,Show,Enum)
+data ErrorMode =
+  ErrorsOff  -- ^ Turn error posting off
+  | ErrorsOn   -- ^ Turn error posting on
+  deriving (Eq,Show,Enum)
 
 -- | Enumeration of Message printer types.
-data PrintLevel = NoPrinter
-                | TextPrinter
-                | HexPrinter
-                | AllPrinter
-                  deriving (Eq,Show,Enum)
+data PrintLevel =
+  NoPrinter
+  | TextPrinter
+  | HexPrinter
+  | AllPrinter
+  deriving (Eq,Show,Enum)
 
 -- | Sound file format.
 data SoundFileFormat = Aiff | Flac | Ircam | Next | Raw | Wave

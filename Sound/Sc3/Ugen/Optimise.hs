@@ -19,10 +19,10 @@ c_irand :: (Num b, RealFrac a, Random a) => Int -> a -> a -> b
 c_irand z l r = fromInteger (round (c_rand z l r))
 
 {- | Optimise 'Ugen' graph by re-writing 'rand' and 'iRand' Ugens that
- have 'Constant' inputs.  This, of course, changes the nature of the
- graph, it is no longer randomised at the server.  It's a useful
- transformation for very large graphs which are being constructed
- and sent each time the graph is played.
+have 'Constant' inputs.  This, of course, changes the nature of the
+graph, it is no longer randomised at the server.  It's a useful
+transformation for very large graphs which are being constructed
+and sent each time the graph is played.
 
 > import Sound.Sc3.Ugen.Dot {- hsc3-dot -}
 
@@ -58,10 +58,10 @@ ugen_optimise_ir_rand =
         in ugenTraverse (const False) f
 
 {- | Optimise 'Ugen' graph by re-writing binary operators with
- 'Constant' inputs.  The standard graph constructors already do
- this, however subsequent optimisations, ie. 'ugen_optimise_ir_rand'
- can re-introduce these sub-graphs, and the /Plain/ graph
- constructors are un-optimised.
+'Constant' inputs.  The standard graph constructors already do
+this, however subsequent optimisations, ie. 'ugen_optimise_ir_rand'
+can re-introduce these sub-graphs, and the /Plain/ graph
+constructors are un-optimised.
 
 > let u = constant
 > u 5 * u 10 == u 50

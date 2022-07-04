@@ -1,7 +1,8 @@
 {-# Language FlexibleInstances #-}
 
--- | Unique identifier types and classes.
---   Used by non-deterministic (noise) and non-sharable (demand) unit generators.
+{- | Unique identifier types and classes.
+Used by non-deterministic (noise) and non-sharable (demand) unit generators.
+-}
 module Sound.Sc3.Common.Uid where
 
 import Data.Functor.Identity {- base -}
@@ -10,7 +11,8 @@ import qualified Data.Unique as Unique {- base -}
 
 import qualified Control.Monad.Trans.Reader as Reader {- transformers -}
 import qualified Control.Monad.Trans.State as State {- transformers -}
-import qualified Data.Digest.Murmur32 as Murmur32 {- hashable -}
+
+import qualified Data.Digest.Murmur32 as Murmur32 {- murmur-hash -}
 
 import qualified Sound.Sc3.Common.Base as Base {- hsc3 -}
 
@@ -19,9 +21,8 @@ import qualified Sound.Sc3.Common.Base as Base {- hsc3 -}
 -- | Identifiers are integers.
 type Id = Int
 
--- | A class indicating a monad (and functor and applicative) that will
--- generate a sequence of unique integer identifiers.
-class (Functor m,Applicative m,Monad m) => Uid m where
+-- | A class indicating a monad (and functor and applicative) that will generate a sequence of unique integer identifiers.
+class (Functor m, Applicative m, Monad m) => Uid m where
    generateUid :: m Int
 
 -- | Requires FlexibleInstances.
@@ -34,32 +35,34 @@ instance Uid IO where
 instance Uid m => Uid (Reader.ReaderT t m) where
    generateUid = Reader.ReaderT (const generateUid)
 
--- * Uid_ST
+-- * Uid_St
 
 -- | 'State.State' Uid.
-type Uid_ST = State.State Int
+type Uid_St = State.State Int
 
 -- | Alias for 'runIdentity'.
 uid_id_eval :: Identity t -> t
 uid_id_eval = runIdentity
 
--- | 'State.evalState' with initial state of zero.
---
--- > uid_st_eval (replicateM 3 generateUid) == [0,1,2]
-uid_st_eval :: Uid_ST t -> t
+{- | 'State.evalState' with initial state of zero.
+
+> uid_st_eval (replicateM 3 generateUid) == [0, 1, 2]
+-}
+uid_st_eval :: Uid_St t -> t
 uid_st_eval x = State.evalState x 0
 
 -- | Thread state through sequence of 'State.runState'.
-uid_st_seq :: [Uid_ST t] -> ([t],Int)
+uid_st_seq :: [Uid_St t] -> ([t],Int)
 uid_st_seq =
     let swap (p,q) = (q,p)
         step_f n x = swap (State.runState x n)
     in swap . mapAccumL step_f 0
 
--- | 'fst' of 'uid_st_seq'.
---
--- > uid_st_seq_ (replicate 3 generateUid) == [0,1,2]
-uid_st_seq_ :: [Uid_ST t] -> [t]
+{- | 'fst' of 'uid_st_seq'.
+
+> uid_st_seq_ (replicate 3 generateUid) == [0, 1, 2]
+-}
+uid_st_seq_ :: [Uid_St t] -> [t]
 uid_st_seq_ = fst . uid_st_seq
 
 -- * Lift
@@ -114,14 +117,15 @@ liftUid11 fn a b c d e f g h i j k = do
 
 -- * ID
 
--- | Typeclass to constrain Ugen identifiers.
---   Char inputs are hashed to generate longer seeds for when ir (constant) random Ugens are optimised.
---
--- > map resolveID [0::Int,1] == [0,1]
--- > map resolveID ['α','β'] == [1439603815,4131151318]
--- > map resolveID [('α','β'),('β','α')] == [3538183581,3750624898]
--- > map resolveID [('α',('α','β')),('β',('α','β'))] == [0020082907,2688286317]
--- > map resolveID [('α','α','β'),('β','α','β')] == [0020082907,2688286317]
+{- | Typeclass to constrain Ugen identifiers.
+Char inputs are hashed to generate longer seeds for when ir (constant) random Ugens are optimised.
+
+> map resolveID [0::Int,1] == [0, 1]
+> map resolveID ['α', 'β'] == [1439603815, 4131151318]
+> map resolveID [('α', 'β'),('β', 'α')] == [3538183581, 3750624898]
+> map resolveID [('α',('α', 'β')),('β',('α', 'β'))] == [0020082907, 2688286317]
+> map resolveID [('α', 'α', 'β'),('β', 'α', 'β')] == [0020082907, 2688286317]
+-}
 class Murmur32.Hashable32 a => ID a where
     resolveID :: a -> Id
     resolveID = fromIntegral . Murmur32.asWord32 . Murmur32.hash32
@@ -131,8 +135,9 @@ instance ID Int where resolveID = id
 instance (ID p,ID q) => ID (p,q) where
 instance (ID p,ID q,ID r) => ID (p,q,r) where
 
--- | /n/ identifiers from /x/.
---
--- > id_seq 10 'α' == [1439603815 .. 1439603824]
+{- | /n/ identifiers from /x/.
+
+> id_seq 10 'α' == [1439603815 .. 1439603824]
+-}
 id_seq :: ID a => Int -> a -> [Id]
 id_seq n x = take n [resolveID x ..]
