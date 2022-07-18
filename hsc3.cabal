@@ -5,12 +5,12 @@ Synopsis:          Haskell SuperCollider
 Description:       Haskell SuperCollider
 License:           GPL-3.0-only
 Category:          Sound
-Copyright:         (c) Rohan Drape and others, 2005-2021
+Copyright:         (c) Rohan Drape and others, 2005-2022
 Author:            Rohan Drape
 Maintainer:        rd@rohandrape.net
 Stability:         Experimental
 Homepage:          http://rohandrape.net/t/hsc3
-Tested-With:       GHC == 8.8.4
+Tested-With:       GHC == 9.2.2
 Build-Type:        Simple
 
 Data-files:        README.md
