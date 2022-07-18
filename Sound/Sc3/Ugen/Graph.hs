@@ -34,10 +34,11 @@ type Port_Index = Int
 {- | Type to represent the left hand side of an edge in a unit generator graph.
 C = constant, K = control, U = ugen.
 -}
-data From_Port = From_Port_C {from_port_nid :: Uid.Id}
-               | From_Port_K {from_port_nid :: Uid.Id,from_port_kt :: Rate.K_Type}
-               | From_Port_U {from_port_nid :: Uid.Id,from_port_idx :: Maybe Port_Index}
-               deriving (Eq,Show)
+data From_Port =
+  From_Port_C {from_port_nid :: Uid.Id}
+  | From_Port_K {from_port_nid :: Uid.Id,from_port_kt :: Rate.K_Type}
+  | From_Port_U {from_port_nid :: Uid.Id,from_port_idx :: Maybe Port_Index}
+  deriving (Eq,Show)
 
 -- | A destination port.
 data To_Port = To_Port {to_port_nid :: Uid.Id,to_port_idx :: Port_Index}

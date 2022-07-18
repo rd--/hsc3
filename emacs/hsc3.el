@@ -101,14 +101,14 @@ If STR has a newline the layout is adjusted accordingly."
   (interactive)
   (hsc3-send-line
    (format
-    "Sound.Sc3.Common.Help.sc3_scdoc_help_open False (Sound.Sc3.Common.Help.sc3_scdoc_help_path (Sound.Sc3.Ugen.DB.ugen_sc3_name \"%s\"))"
+    "Sound.Sc3.Common.Help.sc3_scdoc_help_open False (Sound.Sc3.Common.Help.sc3_scdoc_help_path (Sound.Sc3.Ugen.Db.ugen_sc3_name \"%s\"))"
     (thing-at-point 'symbol))))
 
 (defun hsc3-ugen-summary ()
   "Lookup up the Ugen at point in hsc3-db."
   (interactive)
   (hsc3-send-line
-   (format "Sound.Sc3.Ugen.DB.PP.ugen_summary_wr \"%s\"" (thing-at-point 'symbol))))
+   (format "Sound.Sc3.Ugen.Db.Pp.ugen_summary_wr \"%s\"" (thing-at-point 'symbol))))
 
 (defun hsc3-ugen-default-param ()
   "Insert the default Ugen parameters (arguments) for the Ugen before <point>."
@@ -224,12 +224,12 @@ If STR has a newline the layout is adjusted accordingly."
 (defun hsc3-pp-forth ()
   "Forth PP."
   (interactive)
-  (hsc3-send-region-fn "Sound.Sc3.Ugen.DB.PP.ugen_graph_forth_pp (False,False)"))
+  (hsc3-send-region-fn "Sound.Sc3.Ugen.Db.Pp.ugen_graph_forth_pp (False,False)"))
 
 (defun hsc3-pp-smalltalk ()
   "Pretty print Ugen as Smalltalk."
   (interactive)
-  (hsc3-send-region-fn "Sound.Sc3.Ugen.DB.PP.Graph.ugen_graph_smalltalk_pp"))
+  (hsc3-send-region-fn "Sound.Sc3.Ugen.Db.Pp.Graph.ugen_graph_smalltalk_pp"))
 
 (defun hsc3-id-rewrite-region ()
   "Run hsc3-id-rewrite on region."

@@ -9,8 +9,8 @@ data Rate = InitialisationRate | ControlRate | AudioRate | DemandRate
             deriving (Eq,Ord,Enum,Bounded,Show,Read)
 
 {- | Standard abbreviations of Rate values.
-     ir = initialisation, kr = control, ar = audio, dr = demand.
-     dr sorts to the right of the fixed clock rates.
+ir = initialisation, kr = control, ar = audio, dr = demand.
+dr sorts to the right of the fixed clock rates.
 
 > Data.List.sort [dr,ar,kr,ir] == [ir,kr,ar,dr]
 -}
@@ -55,9 +55,10 @@ rate_color r =
 all_rates :: [Rate]
 all_rates = [minBound .. maxBound]
 
--- | Case insensitive parser for rate.
---
--- > Data.Maybe.mapMaybe rate_parse (words "ar kR IR Dr") == [AR,KR,IR,DR]
+{- | Case insensitive parser for rate.
+
+> Data.Maybe.mapMaybe rate_parse (words "ar kR IR Dr") == [AudioRate,ControlRate,InitialisationRate,DemandRate]
+-}
 rate_parse :: String -> Maybe Rate
 rate_parse r =
     case map toUpper r of
@@ -69,8 +70,9 @@ rate_parse r =
 
 -- * Control rates
 
--- | Enumeration of the four operating rates for controls.
---   I = initialisation, K = control, T = trigger, A = audio.
+{- | Enumeration of the four operating rates for controls.
+I = initialisation, K = control, T = trigger, A = audio.
+-}
 data K_Type = K_InitialisationRate | K_ControlRate | K_TriggerRate | K_AudioRate
              deriving (Eq,Show,Ord)
 
