@@ -57,7 +57,7 @@ rec_synthdef nc =
 
 -- | Asyncronous initialisation 'Message's ('d_recv', 'b_alloc' and 'b_write').
 --
--- > withSC3 (sendBundle (bundle immediately (rec_init_m def)))
+-- > withSc3 (sendBundle (bundle immediately (rec_init_m def)))
 rec_init_m :: SC3_Recorder -> [Message]
 rec_init_m r =
     let buf = rec_buf_id r
@@ -67,7 +67,7 @@ rec_init_m r =
 
 -- | Begin recording 'Message' ('s_new').
 --
--- > withSC3 (sendMessage (rec_begin_m def))
+-- > withSc3 (sendMessage (rec_begin_m def))
 rec_begin_m :: SC3_Recorder -> Message
 rec_begin_m r =
     s_new (rec_synthdef_nm (rec_nc r))
@@ -79,7 +79,7 @@ rec_begin_m r =
 
 -- | End recording 'Message's ('n_free', 'b_close' and 'b_free').
 --
--- > withSC3 (sendBundle (bundle immediately (rec_end_m def)))
+-- > withSc3 (sendBundle (bundle immediately (rec_end_m def)))
 rec_end_m :: SC3_Recorder -> [Message]
 rec_end_m r =
     [n_free [rec_node_id r]
@@ -89,7 +89,7 @@ rec_end_m r =
 {- | 'Nrt' score for recorder, if 'rec_dur' is given schedule 'rec_end_m'.
 
 > import Sound.Sc3
-> withSC3 (Sound.Osc.sendMessage (dumpOSC TextPrinter))
+> withSc3 (Sound.Osc.sendMessage (dumpOSC TextPrinter))
 > audition (out 0 (sinOsc ar (mce2 440 441) 0 * 0.1))
 > let rc = default_SC3_Recorder {rec_dur = Just 5.0}
 > nrt_audition (sc3_recorder rc)

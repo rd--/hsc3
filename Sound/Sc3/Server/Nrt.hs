@@ -37,13 +37,12 @@ encodeNrt = B.concat . map oscWithSize . nrt_bundles
 > import Sound.Osc {- hosc -}
 > import Sound.Sc3 {- hsc3 -}
 > m1 = g_new [(1, AddToTail, 0)]
-> m2 = d_recv (synthdef "sin" (out 0 (sinOsc AR 660 0 * 0.15)))
+> m2 = d_recv (synthdef "sin" (out 0 (sinOsc ar 660 0 * 0.15)))
 > m3 = s_new "sin" 100 AddToTail 1 []
 > m4 = n_free [100]
 > m5 = nrt_end
 > sc = Nrt [bundle 0 [m1,m2],bundle 1 [m3],bundle 10 [m4],bundle 15 [m5]]
 > writeNrt "/tmp/t.osc" sc
-
 -}
 writeNrt :: FilePath -> Nrt -> IO ()
 writeNrt fn = B.writeFile fn . encodeNrt
@@ -67,7 +66,10 @@ decode_nrt_bundles s =
 decodeNrt :: B.ByteString -> Nrt
 decodeNrt = Nrt . decode_nrt_bundles
 
--- | 'decodeNrt' of 'B.readFile'.
+{- | 'decodeNrt' of 'B.readFile'.
+
+> readNrt "/tmp/t.osc"
+-}
 readNrt :: FilePath -> IO Nrt
 readNrt = fmap decodeNrt . B.readFile
 

@@ -27,10 +27,13 @@ nrt_ugen_rec dur u =
         m1 = s_new0 "anonymous" 1 AddToHead 0
     in Nrt [Osc.bundle 0 [m0, m1], Osc.bundle dur [nrt_end]]
 
+-- | (osc-file, sound-file, sample-rate, sample-format, scsynth-options)
+type Nrt_Ugen_Opt = (FilePath, FilePath, Int, SampleFormat, [String])
+
 {- | 'nrt_render_plain' of 'ugen_rec_nrt'.
 The number of channels is equal to the degree of the Ugen.
 -}
-nrt_ugen_render :: (FilePath, FilePath, Int, SampleFormat, [String]) -> Osc.Time -> Ugen -> IO ()
+nrt_ugen_render :: Nrt_Ugen_Opt -> Osc.Time -> Ugen -> IO ()
 nrt_ugen_render (osc_fn,sf_fn,sample_rate,fmt,opt) dur u = do
   let sc = nrt_ugen_rec dur u
       nc = length (mceChannels u)

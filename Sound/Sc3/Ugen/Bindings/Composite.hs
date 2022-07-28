@@ -263,7 +263,7 @@ localIn' nc r = localIn nc r (mce (replicate nc 0))
 --
 -- > import Sound.Sc3
 -- > audition (out 0 (makeFadeEnv 1 * sinOsc ar 440 0 * 0.1))
--- > withSC3 (send (n_set1 (-1) "gate" 0))
+-- > withSc3 (send (n_set1 (-1) "gate" 0))
 makeFadeEnv :: Double -> Ugen
 makeFadeEnv fadeTime =
     let dt = control kr "fadeTime" (realToFrac fadeTime)
@@ -530,7 +530,7 @@ whiteNoiseN k = liftUnsafe1 (whiteNoiseMN k)
 > import Sound.Sc3 {- hsc3 -}
 > audition (wrapOut (Just 1) (sinOsc ar 440 0 * 0.1))
 > import Sound.Osc {- hosc -}
-> withSC3 (sendMessage (n_set1 (-1) "gate" 0))
+> withSc3 (sendMessage (n_set1 (-1) "gate" 0))
 -}
 wrapOut :: Maybe Double -> Ugen -> Ugen
 wrapOut fadeTime z =

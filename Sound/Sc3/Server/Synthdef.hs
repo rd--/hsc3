@@ -27,7 +27,7 @@ synthdef = Synthdef
 
 > import Sound.Osc {- hosc -}
 > import Sound.Sc3 {- hsc3 -}
-> withSC3 (sendMessage (d_recv defaultSynthdef))
+> withSc3 (sendMessage (d_recv defaultSynthdef))
 > audition defaultSynthdef
 -}
 defaultSynthdef :: Synthdef
@@ -36,7 +36,7 @@ defaultSynthdef = synthdef "default" Help.Graph.default_ugen_graph
 {- | The SC3 /default/ sample (buffer) playback instrument 'Synthdef',
 see 'default_sampler_ugen_graph'.
 
-> withSC3 (sendMessage (d_recv (defaultSampler False)))
+> withSc3 (sendMessage (d_recv (defaultSampler False)))
 > audition (defaultSampler False)
 -}
 defaultSampler :: Bool -> Synthdef
