@@ -11,8 +11,8 @@ let e = envelope [6000,700,100] [1,1] [EnvExp,EnvLin]
     f = envGen kr 1 1 0 1 DoNothing c
 in (sinOsc ar f 0 + impulse ar 1 0) * 0.1
 
--- envGen ; c.f. envXYC ; non-linear Phasor ; positive half traversed more quickly than negative
-let e = envXYC [(0,0,EnvNum (-0.5)),(0.4,pi,EnvNum 0.5),(1,two_pi,EnvLin)]
+-- envGen ; c.f. envXyc ; non-linear Phasor ; positive half traversed more quickly than negative
+let e = envXyc [(0,0,EnvNum (-0.5)),(0.4,pi,EnvNum 0.5),(1,two_pi,EnvLin)]
     o = sinOsc kr 0 (envGen kr 1 1 0 2 DoNothing (env_circle_0 e))
 in (soundIn 0 + pinkNoiseId 'α' ar * 0.1) * range 0.25 1 o
 
@@ -27,8 +27,8 @@ in changed (ceil (env * num)) 0 * amp
 
 {---- ; see also help files for the following envelope constructors
 
-- envADSR
-- envASR
+- envAdsr
+- envAsr
 - envCoord
 - envGate
 - envLinen
@@ -38,7 +38,7 @@ in changed (ceil (env * num)) 0 * amp
 - envStep
 - envTrapezoid
 - envTriangle
-- envXYC
+- envXyc
 
 -}
 

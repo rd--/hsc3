@@ -76,7 +76,7 @@ default_sampler_ugen_graph use_gate =
         p = playBuf 1 ar b r' 1 0 NoLoop RemoveSynth
         e = if use_gate
             then let g = control kr "gate" 1
-                 in envGen kr g 1 0 1 RemoveSynth (envASR w 1 y EnvSin)
+                 in envGen kr g 1 0 1 RemoveSynth (envAsr w 1 y EnvSin)
             else let s = control kr "sustain" 1
                  in envGen kr 1 1 0 1 RemoveSynth (envLinen w s y 1)
         d = delayC (p * e) m (randId 'α' 0 m)

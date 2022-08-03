@@ -10,7 +10,7 @@ let bf = control kr "bufnum" 0
     ip = control kr "ipol" 2
     am = control kr "amp" 0.1
     rt' = lag rt gl * bufRateScale kr bf
-    e = let d = envADSR 0.1 0.2 1 2 1 (EnvNum (-4)) 0
+    e = let d = envAdsr 0.1 0.2 1 2 1 (EnvNum (-4)) 0
         in envGen ar gt 1 0 1 RemoveSynth d
     s = X.loopBuf 1 ar bf rt' (gt + lr) sp sl el ip
 in s * e * am

@@ -36,7 +36,7 @@ in sinOsc ar (freq * mce2 1.001 1) ph * 0.1
 let midinote = 60
     gate_ = 1
     amp = 0.25
-    asr = envASR 0.1 1 0.1 (EnvNum (-4))
+    asr = envAsr 0.1 1 0.1 (EnvNum (-4))
     env = envGen kr gate_ 1 0 1 RemoveSynth asr
     freq = midiCps midinote
     width = range 0.2 0.8 (lfNoise2Id 'α' kr 1) * range 0.7 0.8 (sinOsc kr 5 (randId 'β' 0.0 1.0))
