@@ -2427,8 +2427,8 @@ sum4 in0 in1 in2 in3 = mkUgen Nothing [InitialisationRate,ControlRate,AudioRate,
 -- | Triggered linear ramp
 --
 --  Sweep [ControlRate,AudioRate] trig=0 rate=1;    FILTER: TRUE
-sweep :: Ugen -> Ugen -> Ugen
-sweep trig_ rate_ = mkUgen Nothing [ControlRate,AudioRate] (Right [0]) "Sweep" [trig_,rate_] Nothing 1 (Special 0) NoId
+sweep :: Rate -> Ugen -> Ugen -> Ugen
+sweep rate trig_ rate_ = mkUgen Nothing [ControlRate,AudioRate] (Left rate) "Sweep" [trig_,rate_] Nothing 1 (Special 0) NoId
 
 -- | Hard sync sawtooth wave.
 --
