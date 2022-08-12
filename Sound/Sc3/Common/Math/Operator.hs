@@ -156,11 +156,11 @@ data Sc3_Binary_Op
   | OpBitXor
   | OpLcm -- 17
   | OpGcd -- 18
-  | OpRound -- 19
+  | OpRoundTo -- 19 -- i.e. roundTo: (renamed)
   | OpRoundUp -- 20
   | OpTrunc -- 21
   | OpAtan2
-  | OpHypot
+  | OpHypot -- 23
   | OpHypotx
   | OpPow -- 25
   | OpShiftLeft -- 26
@@ -497,7 +497,7 @@ binop_hs_tbl =
     ,(OpPow,(**))
     ,(OpMin,min)
     ,(OpMax,max)
-    ,(OpRound,Math.sc3_round_to)]
+    ,(OpRoundTo,Math.sc3_round_to)]
 
 -- | 'lookup' 'binop_hs_tbl' via 'toEnum'.
 binop_special_hs :: (RealFrac n,Floating n) => Int -> Maybe (n -> n -> n)

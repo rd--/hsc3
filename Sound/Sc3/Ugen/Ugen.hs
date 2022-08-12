@@ -60,7 +60,7 @@ instance OrdE Ugen where
 
 -- | 'Ugen' form or 'Math.sc3_round_to'.
 roundTo :: Ugen -> Ugen -> Ugen
-roundTo = mkBinaryOperator OpRound Math.sc3_round_to
+roundTo = mkBinaryOperator OpRoundTo Math.sc3_round_to
 
 instance RealFracE Ugen where
     properFractionE = error "Ugen.properFractionE"
