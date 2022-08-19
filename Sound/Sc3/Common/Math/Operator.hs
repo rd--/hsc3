@@ -42,7 +42,7 @@ data Sc3_Unary_Op
   | OpFrac -- 10
   | OpSign -- 11
   | OpSquared -- 12
-  | OpCubed
+  | OpCubed -- 13
   | OpSqrt -- 14
   | OpExp -- 15
   | OpRecip -- 16
@@ -175,10 +175,10 @@ data Sc3_Binary_Op
   | OpSumSqr -- 35
   | OpSqrSum
   | OpSqrDif
-  | OpAbsDif
+  | OpAbsDif -- 38
   | OpThresh
   | OpAmClip -- 40
-  | OpScaleNeg
+  | OpScaleNeg -- 41
   | OpClip2 -- 42
   | OpExcess
   | OpFold2 -- 44
