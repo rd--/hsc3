@@ -373,7 +373,7 @@ sc3_dif_sqr a b = (a * a) - (b * b)
 sc3_hypot :: Floating a => a -> a -> a
 sc3_hypot x y = sqrt (x * x + y * y)
 
--- | SC3 hypotenuse approximation function.
+-- | Sc3 hypotenuse approximation function.
 sc3_hypotx :: (Ord a, Floating a) => a -> a -> a
 sc3_hypotx x y = abs x + abs y - ((sqrt 2 - 1) * min (abs x) (abs y))
 
@@ -740,10 +740,49 @@ sum_opt_f f3 f4 =
 
 -- * Sin
 
-{- | Taylor approximation of sin.
+{- | Taylor approximation of sin, (-pi, pi).
 
-> import Sound.Sc3.Plot {- hsc3-plot -}
-> plot_p1_ln [map sin [-pi, -pi + 0.05 .. pi]]
+> import Sound.Sc3.Plot
+> let xs = [-pi, -pi + 0.05 .. pi] in plot_p1_ln [map sin_taylor_approximation xs, map sin xs]
+> let xs = [-pi, -pi + 0.05 .. pi] in plot_p1_ln [map (\x -> sin_taylor_approximation x - sin x) xs]
 -}
 sin_taylor_approximation :: Floating a => a -> a
 sin_taylor_approximation x = x - (x ** 3) / (3 * 2) + (x ** 5) / (5 * 4 * 3 * 2) - (x ** 7) / (7 * 6 * 5 * 4 * 3 * 2) + (x ** 9) / (9 * 8 * 7 * 6 * 5 * 4 * 3 * 2)
+
+{- | Bhaskara approximation of sin, (0, pi).
+
+> import Sound.Sc3.Plot
+> let xs = [0, 0.05 .. pi] in plot_p1_ln [map sin_bhaskara_approximation xs, map sin xs]
+> let xs = [0, 0.05 .. pi] in plot_p1_ln [map (\x -> sin_bhaskara_approximation x - sin x) xs]
+-}
+sin_bhaskara_approximation :: Floating a => a -> a
+sin_bhaskara_approximation x = (16 * x * (pi - x)) / ((5 * pi * pi) - (4 * x * (pi - x)))
+
+{- | Robin Green, robin_green@playstation.sony.com, (-pi, pi)
+
+> import Sound.Sc3.Plot
+> let xs = [-pi, -pi + 0.05 .. pi] in plot_p1_ln [map sin_green_approximation xs, map sin xs]
+> let xs = [-pi, -pi + 0.05 .. pi] in plot_p1_ln [map (\x -> sin_green_approximation x - sin x) xs]
+-}
+sin_green_approximation :: Floating a => a -> a
+sin_green_approximation x = x - (0.166666546 * (x ** 3)) + (0.00833216076 * (x ** 5)) - (0.000195152832 * (x ** 7))
+
+{- | Paul Adenot, (-pi, pi)
+
+> import Sound.Sc3.Plot
+> let xs = [-pi, -pi + 0.05 .. pi] in plot_p1_ln [map sin_adenot_approximation xs, map sin xs]
+> let xs = [-pi, -pi + 0.05 .. pi] in plot_p1_ln [map (\x -> sin_adenot_approximation x - sin x) xs]
+-}
+sin_adenot_approximation :: Floating a => a -> a
+sin_adenot_approximation x = 0.391969947653056 * x * (pi - abs x)
+
+{- Anthony C. Robin, (0, 45).
+Simple Trigonometric Approximations, The Mathematical Gazette, Vol. 79, No. 485 (Jul., 1995), pp. 385-387.
+
+> import Sound.Sc3.Plot
+> degrees_to_radians = (* pi) . (/ 180)
+> let xs = [0, 0.05 .. 45] in plot_p1_ln [map sin_robin_approximation xs, map (sin . degrees_to_radians) xs]
+> let xs = [0, 0.05 .. 45] in plot_p1_ln [map (\x -> sin_robin_approximation x - sin (degrees_to_radians x)) xs]
+-}
+sin_robin_approximation :: Floating a => a -> a
+sin_robin_approximation x = let c = x * 0.01 in c * (2 - c)
