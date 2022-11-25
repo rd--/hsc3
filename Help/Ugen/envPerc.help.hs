@@ -14,6 +14,7 @@ in sinOsc ar 440 0 * e
 ---- ; drawings
 Sound.Sc3.Plot.plotEnvelope [envPerc 0.05 1,envPerc 0.2 0.75]
 Sound.Sc3.Plot.plotEnvelope [envPerc 0.1 1,envPerc_c 0.1 1 1 (EnvSin,EnvSin)]
+Sound.Sc3.Plot.plotEnvelope [envPerc_c 0.01 5 1 (EnvNum (-40), EnvNum (-40))]
 
 ---- ; help
 Sound.Sc3.Lang.Help.viewSc3Help "Env.*perc"

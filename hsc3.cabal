@@ -52,6 +52,7 @@ Library
                    Sound.Sc3.Common.Enum
                    Sound.Sc3.Common.Envelope
                    Sound.Sc3.Common.Help
+                   Sound.Sc3.Common.Help.Sc2
                    Sound.Sc3.Common.Math
                    Sound.Sc3.Common.Math.Filter
                    Sound.Sc3.Common.Math.Filter.Beq
