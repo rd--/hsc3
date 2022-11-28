@@ -69,22 +69,22 @@ string_split_at_char c s =
 
 -- * String / Case
 
--- | CI = Case insensitive, CS = case sensitive.
-data Case_Rule = CI | CS deriving (Eq)
+-- | Ci = Case insensitive, Cs = case sensitive, Sci = separator & case insensitive
+data Case_Rule = Ci | Cs | Sci deriving (Eq)
 
--- | Predicates for 'Case_Rule'.
-is_ci :: Case_Rule -> Bool
-is_ci = (==) CI
+{- | String equality with 'Case_Rule'.
 
--- | Predicates for 'Case_Rule'.
-is_cs :: Case_Rule -> Bool
-is_cs = (==) CS
-
--- | String equality with 'Case_Rule'.
---
--- > string_eq CI "lower" "LOWER" == True
+> string_eq Ci "sinOsc" "SinOsc" == True
+> string_eq Sci "sin-osc" "SinOsc" == True
+-}
 string_eq :: Case_Rule -> String -> String -> Bool
-string_eq cr x y = if is_ci cr then map toLower x == map toLower y else x == y
+string_eq cr x y =
+  let ci_form = map toLower
+      sci_form = filter (`notElem` "-_") . ci_form
+  in case cr of
+       Ci -> ci_form x == ci_form y
+       Cs -> x == y
+       Sci -> sci_form x == sci_form y
 
 -- | 'rlookup_by' of 'string_eq'.
 rlookup_str :: Case_Rule -> String -> [(a,String)] -> Maybe a
@@ -92,7 +92,7 @@ rlookup_str = rlookup_by . string_eq
 
 {- | 'Enum' parser with 'Case_Rule'.
 
-> parse_enum CI "FALSE" == Just False
+> parse_enum Ci "false" == Just False
 -}
 parse_enum :: (Show t,Enum t,Bounded t) => Case_Rule -> String -> Maybe t
 parse_enum cr nm =

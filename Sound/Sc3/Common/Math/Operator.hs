@@ -91,7 +91,7 @@ sc3_unary_op_name = drop 2 . show
 
 {- | 'Base.parse_enum' with Op prefix.
 
-> mapMaybe (parse_unary Base.CS) (words "Abs Rand") == [OpAbs,OpRand]
+> Data.Maybe.mapMaybe (parse_unary Cs) (words "Abs Rand")
 -}
 parse_unary :: Base.Case_Rule -> String -> Maybe Sc3_Unary_Op
 parse_unary cr = Base.parse_enum cr . (++) "Op"
@@ -114,8 +114,8 @@ unaryName n =
 
 -- | Given name of unary operator derive index.
 --
--- > mapMaybe (unaryIndex Base.CI) (words "abs CUBED midicps NEG") == [5,13,17,0]
--- > unaryIndex Base.CS "SinOsc" == Nothing
+-- > Data.Maybe.mapMaybe (unaryIndex Ci) (words "abs Cubed midiCps Neg") == [5,13,17,0]
+-- > unaryIndex Cs "SinOsc" == Nothing
 unaryIndex :: Base.Case_Rule -> String -> Maybe Int
 unaryIndex cr nm =
     let ix = Base.rlookup_str cr nm unary_sym_tbl
@@ -124,9 +124,9 @@ unaryIndex cr nm =
 
 -- | 'isJust' of 'unaryIndex'.
 --
--- > map (is_unary CI) (words "Abs MidiCps Neg")
--- > map (is_unary CI) (words "- RAND")
--- > map (is_unary CI) (words "arctan atan")
+-- > map (is_unary Ci) (words "Abs MidiCps Neg")
+-- > map (is_unary Ci) (words "- rand")
+-- > map (is_unary Ci) (words "arctan atan")
 is_unary :: Base.Case_Rule -> String -> Bool
 is_unary cr = isJust . unaryIndex cr
 
@@ -198,7 +198,7 @@ sc3_binary_op_tbl = zip (map sc3_binary_op_name [minBound .. maxBound]) [0..]
 
 {- | 'parse_enum' with Op prefix.
 
-> parse_binary Base.CI "mul" == Just OpMul
+> parse_binary Ci "mul" == Just OpMul
 -}
 parse_binary :: Base.Case_Rule -> String -> Maybe Sc3_Binary_Op
 parse_binary cr = Base.parse_enum cr . (++) "Op"
@@ -239,9 +239,9 @@ binaryName n =
 
 {- | Given name of binary operator derive index.
 
-> mapMaybe (binaryIndex Base.CI) (words "* mul ring1 +") == [2,2,30,0]
-> binaryIndex Base.CI "sinosc" == Nothing
-> map (\x -> (x,binaryIndex Base.CI x)) (map snd binary_sym_tbl)
+> Data.Maybe.mapMaybe (binaryIndex Ci) (words "* mul ring1 +") == [2,2,30,0]
+> binaryIndex Ci "sinosc" == Nothing
+> map (\x -> (x,binaryIndex Ci x)) (map snd binary_sym_tbl)
 -}
 binaryIndex :: Base.Case_Rule -> String -> Maybe Int
 binaryIndex cr nm =
@@ -251,7 +251,7 @@ binaryIndex cr nm =
 
 -- | 'isJust' of 'binaryIndex'.
 --
--- > map (is_binary CI) (words "== > % TRUNC MAX")
+-- > map (is_binary Ci) (words "== > % Trunc max")
 is_binary :: Base.Case_Rule -> String -> Bool
 is_binary cr = isJust . binaryIndex cr
 
@@ -267,8 +267,8 @@ ugen_operator_name nm n =
 
 {- | Order of lookup: binary then unary.
 
-> map (resolve_operator Sound.Sc3.Common.Base.CI) (words "+ - ADD SUB NEG ABS")
-> map (resolve_operator Sound.Sc3.Common.Base.CS) (words "Abs")
+> map (resolve_operator Ci) (words "+ - Add sub Neg abs")
+> map (resolve_operator Cs) (words "Abs")
 -}
 resolve_operator :: Base.Case_Rule -> String -> (String,Maybe Int)
 resolve_operator cr nm =
@@ -280,7 +280,7 @@ resolve_operator cr nm =
 
 -- | Case-insensitive resolve_operator.
 resolve_operator_ci :: String -> (String,Maybe Int)
-resolve_operator_ci = resolve_operator Base.CI
+resolve_operator_ci = resolve_operator Base.Ci
 
 -- * Classes
 
