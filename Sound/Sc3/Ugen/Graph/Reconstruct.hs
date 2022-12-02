@@ -46,10 +46,12 @@ reconstruct_graph_module nm gr =
   let imp = ["import Sound.Sc3 {- hsc3 -}"
             ,"import Sound.Sc3.Common.Base {- hsc3 -}"
             ,"import Sound.Sc3.Util.Plain {- hsc3 -}"]
-      (b0:bnd,res) = reconstruct_graph gr
-      hs = ("  let " ++ b0) : map ("      " ++ ) bnd ++ ["  in " ++ res]
-      pre = [nm ++ " :: Ugen",nm ++ " ="]
-  in (imp ++ pre ++ hs)
+  in case reconstruct_graph gr of
+      (b0:bnd,res) ->
+        let hs = ("  let " ++ b0) : map ("      " ++ ) bnd ++ ["  in " ++ res]
+            pre = [nm ++ " :: Ugen",nm ++ " ="]
+        in (imp ++ pre ++ hs)
+      _ -> error "reconstruct_graph_module"
 
 {- | Generate a reconstruction of a 'Graph'.
 

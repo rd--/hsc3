@@ -227,7 +227,10 @@ mceChannels :: Ugen -> [Ugen]
 mceChannels u =
     case u of
       Mce_U m -> mce_to_list m
-      Mrg_U (Mrg x y) -> let r:rs = mceChannels x in Mrg_U (Mrg r y) : rs
+      Mrg_U (Mrg x y) ->
+        case mceChannels x of
+          r:rs -> Mrg_U (Mrg r y) : rs
+          _ -> error "mceChannels"
       _ -> [u]
 
 -- | Number of channels to expand to.  This function sees into Mrg, and is defined only for Mce nodes.
@@ -246,8 +249,10 @@ mceExtend :: Int -> Ugen -> [Ugen]
 mceExtend n u =
     case u of
       Mce_U m -> mceProxies (mce_extend n m)
-      Mrg_U (Mrg x y) -> let (r:rs) = mceExtend n x
-                         in Mrg_U (Mrg r y) : rs
+      Mrg_U (Mrg x y) ->
+        case mceExtend n x of
+          r:rs -> Mrg_U (Mrg r y) : rs
+          _ -> error "mceExtend"
       _ -> replicate n u
 
 -- | Is Mce required, ie. are any input values Mce?

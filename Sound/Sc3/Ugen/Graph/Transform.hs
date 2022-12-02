@@ -45,9 +45,12 @@ c_lift_inputs g z i =
 -- | Lift inputs at 'U_Node_U' as required.
 c_lift_ugen :: U_Graph -> Uid.Id -> U_Node -> (Uid.Id,U_Node,[U_Node])
 c_lift_ugen g z n =
-    let i = u_node_u_inputs n
-        (z',i',k) = c_lift_inputs g z i
-    in (z',n {u_node_u_inputs = i'},k)
+  case n of
+    U_Node_U {} ->
+      let i = u_node_u_inputs n
+          (z',i',k) = c_lift_inputs g z i
+      in (z',n {u_node_u_inputs = i'},k)
+    _ -> error "c_lift_ugen"
 
 -- | 'c_lift_ugen' at list of 'U_Node_U'.
 c_lift_ugens :: U_Graph -> Uid.Id -> [U_Node] -> (Uid.Id,[U_Node],[U_Node])
