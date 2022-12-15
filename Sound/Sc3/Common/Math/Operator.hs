@@ -182,10 +182,10 @@ data Sc3_Binary_Op
   | OpClip2 -- 42
   | OpExcess
   | OpFold2 -- 44
-  | OpWrap2
+  | OpWrap2 -- 45
   | OpFirstArg
-  | OpRandRange
-  | OpExpRandRange
+  | OpRandRange -- 47
+  | OpExpRandRange -- 48
   deriving (Eq,Show,Enum,Bounded,Read)
 
 -- | Enum name without Op prefix.

@@ -117,7 +117,9 @@ graphdef_ugen_nid g n = graphdef_control_nid g 0 + length (graphdef_controls g) 
 {- | "SCgf" encoded as 32-bit unsigned integer.
 
 > map fromEnum "SCgf" == [83, 67, 103, 102]
-> Byte.decode_i32 (Byte.encode_ascii (Datum.ascii "SCgf"))
+
+> import Sound.Osc.Coding.Byte
+> decode_i32 (encode_ascii (Datum.ascii "SCgf")) == scgf_i32
 -}
 scgf_i32 :: Num n => n
 scgf_i32 = 1396926310
@@ -265,6 +267,7 @@ graphdef_dump_ugens_str (Graphdef _nm cs _ks us) = zipWith (ugen_dump_ugen_str c
 {- | 'putStrLn' of 'unlines' of 'graphdef_dump_ugens_str'
 
 > import Sound.Sc3.Server.Graphdef
+> import Sound.Sc3.Server.Graphdef.Io
 > dir = "/home/rohan/sw/rsc3-disassembler/scsyndef/"
 > pp nm = read_graphdef_file (dir ++ nm) >>= graphdef_dump_ugens
 > pp "simple.scsyndef"

@@ -119,6 +119,10 @@ dynKlank i fs fo ds s =
         gen _ = 0
     in gen (mceChannels s)
 
+-- | Pan2 without (k-rate only) level input
+eqPan2 :: Ugen -> Ugen -> Ugen
+eqPan2 input pos = pan2 input pos 1
+
 -- | 'linExp' with input range of (-1,1).
 exprange :: Ugen -> Ugen -> Ugen -> Ugen
 exprange l r s = linExp s (-1) 1 l r

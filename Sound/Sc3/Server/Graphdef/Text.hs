@@ -31,9 +31,8 @@ enc_text com_f =
 
 {- | 'encode_graphdef_f' of 'enc_text' with optional semi-colon delimited comments.
 
-> import Sound.Sc3.Server.Graphdef.Binary
 > dir = "/home/rohan/sw/rsc3-disassembler/scsyndef/"
-> pp nm = read_graphdef_file (dir ++ nm) >>= putStrLn . print_graphdef True
+> pp nm = Sound.Sc3.Server.Graphdef.Io.read_graphdef_file (dir ++ nm) >>= putStrLn . print_graphdef True
 > pp "simple.scsyndef"
 > pp "with-ctl.scsyndef"
 > pp "mce.scsyndef"
@@ -66,9 +65,10 @@ read_float txt =
 text_get_f :: Get_Functions (S.StateT [String] Identity)
 text_get_f = (list_read_f Datum.ascii,list_read_f read,list_read_f read,list_read_f read,list_read_f read_float)
 
--- | Read text representation of Graphdef, as written by 'print_graphdef'.
---
--- > read_graphdef "1396926310 0 1 simple 2 0.0 440.0 0 0 2 SinOsc 2 2 1 0 -1 1 -1 0 2 Out 2 2 0 0 -1 0 0 0"
+{- | Read text representation of Graphdef, as written by 'print_graphdef'.
+
+> read_graphdef "1396926310 0 1 simple 2 0.0 440.0 0 0 2 SinOsc 2 2 1 0 -1 1 -1 0 2 Out 2 2 0 0 -1 0 0 0"
+-}
 read_graphdef :: String -> Graphdef
 read_graphdef txt =
   let delete_comments = filter (\x -> not (null x) && (head x /= ';'))
