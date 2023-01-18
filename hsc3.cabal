@@ -5,7 +5,7 @@ Synopsis:          Haskell SuperCollider
 Description:       Library for communicating with the SuperCollider synthesiser
 License:           GPL-3.0-only
 Category:          Sound
-Copyright:         (c) Rohan Drape and others, 2005-2022
+Copyright:         (c) Rohan Drape and others, 2005-2023
 Author:            Rohan Drape
 Maintainer:        rd@rohandrape.net
 Stability:         Experimental

@@ -183,7 +183,7 @@ data Sc3_Binary_Op
   | OpExcess
   | OpFold2 -- 44
   | OpWrap2 -- 45
-  | OpFirstArg
+  | OpFirstArg -- 46
   | OpRandRange -- 47
   | OpExpRandRange -- 48
   deriving (Eq,Show,Enum,Bounded,Read)

@@ -393,11 +393,11 @@ foldToRange i j =
 sc3_fold :: (Ord a,Num a) => a -> a -> a -> a
 sc3_fold n i j = foldToRange i j n
 
--- | SC3 distort operator.
+-- | Sc3 distort operator.
 sc3_distort :: Fractional n => n -> n
 sc3_distort x = x / (1 + abs x)
 
--- | SC3 softclip operator.
+-- | Sc3 softclip operator.
 sc3_softclip :: (Ord n, Fractional n) => n -> n
 sc3_softclip x = let x' = abs x in if x' <= 0.5 then x else (x' - 0.25) / x
 
@@ -694,7 +694,7 @@ sc3_curvelin curve src_l src_r dst_l dst_r x =
                    b = src_l + a
                in log ((b - x) / a) * (dst_r - dst_l) / curve + dst_l
 
--- * PP
+-- * Pp (pretty print)
 
 -- | Removes all but the last trailing zero from floating point string.
 double_pp_rm0 :: String -> String
