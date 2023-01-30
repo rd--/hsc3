@@ -8,15 +8,15 @@ import Sound.Sc3.Ugen.Types
 import qualified Sound.Sc3.Ugen.Util as Util
 import qualified Sound.Sc3.Ugen.Bindings.Db.External as X
 
--- | Convert frequency value to value appropriate for AY tone inputs.
+-- | Convert frequency value to value appropriate for Ay tone inputs.
 ayFreqToTone :: Fractional a => a -> a
 ayFreqToTone f = 110300 / (f - 0.5)
 
--- | LADSPA plugins inside SuperCollider.
+-- | Ladspa plugins inside SuperCollider.
 ladspa :: Int -> Rate -> Ugen -> [Ugen] -> Ugen
 ladspa nc rt k z = C.mkOsc rt "LADSPA" (constant nc : k : z) nc
 
--- | Lookup index of STK instrument by name.
+-- | Lookup index of Stk instrument by name.
 stkAt :: (Num t,Enum t) => String -> t
 stkAt nm =
   let nm_seq = ["Clarinet", "BlowHole", "Saxofony", "Flute", "Brass"

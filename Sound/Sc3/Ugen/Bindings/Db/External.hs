@@ -2741,11 +2741,13 @@ stkClarinet rate freq reedstiffness noisegain vibfreq vibgain breathpressure tri
 stkFlute :: Rate -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
 stkFlute rate freq jetDelay noisegain jetRatio = mkUgen Nothing [ControlRate,AudioRate] (Left rate) "StkFlute" [freq,jetDelay,noisegain,jetRatio] Nothing 1 (Special 0) NoId
 
+{-
 -- | Wrapping Synthesis toolkit.
 --
 --  StkGlobals [AudioRate] showWarnings=0 printErrors=0 rawfilepath=0
 stkGlobals :: Rate -> Ugen -> Ugen -> Ugen -> Ugen
 stkGlobals rate showWarnings printErrors rawfilepath = mkUgen Nothing [AudioRate] (Left rate) "StkGlobals" [showWarnings,printErrors,rawfilepath] Nothing 1 (Special 0) NoId
+-}
 
 -- | Wrapping Synthesis toolkit.
 --

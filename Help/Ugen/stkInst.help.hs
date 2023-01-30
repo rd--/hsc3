@@ -116,4 +116,4 @@ let f (_,g,_,y,z,o,rx,ry,p,_,_) =
 in mix (voicer 16 f) * control kr "gain" 1
 
 ---- ; set globals
-X.stkGlobals ar 1 1 (label "/home/rohan/opt/src/sc3-plugins/external_libraries/stk/rawwaves")
+X.stkGlobals ar 1 1 (label "/home/rohan/opt/src/supercollider/sc3-plugins/external_libraries/stk/rawwaves")
