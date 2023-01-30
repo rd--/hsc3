@@ -159,7 +159,7 @@ data Sc3_Binary_Op
   | OpRoundTo -- 19 -- i.e. roundTo: (renamed)
   | OpRoundUp -- 20
   | OpTrunc -- 21
-  | OpAtan2
+  | OpAtan2 -- 22
   | OpHypot -- 23
   | OpHypotx
   | OpPow -- 25

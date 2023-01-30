@@ -9,7 +9,6 @@ import qualified Data.List.Split as Split {- split -}
 
 import qualified Sound.Sc3.Common.Envelope as Envelope {- hsc3 -}
 import qualified Sound.Sc3.Common.Base as Base {- hsc3 -}
-import qualified Sound.Sc3.Common.Math.Operator as Operator {- hsc3 -}
 import qualified Sound.Sc3.Common.Mce as Mce {- hsc3 -}
 import qualified Sound.Sc3.Common.Rate as Rate {- hsc3 -}
 import qualified Sound.Sc3.Common.Uid as Uid {- hsc3 -}
@@ -293,44 +292,6 @@ envelope_to_ienvgen_ugen :: Envelope.Envelope Ugen -> Ugen
 envelope_to_ienvgen_ugen =
     let err = error "envGen: bad Envelope"
     in mce . fromMaybe err . Envelope.envelope_sc3_ienvgen_array
-
--- * Bitwise
-
--- | 'Operator.OpBitAnd'
-bitAnd :: Ugen -> Ugen -> Ugen
-bitAnd = mkBinaryOperator Operator.OpBitAnd undefined
-
--- | 'Operator.OpBitOr'
-bitOr :: Ugen -> Ugen -> Ugen
-bitOr = mkBinaryOperator Operator.OpBitOr undefined
-
--- | 'Operator.OpBitXor'
-bitXOr :: Ugen -> Ugen -> Ugen
-bitXOr = mkBinaryOperator Operator.OpBitXor undefined
-
--- | 'Operator.OpBitNot'
-bitNot :: Ugen -> Ugen
-bitNot = mkUnaryOperator Operator.OpBitNot undefined
-
--- | 'Operator.OpShiftLeft'
-shiftLeft :: Ugen -> Ugen -> Ugen
-shiftLeft = mkBinaryOperator Operator.OpShiftLeft undefined
-
--- | 'Operator.OpShiftRight'
-shiftRight :: Ugen -> Ugen -> Ugen
-shiftRight = mkBinaryOperator Operator.OpShiftRight undefined
-
--- | 'Operator.OpUnsignedShift'
-unsignedShift :: Ugen -> Ugen -> Ugen
-unsignedShift = mkBinaryOperator Operator.OpUnsignedShift undefined
-
--- | 'shiftLeft' operator.
-(.<<.) :: Ugen -> Ugen -> Ugen
-(.<<.) = shiftLeft
-
--- | 'shiftRight' operator.
-(.>>.) :: Ugen -> Ugen -> Ugen
-(.>>.) = shiftRight
 
 -- * Rate Flow
 

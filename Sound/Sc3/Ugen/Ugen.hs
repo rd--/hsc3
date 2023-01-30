@@ -656,13 +656,44 @@ instance Random.Random Ugen where
     randomR _ _ = error "Ugen.randomR: non constant (l,r)"
     random = Random.randomR (-1.0, 1.0)
 
+-- * Bitwise
+
+-- | 'Operator.OpBitAnd'
+bitAnd :: Ugen -> Ugen -> Ugen
+bitAnd = mkBinaryOperator OpBitAnd undefined
+
+-- | 'Operator.OpBitOr'
+bitOr :: Ugen -> Ugen -> Ugen
+bitOr = mkBinaryOperator OpBitOr undefined
+
+-- | 'OpBitXor'
+bitXOr :: Ugen -> Ugen -> Ugen
+bitXOr = mkBinaryOperator OpBitXor undefined
+
+-- | 'OpBitNot'
+bitNot :: Ugen -> Ugen
+bitNot = mkUnaryOperator OpBitNot undefined
+
+-- | 'OpShiftLeft'
+shiftLeft :: Ugen -> Ugen -> Ugen
+shiftLeft = mkBinaryOperator OpShiftLeft undefined
+
+-- | 'OpShiftRight'
+shiftRight :: Ugen -> Ugen -> Ugen
+shiftRight = mkBinaryOperator OpShiftRight undefined
+
+-- | 'OpUnsignedShift'
+unsignedShift :: Ugen -> Ugen -> Ugen
+unsignedShift = mkBinaryOperator OpUnsignedShift undefined
+
 -- | Ugens are bit patterns.
 instance Bits Ugen where
-    (.&.) = mkBinaryOperator OpBitAnd undefined
-    (.|.) = mkBinaryOperator OpBitOr undefined
-    xor = mkBinaryOperator OpBitXor undefined
-    complement = mkUnaryOperator OpBitNot undefined
-    shift = error "Ugen.shift"
+    (.&.) = bitAnd
+    (.|.) = bitOr
+    xor = bitXOr
+    complement = bitNot
+    shiftL p q = shiftLeft p (constant q)
+    shiftR p q = shiftRight p (constant q)
     rotate = error "Ugen.rotate"
     bitSize = error "Ugen.bitSize"
     bit = error "Ugen.bit"
