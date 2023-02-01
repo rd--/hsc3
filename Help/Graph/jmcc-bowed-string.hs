@@ -29,13 +29,12 @@ uid_st_eval (do
   return (softClip (k * 0.1)))
 
 -- bowed string (jmcc) ; event control
-let f (_,g,x,y,z,_,_,_,p,_,_) =
+let f (_,g,_,y,z,_,_,_,p,_,_) =
       let n0 = mce2 (brownNoise ar) (brownNoise ar)
           r0 = expRand 0.125 0.5
           r1 = rand 0.7 0.9
           r2 = X.randN 12 1.0 3.0
           fq = unitCps p
-          n1 = lfNoise1 kr r0
           exc = n0 * 0.005 * z * lagUD g (y * 0.1) (y * 4)
           geom n i m = mce (take n (iterate (* m) i))
           iota n i m = mce (take n (iterate (+ m) i))
@@ -50,7 +49,6 @@ let f (c,g,_,y,z,_,_,_,p,_,_) =
           r1 = randId (c,'δ') 0.7 0.9
           r2 = X.randNId 12 (c,'ε') 1.0 3.0
           fq = unitCps p
-          n1 = lfNoise1Id (c,'ζ') kr r0
           exc = n0 * 0.005 * z * lagUD g (y * 0.1) (y * 4)
           geom n i m = mce (take n (iterate (* m) i))
           iota n i m = mce (take n (iterate (+ m) i))

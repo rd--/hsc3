@@ -16,7 +16,7 @@ import Sound.Sc3.Ugen.Util {- hsc3 -}
 import qualified Sound.Sc3.Ugen.Bindings.Db as Db {- hsc3 -}
 import qualified Sound.Sc3.Ugen.Bindings.Db.External as External {- hsc3 -}
 
--- | FM7 variant where input matrices are not in MCE form.
+-- | FM7 variant where input matrices are not in Mce form.
 fm7_mx :: [[Ugen]] -> [[Ugen]] -> Ugen
 fm7_mx ctlMatrix modMatrix = External.fm7 ar (mce (concat ctlMatrix)) (mce (concat modMatrix))
 
