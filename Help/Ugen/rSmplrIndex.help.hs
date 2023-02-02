@@ -45,8 +45,8 @@ in mix (voicer 16 f) * control kr "gain" 8
 hsc3-smplr load pf --dyn=008 --b0=100
 
 ---- ; load SFZ sample data
-import Sound.OSC {- hosc -}
-import Sound.Sc3.Data.SFZ {- hsc3-data -}
+import Sound.Osc {- hosc -}
+import Sound.Sc3.Data.Sfz {- hsc3-data -}
 sfz_fn = sfResolve "instr/bosendorfer/008.sfz"
 sfz_fn = sfResolve "instr/farfisa/aad/dolce-8.sfz"
 sfz_fn = sfResolve "instr/casacota/zell_1737_415_MeanTone5/8_i.sfz"

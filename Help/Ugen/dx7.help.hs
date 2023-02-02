@@ -29,7 +29,7 @@ let f (_,g,x,_,z,o,_,_,p,_,_) =
                ,[99,99,99,99,50,50,50,50,3,2,1,29,99,1,0,0,0,1,24]]
           buf = asLocalBufId 'ε' (map constant (concat vc))
           x0 = latch x g
-      in pan2 (X.dx7 ar buf g 0 0 0 (p * 127) z (0x2000 * (x - x0)) 0 0 0) (o * 2 - 1) 1
+      in pan2 (X.dx7 ar buf g 0 0 0 (p * 100) z (0x2000 * (x - x0)) 0 0 0) (o * 2 - 1) 1
 in mix (voicer 16 f) * control kr "gain" 1
 
 -- dx7 ; data at shared buffer ; external control

@@ -20,7 +20,7 @@ let f (_,g,_,y,z,o,rx,ry,p,_,_) =
       in grainSin 2 tr du (midiCps ((p * 127) + (ry * 2 - 1))) (o * 2 - 1) (-1) 512 * z * g
 in mix (voicer 16 f) * control kr "gain" 1
 
--- grainsin ; mouse control
+-- grainSin ; mouse control
 let overlap = mouseY kr 0 2 Linear 0.2
     f = mouseX kr 1 220 Linear 0.2
 in grainSin 2 (impulse ar f 0) (overlap / f) 440 0 (-1) 512 * 0.1

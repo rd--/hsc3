@@ -66,11 +66,13 @@ voicer = ccEventVoicer
 ccEventVoicerParam :: Int -> (CcEvent Ugen -> Ugen) -> Ugen
 ccEventVoicerParam = ccEventVoicerAddr (ccEventMetaControls ccEventMetaDefault)
 
-{- | Given /g/ and /p/ fields of an 'CcEvent' derive a 'gateReset' from g
-and a trigger derived from monitoring /g/ and /p/ for changed values.
+{- | Given /w|g/ and /p/ fields of an 'CcEvent' derive a 'gateReset' from g
+and a trigger derived from monitoring /w|g/ and /p/ for changed values.
 -}
 ccEventGateReset :: Ugen -> Ugen -> (Ugen, Ugen)
-ccEventGateReset g p = let tr = changed p 0.01 + changed g 0.01 in (gateReset g tr,tr)
+ccEventGateReset g p =
+  let tr = changed p 0.01 + changed g 0.01
+  in (gateReset g tr,tr)
 
 -- * Ctl
 
