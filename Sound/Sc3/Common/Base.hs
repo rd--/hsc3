@@ -72,19 +72,25 @@ string_split_at_char c s =
 -- | Ci = Case insensitive, Cs = case sensitive, Sci = separator & case insensitive
 data Case_Rule = Ci | Cs | Sci deriving (Eq)
 
+string_op :: (String -> String -> t) -> Case_Rule -> String -> String -> t
+string_op f cr x y =
+  let ci_form = map toLower
+      sci_form = filter (`notElem` "-_") . ci_form
+  in case cr of
+       Ci -> f (ci_form x) (ci_form y)
+       Cs -> f x y
+       Sci -> f (sci_form x) (sci_form y)
+
 {- | String equality with 'Case_Rule'.
 
 > string_eq Ci "sinOsc" "SinOsc" == True
 > string_eq Sci "sin-osc" "SinOsc" == True
 -}
 string_eq :: Case_Rule -> String -> String -> Bool
-string_eq cr x y =
-  let ci_form = map toLower
-      sci_form = filter (`notElem` "-_") . ci_form
-  in case cr of
-       Ci -> ci_form x == ci_form y
-       Cs -> x == y
-       Sci -> sci_form x == sci_form y
+string_eq = string_op (==)
+
+string_cmp :: Case_Rule -> String -> String -> Ordering
+string_cmp = string_op compare
 
 -- | 'rlookup_by' of 'string_eq'.
 rlookup_str :: Case_Rule -> String -> [(a,String)] -> Maybe a
