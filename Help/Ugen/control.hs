@@ -1,4 +1,7 @@
 -- control
+out 0 (sinOsc ar (control kr "freq" 440) 0 * 0.1)
+
+-- control
 sinOsc ar (control kr "freq" 440) 0 * control kr "amp" 0.1
 
 -- control ; ir and kr and tr controls ; setting amp also triggers an envelope
@@ -29,3 +32,13 @@ withSc3 (sendMessage (n_set1 1 "gate" 1))
 
 ---- ; command list ui to send messages to set oscillator frequency
 UI.ui_scsynth_command_list (map (\x -> n_set 1 [("freq1",55 * (x ** 2)),("amp1",0.1 * (1 / x))]) [1 .. 7])
+
+---- ; control ; printing
+ugen_dump_ugens (out 0 (sinOsc ar (control kr "freq" 440) 0 * 0.1))
+
+---- ; control ; encoding
+import qualified Data.ByteString.Lazy as L
+L.unpack (synthdefData (Synthdef "LocalControls" (out 0 (sinOsc ar (control kr "freq" 440) 0 * 0.1))))
+
+-- ; control ; printing
+putStrLn $ synthstat (out 0 (sinOsc ar (control kr "freq" 440) 0 * 0.1))

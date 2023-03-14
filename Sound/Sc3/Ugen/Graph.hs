@@ -295,9 +295,10 @@ u_node_ks_count =
                           in recur r' ns'
     in recur (0,0,0,0)
 
--- | Construct implicit /control/ unit generator 'U_Nodes'.  Unit
--- generators are only constructed for instances of control types that
--- are present.
+{- | Construct implicit /control/ unit generator 'U_Nodes'.
+Unit generators are only constructed for instances of control types that are present.
+The special-index holds the accumulated offset where multiple Control Ugens (at different rates) are present.
+-}
 u_node_mk_implicit_ctl :: [U_Node] -> [U_Node]
 u_node_mk_implicit_ctl ks =
     let (ni,nk,nt,na) = u_node_ks_count ks

@@ -23,7 +23,7 @@ data Synthdef =
 synthdef :: String -> Ugen.Ugen -> Synthdef
 synthdef = Synthdef
 
-{- | The SC3 /default/ instrument 'Synthdef', see 'default_ugen_graph'.
+{- | The Sc3 /default/ instrument 'Synthdef', see 'default_ugen_graph'.
 
 > import Sound.Osc {- hosc -}
 > import Sound.Sc3 {- hsc3 -}
@@ -33,7 +33,7 @@ synthdef = Synthdef
 defaultSynthdef :: Synthdef
 defaultSynthdef = synthdef "default" Help.Graph.default_ugen_graph
 
-{- | The SC3 /default/ sample (buffer) playback instrument 'Synthdef',
+{- | The Sc3 /default/ sample (buffer) playback instrument 'Synthdef',
 see 'default_sampler_ugen_graph'.
 
 > withSc3 (sendMessage (d_recv (defaultSampler False)))
