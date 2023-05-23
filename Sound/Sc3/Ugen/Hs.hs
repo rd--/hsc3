@@ -9,9 +9,9 @@ import Sound.Sc3.Common.Base
 import Sound.Sc3.Common.Math
 import qualified Sound.Sc3.Common.Math.Filter as Filter
 
--- | F = function, ST = state
-type F_ST0 st o = st -> (o,st)
-type F_ST1 st i o = (i,st) -> (o,st)
+-- | F = function, St = state
+type F_St0 st o = st -> (o,st)
+type F_St1 st i o = (i,st) -> (o,st)
 
 -- | U = uniform
 type F_U2 n = n -> n -> n
@@ -49,76 +49,76 @@ avg9 p q r s t u v w x = (p + q + r + s + t + u + v + w + x) / 9
 -- | fir = finite impulse response
 --
 -- > l_apply_f_st1 (fir1 (\x z1 -> (x + z1) / 2)) 0 [0 .. 5] == [0.0,0.5,1.5,2.5,3.5,4.5]
-fir1 :: F_U2 n -> F_ST1 n n n
+fir1 :: F_U2 n -> F_St1 n n n
 fir1 f (n,z0) = (f n z0,n)
 
 -- | fir = finite impulse response
 --
 -- > l_apply_f_st1 (fir2 (\x x1 x2 -> (x + x1 + x2) / 2)) (0,0) [0 .. 5] == [0.0,0.5,1.5,3.0,4.5,6.0]
-fir2 :: F_U3 n -> F_ST1 (T2 n) n n
+fir2 :: F_U3 n -> F_St1 (T2 n) n n
 fir2 f (n,(z1,z0)) = (f n z0 z1,(z0,n))
 
-fir3 :: F_U4 n -> F_ST1 (T3 n) n n
+fir3 :: F_U4 n -> F_St1 (T3 n) n n
 fir3 f (n,(z2,z1,z0)) = (f n z0 z1 z2,(z1,z0,n))
 
-fir4 :: F_U5 n -> F_ST1 (T4 n) n n
+fir4 :: F_U5 n -> F_St1 (T4 n) n n
 fir4 f (n,(z3,z2,z1,z0)) = (f n z0 z1 z2 z3,(z2,z1,z0,n))
 
-fir8 :: F_U9 n -> F_ST1 (T8 n) n n
+fir8 :: F_U9 n -> F_St1 (T8 n) n n
 fir8 f (n,(z7,z6,z5,z4,z3,z2,z1,z0)) = (f n z0 z1 z2 z3 z4 z5 z6 z7,(z6,z5,z4,z4,z2,z1,z0,n))
 
 -- | iir = infinite impulse response
 --
 -- > l_apply_f_st1 (iir1 (\x y1 -> x + y1)) 0 (replicate 10 1) == [1,2,3,4,5,6,7,8,9,10]
-iir1 :: F_U2 n -> F_ST1 n n n
+iir1 :: F_U2 n -> F_St1 n n n
 iir1 f (n,y0) = let r = f n y0 in (r,r)
 
 -- > l_apply_f_st1 (iir2 (\x y1 y2 -> x + y1 + y2)) (0,0) (replicate 10 1) == [1,2,4,7,12,20,33,54,88,143]
 -- > map (+1) [0+0,1+0,2+1,4+2,7+4,12+7,20+12,33+20,54+33,88+54] == [1,2,4,7,12,20,33,54,88,143] -- https://oeis.org/A000071
-iir2 :: F_U3 n -> F_ST1 (T2 n) n n
+iir2 :: F_U3 n -> F_St1 (T2 n) n n
 iir2 f (n,(y1,y0)) = let r = f n y0 y1 in (r,(y0,r))
 
 -- | ff = feed-forward, fb = feed-back
-iir2_ff_fb :: (n -> n -> n -> T2 n) -> F_ST1 (T2 n) n n
+iir2_ff_fb :: (n -> n -> n -> T2 n) -> F_St1 (T2 n) n n
 iir2_ff_fb f (n,(y1,y0)) = let (r,y0') = f n y0 y1 in (r,(y0,y0'))
 
-biquad :: F_U5 n -> F_ST1 (T4 n) n n
+biquad :: F_U5 n -> F_St1 (T4 n) n n
 biquad f (n,(x1,x0,y1,y0)) = let r = f n x0 x1 y0 y1 in (r,(x0,n,y0,r))
 
 -- | sos = second order section
 sos_f :: Num n => T5 n -> F_U5 n
 sos_f (a0,a1,a2,b1,b2) x x1 x2 y1 y2 = a0*x + a1*x1 + a2*x2 - b1*y1 - b2*y2
 
-sos :: Num n => T5 n -> F_ST1 (T4 n) n n
+sos :: Num n => T5 n -> F_St1 (T4 n) n n
 sos p = biquad (sos_f p)
 
 -- | hp = high pass
-hpz1 :: Fractional n => F_ST1 n n n
+hpz1 :: Fractional n => F_St1 n n n
 hpz1 = fir1 (\n z0 -> 0.5 * (n - z0))
 
-hpz2 :: Fractional n => F_ST1 (T2 n) n n
+hpz2 :: Fractional n => F_St1 (T2 n) n n
 hpz2 = fir2 (\n z0 z1 -> 0.25 * (n - (2 * z0) + z1))
 
 -- | lp = low pass
-lpz1 :: Fractional n => F_ST1 n n n
+lpz1 :: Fractional n => F_St1 n n n
 lpz1 = fir1 avg2
 
-lpz2 :: Fractional n => F_ST1 (T2 n) n n
+lpz2 :: Fractional n => F_St1 (T2 n) n n
 lpz2 = fir2 (\n z0 z1 -> 0.25 * (n + (2 * z0) + z1))
 
 -- | bp = band pass
-bpz2 :: Fractional n => F_ST1 (T2 n) n n
+bpz2 :: Fractional n => F_St1 (T2 n) n n
 bpz2 = fir2 (\n _z0 z1 -> 0.5 * (n - z1))
 
 -- | br = band reject
-brz2 :: Fractional n => F_ST1 (T2 n) n n
+brz2 :: Fractional n => F_St1 (T2 n) n n
 brz2 = fir2 (\n _z0 z1 -> 0.5 * (n + z1))
 
 -- | mavg = moving average
-mavg5 :: Fractional n => F_ST1 (T4 n) n n
+mavg5 :: Fractional n => F_St1 (T4 n) n n
 mavg5 = fir4 avg5
 
-mavg9 :: Fractional n => F_ST1 (T8 n) n n
+mavg9 :: Fractional n => F_St1 (T8 n) n n
 mavg9 = fir8 avg9
 
 -- | Sample rate (SR) to radians per sample (RPS).
@@ -135,7 +135,7 @@ resonz_f param x y1 y2 =
     in (a0 * (y0 - y2),y0)
 
 -- | ir = initialization rate
-resonz_ir :: Floating n => T3 n -> F_ST1 (T2 n) n n
+resonz_ir :: Floating n => T3 n -> F_St1 (T2 n) n n
 resonz_ir p = iir2_ff_fb (resonz_f p)
 
 -- | rlpf = resonant low pass filter
@@ -144,16 +144,16 @@ rlpf_f max_f param x y1 y2 =
     let (a0,b1,b2) = Filter.rlpf_coef max_f param
     in a0 * x + b1 * y1 + b2 * y2
 
-rlpf_ir :: (Floating n, Ord n) => T3 n -> F_ST1 (T2 n) n n
+rlpf_ir :: (Floating n, Ord n) => T3 n -> F_St1 (T2 n) n n
 rlpf_ir p = iir2 (rlpf_f max p)
 
-bw_hpf_ir :: Floating n => T2 n -> F_ST1 (T4 n) n n
+bw_hpf_ir :: Floating n => T2 n -> F_St1 (T4 n) n n
 bw_hpf_ir (sample_rate,f) = sos (Filter.bw_lpf_or_hpf_coef True sample_rate f)
 
-bw_lpf_ir :: Floating n => T2 n -> F_ST1 (T4 n) n n
+bw_lpf_ir :: Floating n => T2 n -> F_St1 (T4 n) n n
 bw_lpf_ir (sample_rate,f) = sos (Filter.bw_lpf_or_hpf_coef False sample_rate f)
 
-white_noise :: (R.RandomGen g, Fractional n, R.Random n) => F_ST0 g n
+white_noise :: (R.RandomGen g, Fractional n, R.Random n) => F_St0 g n
 white_noise = R.randomR (-1.0,1.0)
 
 brown_noise_f :: (Fractional n, Ord n) => n -> n -> n
@@ -161,7 +161,7 @@ brown_noise_f x y1 =
     let z = x + y1
     in if z > 1.0 then 2.0 - z else if z < (-1.0) then (-2.0) - z else z
 
-brown_noise :: (R.RandomGen g, Fractional n, R.Random n, Ord n) => F_ST0 (g,n) n
+brown_noise :: (R.RandomGen g, Fractional n, R.Random n, Ord n) => F_St0 (g,n) n
 brown_noise (g,y1) =
     let (n,g') = white_noise g
         r = brown_noise_f (n / 8.0) y1
@@ -204,19 +204,19 @@ lag_f_frames dt x y1 = let b1 = exp (log 0.001 / dt) in x + b1 * (y1 - x)
 lag_f :: Floating a => a -> a -> a -> a -> a
 lag_f sr dt = lag_f_frames (dt * sr)
 
-lag :: Floating t => t -> F_ST1 t (t,t) t
+lag :: Floating t => t -> F_St1 t (t,t) t
 lag sr ((i,t),st) = let r = lag_f sr t i st in (r,r)
 
-slope :: Num t => t -> F_ST1 t t t
+slope :: Num t => t -> F_St1 t t t
 slope sr = fir1 (\n z0 -> (n - z0) * sr)
 
-latch :: F_ST1 t (t,Bool) t
+latch :: F_St1 t (t,Bool) t
 latch ((n,b),y1) = let r = if b then n else y1 in (r,r)
 
-as_trig :: (Fractional t,Ord t) => F_ST1 t t Bool
+as_trig :: (Fractional t,Ord t) => F_St1 t t Bool
 as_trig (n,y1) = (y1 <= 0.0 && n > 0.0,n)
 
-phasor :: RealFrac t => F_ST1 t (Bool,t,t,t,t) t
+phasor :: RealFrac t => F_St1 t (Bool,t,t,t,t) t
 phasor ((trig,rate,start,end,resetPos),ph) =
     let r = if trig then resetPos else sc3_wrap start end (ph + rate)
     in (ph,r)
@@ -237,9 +237,9 @@ modDif i j m =
   in h - absDif d h
 -}
 
--- | * LIST PROCESSING
+-- | * List Processing
 
-l_apply_f_st0 :: F_ST0 st o -> st -> [o]
+l_apply_f_st0 :: F_St0 st o -> st -> [o]
 l_apply_f_st0 f st = let (r,st') = f st in r : l_apply_f_st0 f st'
 
 -- > take 10 (l_white_noise 'α')
@@ -250,7 +250,7 @@ l_white_noise e = l_apply_f_st0 white_noise (R.mkStdGen (fromEnum e))
 l_brown_noise :: (Enum e, Fractional n, Ord n, R.Random n) => e -> [n]
 l_brown_noise e = l_apply_f_st0 brown_noise (R.mkStdGen (fromEnum e),0.0)
 
-l_apply_f_st1 :: F_ST1 st i o -> st -> [i] -> [o]
+l_apply_f_st1 :: F_St1 st i o -> st -> [i] -> [o]
 l_apply_f_st1 f st xs =
     case xs of
       [] -> []
