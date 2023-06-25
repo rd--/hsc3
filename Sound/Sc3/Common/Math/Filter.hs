@@ -64,7 +64,11 @@ pinking_filter_freq_96000 = (8227.219, 8227.219, 6388.570, 3302.754, 479.412, 15
 pinking_filter_freq_192000 :: Fractional t => Pinking_Param t
 pinking_filter_freq_192000 = (9211.912, 8621.096, 8555.228, 8292.754, 518.334, 163.712, 240.241)
 
--- > pinking_filter_coef 48000 pinking_filter_freq_48000
+{- | Pinking filter coefficients
+
+>>> pinking_filter_coef 48000 pinking_filter_freq_48000
+(0.5368186045507747,0.5899888969306109,0.6945314610687594,0.8175983529924599,0.9542588306160661,0.9908788735874952,0.9960807097281633)
+-}
 pinking_filter_coef :: Floating t => t -> Pinking_Param t -> Pinking_Param t
 pinking_filter_coef sr (f0, f1, f2, f3, f4, f5, f6) =
   let f n = exp ((- 2) * pi * n / sr)

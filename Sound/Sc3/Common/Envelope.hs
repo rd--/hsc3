@@ -31,9 +31,11 @@ type Envelope_Curve_3 a = Base.T3 (Envelope_Curve a)
 -- | Envelope curve quadruple.
 type Envelope_Curve_4 a = Base.T4 (Envelope_Curve a)
 
--- | Convert 'Envelope_Curve' to shape value.
---
--- > map env_curve_shape [EnvSin,EnvSqr] == [3,6]
+{- | Convert 'Envelope_Curve' to shape value.
+
+>>> map env_curve_shape [EnvSin,EnvSqr]
+[3,6]
+-}
 env_curve_shape :: Num a => Envelope_Curve a -> a
 env_curve_shape e =
     case e of
@@ -47,9 +49,11 @@ env_curve_shape e =
       EnvCub -> 7
       EnvHold -> 8
 
--- | The /value/ of 'EnvCurve' is non-zero for 'EnvNum'.
---
--- > map env_curve_value [EnvWelch,EnvNum 2] == [0,2]
+{- | The /value/ of 'EnvCurve' is non-zero for 'EnvNum'.
+
+> map env_curve_value [EnvWelch,EnvNum 2]
+[0,2]
+-}
 env_curve_value :: Num a => Envelope_Curve a -> a
 env_curve_value e =
     case e of
@@ -218,14 +222,14 @@ envelope_curves e =
 
 Form is: l0 #t reset loop l1 t0 c0 c0' ...
 
-envelope_sc3_array (envelope [0,1] [0.1] [EnvLin]) == Just [0,1,-99,-99,1,0.1,1,0]
+>>> envelope_sc3_array (envelope [0,1] [0.1] [EnvLin])
+Just [0.0,1.0,-99.0,-99.0,1.0,0.1,1.0,0.0]
 
-> let l = [0,0.6,0.3,1.0,0]
-> let t = [0.1,0.02,0.4,1.1]
-> let c = [EnvLin,EnvExp,EnvNum (-6),EnvSin]
-> let e = Envelope l t c Nothing Nothing 0
-> let r = [0,4,-99,-99,0.6,0.1,1,0,0.3,0.02,2,0,1,0.4,5,-6,0,1.1,3,0]
-> envelope_sc3_array e == Just r
+>>> let l = [0,0.6,0.3,1.0,0]
+>>> let t = [0.1,0.02,0.4,1.1]
+>>> let c = [EnvLin,EnvExp,EnvNum (-6),EnvSin]
+>>> envelope_sc3_array (Envelope l t c Nothing Nothing 0)
+Just [0.0,4.0,-99.0,-99.0,0.6,0.1,1.0,0.0,0.3,2.0e-2,2.0,0.0,1.0,0.4,5.0,-6.0,0.0,1.1,3.0,0.0]
 -}
 envelope_sc3_array :: Num a => Envelope a -> Maybe [a]
 envelope_sc3_array e =
@@ -330,10 +334,12 @@ envTrapezoid_f (lte_f,gte_f) shape skew dur amp =
 envCoord :: Num n => [(n,n)] -> n -> n -> Envelope_Curve n -> Envelope n
 envCoord xy dur amp c = envXyc (map (\(x,y) -> (x * dur,y * amp,c)) xy)
 
--- | Segments given as pairs of (time,level).
---   The input is sorted by time before processing.
---
--- > envPairs [(0, 1), (3, 1.4), (2.1, 0.5)] EnvSin
+{- | Segments given as pairs of (time,level).
+The input is sorted by time before processing.
+
+>>> env_levels (envPairs [(0, 1), (3, 1.4), (2.1, 0.5)] EnvSin)
+[1.0,0.5,1.4]
+-}
 envPairs :: (Num n,Ord n) => [(n,n)] -> Envelope_Curve n -> Envelope n
 envPairs xy = envCoord (Base.sort_on fst xy) 1 1
 
@@ -349,20 +355,23 @@ envPerc atk rls =
     let cn = EnvNum (-4)
     in envPerc_c atk rls 1 (cn,cn)
 
--- | Triangular envelope, with duration and level inputs.
---
--- > let e = envTriangle 1 0.1
--- > envelope_sc3_array e == Just [0,2,-99,-99,0.1,0.5,1,0,0,0.5,1,0]
+{- | Triangular envelope, with duration and level inputs.
+
+>>> let e = envTriangle 1 0.1
+>>> envelope_sc3_array e
+Just [0.0,2.0,-99.0,-99.0,0.1,0.5,1.0,0.0,0.0,0.5,1.0,0.0]
+-}
 envTriangle :: Fractional a => a -> a -> Envelope a
 envTriangle dur lvl =
     let c = replicate 2 EnvLin
         d = replicate 2 (dur / 2)
     in Envelope [0,lvl,0] d c Nothing Nothing 0
 
--- | Sine envelope, with duration and level inputs.
---
--- > let e = envSine 0 0.1
--- > envelope_sc3_array e == Just [0,2,-99,-99,0.1,0.5,1,0,0,0.5,1,0]
+{- | Sine envelope, with duration and level inputs.
+
+>>> envelope_sc3_array (envSine 0 0.1)
+Just [0.0,2.0,-99.0,-99.0,0.1,0.0,3.0,0.0,0.0,0.0,3.0,0.0]
+-}
 envSine :: Fractional a => a -> a -> Envelope a
 envSine dur lvl =
     let c = replicate 2 EnvSin
@@ -504,9 +513,11 @@ envStep levels times releaseNode loopNode =
     else let levels' = head levels : levels
          in Envelope levels' times [EnvStep] releaseNode loopNode 0
 
--- | Segments given as triples of (time,level,curve).  The final curve is ignored.
---
--- > envXyc [(0, 1, EnvSin), (2.1, 0.5, EnvLin), (3, 1.4, EnvLin)]
+{- | Segments given as triples of (time,level,curve).  The final curve is ignored.
+
+>>> env_levels (envXyc [(0, 1, EnvSin), (2.1, 0.5, EnvLin), (3, 1.4, EnvLin)])
+[1.0,0.5,1.4]
+-}
 envXyc :: Num n => [(n,n,Envelope_Curve n)] -> Envelope n
 envXyc xyc =
   let n = length xyc
@@ -514,8 +525,10 @@ envXyc xyc =
       offset = times !! 0
   in Envelope levels (Base.d_dx' times) (take (n - 1) curves) Nothing Nothing offset
 
--- | Variant where the input is sorted by time before processing.
---
--- > envXyc_sort [(0, 1, EnvSin), (3, 1.4, EnvLin), (2.1, 0.5, EnvLin)]
+{- | Variant where the input is sorted by time before processing.
+
+>>> env_levels (envXyc_sort [(0, 1, EnvSin), (3, 1.4, EnvLin), (2.1, 0.5, EnvLin)])
+[1.0,0.5,1.4]
+-}
 envXyc_sort :: (Num n,Ord n) => [(n,n,Envelope_Curve n)] -> Envelope n
 envXyc_sort = envXyc . Base.sort_on (\(x,_,_) -> x)

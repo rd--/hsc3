@@ -18,19 +18,19 @@ cmd_check_arg e f x = if not (f x) then error e else x
 
 -- * Buffer commands (b_)
 
--- | BUF-NUM must be >= 0
+-- | Buf-Num must be >= 0
 b_bufnum :: Integral t => t -> Datum
 b_bufnum = int32 . cmd_check_arg "buffer-number < 0?" (>= 0)
 
--- | BUF-FRAME-IX must be >= 0
+-- | Buf-Frame-Ix must be >= 0
 b_ix :: Integral t => t -> Datum
 b_ix = int32 . cmd_check_arg "buffer-ix < 0?" (>= 0)
 
--- | BUF-CHANNEL must be >= 0
+-- | Buf-Channel must be >= 0
 b_ch :: Integral t => t -> Datum
 b_ch = int32 . cmd_check_arg "buffer-channel < 0?" (>= 0)
 
--- | BUF-FRAME-CNT must be >= 0
+-- | Buf-Frame-Cnt must be >= 0
 b_size :: Integral t => t -> Datum
 b_size = int32 . cmd_check_arg "buffer-size < 0?" (>= 0)
 
@@ -204,37 +204,39 @@ g_tail = message "/g_tail" . Common.Base.mk_duples int32 int32
 g_dumpTree :: Integral i => [(i,Bool)] -> Message
 g_dumpTree = message "/g_dumpTree" . Common.Base.mk_duples int32 (int32 . fromEnum)
 
--- | Request a representation of a group's node subtree, optionally including the current control values for synths.
---
--- Replies to the sender with a @/g_queryTree.reply@ message listing all of the nodes contained within the group in the following format:
---
--- > int32 - if synth control values are included 1, else 0
--- > int32 - node ID of the requested group
--- > int32 - number of child nodes contained within the requested group
--- >
--- > For each node in the subtree:
--- > [
--- >   int32 - node ID
--- >   int32 - number of child nodes contained within this node. If -1 this is a synth, if >= 0 it's a group.
--- >
--- >   If this node is a synth:
--- >     symbol - the SynthDef name for this node.
--- >
--- >   If flag (see above) is true:
--- >     int32 - numControls for this synth (M)
--- >     [
--- >       symbol or int: control name or index
--- >       float or symbol: value or control bus mapping symbol (e.g. 'c1')
--- >     ] * M
--- > ] * the number of nodes in the subtree
---
--- N.Common.Base. The order of nodes corresponds to their execution order on the server. Thus child nodes (those contained within a group) are listed immediately following their parent.
+{- | Request a representation of a group's node subtree, optionally including the current control values for synths.
+
+Replies to the sender with a @/g_queryTree.reply@ message listing all of the nodes contained within the group in the following format:
+
+@
+int32 - if synth control values are included 1, else 0
+int32 - node ID of the requested group
+int32 - number of child nodes contained within the requested group
+
+For each node in the subtree:
+[
+  int32 - node ID
+  int32 - number of child nodes contained within this node. If -1 this is a synth, if >= 0 it's a group.
+
+  If this node is a synth:
+    symbol - the SynthDef name for this node.
+
+  If flag (see above) is true:
+    int32 - numControls for this synth (M)
+    [
+      symbol or int: control name or index
+      float or symbol: value or control bus mapping symbol (e.g. 'c1')
+    ] * M
+] * the number of nodes in the subtree
+@
+N.b. The order of nodes corresponds to their execution order on the server. Thus child nodes (those contained within a group) are listed immediately following their parent.
+-}
 g_queryTree :: Integral i => [(i,Bool)] -> Message
 g_queryTree = message "/g_queryTree" . Common.Base.mk_duples int32 (int32 . fromEnum)
 
 -- * Node commands (n_)
 
--- | NODE-ID must be >= -1
+-- | Node-Id must be >= -1
 n_id :: Integral t => t -> Datum
 n_id = int32 . cmd_check_arg "node-id < -1?" (>= (-1))
 
@@ -379,11 +381,13 @@ with_completion_packet (Message c xs) cm =
          in Message c xs'
     else error ("with_completion_packet: not async: " ++ c)
 
--- | Add a completion message to an existing asynchronous command.
---
--- > let m = n_set1 0 "0" 0
--- > let e = encodeMessage m
--- > withCM (b_close 0) m == Message "/b_close" [Int32 0,Blob e]
+{- | Add a completion message to an existing asynchronous command.
+
+>>> let m = n_set1 0 "0" 0
+>>> let e = encodeMessage m
+>>> withCM (b_close 0) m == Message "/b_close" [Int32 0,Blob e]
+True
+-}
 withCM :: Message -> Message -> Message
 withCM m cm = with_completion_packet m (Packet_Message cm)
 
@@ -445,21 +449,28 @@ s_new0 n i a t = s_new n i a t ([]::[(String,Double)])
 
 -- * Buffer segmentation and indices
 
--- | Segment a request for /m/ places into sets of at most /n/.
---
--- > b_segment 1024 2056 == [8,1024,1024]
--- > b_segment 1 5 == replicate 5 1
+{- | Segment a request for /m/ places into sets of at most /n/.
+
+>>> b_segment 1024 2056
+[8,1024,1024]
+
+>>> b_segment 1 5 == replicate 5 1
+True
+-}
 b_segment :: Integral i => i -> i -> [i]
 b_segment n m =
     let (q,r) = m `quotRem` n
         s = genericReplicate q n
     in if r == 0 then s else r : s
 
--- | Variant of 'b_segment' that takes a starting index and returns
--- /(index,size)/ duples.
---
--- > b_indices 1 5 0 == zip [0..4] (replicate 5 1)
--- > b_indices 1024 2056 16 == [(16,8),(24,1024),(1048,1024)]
+{- | Variant of 'b_segment' that takes a starting index and returns /(index,size)/ duples.
+
+>>> b_indices 1 5 0 == zip [0..4] (replicate 5 1)
+True
+
+>>> b_indices 1024 2056 16
+[(16,8),(24,1024),(1048,1024)]
+-}
 b_indices :: Integral i => i -> i -> i -> [(i,i)]
 b_indices n m k =
     let s = b_segment n m

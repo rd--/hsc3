@@ -32,10 +32,14 @@ type Fn10 a b c d e f g h i j k = a -> b -> c -> d -> e -> f -> g -> h -> i -> j
 -- | 11-parameter function.
 type Fn11 a b c d e f g h i j k l = a -> b -> c -> d -> e -> f -> g -> h -> i -> j -> k -> l
 
--- | Apply /f/ n times, ie. iterate f x !! n
---
--- > iter 3 (* 2) 1 == 8
--- > iterate (* 2) 1 !! 3 == 8
+{- | Apply /f/ n times, ie. iterate f x !! n
+
+>>> iter 3 (* 2) 1
+8
+
+>>> iterate (* 2) 1 !! 3
+8
+-}
 iter :: Int -> (a -> a) -> a -> a
 iter n f x = if n == 0 then x else f (iter (n - 1) f x)
 
@@ -108,52 +112,72 @@ parse_enum cr nm =
 
 -- * List
 
--- | Left to right composition of a list of functions.
---
--- > compose_l [(* 2),(+ 1)] 3 == 7
+{- | Left to right composition of a list of functions.
+
+>>> compose_l [(* 2),(+ 1)] 3
+7
+-}
 compose_l :: [t -> t] -> t -> t
 compose_l = flip (foldl (\x f -> f x))
 
--- | Right to left composition of a list of functions.
---
--- > compose_r [(* 2),(+ 1)] 3 == 8
+{- | Right to left composition of a list of functions.
+
+>>> compose_r [(* 2),(+ 1)] 3
+8
+-}
 compose_r :: [t -> t] -> t -> t
 compose_r = flip (foldr ($))
 
 {- | SequenceableCollection.differentiate
 
-> > [3,4,1,1].differentiate == [3,1,-3,0]
+> [3,4,1,1].differentiate == [3,1,-3,0]
 
-> d_dx [3,4,1,1] == [3,1,-3,0]
-> d_dx [0,1,3,6] == [0,1,2,3]
+>>> d_dx [3,4,1,1]
+[3,1,-3,0]
+
+>>> d_dx [0,1,3,6]
+[0,1,2,3]
 -}
 d_dx :: (Num a) => [a] -> [a]
 d_dx l = zipWith (-) l (0:l)
 
 {- | Variant that does not prepend zero to input, ie. 'tail' of 'd_dx'.
 
-> d_dx' [3,4,1,1] == [1,-3,0]
-> d_dx' [0,1,3,6] == [1,2,3]
+>> d_dx' [3,4,1,1]
+[1,-3,0]
+
+>>> d_dx' [0,1,3,6]
+[1,2,3]
 -}
 d_dx' :: Num n => [n] -> [n]
 d_dx' l = zipWith (-) (tail l) l
 
 {- | SequenceableCollection.integrate
 
-> > [3,4,1,1].integrate == [3,7,8,9]
+> [3,4,1,1].integrate == [3,7,8,9]
 
-> dx_d [3,4,1,1] == [3,7,8,9]
-> dx_d (d_dx [0,1,3,6]) == [0,1,3,6]
-> dx_d [0.5,0.5] == [0.5,1]
+>>> dx_d [3,4,1,1]
+[3,7,8,9]
+
+>>> dx_d (d_dx [0,1,3,6])
+[0,1,3,6]
+
+>>> dx_d [0.5,0.5]
+[0.5,1.0]
 -}
 dx_d :: Num n => [n] -> [n]
 dx_d = scanl1 (+)
 
 {- | Variant pre-prending zero to output.
 
-> dx_d' [3,4,1,1] == [0,3,7,8,9]
-> dx_d' (d_dx' [0,1,3,6]) == [0,1,3,6]
-> dx_d' [0.5,0.5] == [0,0.5,1]
+>>> dx_d' [3,4,1,1]
+[0,3,7,8,9]
+
+>>> dx_d' (d_dx' [0,1,3,6])
+[0,1,3,6]
+
+>>> dx_d' [0.5,0.5]
+[0.0,0.5,1.0]
 -}
 dx_d' :: Num n => [n] -> [n]
 dx_d' = (0 :) . dx_d
@@ -170,9 +194,11 @@ lookup_by_err f x = fromMaybe (error "lookup_by") . lookup_by f x
 rlookup_by :: (b -> b -> Bool) -> b -> [(a,b)] -> Maybe a
 rlookup_by f x = fmap fst . find (f x . snd)
 
--- | (prev,cur,next) triples.
---
--- > pcn_triples [1..3] == [(Nothing,1,Just 2),(Just 1,2,Just 3),(Just 2,3,Nothing)]
+{- | (prev,cur,next) triples.
+
+>>> pcn_triples [1..3]
+[(Nothing,1,Just 2),(Just 1,2,Just 3),(Just 2,3,Nothing)]
+-}
 pcn_triples :: [a] -> [(Maybe a,a,Maybe a)]
 pcn_triples =
     let f e l = case l of
@@ -181,27 +207,35 @@ pcn_triples =
                   [] -> undefined
     in f Nothing
 
--- | Separate first list element.
---
--- > sep_first "astring" == Just ('a',"string")
+{- | Separate first list element.
+
+>>> sep_first "astring"
+Just ('a',"string")
+-}
 sep_first :: [t] -> Maybe (t,[t])
 sep_first l =
     case l of
       e:l' -> Just (e,l')
       _ -> Nothing
 
--- | Separate last list element.
---
--- > sep_last "stringb" == Just ("string",'b')
+{- | Separate last list element.
+
+>>> sep_last "stringb"
+Just ("string",'b')
+-}
 sep_last :: [t] -> Maybe ([t], t)
 sep_last =
     let f (e,l) = (reverse l,e)
     in fmap f . sep_first . reverse
 
--- | Are lists of equal length?
---
--- > equal_length_p ["t1","t2"] == True
--- > equal_length_p ["t","t1","t2"] == False
+{- | Are lists of equal length?
+
+>>> equal_length_p ["t1","t2"]
+True
+
+>>> equal_length_p ["t","t1","t2"]
+False
+-}
 equal_length_p :: [[a]] -> Bool
 equal_length_p = (== 1) . length . nub . map length
 
@@ -224,7 +258,8 @@ concat_intersperse x = concat . intersperse x
 
 {- | Similar to Data.List.Split.splitOn, which however hugs doesn't know of.
 
-> list_split_at_elem ' ' "a sequence of words" == ["a","sequence","of","words"]
+>>> list_split_at_elem ' ' "a sequence of words"
+["a","sequence","of","words"]
 -}
 list_split_at_elem :: Eq t => t -> [t] -> [[t]]
 list_split_at_elem c s =
@@ -234,16 +269,20 @@ list_split_at_elem c s =
 
 {- | Data.List.sortOn, which however hugs does not know of.
 
-> sort_on snd [('a',1),('b',0)] == [('b',0),('a',1)]
+>>> sort_on snd [('a',1),('b',0)]
+[('b',0),('a',1)]
 -}
 sort_on :: (Ord b) => (a -> b) -> [a] -> [a]
 sort_on = sortBy . comparing
 
 {- | Inserts at the first position where it compares less but not equal to the next element.
 
-> import Data.Function {- base -}
-> insertBy (compare `on` fst) (3,'x') (zip [1..5] ['a'..])
-> insertBy_post (compare `on` fst) (3,'x') (zip [1..5] ['a'..])
+>>> import Data.Function {- base -}
+>>> insertBy (compare `on` fst) (3,'x') (zip [1..5] ['a'..])
+[(1,'a'),(2,'b'),(3,'x'),(3,'c'),(4,'d'),(5,'e')]
+
+>>> insertBy_post (compare `on` fst) (3,'x') (zip [1..5] ['a'..])
+[(1,'a'),(2,'b'),(3,'c'),(3,'x'),(4,'d'),(5,'e')]
 -}
 insertBy_post :: (a -> a -> Ordering) -> a -> [a] -> [a]
 insertBy_post cmp e l =
@@ -257,9 +296,11 @@ insertBy_post cmp e l =
 insert_post :: Ord t => t -> [t] -> [t]
 insert_post = insertBy_post compare
 
--- | Apply /f/ at all but last element, and /g/ at last element.
---
--- > at_last (* 2) negate [1..4] == [2,4,6,-4]
+{- | Apply /f/ at all but last element, and /g/ at last element.
+
+>>> at_last (* 2) negate [1..4]
+[2,4,6,-4]
+-}
 at_last :: (a -> b) -> (a -> b) -> [a] -> [b]
 at_last f g x =
     case x of

@@ -96,9 +96,10 @@ sc3_unary_op_name = drop 2 . show
 parse_unary :: Base.Case_Rule -> String -> Maybe Sc3_Unary_Op
 parse_unary cr = Base.parse_enum cr . (++) "Op"
 
--- | Table of operator names (non-symbolic) and indices.
---
--- > map fst sc3_unary_op_tbl
+{- | Table of operator names (non-symbolic) and indices.
+
+> map fst sc3_unary_op_tbl
+-}
 sc3_unary_op_tbl :: [(String,Int)]
 sc3_unary_op_tbl = zip (map sc3_unary_op_name [minBound .. maxBound]) [0..]
 
@@ -112,30 +113,41 @@ unaryName n =
   let e = toEnum n
   in fromMaybe (sc3_unary_op_name e) (lookup e unary_sym_tbl)
 
--- | Given name of unary operator derive index.
---
--- > Data.Maybe.mapMaybe (unaryIndex Ci) (words "abs Cubed midiCps Neg") == [5,13,17,0]
--- > unaryIndex Cs "SinOsc" == Nothing
+{- | Given name of unary operator derive index.
+
+>>> Data.Maybe.mapMaybe (unaryIndex Base.Ci) (words "abs Cubed midiCps Neg")
+[5,13,17,0]
+
+>>> unaryIndex Base.Cs "SinOsc"
+Nothing
+-}
 unaryIndex :: Base.Case_Rule -> String -> Maybe Int
 unaryIndex cr nm =
     let ix = Base.rlookup_str cr nm unary_sym_tbl
         ix' = parse_unary cr nm
     in fmap fromEnum (mplus ix' ix)
 
--- | 'isJust' of 'unaryIndex'.
---
--- > map (is_unary Ci) (words "Abs MidiCps Neg")
--- > map (is_unary Ci) (words "- rand")
--- > map (is_unary Ci) (words "arctan atan")
+{- | 'isJust' of 'unaryIndex'.
+
+>>> map (is_unary Base.Ci) (words "Abs MidiCps Neg")
+[True,True,True]
+
+>>> map (is_unary Base.Ci) (words "- rand")
+[False,False]
+
+>>> map (is_unary Base.Ci) (words "arctan atan")
+[True,False]
+-}
 is_unary :: Base.Case_Rule -> String -> Bool
 is_unary cr = isJust . unaryIndex cr
 
 -- * Binary
 
--- | Enumeration of @Sc3@ unary operator Ugens.
---   The names here are from the enumeration at "server/plugins/BinaryOpUgens.cpp".
---
--- > zip (map show [minBound :: Sc3_Binary_Op .. maxBound]) [0..]
+{- | Enumeration of @Sc3@ unary operator Ugens.
+The names here are from the enumeration at "server/plugins/BinaryOpUgens.cpp".
+
+> zip (map show [minBound :: Sc3_Binary_Op .. maxBound]) [0..]
+-}
 data Sc3_Binary_Op
   = OpAdd -- 0
   | OpSub -- 1
@@ -221,17 +233,20 @@ binary_sym_tbl =
     ,(OpBitOr,".|.") -- or |
     ,(OpPow,"**")]
 
--- | Table of operator names (non-symbolic) and indices.
---
--- > map fst sc3_binary_op_sym_tbl
+{- | Table of operator names (non-symbolic) and indices.
+
+> map fst sc3_binary_op_sym_tbl
+-}
 sc3_binary_op_sym_tbl :: [(String,Int)]
 sc3_binary_op_sym_tbl =
   let f x = fromMaybe (sc3_binary_op_name x) (lookup x binary_sym_tbl)
   in zip (map f [minBound .. maxBound]) [0..]
 
--- | Lookup possibly symbolic name for standard binary operators.
---
--- > map binaryName [1,2,8,12] == ["-","*","<","Min"]
+{- | Lookup possibly symbolic name for standard binary operators.
+
+>>> map binaryName [1,2,8,12]
+["-","*","<","Min"]
+-}
 binaryName :: Int -> String
 binaryName n =
   let e = toEnum n
@@ -239,8 +254,12 @@ binaryName n =
 
 {- | Given name of binary operator derive index.
 
-> Data.Maybe.mapMaybe (binaryIndex Ci) (words "* mul ring1 +") == [2,2,30,0]
-> binaryIndex Ci "sinosc" == Nothing
+>>> Data.Maybe.mapMaybe (binaryIndex Base.Ci) (words "* mul ring1 +")
+[2,2,30,0]
+
+>>> binaryIndex Base.Ci "sinosc"
+Nothing
+
 > map (\x -> (x,binaryIndex Ci x)) (map snd binary_sym_tbl)
 -}
 binaryIndex :: Base.Case_Rule -> String -> Maybe Int
@@ -249,9 +268,11 @@ binaryIndex cr nm =
         ix' = parse_binary cr nm
     in fmap fromEnum (mplus ix' ix)
 
--- | 'isJust' of 'binaryIndex'.
---
--- > map (is_binary Ci) (words "== > % Trunc max")
+{- | 'isJust' of 'binaryIndex'.
+
+>>> map (is_binary Base.Ci) (words "== > % Trunc max")
+[True,True,True,True,True]
+-}
 is_binary :: Base.Case_Rule -> String -> Bool
 is_binary cr = isJust . binaryIndex cr
 
@@ -332,9 +353,11 @@ class RealFrac a => RealFracE a where
 instance RealFracE Float
 instance RealFracE Double
 
--- | Unary operator class.
---
--- > map (floor . (* 1e4) . dbAmp) [-90,-60,-30,0] == [0,10,316,10000]
+{- | Unary operator class.
+
+>>> map (floor . (* 1e4) . dbAmp) [-90,-60,-30,0]
+[0,10,316,10000]
+-}
 class (Floating a, Ord a) => UnaryOp a where
     ampDb :: a -> a
     ampDb = Math.amp_to_db

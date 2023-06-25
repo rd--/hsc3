@@ -112,9 +112,11 @@ control_spec_parse str =
                               _ -> error ("control_spec_parse: " ++ cnmdef)
     _ -> error ("control_spec_parse: " ++ str)
 
--- | Semicolon separated, no spaces.
---
--- > control_spec_seq_parse "freq:220,110,440,exp;amp:0.1,0,1,amp;pan:0,-1,1,lin"
+{- | Semicolon separated, no spaces.
+
+>>> control_spec_seq_parse "freq:220,110,440,exp;amp:0.1,0,1,amp;pan:0,-1,1,lin"
+[("freq",220.0,(110.0,440.0,"exp")),("amp",0.1,(0.0,1.0,"amp")),("pan",0.0,(-1.0,1.0,"lin"))]
+-}
 control_spec_seq_parse :: String -> [ControlSpec Double]
 control_spec_seq_parse = map control_spec_parse . splitOn ";"
 
@@ -122,9 +124,11 @@ control_spec_seq_parse = map control_spec_parse . splitOn ";"
 control_spec_print :: ControlSpec Double -> String
 control_spec_print (cnm,def,(lhs,rhs,wrp)) = intercalate "," [concat [cnm,":",double_pp 6 def],double_pp 6 lhs,double_pp 6 rhs,wrp]
 
--- | Semicolon separated, no spaces.
---
--- > control_spec_seq_print (control_spec_seq_parse "freq:220,220,440,exp;amp:0.1,0,1,amp;pan:0,-1,1,lin")
+{- | Semicolon separated, no spaces.
+
+>>> control_spec_seq_print (control_spec_seq_parse "freq:220,220,440,exp;amp:0.1,0,1,amp;pan:0,-1,1,lin")
+"freq:220.0,220.0,440.0,exp;amp:0.1,0.0,1.0,amp;pan:0.0,-1.0,1.0,lin"
+-}
 control_spec_seq_print :: [ControlSpec Double] -> String
 control_spec_seq_print = intercalate ";" . map control_spec_print
 

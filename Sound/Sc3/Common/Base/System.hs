@@ -6,7 +6,8 @@ import System.Environment {- base -}
 
 {- | 'getEnv' with error handler to return default value.  This almost works in hugs (IOException should be Exception, the signature can be elided)
 
-> get_env_with_default "undefined_environment_variable" "default"  -- > "default"
+>>> get_env_with_default "undefined_environment_variable" "default"
+"default"
 -}
 get_env_with_default :: String -> String -> IO String
 get_env_with_default variableName defaultValue =

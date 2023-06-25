@@ -16,6 +16,10 @@ data Constant =
   ,constantBrackets :: Brackets}
   deriving (Ord, Eq, Read, Show)
 
--- > constantIsInteger (Constant 1 emptyBrackets) == True
+{- | Is integer?
+
+>>> constantIsInteger (Constant 1 emptyBrackets)
+True
+-}
 constantIsInteger :: Constant -> Bool
 constantIsInteger (Constant n _) = snd (properFraction n) == 0

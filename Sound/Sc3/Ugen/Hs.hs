@@ -46,15 +46,19 @@ avg5 p q r s t = (p + q + r + s + t) / 5
 avg9 :: Fractional n => F_U9 n
 avg9 p q r s t u v w x = (p + q + r + s + t + u + v + w + x) / 9
 
--- | fir = finite impulse response
---
--- > l_apply_f_st1 (fir1 (\x z1 -> (x + z1) / 2)) 0 [0 .. 5] == [0.0,0.5,1.5,2.5,3.5,4.5]
+{- | fir = finite impulse response
+
+>>> l_apply_f_st1 (fir1 (\x z1 -> (x + z1) / 2)) 0 [0 .. 5]
+[0.0,0.5,1.5,2.5,3.5,4.5]
+-}
 fir1 :: F_U2 n -> F_St1 n n n
 fir1 f (n,z0) = (f n z0,n)
 
--- | fir = finite impulse response
---
--- > l_apply_f_st1 (fir2 (\x x1 x2 -> (x + x1 + x2) / 2)) (0,0) [0 .. 5] == [0.0,0.5,1.5,3.0,4.5,6.0]
+{- | fir = finite impulse response
+
+>>> l_apply_f_st1 (fir2 (\x x1 x2 -> (x + x1 + x2) / 2)) (0,0) [0 .. 5]
+[0.0,0.5,1.5,3.0,4.5,6.0]
+-}
 fir2 :: F_U3 n -> F_St1 (T2 n) n n
 fir2 f (n,(z1,z0)) = (f n z0 z1,(z0,n))
 
@@ -67,14 +71,22 @@ fir4 f (n,(z3,z2,z1,z0)) = (f n z0 z1 z2 z3,(z2,z1,z0,n))
 fir8 :: F_U9 n -> F_St1 (T8 n) n n
 fir8 f (n,(z7,z6,z5,z4,z3,z2,z1,z0)) = (f n z0 z1 z2 z3 z4 z5 z6 z7,(z6,z5,z4,z4,z2,z1,z0,n))
 
--- | iir = infinite impulse response
---
--- > l_apply_f_st1 (iir1 (\x y1 -> x + y1)) 0 (replicate 10 1) == [1,2,3,4,5,6,7,8,9,10]
+{- | iir = infinite impulse response
+
+>> l_apply_f_st1 (iir1 (\x y1 -> x + y1)) 0 (replicate 10 1)
+[1,2,3,4,5,6,7,8,9,10]
+-}
 iir1 :: F_U2 n -> F_St1 n n n
 iir1 f (n,y0) = let r = f n y0 in (r,r)
 
--- > l_apply_f_st1 (iir2 (\x y1 y2 -> x + y1 + y2)) (0,0) (replicate 10 1) == [1,2,4,7,12,20,33,54,88,143]
--- > map (+1) [0+0,1+0,2+1,4+2,7+4,12+7,20+12,33+20,54+33,88+54] == [1,2,4,7,12,20,33,54,88,143] -- https://oeis.org/A000071
+{- | Two place iir
+
+>>> l_apply_f_st1 (iir2 (\x y1 y2 -> x + y1 + y2)) (0,0) (replicate 10 1)
+[1,2,4,7,12,20,33,54,88,143]
+
+>>> map (+1) [0+0,1+0,2+1,4+2,7+4,12+7,20+12,33+20,54+33,88+54] -- https://oeis.org/A000071
+[1,2,4,7,12,20,33,54,88,143]
+-}
 iir2 :: F_U3 n -> F_St1 (T2 n) n n
 iir2 f (n,(y1,y0)) = let r = f n y0 y1 in (r,(y0,r))
 
@@ -121,9 +133,11 @@ mavg5 = fir4 avg5
 mavg9 :: Fractional n => F_St1 (T8 n) n n
 mavg9 = fir8 avg9
 
--- | Sample rate (SR) to radians per sample (RPS).
---
--- > sr_to_rps 44100 == 0.00014247585730565955
+{- | Sample rate (SR) to radians per sample (RPS).
+
+>>> sr_to_rps 44100 == 0.00014247585730565955
+True
+-}
 sr_to_rps :: Floating n => n -> n
 sr_to_rps sr = two_pi / sr
 
@@ -218,7 +232,7 @@ as_trig (n,y1) = (y1 <= 0.0 && n > 0.0,n)
 
 phasor :: RealFrac t => F_St1 t (Bool,t,t,t,t) t
 phasor ((trig,rate,start,end,resetPos),ph) =
-    let r = if trig then resetPos else sc3_wrap start end (ph + rate)
+    let r = if trig then resetPos else sc3_wrap (ph + rate) start end
     in (ph,r)
 
 -- > Sound.Sc3.Plot.plot_fn_r1_ln (\x -> mod_dif x 0 1) (0,4)
@@ -242,11 +256,19 @@ modDif i j m =
 l_apply_f_st0 :: F_St0 st o -> st -> [o]
 l_apply_f_st0 f st = let (r,st') = f st in r : l_apply_f_st0 f st'
 
--- > take 10 (l_white_noise 'α')
+{- | White noise
+
+>>> take 4 (l_white_noise 'α')
+[0.9687553280469108,0.808159221997721,-0.8993330152164296,0.23197278942699834]
+-}
 l_white_noise :: (Enum e, Fractional n, R.Random n) => e -> [n]
 l_white_noise e = l_apply_f_st0 white_noise (R.mkStdGen (fromEnum e))
 
--- > take 10 (l_brown_noise 'α')
+{- | Brown noise
+
+>>> take 4 (l_brown_noise 'α')
+[0.12109441600586385,0.22211431875557897,0.10969769185352526,0.13869429053190005]
+-}
 l_brown_noise :: (Enum e, Fractional n, Ord n, R.Random n) => e -> [n]
 l_brown_noise e = l_apply_f_st0 brown_noise (R.mkStdGen (fromEnum e),0.0)
 
@@ -262,8 +284,12 @@ l_lag sr i t = l_apply_f_st1 (lag sr) 0 (zip i t)
 l_slope :: Floating t => t -> [t] -> [t]
 l_slope sr = l_apply_f_st1 (slope sr) 0
 
--- > let rp = repeat
--- > take 10 (l_phasor (rp False) (rp 1) (rp 0) (rp 4) (rp 0)) == [0,1,2,3,0,1,2,3,0,1]
+{- | Phasor
+
+>>> let rp = repeat
+>>> take 10 (l_phasor (rp False) (rp 1) (rp 0) (rp 4) (rp 0))
+[0.0,1.0,2.0,3.0,0.0,1.0,2.0,3.0,0.0,1.0]
+-}
 l_phasor :: RealFrac n => [Bool] -> [n] -> [n] -> [n] -> [n] -> [n]
 l_phasor trig rate start end resetPos =
     let i = zip5 trig rate start end resetPos

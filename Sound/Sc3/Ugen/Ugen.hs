@@ -436,17 +436,27 @@ mkUnaryOperator i f a =
         g _ = error "mkUnaryOperator: non unary input"
     in mkOperator g "UnaryOpUGen" [a] (fromEnum i)
 
--- | Binary math constructor with constant optimisation.
---
--- > constant 2 * constant 3 == constant 6
---
--- > let o = sinOsc ar 440 0
---
--- > o * 1 == o && 1 * o == o && o * 2 /= o
--- > o + 0 == o && 0 + o == o && o + 1 /= o
--- > o - 0 == o && 0 - o /= o
--- > o / 1 == o && 1 / o /= o
--- > o ** 1 == o && o ** 2 /= o
+{- | Binary math constructor with constant optimisation.
+
+>>> constant 2 * constant 3 == constant 6
+True
+
+>>> let o = mkUgen Nothing [AudioRate] (Left AudioRate) "SinOsc" [constant 440, constant 0] Nothing 1 (Special 0) (Uid 0)
+>>> o * 1 == o && 1 * o == o && o * 2 /= o
+True
+
+>>> o + 0 == o && 0 + o == o && o + 1 /= o
+True
+
+>>> o - 0 == o && 0 - o /= o
+True
+
+>>> o / 1 == o && 1 / o /= o
+True
+
+>>> o ** 1 == o && o ** 2 /= o
+True
+-}
 mkBinaryOperator_optimise_constants :: Sc3_Binary_Op -> (Sample -> Sample -> Sample) ->
                                        (Either Sample Sample -> Bool) ->
                                        Ugen -> Ugen -> Ugen
@@ -617,9 +627,11 @@ instance RealFrac Ugen where
   ceiling = error "Ugen.ceiling, see ceilingE"
   floor = error "Ugen.floor, see floorE"
 
--- | Unit generators are orderable (when 'Constants').
---
--- > (constant 2 > constant 1) == True
+{- | Unit generators are orderable (when 'Constants').
+
+>>> constant 2 > constant 1
+True
+-}
 instance Ord Ugen where
     (Constant_U a) < (Constant_U b) = a < b
     _ < _ = error "Ugen.<, see <*"

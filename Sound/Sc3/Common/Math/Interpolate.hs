@@ -8,9 +8,11 @@ import Sound.Sc3.Common.Math {- hsc3 -}
 -}
 type Interpolation_f t = t -> t -> t -> t
 
--- | Clip x to (0,1) and run f.
---
--- > interpolate linear (-1,1) 0.5 == 0
+{- | Clip x to (0,1) and run f.
+
+>>> interpolate linear (-1,1) 0.5
+0.0
+-}
 interpolate :: (Num t,Ord t) => Interpolation_f t -> (t,t) -> t -> t
 interpolate f (l,r) x = if x < 0 then l else if x > 1 then r else f l r x
 
@@ -20,7 +22,8 @@ step _ x1 _ = x1
 
 {- | Linear interpolation funtion.
 
-> map (linear 1 10) [0,0.25 .. 1] == [1,3.25,5.5,7.75,10]
+>>> map (linear 1 10) [0,0.25 .. 1]
+[1.0,3.25,5.5,7.75,10.0]
 
 > import Sound.Sc3.Plot {- hsc3-plot -}
 > plot_fn_r1_ln (linear (-1) 1) (0,1)

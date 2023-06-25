@@ -75,3 +75,11 @@ for details
 initial announcement:
 [[2005-11-29/haskell-cafe](http://rohandrape.net/?t=hsc3&e=md/announce.text),
  [haskell.org](http://www.haskell.org/pipermail/haskell-cafe/2005-November/012483.html)]
+
+* * *
+
+```
+$ doctest Sound/Sc3
+Examples: 254  Tried: 254  Errors: 0  Failures: 0
+$
+```

@@ -338,17 +338,25 @@ s_new0 = G.s_new0
 
 -- * Buffer segmentation and indices
 
--- | Segment a request for /m/ places into sets of at most /n/.
---
--- > b_segment 1024 2056 == [8,1024,1024]
--- > b_segment 1 5 == replicate 5 1
+{- | Segment a request for /m/ places into sets of at most /n/.
+
+>>> b_segment 1024 2056
+[8,1024,1024]
+
+>>> b_segment 1 5 == replicate 5 1
+True
+-}
 b_segment :: Int -> Int -> [Int]
 b_segment = G.b_segment
 
--- | Variant of 'b_segment' that takes a starting index and returns /(index,size)/ duples.
---
--- > b_indices 1 5 0 == zip [0..4] (replicate 5 1)
--- > b_indices 1024 2056 16 == [(16,8),(24,1024),(1048,1024)]
+{- | Variant of 'b_segment' that takes a starting index and returns /(index,size)/ duples.
+
+>>> b_indices 1 5 0 == zip [0..4] (replicate 5 1)
+True
+
+>>> b_indices 1024 2056 16
+[(16,8),(24,1024),(1048,1024)]
+-}
 b_indices :: Int -> Int -> Int -> [(Int,Int)]
 b_indices = G.b_indices
 

@@ -55,9 +55,11 @@ sc3_opt_def p =
 sc3_opt_def_udp :: Num i => [Sc3_Opt i]
 sc3_opt_def_udp = sc3_opt_def Sc3_Udp
 
--- | Is option boolean, ie. 0=FALSE and 1=TRUE.
---
--- > filter sc3_opt_bool sc3_opt_def_udp
+{- | Is option boolean, ie. 0=FALSE and 1=TRUE.
+
+>>> filter sc3_opt_bool sc3_opt_def_udp
+[('D',"load-synthdefs?",1),('R',"publish-to-rendezvous?",1)]
+-}
 sc3_opt_bool :: Sc3_Opt i -> Bool
 sc3_opt_bool (_,s,_) = last s == '?'
 
@@ -68,32 +70,40 @@ sc3_opt_get opt k =
     Left c -> fmap sc3_opt_value (find (\(o,_,_) -> o == c) opt)
     Right s -> fmap sc3_opt_value (find (\(_,o,_) -> o == s) opt)
 
--- | Set option given either short or long name.
---
--- > sc3_opt_set sc3_opt_def_udp (Left 'w',256)
+{- | Set option given either short or long name.
+
+>>> sc3_opt_get (sc3_opt_set sc3_opt_def_udp (Left 'w',256)) (Right "number-of-wire-buffers")
+Just 256
+-}
 sc3_opt_set :: [Sc3_Opt i] -> (Either Char String,i) -> [Sc3_Opt i]
 sc3_opt_set opt (k,v) =
   case k of
     Left x -> map (\(c,s,y) -> if c == x then (c,s,v) else (c,s,y)) opt
     Right x -> map (\(c,s,y) -> if s == x then (c,s,v) else (c,s,y)) opt
 
--- | Apply set of edits to options.
---
--- > sc3_opt_edit sc3_opt_def_udp [(Left 'w',256),(Left 'm',2 ^ 16)]
+{- | Apply set of edits to options.
+
+>>> unwords (sc3_opt_arg (sc3_opt_edit sc3_opt_def_udp [(Left 'w',256),(Left 'm',2 ^ 16)]))
+"-u 57110 -a 1024 -b 1024 -c 16384 -D 1 -d 1024 -i 8 -l 64 -m 65536 -n 1024 -o 8 -r 64 -R 1 -S 0 -V 0 -w 256 -z 64 -Z 0"
+-}
 sc3_opt_edit :: [Sc3_Opt i] -> [(Either Char String,i)] -> [Sc3_Opt i]
 sc3_opt_edit opt edt =
   case edt of
     [] -> opt
     x:rst -> sc3_opt_edit (sc3_opt_set opt x) rst
 
--- | Generate scsynth argument list.
---
--- > unwords (sc3_opt_arg sc3_opt_def_udp)
+{- | Generate scsynth argument list.
+
+>>> unwords (sc3_opt_arg sc3_opt_def_udp)
+"-u 57110 -a 1024 -b 1024 -c 16384 -D 1 -d 1024 -i 8 -l 64 -m 8192 -n 1024 -o 8 -r 64 -R 1 -S 0 -V 0 -w 64 -z 64 -Z 0"
+-}
 sc3_opt_arg :: Show i => [Sc3_Opt i] -> [String]
 sc3_opt_arg = concatMap (\(c,_,v) -> [['-',c],show v])
 
--- | Generate arguments for 'System.Process.callProcess' or related functions.
---
--- > sc3_opt_cmd sc3_opt_def_udp
+{- | Generate arguments for 'System.Process.callProcess' or related functions.
+
+>>> let o = sc3_opt_def_udp in sc3_opt_cmd o == ("scsynth", sc3_opt_arg o)
+True
+-}
 sc3_opt_cmd :: Show i => [Sc3_Opt i] -> (FilePath,[String])
 sc3_opt_cmd opt = ("scsynth",sc3_opt_arg opt)

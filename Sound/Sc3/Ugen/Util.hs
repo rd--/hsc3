@@ -194,23 +194,29 @@ mceChannelWrap n u =
 mceTranspose :: Ugen -> Ugen
 mceTranspose = mce . map mce . transpose . map mceChannels . mceChannels
 
--- | Rotate mce /k/ places to the right, ie. {a,b,c,d} to {d,a,b,c}
---
--- > mceRotate 1 (mce [1,2,3,4]) == mce [4,1,2,3]
+{- | Rotate mce /k/ places to the right, ie. {a,b,c,d} to {d,a,b,c}
+
+>>> mceRotate 1 (mce [1,2,3,4]) == mce [4,1,2,3]
+True
+-}
 mceRotate :: Int -> Ugen -> Ugen
 mceRotate k =
   let rotateRight n p = let (b,a) = splitAt (length p - n) p in a ++ b
   in mce . rotateRight k . mceChannels
 
--- | 'concat' at mce channels of each input, ie. {{a,b},{c,d}} to {a,b,c,d}.
---
--- > mceConcat (map mce [[1,2],[3,4]]) == mce [1..4]
+{- | 'concat' at mce channels of each input, ie. {{a,b},{c,d}} to {a,b,c,d}.
+
+>>> mceConcat (map mce [[1,2],[3,4]]) == mce [1..4]
+True
+-}
 mceConcat :: [Ugen] -> Ugen
 mceConcat = mce . concatMap mceChannels
 
--- | Collect subarrays of mce.
---
--- > mceClump 2 (mce [1,2,3,4]) == mce2 (mce2 1 2) (mce2 3 4)
+{- | Collect subarrays of mce.
+
+>>> mceClump 2 (mce [1,2,3,4]) == mce2 (mce2 1 2) (mce2 3 4)
+True
+-}
 mceClump :: Int -> Ugen -> Ugen
 mceClump k = mce . map mce . Split.chunksOf k . mceChannels
 
@@ -230,10 +236,12 @@ halt_mce_transform_f f l =
     let (l',e) = fromMaybe (error "halt_mce_transform: null?") (Base.sep_last l)
     in l' ++ f e
 
--- | The halt Mce transform, ie. lift channels of last input into list.
---   This is not used by hsc3, but it is used by hsc3-forth and stsc3.
---
--- > halt_mce_transform [1,2,mce2 3 4] == [1,2,3,4]
+{- | The halt Mce transform, ie. lift channels of last input into list.
+This is not used by hsc3, but it is used by hsc3-forth and stsc3.
+
+>>> halt_mce_transform [1,2,mce2 3 4] == [1,2,3,4]
+True
+-}
 halt_mce_transform :: [Ugen] -> [Ugen]
 halt_mce_transform = halt_mce_transform_f mceChannels
 

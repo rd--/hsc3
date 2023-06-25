@@ -95,9 +95,11 @@ sc3_cmd_enumeration =
     ,("/n_order",62)
     ]
 
--- | Lookup command number in 'sc3_cmd_enumeration'.
---
--- > map sc3_cmd_number ["/b_alloc","/s_new"] == [Just 28,Just 9]
+{- | Lookup command number in 'sc3_cmd_enumeration'.
+
+>>> map sc3_cmd_number ["/b_alloc","/s_new"]
+[Just 28,Just 9]
+-}
 sc3_cmd_number :: SC3_Command -> Maybe Int
 sc3_cmd_number = flip lookup sc3_cmd_enumeration
 
@@ -124,17 +126,19 @@ async_cmds =
     ,"/quit"
     ,"/sync"]
 
--- | 'True' if 'Message' is an asynchronous 'Message'.
---
--- > import Sound.Sc3
--- > map isAsync [b_close 0,n_set1 0 "0" 0,status] == [True,False,False]
+{- | 'True' if 'Message' is an asynchronous 'Message'.
+
+> import Sound.Sc3.Server.Command.Plain
+> map isAsync [b_close 0,n_set1 0 "0" 0,status] == [True,False,False]
+-}
 isAsync :: Osc.Message -> Bool
 isAsync (Osc.Message a _) = a `elem` async_cmds
 
--- | Asynchronous commands are at the left.  This function should
--- preserve the ordering of both branches.
---
--- > partition_async [b_close 0,n_set1 0 "0" 0]
+{- | Asynchronous commands are at the left.
+This function should preserve the ordering of both branches.
+
+> partition_async [b_close 0,n_set1 0 "0" 0]
+-}
 partition_async :: [Osc.Message] -> ([Osc.Message],[Osc.Message])
 partition_async = partition isAsync
 
