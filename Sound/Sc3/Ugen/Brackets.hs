@@ -16,8 +16,9 @@ emptyBrackets = ([], [])
 
 {- | Combine a sequence of Brackets into one Bracket.
 
-> f = bimap concat concat . unzip
-> f [(['a'],['A']),(['b'],['B'])]
+>>> f = Data.Bifunctor.bimap concat concat . unzip
+>>> f [(['a'],['A']),(['b'],['B'])]
+("ab","AB")
 -}
 concatBrackets :: [Brackets] -> Brackets
 concatBrackets = bimap concat concat . unzip

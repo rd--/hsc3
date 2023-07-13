@@ -116,10 +116,12 @@ graphdef_ugen_nid g n = graphdef_control_nid g 0 + length (graphdef_controls g) 
 
 {- | "SCgf" encoded as 32-bit unsigned integer.
 
-> map fromEnum "SCgf" == [83, 67, 103, 102]
+>> map fromEnum "SCgf"
+[83, 67, 103, 102]
 
-> import Sound.Osc.Coding.Byte
-> decode_i32 (encode_ascii (Datum.ascii "SCgf")) == scgf_i32
+>>> import Sound.Osc.Coding.Byte
+>>> decode_i32 (encode_ascii (Datum.ascii "SCgf")) == scgf_i32
+True
 -}
 scgf_i32 :: Num n => n
 scgf_i32 = 1396926310

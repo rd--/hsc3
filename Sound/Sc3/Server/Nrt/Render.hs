@@ -22,9 +22,9 @@ type Nrt_Param_Plain = (FilePath,(FilePath,Int),(FilePath,Int),Int,SampleFormat,
 
 {- | Compile argument list from Nrt_Param_Plain.
 
-> let opt = ("/tmp/t.osc",("_",0),("/tmp/t.wav",1),48000,PcmInt16,[])
-> let r = ["-i","0","-o","1","-N","/tmp/t.osc","_","/tmp/t.wav","48000","wav","int16"]
-> nrt_param_plain_to_arg opt == r
+>>> let opt = ("/tmp/t.osc",("_",0),("/tmp/t.wav",1),48000,PcmInt16,[])
+>>> nrt_param_plain_to_arg opt
+["-i","0","-o","1","-N","/tmp/t.osc","_","/tmp/t.wav","48000","wav","int16"]
 -}
 nrt_param_plain_to_arg :: Nrt_Param_Plain -> [String]
 nrt_param_plain_to_arg (osc_nm,(in_sf,in_nc),(out_sf,out_nc),sr,sf,param) =

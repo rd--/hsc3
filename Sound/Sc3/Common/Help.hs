@@ -86,45 +86,57 @@ sc3_scdoc_help_dir = do
 
 {- | Path to indicated Sc3 class help file.
 
-> sc3_scdoc_help_class "SinOsc" == "Classes/SinOsc.html"
+>>> sc3_scdoc_help_class "SinOsc"
+"Classes/SinOsc.html"
 -}
 sc3_scdoc_help_class :: String -> String
 sc3_scdoc_help_class c = "Classes" </> c <.> "html"
 
 {- | Generate path to indicated Sc3 operator help file.
 
-> sc3_scdoc_help_operator "+" == "Overviews/Operators.html#+"
+>>> sc3_scdoc_help_operator "+"
+"Overviews/Operators.html#+"
 -}
 sc3_scdoc_help_operator :: String -> FilePath
 sc3_scdoc_help_operator = (++) "Overviews/Operators.html#"
 
 {- | Generate path to indicated Sc3 method help.
 
-> sc3_scdoc_help_method '*' ("C","m") == "Classes/C.html#*m"
+>>> sc3_scdoc_help_method '*' ("C","m")
+"Classes/C.html#*m"
 -}
 sc3_scdoc_help_method :: Char -> (String,String) -> FilePath
 sc3_scdoc_help_method z (c,m) = "Classes" </> c <.> "html#" ++ [z] ++ m
 
 {- | Generate path to indicated Sc3 class method help.
 
-> sc3_scdoc_help_class_method ("C","m") == "Classes/C.html#*m"
+>>> sc3_scdoc_help_class_method ("C","m")
+"Classes/C.html#*m"
 -}
 sc3_scdoc_help_class_method :: (String,String) -> FilePath
 sc3_scdoc_help_class_method = sc3_scdoc_help_method '*'
 
 {- | Generate path to indicated Sc3 instance method help.
 
-> sc3_scdoc_help_instance_method ("C","m") == "Classes/C.html#-m"
+>>> sc3_scdoc_help_instance_method ("C","m")
+"Classes/C.html#-m"
 -}
 sc3_scdoc_help_instance_method :: (String,String) -> FilePath
 sc3_scdoc_help_instance_method = sc3_scdoc_help_method '-'
 
 {- | Sc3 help path documenting x.
 
-> sc3_scdoc_help_path "Operator.distort" == "Overviews/Operators.html#.distort"
-> sc3_scdoc_help_path "Collection.*fill" == "Classes/Collection.html#*fill"
-> sc3_scdoc_help_path "Collection.inject" == "Classes/Collection.html#-inject"
-> sc3_scdoc_help_path "SinOsc" == "Classes/SinOsc.html"
+>>> sc3_scdoc_help_path "Operator.distort"
+"Overviews/Operators.html#distort"
+
+>>> sc3_scdoc_help_path "Collection.*fill"
+"Classes/Collection.html#*fill"
+
+>>> sc3_scdoc_help_path "Collection.inject"
+"Classes/Collection.html#-inject"
+
+>>> sc3_scdoc_help_path "SinOsc"
+"Classes/SinOsc.html"
 -}
 sc3_scdoc_help_path :: String -> String
 sc3_scdoc_help_path s = do

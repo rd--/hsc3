@@ -168,7 +168,8 @@ freqShift_hilbert i f p =
      If the gate input to EnvGen.kr is -1 the envelope ramps to zero in one control period.
      The reset input sequence 0,1,0 when the gate is open produces (1,-1,1), which resets the envelope.
 
-> map (uncurry gateReset) [(1,0),(1,1),(0,1),(0,0)] == [1,-1,0,0]
+>>> map (uncurry gateReset) [(1,0),(1,1),(0,1),(0,0)]
+[1,-1,0,0]
 -}
 gateReset :: Num a => a -> a -> a
 gateReset gt tr = gt - (gt * tr * 2)
@@ -420,8 +421,11 @@ silent n = let s = dc ar 0 in mce (replicate n s)
 {- | Zero indexed audio input buses.
      Optimises case of consecutive Ugens.
 
-> soundIn (mce2 0 1) == in' 2 ar numOutputBuses
-> soundIn (mce2 0 2) == in' 1 ar (numOutputBuses + mce2 0 2)
+>>> soundIn (mce2 0 1) == in' 2 ar numOutputBuses
+True
+
+>>> soundIn (mce2 0 2) == in' 1 ar (numOutputBuses + mce2 0 2)
+True
 
 -}
 soundIn :: Ugen -> Ugen
@@ -437,7 +441,7 @@ soundIn u =
 
 -- | Pan a set of channels across the stereo field.
 --
--- > input, spread:1, level:1, center:0, levelComp:true
+-- input, spread:1, level:1, center:0, levelComp:true
 splay :: Ugen -> Ugen -> Ugen -> Ugen -> Bool -> Ugen
 splay i s l c lc =
     let n = max 2 (fromIntegral (fromMaybe 1 (mceDegree i)))
@@ -533,6 +537,7 @@ whiteNoiseN k = liftUnsafe1 (whiteNoiseMN k)
 
 > import Sound.Sc3 {- hsc3 -}
 > audition (wrapOut (Just 1) (sinOsc ar 440 0 * 0.1))
+
 > import Sound.Osc {- hosc -}
 > withSc3 (sendMessage (n_set1 (-1) "gate" 0))
 -}

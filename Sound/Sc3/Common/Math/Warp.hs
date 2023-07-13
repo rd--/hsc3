@@ -10,23 +10,31 @@ type Warp_f t = t -> t -> t -> t
 
 {- | Linear real value map.
 
-> map (warp_lin 1 2) [0,1/2,1] == [1,3/2,2]
-> map (warp_lin (-1) 1) [0,1/2,1] == [-1,0,1]
+>>> map (warp_lin 1 2) [0,1/2,1] == [1,3/2,2]
+True
+
+>>> map (warp_lin (-1) 1) [0,1/2,1] == [-1,0,1]
+True
 -}
 warp_lin :: Fractional t => Warp_f t
 warp_lin l r n = let z = r - l in n * z + l
 
 {- | Inverse of 'warp_lin'
 
-> map (warp_lin_inv 1 2) [1,3/2,2] == [0,1/2,1]
-> map (warp_lin_inv (-1) 1) [-1,0,1] == [0,1/2,1]
+>>> map (warp_lin_inv 1 2) [1,3/2,2] == [0,1/2,1]
+True
+
+>>> map (warp_lin_inv (-1) 1) [-1,0,1] == [0,1/2,1]
+True
 -}
 warp_lin_inv :: Fractional t => Warp_f t
 warp_lin_inv l r n = let z = r - l in (n - l) / z
 
 {- | The left and right must both be non zero and have the same sign.
 
-> map (warp_exp 1 2) [0,0.5,1] == [1,2 ** 0.5,2]
+>>> map (warp_exp 1 2) [0,0.5,1] == [1,2 ** 0.5,2]
+True
+
 > import Sound.Sc3.Plot {- hsc3-plot -}
 > plot_p1_ln [map (warp_exp 1 2) [0,0.01 .. 1]]
 -}

@@ -63,15 +63,30 @@ this, however subsequent optimisations, ie. 'ugen_optimise_ir_rand'
 can re-introduce these sub-graphs, and the /Plain/ graph
 constructors are un-optimised.
 
-> let u = constant
-> u 5 * u 10 == u 50
-> u 5 ==** u 5 == u 1
-> u 5 >** u 4 == u 1
-> u 5 <=** u 5 == u 1
-> abs (u (-1)) == u 1
-> u 5 / u 2 == u 2.5
-> min (u 2) (u 3) == u 2
-> max (u 1) (u 3) == u 3
+>>> let u = constant
+>>> u 5 * u 10 == u 50
+True
+
+>>> u 5 ==** u 5 == u 1
+True
+
+>>> u 5 >** u 4 == u 1
+True
+
+>>> u 5 <=** u 5 == u 1
+True
+
+>>> abs (u (-1)) == u 1
+True
+
+>>> u 5 / u 2 == u 2.5
+True
+
+>>> min (u 2) (u 3) == u 2
+True
+
+>>> max (u 1) (u 3) == u 3
+True
 
 > let u = lfPulse ar (2 ** randId 'α' (-9) 1) 0 0.5
 > let u' = ugen_optimise_ir_rand u

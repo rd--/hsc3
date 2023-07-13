@@ -21,7 +21,9 @@ param_insert p z = z : deleteBy ((==) `on` fst) z p
 
 {- | Merge, require keys be unique.
 
-> param_merge_uniq [("a",1),("b",2)] [("c",3),("d",4)] == [("a",1),("b",2),("c",3),("d",4)]
+>>> param_merge_uniq [("a",1),("b",2)] [("c",3),("d",4)]
+[("a",1.0),("b",2.0),("c",3.0),("d",4.0)]
+
 > param_merge_uniq [("a",1)] [("a",2)] -- error
 -}
 param_merge_uniq :: Param -> Param -> Param
@@ -32,7 +34,8 @@ param_merge_uniq p1 p2 =
 
 {- | Merge, right biased.
 
-> param_merge_r [("a",1),("b",2)] [("c",3),("a",4)] == [("b",2),("c",3),("a",4)]
+>>> param_merge_r [("a",1),("b",2)] [("c",3),("a",4)]
+[("b",2.0),("c",3.0),("a",4.0)]
 -}
 param_merge_r :: Param -> Param -> Param
 param_merge_r p1 p2 =
@@ -41,7 +44,8 @@ param_merge_r p1 p2 =
 
 {- | Right-fold (right-biased) of 'param_merge'
 
-> param_merge_r_seq [[("a",1),("b",2)],[("c",3),("a",4)],[("b",5)]] == [("c",3),("a",4),("b",5)]
+>>> param_merge_r_seq [[("a",1),("b",2)],[("c",3),("a",4)],[("b",5)]]
+[("c",3.0),("a",4.0),("b",5.0)]
 -}
 param_merge_r_seq :: [Param] -> Param
 param_merge_r_seq = foldr1 param_merge_r
@@ -52,7 +56,8 @@ param_get p k v = fromMaybe v (lookup k p)
 
 {- | Given (param-separator,key-value-separator) parse paramter string.
 
-> param_parse (';','=') "a=1;b=2" == [("a",1),("b",2)]
+>>> param_parse (';','=') "a=1;b=2"
+[("a",1.0),("b",2.0)]
 -}
 param_parse :: (Char,Char) -> String -> Param
 param_parse (c1,c2) str =
@@ -63,7 +68,8 @@ param_parse (c1,c2) str =
 
 {- | Inverse of 'param_parse', /k/ is the precision to print values to.
 
-> param_pp (';','=') 4 [("a",1),("b",2)] == "a=1.0;b=2.0"
+>>> param_pp (';','=') 4 [("a",1),("b",2)]
+"a=1.0;b=2.0"
 -}
 param_pp :: (Char,Char) -> Int -> Param -> String
 param_pp (c1,c2) k =

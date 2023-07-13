@@ -62,8 +62,11 @@ reads_exact s =
 
 {- | Similar to Data.List.Split.splitOn, which however hugs doesn't know of.
 
-> string_split_at_char ':' "/usr/local/bin:/usr/bin:/bin" == ["/usr/local/bin","/usr/bin","/bin"]
-> string_split_at_char ':' "/usr/local/bin" == ["/usr/local/bin"]
+>>> string_split_at_char ':' "/usr/local/bin:/usr/bin:/bin"
+["/usr/local/bin","/usr/bin","/bin"]
+
+>>> string_split_at_char ':' "/usr/local/bin"
+["/usr/local/bin"]
 -}
 string_split_at_char :: Char -> String -> [String]
 string_split_at_char c s =
@@ -87,8 +90,11 @@ string_op f cr x y =
 
 {- | String equality with 'Case_Rule'.
 
-> string_eq Ci "sinOsc" "SinOsc" == True
-> string_eq Sci "sin-osc" "SinOsc" == True
+>>> string_eq Ci "sinOsc" "SinOsc"
+True
+
+>>> string_eq Sci "sin-osc" "SinOsc"
+True
 -}
 string_eq :: Case_Rule -> String -> String -> Bool
 string_eq = string_op (==)
@@ -102,7 +108,8 @@ rlookup_str = rlookup_by . string_eq
 
 {- | 'Enum' parser with 'Case_Rule'.
 
-> parse_enum Ci "false" == Just False
+>>> parse_enum Ci "false" :: Maybe Bool
+Just False
 -}
 parse_enum :: (Show t,Enum t,Bounded t) => Case_Rule -> String -> Maybe t
 parse_enum cr nm =

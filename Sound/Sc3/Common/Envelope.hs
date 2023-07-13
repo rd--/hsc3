@@ -51,7 +51,7 @@ env_curve_shape e =
 
 {- | The /value/ of 'EnvCurve' is non-zero for 'EnvNum'.
 
-> map env_curve_value [EnvWelch,EnvNum 2]
+>>> map env_curve_value [EnvWelch,EnvNum 2]
 [0,2]
 -}
 env_curve_value :: Num a => Envelope_Curve a -> a
@@ -246,12 +246,12 @@ envelope_sc3_array e =
 
 {- | @IEnvGen@ Sc3 form of 'Envelope' data.
 
-> l = [0,0.6,0.3,1.0,0]
-> t = [0.1,0.02,0.4,1.1]
-> c = [EnvLin,EnvExp,EnvNum (-6),EnvSin]
-> e = Envelope l t c Nothing Nothing 0
-> r = [0,0,4,1.62,0.1,1,0,0.6,0.02,2,0,0.3,0.4,5,-6,1,1.1,3,0,0]
-> envelope_sc3_ienvgen_array e == Just r
+>>> let l = [0,0.6,0.3,1.0,0]
+>>> let t = [0.1,0.02,0.4,1.1]
+>>> let c = [EnvLin,EnvExp,EnvNum (-6),EnvSin]
+>>> let e = Envelope l t c Nothing Nothing 0
+>>> envelope_sc3_ienvgen_array e
+Just [0.0,0.0,4.0,1.62,0.1,1.0,0.0,0.6,2.0e-2,2.0,0.0,0.3,0.4,5.0,-6.0,1.0,1.1,3.0,0.0,0.0]
 -}
 envelope_sc3_ienvgen_array :: Num a => Envelope a -> Maybe [a]
 envelope_sc3_ienvgen_array e =
@@ -325,8 +325,9 @@ envTrapezoid_f (lte_f,gte_f) shape skew dur amp =
 
 {- | Coordinate based static envelope generator.  Points are (time,value) pairs.
 
-> let e = envCoord [(0,0),(1/4,1),(1,0)] 1 1 EnvLin
-> envelope_sc3_array e == Just [0,2,-99,-99,1,1/4,1,0,0,3/4,1,0]
+>>> let e = envCoord [(0,0),(1/4,1),(1,0)] 1 1 EnvLin
+>>> envelope_sc3_array e
+Just [0.0,2.0,-99.0,-99.0,1.0,0.25,1.0,0.0,0.0,0.75,1.0,0.0]
 
 > import Sound.Sc3.Plot {- hsc3-plot -}
 > plotEnvelope [envCoord [(0,0),(1/4,1),(1,0)] 1 1 EnvLin]
@@ -405,10 +406,11 @@ envLinen_c aT sT rT lv c = envLinen_r (Linen aT sT rT lv c)
 
 {- | Linear envelope parameter constructor.
 
-> e = envLinen 0 1 0 1
-> s = envelope_segments e
-> p = pack_envelope_segments s
-> p == (env_levels e,env_times e,env_curves e)
+>>> let e = envLinen 0 1 0 1
+>>> let s = envelope_segments e
+>>> let p = pack_envelope_segments s
+>>> p == (env_levels e,env_times e,env_curves e)
+True
 -}
 envLinen :: Num a => a -> a -> a -> a -> Envelope a
 envLinen aT sT rT lv =
@@ -490,9 +492,8 @@ envAsr_c aT sL rT c = envAsr_r (Asr aT sL rT c)
 
 {- | Attack, sustain, release envelope parameter constructor.
 
-> c = 3
-> r = Just [0,2,1,-99,0.1,3,c,0,0,2,c,0]
-> envelope_sc3_array (envAsr 3 0.1 2 EnvSin) == r
+>>> envelope_sc3_array (envAsr 3 0.1 2 EnvSin)
+Just [0.0,2.0,1.0,-99.0,0.1,3.0,3.0,0.0,0.0,2.0,3.0,0.0]
 -}
 envAsr :: Num a => a -> a -> a -> Envelope_Curve a -> Envelope a
 envAsr aT sL rT c = envAsr_c aT sL rT (c,c)

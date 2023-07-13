@@ -15,8 +15,11 @@ repeatM_ = mvoid . repeatM
 
 {- | Right to left compositon of 'Monad' functions.
 
-> fmap (== 7) (composeM [return . (+ 1),return . (* 2)] 3)
-> fmap (== 8) (composeM [return . (* 2),return . (+ 1)] 3)
+>>> composeM [return . (+ 1),return . (* 2)] 3
+7
+
+>>> composeM [return . (* 2),return . (+ 1)] 3
+8
 -}
 composeM :: Monad m => [a -> m a] -> a -> m a
 composeM = foldr (\f g -> \x -> g x >>= f) return -- foldr (<=<) return except hugs doesn't know of <=<

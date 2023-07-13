@@ -1,9 +1,10 @@
 {- | Plain notation for SuperCollider Ugen graphs.
 
 > s = ugen "SinOsc" ar [440,0] 1
-> m = binop CI "*" ar s 0.1
+> m = binop Ci "*" ar s 0.1
 > o = ugen "Out" ar [0,m] 0
-> map ugen_concise_pp [s, m, o]
+> map Sound.Sc3.Ugen.Pp.ugen_concise_pp [s, m, o]
+["SinOsc","*","Out"]
 -}
 module Sound.Sc3.Ugen.Plain where
 
@@ -19,7 +20,7 @@ mk_plain rt nm inp = mkUgen Nothing all_rates (Left rt) nm inp Nothing
 
 {- | Construct unary operator.
 
-> uop CI "Neg" ar 1
+> uop Ci "Neg" ar 1
 -}
 uop :: Case_Rule -> String -> Rate -> Ugen -> Ugen
 uop cr nm r p =
@@ -29,8 +30,11 @@ uop cr nm r p =
 
 {- | Construct binary operator.
 
-> binop CI "*" ar 1 2 == binop CI "Mul" ar 1 2
-> binop CS "*" ar (ugen "SinOsc" ar [440,0] 1) 0.1 == sinOsc ar 440 0 * 0.1
+>>> binop Ci "*" ar 1 2 == binop Ci "Mul" ar 1 2
+True
+
+> binop Cs "*" ar (ugen "SinOsc" ar [440,0] 1) 0.1 == sinOsc ar 440 0 * 0.1
+True
 -}
 binop :: Case_Rule -> String -> Rate -> Ugen -> Ugen -> Ugen
 binop cr nm r p q =
@@ -50,7 +54,7 @@ ugen nm r i nc = mk_plain r nm i nc (Special 0) NoId
 {- | Construct non-deterministic Ugen.
 
 > import Sound.Sc3.Common.Uid
-> binop CI "*" ar (nondet "WhiteNoise" (Uid (fromEnum 'α')) ar [] 1) 0.05
+> binop Ci "*" ar (nondet "WhiteNoise" (Uid (fromEnum 'α')) ar [] 1) 0.05
 -}
 nondet :: String -> UgenId -> Rate -> [Ugen] -> Int -> Ugen
 nondet nm z r i nc = mk_plain r nm i nc (Special 0) z

@@ -47,8 +47,12 @@ ugenTraverse halt_f map_f u =
 
 {- | Right fold of Ugen graph.
 
-> map Sound.Sc3.Ugen.PP.ugen_concise_pp $ ugenFoldr (:) [] (sinOsc ar 440 0 * 0.1)
-> map Sound.Sc3.Ugen.PP.ugen_concise_pp $ ugenFoldr (:) [] (pan2 (sinOsc ar 440 0) 0.25 0.1)
+> let pp = Sound.Sc3.Ugen.Pp.ugen_concise_pp
+> map pp (ugenFoldr (:) [] (sinOsc ar 440 0 * 0.1))
+["*","SinOsc","440","0","0.1"]
+
+> map pp (ugenFoldr (:) [] (pan2 (sinOsc ar 440 0) 0.25 0.1))
+["[Pan2@0,Pan2@1]","Pan2@0","SinOsc","440","0","0.25","0.1","Pan2@1","SinOsc","440","0","0.25","0.1"]
 -}
 ugenFoldr :: (Ugen -> a -> a) -> a -> Ugen -> a
 ugenFoldr f st u =
@@ -182,7 +186,8 @@ mceChannel n u =
 
 {- | Obtain indexed channel at Mce, indicex wrap around.
 
-> map (\ix -> mceChannelWrap ix (mce [1,2,3,4,5])) [0 .. 9]
+> map (\ix -> pp (mceChannelWrap ix (mce [1,2,3,4,5]))) [0 .. 9]
+["1","2","3","4","5","1","2","3","4","5"]
 -}
 mceChannelWrap :: Int -> Ugen -> Ugen
 mceChannelWrap n u =

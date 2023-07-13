@@ -262,9 +262,14 @@ mceRequired = any isMce
 {- | Apply Mce transform to a list of inputs.
 The transform extends each input so all are of equal length, and then transposes the matrix.
 
-> mceInputTransform [mce2 1 2,mce2 3 4] == Just [[1,3],[2,4]]
-> mceInputTransform [mce2 1 2,mce2 3 4,mce3 5 6 7] == Just [[1,3,5],[2,4,6],[1,3,7]]
-> mceInputTransform [mce2 (mce2 1 2) (mce2 3 4),mce2 5 6] == Just [[mce2 1 2,5],[mce2 3 4,6]]
+>>> mceInputTransform [mce [1, 2],mce [3, 4]] == Just [[1,3],[2,4]]
+True
+
+>>> mceInputTransform [mce [1, 2],mce [3, 4], mce [5, 6, 7]] == Just [[1,3,5],[2,4,6],[1,3,7]]
+True
+
+>>> mceInputTransform [mce [mce [1, 2], mce [3, 4]], mce [5, 6]] == Just [[mce [1, 2],5],[mce [3, 4],6]]
+True
 -}
 mceInputTransform :: [Ugen] -> Maybe [[Ugen]]
 mceInputTransform i =

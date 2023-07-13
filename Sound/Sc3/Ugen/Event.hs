@@ -103,6 +103,9 @@ ctl16Voicer n f = mce (map (\c -> let i = 11000 + (16 * c) in f c (ctl8At i,ctl8
 -- | Control Specificier.  (name,default,(minValue,maxValue,warpName))
 type ControlSpec t = (String,t,(t,t,String))
 
+control_spec_name :: ControlSpec t -> String
+control_spec_name (name, _, _) = name
+
 -- | Comma separated, no spaces.
 control_spec_parse :: String -> ControlSpec Double
 control_spec_parse str =
@@ -172,13 +175,19 @@ other than (0,1). EventValue names are not case-sensitive."
 
 This list adds curve specifiers as strings and default values.
 
-> let x = Data.List.intersect (map fst sc3_control_spec) (map fst kyma_event_value_ranges)
-> x == ["beats","boostcut","freq","rate"]
-> let c z = let (p,q) = unzip z in let f i = filter (flip elem i . fst) in zip (f p sc3_control_spec) (f q kyma_event_value_ranges)
-> c (zip x x)
+>>> Data.List.intersect (map control_spec_name sc3_control_spec) (map control_spec_name kyma_event_value_ranges)
+["beats","boostcut","freq","rate"]
 
-> c [("lofreq","freqlow"),("midfreq","freqmid")]
-> lookup "freqhigh" kyma_event_value_ranges
+>>> let f i = filter ((== i) . control_spec_name)
+>>> let c (p,q) = (f p sc3_control_spec, f q kyma_event_value_ranges)
+>>> c ("lofreq","freqlow")
+([("lofreq",20.0,(0.1,100.0,"exp"))],[("freqlow",120.0,(0.0,1000.0,"exp"))])
+
+>>> c ("midfreq","freqmid")
+([("midfreq",440.0,(25.0,4200.0,"exp"))],[("freqmid",1200.0,(1000.0,8000.0,"exp"))])
+
+>>> find ((==) "freqhigh" . control_spec_name) kyma_event_value_ranges
+Just ("freqhigh",12000.0,(8000.0,24000.0,"exp"))
 -}
 kyma_event_value_ranges :: Fractional t => [ControlSpec t]
 kyma_event_value_ranges =

@@ -5,7 +5,8 @@ import Data.Maybe {- base -}
 
 {- | Enumeration of possible locations to add new nodes (s_new and g_new).
 
-> fromEnum AddToTail == 1
+>>> fromEnum AddToTail
+1
 -}
 data AddAction = AddToHead
                | AddToTail
@@ -20,14 +21,16 @@ data B_Gen = Normalise | Wavetable | Clear
 
 {- | 'B_Gen' to bit number.
 
-> map b_gen_bit [minBound .. maxBound] == [0, 1, 2]
+>>> map b_gen_bit [minBound .. maxBound]
+[0,1,2]
 -}
 b_gen_bit :: B_Gen -> Int
 b_gen_bit = fromEnum
 
 {- | Set of 'B_Gen' to flag.
 
-> b_gen_flag [minBound .. maxBound] == 7
+>>> b_gen_flag [minBound .. maxBound]
+7
 -}
 b_gen_flag :: [B_Gen] -> Int
 b_gen_flag = sum . map ((2 ^) . b_gen_bit)

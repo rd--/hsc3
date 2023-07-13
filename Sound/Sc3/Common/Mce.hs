@@ -13,8 +13,11 @@ data Mce t = Mce_Scalar t | Mce_Vector [Mce t]
 1. Mce should not be empty, ie. Mce_Vector should not have a null list.
 2. Scalar Mce values should not be written as one-place vectors.
 
-> mce_is_well_formed (Mce_Vector []) == False
-> mce_is_well_formed (Mce_Vector [Mce_Scalar 1]) == False
+>>> mce_is_well_formed (Mce_Vector [])
+False
+
+>>> mce_is_well_formed (Mce_Vector [Mce_Scalar 1])
+False
 -}
 mce_is_well_formed :: Mce t -> Bool
 mce_is_well_formed m =
@@ -39,7 +42,9 @@ mce_from_list l =
 
 {- | toList for Mce.
 
-> let v = Mce_Vector in mce_to_list (v[v[1, 2], 3, v[4, 5]]) == [1, 2, 3, 4, 5]
+>>> let v = Mce_Vector
+>>> mce_to_list (v[v[1, 2], 3, v[4, 5]])
+[1,2,3,4,5]
 -}
 mce_to_list :: Mce t -> [t]
 mce_to_list m =
@@ -49,7 +54,9 @@ mce_to_list m =
 
 {- | Pretty printer for Mce.
 
-> let v = Mce_Vector in mce_show (v[1, 2, v[3, 4]] * 5 + v[6, 7, 8]) == "[11, 17, [23, 28]]"
+>>> let v = Mce_Vector
+>>> mce_show (v[1, 2, v[3, 4]] * 5 + v[6, 7, 8])
+"[11, 17, [23, 28]]"
 -}
 mce_show :: Show t => Mce t -> String
 mce_show m =
@@ -76,10 +83,18 @@ mce_length m =
 
 {- | The depth of an Mce is the longest sequence of nested Mce_Vector nodes.
 
-> mce_depth 1 == 1
-> mce_depth (Mce_Vector [1, 2]) == 1
-> let v = Mce_Vector in mce_depth (v[v[1, 2], 3, v[4, 5]]) == 2
-> let v = Mce_Vector in mce_depth (v[v[1, 2, 3, v[4, 5], 6], 7]) == 3
+>>> mce_depth 1
+1
+
+>>> mce_depth (Mce_Vector [1, 2])
+1
+
+>>> let v = Mce_Vector
+>>> mce_depth (v[v[1, 2], 3, v[4, 5]])
+2
+
+>>> mce_depth (v[v[1, 2, 3, v[4, 5], 6], 7])
+3
 -}
 mce_depth :: Mce a -> Int
 mce_depth m =

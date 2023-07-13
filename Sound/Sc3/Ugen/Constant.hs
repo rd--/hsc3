@@ -7,8 +7,11 @@ import Sound.Sc3.Ugen.Brackets {- hsc3 -}
 Constants may have brackets.
 This allows for buffer allocation and deallocation to be associated with a buffer identifier.
 
-> Constant 3 == Constant 3
-> (Constant 3 > Constant 1) == True
+>>> Constant 3 emptyBrackets == Constant 3 emptyBrackets
+True
+
+>>> Constant 3 emptyBrackets > Constant 1 emptyBrackets
+True
 -}
 data Constant =
   Constant
