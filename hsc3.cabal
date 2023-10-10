@@ -10,7 +10,7 @@ Author:            Rohan Drape
 Maintainer:        rd@rohandrape.net
 Stability:         Experimental
 Homepage:          http://rohandrape.net/t/hsc3
-Tested-With:       GHC == 9.6.1
+Tested-With:       GHC == 9.8.1
 Build-Type:        Simple
 
 Data-files:        README.md
