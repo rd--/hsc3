@@ -6,6 +6,8 @@ import Data.List {- base -}
 import Data.Maybe {- base -}
 import Data.Ord {- base -}
 
+import qualified Safe {- safe -}
+
 -- * Function
 
 -- | Unary function.
@@ -157,7 +159,7 @@ d_dx l = zipWith (-) l (0:l)
 [1,2,3]
 -}
 d_dx' :: Num n => [n] -> [n]
-d_dx' l = zipWith (-) (tail l) l
+d_dx' l = zipWith (-) (Safe.tailNote "d_dx'" l) l
 
 {- | SequenceableCollection.integrate
 
@@ -193,9 +195,13 @@ dx_d' = (0 :) . dx_d
 lookup_by :: (a -> t -> Bool) -> a -> [(t,b)] -> Maybe b
 lookup_by f x = fmap snd . find (f x . fst)
 
+-- | Erroring variant, with message.
+lookup_by_note :: String -> (a -> t -> Bool) -> a -> [(t,b)] -> b
+lookup_by_note msg f x = fromMaybe (error ("lookup_by: " ++ msg)) . lookup_by f x
+
 -- | Erroring variant.
 lookup_by_err :: (a -> t -> Bool) -> a -> [(t,b)] -> b
-lookup_by_err f x = fromMaybe (error "lookup_by") . lookup_by f x
+lookup_by_err = lookup_by_note "error"
 
 -- | Reverse 'lookup' with equality function.
 rlookup_by :: (b -> b -> Bool) -> b -> [(a,b)] -> Maybe a
@@ -250,7 +256,7 @@ equal_length_p = (== 1) . length . nub . map length
 histogram :: Ord a => [a] -> [(a,Int)]
 histogram x =
     let g = group (sort x)
-    in zip (map head g) (map length g)
+    in zip (map (Safe.headNote "histogram") g) (map length g)
 
 -- | !! with localised error message
 at_with_error_message :: String -> [t] -> Int -> t

@@ -4,6 +4,8 @@ module Sound.Sc3.Common.Envelope where
 import Data.List {- base -}
 import Data.Maybe {- base -}
 
+import qualified Safe {- safe -}
+
 import qualified Sound.Sc3.Common.Base as Base {- hsc3 -}
 import qualified Sound.Sc3.Common.Math.Interpolate as Interpolate {- hsc3 -}
 
@@ -271,7 +273,7 @@ env_is_sustained = isJust . env_release_node
 -- | Delay the onset of the envelope (add initial segment).
 env_delay :: Envelope a -> a -> Envelope a
 env_delay (Envelope l t c rn ln os) d =
-    let l0 = head l
+    let l0 = Safe.headNote "env_delay" l
         l' = l0 : l
         t' = d : t
         c' = EnvLin : c
@@ -511,7 +513,7 @@ envStep :: Num a => [a] -> [a] -> Maybe Int -> Maybe Int -> Envelope a
 envStep levels times releaseNode loopNode =
     if length levels /= length times
     then error "envStep: levels and times must have same size"
-    else let levels' = head levels : levels
+    else let levels' = Safe.headNote "envStep" levels : levels
          in Envelope levels' times [EnvStep] releaseNode loopNode 0
 
 {- | Segments given as triples of (time,level,curve).  The final curve is ignored.

@@ -3,6 +3,7 @@ module Sound.Sc3.Ugen.Hs where
 
 import Data.List {- base -}
 
+import qualified Safe {- safe -}
 import qualified System.Random as R {- random -}
 
 import Sound.Sc3.Common.Base
@@ -293,7 +294,7 @@ l_slope sr = l_apply_f_st1 (slope sr) 0
 l_phasor :: RealFrac n => [Bool] -> [n] -> [n] -> [n] -> [n] -> [n]
 l_phasor trig rate start end resetPos =
     let i = zip5 trig rate start end resetPos
-    in l_apply_f_st1 phasor (head start) i
+    in l_apply_f_st1 phasor (Safe.headNote "l_phasor" start) i
 
 l_phasor_osc :: RealFrac n => n -> n -> [n] -> [n]
 l_phasor_osc sr k f =

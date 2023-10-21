@@ -4,6 +4,8 @@ module Sound.Sc3.Ugen.Bindings.Composite where
 import Data.List {- base -}
 import Data.Maybe {- base -}
 
+import qualified Safe {- safe -}
+
 import Sound.Sc3.Common.Enum
 import Sound.Sc3.Common.Envelope
 import Sound.Sc3.Common.Math
@@ -434,8 +436,8 @@ soundIn u =
     in case u of
          Mce_U m ->
              let n = mceProxies m
-             in if all (==1) (zipWith (-) (tail n) n)
-                then in' (length n) ar (numOutputBuses + head n)
+             in if all (==1) (zipWith (-) (Safe.tailNote "soundIn" n) n)
+                then in' (length n) ar (numOutputBuses + Safe.headNote "soundIn" n)
                 else r
          _ -> r
 
