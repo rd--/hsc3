@@ -5,10 +5,12 @@
 module Sound.Sc3.Server.Transport.Fd where
 
 import Control.Monad {- base -}
-import qualified Data.ByteString.Lazy as L {- bytestring -}
 import Data.List {- base -}
-import qualified Data.List.Split as Split {- split -}
 import System.FilePath {- filepath -}
+
+import qualified Data.ByteString.Lazy as L {- bytestring -}
+import qualified Data.List.Split as Split {- split -}
+import qualified Safe {- safe -}
 
 import Sound.Osc.Fd {- hosc -}
 
@@ -164,7 +166,7 @@ b_fetch fd n b = do
 
 -- | 'head' of 'b_fetch'.
 b_fetch1 :: Transport t => t -> Int -> Int -> IO [Double]
-b_fetch1 fd n b = fmap head (b_fetch fd n b)
+b_fetch1 fd n b = fmap (Safe.headNote "b_fetch1") (b_fetch fd n b)
 
 -- * Status
 

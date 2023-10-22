@@ -46,9 +46,10 @@ statusFields =
 statusFormat :: [Datum] -> [String]
 statusFormat d =
     let s = "***** SuperCollider Server Status *****"
-    in s : zipWith (++) (tail statusFields) (map (showDatum (Just 5)) (tail d))
+        t = Safe.tailNote "statusFormat"
+    in s : zipWith (++) (t statusFields) (map (showDatum (Just 5)) (t d))
 
--- | Concise pretty printer, one line, omits PEAK-CPU and NOMINAL-SR.
+-- | Concise pretty printer, one line, omits Peak-Cpu and Nominal-Sr.
 status_format_concise :: [Datum] -> String
 status_format_concise d =
   case d of

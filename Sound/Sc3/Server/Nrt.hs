@@ -1,6 +1,7 @@
 -- | Non-realtime score generation.
 module Sound.Sc3.Server.Nrt where
 
+import Data.List {- base -}
 import Data.Maybe {- base -}
 import System.IO {- base -}
 
@@ -78,6 +79,9 @@ readNrt = fmap decodeNrt . B.readFile
 -- | Find any non-ascending sequences.
 nrt_non_ascending :: Nrt -> [(Bundle, Bundle)]
 nrt_non_ascending (Nrt b) =
-  let p = zip b (tail b)
-      f (i,j) = if bundleTime i > bundleTime j then Just (i,j) else Nothing
-  in mapMaybe f p
+  case uncons b of
+    Nothing -> error "nrt_non_ascending: empty nrt"
+    Just (_ , t) ->
+      let p = zip b t
+          f (i,j) = if bundleTime i > bundleTime j then Just (i,j) else Nothing
+      in mapMaybe f p

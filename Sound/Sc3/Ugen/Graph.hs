@@ -19,6 +19,8 @@ import Data.Function {- base -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
 
+import qualified Safe {- safe -}
+
 import qualified Sound.Sc3.Common.Rate as Rate {- hsc3 -}
 import qualified Sound.Sc3.Common.Uid as Uid {- hsc3 -}
 
@@ -324,7 +326,7 @@ u_edge_multiple_out_edges :: [U_Edge] -> [From_Port]
 u_edge_multiple_out_edges e =
     let p = filter is_from_port_u (map fst e)
         p' = group (sortBy (compare `on` from_port_nid) p)
-    in map head (filter ((> 1) . length) p')
+    in map (Safe.headNote "u_edge_multiple_out_edges") (filter ((> 1) . length) p')
 
 -- * Graph
 

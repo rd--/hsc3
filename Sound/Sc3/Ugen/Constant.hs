@@ -19,10 +19,14 @@ data Constant =
   ,constantBrackets :: Brackets}
   deriving (Ord, Eq, Read, Show)
 
+-- | Get fractional part of a double.
+fractionPart :: Double -> Double
+fractionPart = snd . (properFraction :: Double -> (Integer, Double))
+
 {- | Is integer?
 
 >>> constantIsInteger (Constant 1 emptyBrackets)
 True
 -}
 constantIsInteger :: Constant -> Bool
-constantIsInteger (Constant n _) = snd (properFraction n) == 0
+constantIsInteger (Constant n _) = fractionPart n == 0

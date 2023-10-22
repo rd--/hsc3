@@ -134,7 +134,10 @@ t2_adjacent = t2_window (2::Int)
 [(1,2),(2,3),(3,4)]
 -}
 t2_overlap :: [b] -> [(b,b)]
-t2_overlap x = zip x (tail x)
+t2_overlap x =
+  case uncons x of
+    Nothing -> error "t2_overlap"
+    Just (_, t) -> zip x t
 
 {- | Concat of 2-tuples.
 

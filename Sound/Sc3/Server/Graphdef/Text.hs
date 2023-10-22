@@ -3,9 +3,9 @@ There are reader and writer functions.
 -}
 module Sound.Sc3.Server.Graphdef.Text where
 
-import Control.Monad {- base -}
 import Data.Char {- base -}
 import Data.Functor.Identity {- base -}
+import Data.List {- base -}
 
 import qualified Numeric {- base -}
 
@@ -49,9 +49,9 @@ print_graphdef with_com =
 list_read_f :: (t -> u) -> S.State [t] u
 list_read_f f = do
   l <- S.get
-  when (null l) (error "list_read_f")
-  S.put (tail l)
-  return (f (head l))
+  case uncons l of
+    Nothing -> error "list_read_f"
+    Just (h, t) -> S.put t >> return (f h)
 
 -- | Read function for floating point that admits inf and infinity.
 read_float :: (Fractional p, Read p) => String -> p
@@ -65,13 +65,20 @@ read_float txt =
 text_get_f :: Get_Functions (S.StateT [String] Identity)
 text_get_f = (list_read_f Datum.ascii,list_read_f read,list_read_f read,list_read_f read,list_read_f read_float)
 
+-- | Is line empty or starts with ';'
+is_nil_or_comment :: String -> Bool
+is_nil_or_comment txt =
+  case uncons txt of
+    Nothing -> True
+    Just (h, _) -> h == ';'
+
 {- | Read text representation of Graphdef, as written by 'print_graphdef'.
 
 > read_graphdef "1396926310 0 1 simple 2 0.0 440.0 0 0 2 SinOsc 2 2 1 0 -1 1 -1 0 2 Out 2 2 0 0 -1 0 0 0"
 -}
 read_graphdef :: String -> Graphdef
 read_graphdef txt =
-  let delete_comments = filter (\x -> not (null x) && (head x /= ';'))
+  let delete_comments = filter (not . is_nil_or_comment)
   in S.evalState (get_graphdef text_get_f) (concatMap words (delete_comments (lines txt)))
 
 read_graphdef_file :: FilePath -> IO Graphdef
