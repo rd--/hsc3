@@ -59,10 +59,22 @@ maybe_async_at t m =
 -- | Hostname and port number.
 type Sc3_Address = (String, Int)
 
--- | Sc3 default address.
+{- | Sc3 default address.
+
+>>> sc3_default_address
+("127.0.0.1",57110)
+-}
 sc3_default_address :: Sc3_Address
 sc3_default_address = (Options.sc3_host_name_def,Options.sc3_port_def)
 
+{- | Lookup ScSynth address at ScHostname and ScPort.
+If either is no set default values are used.
+
+
+>>> setEnv "ScHost" "192.168.1.53"
+>>> sc3_env_or_default_address
+("192.168.1.53",57110)
+-}
 sc3_env_or_default_address :: IO Sc3_Address
 sc3_env_or_default_address = do
   hostname <- lookupEnv "ScHostname"
