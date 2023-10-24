@@ -4,6 +4,8 @@ module Sound.Sc3.Server.Transport.Monad where
 import Control.Monad {- base -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
+import System.Environment {- base -}
+
 import System.Directory {- directory -}
 import System.FilePath {- filepath -}
 
@@ -57,9 +59,16 @@ maybe_async_at t m =
 -- | Hostname and port number.
 type Sc3_Address = (String, Int)
 
--- | Local host (ie. @127.0.0.1@) at port 'sc3_port_def'
-sc3_default_udp :: Sc3_Address
-sc3_default_udp = (Options.sc3_addr_def,Options.sc3_port_def)
+-- | Sc3 default address.
+sc3_default_address :: Sc3_Address
+sc3_default_address = (Options.sc3_host_name_def,Options.sc3_port_def)
+
+sc3_env_or_default_address :: IO Sc3_Address
+sc3_env_or_default_address = do
+  hostname <- lookupEnv "ScHostname"
+  port <- lookupEnv "ScPort"
+  return (fromMaybe Options.sc3_host_name_def hostname
+         ,maybe Options.sc3_port_def read port)
 
 -- | Maximum packet size, in bytes, that can be sent over Udp.
 --   However, see also <https://tools.ietf.org/html/rfc2675>
@@ -67,35 +76,37 @@ sc3_udp_limit :: Num n => n
 sc3_udp_limit = 65507
 
 -- | Bracket @Sc3@ communication at indicated host and port.
-withSc3At :: Sc3_Address -> Connection Udp a -> IO a
-withSc3At (h,p) = withTransport (openUdp h p)
+withSc3At :: Sc3_Address -> Connection Tcp a -> IO a
+withSc3At (h,p) = withTransport (openTcp h p)
 
--- | Bracket @Sc3@ communication, ie. 'withSc3At' 'sc3_default_udp'.
+-- | Bracket @Sc3@ communication, ie. 'withSc3At' 'sc3_default_address'.
 --
 -- > import Sound.Sc3.Server.Command
 --
 -- > withSc3 (sendMessage status >> waitReply "/status.reply")
-withSc3 :: Connection Udp a -> IO a
-withSc3 = withSc3At sc3_default_udp
+withSc3 :: Connection Tcp a -> IO a
+withSc3 f = do
+  addr <- sc3_env_or_default_address
+  withSc3At addr f
 
 -- | 'void' of 'withSc3'.
-withSc3_ :: Connection Udp a -> IO ()
+withSc3_ :: Connection Tcp a -> IO ()
 withSc3_ = void . withSc3
 
 -- | 'timeout_r' of 'withSc3'
-withSc3_tm :: Double -> Connection Udp a -> IO (Maybe a)
+withSc3_tm :: Double -> Connection Tcp a -> IO (Maybe a)
 withSc3_tm tm = Sound.Osc.Time.Timeout.timeout_r tm . withSc3
 
 -- | Run /f/ at /k/ scsynth servers with sequential port numbers starting at 'Options.sc3_port_def'.
 --
--- > withSc3AtSeq sc3_default_udp 2 (sendMessage status >> waitReply "/status.reply")
-withSc3AtSeq :: Sc3_Address -> Int -> Connection Udp a -> IO [a]
+-- > withSc3AtSeq sc3_default_address 2 (sendMessage status >> waitReply "/status.reply")
+withSc3AtSeq :: Sc3_Address -> Int -> Connection Tcp a -> IO [a]
 withSc3AtSeq (h,p) k f = do
-  let mk_udp i = openUdp h (p + i)
-  mapM (\i -> withTransport (mk_udp i) f) [0 .. k - 1]
+  let mk_tcp i = openTcp h (p + i)
+  mapM (\i -> withTransport (mk_tcp i) f) [0 .. k - 1]
 
 -- | 'void' of 'withSc3AtSeq'.
-withSc3AtSeq_ :: Sc3_Address -> Int -> Connection Udp a -> IO ()
+withSc3AtSeq_ :: Sc3_Address -> Int -> Connection Tcp a -> IO ()
 withSc3AtSeq_ loc k = void . withSc3AtSeq loc k
 
 -- * Server control
@@ -224,11 +235,15 @@ def_play_opt = (-1,Enum.AddToHead,1,[])
 
 -- | 'auditionAt' 'def_play_opt'
 audition :: Audible e => e -> IO ()
-audition = auditionAt sc3_default_udp def_play_opt
+audition x = do
+  addr <- sc3_env_or_default_address
+  auditionAt addr def_play_opt x
 
 -- | 'auditionAtSeq' 'def_play_opt'
 auditionSeq :: Audible e => Int -> e -> IO ()
-auditionSeq = auditionAtSeq sc3_default_udp def_play_opt
+auditionSeq k x = do
+  addr <- sc3_env_or_default_address
+  auditionAtSeq addr def_play_opt k x
 
 -- * Notifications
 

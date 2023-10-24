@@ -10,9 +10,9 @@ type Sc3_Opt i = (Char,String,i)
 sc3_opt_value :: Sc3_Opt i -> i
 sc3_opt_value (_,_,v) = v
 
--- | Default address string.
-sc3_addr_def :: String
-sc3_addr_def = "127.0.0.1"
+-- | Default host name string.
+sc3_host_name_def :: String
+sc3_host_name_def = "127.0.0.1"
 
 -- | Default port number, either a 'u' or a 't' option is required.
 sc3_port_def :: Num i => i
