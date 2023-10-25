@@ -245,11 +245,15 @@ auditionAtSeq loc opt k = withSc3AtSeq_ loc k . playAt opt
 def_play_opt :: Play_Opt
 def_play_opt = (-1,Enum.AddToHead,1,[])
 
--- | 'auditionAt' 'def_play_opt'
-audition :: Audible e => e -> IO ()
-audition x = do
+-- | 'auditionAt' 'sc3_env_or_default_address'
+auditionOpt :: Audible e => Play_Opt -> e -> IO ()
+auditionOpt o e = do
   addr <- sc3_env_or_default_address
-  auditionAt addr def_play_opt x
+  auditionAt addr o e
+
+-- | 'auditionOpt' 'def_play_opt'
+audition :: Audible e => e -> IO ()
+audition = auditionOpt def_play_opt
 
 -- | 'auditionAtSeq' 'def_play_opt'
 auditionSeq :: Audible e => Int -> e -> IO ()
