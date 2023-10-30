@@ -28,7 +28,7 @@ sc3_opt_port_def p =
     Sc3_Udp -> ('u',"udp-port-number",sc3_port_def)
     Sc3_Tcp -> ('t',"tcp-port-number",sc3_port_def)
 
--- | SC3 default options.
+-- | Sc3 default options.
 sc3_opt_def :: Num i => Sc3_Protocol -> [Sc3_Opt i]
 sc3_opt_def p =
   sc3_opt_port_def p :
@@ -55,7 +55,7 @@ sc3_opt_def p =
 sc3_opt_def_udp :: Num i => [Sc3_Opt i]
 sc3_opt_def_udp = sc3_opt_def Sc3_Udp
 
-{- | Is option boolean, ie. 0=FALSE and 1=TRUE.
+{- | Is option boolean, ie. 0=False and 1=True.
 
 >>> filter sc3_opt_bool sc3_opt_def_udp
 [('D',"load-synthdefs?",1),('R',"publish-to-rendezvous?",1)]

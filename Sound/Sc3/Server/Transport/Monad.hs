@@ -4,7 +4,6 @@ module Sound.Sc3.Server.Transport.Monad where
 import Control.Monad {- base -}
 import Data.List {- base -}
 import Data.Maybe {- base -}
-import System.Environment {- base -}
 
 import System.Directory {- directory -}
 import System.FilePath {- filepath -}
@@ -17,6 +16,7 @@ import qualified Safe {- safe -}
 import Sound.Osc {- hosc -}
 import qualified Sound.Osc.Time.Timeout {- hosc -}
 
+import qualified Sound.Sc3.Common.Base.System as System
 import qualified Sound.Sc3.Server.Command as Command
 import qualified Sound.Sc3.Server.Command.Generic as Generic
 import qualified Sound.Sc3.Server.Enum as Enum
@@ -56,8 +56,14 @@ maybe_async_at t m =
     then async_ m
     else sendBundle (bundle t [m])
 
+-- | Hostname, by default "127.0.0.1"
+type Sc3_Hostname = String
+
+-- | Port number, by default 57110
+type Sc3_Port = Int
+
 -- | Hostname and port number.
-type Sc3_Address = (String, Int)
+type Sc3_Address = (Sc3_Hostname, Sc3_Port)
 
 {- | Sc3 default address.
 
@@ -77,10 +83,9 @@ If either is no set default values are used.
 -}
 sc3_env_or_default_address :: IO Sc3_Address
 sc3_env_or_default_address = do
-  hostname <- lookupEnv "ScHostname"
-  port <- lookupEnv "ScPort"
-  return (fromMaybe Options.sc3_host_name_def hostname
-         ,maybe Options.sc3_port_def read port)
+  hostname <- System.lookup_env_default "ScHostname" Options.sc3_host_name_def
+  port <- System.lookup_env_default "ScPort" (show (Options.sc3_port_def :: Int))
+  return (hostname,read port)
 
 -- | Maximum packet size, in bytes, that can be sent over Udp.
 --   However, see also <https://tools.ietf.org/html/rfc2675>
@@ -177,13 +182,16 @@ playUgen loc =
 
 -- * Nrt
 
+-- | Read latency from environment, defaulting to 0.1 seconds.
+sc_latency :: IO Double
+sc_latency = fmap read (System.lookup_env_default "ScLatency" "0.1")
+
 -- | Wait ('pauseThreadUntil') until bundle is due to be sent relative
 -- to the initial 'Time', then send each message, asynchronously if
 -- required.
-run_bundle :: Transport m => Time -> Bundle -> m ()
-run_bundle t0 b = do
+run_bundle :: Transport m => Double -> Time -> Bundle -> m ()
+run_bundle latency t0 b = do
   let t = t0 + bundleTime b
-      latency = 0.1
   liftIO (pauseThreadUntil (t - latency))
   mapM_ (maybe_async_at t) (bundleMessages b)
 
@@ -197,7 +205,8 @@ run_bundle t0 b = do
 nrt_play :: Transport m => Nrt.Nrt -> m ()
 nrt_play sc = do
   t0 <- liftIO time
-  mapM_ (run_bundle t0) (Nrt.nrt_bundles sc)
+  latency <- liftIO sc_latency
+  mapM_ (run_bundle latency t0) (Nrt.nrt_bundles sc)
 
 -- | Variant where asynchronous commands at time @0@ are separated out and run before
 -- the initial time-stamp is taken.  This re-orders synchronous
@@ -208,8 +217,9 @@ nrt_play_reorder s = do
       i' = concatMap bundleMessages i
       (a,b) = Command.partition_async i'
   mapM_ async a
-  t <- liftIO time
-  mapM_ (run_bundle t) (Bundle 0 b : r)
+  t0 <- liftIO time
+  latency <- liftIO sc_latency
+  mapM_ (run_bundle latency t0) (Bundle 0 b : r)
 
 -- | 'withSc3' of 'nrt_play'.
 nrt_audition :: Nrt.Nrt -> IO ()
