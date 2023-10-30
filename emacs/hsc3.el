@@ -185,7 +185,7 @@ If STR has a newline the layout is adjusted accordingly."
   (hsc3-send-region-fn
    (format
     "Sound.Sc3.auditionAt (\"%s\",%d + %d) Sound.Sc3.def_play_opt"
-    hsc3-server-host hsc3-server-port (- k 1))))
+    (hsc3-server-host) (hsc3-server-port) (- k 1))))
 
 (defcustom hsc3-draw-command "draw"
   "*The un-qualified name of the draw function to use at `hsc3-draw-region'."
@@ -246,18 +246,18 @@ If STR has a newline the layout is adjusted accordingly."
   (interactive)
   (shell-command-on-region (region-beginning) (region-end) "hsc3-rw uparam expand" nil t))
 
-(defcustom hsc3-server-host "127.0.0.1"
+(defun hsc3-server-host ()
   "The host that scsynth is listening at."
-  :type 'string)
+  (or (getenv "ScHostname") "127.0.0.1"))
 
-(defcustom hsc3-server-port 57110
+(defun hsc3-server-port ()
   "The port that scsynth is listening at."
-  :type 'integer)
+  (read (or (getenv "ScPort") "57110")))
 
 (defun hsc3-with-sc3 (txt)
   "Sound.Sc3.withSc3 at `hsc3-server-host' and `hsc3-server-port' of the string TXT."
   (hsc3-send-line
-   (format "Sound.Sc3.withSc3At (\"%s\",%d) %s" hsc3-server-host hsc3-server-port txt)))
+   (format "Sound.Sc3.withSc3At (\"%s\",%d) %s" (hsc3-server-host) (hsc3-server-port) txt)))
 
 (defun hsc3-reset-scsynth ()
   "Send Sc3 reset instruction to haskell."
@@ -319,7 +319,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (hsc3-send-line
    (format
     "Sound.Sc3.withSc3AtSeq (\"%s\",%d) %d Sound.Sc3.serverStatus >>= mapM putStrLn . concat"
-    hsc3-server-host hsc3-server-port hsc3-seq-degree)))
+    (hsc3-server-host) (hsc3-server-port) hsc3-seq-degree)))
 
 (defun hsc3-play-region-seq ()
   "Sound.Sc3.auditionAtSeq of `hsc3-seq-degree'."
@@ -327,7 +327,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (hsc3-send-region-fn
    (format
     "Sound.Sc3.auditionAtSeq (\"%s\",%d) def_play_opt %d"
-    hsc3-server-host hsc3-server-port hsc3-seq-degree)))
+    (hsc3-server-host) (hsc3-server-port) hsc3-seq-degree)))
 
 (defun hsc3-reset-scsynth-seq ()
   "Send Sc3 reset instruction to haskell."
@@ -335,7 +335,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (hsc3-send-line
    (format
     "Sound.Sc3.withSc3AtSeq_ (\"%s\",%d) %d Sound.Sc3.reset"
-    hsc3-server-host hsc3-server-port hsc3-seq-degree)))
+    (hsc3-server-host) (hsc3-server-port) hsc3-seq-degree)))
 
 (defun hsc3-dmenu-ugen-core ()
   "Run dmenu to select a core Sc3 Ugen."

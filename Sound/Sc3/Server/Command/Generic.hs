@@ -40,11 +40,19 @@ b_alloc b frames channels = message "/b_alloc" [b_bufnum b,b_size frames,int32 c
 
 -- | Allocate buffer space and read a sound file. (Asynchronous)
 b_allocRead :: Integral i => i -> String -> i -> i -> Message
-b_allocRead b p f n = message "/b_allocRead" [b_bufnum b,string p,b_ix f,b_ix n]
+b_allocRead bufferNumber fileName startFrame frameCount =
+  message "/b_allocRead" [b_bufnum bufferNumber
+                         ,string fileName
+                         ,b_ix startFrame
+                         ,b_ix frameCount]
 
 -- | Allocate buffer space and read a sound file, picking specific channels. (Asynchronous)
 b_allocReadChannel :: Integral i => i -> String -> i -> i -> [i] -> Message
-b_allocReadChannel b p f n cs = message "/b_allocReadChannel" ([b_bufnum b,string p,b_ix f,b_ix n] ++ map b_ch cs)
+b_allocReadChannel bufferNumber fileName startFrame frameCount channels =
+  message "/b_allocReadChannel" ([b_bufnum bufferNumber
+                                 ,string fileName
+                                 ,b_ix startFrame
+                                 ,b_ix frameCount] ++ map b_ch channels)
 
 -- | Close attached soundfile and write header information. (Asynchronous)
 b_close :: Integral i => i -> Message
@@ -317,7 +325,12 @@ s_getn n l = message "/s_getn" (n_id n : Common.Base.mk_duples string int32 l)
 
 -- | Create a new synth.
 s_new :: (Integral i,Real n) => String -> i -> Server.Enum.AddAction -> i -> [(String,n)] -> Message
-s_new n i a t c = message "/s_new" (string n : int32 i : int32 (fromEnum a) : int32 t : Common.Base.mk_duples string float c)
+s_new synthdefName nodeId addAction targetId controlValues =
+  message "/s_new" (string synthdefName :
+                     int32 nodeId :
+                     int32 (fromEnum addAction) :
+                     int32 targetId :
+                     Common.Base.mk_duples string float controlValues)
 
 -- | Auto-reassign synth's ID to a reserved value.
 s_noid :: Integral i => [i] -> Message

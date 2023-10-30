@@ -71,7 +71,7 @@ sc3_default_address = (Options.sc3_host_name_def,Options.sc3_port_def)
 If either is no set default values are used.
 
 
->>> setEnv "ScHost" "192.168.1.53"
+>>> setEnv "ScHostname" "192.168.1.53"
 >>> sc3_env_or_default_address
 ("192.168.1.53",57110)
 -}
@@ -362,9 +362,10 @@ g_queryTree1_unpack n = do
 
 -- * Status
 
--- | Collect server status information.
---
--- > withSc3 serverStatus >>= mapM putStrLn
+{- | Collect server status information.
+
+> withSc3 serverStatus >>= mapM putStrLn
+-}
 serverStatus :: DuplexOsc m => m [String]
 serverStatus = fmap Status.statusFormat serverStatusData
 
