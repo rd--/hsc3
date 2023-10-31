@@ -67,7 +67,10 @@ git checkout 2495f4f61c0955001169d28142543aabbe1bedcb build/old_rtf_help.tar.gz"
 (defun hsc3-send-text-fn (fn str)
   "Send string STR with haskell function FN applied using the $ operator.
 If STR has a newline the layout is adjusted accordingly."
-  (hsc3-send-text (if (string-match "\n" str) (concat fn " $\n" str) (concat fn " $ " str))))
+  (hsc3-send-text
+   (if (string-match "\n" str)
+       (concat fn " $\n" str)
+     (concat fn " $ " str))))
 
 (defun hsc3-send-quit ()
   "Send :quit instruction to haskell."
@@ -174,18 +177,23 @@ If STR has a newline the layout is adjusted accordingly."
   "Send region text with haskell function FN to be applied."
   (hsc3-send-text-fn fn (hsc3-region-string)))
 
-(defun hsc3-play-region ()
-  "Play region at scsynth."
-  (interactive)
-  (hsc3-send-region-fn "Sound.Sc3.scsynthPlay scsynth"))
-
 (defun hsc3-play-region-at (k)
   "Play region at scsynth.  The (one-indexed) prefix agument K indicates which server to send to."
   (interactive "p")
   (hsc3-send-region-fn
    (format
     "Sound.Sc3.auditionAt (\"%s\",%d + %d) Sound.Sc3.def_play_opt"
-    (hsc3-server-host) (hsc3-server-port) (- k 1))))
+    (hsc3-server-host) (hsc3-server-port) k)))
+
+(defun hsc3-play-region ()
+  "Play region at scsynth."
+  (interactive)
+  (hsc3-send-region-fn "Sound.Sc3.audition"))
+
+(defun hsc3-play-region-stateful ()
+  "Play region at scsynth using stateful interface."
+  (interactive)
+  (hsc3-send-region-fn "Sound.Sc3.scSynthPlay scSynth"))
 
 (defcustom hsc3-draw-command "draw"
   "*The un-qualified name of the draw function to use at `hsc3-draw-region'."
@@ -262,7 +270,9 @@ If STR has a newline the layout is adjusted accordingly."
 (defun hsc3-reset-scsynth ()
   "Send Sc3 reset instruction to haskell."
   (interactive)
-  (hsc3-send-line "Sound.Sc3.scsynthReset scsynth"))
+  (hsc3-with-sc3 "Sound.Sc3.reset"))
+
+;;(hsc3-send-line "Sound.Sc3.scsynthReset scsynth")
 
 (defun hsc3-start-haskell ()
   "Start the hsc3 haskell process.
@@ -281,9 +291,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
      (cdr hsc3-interpreter))
     (hsc3-set-prompt)
     (if hsc3-auto-import-modules
-        (progn
-          (hsc3-import-standard-modules)
-          (hsc3-init-scsynth)))
+        (hsc3-import-standard-modules))
     (hsc3-see-haskell)))
 
 (defun hsc3-interrupt-haskell ()
@@ -307,7 +315,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
 (defun hsc3-quit-scsynth ()
   "Quit."
   (interactive)
-  (hsc3-with-sc3 "(Sound.OSC.sendMessage Sound.Sc3.quit)"))
+  (hsc3-with-sc3 "(Sound.Osc.sendMessage Sound.Sc3.quit)"))
 
 (defcustom hsc3-seq-degree 2
   "Number of scsynth processes to address at -seq operations (default=2)."
@@ -396,7 +404,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
 (defun hsc3-init-scsynth ()
   "Initialise the scsynth interpreter variable."
   (interactive)
-  (hsc3-send-line "scsynth <- Sound.Sc3.Server.Scsynth.newScsynth"))
+  (hsc3-send-line "scSynth <- Sound.Sc3.Server.ScSynth.newScSynth"))
 
 (defun hsc3-set-prompt ()
   "Set ghci prompt to hsc3> and the continuation prompt to nil."

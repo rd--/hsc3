@@ -398,11 +398,11 @@ with_completion_packet (Message c xs) cm =
 
 >>> let m = n_set1 0 "0" 0
 >>> let e = encodeMessage m
->>> withCM (b_close 0) m == Message "/b_close" [Int32 0,Blob e]
+>>> withCm (b_close 0) m == Message "/b_close" [Int32 0,Blob e]
 True
 -}
-withCM :: Message -> Message -> Message
-withCM m cm = with_completion_packet m (Packet_Message cm)
+withCm :: Message -> Message -> Message
+withCm m cm = with_completion_packet m (Packet_Message cm)
 
 -- * Variants to simplify common cases
 
@@ -411,7 +411,7 @@ b_alloc_setn1 :: (Integral i,Real n) => i -> i -> [n] -> Message
 b_alloc_setn1 b i xs =
     let k = i + genericLength xs
         xs' = genericReplicate i 0 ++ xs
-    in withCM (b_alloc b k 1) (b_setn1 b 0 xs')
+    in withCm (b_alloc b k 1) (b_setn1 b 0 xs')
 
 -- | Get ranges of sample values.
 b_getn1 :: Integral i => i -> (i,i) -> Message

@@ -87,8 +87,10 @@ sc3_env_or_default_address = do
   port <- System.lookup_env_default "ScPort" (show (Options.sc3_port_def :: Int))
   return (hostname,read port)
 
--- | Maximum packet size, in bytes, that can be sent over Udp.
---   However, see also <https://tools.ietf.org/html/rfc2675>
+{- | Maximum packet size, in bytes, that can be sent over Udp.
+However, see also <https://tools.ietf.org/html/rfc2675>.
+Tcp is now the default transport mechanism for Hsc3.
+-}
 sc3_udp_limit :: Num n => n
 sc3_udp_limit = 65507
 
@@ -96,7 +98,7 @@ sc3_udp_limit = 65507
 withSc3At :: Sc3_Address -> Connection Tcp a -> IO a
 withSc3At (h,p) = withTransport (openTcp h p)
 
--- | Bracket @Sc3@ communication, ie. 'withSc3At' 'sc3_default_address'.
+-- | Bracket @Sc3@ communication, ie. 'withSc3At' 'sc3_env_or_default_address'.
 --
 -- > import Sound.Sc3.Server.Command
 --
