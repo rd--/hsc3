@@ -7,7 +7,7 @@ import Data.Maybe {- base -}
 import Sound.Osc.Core {- hosc -}
 
 import qualified Sound.Sc3.Common.Base as Common.Base
-import qualified Sound.Sc3.Server.Command.Enum as Server.Command.Enum
+import qualified Sound.Sc3.Server.Command.Completion as Server.Command.Completion
 import qualified Sound.Sc3.Server.Enum as Server.Enum
 import qualified Sound.Sc3.Server.Graphdef as Server.Graphdef
 import qualified Sound.Sc3.Server.Graphdef.Binary as Server.Graphdef
@@ -384,26 +384,6 @@ status = message "/status" []
 sync :: Integral i => i -> Message
 sync sid = message "/sync" [int32 sid]
 
--- * Modify existing message to include completion message
-
--- | Add a completion packet to an existing asynchronous command.
-with_completion_packet :: Message -> Packet -> Message
-with_completion_packet (Message c xs) cm =
-    if c `elem` Server.Command.Enum.async_cmds
-    then let xs' = xs ++ [Blob (encodePacket cm)]
-         in Message c xs'
-    else error ("with_completion_packet: not async: " ++ c)
-
-{- | Add a completion message to an existing asynchronous command.
-
->>> let m = n_set1 0 "0" 0
->>> let e = encodeMessage m
->>> withCm (b_close 0) m == Message "/b_close" [Int32 0,Blob e]
-True
--}
-withCm :: Message -> Message -> Message
-withCm m cm = with_completion_packet m (Packet_Message cm)
-
 -- * Variants to simplify common cases
 
 -- | Pre-allocate for b_setn1, values preceding offset are zeroed.
@@ -411,7 +391,7 @@ b_alloc_setn1 :: (Integral i,Real n) => i -> i -> [n] -> Message
 b_alloc_setn1 b i xs =
     let k = i + genericLength xs
         xs' = genericReplicate i 0 ++ xs
-    in withCm (b_alloc b k 1) (b_setn1 b 0 xs')
+    in Server.Command.Completion.withCm (b_alloc b k 1) (b_setn1 b 0 xs')
 
 -- | Get ranges of sample values.
 b_getn1 :: Integral i => i -> (i,i) -> Message

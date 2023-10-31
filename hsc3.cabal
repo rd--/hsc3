@@ -76,6 +76,7 @@ Library
                    Sound.Sc3.Server.Command.Enum
                    Sound.Sc3.Server.Command.Generic
                    Sound.Sc3.Server.Command.Plain
+                   Sound.Sc3.Server.Command.Plain.Completion
                    Sound.Sc3.Server.Enum
                    Sound.Sc3.Server.Graphdef
                    Sound.Sc3.Server.Graphdef.Binary
