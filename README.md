@@ -80,6 +80,6 @@ initial announcement:
 
 ```
 $ doctest Sound/Sc3
-Examples: 350  Tried: 350  Errors: 0  Failures: 0
+Examples: 355  Tried: 355  Errors: 0  Failures: 0
 $
 ```

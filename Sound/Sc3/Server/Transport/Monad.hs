@@ -76,7 +76,7 @@ sc3_default_address = (Options.sc3_host_name_def,Options.sc3_port_def)
 {- | Lookup ScSynth address at ScHostname and ScPort.
 If either is no set default values are used.
 
-
+>>> import System.Environment
 >>> setEnv "ScHostname" "192.168.1.53"
 >>> sc3_env_or_default_address
 ("192.168.1.53",57110)

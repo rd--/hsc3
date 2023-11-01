@@ -15,6 +15,7 @@ with_completion_packet (Message c xs) cm =
 
 {- | Add a completion message to an existing asynchronous command.
 
+>>> import Sound.Sc3.Server.Command.Plain
 >>> let m = n_set1 0 "0" 0
 >>> let e = encodeMessage m
 >>> withCm (b_close 0) m == Message "/b_close" [Int32 0,Blob e]
