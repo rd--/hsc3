@@ -5,14 +5,14 @@ let x = mouseX kr 0.5 20 Exponential 0.1
 in sinOsc ar f 0 * 0.2
 
 -- sweep ; using sweep to index into a buffer ; requires=buf
-let (b, nc) = (control kr "buf" 0, 2)
+let (b, nc) = (control kr "buf" 100, 2)
     x = mouseX kr 0.5 20 Exponential 0.1
     t = impulse ar x 0
     p = sweep ar t (bufSampleRate kr b)
 in bufRdL nc ar b p NoLoop
 
 -- sweep ; backwards, variable offset ; requires=buf
-let (b, nc) = (control kr "buf" 0, 2)
+let (b, nc) = (control kr "buf" 100, 2)
     n = lfNoise0Id 'α' kr 15
     x = mouseX kr 0.5 10 Exponential 0.1
     t = impulse ar x 0
@@ -21,7 +21,7 @@ let (b, nc) = (control kr "buf" 0, 2)
 in bufRdL nc ar b p NoLoop
 
 -- sweep ; raising rate ; requires=buf
-let (b, nc) = (control kr "buf" 0, 2)
+let (b, nc) = (control kr "buf" 100, 2)
     x = mouseX kr 0.5 10 Exponential 0.1
     t = impulse ar x 0
     r = sweep ar t 2 + 0.5

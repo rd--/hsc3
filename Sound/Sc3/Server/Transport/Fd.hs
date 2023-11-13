@@ -81,7 +81,7 @@ playUgen k fd = playSynthdef k fd . synthdef "Anonymous"
 -- | Wait ('pauseThreadUntil') until bundle is due to be sent relative
 -- to initial 'Time', then send each message, asynchronously if
 -- required.
-run_bundle :: Transport t => t -> Time -> Bundle -> IO ()
+run_bundle :: Transport t => t -> Time -> Bundle Message -> IO ()
 run_bundle fd t0 b = do
   let t = t0 + bundleTime b
       latency = 0.1

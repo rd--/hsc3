@@ -14,12 +14,12 @@ let rate = mouseX kr 1 200 Linear 0.1
 in sinOsc ar (x * 500 + 500) 0 * 0.1
 
 -- phasor ; as phase input to bufRd ; requires=buf
-let (b, nc) = (control kr "buf" 0, 2)
+let (b, nc) = (control kr "buf" 100, 2)
     ph = phasor ar 0 (bufRateScale kr b) 0 (bufFrames kr b) 0
 in bufRd nc ar b ph Loop NoInterpolation
 
 -- phasor ; audio rate oscillator as phase input to bufRd ; requires=buf (non-wavetable format)
-let (b, nc) = (control kr "buf" 0, 2)
+let (b, nc) = (control kr "buf" 100, 2)
     f = 440
     fr = bufFrames kr b
     rt = f * (fr / sampleRate)

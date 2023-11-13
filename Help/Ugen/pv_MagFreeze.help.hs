@@ -1,5 +1,5 @@
 -- pv_MagFreeze ; mouseX is trigger to freeze
-let b = control kr "buf" 0
+let b = control kr "buf" 100
     z = playBuf 1 ar b (bufRateScale kr b) 0 0 Loop DoNothing
     f = fft' (localBufId 'α' 2048 1) z
     x = mouseX kr 0 1 Linear 0.1

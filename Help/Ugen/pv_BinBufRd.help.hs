@@ -1,5 +1,5 @@
 -- pv_BinBufRd ; play analysis back ; c.f. pv_RecordBuf help file
-let snd_buf = control kr "buf" 0
+let snd_buf = control kr "buf" 100
     rec_buf = control kr "rec" 10
     fft_buf = localBufId 'α' 1 1024
     x = mouseX kr 0 1 Linear 0.2

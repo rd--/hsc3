@@ -1,16 +1,16 @@
 -- bufRd ; requires=buf ; phasor as phase input ; constructors bufRd{N|L|C} preset interpolation type
-let (buf, nc) = (control kr "buf" 0, 2)
+let (buf, nc) = (control kr "buf" 100, 2)
     tr = impulse ar (recip (bufDur kr buf)) 0
     ph = phasor ar tr (bufRateScale kr buf) 0 (bufFrames kr buf) 0
 in bufRdL nc ar buf ph NoLoop
 
 -- bufRd ; requires=buf ; audio rate sine oscillator as phase input
-let (buf, nc) = (control kr "buf" 0, 2)
+let (buf, nc) = (control kr "buf" 100, 2)
     phase = sinOsc ar 0.1 0 * bufFrames kr buf * bufRateScale kr buf
 in bufRdL nc ar buf phase Loop
 
 -- bufRd ; requires=buf ; mouse control
-let (buf, nc) = (control kr "buf" 0, 2)
+let (buf, nc) = (control kr "buf" 100, 2)
     x = mouseX kr (mce [5, 10]) 100 Linear 0.1
     n = lfNoise1Id 'α' ar x
 in mix (bufRdL nc ar buf (n * bufFrames kr buf * bufRateScale kr buf) Loop)

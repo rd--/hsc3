@@ -1,38 +1,38 @@
 -- playBuf ; requires=buf ; once only
-let (b, nc) = (control kr "buf" 0, 2)
+let (b, nc) = (control kr "buf" 100, 2)
 in playBuf nc ar b (bufRateScale kr b) 1 0 NoLoop RemoveSynth
 
 -- playBuf ; requires=buf ; infinite loop
-let (b, nc) = (control kr "buf" 0, 2)
+let (b, nc) = (control kr "buf" 100, 2)
 in playBuf nc ar b (bufRateScale kr b) 1 0 Loop DoNothing
 
 -- playBuf ; requires=buf ; trigger playback at each pulse
-let (b, nc) = (control kr "buf" 0, 2)
+let (b, nc) = (control kr "buf" 100, 2)
     t = impulse kr 2 0
     s = bufRateScale kr 0
 in playBuf nc ar b s t 0 NoLoop DoNothing
 
 -- playBuf ; requires=buf ; trigger playback at each pulse (diminishing intervals)
-let (b, nc) = (control kr "buf" 0, 2)
+let (b, nc) = (control kr "buf" 100, 2)
     f = xLine kr 0.1 100 10 RemoveSynth
     t = impulse kr f 0
     s = bufRateScale kr b
 in playBuf nc ar b s t 0 NoLoop DoNothing
 
 -- playBuf ; requires=buf ; loop playback, accelerating pitch
-let (b, nc) = (control kr "buf" 0, 2)
+let (b, nc) = (control kr "buf" 100, 2)
     r = xLine kr 0.1 100 60 RemoveSynth
 in playBuf nc ar b r 1 0 Loop DoNothing
 
 -- playBuf ; requires=buf ; sine wave control of playback rate, negative rate plays backwards
-let (b, nc) = (control kr "buf" 0, 2)
+let (b, nc) = (control kr "buf" 100, 2)
     f = xLine kr 0.2 8 30 RemoveSynth
     r = fSinOsc kr f 0 * 3 + 0.6
     s = bufRateScale kr b * r
 in playBuf nc ar b s 1 0 Loop DoNothing
 
 -- playBuf ; requires=buf ; channel mismatch message in server log ; can acquire second channel (subsequent load)
-let (b, nc) = (control kr "buf" 0, 1)
+let (b, nc) = (control kr "buf" 100, 1)
 in playBuf (nc + 1) ar b (bufRateScale kr b) 1 0 Loop DoNothing
 
 -- playBuf ; requires=buf ; scan sequence of buffers

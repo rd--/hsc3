@@ -12,7 +12,7 @@ let zmax = 100
 in X.squiz (soundIn 0) x y 0.1 * 0.1
 
 -- squiz ; of buffer ; requires=buf
-let (b, nc) = (control kr "buf" 0, 2)
+let (b, nc) = (control kr "buf" 100, 2)
     zmax = 100
     s = sinOsc ar 440 0
     x = mouseX kr 1 10 Exponential 0.2

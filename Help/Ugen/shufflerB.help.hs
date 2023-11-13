@@ -1,22 +1,22 @@
 -- playBuf ; check buffer
-let b = control kr "buf" 0
+let b = control kr "buf" 100
     s = bufRateScale kr b
 in playBuf 1 ar b s 1 0 NoLoop RemoveSynth * 0.1
 
 -- shufflerB ; static
-let b = control kr "buf" 0
+let b = control kr "buf" 100
 in X.shufflerB b 0 0.05 0.95 1.05 0.035 0.05 0.1 0.2 0.4 0.6 0.4 0.6 0 1 0.005 0.01 1 0 0
 
 -- shufflerB ; static, quantized
-let b = control kr "buf" 0
+let b = control kr "buf" 100
 in X.shufflerB b 0 1 0.5 2 0.025 0.075 0.2 0.6 0.1 0.9 0.1 0.9 0 1 0.005 0.05 0 0.5 0.005
 
 -- shufflerB ; static, pointilist
-let b = control kr "buf" 0
+let b = control kr "buf" 100
 in X.shufflerB b 0.4 0.5 0.5 2 0.05 0.15 0.2 0.5 0.3 0.7 0.3 0.7 0 1 0.05 0.25 0 0 0
 
 -- shufflerB ; controls
-let b = control_m kr "buf" 0 (0,10,"lin")
+let b = control_m kr "buf" 100 (0,10,"lin")
     k nm def = control_m kr nm def
     k2 nm (d1,d2) = control_rng kr nm (d1,d2)
     k2_mul m (c1,c2) = (c1 * m,c2 * m)

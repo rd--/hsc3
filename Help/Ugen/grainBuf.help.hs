@@ -1,5 +1,5 @@
 -- grainBuf ; requires=buf
-let (buf, nc) = (control kr "buf" 0, 2)
+let (buf, nc) = (control kr "buf" 100, 2)
     dur = 15
     lin a b = line kr a b dur RemoveSynth
     tr = impulse kr (lin 7.5 15) 0
@@ -10,7 +10,7 @@ let (buf, nc) = (control kr "buf" 0, 2)
 in grainBuf nc tr gd buf r i 2 l (-1) 512 * control kr "gain" 0.25
 
 -- grainBuf ; requires=buf ; mouse control
-let (buf, nc) = (control kr "buf" 0, 2)
+let (buf, nc) = (control kr "buf" 100, 2)
     e = -1
     x = mouseX kr (-1) 1 Linear 0.1
     y = mouseY kr 10 45 Linear 0.1
@@ -21,7 +21,7 @@ in grainBuf 2 i 0.1 buf r p 2 x e 512 * control kr "gain" 0.25
 
 -- grainBuf ; requires=buf ; event control
 let f (_,g,x,y,z,o,rx,ry,_,_,_) =
-      let (buf, nc) = (control kr "buf" 0, 2)
+      let (buf, nc) = (control kr "buf" 100, 2)
           e = -1
           tr = impulse ar (y * 60 + 10) 0
       in grainBuf nc tr (ry * 0.5) buf (1 + (rx * 0.1)) x 2 o e 512 * z * g

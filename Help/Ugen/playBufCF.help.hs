@@ -1,5 +1,5 @@
 -- playBufCF ; wslib ; CF = cross-fade ; control-rate trigger and start-position inputs
-let b = control kr "buf" 0
+let b = control kr "buf" 100
     r = bufRateScale kr b
     tr = impulse kr 2 0
     wn = whiteNoiseId 'α' kr
@@ -9,7 +9,7 @@ let b = control kr "buf" 0
 in mce2 o o'
 
 -- playBufCF ; demand ugens inputs
-let b = control kr "buf" 0
+let b = control kr "buf" 100
     r = drandId 'α' dinf (mce [0.95,1,1.05])
     tr = dwhiteId 'β' dinf 0.1 0.3
     sp = dbrownId 'γ' dinf 0 0.95 0.1 * bufFrames kr b

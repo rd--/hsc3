@@ -191,7 +191,7 @@ sc_latency = fmap read (System.lookup_env_default "ScLatency" "0.1")
 -- | Wait ('pauseThreadUntil') until bundle is due to be sent relative
 -- to the initial 'Time', then send each message, asynchronously if
 -- required.
-run_bundle :: Transport m => Double -> Time -> Bundle -> m ()
+run_bundle :: Transport m => Double -> Time -> Bundle Message -> m ()
 run_bundle latency t0 b = do
   let t = t0 + bundleTime b
   liftIO (pauseThreadUntil (t - latency))

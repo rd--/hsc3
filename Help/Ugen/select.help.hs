@@ -26,7 +26,7 @@ let n = 10
 in saw ar f * 0.1
 
 -- select ; buffer segment player ; requires=buf
-let (buf, nc) = (control kr "buf" 0, 2)
+let (buf, nc) = (control kr "buf" 100, 2)
     n_segments = control_m kr "nseg" 32 (1, 64, "lin")
     sel = control_m kr "sel" 0 (0,3,"lin")
     buf_size = bufFrames kr buf

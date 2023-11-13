@@ -1,5 +1,5 @@
 -- pv_BinScramble
-let b = control kr "buf" 0
+let b = control kr "buf" 100
     a = playBuf 1 ar b (bufRateScale kr b) 1 0 Loop DoNothing
     f = fft' (localBufId 'α' 2048 1) a
     x = mouseX kr 0.0 1.0 Linear 0.1

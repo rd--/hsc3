@@ -222,7 +222,7 @@ isMce u =
       Mce_U _ -> True
       _ -> False
 
--- | Output channels of Ugen as a list.  If required, preserves the RHS of and Mrg node in channel 0.
+-- | Output channels of Ugen as a list.  If required, preserves the RHS of an Mrg node in channel 0.
 mceChannels :: Ugen -> [Ugen]
 mceChannels u =
     case u of

@@ -1,5 +1,5 @@
 -- concat ; requires=buf ; granulator
-let (b, nc) = (control kr "buf" 0, 2)
+let (b, nc) = (control kr "buf" 100, 2)
     y0 = mouseY kr 0.01 1 Linear 0.2
     y1 = mouseY kr b 100 Linear 0.2
     n = lfNoise0Id 'α' kr y0 * 3 + 4.5

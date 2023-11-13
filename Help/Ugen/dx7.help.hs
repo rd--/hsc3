@@ -33,7 +33,7 @@ let f (_,g,x,_,z,o,_,_,p,_,_) =
 in mix (voicer 16 f) * control kr "gain" 1
 
 -- dx7 ; data at shared buffer ; external control
-let buf = control kr "dat" 100
+let buf = control kr "dat" 400
     gate_ = control kr "gate" 0
     reset = control kr "reset" 0
     data_ = control kr "data" 0
@@ -48,7 +48,7 @@ in X.dx7 ar buf gate_ reset data_ vc mnn vel pw mw bc fc
 
 -- dx7 ; data at shared buffer
 let nv = 32 -- 221
-    buf = control kr "dat" 100
+    buf = control kr "dat" 400
     tr = dustId 'α' kr 2.0
     gate_ = toggleFF tr
     reset_ = 0
@@ -61,7 +61,7 @@ in pan2 (X.dx7 ar buf gate_ reset_ data_ vc mnn vel 0x2000 0 0 0) loc 1
 
 -- dx7 ; event control ; data at shared buffer
 let f (_,g,x,_,z,o,_,_,p,_,_) =
-      let buf = control kr "buf" 100
+      let buf = control kr "buf" 400
           vc = control_m kr "vc" 0 (0,31,"lin")
           x0 = latch x g
           pw = 0x2000 * (1 + (x - x0) * 2)
@@ -72,18 +72,18 @@ in mix (voicer 16 f) * control_m kr "gain" 1 (0,4,"amp")
 ---- ; send init voice
 import qualified Sound.Sc3.Data.Yamaha.DX7 as DX7 {- hsc3-data -}
 import qualified Sound.Sc3.Data.Yamaha.DX7.Sc3 as DX7 {- hsc3-data -}
-DX7.dx7_sc3_data_load 100 [DX7.dx7_init_voice]
+DX7.dx7_sc3_data_load 400 [DX7.dx7_init_voice]
 
 ---- ; load patch data from .hex.text file
 hex_fn = "/home/rohan/uc/the-center-is-between-us/trees/text/dx7/tc.hex.text"
 v <- DX7.dx7_load_hex hex_fn
-DX7.dx7_sc3_data_load 100 v
+DX7.dx7_sc3_data_load 400 v
 length v == 221
 
 ---- ; load patch data from .syx sysex file
 syx_fn = "/home/rohan/sw/hsc3-data/data/yamaha/dx7ii/rom/DX7II-32A.syx"
 bnk <- DX7.dx7_load_fmt9_sysex_err syx_fn
-DX7.dx7_sc3_data_load 100 bnk
+DX7.dx7_sc3_data_load 400 bnk
 length bnk == 32
 
 ---- ; send external control messages
