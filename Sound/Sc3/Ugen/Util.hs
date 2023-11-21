@@ -47,7 +47,8 @@ ugenTraverse halt_f map_f u =
 
 {- | Right fold of Ugen graph.
 
-> let pp = Sound.Sc3.Ugen.Pp.ugen_concise_pp
+> import qualified Sound.Sc3.Ugen.Pp as Pp
+> let pp = Pp.ugen_concise_pp
 > map pp (ugenFoldr (:) [] (sinOsc ar 440 0 * 0.1))
 ["*","SinOsc","440","0","0.1"]
 
@@ -184,7 +185,7 @@ mceChannel n u =
       Mce_U m -> mceProxies m !! n
       _ -> if n == 0 then u else error "mceChannel: non Mce value, non ZERO index"
 
-{- | Obtain indexed channel at Mce, indicex wrap around.
+{- | Obtain indexed channel at Mce, indices wrap around.
 
 > map (\ix -> pp (mceChannelWrap ix (mce [1,2,3,4,5]))) [0 .. 9]
 ["1","2","3","4","5","1","2","3","4","5"]

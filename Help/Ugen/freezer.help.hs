@@ -57,7 +57,8 @@ let b = control_m kr "buf" 100 (0,0,"lin")
 in X.freezer b lhs rhs amp incr incrO incrR wndR syncPh randPh dgr
 
 ---- ; allocate buffer 100, required for examples
-ld fn = withSc3 (async (b_allocRead 100 (sfResolve fn) 0 0))
+import Sound.Sc3.Server.Command.MemCpy {- sc3-rdu -}
+ld fn = b_allocReadOrSend 100 (sfResolve fn) 0 0 >>= (withSc3 . async)
 ld "instr/crotales/crotale05(D).wav"
 ld "saron-panerus-S-0-5.flac"
 ld "saron-panerus-S-0-6.flac"
@@ -75,5 +76,5 @@ ld "gender-barung-S-3-3.flac"
 
 Create a set of concurrent loops at a signal buffer.  This is the
 dynamic and gestural variant of RLoopSet.  It was written after
-reading the manual for the GRM ToolsId 'Freeze' plugin.
+reading the manual for the Grm Tools 'Freeze' plugin.
 -}
