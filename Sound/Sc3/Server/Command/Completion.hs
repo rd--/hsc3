@@ -6,7 +6,7 @@ import Sound.Osc.Core {- hosc -}
 import qualified Sound.Sc3.Server.Command.Enum as Server.Command.Enum {- hsc3 -}
 
 -- | Add a completion packet to an existing asynchronous command.
-with_completion_packet :: Message -> Packet Message -> Message
+with_completion_packet :: Message -> PacketOf Message -> Message
 with_completion_packet (Message c xs) cm =
     if c `elem` Server.Command.Enum.async_cmds
     then let xs' = xs ++ [Blob (encodePacket cm)]

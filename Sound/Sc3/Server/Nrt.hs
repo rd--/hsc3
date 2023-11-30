@@ -14,19 +14,19 @@ import Sound.Osc.Datum {- hosc -}
 import Sound.Osc.Packet {- hosc -}
 
 -- | Encode Bundle and prefix with encoded length.
-oscWithSize :: Bundle Message -> B.ByteString
+oscWithSize :: BundleOf Message -> B.ByteString
 oscWithSize o =
     let b = Encode.encodeBundle o
         l = Byte.encode_i32 (fromIntegral (B.length b))
     in B.append l b
 
 -- | An 'Nrt' score is a sequence of 'Bundle's.
-newtype Nrt = Nrt {nrt_bundles :: [Bundle Message]} deriving (Show)
+newtype Nrt = Nrt {nrt_bundles :: [BundleOf Message]} deriving (Show)
 
 {- | 'span' of 'f' of 'bundleTime'.
      Can be used to separate the /initialisation/ and /remainder/ parts of a score.
 -}
-nrt_span :: (Time -> Bool) -> Nrt -> ([Bundle Message],[Bundle Message])
+nrt_span :: (Time -> Bool) -> Nrt -> ([BundleOf Message],[BundleOf Message])
 nrt_span f = span (f . bundleTime) . nrt_bundles
 
 -- | Encode an 'Nrt' score.
@@ -53,7 +53,7 @@ putNrt :: Handle -> Nrt -> IO ()
 putNrt h = B.hPut h . encodeNrt
 
 -- | Decode an 'Nrt' 'B.ByteString' to a list of 'Bundle's.
-decode_nrt_bundles :: B.ByteString -> [Bundle Message]
+decode_nrt_bundles :: B.ByteString -> [BundleOf Message]
 decode_nrt_bundles s =
     let (p,q) = B.splitAt 4 s
         n = fromIntegral (Byte.decode_i32 p)
@@ -77,7 +77,7 @@ readNrt = fmap decodeNrt . B.readFile
 -- * Query
 
 -- | Find any non-ascending sequences.
-nrt_non_ascending :: Nrt -> [(Bundle Message, Bundle Message)]
+nrt_non_ascending :: Nrt -> [(BundleOf Message, BundleOf Message)]
 nrt_non_ascending (Nrt b) =
   case uncons b of
     Nothing -> error "nrt_non_ascending: empty nrt"

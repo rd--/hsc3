@@ -166,7 +166,7 @@ True
 from_wavetable :: Num n => [n] -> [n]
 from_wavetable = map (uncurry (+)) . t2_adjacent
 
-{- | A Wavetable has n * 2 + 2 elements, where n is the number of elements of the Signal.
+{- | A Wavetable has n * 2 elements, where n is the number of elements of the Signal.
      Each signal element e0 expands to the two elements (2 * e0 - e1, e1 - e0)
      where e1 is the next element, or zero at the final element.
      Properly wavetables are only of power of two element signals.

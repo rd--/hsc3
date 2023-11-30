@@ -25,11 +25,11 @@ nrt_empty :: Nrt
 nrt_empty = Nrt []
 
 -- | Add bundle at first permissable location of Nrt.
-nrt_insert_pre :: Osc.Bundle Osc.Message -> Nrt -> Nrt
+nrt_insert_pre :: Osc.BundleOf Osc.Message -> Nrt -> Nrt
 nrt_insert_pre p (Nrt q) = Nrt (insert p q)
 
 -- | Add bundle at last permissable location of Nrt.
-nrt_insert_post :: Osc.Bundle Osc.Message -> Nrt -> Nrt
+nrt_insert_post :: Osc.BundleOf Osc.Message -> Nrt -> Nrt
 nrt_insert_post p (Nrt q) = Nrt (Sound.Sc3.Common.Base.insert_post p q)
 
 -- | bundleTime of last of nrt_bundles.

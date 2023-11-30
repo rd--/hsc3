@@ -1,4 +1,4 @@
--- | Implementaion of server b_gen routines.
+-- | Implementation of server b_gen routines.
 --
 -- The naming scheme is: _p generates one partial, _l generates a list
 -- of partials, _nrm is the unit normalised form.
@@ -19,10 +19,11 @@ nrm_u = Buffer.normalize (-1) 1
 
 -- * sine1
 
--- | 'sine3_p' with zero phase.
---
--- > import Sound.Sc3.Plot {- hsc3-plot -}
--- > plot_p1_ln [sine1_p 512 (1, 1)]
+{- | 'sine3_p' with zero phase.
+
+> import Sound.Sc3.Plot {- hsc3-plot -}
+> plot_p1_ln [sine1_p 512 (1, 1)]
+-}
 sine1_p :: (Enum n, Floating n) => Int -> (n,n) -> [n]
 sine1_p n (pfreq,ampl) = sine3_p n (pfreq,ampl,0)
 
@@ -30,9 +31,10 @@ sine1_p n (pfreq,ampl) = sine3_p n (pfreq,ampl,0)
 sine1_l :: (Enum n,Floating n) => Int -> [n] -> [[n]]
 sine1_l n = zipWith (curry (sine1_p n)) [1..]
 
--- | 'sum_l' of 'sine1_l'.
---
--- > plot_p1_ln [sine1 256 [1, 0.95 .. 0.5]]
+{- | 'sum_l' of 'sine1_l'.
+
+> plot_p1_ln [sine1 256 [1, 0.95 .. 0.5]]
+-}
 sine1 :: (Enum n,Floating n) => Int -> [n] -> [n]
 sine1 n = sum_l . sine1_l n
 
@@ -68,19 +70,25 @@ sine2_nrm n = nrm_u . sine1 n
 
 -- * sine3
 
--- | Sine wave table at specified frequency, amplitude and phase.
+{- | Sine wave table at specified frequency, amplitude and phase.
+The table does not arrive back at the starting point.
+
+>>> map (round . (* 100)) (sine3_p 8 (1, 1, 0))
+[0,71,100,71,0,-71,-100,-71]
+-}
 sine3_p :: (Enum n,Floating n) => Int -> (n,n,n) -> [n]
 sine3_p n (pfreq, ampl, phase) =
-    let incr = (Math.two_pi / (fromIntegral n - 0)) * pfreq -- the table should not arrive back at zero
-    in map ((*) ampl . sin) (take n [phase, phase + incr ..])
+  let incr = (Math.two_pi / (fromIntegral n - 0)) * pfreq
+  in map ((*) ampl . sin) (take n [phase, phase + incr ..])
 
 -- | 'map' of 'sine3_p'.
 sine3_l :: (Enum n,Floating n) => Int -> [(n,n,n)] -> [[n]]
 sine3_l n = map (sine3_p n)
 
--- | 'sum_l' of 'sine3_l'.
---
--- > plot_p1_ln [sine3 256 (zip3 [1,1.5 ..] [1,0.95 .. 0.5] [0,pi/7..])]
+{- | 'sum_l' of 'sine3_l'.
+
+> plot_p1_ln [sine3 256 (zip3 [1,1.5 ..] [1,0.95 .. 0.5] [0,pi/7..])]
+-}
 sine3 :: (Enum n,Floating n) => Int -> [(n,n,n)] -> [n]
 sine3 n = sum_l . sine3_l n
 
