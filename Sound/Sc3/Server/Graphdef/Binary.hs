@@ -5,7 +5,7 @@ import System.FilePath {- filepath -}
 
 import qualified Data.Binary.Get as Get {- binary -}
 import qualified Data.Binary.IEEE754 as IEEE754 {- data-binary-ieee754 -}
-import qualified Data.ByteString.Lazy as L {- bytestring -}
+import qualified Data.ByteString.Lazy as ByteString {- bytestring -}
 
 import qualified Sound.Osc.Coding.Byte as Byte {- hosc -}
 import qualified Sound.Osc.Coding.Cast as Cast {- hosc -}
@@ -43,7 +43,7 @@ binary_get_f =
 -}
 read_graphdef_file :: FilePath -> IO Graphdef
 read_graphdef_file nm = do
-  b <- L.readFile nm
+  b <- ByteString.readFile nm
   return (Get.runGet (get_graphdef binary_get_f) b)
 
 -- * Stat
@@ -56,39 +56,39 @@ scsyndef_stat fn = do
 
 -- * Encode (version zero)
 
--- | 'Encode_Functions' for 'L.ByteString'
-enc_bytestring :: Encode_Functions L.ByteString
+-- | 'Encode_Functions' for 'ByteString.ByteString'
+enc_bytestring :: Encode_Functions ByteString.ByteString
 enc_bytestring =
-  (L.concat,encode_pstr,Byte.encode_i8,Byte.encode_i16,Byte.encode_i32,encode_sample
-  ,const L.empty)
+  (ByteString.concat,encode_pstr,Byte.encode_i8,Byte.encode_i16,Byte.encode_i32,encode_sample
+  ,const ByteString.empty)
 
 
 {- | Pascal (length prefixed) encoding of 'Name'.
 
-> L.unpack (encode_pstr (ascii "string")) ==  [6, 115, 116, 114, 105, 110, 103]
+> ByteString.unpack (encode_pstr (ascii "string")) ==  [6, 115, 116, 114, 105, 110, 103]
 -}
-encode_pstr :: Name -> L.ByteString
-encode_pstr = L.pack . Cast.str_pstr . Datum.ascii_to_string
+encode_pstr :: Name -> ByteString.ByteString
+encode_pstr = ByteString.pack . Cast.str_pstr . Datum.ascii_to_string
 
 
 -- | Byte-encode 'Input'.
-encode_input :: Input -> L.ByteString
+encode_input :: Input -> ByteString.ByteString
 encode_input = encode_input_f enc_bytestring
 
 -- | Byte-encode 'Control'.
-encode_control :: Control -> L.ByteString
+encode_control :: Control -> ByteString.ByteString
 encode_control = encode_control_f enc_bytestring
 
 -- | Byte-encode 'Ugen'.
-encode_ugen :: Ugen -> L.ByteString
+encode_ugen :: Ugen -> ByteString.ByteString
 encode_ugen = encode_ugen_f enc_bytestring
 
 -- | Encode 'Sample' as 32-bit IEEE float.
-encode_sample :: Sample -> L.ByteString
+encode_sample :: Sample -> ByteString.ByteString
 encode_sample = Byte.encode_f32 . realToFrac
 
 -- | Encode 'Graphdef'.
-encode_graphdef :: Graphdef -> L.ByteString
+encode_graphdef :: Graphdef -> ByteString.ByteString
 encode_graphdef = encode_graphdef_f enc_bytestring
 
 
@@ -96,7 +96,7 @@ encode_graphdef = encode_graphdef_f enc_bytestring
 
 -- | Write 'Graphdef' to indicated file.
 graphdefWrite :: FilePath -> Graphdef -> IO ()
-graphdefWrite fn = L.writeFile fn . encode_graphdef
+graphdefWrite fn = ByteString.writeFile fn . encode_graphdef
 
 -- | Write 'Graphdef' to indicated directory.  The filename is the
 -- 'graphdef_name' with the appropriate extension (@scsyndef@).

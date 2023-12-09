@@ -50,7 +50,8 @@ synthdefGraph = Graph.ugen_to_graph . synthdefUgen
 
 {- | Parameter names at 'Synthdef'.
 
-> synthdefParam defaultSynthdef == [("amp",0.1),("pan",0),("gate",1),("freq",440),("out",0)]
+>>> synthdefParam defaultSynthdef
+[("amp",0.1),("pan",0),("gate",1),("freq",440),("out",0)]
 -}
 synthdefParam :: Synthdef -> Param.Param
 synthdefParam =
