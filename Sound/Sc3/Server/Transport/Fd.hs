@@ -6,6 +6,8 @@ module Sound.Sc3.Server.Transport.Fd where
 
 import Control.Monad {- base -}
 import Data.List {- base -}
+import Data.Maybe {- base -}
+import System.Environment {- base -}
 import System.FilePath {- filepath -}
 
 import qualified Data.ByteString.Lazy as L {- bytestring -}
@@ -18,9 +20,8 @@ import Sound.Sc3.Server.Command
 import Sound.Sc3.Server.Enum
 import qualified Sound.Sc3.Server.Graphdef as Graphdef
 import qualified Sound.Sc3.Server.Graphdef.Binary as Graphdef
-import Sound.Sc3.Server.Nrt
-import Sound.Sc3.Server.Options
-import Sound.Sc3.Server.Status
+import qualified Sound.Sc3.Server.Nrt as Nrt
+import qualified Sound.Sc3.Server.Status as Status
 import Sound.Sc3.Server.Synthdef
 import Sound.Sc3.Ugen.Ugen
 
@@ -41,9 +42,22 @@ maybe_async_at fd t m =
     then void (async fd m)
     else sendBundle fd (bundle t [m])
 
+{- | Read ScTransport, ScHostname and ScPort environment variables.
+Default values are: Tcp, 127.0.0.1 and 57110.
+-}
+defaultSc3OscSocketAddress :: IO OscSocketAddress
+defaultSc3OscSocketAddress = do
+  let f key defaultValue = fmap (fromMaybe defaultValue) (lookupEnv key)
+  protocol <- f "ScTransport" "Tcp"
+  hostname <- f "ScHostname" "127.0.0.1"
+  port <- f "ScPort" "57110"
+  return (OscSocketAddress (read protocol) hostname (read port))
+
 -- | Bracket @Sc3@ communication.
-withSc3 :: (Udp -> IO a) -> IO a
-withSc3 = withTransport (openUdp "127.0.0.1" sc3_port_def)
+withSc3 :: (OscSocket -> IO a) -> IO a
+withSc3 process = do
+  address <- defaultSc3OscSocketAddress
+  withTransport (openOscSocket address) process
 
 -- * Server control
 
@@ -90,11 +104,11 @@ run_bundle fd t0 b = do
 
 -- | Perform an 'Nrt' score (as would be rendered by 'writeNrt').  In
 -- particular note that all timestamps /must/ be in 'NTPr' form.
-nrt_play :: Transport t => t -> Nrt -> IO ()
-nrt_play fd sc = time >>= \t0 -> mapM_ (run_bundle fd t0) (nrt_bundles sc)
+nrt_play :: Transport t => t -> Nrt.Nrt -> IO ()
+nrt_play fd sc = time >>= \t0 -> mapM_ (run_bundle fd t0) (Nrt.nrt_bundles sc)
 
 -- | 'withSc3' of 'nrt_play'
-nrt_audition :: Nrt -> IO ()
+nrt_audition :: Nrt.Nrt -> IO ()
 nrt_audition sc = withSc3 (`nrt_play` sc)
 
 -- * Audible
@@ -172,15 +186,15 @@ b_fetch1 fd n b = fmap (Safe.headNote "b_fetch1") (b_fetch fd n b)
 
 -- | Collect server status information.
 serverStatus :: Transport t => t -> IO [String]
-serverStatus = fmap statusFormat . serverStatusData
+serverStatus = fmap Status.statusFormat . serverStatusData
 
 -- | Read nominal sample rate of server.
 serverSampleRateNominal :: Transport t => t -> IO Double
-serverSampleRateNominal = fmap (extractStatusField 7) . serverStatusData
+serverSampleRateNominal = fmap (Status.extractStatusField 7) . serverStatusData
 
 -- | Read actual sample rate of server.
 serverSampleRateActual :: Transport t => t -> IO Double
-serverSampleRateActual = fmap (extractStatusField 8) . serverStatusData
+serverSampleRateActual = fmap (Status.extractStatusField 8) . serverStatusData
 
 -- | Retrieve status data from server.
 serverStatusData :: Transport t => t -> IO [Datum]

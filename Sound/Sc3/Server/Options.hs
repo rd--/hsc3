@@ -21,6 +21,9 @@ sc3_port_def = 57110
 -- | Protocol is either Udp or Tcp.
 data Sc3_Protocol = Sc3_Udp | Sc3_Tcp
 
+sc3_protocol_def :: Sc3_Protocol
+sc3_protocol_def = Sc3_Tcp
+
 -- | Default port option.
 sc3_opt_port_def :: Num i => Sc3_Protocol -> Sc3_Opt i
 sc3_opt_port_def p =

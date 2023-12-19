@@ -23,7 +23,6 @@ import qualified Sound.Sc3.Server.Enum as Enum
 import qualified Sound.Sc3.Server.Graphdef as Graphdef
 import qualified Sound.Sc3.Server.Graphdef.Binary as Graphdef
 import qualified Sound.Sc3.Server.Nrt as Nrt
-import qualified Sound.Sc3.Server.Options as Options
 import qualified Sound.Sc3.Server.Status as Status
 import qualified Sound.Sc3.Server.Synthdef as Synthdef
 import qualified Sound.Sc3.Ugen.Bindings.Composite as Composite
@@ -56,22 +55,18 @@ maybe_async_at t m =
     then async_ m
     else sendBundle (bundle t [m])
 
--- | Hostname, by default "127.0.0.1"
-type Sc3_Hostname = String
-
--- | Port number, by default 57110
-type Sc3_Port = Int
-
--- | Hostname and port number.
-type Sc3_Address = (Sc3_Hostname, Sc3_Port)
+{- | Hostname and port number.
+By default Tcp, 127.0.0.1 and 57110.
+-}
+type Sc3_Address = OscSocketAddress
 
 {- | Sc3 default address.
 
 >>> sc3_default_address
-("127.0.0.1",57110)
+(Tcp, "127.0.0.1",57110)
 -}
 sc3_default_address :: Sc3_Address
-sc3_default_address = (Options.sc3_host_name_def,Options.sc3_port_def)
+sc3_default_address = OscSocketAddress Tcp "127.0.0.1" 57110
 
 {- | Lookup ScSynth address at ScHostname and ScPort.
 If either is no set default values are used.
@@ -83,9 +78,10 @@ If either is no set default values are used.
 -}
 sc3_env_or_default_address :: IO Sc3_Address
 sc3_env_or_default_address = do
-  hostname <- System.lookup_env_default "ScHostname" Options.sc3_host_name_def
-  port <- System.lookup_env_default "ScPort" (show (Options.sc3_port_def :: Int))
-  return (hostname,read port)
+  protocol <- System.lookup_env_default "ScProtocol" "Tcp"
+  hostname <- System.lookup_env_default "ScHostname" "127.0.0.1"
+  port <- System.lookup_env_default "ScPort" "57110"
+  return (OscSocketAddress (read protocol) hostname (read port))
 
 {- | Maximum packet size, in bytes, that can be sent over Udp.
 However, see also <https://tools.ietf.org/html/rfc2675>.
@@ -95,37 +91,37 @@ sc3_udp_limit :: Num n => n
 sc3_udp_limit = 65507
 
 -- | Bracket @Sc3@ communication at indicated host and port.
-withSc3At :: Sc3_Address -> Connection Tcp a -> IO a
-withSc3At (h,p) = withTransport (openTcp h p)
+withSc3At :: Sc3_Address -> Connection OscSocket a -> IO a
+withSc3At address = withTransport (openOscSocket address)
 
 -- | Bracket @Sc3@ communication, ie. 'withSc3At' 'sc3_env_or_default_address'.
 --
 -- > import Sound.Sc3.Server.Command
 --
 -- > withSc3 (sendMessage status >> waitReply "/status.reply")
-withSc3 :: Connection Tcp a -> IO a
+withSc3 :: Connection OscSocket a -> IO a
 withSc3 f = do
   addr <- sc3_env_or_default_address
   withSc3At addr f
 
 -- | 'void' of 'withSc3'.
-withSc3_ :: Connection Tcp a -> IO ()
+withSc3_ :: Connection OscSocket a -> IO ()
 withSc3_ = void . withSc3
 
 -- | 'timeout_r' of 'withSc3'
-withSc3_tm :: Double -> Connection Tcp a -> IO (Maybe a)
+withSc3_tm :: Double -> Connection OscSocket a -> IO (Maybe a)
 withSc3_tm tm = Sound.Osc.Time.Timeout.timeout_r tm . withSc3
 
 -- | Run /f/ at /k/ scsynth servers with sequential port numbers starting at 'Options.sc3_port_def'.
 --
 -- > withSc3AtSeq sc3_default_address 2 (sendMessage status >> waitReply "/status.reply")
-withSc3AtSeq :: Sc3_Address -> Int -> Connection Tcp a -> IO [a]
-withSc3AtSeq (h,p) k f = do
-  let mk_tcp i = openTcp h (p + i)
-  mapM (\i -> withTransport (mk_tcp i) f) [0 .. k - 1]
+withSc3AtSeq :: Sc3_Address -> Int -> Connection OscSocket a -> IO [a]
+withSc3AtSeq (OscSocketAddress protocol hostname port) k f = do
+  let mk_socket i = openOscSocket (OscSocketAddress protocol hostname (port + i))
+  mapM (\i -> withTransport (mk_socket i) f) [0 .. k - 1]
 
 -- | 'void' of 'withSc3AtSeq'.
-withSc3AtSeq_ :: Sc3_Address -> Int -> Connection Tcp a -> IO ()
+withSc3AtSeq_ :: Sc3_Address -> Int -> Connection OscSocket a -> IO ()
 withSc3AtSeq_ loc k = void . withSc3AtSeq loc k
 
 -- * Server control

@@ -1,7 +1,9 @@
--- | Interpolation functions, ie. for envelope segments.  Present naming is for qualified import.
+{- | Interpolation functions, ie. for envelope segments.
+Present naming is for qualified import.
+-}
 module Sound.Sc3.Common.Math.Interpolate where
 
-import Sound.Sc3.Common.Math {- hsc3 -}
+import qualified Sound.Sc3.Common.Math as Math {- hsc3 -}
 
 {- | An interpolation function takes three arguments.
      x0 is the left or begin value, x1 is the right or end value, t is a (0,1) index.
@@ -34,17 +36,17 @@ linear x0 x1 t = t * (x1 - x0) + x0
 {- | Exponential interpolation.
      x0 must not be zero and (x0,x1) must not span zero.
 
-> plot_fn_r1_ln (exponential 0.001 1) (0,1)
-> plot_fn_r1_ln (exponential 1 2) (0,1)
-> plot_fn_r1_ln (exponential 20 20000) (0,1)
+> plot_fn_r1_ln [exponential 0.001 1] (0,1)
+> plot_fn_r1_ln [exponential 1 2] (0,1)
+> plot_fn_r1_ln [exponential 20 20000] (0,1)
 -}
 exponential :: Floating t => Interpolation_f t
 exponential x0 x1 t = x0 * ((x1 / x0) ** t)
 
 {- | Variant that allows x0 to be zero, though (x0,x1) must not span zero.
 
-> plot_fn_r1_ln (exponential_0 0 1) (0,1)
-> plot_fn_r1_ln (exponential_0 0 (-1)) (0,1)
+> plot_fn_r1_ln [exponential_0 0 1] (0,1)
+> plot_fn_r1_ln [exponential_0 0 (-1)] (0,1)
 -}
 exponential_0 :: (Eq t,Floating t) => Interpolation_f t
 exponential_0 x0 x1 =
@@ -52,29 +54,33 @@ exponential_0 x0 x1 =
         x0' = if x0 == 0 then epsilon * signum x1 else x0
     in exponential x0' x1
 
--- | 'linear' of 'exponential_0' of (0,1), ie. allows (x0,x1) to span zero.
---
--- > plot_fn_r1_ln (exponential_lin (-1) 1) (0,1)
+{- | 'linear' of 'exponential_0' of (0,1), ie. allows (x0,x1) to span zero.
+
+> plot_fn_r1_ln [exponential_lin (-1) 1] (0,1)
+-}
 exponential_lin :: (Eq t,Floating t) => Interpolation_f t
 exponential_lin x0 x1 t = linear x0 x1 (exponential_0 0 1 t)
 
--- | 'linear' with t transformed by sine function over (-pi/2,pi/2).
---
--- > plot_fn_r1_ln (sine (-1) 1) (0,1)
+{- | 'linear' with t transformed by sine function over (-pi/2,pi/2).
+
+> plot_fn_r1_ln [sine (-1) 1] (0,1)
+> plot_fn_r1_ln [sine 1 (-1)] (0,1)
+-}
 sine :: Floating t => Interpolation_f t
 sine x0 x1 t =
     let t' = - cos (pi * t) * 0.5 + 0.5
     in linear x0 x1 t'
 
--- | If x0 '<' x1 rising sine segment (0,pi/2), else falling segment (pi/2,pi).
---
--- > plot_fn_r1_ln (welch (-1) 1) (0,1)
--- > plot_fn_r1_ln (welch 1 (-1)) (0,1)
+{- | If x0 '<' x1 rising sine segment (0,pi/2), else falling segment (pi/2,pi).
+
+> plot_fn_r1_ln [welch (-1) 1] (0,1)
+> plot_fn_r1_ln [welch 1 (-1)] (0,1)
+-}
 welch :: (Ord t, Floating t) => Interpolation_f t
 welch x0 x1 t =
     if x0 < x1
-    then x0 + (x1 - x0) * sin (half_pi * t)
-    else x1 - (x1 - x0) * sin (half_pi - (half_pi * t))
+    then x0 + (x1 - x0) * sin (Math.half_pi * t)
+    else x1 - (x1 - x0) * sin (Math.half_pi - (Math.half_pi * t))
 
 {- | Curvature controlled by single parameter c.
      Zero is 'linear', increasing c approaches 'exponential' and continues past it.
@@ -95,7 +101,7 @@ curve c x0 x1 t =
 
 {- | Square of 'linear' of 'sqrt' of x0 and x1, therefore neither may be negative.
 
-> plot_fn_r1_ln (squared 0 1) (0,1)
+> plot_fn_r1_ln [squared 0 1] (0,1)
 > plot_p1_ln (map (\f -> map f [0,0.01 .. 1]) [curve 2.05 0 1,squared 0 1])
 -}
 squared :: Floating t => Interpolation_f t
@@ -107,7 +113,7 @@ squared x0 x1 t =
 
 {- | Cubic variant of 'squared'.
 
-> plot_fn_r1_ln (cubed 0 1) (0,1)
+> plot_fn_r1_ln [cubed 0 1] (0,1)
 > plot_p1_ln (map (\f -> map f [0,0.01 .. 1]) [curve 3.25 0 1,cubed 0 1])
 -}
 cubed :: Floating t => Interpolation_f t
@@ -117,9 +123,10 @@ cubed x0 x1 t =
         l = linear x0' x1' t
     in l * l * l
 
--- | x0 until end, then immediately x1.
---
--- > plot_fn_r1_ln (hold 0 1) (0,2)
+{- | x0 until end, then immediately x1.
+
+> plot_fn_r1_ln [hold 0 1] (0,2)
+-}
 hold :: (Num t,Ord t) => Interpolation_f t
 hold x0 x1 t = if t >= 1 then x1 else x0
 
