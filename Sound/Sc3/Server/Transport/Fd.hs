@@ -51,7 +51,7 @@ defaultSc3OscSocketAddress = do
   protocol <- f "ScTransport" "Tcp"
   hostname <- f "ScHostname" "127.0.0.1"
   port <- f "ScPort" "57110"
-  return (OscSocketAddress (read protocol) hostname (read port))
+  return (read protocol, hostname, read port)
 
 -- | Bracket @Sc3@ communication.
 withSc3 :: (OscSocket -> IO a) -> IO a

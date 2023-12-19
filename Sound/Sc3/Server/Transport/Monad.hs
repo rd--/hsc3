@@ -66,7 +66,7 @@ type Sc3_Address = OscSocketAddress
 (Tcp, "127.0.0.1",57110)
 -}
 sc3_default_address :: Sc3_Address
-sc3_default_address = OscSocketAddress Tcp "127.0.0.1" 57110
+sc3_default_address = (Tcp, "127.0.0.1", 57110)
 
 {- | Lookup ScSynth address at ScHostname and ScPort.
 If either is no set default values are used.
@@ -81,7 +81,7 @@ sc3_env_or_default_address = do
   protocol <- System.lookup_env_default "ScProtocol" "Tcp"
   hostname <- System.lookup_env_default "ScHostname" "127.0.0.1"
   port <- System.lookup_env_default "ScPort" "57110"
-  return (OscSocketAddress (read protocol) hostname (read port))
+  return (read protocol, hostname, read port)
 
 {- | Maximum packet size, in bytes, that can be sent over Udp.
 However, see also <https://tools.ietf.org/html/rfc2675>.
@@ -116,8 +116,8 @@ withSc3_tm tm = Sound.Osc.Time.Timeout.timeout_r tm . withSc3
 --
 -- > withSc3AtSeq sc3_default_address 2 (sendMessage status >> waitReply "/status.reply")
 withSc3AtSeq :: Sc3_Address -> Int -> Connection OscSocket a -> IO [a]
-withSc3AtSeq (OscSocketAddress protocol hostname port) k f = do
-  let mk_socket i = openOscSocket (OscSocketAddress protocol hostname (port + i))
+withSc3AtSeq (protocol, hostname, port) k f = do
+  let mk_socket i = openOscSocket (protocol, hostname, port + i)
   mapM (\i -> withTransport (mk_socket i) f) [0 .. k - 1]
 
 -- | 'void' of 'withSc3AtSeq'.
