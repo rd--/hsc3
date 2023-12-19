@@ -7,7 +7,7 @@ import qualified Sound.Sc3.Common.Base {- hsc3 -}
 The Mce type is a tree, however in hsc3 Mce_Vector will always hold Mce_Scalar elements.
 -}
 data Mce t = Mce_Scalar t | Mce_Vector [Mce t]
-             deriving (Ord, Eq, Read, Show)
+  deriving (Ord, Eq, Read, Show)
 
 {- | There are two invariants:
 1. Mce should not be empty, ie. Mce_Vector should not have a null list.
@@ -48,9 +48,9 @@ mce_from_list l =
 -}
 mce_to_list :: Mce t -> [t]
 mce_to_list m =
-    case m of
-      Mce_Scalar e -> [e]
-      Mce_Vector e -> concatMap mce_to_list e
+  case m of
+    Mce_Scalar e -> [e]
+    Mce_Vector e -> concatMap mce_to_list e
 
 {- | Pretty printer for Mce.
 
@@ -60,10 +60,10 @@ mce_to_list m =
 -}
 mce_show :: Show t => Mce t -> String
 mce_show m =
-  let bracketed (l,r) x = l : x ++ [r]
+  let bracketed (l, r) x = l : x ++ [r]
   in case m of
-       Mce_Scalar e -> show e
-       Mce_Vector e -> bracketed ('[',']') (Sound.Sc3.Common.Base.concat_intersperse ", " (map mce_show e))
+      Mce_Scalar e -> show e
+      Mce_Vector e -> bracketed ('[', ']') (Sound.Sc3.Common.Base.concat_intersperse ", " (map mce_show e))
 
 -- | Read value from Mce_Scalar, error if Mce is Mce_Vector
 mce_scalar_value :: Mce t -> t
@@ -107,16 +107,16 @@ Considers only the outermost level.
 -}
 mce_extend :: Int -> Mce t -> Mce t
 mce_extend n m =
-    case m of
-      Mce_Scalar _ -> Mce_Vector (replicate n m)
-      Mce_Vector e -> if length e > n then error "mce_extend?" else Mce_Vector (take n (cycle e))
+  case m of
+    Mce_Scalar _ -> Mce_Vector (replicate n m)
+    Mce_Vector e -> if length e > n then error "mce_extend?" else Mce_Vector (take n (cycle e))
 
 -- | fmap for Mce, apply /f/ at elements of /m/.
 mce_map :: (a -> b) -> Mce a -> Mce b
 mce_map f m =
-    case m of
-      Mce_Scalar e -> Mce_Scalar (f e)
-      Mce_Vector e -> Mce_Vector (map (mce_map f) e)
+  case m of
+    Mce_Scalar e -> Mce_Scalar (f e)
+    Mce_Vector e -> Mce_Vector (map (mce_map f) e)
 
 instance Functor Mce where fmap = mce_map
 
@@ -125,27 +125,27 @@ instance Functor Mce where fmap = mce_map
 -}
 mce_binop :: (a -> b -> c) -> Mce a -> Mce b -> Mce c
 mce_binop f m1 m2 =
-    case (m1,m2) of
-      (Mce_Scalar e1,Mce_Scalar e2) -> Mce_Scalar (f e1 e2)
-      (Mce_Scalar _,Mce_Vector e2) -> Mce_Vector (map (mce_binop f m1) e2)
-      (Mce_Vector e1,Mce_Scalar _) -> Mce_Vector (map (flip (mce_binop f) m2) e1)
-      (Mce_Vector e1,Mce_Vector e2) ->
-          let n = max (length e1) (length e2)
-              ext = take n . cycle
-          in Mce_Vector (zipWith (mce_binop f) (ext e1) (ext e2))
+  case (m1, m2) of
+    (Mce_Scalar e1, Mce_Scalar e2) -> Mce_Scalar (f e1 e2)
+    (Mce_Scalar _, Mce_Vector e2) -> Mce_Vector (map (mce_binop f m1) e2)
+    (Mce_Vector e1, Mce_Scalar _) -> Mce_Vector (map (flip (mce_binop f) m2) e1)
+    (Mce_Vector e1, Mce_Vector e2) ->
+      let n = max (length e1) (length e2)
+          ext = take n . cycle
+      in Mce_Vector (zipWith (mce_binop f) (ext e1) (ext e2))
 
 instance Num n => Num (Mce n) where
-    (+) = mce_binop (+)
-    (-) = mce_binop (-)
-    (*) = mce_binop (*)
-    abs = mce_map abs
-    negate = mce_map negate
-    signum = mce_map signum
-    fromInteger = Mce_Scalar . fromInteger
+  (+) = mce_binop (+)
+  (-) = mce_binop (-)
+  (*) = mce_binop (*)
+  abs = mce_map abs
+  negate = mce_map negate
+  signum = mce_map signum
+  fromInteger = Mce_Scalar . fromInteger
 
 instance Fractional n => Fractional (Mce n) where
-    (/) = mce_binop (/)
-    fromRational = Mce_Scalar . fromRational
+  (/) = mce_binop (/)
+  fromRational = Mce_Scalar . fromRational
 
 instance Floating n => Floating (Mce n) where
   pi = Mce_Scalar pi

@@ -12,7 +12,7 @@ import Sound.Sc3.Ugen.Ugen {- hsc3 -}
 
 -- | Construct a list of Ugens by applying f to consecutive identifiers (from z) and indices (from 0).
 listFillId :: (Integral n, ID z, Enum z) => z -> Int -> (z -> n -> Ugen) -> [Ugen]
-listFillId z n f = zipWith f [z..] [0 .. fromIntegral n - 1]
+listFillId z n f = zipWith f [z ..] [0 .. fromIntegral n - 1]
 
 -- | Construct a list of Ugens by applying f at consecutive indices (from 0).
 listFillM :: (Uid m, Integral n) => Int -> (n -> m Ugen) -> m [Ugen]
@@ -61,8 +61,8 @@ mix = Math.sum_opt . mceChannels
 -- | Mix variant, sum to n channels.
 mixTo :: Int -> Ugen -> Ugen
 mixTo n u =
-    let xs = transpose (Split.chunksOf n (mceChannels u))
-    in mce (map Math.sum_opt xs)
+  let xs = transpose (Split.chunksOf n (mceChannels u))
+  in mce (map Math.sum_opt xs)
 
 -- | 'mix' of 'mceFill'
 mixFill :: Integral n => Int -> (n -> Ugen) -> Ugen

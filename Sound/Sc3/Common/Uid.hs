@@ -1,4 +1,4 @@
-{-# Language FlexibleInstances #-}
+{-# LANGUAGE FlexibleInstances #-}
 
 {- | Unique identifier types and classes.
 Used by non-deterministic (noise) and non-sharable (demand) unit generators.
@@ -23,17 +23,17 @@ type Id = Int
 
 -- | A class indicating a monad (and functor and applicative) that will generate a sequence of unique integer identifiers.
 class (Functor m, Applicative m, Monad m) => Uid m where
-   generateUid :: m Int
+  generateUid :: m Int
 
 -- | Requires FlexibleInstances.
 instance Uid (State.StateT Int Identity) where
-    generateUid = State.get >>= \n -> State.put (n + 1) >> return n
+  generateUid = State.get >>= \n -> State.put (n + 1) >> return n
 
 instance Uid IO where
-    generateUid = fmap Unique.hashUnique Unique.newUnique
+  generateUid = fmap Unique.hashUnique Unique.newUnique
 
 instance Uid m => Uid (Reader.ReaderT t m) where
-   generateUid = Reader.ReaderT (const generateUid)
+  generateUid = Reader.ReaderT (const generateUid)
 
 -- * Uid_St
 
@@ -52,11 +52,11 @@ uid_st_eval :: Uid_St t -> t
 uid_st_eval x = State.evalState x 0
 
 -- | Thread state through sequence of 'State.runState'.
-uid_st_seq :: [Uid_St t] -> ([t],Int)
+uid_st_seq :: [Uid_St t] -> ([t], Int)
 uid_st_seq =
-    let swap (p,q) = (q,p)
-        step_f n x = swap (State.runState x n)
-    in swap . mapAccumL step_f 0
+  let swap (p, q) = (q, p)
+      step_f n x = swap (State.runState x n)
+  in swap . mapAccumL step_f 0
 
 {- | 'fst' of 'uid_st_seq'.
 
@@ -127,13 +127,13 @@ Char inputs are hashed to generate longer seeds for when ir (constant) random Ug
 > map resolveID [('α', 'α', 'β'),('β', 'α', 'β')] == [0020082907, 2688286317]
 -}
 class Murmur32.Hashable32 a => ID a where
-    resolveID :: a -> Id
-    resolveID = fromIntegral . Murmur32.asWord32 . Murmur32.hash32
+  resolveID :: a -> Id
+  resolveID = fromIntegral . Murmur32.asWord32 . Murmur32.hash32
 
-instance ID Char where
+instance ID Char
 instance ID Int where resolveID = id
-instance (ID p,ID q) => ID (p,q) where
-instance (ID p,ID q,ID r) => ID (p,q,r) where
+instance (ID p, ID q) => ID (p, q)
+instance (ID p, ID q, ID r) => ID (p, q, r)
 
 {- | /n/ identifiers from /x/.
 

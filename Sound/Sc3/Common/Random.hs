@@ -6,9 +6,10 @@ import Data.Int {- base -}
 import Data.Word {- base -}
 import System.CPUTime {- base -}
 
--- | Linear congruential generator given modulo function for type.
---
--- See <http://en.wikipedia.org/wiki/Linear_congruential_generator> for possible parameters.
+{- | Linear congruential generator given modulo function for type.
+
+See <http://en.wikipedia.org/wiki/Linear_congruential_generator> for possible parameters.
+-}
 lcg :: Num t => (t -> t) -> t -> t -> t -> t
 lcg modFunc a c x0 = modFunc (a * x0 + c)
 

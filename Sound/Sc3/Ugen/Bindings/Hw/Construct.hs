@@ -8,7 +8,7 @@ import Sound.Sc3.Ugen.Types
 -- | Oscillator constructor with constrained set of operating 'Rate's.
 mk_osc :: [Rate] -> UgenId -> Rate -> String -> [Ugen] -> Int -> Ugen
 mk_osc rs z r c i o =
-    if r `elem` rs
+  if r `elem` rs
     then mkUgen Nothing rs (Left r) c i Nothing o (Special 0) z
     else error ("mk_osc: rate restricted: " ++ show (r, rs, c))
 
@@ -31,8 +31,8 @@ mkOscId = mk_osc all_rates
 -- | Provided 'UgenId' variant of 'mkOscMCE'.
 mk_osc_mce :: UgenId -> Rate -> String -> [Ugen] -> Ugen -> Int -> Ugen
 mk_osc_mce z r c i j =
-    let i' = i ++ mceChannels j
-    in mk_osc all_rates z r c i'
+  let i' = i ++ mceChannels j
+  in mk_osc all_rates z r c i'
 
 -- | Variant oscillator constructor with MCE collapsing input.
 mkOscMCE :: Rate -> String -> [Ugen] -> Ugen -> Int -> Ugen

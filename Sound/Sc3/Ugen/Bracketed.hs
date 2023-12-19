@@ -34,10 +34,11 @@ import Sound.Sc3.Server.Enum {- hsc3 -}
 readChanToNc :: Int -> [Int] -> Int
 readChanToNc sfNc readChan =
   if null readChan
-  then sfNc
-  else if maximum readChan < sfNc
-       then length readChan
-       else error "readChanToNc: channel error"
+    then sfNc
+    else
+      if maximum readChan < sfNc
+        then length readChan
+        else error "readChanToNc: channel error"
 
 {- | diskIn or vDiskIn with brackets to 1. allocate and read and then 2. close and free buffer.
      If ctlName is empty the buffer is returned as a constant, else as a control with the given name.
@@ -48,14 +49,15 @@ readChanToNc sfNc readChan =
 sndfileDiskIn :: (String, Buffer_Id, [Int]) -> FilePath -> Maybe Ugen -> Loop Ugen -> Ugen
 sndfileDiskIn (ctlName, bufId, readChan) sndFileName maybeRate loop =
   let fileName = sfResolve sndFileName
-      (sfNc,_sr,_nf) = sfInfo fileName
+      (sfNc, _sr, _nf) = sfInfo fileName
       bufSize = 65536
       buf = if null ctlName then constant bufId else control kr ctlName (fromIntegral bufId)
       bufNc = readChanToNc sfNc readChan
   in bracketUgen
-     (maybe (diskIn bufNc buf loop) (\rate -> vDiskIn bufNc buf rate loop 0) maybeRate)
-     ([b_alloc bufId bufSize bufNc, b_readChannel bufId fileName 0 (-1) 0 True readChan]
-     ,[b_close bufId, b_free bufId])
+      (maybe (diskIn bufNc buf loop) (\rate -> vDiskIn bufNc buf rate loop 0) maybeRate)
+      ( [b_alloc bufId bufSize bufNc, b_readChannel bufId fileName 0 (-1) 0 True readChan]
+      , [b_close bufId, b_free bufId]
+      )
 
 -- | diskIn form of sndfileDiskIn
 sndfileIn :: (String, Buffer_Id, [Int]) -> FilePath -> Loop Ugen -> Ugen

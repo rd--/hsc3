@@ -17,13 +17,13 @@ ceil :: Ugen.Ugen -> Ugen.Ugen
 ceil = Operator.ceilingE
 
 -- | Midi note number and velocity data is in (0, 127).  This maps (0,1) to (0,100), i.e. is it (* 100).
-unitMidi :: Num t  => t -> t
+unitMidi :: Num t => t -> t
 unitMidi = (*) 100
 
 {- | midiCps of (0,1) scaled to (0,100).
      To make control signal data uniform, all control signals are in (0, 1).
 -}
-unitCps :: Operator.UnaryOp t  => t -> t
+unitCps :: Operator.UnaryOp t => t -> t
 unitCps = Operator.midiCps . (* 100)
 
 -- | Optimised Ugen sum function.

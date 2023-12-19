@@ -1,7 +1,8 @@
--- | /Fd/ variant of interaction with the scsynth server.
---
--- This duplicates functions at 'Sound.Sc3.Server.Transport.Monad' and
--- at some point at least part of the duplication will be removed.
+{- | /Fd/ variant of interaction with the scsynth server.
+
+This duplicates functions at 'Sound.Sc3.Server.Transport.Monad' and
+at some point at least part of the duplication will be removed.
+-}
 module Sound.Sc3.Server.Transport.Fd where
 
 import Control.Monad {- base -}
@@ -38,7 +39,7 @@ maybe_async fd m = if isAsync m then void (async fd m) else sendMessage fd m
 -- | Variant that timestamps synchronous messages.
 maybe_async_at :: (Transport t) => t -> Time -> Message -> IO ()
 maybe_async_at fd t m =
-    if isAsync m
+  if isAsync m
     then void (async fd m)
     else sendBundle fd (bundle t [m])
 
@@ -68,8 +69,8 @@ stop fd = sendMessage fd (g_freeAll [1])
 -- | Free all nodes ('g_freeAll') at and re-create groups @1@ and @2@.
 reset :: Transport t => t -> IO ()
 reset fd = do
-  sendMessage fd (g_freeAll [1,2])
-  sendMessage fd (g_new [(1,AddToTail,0),(2,AddToTail,0)])
+  sendMessage fd (g_freeAll [1, 2])
+  sendMessage fd (g_new [(1, AddToTail, 0), (2, AddToTail, 0)])
 
 -- | Send 'd_recv' and 's_new' messages to scsynth.
 playGraphdef :: Transport t => Int -> t -> Graphdef.Graphdef -> IO ()
@@ -92,9 +93,10 @@ playUgen k fd = playSynthdef k fd . synthdef "Anonymous"
 
 -- * Non-real time
 
--- | Wait ('pauseThreadUntil') until bundle is due to be sent relative
--- to initial 'Time', then send each message, asynchronously if
--- required.
+{- | Wait ('pauseThreadUntil') until bundle is due to be sent relative
+to initial 'Time', then send each message, asynchronously if
+required.
+-}
 run_bundle :: Transport t => t -> Time -> BundleOf Message -> IO ()
 run_bundle fd t0 b = do
   let t = t0 + bundleTime b
@@ -102,8 +104,9 @@ run_bundle fd t0 b = do
   pauseThreadUntil (t - latency)
   mapM_ (maybe_async_at fd t) (bundleMessages b)
 
--- | Perform an 'Nrt' score (as would be rendered by 'writeNrt').  In
--- particular note that all timestamps /must/ be in 'NTPr' form.
+{- | Perform an 'Nrt' score (as would be rendered by 'writeNrt').  In
+particular note that all timestamps /must/ be in 'NTPr' form.
+-}
 nrt_play :: Transport t => t -> Nrt.Nrt -> IO ()
 nrt_play fd sc = time >>= \t0 -> mapM_ (run_bundle fd t0) (Nrt.nrt_bundles sc)
 
@@ -115,18 +118,18 @@ nrt_audition sc = withSc3 (`nrt_play` sc)
 
 -- | Class for values that can be encoded and sent to @scsynth@ for audition.
 class Audible e where
-    play_id :: Transport t => Int -> t -> e -> IO ()
-    play :: Transport t => t -> e -> IO ()
-    play = play_id (-1)
+  play_id :: Transport t => Int -> t -> e -> IO ()
+  play :: Transport t => t -> e -> IO ()
+  play = play_id (-1)
 
 instance Audible Graphdef.Graphdef where
-    play_id = playGraphdef
+  play_id = playGraphdef
 
 instance Audible Synthdef where
-    play_id = playSynthdef
+  play_id = playSynthdef
 
 instance Audible Ugen where
-    play_id = playUgen
+  play_id = playUgen
 
 -- | 'withSc3' of 'play_id'
 audition_id :: Audible e => Int -> e -> IO ()
@@ -138,8 +141,9 @@ audition = audition_id (-1)
 
 -- * Notifications
 
--- | Turn on notifications, run /f/, turn off notifications, return
--- result.
+{- | Turn on notifications, run /f/, turn off notifications, return
+result.
+-}
 withNotifications :: Transport t => t -> (t -> IO a) -> IO a
 withNotifications fd f = do
   _ <- async fd (notify True)
@@ -149,21 +153,23 @@ withNotifications fd f = do
 
 -- * Buffer
 
--- | Variant of 'b_getn1' that waits for return message and unpacks it.
---
--- > withSc3 (\fd -> b_getn1_data fd 0 (0,5))
-b_getn1_data :: Transport t => t -> Int -> (Int,Int) -> IO [Double]
+{- | Variant of 'b_getn1' that waits for return message and unpacks it.
+
+> withSc3 (\fd -> b_getn1_data fd 0 (0,5))
+-}
+b_getn1_data :: Transport t => t -> Int -> (Int, Int) -> IO [Double]
 b_getn1_data fd b s = do
-  let f m = let (_,_,_,r) = unpack_b_setn_err m in r
+  let f m = let (_, _, _, r) = unpack_b_setn_err m in r
   sendMessage fd (b_getn1 b s)
   fmap f (waitReply fd "/b_setn")
 
--- | Variant of 'b_getn1_data' that segments individual 'b_getn'
--- messages to /n/ elements.
---
--- > withSc3 (\fd -> b_getn1_data_segment fd 1 0 (0,5))
-b_getn1_data_segment :: Transport t => t -> Int -> Int -> (Int,Int) -> IO [Double]
-b_getn1_data_segment fd n b (i,j) = do
+{- | Variant of 'b_getn1_data' that segments individual 'b_getn'
+messages to /n/ elements.
+
+> withSc3 (\fd -> b_getn1_data_segment fd 1 0 (0,5))
+-}
+b_getn1_data_segment :: Transport t => t -> Int -> Int -> (Int, Int) -> IO [Double]
+b_getn1_data_segment fd n b (i, j) = do
   let ix = b_indices n j i
   d <- mapM (b_getn1_data fd b) ix
   return (concat d)
@@ -171,10 +177,11 @@ b_getn1_data_segment fd n b (i,j) = do
 -- | Variant of 'b_getn1_data_segment' that gets the entire buffer.
 b_fetch :: Transport t => t -> Int -> Int -> IO [[Double]]
 b_fetch fd n b = do
-  let f m = let (_,nf,nc,_) = unpack_b_info_err m
-                ix = (0,nf * nc)
-                deinterleave = transpose . Split.chunksOf nc
-            in fmap deinterleave (b_getn1_data_segment fd n b ix)
+  let f m =
+        let (_, nf, nc, _) = unpack_b_info_err m
+            ix = (0, nf * nc)
+            deinterleave = transpose . Split.chunksOf nc
+        in fmap deinterleave (b_getn1_data_segment fd n b ix)
   sendMessage fd (b_query1 b)
   waitReply fd "/b_info" >>= f
 

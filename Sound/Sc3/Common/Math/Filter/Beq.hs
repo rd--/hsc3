@@ -7,16 +7,16 @@ type Beq t = (t, t, t, t, t)
 -- | Calculate coefficients for bi-quad low pass filter.
 bLowPassCoef :: Floating t => t -> t -> t -> Beq t
 bLowPassCoef sr freq rq =
-    let w0 = pi * 2 * freq * (1 / sr)
-        cos_w0 = cos w0
-        i = 1 - cos_w0
-        alpha = sin w0 * 0.5 * rq
-        b0rz = recip (1 + alpha)
-        a0 = i * 0.5 * b0rz
-        a1 = i * b0rz
-        b1 = cos_w0 * 2 * b0rz
-        b2 = (1 - alpha) * negate b0rz
-    in (a0, a1, a0, b1, b2)
+  let w0 = pi * 2 * freq * (1 / sr)
+      cos_w0 = cos w0
+      i = 1 - cos_w0
+      alpha = sin w0 * 0.5 * rq
+      b0rz = recip (1 + alpha)
+      a0 = i * 0.5 * b0rz
+      a1 = i * b0rz
+      b1 = cos_w0 * 2 * b0rz
+      b2 = (1 - alpha) * negate b0rz
+  in (a0, a1, a0, b1, b2)
 
 -- | Calculate coefficients for bi-quad high pass filter.
 bHiPassCoef :: Floating t => t -> t -> t -> Beq t
@@ -40,7 +40,7 @@ bAllPassCoef sr freq rq =
       b0rz = recip (1 + alpha)
       a0 = (1 - alpha) * b0rz
       b1 = 2.0 * cos w0 * b0rz
-  in (a0,negate b1, 1.0, b1,negate a0)
+  in (a0, negate b1, 1.0, b1, negate a0)
 
 -- | Calculate coefficients for bi-quad band pass filter.
 bBandPassCoef :: Floating t => t -> t -> t -> Beq t
@@ -104,7 +104,7 @@ bHiShelfCoef sr freq rs db =
       w0 = pi * 2 * freq * (1 / sr)
       cos_w0 = cos w0
       sin_w0 = sin w0
-      alpha = sin_w0 * 0.5 * sqrt((a + recip a) * (rs - 1) + 2.0)
+      alpha = sin_w0 * 0.5 * sqrt ((a + recip a) * (rs - 1) + 2.0)
       i = (a + 1) * cos_w0
       j = (a - 1) * cos_w0
       k = 2 * sqrt a * alpha

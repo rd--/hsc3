@@ -11,3 +11,6 @@ push-all:
 push-tags:
 	r.gitlab-push.sh hsc3 --tags
 	r.github-push.sh hsc3 --tags
+
+indent:
+	fourmolu -i Sound

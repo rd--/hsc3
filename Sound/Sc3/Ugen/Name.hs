@@ -22,8 +22,9 @@ is_lc_or_num :: Char -> Bool
 is_lc_or_num c = isLower c || isDigit c
 -}
 
--- | Find all Sc3 name edges. Edges occur at non lower-case letters.
---   This rule is very simple but is coherent and predictable and works well for .hs names.
+{- | Find all Sc3 name edges. Edges occur at non lower-case letters.
+  This rule is very simple but is coherent and predictable and works well for .hs names.
+-}
 sc3_name_edges_plain :: String -> [Bool]
 sc3_name_edges_plain = map (not . isLower)
 
@@ -52,11 +53,11 @@ sc3_name_edges_plain = map (not . isLower)
 -}
 sc3_name_edges :: String -> [Bool]
 sc3_name_edges s =
-  let (p,q) = span (== True) (sc3_name_edges_plain s)
+  let (p, q) = span (== True) (sc3_name_edges_plain s)
       n = length p
   in if n < 2 || null q
-     then replicate n False ++ q
-     else replicate (n - 1) False ++ [True] ++ q
+      then replicate n False ++ q
+      else replicate (n - 1) False ++ [True] ++ q
 
 {- | Convert from ScLang (class) name to Haskell (function) name.
 
@@ -69,8 +70,8 @@ sc3_name_edges s =
 -}
 sc3_name_to_hs_name :: String -> String
 sc3_name_to_hs_name s =
-    let f (c,e) = if e then toUpper c else c
-    in zipWith (curry f) (map toLower s) (sc3_name_edges s)
+  let f (c, e) = if e then toUpper c else c
+  in zipWith (curry f) (map toLower s) (sc3_name_edges s)
 
 {- | Convert from Sc3 name to Lisp style name.
 
@@ -80,17 +81,17 @@ sc3_name_to_hs_name s =
 -}
 sc3_name_to_lisp_name :: String -> String
 sc3_name_to_lisp_name s =
-    let f (c,e) = if e then ['-',c] else if c == '_' then [] else [c]
-    in concatMap f (zip (map toLower s) (sc3_name_edges s))
+  let f (c, e) = if e then ['-', c] else if c == '_' then [] else [c]
+  in concatMap f (zip (map toLower s) (sc3_name_edges s))
 
 {- | Sc3 Ugen /names/ are given with rate suffixes if oscillators, without if filters.
 
 >>> map sc3_ugen_name_sep (words "SinOsc.ar LPF *")
 [Just ("SinOsc",Just AudioRate),Just ("LPF",Nothing),Just ("*",Nothing)]
 -}
-sc3_ugen_name_sep :: String -> Maybe (String,Maybe Rate)
+sc3_ugen_name_sep :: String -> Maybe (String, Maybe Rate)
 sc3_ugen_name_sep u =
-    case string_split_at_char '.' u of
-      [nm,rt] -> Just (nm,rate_parse (map toUpper rt))
-      [nm] -> Just (nm,Nothing)
-      _ -> Nothing
+  case string_split_at_char '.' u of
+    [nm, rt] -> Just (nm, rate_parse (map toUpper rt))
+    [nm] -> Just (nm, Nothing)
+    _ -> Nothing

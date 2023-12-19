@@ -15,5 +15,5 @@ read_graphdef_file "/tmp/stsc3.scsyndef.text"
 read_graphdef_file :: FilePath -> IO Graphdef
 read_graphdef_file fn =
   if ".scsyndef.text" `isSuffixOf` fn
-  then Text.read_graphdef_file fn
-  else Binary.read_graphdef_file fn
+    then Text.read_graphdef_file fn
+    else Binary.read_graphdef_file fn

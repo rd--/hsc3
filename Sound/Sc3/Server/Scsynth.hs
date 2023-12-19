@@ -6,7 +6,6 @@ This should, but does not:
 
 - allow for Scsynth to be at a non-standard address
 - allow for multiple Scsynth instances
-
 -}
 module Sound.Sc3.Server.Scsynth where
 
@@ -41,8 +40,8 @@ scsynthPrint (Scsynth mRef) = do
 scsynthOnReset :: Scsynth -> [Osc.Message] -> IO ()
 scsynthOnReset (Scsynth mRef) messages =
   if not (null messages)
-  then modifyIORef' mRef (++ messages)
-  else return ()
+    then modifyIORef' mRef (++ messages)
+    else return ()
 
 -- | reset scsynth, send all stored onReset messages, clear the onReset message store.
 scsynthReset :: Scsynth -> IO ()

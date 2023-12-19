@@ -13,11 +13,11 @@ import qualified Sound.Sc3.Server.Graphdef.Graph as Graphdef.Graph {- hsc3 -}
 import qualified Sound.Sc3.Server.Param as Param {- hsc3 -}
 
 -- | A named unit generator graph.
-data Synthdef =
-  Synthdef
-  {synthdefName :: String
-  ,synthdefUgen :: Ugen.Ugen}
-  deriving (Eq,Show)
+data Synthdef = Synthdef
+  { synthdefName :: String
+  , synthdefUgen :: Ugen.Ugen
+  }
+  deriving (Eq, Show)
 
 -- | Alias for 'Synthdef'.
 synthdef :: String -> Ugen.Ugen -> Synthdef
@@ -25,8 +25,8 @@ synthdef = Synthdef
 
 {- | The Sc3 /default/ instrument 'Synthdef', see 'default_ugen_graph'.
 
-> import Sound.Osc {- hosc -}
-> import Sound.Sc3 {- hsc3 -}
+> import Sound.Osc {\- hosc -\}
+> import Sound.Sc3 {\- hsc3 -\}
 > withSc3 (sendMessage (d_recv defaultSynthdef))
 > audition defaultSynthdef
 -}
@@ -41,8 +41,8 @@ see 'default_sampler_ugen_graph'.
 -}
 defaultSampler :: Bool -> Synthdef
 defaultSampler use_gate =
-    let nm = "default-sampler-" ++ if use_gate then "gate" else "fixed"
-    in synthdef nm (Help.Graph.default_sampler_ugen_graph use_gate)
+  let nm = "default-sampler-" ++ if use_gate then "gate" else "fixed"
+  in synthdef nm (Help.Graph.default_sampler_ugen_graph use_gate)
 
 -- | 'ugen_to_graph' of 'synthdefUgen'.
 synthdefGraph :: Synthdef -> Graph.U_Graph
@@ -51,13 +51,13 @@ synthdefGraph = Graph.ugen_to_graph . synthdefUgen
 {- | Parameter names at 'Synthdef'.
 
 >>> synthdefParam defaultSynthdef
-[("amp",0.1),("pan",0),("gate",1),("freq",440),("out",0)]
+[("amp",0.1),("pan",0.0),("gate",1.0),("freq",440.0),("out",0.0)]
 -}
 synthdefParam :: Synthdef -> Param.Param
 synthdefParam =
-  map (\n -> (Graph.u_node_k_name n, Graph.u_node_k_default n)) .
-  Graph.ug_controls .
-  synthdefGraph
+  map (\n -> (Graph.u_node_k_name n, Graph.u_node_k_default n))
+    . Graph.ug_controls
+    . synthdefGraph
 
 -- | 'graph_to_graphdef' at 'Synthdef'.
 synthdef_to_graphdef :: Synthdef -> Graphdef.Graphdef
@@ -75,8 +75,9 @@ synthdefData = Graphdef.Binary.encode_graphdef . synthdef_to_graphdef
 synthdefWrite :: FilePath -> Synthdef -> IO ()
 synthdefWrite fn = Graphdef.Binary.graphdefWrite fn . synthdef_to_graphdef
 
--- | Write 'Synthdef' to indicated directory.  The filename is the
--- 'synthdefName' with the appropriate extension (@scsyndef@).
+{- | Write 'Synthdef' to indicated directory.  The filename is the
+'synthdefName' with the appropriate extension (@scsyndef@).
+-}
 synthdefWrite_dir :: FilePath -> Synthdef -> IO ()
 synthdefWrite_dir dir = Graphdef.Binary.graphdefWrite_dir dir . synthdef_to_graphdef
 

@@ -1,4 +1,4 @@
-{- | Signals & wavetables -}
+-- | Signals & wavetables
 module Sound.Sc3.Common.Buffer where
 
 import Data.List {- base -}
@@ -29,12 +29,12 @@ blend z i j = i + (z * (j - i))
 clipAt :: Int -> [a] -> a
 clipAt ix c = if ix > length c - 1 then last c else if ix < 0 then c !! 0 else c !! ix
 
-{- | 'blendAt' with @clip@ function as argument. -}
-blendAtBy :: (Integral i,RealFrac n) => (i -> t -> n) -> n -> t -> n
+-- | 'blendAt' with @clip@ function as argument.
+blendAtBy :: (Integral i, RealFrac n) => (i -> t -> n) -> n -> t -> n
 blendAtBy f ix c =
-    let m = floor ix
-        m' = fromIntegral m
-    in blend (S.absdif ix m') (f m c) (f (m + 1) c)
+  let m = floor ix
+      m' = fromIntegral m
+  in blend (S.absdif ix m') (f m c) (f (m + 1) c)
 
 {- | @SequenceableCollection.blendAt@ returns a linearly interpolated value between the two closest indices.
 Inverse operation is 'indexInBetween'.
@@ -50,13 +50,13 @@ Inverse operation is 'indexInBetween'.
 blendAt :: RealFrac a => a -> [a] -> a
 blendAt = blendAtBy clipAt
 
-{- | Resampling function, /n/ is destination length, /r/ is source length, /f/ is the indexing function, /c/ is the collection. -}
-resamp1_gen :: (Integral i,RealFrac n) => i -> i -> (i -> t -> n) -> t -> i -> n
+-- | Resampling function, /n/ is destination length, /r/ is source length, /f/ is the indexing function, /c/ is the collection.
+resamp1_gen :: (Integral i, RealFrac n) => i -> i -> (i -> t -> n) -> t -> i -> n
 resamp1_gen n r f c =
-    let n' = fromIntegral n
-        fwd = (fromIntegral r - 1) / (n' - 1)
-        gen i = blendAtBy f (fromIntegral i * fwd) c
-    in gen
+  let n' = fromIntegral n
+      fwd = (fromIntegral r - 1) / (n' - 1)
+      gen i = blendAtBy f (fromIntegral i * fwd) c
+  in gen
 
 {- | @SequenceableCollection.resamp1@ returns a new collection of the desired length, with values resampled evenly-spaced from the receiver with linear interpolation.
 
@@ -75,8 +75,8 @@ resamp1_gen n r f c =
 -}
 resamp1 :: RealFrac n => Int -> [n] -> [n]
 resamp1 n c =
-    let gen = resamp1_gen n (length c) clipAt c
-    in map gen [0 .. n - 1]
+  let gen = resamp1_gen n (length c) clipAt c
+  in map gen [0 .. n - 1]
 
 {- | @ArrayedCollection.normalizeSum@ ensures sum of elements is one.
 
@@ -88,9 +88,9 @@ True
 normalizeSum :: (Fractional a) => [a] -> [a]
 normalizeSum l = let n = sum l in map (/ n) l
 
-{- | Variant that specifies range of input sequence separately. -}
-normalise_rng :: Fractional n => (n,n) -> (n,n) -> [n] -> [n]
-normalise_rng (il,ir) (l,r) = map (\e -> S.sc3_linlin e il ir l r)
+-- | Variant that specifies range of input sequence separately.
+normalise_rng :: Fractional n => (n, n) -> (n, n) -> [n] -> [n]
+normalise_rng (il, ir) (l, r) = map (\e -> S.sc3_linlin e il ir l r)
 
 {- | @ArrayedCollection.normalize@ returns a new Array with the receiver items normalized between min and max.
 
@@ -104,18 +104,18 @@ normalise_rng (il,ir) (l,r) = map (\e -> S.sc3_linlin e il ir l r)
 [-20.0,-5.0,10.0]
 -}
 normalize :: (Fractional n, Ord n) => n -> n -> [n] -> [n]
-normalize l r c = normalise_rng (minimum c,maximum c) (l,r) c
+normalize l r c = normalise_rng (minimum c, maximum c) (l, r) c
 
 {- | List of 2-tuples of elements at distance (stride) /n/.
 
 >>> t2_window 3 [1..9]
 [(1,2),(4,5),(7,8)]
 -}
-t2_window :: Integral i => i -> [t] -> [(t,t)]
+t2_window :: Integral i => i -> [t] -> [(t, t)]
 t2_window n x =
-    case x of
-      i:j:_ -> (i,j) : t2_window n (genericDrop n x)
-      _ -> []
+  case x of
+    i : j : _ -> (i, j) : t2_window n (genericDrop n x)
+    _ -> []
 
 {- | List of 2-tuples of adjacent elements.
 
@@ -125,15 +125,15 @@ t2_window n x =
 >>> t2_adjacent [1..5]
 [(1,2),(3,4)]
 -}
-t2_adjacent :: [t] -> [(t,t)]
-t2_adjacent = t2_window (2::Int)
+t2_adjacent :: [t] -> [(t, t)]
+t2_adjacent = t2_window (2 :: Int)
 
 {- | List of 2-tuples of overlapping elements.
 
 >>> t2_overlap [1..4]
 [(1,2),(2,3),(3,4)]
 -}
-t2_overlap :: [b] -> [(b,b)]
+t2_overlap :: [b] -> [(b, b)]
 t2_overlap x =
   case uncons x of
     Nothing -> error "t2_overlap"
@@ -147,11 +147,11 @@ t2_overlap x =
 >>> t2_concat (t2_overlap [1..4])
 [1,2,2,3,3,4]
 -}
-t2_concat :: [(a,a)] -> [a]
+t2_concat :: [(a, a)] -> [a]
 t2_concat x =
-    case x of
-      [] -> []
-      (i,j):x' -> i : j : t2_concat x'
+  case x of
+    [] -> []
+    (i, j) : x' -> i : j : t2_concat x'
 
 {- | A Signal is half the size of a Wavetable, each element is the sum
 of two adjacent elements of the Wavetable.
@@ -177,7 +177,7 @@ from_wavetable = map (uncurry (+)) . t2_adjacent
 [-0.5,0.5,0.0,0.5,1.5,-0.5,1.0,-0.5]
 -}
 to_wavetable :: Num a => [a] -> [a]
-to_wavetable  = to_wavetable_nowrap . (++ [0])
+to_wavetable = to_wavetable_nowrap . (++ [0])
 
 {- | Shaper requires wavetables without wrap.
 
@@ -186,8 +186,8 @@ to_wavetable  = to_wavetable_nowrap . (++ [0])
 -}
 to_wavetable_nowrap :: Num a => [a] -> [a]
 to_wavetable_nowrap =
-    let f (e0,e1) = (2 * e0 - e1,e1 - e0)
-    in t2_concat . map f . t2_overlap
+  let f (e0, e1) = (2 * e0 - e1, e1 - e0)
+  in t2_concat . map f . t2_overlap
 
 {- | Variant of 'sineFill' that gives each component table.
 
@@ -197,12 +197,12 @@ True
 
 > Sound.Sc3.Plot.plot_p1_ln t
 -}
-sineGen :: (Floating n,Enum n) => Int -> [n] -> [n] -> [[n]]
+sineGen :: (Floating n, Enum n) => Int -> [n] -> [n] -> [[n]]
 sineGen n =
-    let incr = (2 * pi) / fromIntegral n
-        ph partial = take n [0,incr * partial ..]
-        f h amp iph = map (\z -> sin (z + iph) * amp) (ph h)
-    in zipWith3 f [1..]
+  let incr = (2 * pi) / fromIntegral n
+      ph partial = take n [0, incr * partial ..]
+      f h amp iph = map (\z -> sin (z + iph) * amp) (ph h)
+  in zipWith3 f [1 ..]
 
 {- | @Signal.*sineFill@ is a table generator.
      Frequencies are partials, amplitudes and initial phases are as given.
@@ -211,9 +211,8 @@ sineGen n =
 > let a = [[21,5,34,3,2,13,1,8,55],[13,8,55,34,5,21,3,1,2],[55,34,1,3,2,13,5,8,21]]
 > let t = map (\amp -> sineFill 1024 (map recip amp) (replicate 9 0)) a
 > Sound.Sc3.Plot.plot_p1_ln t
-
 -}
-sineFill :: (Ord n,Floating n,Enum n) => Int -> [n] -> [n] -> [n]
+sineFill :: (Ord n, Floating n, Enum n) => Int -> [n] -> [n] -> [n]
 sineFill n amp iph =
-    let t = sineGen n amp iph
-    in normalize (-1) 1 (map sum (transpose t))
+  let t = sineGen n amp iph
+  in normalize (-1) 1 (map sum (transpose t))

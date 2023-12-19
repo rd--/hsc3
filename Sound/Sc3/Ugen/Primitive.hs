@@ -17,16 +17,16 @@ type Output = Rate
 
 -- | Selector for unary and binary operators.
 newtype Special = Special Int
-    deriving (Ord, Eq, Read, Show)
+  deriving (Ord, Eq, Read, Show)
 
 -- | Sc Ugen primitive.
-data Primitive t =
-  Primitive
-  {ugenRate :: Rate
-  ,ugenName :: String
-  ,ugenInputs :: [t]
-  ,ugenOutputs :: [Output]
-  ,ugenSpecial :: Special
-  ,ugenId :: UgenId
-  ,primitiveBrackets :: Brackets}
+data Primitive t = Primitive
+  { ugenRate :: Rate
+  , ugenName :: String
+  , ugenInputs :: [t]
+  , ugenOutputs :: [Output]
+  , ugenSpecial :: Special
+  , ugenId :: UgenId
+  , primitiveBrackets :: Brackets
+  }
   deriving (Ord, Eq, Read, Show)

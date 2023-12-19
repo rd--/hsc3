@@ -8,9 +8,10 @@ import qualified Sound.Sc3.Server.Command.Enum as Server.Command.Enum {- hsc3 -}
 -- | Add a completion packet to an existing asynchronous command.
 with_completion_packet :: Message -> PacketOf Message -> Message
 with_completion_packet (Message c xs) cm =
-    if c `elem` Server.Command.Enum.async_cmds
-    then let xs' = xs ++ [Blob (encodePacket cm)]
-         in Message c xs'
+  if c `elem` Server.Command.Enum.async_cmds
+    then
+      let xs' = xs ++ [Blob (encodePacket cm)]
+      in Message c xs'
     else error ("with_completion_packet: not async: " ++ c)
 
 {- | Add a completion message to an existing asynchronous command.

@@ -16,9 +16,9 @@ import Sound.Osc.Packet {- hosc -}
 -- | Encode Bundle and prefix with encoded length.
 oscWithSize :: BundleOf Message -> B.ByteString
 oscWithSize o =
-    let b = Encode.encodeBundle o
-        l = Byte.encode_i32 (fromIntegral (B.length b))
-    in B.append l b
+  let b = Encode.encodeBundle o
+      l = Byte.encode_i32 (fromIntegral (B.length b))
+  in B.append l b
 
 -- | An 'Nrt' score is a sequence of 'Bundle's.
 newtype Nrt = Nrt {nrt_bundles :: [BundleOf Message]} deriving (Show)
@@ -26,7 +26,7 @@ newtype Nrt = Nrt {nrt_bundles :: [BundleOf Message]} deriving (Show)
 {- | 'span' of 'f' of 'bundleTime'.
      Can be used to separate the /initialisation/ and /remainder/ parts of a score.
 -}
-nrt_span :: (Time -> Bool) -> Nrt -> ([BundleOf Message],[BundleOf Message])
+nrt_span :: (Time -> Bool) -> Nrt -> ([BundleOf Message], [BundleOf Message])
 nrt_span f = span (f . bundleTime) . nrt_bundles
 
 -- | Encode an 'Nrt' score.
@@ -35,8 +35,8 @@ encodeNrt = B.concat . map oscWithSize . nrt_bundles
 
 {- | Write an 'Nrt' score.
 
-> import Sound.Osc {- hosc -}
-> import Sound.Sc3 {- hsc3 -}
+> import Sound.Osc {\- hosc -\}
+> import Sound.Sc3 {\- hsc3 -\}
 > m1 = g_new [(1, AddToTail, 0)]
 > m2 = d_recv (synthdef "sin" (out 0 (sinOsc ar 660 0 * 0.15)))
 > m3 = s_new "sin" 100 AddToTail 1 []
@@ -55,13 +55,13 @@ putNrt h = B.hPut h . encodeNrt
 -- | Decode an 'Nrt' 'B.ByteString' to a list of 'Bundle's.
 decode_nrt_bundles :: B.ByteString -> [BundleOf Message]
 decode_nrt_bundles s =
-    let (p,q) = B.splitAt 4 s
-        n = fromIntegral (Byte.decode_i32 p)
-        (r,s') = B.splitAt n q
-        r' = Decode.decodeBundle r
-    in if B.null s'
-       then [r']
-       else r' : decode_nrt_bundles s'
+  let (p, q) = B.splitAt 4 s
+      n = fromIntegral (Byte.decode_i32 p)
+      (r, s') = B.splitAt n q
+      r' = Decode.decodeBundle r
+  in if B.null s'
+      then [r']
+      else r' : decode_nrt_bundles s'
 
 -- | Decode an 'Nrt' 'B.ByteString'.
 decodeNrt :: B.ByteString -> Nrt
@@ -81,7 +81,7 @@ nrt_non_ascending :: Nrt -> [(BundleOf Message, BundleOf Message)]
 nrt_non_ascending (Nrt b) =
   case uncons b of
     Nothing -> error "nrt_non_ascending: empty nrt"
-    Just (_ , t) ->
+    Just (_, t) ->
       let p = zip b t
-          f (i,j) = if bundleTime i > bundleTime j then Just (i,j) else Nothing
+          f (i, j) = if bundleTime i > bundleTime j then Just (i, j) else Nothing
       in mapMaybe f p

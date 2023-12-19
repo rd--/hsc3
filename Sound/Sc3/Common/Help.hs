@@ -30,7 +30,7 @@ Runs the command "find -name" (so Unix only).
 sc3_rtf_find_file :: FilePath -> IO (Maybe FilePath)
 sc3_rtf_find_file fn = do
   d <- sc3_rtf_help_dir
-  r <- System.Process.readProcess "find" [d,"-iname",fn] ""
+  r <- System.Process.readProcess "find" [d, "-iname", fn] ""
   case lines r of
     [] -> return Nothing
     [r0] -> return (Just r0)
@@ -43,7 +43,7 @@ sc3_rtf_find_file_err = fmap (fromMaybe (error "sc3_rtf_find_file")) . sc3_rtf_f
 -- | Run the command unrtf (so UNIX only) to convert an RTF file to a TEXT (.scd) file.
 sc3_rtf_to_scd :: FilePath -> FilePath -> IO ()
 sc3_rtf_to_scd rtf_fn scd_fn = do
-  txt <- System.Process.readProcess "unrtf" ["--text",rtf_fn] ""
+  txt <- System.Process.readProcess "unrtf" ["--text", rtf_fn] ""
   let delete_trailing_whitespace = reverse . dropWhile isSpace . reverse
       tidy = unlines . map delete_trailing_whitespace . drop 4 . lines
   writeFile scd_fn (tidy txt)
@@ -58,8 +58,8 @@ sc3_rtf_help_translate nm = do
   return scd_fn
 
 -- | 'sc3_rtf_help_translate' and run editor.
-sc3_rtf_help_scd_open :: (String,[String]) -> String -> IO ()
-sc3_rtf_help_scd_open (cmd,arg) nm = do
+sc3_rtf_help_scd_open :: (String, [String]) -> String -> IO ()
+sc3_rtf_help_scd_open (cmd, arg) nm = do
   scd_fn <- sc3_rtf_help_translate nm
   System.Process.callProcess cmd (arg ++ [scd_fn])
 
@@ -68,7 +68,7 @@ sc3_rtf_help_scd_open (cmd,arg) nm = do
 > sc3_rtf_help_scd_open_emacs "lfsaw"
 -}
 sc3_rtf_help_scd_open_emacs :: String -> IO ()
-sc3_rtf_help_scd_open_emacs = sc3_rtf_help_scd_open ("emacsclient",["--no-wait"])
+sc3_rtf_help_scd_open_emacs = sc3_rtf_help_scd_open ("emacsclient", ["--no-wait"])
 
 -- * Sc-Doc (Html)
 
@@ -76,8 +76,9 @@ sc3_rtf_help_scd_open_emacs = sc3_rtf_help_scd_open ("emacsclient",["--no-wait"]
 sc3_scdoc_help_url :: String
 sc3_scdoc_help_url = "http://doc.sccode.org/"
 
--- | Read the environment variable @SC3_SCDOC_HTML_HELP_DIR@.
---   The default value is @~\/.local\/share\/SuperCollider/Help@.
+{- | Read the environment variable @SC3_SCDOC_HTML_HELP_DIR@.
+  The default value is @~\/.local\/share\/SuperCollider/Help@.
+-}
 sc3_scdoc_help_dir :: IO String
 sc3_scdoc_help_dir = do
   h <- getEnv "HOME"
@@ -105,15 +106,15 @@ sc3_scdoc_help_operator = (++) "Overviews/Operators.html#"
 >>> sc3_scdoc_help_method '*' ("C","m")
 "Classes/C.html#*m"
 -}
-sc3_scdoc_help_method :: Char -> (String,String) -> FilePath
-sc3_scdoc_help_method z (c,m) = "Classes" </> c <.> "html#" ++ [z] ++ m
+sc3_scdoc_help_method :: Char -> (String, String) -> FilePath
+sc3_scdoc_help_method z (c, m) = "Classes" </> c <.> "html#" ++ [z] ++ m
 
 {- | Generate path to indicated Sc3 class method help.
 
 >>> sc3_scdoc_help_class_method ("C","m")
 "Classes/C.html#*m"
 -}
-sc3_scdoc_help_class_method :: (String,String) -> FilePath
+sc3_scdoc_help_class_method :: (String, String) -> FilePath
 sc3_scdoc_help_class_method = sc3_scdoc_help_method '*'
 
 {- | Generate path to indicated Sc3 instance method help.
@@ -121,7 +122,7 @@ sc3_scdoc_help_class_method = sc3_scdoc_help_method '*'
 >>> sc3_scdoc_help_instance_method ("C","m")
 "Classes/C.html#-m"
 -}
-sc3_scdoc_help_instance_method :: (String,String) -> FilePath
+sc3_scdoc_help_instance_method :: (String, String) -> FilePath
 sc3_scdoc_help_instance_method = sc3_scdoc_help_method '-'
 
 {- | Sc3 help path documenting x.
@@ -141,9 +142,9 @@ sc3_scdoc_help_instance_method = sc3_scdoc_help_method '-'
 sc3_scdoc_help_path :: String -> String
 sc3_scdoc_help_path s = do
   case Split.splitOn "." s of
-    ["Operator",m] -> sc3_scdoc_help_operator m
-    [c,'*':m] -> sc3_scdoc_help_class_method (c,m)
-    [c,m] -> sc3_scdoc_help_instance_method (c,m)
+    ["Operator", m] -> sc3_scdoc_help_operator m
+    [c, '*' : m] -> sc3_scdoc_help_class_method (c, m)
+    [c, m] -> sc3_scdoc_help_instance_method (c, m)
     _ -> sc3_scdoc_help_class s
 
 {- | Open SC3 help path, either the local file or the online version.
@@ -170,10 +171,10 @@ Adds initial forward slash if not present.
 -}
 sc3_scdoc_help_server_command_path :: String -> FilePath
 sc3_scdoc_help_server_command_path c =
-    let c' = case c of
-               '/':_ -> c
-               _ -> '/':c
-    in "Reference/Server-Command-Reference.html" ++ ('#' : c')
+  let c' = case c of
+        '/' : _ -> c
+        _ -> '/' : c
+  in "Reference/Server-Command-Reference.html" ++ ('#' : c')
 
 {- | 'sc3_scdoc_help_open' of 'sc3_server_command_path'
 
@@ -182,8 +183,8 @@ sc3_scdoc_help_server_command_path c =
 -}
 sc3_scdoc_help_server_command_open :: Bool -> String -> IO ()
 sc3_scdoc_help_server_command_open use_loc =
-  sc3_scdoc_help_open use_loc .
-  sc3_scdoc_help_server_command_path
+  sc3_scdoc_help_open use_loc
+    . sc3_scdoc_help_server_command_path
 
 -- * Fragments
 

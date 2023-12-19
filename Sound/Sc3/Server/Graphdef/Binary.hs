@@ -24,11 +24,12 @@ get_pstr = do
 -- | Get_Functions for binary .scsyndef files.
 binary_get_f :: Get_Functions Get.Get
 binary_get_f =
-  (get_pstr
-  ,fmap fromIntegral Get.getInt8
-  ,fmap fromIntegral Get.getInt16be
-  ,fmap fromIntegral Get.getInt32be
-  ,fmap realToFrac IEEE754.getFloat32be)
+  ( get_pstr
+  , fmap fromIntegral Get.getInt8
+  , fmap fromIntegral Get.getInt16be
+  , fmap fromIntegral Get.getInt32be
+  , fmap realToFrac IEEE754.getFloat32be
+  )
 
 -- * Read
 
@@ -59,9 +60,14 @@ scsyndef_stat fn = do
 -- | 'Encode_Functions' for 'ByteString.ByteString'
 enc_bytestring :: Encode_Functions ByteString.ByteString
 enc_bytestring =
-  (ByteString.concat,encode_pstr,Byte.encode_i8,Byte.encode_i16,Byte.encode_i32,encode_sample
-  ,const ByteString.empty)
-
+  ( ByteString.concat
+  , encode_pstr
+  , Byte.encode_i8
+  , Byte.encode_i16
+  , Byte.encode_i32
+  , encode_sample
+  , const ByteString.empty
+  )
 
 {- | Pascal (length prefixed) encoding of 'Name'.
 
@@ -69,7 +75,6 @@ enc_bytestring =
 -}
 encode_pstr :: Name -> ByteString.ByteString
 encode_pstr = ByteString.pack . Cast.str_pstr . Datum.ascii_to_string
-
 
 -- | Byte-encode 'Input'.
 encode_input :: Input -> ByteString.ByteString
@@ -91,16 +96,16 @@ encode_sample = Byte.encode_f32 . realToFrac
 encode_graphdef :: Graphdef -> ByteString.ByteString
 encode_graphdef = encode_graphdef_f enc_bytestring
 
-
 -- * IO
 
 -- | Write 'Graphdef' to indicated file.
 graphdefWrite :: FilePath -> Graphdef -> IO ()
 graphdefWrite fn = ByteString.writeFile fn . encode_graphdef
 
--- | Write 'Graphdef' to indicated directory.  The filename is the
--- 'graphdef_name' with the appropriate extension (@scsyndef@).
+{- | Write 'Graphdef' to indicated directory.  The filename is the
+'graphdef_name' with the appropriate extension (@scsyndef@).
+-}
 graphdefWrite_dir :: FilePath -> Graphdef -> IO ()
 graphdefWrite_dir dir s =
-    let fn = dir </> Datum.ascii_to_string (graphdef_name s) <.> "scsyndef"
-    in graphdefWrite fn s
+  let fn = dir </> Datum.ascii_to_string (graphdef_name s) <.> "scsyndef"
+  in graphdefWrite fn s

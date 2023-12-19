@@ -13,10 +13,10 @@ True
 >>> Constant 3 emptyBrackets > Constant 1 emptyBrackets
 True
 -}
-data Constant =
-  Constant
-  {constantValue :: Double
-  ,constantBrackets :: Brackets}
+data Constant = Constant
+  { constantValue :: Double
+  , constantBrackets :: Brackets
+  }
   deriving (Ord, Eq, Read, Show)
 
 -- | Get fractional part of a double.

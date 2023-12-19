@@ -39,8 +39,8 @@ param_merge_uniq p1 p2 =
 -}
 param_merge_r :: Param -> Param -> Param
 param_merge_r p1 p2 =
-    let p3 = let k2 = map fst p2 in filter (\(x,_) -> x `notElem` k2) p1
-    in p3 ++ p2
+  let p3 = let k2 = map fst p2 in filter (\(x, _) -> x `notElem` k2) p1
+  in p3 ++ p2
 
 {- | Right-fold (right-biased) of 'param_merge'
 
@@ -59,20 +59,19 @@ param_get p k v = fromMaybe v (lookup k p)
 >>> param_parse (';','=') "a=1;b=2"
 [("a",1.0),("b",2.0)]
 -}
-param_parse :: (Char,Char) -> String -> Param
-param_parse (c1,c2) str =
-    let f x = case splitOn [c2] x of
-                [lhs,rhs] -> (lhs,read rhs)
-                _ -> error ("param_parse: " ++ x)
-    in if null str then [] else map f (splitOn [c1] str)
+param_parse :: (Char, Char) -> String -> Param
+param_parse (c1, c2) str =
+  let f x = case splitOn [c2] x of
+        [lhs, rhs] -> (lhs, read rhs)
+        _ -> error ("param_parse: " ++ x)
+  in if null str then [] else map f (splitOn [c1] str)
 
 {- | Inverse of 'param_parse', /k/ is the precision to print values to.
 
 >>> param_pp (';','=') 4 [("a",1),("b",2)]
 "a=1.0;b=2.0"
 -}
-param_pp :: (Char,Char) -> Int -> Param -> String
-param_pp (c1,c2) k =
-    let f (lhs,rhs) = concat [lhs,[c2],double_pp k rhs]
-    in concat . intersperse [c1] . map f
-
+param_pp :: (Char, Char) -> Int -> Param -> String
+param_pp (c1, c2) k =
+  let f (lhs, rhs) = concat [lhs, [c2], double_pp k rhs]
+  in concat . intersperse [c1] . map f

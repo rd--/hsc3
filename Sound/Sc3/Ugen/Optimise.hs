@@ -12,7 +12,7 @@ import Sound.Sc3.Ugen.Util
 
 -- | Constant form of 'rand' Ugen.
 c_rand :: Random a => Int -> a -> a -> a
-c_rand z l r = fst (randomR (l,r) (mkStdGen z))
+c_rand z l r = fst (randomR (l, r) (mkStdGen z))
 
 -- | Constant form of 'iRand' Ugen.
 c_irand :: (Num b, RealFrac a, Random a) => Int -> a -> a -> b
@@ -24,7 +24,7 @@ graph, it is no longer randomised at the server.  It's a useful
 transformation for very large graphs which are being constructed
 and sent each time the graph is played.
 
-> import Sound.Sc3.Ugen.Dot {- hsc3-dot -}
+> import Sound.Sc3.Ugen.Dot {\- hsc3-dot -\}
 
 > let u = sinOsc ar (randId 'a' 220 440) 0 * 0.1
 > draw (u + ugen_optimise_ir_rand u)
@@ -38,24 +38,26 @@ ugen_optimise_ir_rand =
               Primitive
                 InitialisationRate
                 "Rand"
-                [Constant_U (Constant l ([],[]))
-                ,Constant_U (Constant r ([],[]))]
+                [ Constant_U (Constant l ([], []))
+                  , Constant_U (Constant r ([], []))
+                  ]
                 [InitialisationRate]
                 _
                 (Uid z)
-                ([],[]) -> Constant_U (Constant (c_rand z l r) ([],[]))
+                ([], []) -> Constant_U (Constant (c_rand z l r) ([], []))
               Primitive
                 InitialisationRate
                 "IRand"
-                [Constant_U (Constant l ([],[]))
-                ,Constant_U (Constant r ([],[]))]
+                [ Constant_U (Constant l ([], []))
+                  , Constant_U (Constant r ([], []))
+                  ]
                 [InitialisationRate]
                 _
                 (Uid z)
-                ([],[]) -> Constant_U (Constant (c_irand z l r) ([],[]))
+                ([], []) -> Constant_U (Constant (c_irand z l r) ([], []))
               _ -> u
           _ -> u
-        in ugenTraverse (const False) f
+  in ugenTraverse (const False) f
 
 {- | Optimise 'Ugen' graph by re-writing binary operators with
 'Constant' inputs.  The standard graph constructors already do
@@ -103,25 +105,26 @@ ugen_optimise_const_operator =
               Primitive
                 _
                 "BinaryOpUGen"
-                [Constant_U (Constant l ([],[]))
-                ,Constant_U (Constant r ([],[]))]
+                [ Constant_U (Constant l ([], []))
+                  , Constant_U (Constant r ([], []))
+                  ]
                 [_]
                 (Special z)
                 _
-                ([],[]) -> case binop_special_hs z of
-                             Just fn -> Constant_U (Constant (fn l r) ([],[]))
-                             _ -> u
+                ([], []) -> case binop_special_hs z of
+                  Just fn -> Constant_U (Constant (fn l r) ([], []))
+                  _ -> u
               Primitive
                 _
                 "UnaryOpUGen"
-                [Constant_U (Constant i ([],[]))]
+                [Constant_U (Constant i ([], []))]
                 [_]
                 (Special z)
                 _
-                ([],[]) -> case uop_special_hs z of
-                             Just fn -> Constant_U (Constant (fn i) ([],[]))
-                             _ -> u
-              Primitive _ "MulAdd" [i, m, a] [_] _ _ ([],[]) -> mulAddOptimised i m a
+                ([], []) -> case uop_special_hs z of
+                  Just fn -> Constant_U (Constant (fn i) ([], []))
+                  _ -> u
+              Primitive _ "MulAdd" [i, m, a] [_] _ _ ([], []) -> mulAddOptimised i m a
               _ -> u
           _ -> u
   in ugenTraverse (const False) f
@@ -139,8 +142,8 @@ constant_opt = u_constant . ugen_optimise_ir_rand
 -}
 mulAddOptimised :: Ugen -> Ugen -> Ugen -> Ugen
 mulAddOptimised u m a =
-  case (is_constant_of 1 m,is_constant_of 0 a) of
-    (True,True) -> u
-    (False,True) -> u * m
-    (True,False) -> u + a
-    (False,False) -> Bindings.mulAdd u m a
+  case (is_constant_of 1 m, is_constant_of 0 a) of
+    (True, True) -> u
+    (False, True) -> u * m
+    (True, False) -> u + a
+    (False, False) -> Bindings.mulAdd u m a

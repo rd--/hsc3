@@ -35,7 +35,7 @@ warp_lin_inv l r n = let z = r - l in (n - l) / z
 >>> map (warp_exp 1 2) [0,0.5,1] == [1,2 ** 0.5,2]
 True
 
-> import Sound.Sc3.Plot {- hsc3-plot -}
+> import Sound.Sc3.Plot {\- hsc3-plot -\}
 > plot_p1_ln [map (warp_exp 1 2) [0,0.01 .. 1]]
 -}
 warp_exp :: Floating a => Warp_f a
@@ -107,20 +107,22 @@ warp_db_inv l r n = sqrt (Math.db_to_amp (Math.sc3_linlin n l r (-180) 0))
 warp_curve :: (Ord a, Floating a) => a -> Warp_f a
 warp_curve k l r n =
   if abs k < 0.001
-  then warp_lin l r n
-  else let e = exp k
-           a = (r - l) / (1 - e)
-           b = l + a
-       in b - ((e ** n) * a)
+    then warp_lin l r n
+    else
+      let e = exp k
+          a = (r - l) / (1 - e)
+          b = l + a
+      in b - ((e ** n) * a)
 
 warp_curve_inv :: (Ord a, Floating a) => a -> Warp_f a
 warp_curve_inv k l r n =
   if abs k < 0.001
-  then warp_lin l r n
-  else let e = exp k
-           a = (r - l) / (1 - e)
-           b = l + a
-       in log ((b - n) / a) / k
+    then warp_lin l r n
+    else
+      let e = exp k
+          a = (r - l) / (1 - e)
+          b = l + a
+      in log ((b - n) / a) / k
 
 {- | Select warp functions by name.  Numerical names are interpreted as /curve/ values for 'warpCurve'.
 
@@ -131,13 +133,13 @@ warp_curve_inv k l r n =
 -}
 warp_named :: (Floating t, RealFrac t) => String -> Maybe (Warp_f t, Warp_f t)
 warp_named nm =
-    case nm of
-      "lin" -> Just (warp_lin,warp_lin_inv)
-      "exp" -> Just (warp_exp,warp_exp_inv)
-      "sin" -> Just (warp_sin,warp_sin_inv)
-      "cos" -> Just (warp_cos,warp_cos_inv)
-      "amp" -> Just (warp_amp,warp_amp_inv)
-      "db" -> Just (warp_db,warp_db_inv)
-      _ -> case readSigned readFloat nm of
-             [(c,"")] -> Just (warp_curve c,warp_curve_inv c)
-             _ -> Nothing
+  case nm of
+    "lin" -> Just (warp_lin, warp_lin_inv)
+    "exp" -> Just (warp_exp, warp_exp_inv)
+    "sin" -> Just (warp_sin, warp_sin_inv)
+    "cos" -> Just (warp_cos, warp_cos_inv)
+    "amp" -> Just (warp_amp, warp_amp_inv)
+    "db" -> Just (warp_db, warp_db_inv)
+    _ -> case readSigned readFloat nm of
+      [(c, "")] -> Just (warp_curve c, warp_curve_inv c)
+      _ -> Nothing

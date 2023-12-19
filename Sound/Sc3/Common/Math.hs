@@ -1,4 +1,4 @@
-{- | Common math functions. -}
+-- | Common math functions.
 module Sound.Sc3.Common.Math where
 
 import qualified Data.Fixed {- base -}
@@ -24,11 +24,11 @@ half_pi = pi / 2
 two_pi :: Floating n => n
 two_pi = 2 * pi
 
-{- | 'abs' of '(-)'. -}
+-- | 'abs' of '(-)'.
 absdif :: Num a => a -> a -> a
 absdif i j = abs (j - i)
 
-{- | Sc3 MulAdd type signature, arguments in Sc3 order of input, multiply, add.-}
+-- | Sc3 MulAdd type signature, arguments in Sc3 order of input, multiply, add.
 type Sc3_MulAdd t = t -> t -> t -> t
 
 {- | Ordinary (un-optimised) multiply-add, see also mulAdd Ugen.
@@ -64,22 +64,22 @@ mul_add m a = (+ a) . (* m)
 >>> mul_add_hs (3,4) 2 == 2 * 3 + 4
 True
 -}
-mul_add_hs :: Num t => (t,t) -> t -> t
+mul_add_hs :: Num t => (t, t) -> t -> t
 mul_add_hs = uncurry mul_add
 
-{- | 'fromInteger' of 'truncate'. -}
+-- | 'fromInteger' of 'truncate'.
 sc3_truncate :: RealFrac a => a -> a
 sc3_truncate = fromInteger . truncate
 
-{- | 'fromInteger' of 'round'. -}
+-- | 'fromInteger' of 'round'.
 sc3_round :: RealFrac a => a -> a
 sc3_round = fromInteger . round
 
-{- | 'fromInteger' of 'ceiling'. -}
+-- | 'fromInteger' of 'ceiling'.
 sc3_ceiling :: RealFrac a => a -> a
 sc3_ceiling = fromInteger . ceiling
 
-{- | 'fromInteger' of 'floor'. -}
+-- | 'fromInteger' of 'floor'.
 sc3_floor :: RealFrac a => a -> a
 sc3_floor = fromInteger . floor
 
@@ -97,7 +97,7 @@ sc3_floor = fromInteger . floor
 sc3_round_to :: RealFrac n => n -> n -> n
 sc3_round_to a b = if b == 0 then a else sc3_floor ((a / b) + 0.5) * b
 
-{- | 'fromInteger' of 'div' of 'floor'. -}
+-- | 'fromInteger' of 'div' of 'floor'.
 sc3_idiv :: RealFrac n => n -> n -> n
 sc3_idiv a b = fromInteger (floor a `div` floor b)
 
@@ -157,7 +157,6 @@ True
 
 >>> gcd 66 54 * lcm 66 54 == 66 * 54
 True
-
 -}
 sc3_gcd :: t -> t -> t
 sc3_gcd = error "sc3_gcd: undefined"
@@ -206,11 +205,11 @@ True
 sc3_mod :: RealFrac n => n -> n -> n
 sc3_mod = Data.Fixed.mod'
 
-{- | Type specialised 'sc3_mod'. -}
+-- | Type specialised 'sc3_mod'.
 fmod_f32 :: Float -> Float -> Float
 fmod_f32 = sc3_mod
 
-{- | Type specialised 'sc3_mod'. -}
+-- | Type specialised 'sc3_mod'.
 fmod_f64 :: Double -> Double -> Double
 fmod_f64 = sc3_mod
 
@@ -227,8 +226,8 @@ sc3_clip n i j = if n < i then i else if n > j then j else n
 >>> map (clip_hs (5,10)) [3..12]
 [5,5,5,6,7,8,9,10,10,10]
 -}
-clip_hs :: (Ord a) => (a,a) -> a -> a
-clip_hs (i,j) n = sc3_clip n i j
+clip_hs :: (Ord a) => (a, a) -> a -> a
+clip_hs (i, j) n = sc3_clip n i j
 
 {- | Fractional modulo, alternate implementation.
 
@@ -237,12 +236,13 @@ clip_hs (i,j) n = sc3_clip n i j
 -}
 sc3_mod_alt :: RealFrac a => a -> a -> a
 sc3_mod_alt n hi =
-    let lo = 0.0
-    in if n >= lo && n < hi
-       then n
-       else if hi == lo
-            then lo
-            else n - hi * sc3_floor (n / hi)
+  let lo = 0.0
+  in if n >= lo && n < hi
+      then n
+      else
+        if hi == lo
+          then lo
+          else n - hi * sc3_floor (n / hi)
 
 {- | Wrap function that is /non-inclusive/ at right edge, ie. the Wrap Ugen rule.
 
@@ -270,7 +270,7 @@ sc3_wrap_ni lo hi n = sc3_mod (n - lo) (hi - lo) + lo
 [9,10,5,6,7,8,9,10,5,6]
 -}
 wrap_hs_int :: Integral a => (a, a) -> a -> a
-wrap_hs_int (i,j) n = ((n - i) `mod` (j - i + 1)) + i
+wrap_hs_int (i, j) n = ((n - i) `mod` (j - i + 1)) + i
 
 {- | Wrap /n/ to within range /(i,j)/, ie. @AbstractFunction.wrap@,
 ie. /inclusive/ at right edge.  'wrap' is a 'Ugen', hence prime.
@@ -287,15 +287,14 @@ ie. /inclusive/ at right edge.  'wrap' is a 'Ugen', hence prime.
 [8,9,5,6,7,8,9,5,6,7]
 
 > Sound.Sc3.Plot.plot_fn_r1_ln (wrap_hs (-1,1)) (-2,2)
-
 -}
-wrap_hs :: RealFrac n => (n,n) -> n -> n
-wrap_hs (i,j) n =
-    let r = j - i -- + 1
-        n' = if n >= j then n - r else if n < i then n + r else n
-    in if n' >= i && n' < j
-       then n'
-       else n' - r * sc3_floor ((n' - i) / r)
+wrap_hs :: RealFrac n => (n, n) -> n -> n
+wrap_hs (i, j) n =
+  let r = j - i -- + 1
+      n' = if n >= j then n - r else if n < i then n + r else n
+  in if n' >= i && n' < j
+      then n'
+      else n' - r * sc3_floor ((n' - i) / r)
 
 {- | Variant of 'wrap_hs' with @Sc3@ argument ordering.
 
@@ -306,7 +305,7 @@ True
 [3.0,0.0,1.0,2.0,3.0,0.0,1.0]
 -}
 sc3_wrap :: RealFrac n => n -> n -> n -> n
-sc3_wrap index start end = wrap_hs (start,end) index
+sc3_wrap index start end = wrap_hs (start, end) index
 
 {- | Generic variant of 'wrap''.
 
@@ -320,13 +319,13 @@ sc3_wrap index start end = wrap_hs (start,end) index
 >>> map (generic_wrap (5::Integer,10)) [3..12]
 [9,10,5,6,7,8,9,10,5,6]
 -}
-generic_wrap :: (Ord a, Num a) => (a,a) -> a -> a
-generic_wrap (l,r) n =
-    let d = r - l + 1
-        f = generic_wrap (l,r)
-    in if n < l
-       then f (n + d)
-       else if n > r then f (n - d) else n
+generic_wrap :: (Ord a, Num a) => (a, a) -> a -> a
+generic_wrap (l, r) n =
+  let d = r - l + 1
+      f = generic_wrap (l, r)
+  in if n < l
+      then f (n + d)
+      else if n > r then f (n - d) else n
 
 {- | Given sample-rate /sr/ and bin-count /n/ calculate frequency of /i/th bin.
 
@@ -379,13 +378,13 @@ cps_to_oct a = logBase 2 (a * (1.0 / 440.0)) + 4.75
 oct_to_cps :: Floating a => a -> a
 oct_to_cps a = 440.0 * (2.0 ** (a - 4.75))
 
-{- | Degree, scale and steps per octave to key. -}
+-- | Degree, scale and steps per octave to key.
 degree_to_key :: RealFrac a => [a] -> a -> a -> a
 degree_to_key s n d =
-    let l = length s
-        d' = round d
-        a = (d - fromIntegral d') * 10.0 * (n / 12.0)
-    in (n * fromIntegral (d' `div` l)) + Common.Base.at_with_error_message "degree_to_key" s (d' `mod` l) + a
+  let l = length s
+      d' = round d
+      a = (d - fromIntegral d') * 10.0 * (n / 12.0)
+  in (n * fromIntegral (d' `div` l)) + Common.Base.at_with_error_message "degree_to_key" s (d' `mod` l) + a
 
 {- | One-indexed piano key number (for standard 88 key piano) to midi note number.
 
@@ -433,7 +432,7 @@ True
 -3.0
 -}
 db_to_amp :: Floating a => a -> a
-db_to_amp = (10 **) .  (* 0.05)
+db_to_amp = (10 **) . (* 0.05)
 
 {- | Fractional midi note interval to frequency multiplier.
 
@@ -470,11 +469,11 @@ cps_to_incr sr r cps = (r / sr) * cps
 incr_to_cps :: Fractional a => a -> a -> a -> a
 incr_to_cps sr r ic = ic / (r / sr)
 
-{- | Pan2 function, identity is linear, sqrt is equal power. -}
+-- | Pan2 function, identity is linear, sqrt is equal power.
 pan2_f :: Fractional t => (t -> t) -> t -> t -> (t, t)
 pan2_f f p q =
-    let q' = (q / 2) + 0.5
-    in (p * f (1 - q'),p * f q')
+  let q' = (q / 2) + 0.5
+  in (p * f (1 - q'), p * f q')
 
 {- | Linear pan.
 
@@ -492,21 +491,21 @@ lin_pan2 = pan2_f id
 eq_pan2 :: Floating t => t -> t -> (t, t)
 eq_pan2 = pan2_f sqrt
 
-{- | 'fromInteger' of 'properFraction'. -}
-sc3_properFraction :: RealFrac t => t -> (t,t)
+-- | 'fromInteger' of 'properFraction'.
+sc3_properFraction :: RealFrac t => t -> (t, t)
 sc3_properFraction a =
-    let (p,q) = properFraction a
-    in (fromInteger p,q)
+  let (p, q) = properFraction a
+  in (fromInteger p, q)
 
-{- | a^2 - b^2. -}
+-- | a^2 - b^2.
 sc3_dif_sqr :: Num a => a -> a -> a
 sc3_dif_sqr a b = (a * a) - (b * b)
 
-{- | Euclidean distance function ('sqrt' of sum of squares). -}
+-- | Euclidean distance function ('sqrt' of sum of squares).
 sc3_hypot :: Floating a => a -> a -> a
 sc3_hypot x y = sqrt (x * x + y * y)
 
-{- | Sc3 hypotenuse approximation function. -}
+-- | Sc3 hypotenuse approximation function.
 sc3_hypotx :: (Ord a, Floating a) => a -> a -> a
 sc3_hypotx x y = abs x + abs y - ((sqrt 2 - 1) * min (abs x) (abs y))
 
@@ -515,34 +514,36 @@ sc3_hypotx x y = abs x + abs y - ((sqrt 2 - 1) * min (abs x) (abs y))
 >>> map (foldToRange 5 10) [3..12]
 [7,6,5,6,7,8,9,10,9,8]
 -}
-foldToRange :: (Ord a,Num a) => a -> a -> a -> a
+foldToRange :: (Ord a, Num a) => a -> a -> a -> a
 foldToRange i j =
-    let f n = if n > j
-              then f (j - (n - j))
-              else if n < i
-                   then f (i - (n - i))
-                   else n
-    in f
+  let f n =
+        if n > j
+          then f (j - (n - j))
+          else
+            if n < i
+              then f (i - (n - i))
+              else n
+  in f
 
-{- | Variant of 'foldToRange' with @Sc3@ argument ordering. -}
-sc3_fold :: (Ord a,Num a) => a -> a -> a -> a
+-- | Variant of 'foldToRange' with @Sc3@ argument ordering.
+sc3_fold :: (Ord a, Num a) => a -> a -> a -> a
 sc3_fold n i j = foldToRange i j n
 
-{- | Sc3 distort operator. -}
+-- | Sc3 distort operator.
 sc3_distort :: Fractional n => n -> n
 sc3_distort x = x / (1 + abs x)
 
-{- | Sc3 softclip operator. -}
+-- | Sc3 softclip operator.
 sc3_softclip :: (Ord n, Fractional n) => n -> n
 sc3_softclip x = let x' = abs x in if x' <= 0.5 then x else (x' - 0.25) / x
 
 -- * Bool
 
-{- | True is conventionally 1.  The test to determine true is @> 0@. -}
+-- | True is conventionally 1.  The test to determine true is @> 0@.
 sc3_true :: Num n => n
 sc3_true = 1
 
-{- | False is conventionally 0.  The test to determine true is @<= 0@. -}
+-- | False is conventionally 0.  The test to determine true is @<= 0@.
 sc3_false :: Num n => n
 sc3_false = 0
 
@@ -553,52 +554,51 @@ True
 
 >>> sc3_not sc3_false == sc3_true
 True
-
 -}
-sc3_not :: (Ord n,Num n) => n -> n
+sc3_not :: (Ord n, Num n) => n -> n
 sc3_not = sc3_bool . (<= 0)
 
-{- | Translate 'Bool' to 'sc3_true' and 'sc3_false'. -}
+-- | Translate 'Bool' to 'sc3_true' and 'sc3_false'.
 sc3_bool :: Num n => Bool -> n
 sc3_bool b = if b then sc3_true else sc3_false
 
-{- | Lift comparison function. -}
+-- | Lift comparison function.
 sc3_comparison :: Num n => (n -> n -> Bool) -> n -> n -> n
 sc3_comparison f p q = sc3_bool (f p q)
 
 -- * Eq
 
-{- | Lifted '=='. -}
+-- | Lifted '=='.
 sc3_eq :: (Num n, Eq n) => n -> n -> n
 sc3_eq = sc3_comparison (==)
 
-{- | Lifted '/='. -}
+-- | Lifted '/='.
 sc3_neq :: (Num n, Eq n) => n -> n -> n
 sc3_neq = sc3_comparison (/=)
 
 -- * Ord
 
-{- | Lifted '<'. -}
-sc3_lt :: (Num  n, Ord n) => n -> n -> n
+-- | Lifted '<'.
+sc3_lt :: (Num n, Ord n) => n -> n -> n
 sc3_lt = sc3_comparison (<)
 
-{- | Lifted '<='. -}
-sc3_lte :: (Num  n, Ord n) => n -> n -> n
+-- | Lifted '<='.
+sc3_lte :: (Num n, Ord n) => n -> n -> n
 sc3_lte = sc3_comparison (<=)
 
-{- | Lifted '>'. -}
+-- | Lifted '>'.
 sc3_gt :: (Num n, Ord n) => n -> n -> n
 sc3_gt = sc3_comparison (>)
 
-{- | Lifted '>='. -}
+-- | Lifted '>='.
 sc3_gte :: (Num n, Ord n) => n -> n -> n
 sc3_gte = sc3_comparison (>=)
 
 -- * Clip Rule
 
-{- | Enumeration of clipping rules. -}
+-- | Enumeration of clipping rules.
 data Clip_Rule = Clip_None | Clip_Left | Clip_Right | Clip_Both
-                 deriving (Enum,Bounded)
+  deriving (Enum, Bounded)
 
 {- | Clip a value that is expected to be within an input range to an output range, according to a rule.
 
@@ -608,15 +608,15 @@ data Clip_Rule = Clip_None | Clip_Left | Clip_Right | Clip_Both
 -}
 apply_clip_rule :: Ord n => Clip_Rule -> n -> n -> n -> n -> n -> Maybe n
 apply_clip_rule clip_rule sl sr dl dr x =
-    case clip_rule of
-      Clip_None -> Nothing
-      Clip_Left -> if x <= sl then Just dl else Nothing
-      Clip_Right -> if x >= sr then Just dr else Nothing
-      Clip_Both -> if x <= sl then Just dl else if x >= sr then Just dr else Nothing
+  case clip_rule of
+    Clip_None -> Nothing
+    Clip_Left -> if x <= sl then Just dl else Nothing
+    Clip_Right -> if x >= sr then Just dr else Nothing
+    Clip_Both -> if x <= sl then Just dl else if x >= sr then Just dr else Nothing
 
 -- * LinLin
 
-{- | Scale uni-polar (0,1) input to linear (l,r) range. -}
+-- | Scale uni-polar (0,1) input to linear (l,r) range.
 urange_ma :: Fractional a => Sc3_MulAdd a -> a -> a -> a -> a
 urange_ma mul_add_f l r i = mul_add_f i (r - l) l
 
@@ -633,14 +633,15 @@ urange = urange_ma sc3_mul_add
 >>> range_muladd 3 4
 (0.5,3.5)
 -}
-range_muladd :: Fractional t => t -> t -> (t,t)
+range_muladd :: Fractional t => t -> t -> (t, t)
 range_muladd = linlin_muladd (-1) 1
 
 {- | Scale bi-polar (-1,1) input to linear (l,r) range.
-Note that the argument order is not the same as 'linLin'. -}
+Note that the argument order is not the same as 'linLin'.
+-}
 range_ma :: Fractional a => Sc3_MulAdd a -> a -> a -> a -> a
 range_ma mul_add_f l r i =
-  let (m,a) = range_muladd l r
+  let (m, a) = range_muladd l r
   in mul_add_f i m a
 
 {- | Scale (-1,1) input to linear (l,r) range.
@@ -656,12 +657,12 @@ Note also that the various range Ugen methods at sclang select mul-add values gi
 range :: Fractional a => a -> a -> a -> a
 range = range_ma sc3_mul_add
 
-{- | 'uncurry' 'range' -}
-range_hs :: Fractional a => (a,a) -> a -> a
+-- | 'uncurry' 'range'
+range_hs :: Fractional a => (a, a) -> a -> a
 range_hs = uncurry range
 
-{- | 'flip' 'range_hs'.  This allows cases such as osc `in_range` (0,1) -}
-in_range :: Fractional a => a -> (a,a) -> a
+-- | 'flip' 'range_hs'.  This allows cases such as osc `in_range` (0,1)
+in_range :: Fractional a => a -> (a, a) -> a
 in_range = flip range_hs
 
 {- | Calculate multiplier and add values for 'linlin' transform.
@@ -682,11 +683,11 @@ Inputs are: input-min input-max output-min output-max
 >>> linlin_muladd (-0.3) 1 (-1) 1
 (1.5384615384615383,-0.5384615384615385)
 -}
-linlin_muladd :: Fractional t => t -> t -> t -> t -> (t,t)
+linlin_muladd :: Fractional t => t -> t -> t -> t -> (t, t)
 linlin_muladd sl sr dl dr =
-    let m = (dr - dl) / (sr - sl)
-        a = dl - (m * sl)
-    in (m,a)
+  let m = (dr - dl) / (sr - sl)
+      a = dl - (m * sl)
+  in (m, a)
 
 {- | Map from one linear range to another linear range.
 
@@ -695,7 +696,7 @@ linlin_muladd sl sr dl dr =
 -}
 linlin_ma :: Fractional a => Sc3_MulAdd a -> a -> a -> a -> a -> a -> a
 linlin_ma mul_add_f i sl sr dl dr =
-  let (m,a) = linlin_muladd sl sr dl dr
+  let (m, a) = linlin_muladd sl sr dl dr
   in mul_add_f i m a
 
 {- | 'linLin' with a more typical haskell argument structure, ranges as pairs and input last.
@@ -704,7 +705,7 @@ linlin_ma mul_add_f i sl sr dl dr =
 [-0.5,0.0,0.5]
 -}
 linlin_hs :: Fractional a => (a, a) -> (a, a) -> a -> a
-linlin_hs (sl,sr) (dl,dr) = let (m,a) = linlin_muladd sl sr dl dr in (+ a) . (* m)
+linlin_hs (sl, sr) (dl, dr) = let (m, a) = linlin_muladd sl sr dl dr in (+ a) . (* m)
 
 {- | Map from one linear range to another linear range.
 
@@ -712,7 +713,7 @@ linlin_hs (sl,sr) (dl,dr) = let (m,a) = linlin_muladd sl sr dl dr in (+ a) . (* 
 [0.0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1.0]
 -}
 sc3_linlin :: Fractional a => a -> a -> a -> a -> a -> a
-sc3_linlin i sl sr dl dr = linlin_hs (sl,sr) (dl,dr) i
+sc3_linlin i sl sr dl dr = linlin_hs (sl, sr) (dl, dr) i
 
 {- | Given enumeration from /dst/ that is in the same relation as /n/ is from /src/.
 
@@ -725,7 +726,7 @@ sc3_linlin i sl sr dl dr = linlin_hs (sl,sr) (dl,dr) i
 >>> linlin_enum_plain 0 (-50) (-1)
 -51
 -}
-linlin_enum_plain :: (Enum t,Enum u) => t -> u -> t -> u
+linlin_enum_plain :: (Enum t, Enum u) => t -> u -> t -> u
 linlin_enum_plain src dst n = toEnum (fromEnum dst + (fromEnum n - fromEnum src))
 
 {- | Variant of 'linlin_enum_plain' that requires /src/ and /dst/ ranges to be of equal size,
@@ -740,14 +741,14 @@ Just 16
 >>> linlin_enum (0,100) (-50,50) (-1)
 Nothing
 -}
-linlin_enum :: (Enum t,Enum u) => (t,t) -> (u,u) -> t -> Maybe u
-linlin_enum (l,r) (l',r') n =
-    if fromEnum n >= fromEnum l && fromEnum r - fromEnum l == fromEnum r' - fromEnum l'
+linlin_enum :: (Enum t, Enum u) => (t, t) -> (u, u) -> t -> Maybe u
+linlin_enum (l, r) (l', r') n =
+  if fromEnum n >= fromEnum l && fromEnum r - fromEnum l == fromEnum r' - fromEnum l'
     then Just (linlin_enum_plain l l' n)
     else Nothing
 
-{- | Erroring variant. -}
-linlin_enum_err :: (Enum t,Enum u) => (t,t) -> (u,u) -> t -> u
+-- | Erroring variant.
+linlin_enum_err :: (Enum t, Enum u) => (t, t) -> (u, u) -> t -> u
 linlin_enum_err src dst = fromMaybe (error "linlin_enum") . linlin_enum src dst
 
 {- | Variant of 'linlin' that requires /src/ and /dst/ ranges to be of
@@ -760,14 +761,14 @@ Just (-34)
 >>> linlin_eq (-50,50) (0,100) (-34)
 Just 16
 -}
-linlin_eq :: (Eq a, Num a) => (a,a) -> (a,a) -> a -> Maybe a
-linlin_eq (l,r) (l',r') n =
-    let d = r - l
-        d' = r' - l'
-    in if d == d' then Just (l' + (n - l)) else Nothing
+linlin_eq :: (Eq a, Num a) => (a, a) -> (a, a) -> a -> Maybe a
+linlin_eq (l, r) (l', r') n =
+  let d = r - l
+      d' = r' - l'
+  in if d == d' then Just (l' + (n - l)) else Nothing
 
-{- | Erroring variant. -}
-linlin_eq_err :: (Eq a,Num a) => (a,a) -> (a,a) -> a -> a
+-- | Erroring variant.
+linlin_eq_err :: (Eq a, Num a) => (a, a) -> (a, a) -> a -> a
 linlin_eq_err src dst = fromMaybe (error "linlin_eq") . linlin_eq src dst
 
 -- * LinExp
@@ -781,14 +782,13 @@ linlin_eq_err src dst = fromMaybe (error "linlin_eq") . linlin_eq src dst
 
 >>> map (floor . linexp_hs (-2,2) (1,100)) [-3,-2,-1,0,1,2,3]
 [0,1,3,10,31,100,316]
-
 -}
-linexp_hs :: Floating a => (a,a) -> (a,a) -> a -> a
-linexp_hs (in_l,in_r) (out_l,out_r) x =
-    let rt = out_r / out_l
-        rn = 1.0 / (in_r - in_l)
-        rr = rn * negate in_l
-    in out_l * (rt ** (x * rn + rr))
+linexp_hs :: Floating a => (a, a) -> (a, a) -> a -> a
+linexp_hs (in_l, in_r) (out_l, out_r) x =
+  let rt = out_r / out_l
+      rn = 1.0 / (in_r - in_l)
+      rr = rn * negate in_l
+  in out_l * (rt ** (x * rn + rr))
 
 {- | Variant of 'linexp_hs' with argument ordering as at 'linExp' Ugen.
 
@@ -799,7 +799,7 @@ linexp_hs (in_l,in_r) (out_l,out_r) x =
 [1,10,31,100,1000]
 -}
 lin_exp :: Floating a => a -> a -> a -> a -> a -> a
-lin_exp x in_l in_r out_l out_r = linexp_hs (in_l,in_r) (out_l,out_r) x
+lin_exp x in_l in_r out_l out_r = linexp_hs (in_l, in_r) (out_l, out_r) x
 
 {- | @SimpleNumber.linexp@ shifts from linear to exponential ranges.
 
@@ -813,9 +813,9 @@ lin_exp x in_l in_r out_l out_r = linexp_hs (in_l,in_r) (out_l,out_r) x
 -}
 sc3_linexp :: (Ord a, Floating a) => a -> a -> a -> a -> a -> a
 sc3_linexp src_l src_r dst_l dst_r x =
-    case apply_clip_rule Clip_Both src_l src_r dst_l dst_r x of
-      Just r -> r
-      Nothing -> ((dst_r / dst_l) ** ((x - src_l) / (src_r - src_l))) * dst_l
+  case apply_clip_rule Clip_Both src_l src_r dst_l dst_r x of
+    Just r -> r
+    Nothing -> ((dst_r / dst_l) ** ((x - src_l) / (src_r - src_l))) * dst_l
 
 {- | @SimpleNumber.explin@ is the inverse of linexp.
 
@@ -825,8 +825,8 @@ sc3_linexp src_l src_r dst_l dst_r x =
 sc3_explin :: (Ord a, Floating a) => a -> a -> a -> a -> a -> a
 sc3_explin src_l src_r dst_l dst_r x =
   fromMaybe
-  (logBase (src_r / src_l) (x / src_l) * (dst_r - dst_l) + dst_l)
-  (apply_clip_rule Clip_Both src_l src_r dst_l dst_r x)
+    (logBase (src_r / src_l) (x / src_l) * (dst_r - dst_l) + dst_l)
+    (apply_clip_rule Clip_Both src_l src_r dst_l dst_r x)
 
 -- * ExpExp
 
@@ -838,8 +838,8 @@ sc3_explin src_l src_r dst_l dst_r x =
 sc3_expexp :: (Ord a, Floating a) => a -> a -> a -> a -> a -> a
 sc3_expexp src_l src_r dst_l dst_r x =
   fromMaybe
-  ((dst_r / dst_l) ** logBase (src_r / src_l) (x / src_l) * dst_l)
-  (apply_clip_rule Clip_Both src_l src_r dst_l dst_r x)
+    ((dst_r / dst_l) ** logBase (src_r / src_l) (x / src_l) * dst_l)
+    (apply_clip_rule Clip_Both src_l src_r dst_l dst_r x)
 
 -- * LinCurve
 
@@ -854,22 +854,22 @@ zero.
 >>> map f [0 .. 10]
 [-4,24,45,61,72,81,87,92,96,98,100]
 
-> import Sound.Sc3.Plot {- hsc3-plot -}
+> import Sound.Sc3.Plot {\- hsc3-plot -\}
 > plotTable (map (\c-> map (sc3_lincurve c 0 1 (-1) 1) [0,0.01 .. 1]) [-6,-4 .. 6])
-
 -}
 sc3_lincurve :: (Ord a, Floating a) => a -> a -> a -> a -> a -> a -> a
 sc3_lincurve curve src_l src_r dst_l dst_r x =
-    case apply_clip_rule Clip_Both src_l src_r dst_l dst_r x of
-      Just r -> r
-      Nothing ->
-          if abs curve < 0.001
-          then linlin_hs (src_l,src_r) (dst_l,dst_r) x
-          else let grow = exp curve
-                   a = (dst_r - dst_l) / (1.0 - grow)
-                   b = dst_l + a
-                   scaled = (x - src_l) / (src_r - src_l)
-               in b - (a * (grow ** scaled))
+  case apply_clip_rule Clip_Both src_l src_r dst_l dst_r x of
+    Just r -> r
+    Nothing ->
+      if abs curve < 0.001
+        then linlin_hs (src_l, src_r) (dst_l, dst_r) x
+        else
+          let grow = exp curve
+              a = (dst_r - dst_l) / (1.0 - grow)
+              b = dst_l + a
+              scaled = (x - src_l) / (src_r - src_l)
+          in b - (a * (grow ** scaled))
 
 {- | Inverse of 'sc3_lincurve'.
 
@@ -879,27 +879,28 @@ True
 -}
 sc3_curvelin :: (Ord a, Floating a) => a -> a -> a -> a -> a -> a -> a
 sc3_curvelin curve src_l src_r dst_l dst_r x =
-    case apply_clip_rule Clip_Both src_l src_r dst_l dst_r x of
-      Just r -> r
-      Nothing ->
-          if abs curve < 0.001
-          then linlin_hs (src_l,src_r) (dst_l,dst_r) x
-          else let grow = exp curve
-                   a = (src_r - src_l) / (1.0 - grow)
-                   b = src_l + a
-               in log ((b - x) / a) * (dst_r - dst_l) / curve + dst_l
+  case apply_clip_rule Clip_Both src_l src_r dst_l dst_r x of
+    Just r -> r
+    Nothing ->
+      if abs curve < 0.001
+        then linlin_hs (src_l, src_r) (dst_l, dst_r) x
+        else
+          let grow = exp curve
+              a = (src_r - src_l) / (1.0 - grow)
+              b = src_l + a
+          in log ((b - x) / a) * (dst_r - dst_l) / curve + dst_l
 
 -- * Pp (pretty print)
 
-{- | Removes all but the last trailing zero from floating point string. -}
+-- | Removes all but the last trailing zero from floating point string.
 double_pp_rm0 :: String -> String
 double_pp_rm0 =
-    let rev_f f = reverse . f . reverse
-        remv l = case l of
-                   '0':'.':_ -> l
-                   '0':l' -> remv l'
-                   _ -> l
-    in rev_f remv
+  let rev_f f = reverse . f . reverse
+      remv l = case l of
+        '0' : '.' : _ -> l
+        '0' : l' -> remv l'
+        _ -> l
+  in rev_f remv
 
 {- | The default show is odd, 0.05 shows as 5.0e-2.
 
@@ -916,24 +917,24 @@ double_pp k n = double_pp_rm0 (Numeric.showFFloat (Just k) n "")
 -}
 real_pp :: Int -> Double -> String
 real_pp k n =
-    let r = toRational n
-    in if denominator r == 1 then show (numerator r) else double_pp k n
+  let r = toRational n
+  in if denominator r == 1 then show (numerator r) else double_pp k n
 
 -- * Parser
 
-{- | Type-specialised 'Text.Read.readMaybe'. -}
+-- | Type-specialised 'Text.Read.readMaybe'.
 parse_double :: String -> Maybe Double
 parse_double = Common.Base.reads_exact
 
 -- * Optimiser
 
-{- | Non-specialised optimised sum function (3 & 4 element adders). -}
+-- | Non-specialised optimised sum function (3 & 4 element adders).
 sum_opt_f :: Num t => (t -> t -> t -> t) -> (t -> t -> t -> t -> t) -> [t] -> t
 sum_opt_f f3 f4 =
   let recur l =
         case l of
-          p:q:r:s:l' -> recur (f4 p q r s : l')
-          p:q:r:l' -> recur (f3 p q r : l')
+          p : q : r : s : l' -> recur (f4 p q r s : l')
+          p : q : r : l' -> recur (f3 p q r : l')
           _ -> sum l
   in recur
 

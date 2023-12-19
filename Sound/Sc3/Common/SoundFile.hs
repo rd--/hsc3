@@ -24,7 +24,6 @@ findFileFromDirectory dir fn = do
     [r0] -> return (Just r0)
     _ -> error "findFileFromDirectory: multiple files?"
 
-
 {- | Find the file fn starting from dir.
 If dir/fn names a file return that file, else call findFileFromDirectory.
 Note this will not find dir/p/q/r given q/r, the query must be either p/q/r or r.
@@ -44,7 +43,7 @@ findFileAtOrFromPath :: [FilePath] -> FilePath -> IO (Maybe FilePath)
 findFileAtOrFromPath path fn =
   case path of
     [] -> return Nothing
-    dir:path' -> do
+    dir : path' -> do
       m <- findFileAtOrFromDirectory dir fn
       case m of
         Just r -> return (Just r)
@@ -79,7 +78,7 @@ sfResolveFile :: FilePath -> IO FilePath
 sfResolveFile fn = do
   m <- sfFindFile fn
   case m of
-    Nothing  -> error ("sfResolveFile: " ++ fn)
+    Nothing -> error ("sfResolveFile: " ++ fn)
     Just r -> return r
 
 {- | Unsafe sfResolveFile.

@@ -21,13 +21,13 @@ data TableFormat = TableClosed | TableOpen | TableGuarded deriving (Eq, Show)
      The cycle argument decides if the end point should be equal to the start point, or one place short.
      When using a table with an oscillator we want the latter, since the point following the end point is the start point.
 -}
-window_table :: (Integral n,Fractional a,Enum a) => TableFormat -> n -> Window a -> Table a
+window_table :: (Integral n, Fractional a, Enum a) => TableFormat -> n -> Window a -> Table a
 window_table fmt n f =
   let k = 1 / (fromIntegral n - (if fmt == TableClosed then 1 else 0))
   in take (fromIntegral (if fmt == TableGuarded then n + 1 else n)) (map f [0, k ..])
 
 -- | window_table of TableClosed.
-window_table_closed :: (Integral n,Fractional a,Enum a) => n -> Window a -> Table a
+window_table_closed :: (Integral n, Fractional a, Enum a) => n -> Window a -> Table a
 window_table_closed = window_table TableClosed
 
 -- * Math
@@ -40,7 +40,7 @@ square x = x * x
 
 -- | Gaussian window, θ <= 0.5.
 gaussian :: Floating a => a -> Window a
-gaussian theta i = exp (- (0.5 * square ((i - 0.5) / (theta * 0.5))))
+gaussian theta i = exp (-(0.5 * square ((i - 0.5) / (theta * 0.5))))
 
 -- | Hann raised cosine window.
 hann :: Floating a => Window a

@@ -56,9 +56,9 @@ fvoid = fmap (const ())
 -- | Variant of 'reads' requiring exact match.
 reads_exact :: Read a => String -> Maybe a
 reads_exact s =
-    case reads s of
-      [(r,"")] -> Just r
-      _ -> Nothing
+  case reads s of
+    [(r, "")] -> Just r
+    _ -> Nothing
 
 -- * String
 
@@ -73,8 +73,8 @@ reads_exact s =
 string_split_at_char :: Char -> String -> [String]
 string_split_at_char c s =
   case break (== c) s of
-    (lhs,[]) -> [lhs]
-    (lhs,_:rhs) -> lhs : string_split_at_char c rhs
+    (lhs, []) -> [lhs]
+    (lhs, _ : rhs) -> lhs : string_split_at_char c rhs
 
 -- * String / Case
 
@@ -86,9 +86,9 @@ string_op f cr x y =
   let ci_form = map toLower
       sci_form = filter (`notElem` "-_") . ci_form
   in case cr of
-       Ci -> f (ci_form x) (ci_form y)
-       Cs -> f x y
-       Sci -> f (sci_form x) (sci_form y)
+      Ci -> f (ci_form x) (ci_form y)
+      Cs -> f x y
+      Sci -> f (sci_form x) (sci_form y)
 
 {- | String equality with 'Case_Rule'.
 
@@ -105,7 +105,7 @@ string_cmp :: Case_Rule -> String -> String -> Ordering
 string_cmp = string_op compare
 
 -- | 'rlookup_by' of 'string_eq'.
-rlookup_str :: Case_Rule -> String -> [(a,String)] -> Maybe a
+rlookup_str :: Case_Rule -> String -> [(a, String)] -> Maybe a
 rlookup_str = rlookup_by . string_eq
 
 {- | 'Enum' parser with 'Case_Rule'.
@@ -113,11 +113,11 @@ rlookup_str = rlookup_by . string_eq
 >>> parse_enum Ci "false" :: Maybe Bool
 Just False
 -}
-parse_enum :: (Show t,Enum t,Bounded t) => Case_Rule -> String -> Maybe t
+parse_enum :: (Show t, Enum t, Bounded t) => Case_Rule -> String -> Maybe t
 parse_enum cr nm =
-    let u = [minBound .. maxBound]
-        t = zip (map show u) u
-    in lookup_by (string_eq cr) nm t
+  let u = [minBound .. maxBound]
+      t = zip (map show u) u
+  in lookup_by (string_eq cr) nm t
 
 -- * List
 
@@ -148,7 +148,7 @@ compose_r = flip (foldr ($))
 [0,1,2,3]
 -}
 d_dx :: (Num a) => [a] -> [a]
-d_dx l = zipWith (-) l (0:l)
+d_dx l = zipWith (-) l (0 : l)
 
 {- | Variant that does not prepend zero to input, ie. 'tail' of 'd_dx'.
 
@@ -192,19 +192,19 @@ dx_d' :: Num n => [n] -> [n]
 dx_d' = (0 :) . dx_d
 
 -- | 'lookup' with equality function.
-lookup_by :: (a -> t -> Bool) -> a -> [(t,b)] -> Maybe b
+lookup_by :: (a -> t -> Bool) -> a -> [(t, b)] -> Maybe b
 lookup_by f x = fmap snd . find (f x . fst)
 
 -- | Erroring variant, with message.
-lookup_by_note :: String -> (a -> t -> Bool) -> a -> [(t,b)] -> b
+lookup_by_note :: String -> (a -> t -> Bool) -> a -> [(t, b)] -> b
 lookup_by_note msg f x = fromMaybe (error ("lookup_by: " ++ msg)) . lookup_by f x
 
 -- | Erroring variant.
-lookup_by_err :: (a -> t -> Bool) -> a -> [(t,b)] -> b
+lookup_by_err :: (a -> t -> Bool) -> a -> [(t, b)] -> b
 lookup_by_err = lookup_by_note "error"
 
 -- | Reverse 'lookup' with equality function.
-rlookup_by :: (b -> b -> Bool) -> b -> [(a,b)] -> Maybe a
+rlookup_by :: (b -> b -> Bool) -> b -> [(a, b)] -> Maybe a
 rlookup_by f x = fmap fst . find (f x . snd)
 
 {- | (prev,cur,next) triples.
@@ -212,24 +212,24 @@ rlookup_by f x = fmap fst . find (f x . snd)
 >>> pcn_triples [1..3]
 [(Nothing,1,Just 2),(Just 1,2,Just 3),(Just 2,3,Nothing)]
 -}
-pcn_triples :: [a] -> [(Maybe a,a,Maybe a)]
+pcn_triples :: [a] -> [(Maybe a, a, Maybe a)]
 pcn_triples =
-    let f e l = case l of
-                  e1 : e2 : l' -> (e,e1,Just e2) : f (Just e1) (e2 : l')
-                  [e'] -> [(e,e',Nothing)]
-                  [] -> undefined
-    in f Nothing
+  let f e l = case l of
+        e1 : e2 : l' -> (e, e1, Just e2) : f (Just e1) (e2 : l')
+        [e'] -> [(e, e', Nothing)]
+        [] -> undefined
+  in f Nothing
 
 {- | Separate first list element.
 
 >>> sep_first "astring"
 Just ('a',"string")
 -}
-sep_first :: [t] -> Maybe (t,[t])
+sep_first :: [t] -> Maybe (t, [t])
 sep_first l =
-    case l of
-      e:l' -> Just (e,l')
-      _ -> Nothing
+  case l of
+    e : l' -> Just (e, l')
+    _ -> Nothing
 
 {- | Separate last list element.
 
@@ -238,8 +238,8 @@ Just ("string",'b')
 -}
 sep_last :: [t] -> Maybe ([t], t)
 sep_last =
-    let f (e,l) = (reverse l,e)
-    in fmap f . sep_first . reverse
+  let f (e, l) = (reverse l, e)
+  in fmap f . sep_first . reverse
 
 {- | Are lists of equal length?
 
@@ -253,17 +253,17 @@ equal_length_p :: [[a]] -> Bool
 equal_length_p = (== 1) . length . nub . map length
 
 -- | Histogram
-histogram :: Ord a => [a] -> [(a,Int)]
+histogram :: Ord a => [a] -> [(a, Int)]
 histogram x =
-    let g = group (sort x)
-    in zip (map (Safe.headNote "histogram") g) (map length g)
+  let g = group (sort x)
+  in zip (map (Safe.headNote "histogram") g) (map length g)
 
 -- | !! with localised error message
 at_with_error_message :: String -> [t] -> Int -> t
 at_with_error_message msg list index =
   if index >= length list
-  then error ("!!: index out of range: " ++ msg)
-  else list !! index
+    then error ("!!: index out of range: " ++ msg)
+    else list !! index
 
 -- | concat of intersperse.  This is the same function as intercalate, which hugs doesn't know of.
 concat_intersperse :: [a] -> [[a]] -> [a]
@@ -277,8 +277,8 @@ concat_intersperse x = concat . intersperse x
 list_split_at_elem :: Eq t => t -> [t] -> [[t]]
 list_split_at_elem c s =
   case break (== c) s of
-    (lhs,[]) -> [lhs]
-    (lhs,_:rhs) -> lhs : list_split_at_elem c rhs
+    (lhs, []) -> [lhs]
+    (lhs, _ : rhs) -> lhs : list_split_at_elem c rhs
 
 {- | Data.List.sortOn, which however hugs does not know of.
 
@@ -290,7 +290,7 @@ sort_on = sortBy . comparing
 
 {- | Inserts at the first position where it compares less but not equal to the next element.
 
->>> import Data.Function {- base -}
+>>> import Data.Function
 >>> insertBy (compare `on` fst) (3,'x') (zip [1..5] ['a'..])
 [(1,'a'),(2,'b'),(3,'x'),(3,'c'),(4,'d'),(5,'e')]
 
@@ -299,11 +299,11 @@ sort_on = sortBy . comparing
 -}
 insertBy_post :: (a -> a -> Ordering) -> a -> [a] -> [a]
 insertBy_post cmp e l =
-    case l of
-      [] -> [e]
-      h:l' -> case cmp e h of
-                LT -> e : l
-                _ -> h : insertBy_post cmp e l'
+  case l of
+    [] -> [e]
+    h : l' -> case cmp e h of
+      LT -> e : l
+      _ -> h : insertBy_post cmp e l'
 
 -- | 'insertBy_post' using 'compare'.
 insert_post :: Ord t => t -> [t] -> [t]
@@ -316,54 +316,54 @@ insert_post = insertBy_post compare
 -}
 at_last :: (a -> b) -> (a -> b) -> [a] -> [b]
 at_last f g x =
-    case x of
-      [] -> []
-      [i] -> [g i]
-      i:x' -> f i : at_last f g x'
+  case x of
+    [] -> []
+    [i] -> [g i]
+    i : x' -> f i : at_last f g x'
 
 -- * Tuples
 
 -- | Zip two 4-tuples.
-p4_zip :: (a,b,c,d) -> (e,f,g,h) -> ((a,e),(b,f),(c,g),(d,h))
-p4_zip (a,b,c,d) (e,f,g,h) = ((a,e),(b,f),(c,g),(d,h))
+p4_zip :: (a, b, c, d) -> (e, f, g, h) -> ((a, e), (b, f), (c, g), (d, h))
+p4_zip (a, b, c, d) (e, f, g, h) = ((a, e), (b, f), (c, g), (d, h))
 
 -- | Two-tuple.
-type T2 a = (a,a)
+type T2 a = (a, a)
 
 -- | Three-tuple.
-type T3 a = (a,a,a)
+type T3 a = (a, a, a)
 
 -- | Four-tuple.
-type T4 a = (a,a,a,a)
+type T4 a = (a, a, a, a)
 
 -- | t -> (t,t)
 dup2 :: t -> T2 t
-dup2 t = (t,t)
+dup2 t = (t, t)
 
 -- | t -> (t,t,t)
 dup3 :: t -> T3 t
-dup3 t = (t,t,t)
+dup3 t = (t, t, t)
 
 -- | t -> (t,t,t,t)
 dup4 :: t -> T4 t
-dup4 t = (t,t,t,t)
+dup4 t = (t, t, t, t)
 
 -- | 'concatMap' of /f/ at /x/ and /g/ at /y/.
 mk_duples :: (a -> c) -> (b -> c) -> [(a, b)] -> [c]
-mk_duples a b = concatMap (\(x,y) -> [a x, b y])
+mk_duples a b = concatMap (\(x, y) -> [a x, b y])
 
 -- | Length prefixed list variant of 'mk_duples'.
-mk_duples_l :: (Int -> c) -> (a -> c) -> (b -> c) -> [(a,[b])] -> [c]
-mk_duples_l i a b = concatMap (\(x,y) -> a x : i (length y) : map b y)
+mk_duples_l :: (Int -> c) -> (a -> c) -> (b -> c) -> [(a, [b])] -> [c]
+mk_duples_l i a b = concatMap (\(x, y) -> a x : i (length y) : map b y)
 
 -- | 'concatMap' of /f/ at /x/ and /g/ at /y/ and /h/ at /z/.
 mk_triples :: (a -> d) -> (b -> d) -> (c -> d) -> [(a, b, c)] -> [d]
-mk_triples a b c = concatMap (\(x,y,z) -> [a x, b y, c z])
+mk_triples a b c = concatMap (\(x, y, z) -> [a x, b y, c z])
 
 -- | [x,y] -> (x,y)
 t2_from_list :: [t] -> T2 t
-t2_from_list l = case l of {[p,q] -> (p,q);_ -> error "t2_from_list"}
+t2_from_list l = case l of [p, q] -> (p, q); _ -> error "t2_from_list"
 
 -- | [x,y,z] -> (x,y,z)
-t3_from_list :: [t] -> (t,t,t)
-t3_from_list l = case l of {[p,q,r] -> (p,q,r);_ -> error "t3_from_list"}
+t3_from_list :: [t] -> (t, t, t)
+t3_from_list l = case l of [p, q, r] -> (p, q, r); _ -> error "t3_from_list"

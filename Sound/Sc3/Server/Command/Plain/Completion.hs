@@ -1,9 +1,10 @@
--- | This module provides variations of the asynchronous server commands that
--- expect a /completion packet/ as the first argument. The completion packet
--- is executed by the server when the asynchronous command has finished. Note
--- that this mechanism is for synchronizing server side processes only, for
--- client side synchronization use @\/done@ message notification or the
--- @\/sync@ barrier.
+{- | This module provides variations of the asynchronous server commands that
+expect a /completion packet/ as the first argument. The completion packet
+is executed by the server when the asynchronous command has finished. Note
+that this mechanism is for synchronizing server side processes only, for
+client side synchronization use @\/done@ message notification or the
+@\/sync@ barrier.
+-}
 module Sound.Sc3.Server.Command.Plain.Completion where
 
 import Sound.Osc.Core {- hosc -}
@@ -17,51 +18,51 @@ encode_blob = Blob . encodePacket
 
 -- | Install a bytecode instrument definition. (Asynchronous)
 d_recv :: PacketOf Message -> Synthdef -> Message
-d_recv pkt d = Message "/d_recv" [Blob (synthdefData d),encode_blob pkt]
+d_recv pkt d = Message "/d_recv" [Blob (synthdefData d), encode_blob pkt]
 
 -- | Load an instrument definition from a named file. (Asynchronous)
 d_load :: PacketOf Message -> String -> Message
-d_load pkt p = Message "/d_load" [string p,encode_blob pkt]
+d_load pkt p = Message "/d_load" [string p, encode_blob pkt]
 
 -- | Load a directory of instrument definitions files. (Asynchronous)
 d_loadDir :: PacketOf Message -> String -> Message
-d_loadDir pkt p = Message "/d_loadDir" [string p,encode_blob pkt]
+d_loadDir pkt p = Message "/d_loadDir" [string p, encode_blob pkt]
 
 -- | Allocates zero filled buffer to number of channels and samples. (Asynchronous)
 b_alloc :: PacketOf Message -> Int -> Int -> Int -> Message
-b_alloc pkt nid frames channels = Message "/b_alloc" [int32 nid,int32 frames,int32 channels,encode_blob pkt]
+b_alloc pkt nid frames channels = Message "/b_alloc" [int32 nid, int32 frames, int32 channels, encode_blob pkt]
 
 -- | Allocate buffer space and read a sound file. (Asynchronous)
 b_allocRead :: PacketOf Message -> Int -> String -> Int -> Int -> Message
-b_allocRead pkt nid p f n = Message "/b_allocRead" [int32 nid,string p,int32 f,int32 n,encode_blob pkt]
+b_allocRead pkt nid p f n = Message "/b_allocRead" [int32 nid, string p, int32 f, int32 n, encode_blob pkt]
 
 -- | Allocate buffer space and read a sound file, picking specific channels. (Asynchronous)
 b_allocReadChannel :: PacketOf Message -> Int -> String -> Int -> Int -> [Int] -> Message
-b_allocReadChannel pkt nid p f n cs = Message "/b_allocReadChannel" ([int32 nid,string p,int32 f,int32 n] ++ map int32 cs ++ [encode_blob pkt])
+b_allocReadChannel pkt nid p f n cs = Message "/b_allocReadChannel" ([int32 nid, string p, int32 f, int32 n] ++ map int32 cs ++ [encode_blob pkt])
 
 -- | Free buffer data. (Asynchronous)
 b_free :: PacketOf Message -> Int -> Message
-b_free pkt nid = Message "/b_free" [int32 nid,encode_blob pkt]
+b_free pkt nid = Message "/b_free" [int32 nid, encode_blob pkt]
 
 -- | Close attached soundfile and write header information. (Asynchronous)
 b_close :: PacketOf Message -> Int -> Message
-b_close pkt nid = Message "/b_close" [int32 nid,encode_blob pkt]
+b_close pkt nid = Message "/b_close" [int32 nid, encode_blob pkt]
 
 -- | Read sound file data into an existing buffer. (Asynchronous)
 b_read :: PacketOf Message -> Int -> String -> Int -> Int -> Int -> Bool -> Message
-b_read pkt nid p f n f' z = Message "/b_read" [int32 nid,string p,int32 f,int32 n,int32 f',int32 (fromEnum z),encode_blob pkt]
+b_read pkt nid p f n f' z = Message "/b_read" [int32 nid, string p, int32 f, int32 n, int32 f', int32 (fromEnum z), encode_blob pkt]
 
 -- | Read sound file data into an existing buffer. (Asynchronous)
 b_readChannel :: PacketOf Message -> Int -> String -> Int -> Int -> Int -> Bool -> [Int] -> Message
-b_readChannel pkt nid p f n f' z cs = Message "/b_readChannel" ([int32 nid,string p,int32 f,int32 n,int32 f',int32 (fromEnum z)] ++ map int32 cs ++ [encode_blob pkt])
+b_readChannel pkt nid p f n f' z cs = Message "/b_readChannel" ([int32 nid, string p, int32 f, int32 n, int32 f', int32 (fromEnum z)] ++ map int32 cs ++ [encode_blob pkt])
 
 -- | Write sound file data. (Asynchronous)
 b_write :: PacketOf Message -> Int -> String -> SoundFileFormat -> SampleFormat -> Int -> Int -> Bool -> Message
-b_write pkt nid p h t f s z = Message "/b_write" [int32 nid,string p,string (soundFileFormatString h),string (sampleFormatString t),int32 f,int32 s,int32 (fromEnum z),encode_blob pkt]
+b_write pkt nid p h t f s z = Message "/b_write" [int32 nid, string p, string (soundFileFormatString h), string (sampleFormatString t), int32 f, int32 s, int32 (fromEnum z), encode_blob pkt]
 
 -- | Zero sample data. (Asynchronous)
 b_zero :: PacketOf Message -> Int -> Message
-b_zero pkt nid = Message "/b_zero" [int32 nid,encode_blob pkt]
+b_zero pkt nid = Message "/b_zero" [int32 nid, encode_blob pkt]
 
 -- Local Variables:
 -- truncate-lines:t

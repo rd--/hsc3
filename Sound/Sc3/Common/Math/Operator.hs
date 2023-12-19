@@ -7,7 +7,6 @@ The Eq and Ord classes in the Prelude require Bool, hence EqE and OrdE.
 True is 1.0, False is 0.0
 
 The RealFrac class requires Integral results, hence RealFracE.
-
 -}
 module Sound.Sc3.Common.Math.Operator where
 
@@ -83,7 +82,7 @@ data Sc3_Unary_Op
   | OpTriWindow
   | OpRamp_ -- 52 ; Ugen
   | OpScurve
-  deriving (Eq,Show,Enum,Bounded,Read)
+  deriving (Eq, Show, Enum, Bounded, Read)
 
 -- | Enum name without Op prefix.
 sc3_unary_op_name :: Sc3_Unary_Op -> String
@@ -100,11 +99,11 @@ parse_unary cr = Base.parse_enum cr . (++) "Op"
 
 > map fst sc3_unary_op_tbl
 -}
-sc3_unary_op_tbl :: [(String,Int)]
-sc3_unary_op_tbl = zip (map sc3_unary_op_name [minBound .. maxBound]) [0..]
+sc3_unary_op_tbl :: [(String, Int)]
+sc3_unary_op_tbl = zip (map sc3_unary_op_name [minBound .. maxBound]) [0 ..]
 
 -- | Table of symbolic names for standard unary operators.
-unary_sym_tbl :: [(Sc3_Unary_Op,String)]
+unary_sym_tbl :: [(Sc3_Unary_Op, String)]
 unary_sym_tbl = [] -- (Neg,"-"),(Not,"!")
 
 -- | Lookup possibly symbolic name for standard unary operators.
@@ -123,9 +122,9 @@ Nothing
 -}
 unaryIndex :: Base.Case_Rule -> String -> Maybe Int
 unaryIndex cr nm =
-    let ix = Base.rlookup_str cr nm unary_sym_tbl
-        ix' = parse_unary cr nm
-    in fmap fromEnum (mplus ix' ix)
+  let ix = Base.rlookup_str cr nm unary_sym_tbl
+      ix' = parse_unary cr nm
+  in fmap fromEnum (mplus ix' ix)
 
 {- | 'isJust' of 'unaryIndex'.
 
@@ -198,15 +197,15 @@ data Sc3_Binary_Op
   | OpFirstArg -- 46
   | OpRandRange -- 47
   | OpExpRandRange -- 48
-  deriving (Eq,Show,Enum,Bounded,Read)
+  deriving (Eq, Show, Enum, Bounded, Read)
 
 -- | Enum name without Op prefix.
 sc3_binary_op_name :: Sc3_Binary_Op -> String
 sc3_binary_op_name = drop 2 . show
 
 -- | Table of operator names (non-symbolic) and indices.
-sc3_binary_op_tbl :: [(String,Int)]
-sc3_binary_op_tbl = zip (map sc3_binary_op_name [minBound .. maxBound]) [0..]
+sc3_binary_op_tbl :: [(String, Int)]
+sc3_binary_op_tbl = zip (map sc3_binary_op_name [minBound .. maxBound]) [0 ..]
 
 {- | 'parse_enum' with Op prefix.
 
@@ -216,31 +215,32 @@ parse_binary :: Base.Case_Rule -> String -> Maybe Sc3_Binary_Op
 parse_binary cr = Base.parse_enum cr . (++) "Op"
 
 -- | Table of symbolic names for standard binary operators.
-binary_sym_tbl :: [(Sc3_Binary_Op,String)]
+binary_sym_tbl :: [(Sc3_Binary_Op, String)]
 binary_sym_tbl =
-    [(OpAdd,"+")
-    ,(OpSub,"-")
-    ,(OpMul,"*")
-    ,(OpFdiv,"/")
-    ,(OpMod,"%")
-    ,(OpEq,"==")
-    ,(OpNe,"/=") -- or !=
-    ,(OpLt,"<")
-    ,(OpGt,">")
-    ,(OpLe,"<=")
-    ,(OpGe,">=")
-    ,(OpBitAnd,".&.") -- or &
-    ,(OpBitOr,".|.") -- or |
-    ,(OpPow,"**")]
+  [ (OpAdd, "+")
+  , (OpSub, "-")
+  , (OpMul, "*")
+  , (OpFdiv, "/")
+  , (OpMod, "%")
+  , (OpEq, "==")
+  , (OpNe, "/=") -- or !=
+  , (OpLt, "<")
+  , (OpGt, ">")
+  , (OpLe, "<=")
+  , (OpGe, ">=")
+  , (OpBitAnd, ".&.") -- or &
+  , (OpBitOr, ".|.") -- or |
+  , (OpPow, "**")
+  ]
 
 {- | Table of operator names (non-symbolic) and indices.
 
 > map fst sc3_binary_op_sym_tbl
 -}
-sc3_binary_op_sym_tbl :: [(String,Int)]
+sc3_binary_op_sym_tbl :: [(String, Int)]
 sc3_binary_op_sym_tbl =
   let f x = fromMaybe (sc3_binary_op_name x) (lookup x binary_sym_tbl)
-  in zip (map f [minBound .. maxBound]) [0..]
+  in zip (map f [minBound .. maxBound]) [0 ..]
 
 {- | Lookup possibly symbolic name for standard binary operators.
 
@@ -264,9 +264,9 @@ Nothing
 -}
 binaryIndex :: Base.Case_Rule -> String -> Maybe Int
 binaryIndex cr nm =
-    let ix = Base.rlookup_str cr nm binary_sym_tbl
-        ix' = parse_binary cr nm
-    in fmap fromEnum (mplus ix' ix)
+  let ix = Base.rlookup_str cr nm binary_sym_tbl
+      ix' = parse_binary cr nm
+  in fmap fromEnum (mplus ix' ix)
 
 {- | 'isJust' of 'binaryIndex'.
 
@@ -281,54 +281,54 @@ is_binary cr = isJust . binaryIndex cr
 -- | Lookup operator name for operator Ugens, else Ugen name.
 ugen_operator_name :: String -> Int -> Maybe String
 ugen_operator_name nm n =
-    case nm of
-      "UnaryOpUGen" -> Just (unaryName n)
-      "BinaryOpUGen" -> Just (binaryName n)
-      _ -> Nothing
+  case nm of
+    "UnaryOpUGen" -> Just (unaryName n)
+    "BinaryOpUGen" -> Just (binaryName n)
+    _ -> Nothing
 
 {- | Order of lookup: binary then unary.
 
 > map (resolve_operator Ci) (words "+ - Add sub Neg abs")
 > map (resolve_operator Cs) (words "Abs")
 -}
-resolve_operator :: Base.Case_Rule -> String -> (String,Maybe Int)
+resolve_operator :: Base.Case_Rule -> String -> (String, Maybe Int)
 resolve_operator cr nm =
-    case binaryIndex cr nm of
-      Just sp -> ("BinaryOpUGen",Just sp)
-      Nothing -> case unaryIndex cr nm of
-                   Just sp -> ("UnaryOpUGen",Just sp)
-                   _ -> (nm,Nothing)
+  case binaryIndex cr nm of
+    Just sp -> ("BinaryOpUGen", Just sp)
+    Nothing -> case unaryIndex cr nm of
+      Just sp -> ("UnaryOpUGen", Just sp)
+      _ -> (nm, Nothing)
 
 -- | Case-insensitive resolve_operator.
-resolve_operator_ci :: String -> (String,Maybe Int)
+resolve_operator_ci :: String -> (String, Maybe Int)
 resolve_operator_ci = resolve_operator Base.Ci
 
 -- * Classes
 
 -- | Variant on 'Eq' class, result is of the same type as the values compared.
-class (Eq a,Num a) => EqE a where
+class (Eq a, Num a) => EqE a where
   equal_to :: a -> a -> a
   equal_to = Math.sc3_eq
   not_equal_to :: a -> a -> a
   not_equal_to = Math.sc3_neq
 
-instance EqE Int where
-instance EqE Integer where
-instance EqE Int32 where
-instance EqE Int64 where
-instance EqE Float where
-instance EqE Double where
+instance EqE Int
+instance EqE Integer
+instance EqE Int32
+instance EqE Int64
+instance EqE Float
+instance EqE Double
 
 -- | Variant on Ord class, result is of the same type as the values compared.
-class (Ord a,Num a) => OrdE a where
-    less_than :: a -> a -> a
-    less_than = Math.sc3_lt
-    less_than_or_equal_to :: a -> a -> a
-    less_than_or_equal_to = Math.sc3_lte
-    greater_than :: a -> a -> a
-    greater_than = Math.sc3_gt
-    greater_than_or_equal_to :: a -> a -> a
-    greater_than_or_equal_to = Math.sc3_gte
+class (Ord a, Num a) => OrdE a where
+  less_than :: a -> a -> a
+  less_than = Math.sc3_lt
+  less_than_or_equal_to :: a -> a -> a
+  less_than_or_equal_to = Math.sc3_lte
+  greater_than :: a -> a -> a
+  greater_than = Math.sc3_gt
+  greater_than_or_equal_to :: a -> a -> a
+  greater_than_or_equal_to = Math.sc3_gte
 
 instance OrdE Int
 instance OrdE Integer
@@ -339,7 +339,7 @@ instance OrdE Double
 
 -- | Variant of 'RealFrac' with non 'Integral' results.
 class RealFrac a => RealFracE a where
-  properFractionE :: a -> (a,a)
+  properFractionE :: a -> (a, a)
   properFractionE = Math.sc3_properFraction
   truncateE :: a -> a
   truncateE = Math.sc3_truncate
@@ -359,124 +359,124 @@ instance RealFracE Double
 [0,10,316,10000]
 -}
 class (Floating a, Ord a) => UnaryOp a where
-    ampDb :: a -> a
-    ampDb = Math.amp_to_db
-    asFloat :: a -> a
-    asFloat = error "asFloat"
-    asInt :: a -> a
-    asInt = error "asInt"
-    cpsMidi :: a -> a
-    cpsMidi = Math.cps_to_midi
-    cpsOct :: a -> a
-    cpsOct = Math.cps_to_oct
-    cubed :: a -> a
-    cubed n = n * n * n
-    dbAmp :: a -> a
-    dbAmp = Math.db_to_amp
-    distort :: a -> a
-    distort = Math.sc3_distort
-    frac :: a -> a
-    frac = error "frac"
-    isNil :: a -> a
-    isNil a = if a == 0.0 then 0.0 else 1.0
-    log10 :: a -> a
-    log10 = logBase 10
-    log2 :: a -> a
-    log2 = logBase 2
-    midiCps :: a -> a
-    midiCps = Math.midi_to_cps
-    midiRatio :: a -> a
-    midiRatio = Math.midi_to_ratio
-    notE :: a -> a
-    notE a = if a > 0.0 then 0.0 else 1.0
-    notNil :: a -> a
-    notNil a = if a /= 0.0 then 0.0 else 1.0
-    octCps :: a -> a
-    octCps = Math.oct_to_cps
-    ramp_ :: a -> a
-    ramp_ _ = error "ramp_"
-    ratioMidi :: a -> a
-    ratioMidi = Math.ratio_to_midi
-    softClip :: a -> a
-    softClip = Math.sc3_softclip
-    squared :: a -> a
-    squared = \z -> z * z
+  ampDb :: a -> a
+  ampDb = Math.amp_to_db
+  asFloat :: a -> a
+  asFloat = error "asFloat"
+  asInt :: a -> a
+  asInt = error "asInt"
+  cpsMidi :: a -> a
+  cpsMidi = Math.cps_to_midi
+  cpsOct :: a -> a
+  cpsOct = Math.cps_to_oct
+  cubed :: a -> a
+  cubed n = n * n * n
+  dbAmp :: a -> a
+  dbAmp = Math.db_to_amp
+  distort :: a -> a
+  distort = Math.sc3_distort
+  frac :: a -> a
+  frac = error "frac"
+  isNil :: a -> a
+  isNil a = if a == 0.0 then 0.0 else 1.0
+  log10 :: a -> a
+  log10 = logBase 10
+  log2 :: a -> a
+  log2 = logBase 2
+  midiCps :: a -> a
+  midiCps = Math.midi_to_cps
+  midiRatio :: a -> a
+  midiRatio = Math.midi_to_ratio
+  notE :: a -> a
+  notE a = if a > 0.0 then 0.0 else 1.0
+  notNil :: a -> a
+  notNil a = if a /= 0.0 then 0.0 else 1.0
+  octCps :: a -> a
+  octCps = Math.oct_to_cps
+  ramp_ :: a -> a
+  ramp_ _ = error "ramp_"
+  ratioMidi :: a -> a
+  ratioMidi = Math.ratio_to_midi
+  softClip :: a -> a
+  softClip = Math.sc3_softclip
+  squared :: a -> a
+  squared = \z -> z * z
 
-instance UnaryOp Float where
-instance UnaryOp Double where
+instance UnaryOp Float
+instance UnaryOp Double
 
 -- | Sc3_Binary_Op operator class.
-class (Floating a,RealFrac a, Ord a) => BinaryOp a where
-    absDif :: a -> a -> a
-    absDif a b = abs (a - b)
-    amClip :: a -> a -> a
-    amClip a b = if b <= 0 then 0 else a * b
-    atan2E :: a -> a -> a
-    atan2E a b = atan (b/a)
-    clip2 :: a -> a -> a
-    clip2 a b = Math.sc3_clip a (-b) b
-    difSqr :: a -> a -> a
-    difSqr = Math.sc3_dif_sqr
-    excess :: a -> a -> a
-    excess a b = a - Math.sc3_clip a (-b) b
-    exprandRange :: a -> a -> a
-    exprandRange = error "exprandRange"
-    fill :: a -> a -> a
-    fill = error "fill"
-    firstArg :: a -> a -> a
-    firstArg a _ = a
-    fold2 :: a -> a -> a
-    fold2 a b = Math.sc3_fold a (-b) b
-    gcdE :: a -> a -> a
-    gcdE = Math.sc3_gcd
-    hypot :: a -> a -> a
-    hypot = Math.sc3_hypot
-    hypotx :: a -> a -> a
-    hypotx = Math.sc3_hypotx
-    iDiv :: a -> a -> a
-    iDiv = Math.sc3_idiv
-    lcmE :: a -> a -> a
-    lcmE = Math.sc3_lcm
-    modE :: a -> a -> a
-    modE = Math.sc3_mod
-    randRange :: a -> a -> a
-    randRange = error "randRange"
-    ring1 :: a -> a -> a
-    ring1 a b = a * b + a
-    ring2 :: a -> a -> a
-    ring2 a b = a * b + a + b
-    ring3 :: a -> a -> a
-    ring3 a b = a * a * b
-    ring4 :: a -> a -> a
-    ring4 a b = a * a * b - a * b * b
-    roundUp :: a -> a -> a
-    roundUp = error "roundUp"
-    scaleNeg :: a -> a -> a
-    scaleNeg a b = (abs a - a) * b' + a where b' = 0.5 * b + 0.5
-    sqrDif :: a -> a -> a
-    sqrDif a b = (a-b) * (a-b)
-    sqrSum :: a -> a -> a
-    sqrSum a b = (a+b) * (a+b)
-    sumSqr :: a -> a -> a
-    sumSqr a b = (a*a) + (b*b)
-    thresh :: a -> a -> a
-    thresh a b = if a <  b then 0 else a
-    trunc :: a -> a -> a
-    trunc = error "trunc"
-    wrap2 :: a -> a -> a
-    wrap2 = error "wrap2"
+class (Floating a, RealFrac a, Ord a) => BinaryOp a where
+  absDif :: a -> a -> a
+  absDif a b = abs (a - b)
+  amClip :: a -> a -> a
+  amClip a b = if b <= 0 then 0 else a * b
+  atan2E :: a -> a -> a
+  atan2E a b = atan (b / a)
+  clip2 :: a -> a -> a
+  clip2 a b = Math.sc3_clip a (-b) b
+  difSqr :: a -> a -> a
+  difSqr = Math.sc3_dif_sqr
+  excess :: a -> a -> a
+  excess a b = a - Math.sc3_clip a (-b) b
+  exprandRange :: a -> a -> a
+  exprandRange = error "exprandRange"
+  fill :: a -> a -> a
+  fill = error "fill"
+  firstArg :: a -> a -> a
+  firstArg a _ = a
+  fold2 :: a -> a -> a
+  fold2 a b = Math.sc3_fold a (-b) b
+  gcdE :: a -> a -> a
+  gcdE = Math.sc3_gcd
+  hypot :: a -> a -> a
+  hypot = Math.sc3_hypot
+  hypotx :: a -> a -> a
+  hypotx = Math.sc3_hypotx
+  iDiv :: a -> a -> a
+  iDiv = Math.sc3_idiv
+  lcmE :: a -> a -> a
+  lcmE = Math.sc3_lcm
+  modE :: a -> a -> a
+  modE = Math.sc3_mod
+  randRange :: a -> a -> a
+  randRange = error "randRange"
+  ring1 :: a -> a -> a
+  ring1 a b = a * b + a
+  ring2 :: a -> a -> a
+  ring2 a b = a * b + a + b
+  ring3 :: a -> a -> a
+  ring3 a b = a * a * b
+  ring4 :: a -> a -> a
+  ring4 a b = a * a * b - a * b * b
+  roundUp :: a -> a -> a
+  roundUp = error "roundUp"
+  scaleNeg :: a -> a -> a
+  scaleNeg a b = (abs a - a) * b' + a where b' = 0.5 * b + 0.5
+  sqrDif :: a -> a -> a
+  sqrDif a b = (a - b) * (a - b)
+  sqrSum :: a -> a -> a
+  sqrSum a b = (a + b) * (a + b)
+  sumSqr :: a -> a -> a
+  sumSqr a b = (a * a) + (b * b)
+  thresh :: a -> a -> a
+  thresh a b = if a < b then 0 else a
+  trunc :: a -> a -> a
+  trunc = error "trunc"
+  wrap2 :: a -> a -> a
+  wrap2 = error "wrap2"
 
 instance BinaryOp Float where
-    fold2 a b = Math.sc3_fold a (-b) b
-    modE = F.mod'
-    roundUp a b = if b == 0 then a else ceilingE (a/b + 0.5) * b
-    wrap2 a b = Math.sc3_wrap_ni (-b) b a
+  fold2 a b = Math.sc3_fold a (-b) b
+  modE = F.mod'
+  roundUp a b = if b == 0 then a else ceilingE (a / b + 0.5) * b
+  wrap2 a b = Math.sc3_wrap_ni (-b) b a
 
 instance BinaryOp Double where
-    fold2 a b = Math.sc3_fold a (-b) b
-    modE = F.mod'
-    roundUp a b = if b == 0 then a else ceilingE (a/b + 0.5) * b
-    wrap2 a b = Math.sc3_wrap_ni (-b) b a
+  fold2 a b = Math.sc3_fold a (-b) b
+  modE = F.mod'
+  roundUp a b = if b == 0 then a else ceilingE (a / b + 0.5) * b
+  wrap2 a b = Math.sc3_wrap_ni (-b) b a
 
 -- * Infix
 
@@ -501,49 +501,51 @@ instance BinaryOp Double where
 -- * Tables
 
 -- | Association table for 'Sc3_Binary_Op' to haskell function implementing operator.
-binop_hs_tbl :: (Real n,Floating n,RealFrac n) => [(Sc3_Binary_Op,n -> n -> n)]
+binop_hs_tbl :: (Real n, Floating n, RealFrac n) => [(Sc3_Binary_Op, n -> n -> n)]
 binop_hs_tbl =
-    [(OpAdd,(+))
-    ,(OpSub,(-))
-    ,(OpFdiv,(/))
-    ,(OpIdiv,Math.sc3_idiv)
-    ,(OpMod,Math.sc3_mod)
-    ,(OpEq,Math.sc3_eq)
-    ,(OpNe,Math.sc3_neq)
-    ,(OpLt,Math.sc3_lt)
-    ,(OpLe,Math.sc3_lte)
-    ,(OpGt,Math.sc3_gt)
-    ,(OpGe,Math.sc3_gte)
-    ,(OpMin,min)
-    ,(OpMax,max)
-    ,(OpMul,(*))
-    ,(OpPow,(**))
-    ,(OpMin,min)
-    ,(OpMax,max)
-    ,(OpRoundTo,Math.sc3_round_to)]
+  [ (OpAdd, (+))
+  , (OpSub, (-))
+  , (OpFdiv, (/))
+  , (OpIdiv, Math.sc3_idiv)
+  , (OpMod, Math.sc3_mod)
+  , (OpEq, Math.sc3_eq)
+  , (OpNe, Math.sc3_neq)
+  , (OpLt, Math.sc3_lt)
+  , (OpLe, Math.sc3_lte)
+  , (OpGt, Math.sc3_gt)
+  , (OpGe, Math.sc3_gte)
+  , (OpMin, min)
+  , (OpMax, max)
+  , (OpMul, (*))
+  , (OpPow, (**))
+  , (OpMin, min)
+  , (OpMax, max)
+  , (OpRoundTo, Math.sc3_round_to)
+  ]
 
 -- | 'lookup' 'binop_hs_tbl' via 'toEnum'.
-binop_special_hs :: (RealFrac n,Floating n) => Int -> Maybe (n -> n -> n)
+binop_special_hs :: (RealFrac n, Floating n) => Int -> Maybe (n -> n -> n)
 binop_special_hs z = lookup (toEnum z) binop_hs_tbl
 
 -- | Association table for 'Unary' to haskell function implementing operator.
-uop_hs_tbl :: (RealFrac n,Floating n) => [(Sc3_Unary_Op,n -> n)]
+uop_hs_tbl :: (RealFrac n, Floating n) => [(Sc3_Unary_Op, n -> n)]
 uop_hs_tbl =
-    [(OpNeg,negate)
-    ,(OpNot,\z -> if z > 0 then 0 else 1)
-    ,(OpAbs,abs)
-    ,(OpCeil,Math.sc3_ceiling)
-    ,(OpFloor,Math.sc3_floor)
-    ,(OpSquared,\z -> z * z)
-    ,(OpCubed,\z -> z * z * z)
-    ,(OpSqrt,sqrt)
-    ,(OpRecip,recip)
-    ,(OpMidiCps,Math.midi_to_cps)
-    ,(OpCpsMidi,Math.cps_to_midi)
-    ,(OpSin,sin)
-    ,(OpCos,cos)
-    ,(OpTan,tan)]
+  [ (OpNeg, negate)
+  , (OpNot, \z -> if z > 0 then 0 else 1)
+  , (OpAbs, abs)
+  , (OpCeil, Math.sc3_ceiling)
+  , (OpFloor, Math.sc3_floor)
+  , (OpSquared, \z -> z * z)
+  , (OpCubed, \z -> z * z * z)
+  , (OpSqrt, sqrt)
+  , (OpRecip, recip)
+  , (OpMidiCps, Math.midi_to_cps)
+  , (OpCpsMidi, Math.cps_to_midi)
+  , (OpSin, sin)
+  , (OpCos, cos)
+  , (OpTan, tan)
+  ]
 
 -- | 'lookup' 'uop_hs_tbl' via 'toEnum'.
-uop_special_hs :: (RealFrac n,Floating n) => Int -> Maybe (n -> n)
+uop_special_hs :: (RealFrac n, Floating n) => Int -> Maybe (n -> n)
 uop_special_hs z = lookup (toEnum z) uop_hs_tbl

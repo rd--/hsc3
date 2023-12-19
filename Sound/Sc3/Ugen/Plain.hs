@@ -24,9 +24,9 @@ mk_plain rt nm inp = mkUgen Nothing all_rates (Left rt) nm inp Nothing
 -}
 uop :: Case_Rule -> String -> Rate -> Ugen -> Ugen
 uop cr nm r p =
-    case unaryIndex cr nm of
-      Just s -> mk_plain r "UnaryOpUGen" [p] 1 (Special s) NoId
-      Nothing -> error "uop"
+  case unaryIndex cr nm of
+    Just s -> mk_plain r "UnaryOpUGen" [p] 1 (Special s) NoId
+    Nothing -> error "uop"
 
 {- | Construct binary operator.
 
@@ -38,9 +38,9 @@ True
 -}
 binop :: Case_Rule -> String -> Rate -> Ugen -> Ugen -> Ugen
 binop cr nm r p q =
-    case binaryIndex cr nm of
-      Just s -> mk_plain r "BinaryOpUGen" [p,q] 1 (Special s) NoId
-      Nothing -> error "binop"
+  case binaryIndex cr nm of
+    Just s -> mk_plain r "BinaryOpUGen" [p, q] 1 (Special s) NoId
+    Nothing -> error "binop"
 
 {- | Construct deterministic Ugen.
 

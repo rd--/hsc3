@@ -39,14 +39,16 @@ nrt_end_time = Osc.bundleTime . last . nrt_bundles
 -- | Delete any internal nrt_end messages, and require one at the final bundle.
 nrt_close :: Nrt -> Nrt
 nrt_close (Nrt l) =
-    let is_nrt_end_msg = (== "/nrt_end") . Osc.messageAddress
-        bundle_map t_f m_f (Osc.Bundle t m) = Osc.Bundle (t_f t) (m_f m) -- apply temporal and message functions to bundle
-        rem_end_msg = bundle_map id (filter (not . is_nrt_end_msg))
-        req_end_msg = let f m = if any is_nrt_end_msg m
-                                then m
-                                else m ++ [Sound.Sc3.Server.Command.nrt_end]
-                      in bundle_map id f
-    in Nrt (Sound.Sc3.Common.Base.at_last rem_end_msg req_end_msg l)
+  let is_nrt_end_msg = (== "/nrt_end") . Osc.messageAddress
+      bundle_map t_f m_f (Osc.Bundle t m) = Osc.Bundle (t_f t) (m_f m) -- apply temporal and message functions to bundle
+      rem_end_msg = bundle_map id (filter (not . is_nrt_end_msg))
+      req_end_msg =
+        let f m =
+              if any is_nrt_end_msg m
+                then m
+                else m ++ [Sound.Sc3.Server.Command.nrt_end]
+        in bundle_map id f
+  in Nrt (Sound.Sc3.Common.Base.at_last rem_end_msg req_end_msg l)
 
 -- | Append /q/ to /p/, assumes last timestamp at /p/ precedes first at /q/.
 nrt_append :: Nrt -> Nrt -> Nrt

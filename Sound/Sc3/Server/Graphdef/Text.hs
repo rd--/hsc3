@@ -26,8 +26,14 @@ print_string a =
 -- | 'Encode_Functions' for plain text output.
 enc_text :: (String -> String) -> Encode_Functions String
 enc_text com_f =
-  (unwords . filter (not . null),print_string,show,show,show,\n -> Numeric.showFFloat Nothing n ""
-  ,com_f)
+  ( unwords . filter (not . null)
+  , print_string
+  , show
+  , show
+  , show
+  , \n -> Numeric.showFFloat Nothing n ""
+  , com_f
+  )
 
 {- | 'encode_graphdef_f' of 'enc_text' with optional semi-colon delimited comments.
 
@@ -40,8 +46,8 @@ enc_text com_f =
 -}
 print_graphdef :: Bool -> Graphdef -> String
 print_graphdef with_com =
-    let com_f = if with_com then \c -> concat ["\n; ",c,"\n"] else const ""
-    in encode_graphdef_f (enc_text com_f)
+  let com_f = if with_com then \c -> concat ["\n; ", c, "\n"] else const ""
+  in encode_graphdef_f (enc_text com_f)
 
 -- * List Input
 
@@ -63,7 +69,7 @@ read_float txt =
 
 -- | Get_Functions for text representation of Graphdef.
 text_get_f :: Get_Functions (S.StateT [String] Identity)
-text_get_f = (list_read_f Datum.ascii,list_read_f read,list_read_f read,list_read_f read,list_read_f read_float)
+text_get_f = (list_read_f Datum.ascii, list_read_f read, list_read_f read, list_read_f read, list_read_f read_float)
 
 -- | Is line empty or starts with ';'
 is_nil_or_comment :: String -> Bool
@@ -83,4 +89,3 @@ read_graphdef txt =
 
 read_graphdef_file :: FilePath -> IO Graphdef
 read_graphdef_file = fmap read_graphdef . readFile
-
