@@ -14,3 +14,6 @@ push-tags:
 
 indent:
 	fourmolu -i Sound
+
+doctest:
+	doctest -Wno-x-partial -Wno-incomplete-uni-patterns Sound
