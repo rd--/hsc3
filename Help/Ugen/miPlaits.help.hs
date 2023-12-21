@@ -36,21 +36,18 @@ in X.miPlaits ar 44 (X.miPlaits_mode "wavetable") harm timbre 0 trigger 0 0 0 0 
 let harm = mouseY kr 0 1 Linear 0.2 -- select chord
     trigger = impulse kr 6 0
     lev = tRandId 'α' 0 1 trigger
-    c0 = head . mceChannels
-in c0 (X.miPlaits ar 40 (X.miPlaits_mode "chord") harm 0.5 0.5 trigger (lev * lev) 0 0.4 0 0.5 0.5) * 0.1
+in mceChannel 0 (X.miPlaits ar 40 (X.miPlaits_mode "chord") harm 0.5 0.5 trigger (lev * lev) 0 0.4 0 0.5 0.5) * 0.1
 
 -- MiPlaits ; 8=swarm ; super saw
 let pit = tiRandId 'α' 39 49 (dustId 'β' kr 0.5)
-    c0 = head . mceChannels
-in c0 (X.miPlaits ar pit (X.miPlaits_mode "swarm") 0.16 0 1 0 0 0 0 0 0.5 0.5) * 0.1
+in mceChannel 0 (X.miPlaits ar pit (X.miPlaits_mode "swarm") 0.16 0 1 0 0 0 0 0 0.5 0.5) * 0.1
 
 -- MiPlaits ; slow swarm
 X.miPlaits ar 48 (X.miPlaits_mode "swarm") 0.9 0 0.5 0 0 0 0 0 0.5 0.5 * mce2 0.04 0.15
 
 -- MiPlaits ; 11=string ; inharmonic
 let harm = range 0 1 (lfNoise2Id 'α' kr 0.2)
-    c0 = head . mceChannels
-in c0 (X.miPlaits ar 60 (X.miPlaits_mode "string") harm 0 0.85 0 0 0 0 0 0.5 0.5)
+in mceChannel 0 (X.miPlaits ar 60 (X.miPlaits_mode "string") harm 0 0.85 0 0 0 0 0 0.5 0.5)
 
 -- MiPlaits ; 12=modal
 let harm = range 0 1 (lfNoise2Id 'α' kr 0.2)

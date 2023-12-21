@@ -164,6 +164,13 @@ If STR has a newline the layout is adjusted accordingly."
   (interactive)
   (hsc3-send-line "main"))
 
+(defun hsc3-set-region-to-paragraph ()
+  "Set the mark at the start and point at the end of the current paragraph."
+  (interactive)
+  (backward-paragraph)
+  (push-mark nil t t)
+  (forward-paragraph))
+
 (defun hsc3-region-string ()
   "Get current region as string."
   (buffer-substring-no-properties (region-beginning) (region-end)))
@@ -190,6 +197,12 @@ If STR has a newline the layout is adjusted accordingly."
   (interactive)
   (hsc3-send-region-fn "Sound.Sc3.audition"))
 
+(defun hsc3-play ()
+  "Play at scsynth."
+  (interactive)
+  (hsc3-set-region-to-paragraph)
+  (hsc3-play-region))
+
 (defun hsc3-play-region-stateful ()
   "Play region at scsynth using stateful interface."
   (interactive)
@@ -203,6 +216,12 @@ If STR has a newline the layout is adjusted accordingly."
   "Draw region Ugen graph."
   (interactive)
   (hsc3-send-region-fn (format "Sound.Sc3.Ugen.Dot.%s $ wrapOut Nothing " hsc3-draw-command)))
+
+(defun hsc3-draw ()
+  "Draw Ugen graph."
+  (interactive)
+  (hsc3-set-region-to-paragraph)
+  (hsc3-draw-region))
 
 (defun hsc3-dump-ugens-region ()
   "Print region Ugen graph."
@@ -265,7 +284,7 @@ If STR has a newline the layout is adjusted accordingly."
 (defun hsc3-with-sc3 (txt)
   "Sound.Sc3.withSc3 at `hsc3-server-host' and `hsc3-server-port' of the string TXT."
   (hsc3-send-line
-   (format "Sound.Sc3.withSc3At (\"%s\",%d) %s" (hsc3-server-host) (hsc3-server-port) txt)))
+   (format "Sound.Sc3.withSc3At (Tcp,\"%s\",%d) %s" (hsc3-server-host) (hsc3-server-port) txt)))
 
 (defun hsc3-reset-scsynth ()
   "Send Sc3 reset instruction to haskell."
@@ -435,9 +454,9 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   (define-key map (kbd "C-c C-c") 'hsc3-send-current-line)
   (define-key map (kbd "C-c C-h") 'hsc3-help)
   (define-key map (kbd "C-c C-r") 'hsc3-send-region)
-  (define-key map (kbd "C-c C-a") 'hsc3-play-region)
+  (define-key map (kbd "C-c C-a") 'hsc3-play)
   (define-key map (kbd "C-c C-S-a") 'hsc3-play-region-seq)
-  (define-key map (kbd "C-c C-g") 'hsc3-draw-region)
+  (define-key map (kbd "C-c C-g") 'hsc3-draw)
   (define-key map (kbd "C-c C-d") 'hsc3-dump-ugens-region)
   (define-key map (kbd "C-c C-v") 'hsc3-ui-region)
   (define-key map (kbd "C-c C-f") 'hsc3-ui-comment)

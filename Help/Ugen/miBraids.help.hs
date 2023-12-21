@@ -44,7 +44,7 @@ let tr = dustId 'α' kr 0.6
 in X.miBraids ar pit timb color (X.miBraids_mode "PLUCKED") tr 0 0 0 0 * 0.1
 
 -- MiBraids ; 28:PLUCKED ; event control
-let f (_,g,x,y,z,o,rx,_,_,_,_) =
+let f (_,g,x,y,_,o,rx,_,_,_,_) =
       let tr = trig1 g controlDur
           pit = x * 24 + 45
           timb = latch y tr * 0.5 + 0.25

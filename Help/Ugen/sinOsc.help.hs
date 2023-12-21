@@ -137,9 +137,6 @@ let geom k z m = mce (take k (iterate (* m) z))
     o3 = pulse ar (1/4) 0.5
 in (o1 + o2 + o3) * 0.1
 
--- jh ; <https://scsynth.org/t/auditory-illusion-with-exponentially-spaced-frequencies/4157>
-mix (sinOsc ar (300 * mce (map (4 **) (take 200 [0, 0.002 ..]))) 0 * 0.02)
-
 -- sinOsc ; https://scsynth.org/t/what-kind-of-synthesis-is-this/4318/30
 let mratio = 4
     amp = 0.2
