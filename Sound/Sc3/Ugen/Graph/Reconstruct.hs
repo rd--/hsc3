@@ -49,7 +49,7 @@ reconstruct_graph_module nm gr =
   let imp =
         [ "import Sound.Sc3 {- hsc3 -}"
         , "import Sound.Sc3.Common.Base {- hsc3 -}"
-        , "import Sound.Sc3.Util.Plain {- hsc3 -}"
+        , "import Sound.Sc3.Ugen.Plain {- hsc3 -}"
         ]
   in case reconstruct_graph gr of
       (b0 : bnd, res) ->
@@ -60,14 +60,14 @@ reconstruct_graph_module nm gr =
 
 {- | Generate a reconstruction of a 'Graph'.
 
-> import Sound.Sc3 {\- hsc3 -\}
-> import Sound.Sc3.Util.Graph {\- hsc3 -\}
-> import Sound.Sc3.Util.Graph.Reconstruct {\- hsc3 -\}
+> import Sound.Sc3
+> import Sound.Sc3.Ugen.Graph
+> import Sound.Sc3.Ugen.Graph.Reconstruct
 
-> let k = control KR "bus" 0
-> let o = sinOsc AR 440 0 + whiteNoise 'α' AR
+> let k = control kr "bus" 0
+> let o = sinOsc ar 440 0 + whiteNoiseId 'α' ar
 > let u = out k (pan2 (o * 0.1) 0 1)
-> let m = mrg [u,out 1 (impulse AR 1 0 * 0.1)]
+> let m = mrg [u,out 1 (impulse ar 1 0 * 0.1)]
 > putStrLn (reconstruct_graph_str "anon" (ugen_to_graph m))
 -}
 reconstruct_graph_str :: String -> Graph.U_Graph -> String
@@ -104,8 +104,8 @@ reconstruct_k_ugen u =
 ugen_qname :: String -> Types.Special -> (String, String)
 ugen_qname nm (Types.Special n) =
   case nm of
-    "UnaryOpUGen" -> ("uop CS", Operator.unaryName n)
-    "BinaryOpUGen" -> ("binop CS", Operator.binaryName n)
+    "UnaryOpUGen" -> ("uop Cs", Operator.unaryName n)
+    "BinaryOpUGen" -> ("binop Cs", Operator.binaryName n)
     _ -> ("ugen", nm)
 
 reconstruct_mce_str :: Graph.U_Node -> String
@@ -131,7 +131,7 @@ reconstruct_u_str u =
       o = length (Graph.u_node_u_outputs u)
       u_s = printf "%s = ugen \"%s\" %s [%s] %d" l n (show r) i_l o
       nd_s =
-        let t = "%s = nondet \"%s\" (UId %d) %s [%s] %d"
+        let t = "%s = nondet \"%s\" (Uid %d) %s [%s] %d"
         in printf t l n z (show r) i_l o
       c = case q of
         "ugen" -> if Graph.u_node_u_ugenid u == Types.NoId then u_s else nd_s

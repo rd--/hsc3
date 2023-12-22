@@ -90,7 +90,8 @@ sc3_unary_op_name = drop 2 . show
 
 {- | 'Base.parse_enum' with Op prefix.
 
-> Data.Maybe.mapMaybe (parse_unary Cs) (words "Abs Rand")
+>>> Data.Maybe.mapMaybe (parse_unary Cs) (words "Abs Rand")
+[OpAbs]
 -}
 parse_unary :: Base.Case_Rule -> String -> Maybe Sc3_Unary_Op
 parse_unary cr = Base.parse_enum cr . (++) "Op"
@@ -209,7 +210,8 @@ sc3_binary_op_tbl = zip (map sc3_binary_op_name [minBound .. maxBound]) [0 ..]
 
 {- | 'parse_enum' with Op prefix.
 
-> parse_binary Ci "mul" == Just OpMul
+>>> parse_binary Ci "mul"
+Just OpMul
 -}
 parse_binary :: Base.Case_Rule -> String -> Maybe Sc3_Binary_Op
 parse_binary cr = Base.parse_enum cr . (++) "Op"
@@ -260,7 +262,8 @@ binaryName n =
 >>> binaryIndex Base.Ci "sinosc"
 Nothing
 
-> map (\x -> (x,binaryIndex Ci x)) (map snd binary_sym_tbl)
+>>> map (\x -> (x,binaryIndex Ci x)) (map snd binary_sym_tbl)
+[("+",Just 0),("-",Just 1),("*",Just 2),("/",Just 4),("%",Just 5),("==",Just 6),("/=",Just 7),("<",Just 8),(">",Just 9),("<=",Just 10),(">=",Just 11),(".&.",Just 14),(".|.",Just 15),("**",Just 25])
 -}
 binaryIndex :: Base.Case_Rule -> String -> Maybe Int
 binaryIndex cr nm =
@@ -288,8 +291,11 @@ ugen_operator_name nm n =
 
 {- | Order of lookup: binary then unary.
 
-> map (resolve_operator Ci) (words "+ - Add sub Neg abs")
-> map (resolve_operator Cs) (words "Abs")
+>>> map (resolve_operator Ci) (words "+ - sub abs max")
+[("BinaryOpUGen",Just 0),("BinaryOpUGen",Just 1),("BinaryOpUGen",Just 1),("UnaryOpUGen",Just 5),("BinaryOpUGen",Just 13)]
+
+>>> map (resolve_operator Cs) (words "Abs Add Neg")
+[("UnaryOpUGen",Just 5),("BinaryOpUGen",Just 0),("UnaryOpUGen",Just 0)]
 -}
 resolve_operator :: Base.Case_Rule -> String -> (String, Maybe Int)
 resolve_operator cr nm =
