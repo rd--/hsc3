@@ -228,17 +228,17 @@ and
 data CodeBlockType = IndentedCodeBlock | FencedCodeBlock
   deriving (Bounded, Enum, Eq, Read, Show)
 
-{- | Get code blocks from Markdown help file. -}
+-- | Get code blocks from Markdown help file.
 md_help_get_code_blocks :: [String] -> [(CodeBlockType, [String])]
 md_help_get_code_blocks x =
   case x of
     [] -> []
     "```" : x' ->
       let (q, x'') = break (== "```") x'
-      in (FencedCodeBlock,q) : md_help_get_code_blocks (drop 1 x'')
+      in (FencedCodeBlock, q) : md_help_get_code_blocks (drop 1 x'')
     ('\t' : _) : _ ->
       let (q, x') = span ((==) ['\t'] . take 1) x
-      in (IndentedCodeBlock,(map (drop 1) q)) : md_help_get_code_blocks x'
+      in (IndentedCodeBlock, (map (drop 1) q)) : md_help_get_code_blocks x'
     _ : x' ->
       md_help_get_code_blocks x'
 
@@ -258,8 +258,8 @@ md_help_get_tab_indented_code_blocks = map snd . filter ((== IndentedCodeBlock) 
 get_help_file_fragments :: String -> [String]
 get_help_file_fragments s =
   if is_md_help s
-  then on_lines_of md_help_get_tab_indented_code_blocks s
-  else on_lines_of (split_multiple_fragments . drop_post_graph_section) s
+    then on_lines_of md_help_get_tab_indented_code_blocks s
+    else on_lines_of (split_multiple_fragments . drop_post_graph_section) s
 
 -- | Read text fragments from file.
 read_file_fragments :: FilePath -> IO [String]
