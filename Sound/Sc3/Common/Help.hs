@@ -197,7 +197,8 @@ Hsc3 (and related projects) write help files as sets of distinct fragments.
 Fragments are separated by empty lines.
 A line containing the special character sequence ---- indicates the end of the fragments.
 
-> on_lines_of split_multiple_fragments ";a\nb\n\n\n;c\nd" == [";a\nb\n",";c\nd\n"]
+>>> on_lines_of split_multiple_fragments ";a\nb\n\n\n;c\nd"
+[";a\nb\n",";c\nd\n"]
 -}
 split_multiple_fragments :: [String] -> [[String]]
 split_multiple_fragments = filter (not . null) . Split.splitOn [[]]
@@ -206,9 +207,63 @@ split_multiple_fragments = filter (not . null) . Split.splitOn [[]]
 drop_post_graph_section :: [String] -> [String]
 drop_post_graph_section = takeWhile (not . isInfixOf "----")
 
+{- | Some help files are in Markdown format.
+These are recognised by examing the first character, which must be a '#'.
+-}
+is_md_help :: String -> Bool
+is_md_help x =
+  case x of
+    '#' : _ -> True
+    _ -> False
+
+{- | There are two code block formats in markdown help files.
+The first indents the block using a single tab or four spaces.
+The second marks the start and end of the block by lines starting with three back ticks (`).
+
+See:
+<https://spec.commonmark.org/0.30/#indented-code-blocks>
+and
+<https://spec.commonmark.org/0.30/#fenced-code-blocks>
+-}
+data CodeBlockType = IndentedCodeBlock | FencedCodeBlock
+  deriving (Bounded, Enum, Eq, Read, Show)
+
+{- | Get code blocks from Markdown help file. -}
+md_help_get_code_blocks :: [String] -> [(CodeBlockType, [String])]
+md_help_get_code_blocks x =
+  case x of
+    [] -> []
+    "```" : x' ->
+      let (q, x'') = break (== "```") x'
+      in (FencedCodeBlock,q) : md_help_get_code_blocks (drop 1 x'')
+    ('\t' : _) : _ ->
+      let (q, x') = span ((==) ['\t'] . take 1) x
+      in (IndentedCodeBlock,(map (drop 1) q)) : md_help_get_code_blocks x'
+    _ : x' ->
+      md_help_get_code_blocks x'
+
+{- | Get indented code blocks from Markdown help file.
+
+>>> s <- readFile "/home/rohan/sw/spl/help/SuperCollider/Reference/AllpassC.help.sl"
+>>> is_md_help s
+True
+
+>>> let b = md_help_get_tab_indented_code_blocks (lines s)
+>>> length b
+3
+-}
+md_help_get_tab_indented_code_blocks :: [String] -> [[String]]
+md_help_get_tab_indented_code_blocks = map snd . filter ((== IndentedCodeBlock) . fst) . md_help_get_code_blocks
+
+get_help_file_fragments :: String -> [String]
+get_help_file_fragments s =
+  if is_md_help s
+  then on_lines_of md_help_get_tab_indented_code_blocks s
+  else on_lines_of (split_multiple_fragments . drop_post_graph_section) s
+
 -- | Read text fragments from file.
 read_file_fragments :: FilePath -> IO [String]
-read_file_fragments = fmap (on_lines_of (split_multiple_fragments . drop_post_graph_section)) . readFile
+read_file_fragments = fmap get_help_file_fragments . readFile
 
 -- | Read text fragments from set of files.
 read_file_set_fragments :: [FilePath] -> IO [String]
