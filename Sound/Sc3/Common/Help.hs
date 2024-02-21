@@ -18,7 +18,7 @@ import qualified Sound.Sc3.Common.Base.System as Base.System {- hsc3 -}
 
 -- | Directory containing Sc3 Rtf help files.
 sc3_rtf_help_dir :: IO FilePath
-sc3_rtf_help_dir = getEnv "SC3_RTF_HELP_DIR"
+sc3_rtf_help_dir = getEnv "Sc3_Rtf_Help_Dir"
 
 {- | Find (case-insensitively) indicated file at 'sc3_rtf_help_dir'.
 Runs the command "find -name" (so Unix only).
@@ -76,14 +76,14 @@ sc3_rtf_help_scd_open_emacs = sc3_rtf_help_scd_open ("emacsclient", ["--no-wait"
 sc3_scdoc_help_url :: String
 sc3_scdoc_help_url = "http://doc.sccode.org/"
 
-{- | Read the environment variable @SC3_SCDOC_HTML_HELP_DIR@.
+{- | Read the environment variable @Sc3_ScDoc_Html_Help_Dir@.
   The default value is @~\/.local\/share\/SuperCollider/Help@.
 -}
 sc3_scdoc_help_dir :: IO String
 sc3_scdoc_help_dir = do
   h <- getEnv "HOME"
   let d = h </> ".local/share/SuperCollider/Help"
-  Base.System.get_env_default "SC3_SCDOC_HTML_HELP_DIR" d
+  Base.System.get_env_default "Sc3_ScDoc_Html_Help_Dir" d
 
 {- | Path to indicated Sc3 class help file.
 
@@ -147,7 +147,7 @@ sc3_scdoc_help_path s = do
     [c, m] -> sc3_scdoc_help_instance_method (c, m)
     _ -> sc3_scdoc_help_class s
 
-{- | Open SC3 help path, either the local file or the online version.
+{- | Open Sc3 help path, either the local file or the online version.
      Use @BROWSER@ or @x-www-browser@.
 
 > Base.System.get_env_default "BROWSER" "x-www-browser"
@@ -242,23 +242,37 @@ md_help_get_code_blocks x =
     _ : x' ->
       md_help_get_code_blocks x'
 
+is_doctest_block :: [String] -> Bool
+is_doctest_block = any (\x -> ">>> " `isPrefixOf` x)
+
+md_help_get_tab_indented_code_blocks :: [String] -> [[String]]
+md_help_get_tab_indented_code_blocks =
+  filter (not . is_doctest_block)
+    . map snd
+    . filter ((== IndentedCodeBlock) . fst)
+    . md_help_get_code_blocks
+
 {- | Get indented code blocks from Markdown help file.
 
->>> s <- readFile "/home/rohan/sw/spl/help/SuperCollider/Reference/AllpassC.help.sl"
+>>> s <- readFile "/home/rohan/sw/spl/help/Reference/AllpassC.help.sl"
 >>> is_md_help s
 True
 
->>> let b = md_help_get_tab_indented_code_blocks (lines s)
+>>> let b = md_help_get_fenced_code_blocks (lines s)
 >>> length b
 3
 -}
-md_help_get_tab_indented_code_blocks :: [String] -> [[String]]
-md_help_get_tab_indented_code_blocks = map snd . filter ((== IndentedCodeBlock) . fst) . md_help_get_code_blocks
+md_help_get_fenced_code_blocks :: [String] -> [[String]]
+md_help_get_fenced_code_blocks =
+  filter (not . is_doctest_block)
+    . map snd
+    . filter ((== FencedCodeBlock) . fst)
+    . md_help_get_code_blocks
 
 get_help_file_fragments :: String -> [String]
 get_help_file_fragments s =
   if is_md_help s
-    then on_lines_of md_help_get_tab_indented_code_blocks s
+    then on_lines_of md_help_get_fenced_code_blocks s
     else on_lines_of (split_multiple_fragments . drop_post_graph_section) s
 
 -- | Read text fragments from file.

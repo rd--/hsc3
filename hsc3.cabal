@@ -39,7 +39,7 @@ Library
                    transformers,
                    vector
   Default-Language:Haskell2010
-  GHC-Options:     -Wall -fwarn-tabs
+  GHC-Options:     -Wall -Wno-x-partial -Wno-incomplete-uni-patterns
   Exposed-modules: Sound.Sc3
                    Sound.Sc3.Common
                    Sound.Sc3.Common.Base
