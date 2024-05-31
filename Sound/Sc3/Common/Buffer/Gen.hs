@@ -22,7 +22,7 @@ nrm_u = Buffer.normalize (-1) 1
 
 {- | 'sine3_p' with zero phase.
 
-> import Sound.Sc3.Plot {\- hsc3-plot -\}
+> import Sound.Sc3.Plot
 > plot_p1_ln [sine1_p 512 (1, 1)]
 -}
 sine1_p :: (Enum n, Floating n) => Int -> (n, n) -> [n]
@@ -96,8 +96,20 @@ sine3 n = sum_l . sine3_l n
 -- * cheby
 
 {- | Generate Chebyshev waveshaping table, see b_gen_cheby.
+Cf. <https://www.csounds.com/manual/html/GEN13.html>
 
-> Sound.Sc3.Plot.plot_p1_ln [gen_cheby 256 [1, 0, 1, 1, 0, 1]]
+> import Sound.Sc3.Plot
+> let p x = plot_p1_ln [gen_cheby 512 x]
+
+> p [1, 0, 1, 1, 0, 1]
+> p [100, -50, -33, 25, 20, -16.7, -14.2, 12.5, 11.1, -10, -9.09, 8.333, 7.69, -7.14, -6.67, 6.25, 5.88, -5.55, -5.26, 5]
+> p [100, 0, -33, 0, 20, 0, -14.2, 0, 11.1, 0, -9.09, 0, 7.69, 0, -6.67, 0, 5.88, 0, -5.26]
+> p [100, 0, -11.11, 0, 4, 0, -2.04, 0, 1.23, 0, -0.826, 0, 0.59, 0, -0.444, 0, 0.346, 0, -0.277]
+> p [1, -0.8, 0, 0.6, 0, 0, 0, 0.4, 0, 0, 0, 0, 0.1, -0.2, -0.3, 0.5]
+> p [0, 0, -0.1, 0, 0.3, 0, -0.5, 0, 0.7, 0, -0.9, 0, 1, 0, -1, 0]
+> p [0, 0, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.1, 0, 0.1, 0, -0.2, 0.3, 0, -0.7, 0, 0.2, 0, -0.1]
+> p [5, 0, 3, 0, 1]
+
 -}
 gen_cheby :: (Enum n, Floating n, Ord n, Integral i) => i -> [n] -> [n]
 gen_cheby n =

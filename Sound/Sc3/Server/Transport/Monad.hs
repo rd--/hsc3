@@ -74,7 +74,7 @@ If either is no set default values are used.
 >>> import System.Environment
 >>> setEnv "ScHostname" "192.168.1.53"
 >>> sc3_env_or_default_address
-(Tcp,"192.168.1.53",57110)
+(Udp,"192.168.1.53",57110)
 -}
 sc3_env_or_default_address :: IO Sc3_Address
 sc3_env_or_default_address = do
