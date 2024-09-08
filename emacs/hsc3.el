@@ -273,6 +273,10 @@ If STR has a newline the layout is adjusted accordingly."
   (interactive)
   (shell-command-on-region (region-beginning) (region-end) "hsc3-rw uparam expand" nil t))
 
+(defun hsc3-server-protocol ()
+  "The protocol that scsynth is listening at."
+  (or (getenv "ScProtocol") "Udp"))
+
 (defun hsc3-server-host ()
   "The host that scsynth is listening at."
   (or (getenv "ScHostname") "127.0.0.1"))
@@ -284,7 +288,7 @@ If STR has a newline the layout is adjusted accordingly."
 (defun hsc3-with-sc3 (txt)
   "Sound.Sc3.withSc3 at `hsc3-server-host' and `hsc3-server-port' of the string TXT."
   (hsc3-send-line
-   (format "Sound.Sc3.withSc3At (Tcp,\"%s\",%d) %s" (hsc3-server-host) (hsc3-server-port) txt)))
+   (format "Sound.Sc3.withSc3At (%s,\"%s\",%d) %s" (hsc3-server-protocol) (hsc3-server-host) (hsc3-server-port) txt)))
 
 (defun hsc3-reset-scsynth ()
   "Send Sc3 reset instruction to haskell."

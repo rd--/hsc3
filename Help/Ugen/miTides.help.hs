@@ -1,11 +1,11 @@
 -- MiTides ; shape
 let shape = lfTri ar 0.11 0 `in_range` (0,1)
-    c0 = head . mceChannels
+    c0 = mceChannel 0
 in c0 (X.miTides ar 100 shape 0.5 0.5 0.2 0 0 {-output_mode:-} 2 1 9 1) * 0.25
 
 -- MiTides ; slope
 let slope = lfTri ar 0.11 0 `in_range` (0,1)
-    c0 = head . mceChannels
+    c0 = mceChannel 0
 in c0 (X.miTides ar 100 0.5 slope 0.5 0.2 0 0 {-output_mode:-} 2 1 9 1) * 0.25
 
 -- MiTides ; phasing
@@ -61,7 +61,7 @@ let freq = 5 -- attack rate
     tr = lfPulse ar 1 0 0.5
     env = X.miTides ar freq shape slope_ smooth 0.8 tr 0 {-output_mode:-} 0 {-ramp_mode:-} 0 1 9
     sine = pmOsc ar 150 300 2 0
-    c0 = head . mceChannels
+    c0 = mceChannel 0
 in sine * c0 env
 
 -- MiTides ; Lightbath -- Loom 4

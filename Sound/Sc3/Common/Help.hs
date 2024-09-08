@@ -243,7 +243,9 @@ md_help_get_code_blocks x =
       md_help_get_code_blocks x'
 
 is_doctest_block :: [String] -> Bool
-is_doctest_block = any (\x -> ">>> " `isPrefixOf` x)
+is_doctest_block =
+  let f x p = p `isPrefixOf` x
+  in any (\x -> f x ">>> " || f x ">> ")
 
 md_help_get_tab_indented_code_blocks :: [String] -> [[String]]
 md_help_get_tab_indented_code_blocks =

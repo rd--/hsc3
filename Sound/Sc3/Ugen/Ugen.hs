@@ -42,7 +42,11 @@ data Ugen
 
 -- * Name
 
--- | Lookup operator name for operator Ugens, else Ugen name.
+{- | Lookup operator name for operator Ugens, else Ugen name.
+
+>>> map (\k -> ugen_user_name "BinaryOpUGen" (Special k)) [0, 2, 4, 9, 12, 17, 25]
+["+","*","/",">","Min","Lcm","**"]
+-}
 ugen_user_name :: String -> Special -> String
 ugen_user_name nm (Special n) = fromMaybe nm (ugen_operator_name nm n)
 
@@ -222,7 +226,10 @@ isMce u =
     Mce_U _ -> True
     _ -> False
 
--- | Output channels of Ugen as a list.  If required, preserves the RHS of an Mrg node in channel 0.
+{- | Output channels of Ugen as a list.
+If required, preserves the RHS of an Mrg node in channel 0.
+See also: mceChannel
+-}
 mceChannels :: Ugen -> [Ugen]
 mceChannels u =
   case u of
