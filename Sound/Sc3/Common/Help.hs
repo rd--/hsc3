@@ -203,17 +203,27 @@ A line containing the special character sequence ---- indicates the end of the f
 split_multiple_fragments :: [String] -> [[String]]
 split_multiple_fragments = filter (not . null) . Split.splitOn [[]]
 
--- | The text ---- indicates the end of graph fragments.
+{- | The text '----' appearing anywhere in a line indicates the end of the graph fragments.
+The text '# ' appearing at the start of a line also indicates the end of the graph fragments.
+
+>>> drop_post_graph_section ["a","b","c","","----d","e","f"]
+["a","b","c",""]
+
+>>> drop_post_graph_section ["a","b","c","","----d","# e","","f"]
+["a","b","c",""]
+-}
 drop_post_graph_section :: [String] -> [String]
-drop_post_graph_section = takeWhile (not . isInfixOf "----")
+drop_post_graph_section =
+  let isEnd x = "----" `isInfixOf` x || "# " `isPrefixOf` x
+  in takeWhile (not . isEnd)
 
 {- | Some help files are in Markdown format.
-These are recognised by examing the first character, which must be a '#'.
+These are recognised by examing the first two characters, which must be a '#' and ' '.
 -}
 is_md_help :: String -> Bool
 is_md_help x =
   case x of
-    '#' : _ -> True
+    '#' : ' ' : _ -> True
     _ -> False
 
 {- | There are two code block formats in markdown help files.
