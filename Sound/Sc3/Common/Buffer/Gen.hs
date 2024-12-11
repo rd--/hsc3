@@ -109,7 +109,6 @@ Cf. <https://www.csounds.com/manual/html/GEN13.html>
 > p [0, 0, -0.1, 0, 0.3, 0, -0.5, 0, 0.7, 0, -0.9, 0, 1, 0, -1, 0]
 > p [0, 0, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.1, 0, 0.1, 0, -0.2, 0.3, 0, -0.7, 0, 0.2, 0, -0.1]
 > p [5, 0, 3, 0, 1]
-
 -}
 gen_cheby :: (Enum n, Floating n, Ord n, Integral i) => i -> [n] -> [n]
 gen_cheby n =

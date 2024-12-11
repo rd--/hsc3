@@ -266,7 +266,7 @@ md_help_get_tab_indented_code_blocks =
 
 {- | Get indented code blocks from Markdown help file.
 
->>> s <- readFile "/home/rohan/sw/spl/help/Reference/AllpassC.help.sl"
+>>> s <- readFile "/home/rohan/sw/spl/Help/Reference/AllpassC.help.sl"
 >>> is_md_help s
 True
 
