@@ -55,24 +55,24 @@ There is also, more obliquely related:
 [UGen Index](http://rohandrape.net/?t=hsc3&e=Help/Ugen/ix.md)
 
 ©
-[rohan drape](http://rohandrape.net/)
+[Rohan Drape](http://rohandrape.net/)
 and others, 2005-2024,
-[gpl-3](http://gnu.org/copyleft/)
+[Gpl-3](http://gnu.org/copyleft/)
 
-with contributions by:
+With contributions by:
 
-- henning thielemann
-- stefan kersten
-- alex mclean
-- brent yorgey
-- shae erisson
+- Henning Thielemann
+- Stefan Kersten
+- Alex McLean
+- Brent Yorgey
+- Shae Erisson
 
-see the
+See the
 [git](https://git-scm.com/)
 [history](http://rohandrape.net/?t=hsc3&q=history)
 for details
 
-initial announcement:
+Initial announcement:
 [[2005-11-29/haskell-cafe](http://rohandrape.net/?t=hsc3&e=md/announce.text),
  [haskell.org](http://www.haskell.org/pipermail/haskell-cafe/2005-November/012483.html)]
 
