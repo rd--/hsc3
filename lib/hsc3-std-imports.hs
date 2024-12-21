@@ -13,9 +13,9 @@ import qualified Sound.Sc3.Ugen.Bindings.Db.External as X {- hsc3 -}
 import qualified Sound.Sc3.Ugen.Bindings.Composite.External as X {- hsc3 -}
 import qualified Sound.Sc3.Ugen.Bindings.Hw.External.Sc3_Plugins as X {- hsc3 -}
 import qualified Sound.Sc3.Ugen.Bindings.Hw.External.Zita as X {- hsc3 -}
-import qualified Sound.Sc3.Ugen.Protect as Protect {- hsc3-rw -}
-import qualified Sound.Sc3.Ui.Html as Ui {- hsc3-ui -}
-import qualified Sound.Sc3.Ui.Plot as Ui {- hsc3-ui -}
-import qualified Sound.Sc3.Ui.Qarma as Ui {- hsc3-ui -}
-import qualified Sound.Sc3.Ui.Sclang as Ui {- hsc3-ui -}
-import qualified Sound.Sc3.Ui.Sclang.Control as Ui {- hsc3-ui -}
+-- import qualified Sound.Sc3.Ugen.Protect as Protect {- hsc3-rw -}
+-- import qualified Sound.Sc3.Ui.Html as Ui {- hsc3-ui -}
+-- import qualified Sound.Sc3.Ui.Plot as Ui {- hsc3-ui -}
+-- import qualified Sound.Sc3.Ui.Qarma as Ui {- hsc3-ui -}
+-- import qualified Sound.Sc3.Ui.Sclang as Ui {- hsc3-ui -}
+-- import qualified Sound.Sc3.Ui.Sclang.Control as Ui {- hsc3-ui -}
