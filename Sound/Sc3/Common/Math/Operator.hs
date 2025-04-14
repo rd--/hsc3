@@ -28,8 +28,8 @@ import qualified Sound.Sc3.Common.Math as Math {- hsc3 -}
 > zip (map show [minBound :: Sc3_Unary_Op .. maxBound]) [0..]
 -}
 data Sc3_Unary_Op
-  = OpNeg -- -
-  | OpNot -- !
+  = OpNeg -- 0 Minus -
+  | OpNot -- 1 !
   | OpIsNil
   | OpNotNil
   | OpBitNot
@@ -44,7 +44,7 @@ data Sc3_Unary_Op
   | OpCubed -- 13
   | OpSqrt -- 14
   | OpExp -- 15
-  | OpRecip -- 16
+  | OpRecip -- 16 Reciprocal
   | OpMidiCps -- 17
   | OpCpsMidi -- 18
   | OpMidiRatio -- 19
@@ -149,18 +149,18 @@ The names here are from the enumeration at "server/plugins/BinaryOpUgens.cpp".
 > zip (map show [minBound :: Sc3_Binary_Op .. maxBound]) [0..]
 -}
 data Sc3_Binary_Op
-  = OpAdd -- 0
-  | OpSub -- 1
-  | OpMul -- 2
+  = OpAdd -- 0 + Plus
+  | OpSub -- 1 - Subtract
+  | OpMul -- 2 * Times Multiply
   | OpIdiv -- 3
-  | OpFdiv -- 4
-  | OpMod -- 5
-  | OpEq -- 6
-  | OpNe -- 7
-  | OpLt -- 8
-  | OpGt -- 9
-  | OpLe -- 10
-  | OpGe -- 11
+  | OpFdiv -- 4 / Divide
+  | OpMod -- 5 %
+  | OpEq -- 6 = == Equal
+  | OpNe -- 7 != ~= NotEqual Unequal
+  | OpLt -- 8 < Less LessThan
+  | OpGt -- 9 > Greater GreaterThan
+  | OpLe -- 10 <= LessEqual LessThanOrEqual
+  | OpGe -- 11 >= GreaterEqual GreaterThanOrEqual
   | OpMin -- 12
   | OpMax -- 13
   | OpBitAnd -- 14
@@ -170,11 +170,11 @@ data Sc3_Binary_Op
   | OpGcd -- 18
   | OpRoundTo -- 19 -- i.e. roundTo: (renamed)
   | OpRoundUp -- 20
-  | OpTrunc -- 21
-  | OpAtan2 -- 22
-  | OpHypot -- 23
+  | OpTrunc -- 21 Truncate IntegerPart
+  | OpAtan2 -- 22 ArcTan
+  | OpHypot -- 23 Hypotenuse
   | OpHypotx
-  | OpPow -- 25
+  | OpPow -- 25 ^ ** Power
   | OpShiftLeft -- 26
   | OpShiftRight -- 27
   | OpUnsignedShift

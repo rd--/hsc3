@@ -43,13 +43,13 @@ maybe_async_at fd t m =
     then void (async fd m)
     else sendBundle fd (bundle t [m])
 
-{- | Read ScTransport, ScHostname and ScPort environment variables.
+{- | Read ScProtocol, ScHostname and ScPort environment variables.
 Default values are: Tcp, 127.0.0.1 and 57110.
 -}
 defaultSc3OscSocketAddress :: IO OscSocketAddress
 defaultSc3OscSocketAddress = do
   let f key defaultValue = fmap (fromMaybe defaultValue) (lookupEnv key)
-  protocol <- f "ScTransport" "Tcp"
+  protocol <- f "ScProtocol" "Tcp"
   hostname <- f "ScHostname" "127.0.0.1"
   port <- f "ScPort" "57110"
   return (read protocol, hostname, read port)
