@@ -1,4 +1,4 @@
--- | SC3 Ugen bindings (auto-generated).
+-- | Sc3 Ugen bindings (auto-generated).
 module Sound.Sc3.Ugen.Bindings.Db.External where
 
 -- import Sound.Sc3.Common.Enum

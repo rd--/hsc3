@@ -47,13 +47,15 @@ std_context =
   , ("Sound.Sc3.Ugen.Bindings.Db.External", Just "X", "hsc3")
   , ("Sound.Sc3.Ugen.Bindings.Composite.External", Just "X", "hsc3")
   , ("Sound.Sc3.Ugen.Bindings.Hw.External.F0", Just "X", "hsc3")
-  , ("Sound.Sc3.Ugen.Bindings.Hw.External.SC3_Plugins", Just "X", "hsc3")
+  , ("Sound.Sc3.Ugen.Bindings.Hw.External.Sc3_Plugins", Just "X", "hsc3")
   , ("Sound.Sc3.Ugen.Bindings.Hw.External.Zita", Just "X", "hsc3")
-  , ("Sound.Sc3.Ugen.Bindings.Db.Rdu", Just "X", "sc3-rdu")
   , ("Sound.Sc3.Ugen.Dot", Just "Sound.Sc3.Ugen.Dot", "hsc3-dot")
-  , ("Sound.Sc3.Ugen.Unsafe", Nothing, "hsc3-unsafe")
-  , ("Sound.Sc3.Ugen.Unsafe", Nothing, "hsc3-unsafe")
-  , ("Sound.Sc3.Ugen.Protect", Just "Protect", "hsc3-rw")
+  ]
+
+-- | Extended hsc3 context
+ext_context :: Context
+ext_context =
+  [ ("Sound.Sc3.Ugen.Protect", Just "Protect", "hsc3-rw")
   , ("Sound.Sc3.Ui.Html", Just "Ui", "hsc3-ui")
   , ("Sound.Sc3.Ui.Plot", Just "Ui", "hsc3-ui")
   , ("Sound.Sc3.Ui.Qarma", Just "Ui", "hsc3-ui")
