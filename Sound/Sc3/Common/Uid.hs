@@ -46,7 +46,8 @@ uid_id_eval = runIdentity
 
 {- | 'State.evalState' with initial state of zero.
 
-> uid_st_eval (replicateM 3 generateUid) == [0, 1, 2]
+>>> uid_st_eval (Control.Monad.replicateM 3 generateUid)
+[0,1,2]
 -}
 uid_st_eval :: Uid_St t -> t
 uid_st_eval x = State.evalState x 0
@@ -60,7 +61,8 @@ uid_st_seq =
 
 {- | 'fst' of 'uid_st_seq'.
 
-> uid_st_seq_ (replicate 3 generateUid) == [0, 1, 2]
+>>> uid_st_seq_ (replicate 3 generateUid)
+[0,1,2]
 -}
 uid_st_seq_ :: [Uid_St t] -> [t]
 uid_st_seq_ = fst . uid_st_seq
@@ -115,29 +117,40 @@ liftUid11 fn a b c d e f g h i j k = do
   z <- generateUid
   return (fn z a b c d e f g h i j k)
 
--- * ID
+-- * Id
 
 {- | Typeclass to constrain Ugen identifiers.
 Char inputs are hashed to generate longer seeds for when ir (constant) random Ugens are optimised.
 
-> map resolveID [0::Int,1] == [0, 1]
-> map resolveID ['α', 'β'] == [1439603815, 4131151318]
-> map resolveID [('α', 'β'),('β', 'α')] == [3538183581, 3750624898]
-> map resolveID [('α',('α', 'β')),('β',('α', 'β'))] == [0020082907, 2688286317]
-> map resolveID [('α', 'α', 'β'),('β', 'α', 'β')] == [0020082907, 2688286317]
+>>> map resolveID [0::Int,1]
+[0,1]
+
+>>> map resolveID ['α', 'β']
+[1439603815,4131151318]
+
+>>> map resolveID [('α', 'β'),('β', 'α')]
+[3538183581,3750624898]
+
+>>> map resolveID [('α',('α', 'β')),('β',('α', 'β'))]
+[20082907,2688286317]
+
+>>> map resolveID [('α', 'α', 'β'),('β', 'α', 'β')]
+[20082907,2688286317]
 -}
 class Murmur32.Hashable32 a => ID a where
   resolveID :: a -> Id
   resolveID = fromIntegral . Murmur32.asWord32 . Murmur32.hash32
 
 instance ID Char
+instance ID String
 instance ID Int where resolveID = id
 instance (ID p, ID q) => ID (p, q)
 instance (ID p, ID q, ID r) => ID (p, q, r)
 
 {- | /n/ identifiers from /x/.
 
-> id_seq 10 'α' == [1439603815 .. 1439603824]
+>>> id_seq 4 'α'
+[1439603815,1439603816,1439603817,1439603818]
 -}
 id_seq :: ID a => Int -> a -> [Id]
 id_seq n x = take n [resolveID x ..]
