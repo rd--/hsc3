@@ -519,6 +519,7 @@ evaluating hsc3 expressions.  Input and output is via `hsc3-buffer'."
   haskell-mode
   "Haskell SuperCollider"
   "Major mode for interacting with an inferior hsc3 process."
+  (setq haskell-mode-hook '(haskell-indentation-mode))
   (turn-on-font-lock))
 
 (add-to-list 'auto-mode-alist '("\\.hs$" . hsc3-mode))
