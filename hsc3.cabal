@@ -1,16 +1,16 @@
 cabal-version:     2.4
 Name:              hsc3
-Version:           0.22
+Version:           0.23
 Synopsis:          Haskell SuperCollider
 Description:       Library for communicating with the SuperCollider synthesiser
 License:           GPL-3.0-only
 Category:          Sound
-Copyright:         (c) Rohan Drape and others, 2005-2024
+Copyright:         (c) Rohan Drape and others, 2005-2026
 Author:            Rohan Drape
 Maintainer:        rd@rohandrape.net
 Stability:         Experimental
 Homepage:          http://rohandrape.net/t/hsc3
-Tested-With:       GHC == 9.12.1
+Tested-With:       GHC == 9.14.1
 Build-Type:        Simple
 
 Data-files:        README.md
@@ -28,7 +28,7 @@ Library
                    data-ordlist,
                    directory,
                    filepath,
-                   hosc == 0.22.*,
+                   hosc == 0.23.*,
                    mtl,
                    murmur-hash,
                    network,
