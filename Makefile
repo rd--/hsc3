@@ -1,6 +1,9 @@
 all:
 	echo "hsc3"
 
+install:
+	cabal v1-install --allow-newer
+
 clean:
 	rm -Rf dist dist-newstyle *~
 
