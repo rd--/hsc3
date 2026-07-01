@@ -13,7 +13,8 @@ import qualified Data.List.Split as Split {- split -}
 import qualified Data.Tree as Tree {- containers -}
 import qualified Safe {- safe -}
 
-import Sound.Osc {- hosc -}
+import Sound.Osc (Datum, DuplexOsc, Message, Transport, BundleOf, Time, SendOsc, OscSocket, Connection) {- hosc -}
+import qualified Sound.Osc {- hosc -}
 import qualified Sound.Osc.Time.Timeout {- hosc -}
 
 import qualified Sound.Sc3.Common.Base.System as System
@@ -38,7 +39,7 @@ import qualified Sound.Sc3.Server.Transport.FD as FD
 
 -- | 'sendMessage' and 'waitReply' for a @\/done@ reply.
 async :: DuplexOsc m => Message -> m Message
-async m = sendMessage m >> waitReply "/done"
+async m = Sound.Osc.sendMessage m >> Sound.Osc.waitReply "/done"
 
 -- | 'void' of 'async'.
 async_ :: DuplexOsc m => Message -> m ()
@@ -46,19 +47,19 @@ async_ = void . async
 
 -- | If 'isAsync' then 'async_' else 'sendMessage'.
 maybe_async :: DuplexOsc m => Message -> m ()
-maybe_async m = if Command.isAsync m then async_ m else sendMessage m
+maybe_async m = if Command.isAsync m then async_ m else Sound.Osc.sendMessage m
 
 -- | Variant that timestamps synchronous messages.
 maybe_async_at :: DuplexOsc m => Time -> Message -> m ()
 maybe_async_at t m =
   if Command.isAsync m
     then async_ m
-    else sendBundle (bundle t [m])
+    else Sound.Osc.sendBundle (Sound.Osc.bundle t [m])
 
 {- | Hostname and port number.
 By default Tcp, 127.0.0.1 and 57110.
 -}
-type Sc3_Address = OscSocketAddress
+type Sc3_Address = Sound.Osc.OscSocketAddress
 
 {- | Sc3 default address.
 
@@ -66,7 +67,7 @@ type Sc3_Address = OscSocketAddress
 (Tcp,"127.0.0.1",57110)
 -}
 sc3_default_address :: Sc3_Address
-sc3_default_address = (Tcp, "127.0.0.1", 57110)
+sc3_default_address = (Sound.Osc.Tcp, "127.0.0.1", 57110)
 
 {- | Lookup ScSynth address at ScHostname and ScPort.
 If either is no set default values are used.
@@ -92,13 +93,13 @@ sc3_udp_limit = 65507
 
 -- | Bracket @Sc3@ communication at indicated host and port.
 withSc3At :: Sc3_Address -> Connection OscSocket a -> IO a
-withSc3At address = withTransport (openOscSocket address)
+withSc3At address = Sound.Osc.withTransport (Sound.Osc.openOscSocket address)
 
 {- | Bracket @Sc3@ communication, ie. 'withSc3At' 'sc3_env_or_default_address'.
 
 > import Sound.Sc3.Server.Command
 
-> withSc3 (sendMessage status >> waitReply "/status.reply")
+> withSc3 (Sound.Osc.sendMessage status >> waitReply "/status.reply")
 -}
 withSc3 :: Connection OscSocket a -> IO a
 withSc3 f = do
@@ -115,12 +116,12 @@ withSc3_tm tm = Sound.Osc.Time.Timeout.timeout_r tm . withSc3
 
 {- | Run /f/ at /k/ scsynth servers with sequential port numbers starting at 'Options.sc3_port_def'.
 
-> withSc3AtSeq sc3_default_address 2 (sendMessage status >> waitReply "/status.reply")
+> withSc3AtSeq sc3_default_address 2 (Sound.Osc.sendMessage status >> Sound.Osc.waitReply "/status.reply")
 -}
 withSc3AtSeq :: Sc3_Address -> Int -> Connection OscSocket a -> IO [a]
 withSc3AtSeq (protocol, hostname, port) k f = do
-  let mk_socket i = openOscSocket (protocol, hostname, port + i)
-  mapM (\i -> withTransport (mk_socket i) f) [0 .. k - 1]
+  let mk_socket i = Sound.Osc.openOscSocket (protocol, hostname, port + i)
+  mapM (\i -> Sound.Osc.withTransport (mk_socket i) f) [0 .. k - 1]
 
 -- | 'void' of 'withSc3AtSeq'.
 withSc3AtSeq_ :: Sc3_Address -> Int -> Connection OscSocket a -> IO ()
@@ -130,11 +131,14 @@ withSc3AtSeq_ loc k = void . withSc3AtSeq loc k
 
 -- | Free all nodes ('g_freeAll') at group @1@.
 stop :: SendOsc m => m ()
-stop = sendMessage (Command.g_freeAll [1])
+stop = Sound.Osc.sendMessage (Command.g_freeAll [1])
 
 -- * Composite
 
--- | Runs 'clearSched' and then frees and re-creates groups @1@ and @2@.
+{- | Runs 'clearSched' and then frees and re-creates groups @1@ and @2@.
+
+> withSc3 reset
+-}
 reset :: SendOsc m => m ()
 reset =
   let m =
@@ -142,7 +146,7 @@ reset =
         , Command.n_free [1, 2]
         , Command.g_new [(1, Enum.AddToHead, 0), (2, Enum.AddToTail, 0)]
         ]
-  in sendBundle (bundle immediately m)
+  in Sound.Osc.sendBundle (Sound.Osc.bundle Sound.Osc.immediately m)
 
 -- | (node-id,add-action,group-id,parameters)
 type Play_Opt = (Command.Node_Id, Enum.AddAction, Command.Group_Id, [(String, Double)])
@@ -150,7 +154,7 @@ type Play_Opt = (Command.Node_Id, Enum.AddAction, Command.Group_Id, [(String, Do
 -- | Make 's_new' message to play 'Graphdef.Graphdef'.
 play_graphdef_msg :: Play_Opt -> Graphdef.Graphdef -> Message
 play_graphdef_msg (nid, act, gid, param) g =
-  let nm = ascii_to_string (Graphdef.graphdef_name g)
+  let nm = Sound.Osc.ascii_to_string (Graphdef.graphdef_name g)
   in Command.s_new nm nid act gid param
 
 {- | If the graph size is less than 'sc3_udp_limit' encode and send
@@ -159,18 +163,18 @@ using 'd_load'.
 -}
 recv_or_load_graphdef :: Transport m => Graphdef.Graphdef -> m Message
 recv_or_load_graphdef g = do
-  tmp <- liftIO getTemporaryDirectory
-  let nm = ascii_to_string (Graphdef.graphdef_name g)
+  tmp <- Sound.Osc.liftIO getTemporaryDirectory
+  let nm = Sound.Osc.ascii_to_string (Graphdef.graphdef_name g)
       fn = tmp </> nm <.> "scsyndef"
       by = Graphdef.encode_graphdef g
       sz = L.length by
   if sz < sc3_udp_limit
     then async (Command.d_recv_bytes by)
-    else liftIO (Graphdef.graphdefWrite fn g) >> async (Command.d_load fn)
+    else Sound.Osc.liftIO (Graphdef.graphdefWrite fn g) >> async (Command.d_load fn)
 
 -- | Send 'd_recv' and 's_new' messages to scsynth.
 playGraphdef :: Transport m => Play_Opt -> Graphdef.Graphdef -> m ()
-playGraphdef opt g = recv_or_load_graphdef g >> sendMessage (play_graphdef_msg opt g)
+playGraphdef opt g = recv_or_load_graphdef g >> Sound.Osc.sendMessage (play_graphdef_msg opt g)
 
 -- | Send 'd_recv' and 's_new' messages to scsynth.
 playSynthdef :: Transport m => Play_Opt -> Synthdef.Synthdef -> m ()
@@ -195,9 +199,9 @@ required.
 -}
 run_bundle :: Transport m => Double -> Time -> BundleOf Message -> m ()
 run_bundle latency t0 b = do
-  let t = t0 + bundleTime b
-  liftIO (pauseThreadUntil (t - latency))
-  mapM_ (maybe_async_at t) (bundleMessages b)
+  let t = t0 + Sound.Osc.bundleTime b
+  Sound.Osc.liftIO (Sound.Osc.pauseThreadUntil (t - latency))
+  mapM_ (maybe_async_at t) (Sound.Osc.bundleMessages b)
 
 {- | Play an 'Nrt' score (as would be rendered by 'writeNrt').
 
@@ -207,8 +211,8 @@ run_bundle latency t0 b = do
 -}
 nrt_play :: Transport m => Nrt.Nrt -> m ()
 nrt_play sc = do
-  t0 <- liftIO time
-  latency <- liftIO sc_latency
+  t0 <- Sound.Osc.liftIO Sound.Osc.time
+  latency <- Sound.Osc.liftIO sc_latency
   mapM_ (run_bundle latency t0) (Nrt.nrt_bundles sc)
 
 {- | Variant where asynchronous commands at time @0@ are separated out and run before
@@ -218,12 +222,12 @@ commands in relation to asynchronous at time @0@.
 nrt_play_reorder :: Transport m => Nrt.Nrt -> m ()
 nrt_play_reorder s = do
   let (i, r) = Nrt.nrt_span (<= 0) s
-      i' = concatMap bundleMessages i
+      i' = concatMap Sound.Osc.bundleMessages i
       (a, b) = Command.partition_async i'
   mapM_ async a
-  t0 <- liftIO time
-  latency <- liftIO sc_latency
-  mapM_ (run_bundle latency t0) (Bundle 0 b : r)
+  t0 <- Sound.Osc.liftIO Sound.Osc.time
+  latency <- Sound.Osc.liftIO sc_latency
+  mapM_ (run_bundle latency t0) (Sound.Osc.Bundle 0 b : r)
 
 -- | 'withSc3' of 'nrt_play'.
 nrt_audition :: Nrt.Nrt -> IO ()
@@ -295,8 +299,8 @@ withNotifications f = do
 b_getn1_data :: DuplexOsc m => Int -> (Int, Int) -> m [Double]
 b_getn1_data b s = do
   let f m = let (_, _, _, r) = Command.unpack_b_setn_err m in r
-  sendMessage (Command.b_getn1 b s)
-  fmap f (waitReply "/b_setn")
+  Sound.Osc.sendMessage (Command.b_getn1 b s)
+  fmap f (Sound.Osc.waitReply "/b_setn")
 
 {- | Variant of 'b_getn1_data' that segments individual 'b_getn'
 messages to /n/ elements.
@@ -322,8 +326,8 @@ b_fetch n b = do
             ix = (0, nf * nc)
             deinterleave = transpose . Split.chunksOf nc
         in fmap deinterleave (b_getn1_data_segment n b ix)
-  sendMessage (Command.b_query1 b)
-  waitReply "/b_info" >>= f
+  Sound.Osc.sendMessage (Command.b_query1 b)
+  Sound.Osc.waitReply "/b_info" >>= f
 
 {- | First channel of 'b_fetch', errors if there is no data.
 
@@ -342,8 +346,8 @@ b_fetch_hdr k b = do
 -- | 'b_info_unpack_err' of 'b_query1'.
 b_query1_unpack_generic :: (DuplexOsc m, Num n, Fractional r) => Int -> m (n, n, n, r)
 b_query1_unpack_generic n = do
-  sendMessage (Command.b_query1 n)
-  q <- waitReply "/b_info"
+  Sound.Osc.sendMessage (Command.b_query1 n)
+  q <- Sound.Osc.waitReply "/b_info"
   return (Generic.unpack_b_info_err q)
 
 {- | Type specialised 'b_query1_unpack_generic'.
@@ -357,16 +361,16 @@ b_query1_unpack = b_query1_unpack_generic
 c_getn1_data :: (DuplexOsc m, Floating t) => (Int, Int) -> m [t]
 c_getn1_data s = do
   let f d = case d of
-        Int32 _ : Int32 _ : x -> mapMaybe datum_floating x
+        Sound.Osc.Int32 _ : Sound.Osc.Int32 _ : x -> mapMaybe Sound.Osc.datum_floating x
         _ -> error "c_getn1_data"
-  sendMessage (Command.c_getn1 s)
-  fmap f (waitDatum "/c_setn")
+  Sound.Osc.sendMessage (Command.c_getn1 s)
+  fmap f (Sound.Osc.waitDatum "/c_setn")
 
 -- | Apply /f/ to result of 'n_query'.
 n_query1_unpack_f :: DuplexOsc m => (Message -> t) -> Command.Node_Id -> m t
 n_query1_unpack_f f n = do
-  sendMessage (Command.n_query [n])
-  r <- waitReply "/n_info"
+  Sound.Osc.sendMessage (Command.n_query [n])
+  r <- Sound.Osc.waitReply "/n_info"
   return (f r)
 
 -- | Variant of 'n_query' that waits for and unpacks the reply.
@@ -380,9 +384,9 @@ n_query1_unpack_plain = n_query1_unpack_f Command.unpack_n_info_plain
 -- | Variant of 'g_queryTree' that waits for and unpacks the reply.
 g_queryTree1_unpack :: DuplexOsc m => Command.Group_Id -> m Status.Query_Node
 g_queryTree1_unpack n = do
-  sendMessage (Command.g_queryTree [(n, True)])
-  r <- waitReply "/g_queryTree.reply"
-  return (Status.queryTree (messageDatum r))
+  Sound.Osc.sendMessage (Command.g_queryTree [(n, True)])
+  r <- Sound.Osc.waitReply "/g_queryTree.reply"
+  return (Status.queryTree (Sound.Osc.messageDatum r))
 
 -- * Status
 
@@ -417,8 +421,8 @@ serverSampleRateActual = fmap (Status.extractStatusField 8) serverStatusData
 -- | Retrieve status data from server.
 serverStatusData :: DuplexOsc m => m [Datum]
 serverStatusData = do
-  sendMessage Command.status
-  waitDatum "/status.reply"
+  Sound.Osc.sendMessage Command.status
+  Sound.Osc.waitDatum "/status.reply"
 
 -- * Tree
 
