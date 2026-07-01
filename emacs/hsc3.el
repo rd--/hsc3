@@ -288,7 +288,7 @@ If STR has a newline the layout is adjusted accordingly."
 (defun hsc3-with-sc3 (txt)
   "Sound.Sc3.withSc3 at `hsc3-server-host' and `hsc3-server-port' of the string TXT."
   (hsc3-send-line
-   (format "Sound.Sc3.withSc3At (%s,\"%s\",%d) %s" (hsc3-server-protocol) (hsc3-server-host) (hsc3-server-port) txt)))
+   (format "Sound.Sc3.withSc3At (Sound.Osc.%s,\"%s\",%d) %s" (hsc3-server-protocol) (hsc3-server-host) (hsc3-server-port) txt)))
 
 (defun hsc3-reset-scsynth ()
   "Send Sc3 reset instruction to haskell."
