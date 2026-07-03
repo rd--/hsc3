@@ -1,7 +1,7 @@
 -- | Nrt editing
 module Sound.Sc3.Server.Nrt.Edit where
 
-import Data.List {- base -}
+import qualified Data.List {- base -}
 
 import qualified Data.List.Ordered {- data-ordlist -}
 
@@ -26,7 +26,7 @@ nrt_empty = Nrt []
 
 -- | Add bundle at first permissable location of Nrt.
 nrt_insert_pre :: Osc.BundleOf Osc.Message -> Nrt -> Nrt
-nrt_insert_pre p (Nrt q) = Nrt (insert p q)
+nrt_insert_pre p (Nrt q) = Nrt (Data.List.insert p q)
 
 -- | Add bundle at last permissable location of Nrt.
 nrt_insert_post :: Osc.BundleOf Osc.Message -> Nrt -> Nrt

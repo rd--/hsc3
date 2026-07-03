@@ -1,11 +1,11 @@
 -- | Non-realtime score rendering.
 module Sound.Sc3.Server.Nrt.Render where
 
-import System.FilePath {- filepath -}
-import System.Process {- process -}
+import qualified System.FilePath {- filepath -}
+import qualified System.Process {- process -}
 
-import Sound.Sc3.Server.Enum
-import Sound.Sc3.Server.Nrt
+import qualified Sound.Sc3.Server.Enum as Enum {- hsc3 -}
+import qualified Sound.Sc3.Server.Nrt as Nrt {- hsc3 -}
 
 {- | Minimal Nrt rendering parameters.
 
@@ -18,7 +18,7 @@ sample rate (int),
 sample format,
 further parameters (ie. ["-m","32768"]) to be inserted before the Nrt -N option.
 -}
-type Nrt_Param_Plain = (FilePath, (FilePath, Int), (FilePath, Int), Int, SampleFormat, [String])
+type Nrt_Param_Plain = (FilePath, (FilePath, Int), (FilePath, Int), Int, Enum.SampleFormat, [String])
 
 {- | Compile argument list from Nrt_Param_Plain.
 
@@ -28,8 +28,8 @@ type Nrt_Param_Plain = (FilePath, (FilePath, Int), (FilePath, Int), Int, SampleF
 -}
 nrt_param_plain_to_arg :: Nrt_Param_Plain -> [String]
 nrt_param_plain_to_arg (osc_nm, (in_sf, in_nc), (out_sf, out_nc), sr, sf, param) =
-  let sf_ty = case takeExtension out_sf of
-        '.' : ext -> soundFileFormat_from_extension_err ext
+  let sf_ty = case System.FilePath.takeExtension out_sf of
+        '.' : ext -> Enum.soundFileFormat_from_extension_err ext
         _ -> error "nrt_exec_plain: invalid sf extension"
   in concat
       [
@@ -45,8 +45,8 @@ nrt_param_plain_to_arg (osc_nm, (in_sf, in_nc), (out_sf, out_nc), sr, sf, param)
         , in_sf
         , out_sf
         , show sr
-        , soundFileFormatString sf_ty
-        , sampleFormatString sf
+        , Enum.soundFileFormatString sf_ty
+        , Enum.sampleFormatString sf
         ]
       ]
 
@@ -55,29 +55,29 @@ nrt_param_plain_to_arg (osc_nm, (in_sf, in_nc), (out_sf, out_nc), sr, sf, param)
 > nrt_exec_plain opt
 -}
 nrt_exec_plain :: Nrt_Param_Plain -> IO ()
-nrt_exec_plain opt = callProcess "scsynth" (nrt_param_plain_to_arg opt)
+nrt_exec_plain opt = System.Process.callProcess "scsynth" (nrt_param_plain_to_arg opt)
 
 {- | Minimal Nrt rendering, for more control see Stefan Kersten's
 /hsc3-process/ package at:
 <https://github.com/kaoskorobase/hsc3-process>.
 -}
-nrt_proc_plain :: Nrt_Param_Plain -> Nrt -> IO ()
+nrt_proc_plain :: Nrt_Param_Plain -> Nrt.Nrt -> IO ()
 nrt_proc_plain opt sc = do
   let (osc_nm, _, _, _, _, _) = opt
-  writeNrt osc_nm sc
+  Nrt.writeNrt osc_nm sc
   nrt_exec_plain opt
 
 {- | Variant for no input case.
 
 (osc-file-name, audio-file-name, number-of-channels, sample-rate, sample-format, param)
 -}
-type Nrt_Render_Plain = (FilePath, FilePath, Int, Int, SampleFormat, [String])
+type Nrt_Render_Plain = (FilePath, FilePath, Int, Int, Enum.SampleFormat, [String])
 
 {- | Add ("-",0) as input parameters and run 'nrt_proc_plain'.
 
 > nrt_render_plain opt sc
 -}
-nrt_render_plain :: Nrt_Render_Plain -> Nrt -> IO ()
+nrt_render_plain :: Nrt_Render_Plain -> Nrt.Nrt -> IO ()
 nrt_render_plain (osc_nm, sf_nm, nc, sr, sf, param) sc =
   let opt = (osc_nm, ("_", 0), (sf_nm, nc), sr, sf, param)
   in nrt_proc_plain opt sc
