@@ -72,6 +72,8 @@ sc3_default_address = (Sound.Osc.Tcp, "127.0.0.1", 57110)
 {- | Lookup ScSynth address at ScHostname and ScPort.
 If either is no set default values are used.
 
+Cf. `defaultSc3OscSocketAddress`
+
 >>> import System.Environment
 >>> setEnv "ScHostname" "192.168.1.53"
 >>> sc3_env_or_default_address

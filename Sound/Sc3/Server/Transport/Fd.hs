@@ -45,6 +45,8 @@ maybe_async_at fd t m =
 
 {- | Read ScProtocol, ScHostname and ScPort environment variables.
 Default values are: Tcp, 127.0.0.1 and 57110.
+
+Cf. `sc3_env_or_default_address`
 -}
 defaultSc3OscSocketAddress :: IO OscSocketAddress
 defaultSc3OscSocketAddress = do
