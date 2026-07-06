@@ -79,7 +79,7 @@ Initial announcement:
 * * *
 
 ```
-$ doctest Sound/Sc3
-Examples: 370  Tried: 370  Errors: 0  Failures: 0
+$ doctest -i Sound/Sc3
+Examples: 391  Tried: 391  Errors: 0  Failures: 0
 $
 ```

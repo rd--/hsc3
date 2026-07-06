@@ -22,7 +22,7 @@ type Nrt_Param_Plain = (FilePath, (FilePath, Int), (FilePath, Int), Int, Enum.Sa
 
 {- | Compile argument list from Nrt_Param_Plain.
 
->>> let opt = ("/tmp/t.osc",("_",0),("/tmp/t.wav",1),48000,PcmInt16,[])
+>>> let opt = ("/tmp/t.osc",("_",0),("/tmp/t.wav",1),48000,Enum.PcmInt16,[])
 >>> nrt_param_plain_to_arg opt
 ["-i","0","-o","1","-N","/tmp/t.osc","_","/tmp/t.wav","48000","wav","int16"]
 -}
@@ -50,10 +50,7 @@ nrt_param_plain_to_arg (osc_nm, (in_sf, in_nc), (out_sf, out_nc), sr, sf, param)
         ]
       ]
 
-{- | Compile argument list from Nrt_Param_Plain and run scynth.
-
-> nrt_exec_plain opt
--}
+{- | Compile argument list from Nrt_Param_Plain and run scynth. -}
 nrt_exec_plain :: Nrt_Param_Plain -> IO ()
 nrt_exec_plain opt = System.Process.callProcess "scsynth" (nrt_param_plain_to_arg opt)
 
@@ -73,10 +70,7 @@ nrt_proc_plain opt sc = do
 -}
 type Nrt_Render_Plain = (FilePath, FilePath, Int, Int, Enum.SampleFormat, [String])
 
-{- | Add ("-",0) as input parameters and run 'nrt_proc_plain'.
-
-> nrt_render_plain opt sc
--}
+{- | Add ("-",0) as input parameters and run 'nrt_proc_plain'. -}
 nrt_render_plain :: Nrt_Render_Plain -> Nrt.Nrt -> IO ()
 nrt_render_plain (osc_nm, sf_nm, nc, sr, sf, param) sc =
   let opt = (osc_nm, ("_", 0), (sf_nm, nc), sr, sf, param)

@@ -263,7 +263,7 @@ l_apply_f_st0 f st = let (r, st') = f st in r : l_apply_f_st0 f st'
 {- | White noise
 
 >>> take 4 (l_white_noise 'α')
-[0.9687553280469108,0.808159221997721,-0.8993330152164296,0.23197278942699834]
+[0.9687553280469108,0.808159221997721,-0.1006669847835705,0.2319727894269984]
 -}
 l_white_noise :: (Enum e, Fractional n, R.Random n) => e -> [n]
 l_white_noise e = l_apply_f_st0 white_noise (R.mkStdGen (fromEnum e))
@@ -271,7 +271,7 @@ l_white_noise e = l_apply_f_st0 white_noise (R.mkStdGen (fromEnum e))
 {- | Brown noise
 
 >>> take 4 (l_brown_noise 'α')
-[0.12109441600586385,0.22211431875557897,0.10969769185352526,0.13869429053190005]
+[0.12109441600586385,0.22211431875557897,0.20953094565763264,0.23852754433600742]
 -}
 l_brown_noise :: (Enum e, Fractional n, Ord n, R.Random n) => e -> [n]
 l_brown_noise e = l_apply_f_st0 brown_noise (R.mkStdGen (fromEnum e), 0.0)

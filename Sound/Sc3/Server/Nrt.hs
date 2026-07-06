@@ -31,21 +31,21 @@ nrt_span f = span (f . bundleTime) . nrt_bundles
 
 {- | Encode an 'Nrt' score.
 
-> import Sound.Osc
-> import qualified Sound.Sc3 as Sc3
-> import qualified Data.Digest.Murmur64 as Hash
-> m1 = g_new [(1, AddToTail, 0)]
-> m2 = d_recv (synthdef "sin" (out 0 (sinOsc ar 660 0 * 0.15)))
-> m3 = s_new "sin" 100 AddToTail 1 []
-> m4 = n_free [100]
-> m5 = nrt_end
-> sc = Nrt [bundle 0 [m1,m2],bundle 1 [m3],bundle 10 [m4],bundle 15 [m5]]
-> let b = encodeNrt sc
-> let d = decodeNrt b
-> Hash.hash64 b
+>>> import Sound.Osc
+>>> import Sound.Sc3 hiding (Nrt, decodeNrt, encodeNrt)
+>>> import qualified Data.Digest.Murmur64 as Hash
+>>> let m1 = g_new [(1, AddToTail, 0)]
+>>> let m2 = d_recv (synthdef "sin" (out 0 (sinOsc ar 660 0 * 0.15)))
+>>> let m3 = s_new "sin" 100 AddToTail 1 []
+>>> let m4 = n_free [100]
+>>> let m5 = nrt_end
+>>> let sc = Nrt [bundle 0 [m1,m2],bundle 1 [m3],bundle 10 [m4],bundle 15 [m5]]
+>>> let b = encodeNrt sc
+>>> Hash.hash64 b
 Hash64 0x59f65af6bb615c3c
 
-> sc == d
+>>> let d = decodeNrt b
+>>> sc == d
 True
 -}
 encodeNrt :: Nrt -> ByteString.Lazy.ByteString
