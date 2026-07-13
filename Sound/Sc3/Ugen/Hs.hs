@@ -1,14 +1,13 @@
 -- | Haskell implementations of Sc3 Ugens.
 module Sound.Sc3.Ugen.Hs where
 
-import Data.List {- base -}
+import qualified Data.List {- base -}
 
 import qualified Safe {- safe -}
 import qualified System.Random as R {- random -}
 
-import Sound.Sc3.Common.Base
-import Sound.Sc3.Common.Math
-import qualified Sound.Sc3.Common.Math.Filter as Filter
+import qualified Sound.Sc3.Common.Math as Math {- hsc3 -}
+import qualified Sound.Sc3.Common.Math.Filter as Filter {- hsc3 -}
 
 -- | F = function, St = state
 type F_St0 st o = st -> (o, st)
@@ -26,9 +25,12 @@ type F_U7 n = n -> n -> n -> n -> n -> n -> n -> n
 type F_U8 n = n -> n -> n -> n -> n -> n -> n -> n -> n
 type F_U9 n = n -> n -> n -> n -> n -> n -> n -> n -> n -> n
 
--- | T = tuple (see Base for T2-T4)
-type T5 n = (n, n, n, n, n)
+-- | T = tuple
+type T2 n = (n, n)
 
+type T3 n = (n, n, n)
+type T4 n = (n, n, n, n)
+type T5 n = (n, n, n, n, n)
 type T6 n = (n, n, n, n, n, n)
 type T7 n = (n, n, n, n, n, n, n)
 type T8 n = (n, n, n, n, n, n, n, n)
@@ -77,7 +79,7 @@ fir8 f (n, (z7, z6, z5, z4, z3, z2, z1, z0)) = (f n z0 z1 z2 z3 z4 z5 z6 z7, (z6
 
 {- | iir = infinite impulse response
 
->> l_apply_f_st1 (iir1 (\x y1 -> x + y1)) 0 (replicate 10 1)
+>>> l_apply_f_st1 (iir1 (\x y1 -> x + y1)) 0 (replicate 10 1)
 [1,2,3,4,5,6,7,8,9,10]
 -}
 iir1 :: F_U2 n -> F_St1 n n n
@@ -143,7 +145,7 @@ mavg9 = fir8 avg9
 True
 -}
 sr_to_rps :: Floating n => n -> n
-sr_to_rps sr = two_pi / sr
+sr_to_rps sr = Math.two_pi / sr
 
 -- | resonz iir2_ff_fb function.  param are for 'Filter.resonz_coef'.
 resonz_f :: Floating n => T3 n -> (n -> n -> n -> T2 n)
@@ -237,18 +239,18 @@ as_trig (n, y1) = (y1 <= 0.0 && n > 0.0, n)
 
 phasor :: RealFrac t => F_St1 t (Bool, t, t, t, t) t
 phasor ((trig, rate, start, end, resetPos), ph) =
-  let r = if trig then resetPos else sc3_wrap (ph + rate) start end
+  let r = if trig then resetPos else Math.sc3_wrap (ph + rate) start end
   in (ph, r)
 
--- > Sound.Sc3.Plot.plot_fn_r1_ln (\x -> mod_dif x 0 1) (0,4)
+-- > Sound.Sc3.Plot.plot_fn_r1_ln [\x -> mod_dif x 0 1] (0,4)
 mod_dif :: RealFrac a => a -> a -> a -> a
 mod_dif i j m =
-  let d = absdif i j `sc3_mod` m
+  let d = Math.absdif i j `Math.sc3_mod` m
       h = m * 0.5
-  in h - absdif d h
+  in h - Math.absdif d h
 
 {-
--- > Sound.Sc3.Plot.plot_fn_r1_ln (\x -> modDif x 0 1) (0,4)
+-- > Sound.Sc3.Plot.plot_fn_r1_ln [\x -> modDif x 0 1] (0,4)
 modDif :: BinaryOp a => a -> a -> a -> a
 modDif i j m =
   let d = absDif i j `modE` m
@@ -296,19 +298,19 @@ l_slope sr = l_apply_f_st1 (slope sr) 0
 -}
 l_phasor :: RealFrac n => [Bool] -> [n] -> [n] -> [n] -> [n] -> [n]
 l_phasor trig rate start end resetPos =
-  let i = zip5 trig rate start end resetPos
+  let i = Data.List.zip5 trig rate start end resetPos
   in l_apply_f_st1 phasor (Safe.headNote "l_phasor" start) i
 
 l_phasor_osc :: RealFrac n => n -> n -> [n] -> [n]
 l_phasor_osc sr k f =
   let rp = repeat
-  in l_phasor (rp False) (map (cps_to_incr sr k) f) (rp 0) (rp k) (rp 0)
+  in l_phasor (rp False) (map (Math.cps_to_incr sr k) f) (rp 0) (rp k) (rp 0)
 
 l_sin_osc :: (Floating n, RealFrac n) => n -> [n] -> [n]
-l_sin_osc sr f = map sin (l_phasor_osc sr two_pi f)
+l_sin_osc sr f = map sin (l_phasor_osc sr Math.two_pi f)
 
 l_cos_osc :: (Floating n, RealFrac n) => n -> [n] -> [n]
-l_cos_osc sr f = map cos (l_phasor_osc sr two_pi f)
+l_cos_osc sr f = map cos (l_phasor_osc sr Math.two_pi f)
 
 l_hpz1 :: Fractional n => [n] -> [n]
 l_hpz1 = l_apply_f_st1 hpz1 0
@@ -349,7 +351,7 @@ l_mavg9 = l_apply_f_st1 mavg9 (0, 0, 0, 0, 0, 0, 0, 0)
 {-
 
 import Sound.Sc3.Plot {- hsc3-plot -}
-import Sound.Sc3.Plot.FFT {- hsc3-plot -}
+import Sound.Sc3.Plot.Fft {- hsc3-plot -}
 
 let n = take 4096 (l_white_noise 'α')
 let plotTable1 = plot_p1_ln . return
