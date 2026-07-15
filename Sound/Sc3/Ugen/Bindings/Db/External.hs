@@ -2326,13 +2326,6 @@ pv_SpectralMap buffer specBuffer floor_ freeze mode norm window = mkUgen Nothing
 
 {- | (Undocumented class)
 
- PV_Split [ControlRate] bufferA=0 bufferB=0
--}
-pv_Split :: Ugen -> Ugen -> Ugen
-pv_Split bufferA bufferB = mkUgen Nothing [ControlRate] (Left ControlRate) "PV_Split" [bufferA, bufferB] Nothing 2 (Special 0) NoId
-
-{- | (Undocumented class)
-
  PV_Whiten [ControlRate] chain=0 trackbufnum=0 relaxtime=2 floor=0.1 smear=0 bindownsample=0
 -}
 pv_Whiten :: Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
@@ -2443,13 +2436,6 @@ printVal rate in_ numblocks id_ = mkUgen Nothing [ControlRate] (Left rate) "Prin
 qitch :: Rate -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
 qitch rate in_ databufnum ampThreshold algoflag ampbufnum minfreq maxfreq = mkUgen Nothing [ControlRate] (Left rate) "Qitch" [in_, databufnum, ampThreshold, algoflag, ampbufnum, minfreq, maxfreq] Nothing 2 (Special 0) NoId
 
-{- | (Undocumented class)
-
- Bezier [ControlRate,AudioRate] haltAfter=100 dx=0.0001 freq=440 phase=0 *param=0;    MCE=1
--}
-bezier :: Rate -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
-bezier rate haltAfter dx freq phase param = mkUgen Nothing [ControlRate, AudioRate] (Left rate) "Bezier" [haltAfter, dx, freq, phase] (Just [param]) 1 (Special 0) NoId
-
 {- | rotating clock divider
 
  RCD [AudioRate] clock=0 rotate=0 reset=0 div=0 spread=0 auto=0 len=0 down=0 gates=0;    FILTER: TRUE
@@ -2457,127 +2443,12 @@ bezier rate haltAfter dx freq phase param = mkUgen Nothing [ControlRate, AudioRa
 rcd :: Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
 rcd clock rotate_ reset div_ spread auto len down gates = mkUgen Nothing [AudioRate] (Right [0]) "RCD" [clock, rotate_, reset, div_, spread, auto, len, down, gates] Nothing 8 (Special 0) NoId
 
-{- | (Undocumented class)
-
- RDL [AudioRate] numChannels=1 inputArray=0
--}
-rdl :: Rate -> Ugen -> Ugen -> Ugen
-rdl rate numChannels inputArray = mkUgen Nothing [AudioRate] (Left rate) "RDL" [numChannels, inputArray] Nothing 1 (Special 0) NoId
-
-{- | (Undocumented class)
-
- DX7 [AudioRate] bufnum=0 on=0 off=0 data=0 vc=0 mnn=60 vel=99 pw=0 mw=0 bc=0 fc=0
--}
-dx7 :: Rate -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
-dx7 rate bufnum on off data_ vc mnn vel pw mw bc fc = mkUgen Nothing [AudioRate] (Left rate) "DX7" [bufnum, on, off, data_, vc, mnn, vel, pw, mw, bc, fc] Nothing 1 (Special 0) NoId
-
-{- | (Undocumented class)
-
- RDX7Env [AudioRate] gate=0 data=0 r1=0 r2=0 r3=0 r4=0 l1=0 l2=0 l3=0 l4=0 ol=0
--}
-rdx7Env :: Rate -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
-rdx7Env rate gate_ data_ r1 r2 r3 r4 l1 l2 l3 l4 ol = mkUgen Nothing [AudioRate] (Left rate) "RDX7Env" [gate_, data_, r1, r2, r3, r4, l1, l2, l3, l4, ol] Nothing 1 (Special 0) NoId
-
-{- | (Undocumented class)
-
- RDelayMap [AudioRate] bufnum=0 in=0 dynamic=0 *spec=0;    MCE=1, FILTER: TRUE
--}
-rDelayMap :: Ugen -> Ugen -> Ugen -> Ugen -> Ugen
-rDelayMap bufnum in_ dynamic spec = mkUgen Nothing [AudioRate] (Right [1]) "RDelayMap" [bufnum, in_, dynamic] (Just [spec]) 1 (Special 0) NoId
-
-{- | (Undocumented class)
-
- RDelaySet [AudioRate] input=0 *setArray=0;    MCE=1, FILTER: TRUE
--}
-rDelaySet :: Ugen -> Ugen -> Ugen
-rDelaySet input setArray = mkUgen Nothing [AudioRate] (Right [0]) "RDelaySet" [input] (Just [setArray]) 1 (Special 0) NoId
-
-{- | (Undocumented class)
-
- RDelaySetBuf [AudioRate] bufnum=0 in=0 spec=0
--}
-rDelaySetBuf :: Rate -> Ugen -> Ugen -> Ugen -> Ugen
-rDelaySetBuf rate bufnum in_ spec = mkUgen Nothing [AudioRate] (Left rate) "RDelaySetBuf" [bufnum, in_, spec] Nothing 1 (Special 0) NoId
-
-{- | (Undocumented class)
-
- dustRange [AudioRate] iot_min=0.1 iot_max=1
--}
-dustRangeId :: ID a => a -> Rate -> Ugen -> Ugen -> Ugen
-dustRangeId z rate iot_min iot_max = mkUgen Nothing [AudioRate] (Left rate) "DustRange" [iot_min, iot_max] Nothing 1 (Special 0) (toUid z)
-
-{- | (Undocumented class)
-
- ExpRandN [InitialisationRate] lo=0 hi=1;    NC INPUT: True, NONDET
--}
-expRandNId :: ID a => Int -> a -> Ugen -> Ugen -> Ugen
-expRandNId numChannels z lo hi = mkUgen Nothing [InitialisationRate] (Left InitialisationRate) "ExpRandN" [lo, hi] Nothing numChannels (Special 0) (toUid z)
-
--- | Monad variant of ExpRandN.
-expRandNM :: Uid m => Int -> Ugen -> Ugen -> m Ugen
-expRandNM nc = liftUid2 (expRandNId nc)
-
--- | Unsafe variant of ExpRandN.
-expRandN :: Int -> Ugen -> Ugen -> Ugen
-expRandN nc = liftUnsafe2 (expRandNM nc)
-
-{- | (Undocumented class)
-
- Freezer [AudioRate] bufnum=0 left=0 right=1 gain=1 increment=1 incrementOffset=0 incrementRandom=0 rightRandom=0 syncPhaseTrigger=0 randomizePhaseTrigger=0 numberOfLoops=4
--}
-freezer :: Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
-freezer bufnum left right gain increment incrementOffset incrementRandom rightRandom syncPhaseTrigger randomizePhaseTrigger numberOfLoops = mkUgen Nothing [AudioRate] (Left AudioRate) "Freezer" [bufnum, left, right, gain, increment, incrementOffset, incrementRandom, rightRandom, syncPhaseTrigger, randomizePhaseTrigger, numberOfLoops] Nothing 1 (Special 0) NoId
-
-{- | (Undocumented class)
-
- IRandN [] numChannels=2 lo=0 hi=127
--}
-iRandNId :: ID a => a -> Int -> Ugen -> Ugen -> Ugen
-iRandNId z numChannels lo hi = mkUgen Nothing [InitialisationRate] (Left InitialisationRate) "IRandN" [lo, hi] Nothing numChannels (Special 0) (toUid z)
-
--- | Monad variant of IRandN.
-iRandNM :: Uid m => Int -> Ugen -> Ugen -> m Ugen
-iRandNM nc = liftUid2 (iRandNId nc)
-
--- | Unsafe variant of IRandN.
-iRandN :: Int -> Ugen -> Ugen -> Ugen
-iRandN nc = liftUnsafe2 (iRandNM nc)
-
 {- | TB303 Filter Emulation
 
  RLPFD [ControlRate,AudioRate] in=0 ffreq=440 res=0 dist=0;    FILTER: TRUE
 -}
 rlpfd :: Ugen -> Ugen -> Ugen -> Ugen -> Ugen
 rlpfd in_ ffreq res dist = mkUgen Nothing [ControlRate, AudioRate] (Right [0]) "RLPFD" [in_, ffreq, res, dist] Nothing 1 (Special 0) NoId
-
-{- | (Undocumented class)
-
- RLagC [ControlRate] in=0 timeUp=0.1 curveUp=0 timeDown=0.1 curveDown=0;    FILTER: TRUE
--}
-rLagC :: Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
-rLagC in_ timeUp curveUp timeDown curveDown = mkUgen Nothing [ControlRate] (Right [0]) "RLagC" [in_, timeUp, curveUp, timeDown, curveDown] Nothing 1 (Special 0) NoId
-
-{- | (Undocumented class)
-
- LinRandN [InitialisationRate] lo=0 hi=1 minmax=0;    NC INPUT: True, NONDET
--}
-linRandNId :: ID a => Int -> a -> Ugen -> Ugen -> Ugen -> Ugen
-linRandNId numChannels z lo hi minmax = mkUgen Nothing [InitialisationRate] (Left InitialisationRate) "LinRandN" [lo, hi, minmax] Nothing numChannels (Special 0) (toUid z)
-
--- | Monad variant of LinRandN.
-linRandNM :: Uid m => Int -> Ugen -> Ugen -> Ugen -> m Ugen
-linRandNM nc = liftUid3 (linRandNId nc)
-
--- | Unsafe variant of LinRandN.
-linRandN :: Int -> Ugen -> Ugen -> Ugen -> Ugen
-linRandN nc = liftUnsafe3 (linRandNM nc)
-
-{- | (Undocumented class)
-
- RLoopSet [AudioRate] bufnum=0 left=0 right=1 gain=1 increment=1 spec=0
--}
-rLoopSet :: Rate -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
-rLoopSet rate bufnum left right gain increment spec = mkUgen Nothing [AudioRate] (Left rate) "RLoopSet" [bufnum, left, right, gain, increment, spec] Nothing 1 (Special 0) NoId
 
 {- | (Undocumented class)
 
@@ -2620,151 +2491,6 @@ rmShelf rate in_ freq k = mkUgen Nothing [AudioRate] (Left rate) "RMShelf" [in_,
 -}
 rmShelf2 :: Rate -> Ugen -> Ugen -> Ugen -> Ugen
 rmShelf2 rate in_ freq k = mkUgen Nothing [AudioRate] (Left rate) "RMShelf2" [in_, freq, k] Nothing 1 (Special 0) NoId
-
-{- | (Undocumented class)
-
- ObxdFilter [AudioRate] in=0 cutoff=440 resonance=0 multimode=0.5 bandpass=0 fourpole=0
--}
-obxdFilter :: Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
-obxdFilter in_ cutoff resonance multimode bandpass fourpole = mkUgen Nothing [AudioRate] (Right [0]) "ObxdFilter" [in_, cutoff, resonance, multimode, bandpass, fourpole] Nothing 1 (Special 0) NoId
-
-{- | (Undocumented class)
-
- RPVDecayTbl [] fft_buf=0 decay_rate_buf=0 history_buf=0
--}
-rpvDecayTbl :: Ugen -> Ugen -> Ugen -> Ugen
-rpvDecayTbl fft_buf decay_rate_buf history_buf = mkUgen Nothing [ControlRate] (Left ControlRate) "RPVDecayTbl" [fft_buf, decay_rate_buf, history_buf] Nothing 1 (Special 0) NoId
-
-{- | (Undocumented class)
-
- RandN [InitialisationRate] lo=0 hi=1;    NC INPUT: True, NONDET
--}
-randNId :: ID a => Int -> a -> Ugen -> Ugen -> Ugen
-randNId numChannels z lo hi = mkUgen Nothing [InitialisationRate] (Left InitialisationRate) "RandN" [lo, hi] Nothing numChannels (Special 0) (toUid z)
-
--- | Monad variant of RandN.
-randNM :: Uid m => Int -> Ugen -> Ugen -> m Ugen
-randNM nc = liftUid2 (randNId nc)
-
--- | Unsafe variant of RandN.
-randN :: Int -> Ugen -> Ugen -> Ugen
-randN nc = liftUnsafe2 (randNM nc)
-
-{- | (Undocumented class)
-
- RSVFBP [AudioRate] in=0 freq=440 q=0
--}
-svfBp :: Ugen -> Ugen -> Ugen -> Ugen
-svfBp in_ freq q = mkUgen Nothing [AudioRate] (Right [0]) "SvfBp" [in_, freq, q] Nothing 1 (Special 0) NoId
-
-{- | (Undocumented class)
-
- SvfHp [AudioRate] in=0 freq=440 q=0
--}
-svfHp :: Ugen -> Ugen -> Ugen -> Ugen
-svfHp in_ freq q = mkUgen Nothing [AudioRate] (Right [0]) "SvfHp" [in_, freq, q] Nothing 1 (Special 0) NoId
-
-{- | (Undocumented class)
-
- SvflP [AudioRate] in=0 freq=440 q=0
--}
-svfLp :: Ugen -> Ugen -> Ugen -> Ugen
-svfLp in_ freq q = mkUgen Nothing [AudioRate] (Right [0]) "SvfLp" [in_, freq, q] Nothing 1 (Special 0) NoId
-
-{- | (Undocumented class)
-
- ShufflerB [AudioRate] bufnum=0 readLocationMinima=0.01 readLocationMaxima=0.02 readIncrementMinima=1 readIncrementMaxima=1 durationMinima=0.2 durationMaxima=0.2 envelopeAmplitudeMinima=0.5 envelopeAmplitudeMaxima=0.5 envelopeShapeMinima=0.5 envelopeShapeMaxima=0.5 envelopeSkewMinima=0.5 envelopeSkewMaxima=0.5 stereoLocationMinima=0.5 stereoLocationMaxima=0.5 interOffsetTimeMinima=0.05 interOffsetTimeMaxima=0.01 ftableReadLocationIncrement=1 readIncrementQuanta=0 interOffsetTimeQuanta=0
--}
-shufflerB :: Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
-shufflerB bufnum readLocationMinima readLocationMaxima readIncrementMinima readIncrementMaxima durationMinima durationMaxima envelopeAmplitudeMinima envelopeAmplitudeMaxima envelopeShapeMinima envelopeShapeMaxima envelopeSkewMinima envelopeSkewMaxima stereoLocationMinima stereoLocationMaxima interOffsetTimeMinima interOffsetTimeMaxima ftableReadLocationIncrement readIncrementQuanta interOffsetTimeQuanta = mkUgen Nothing [AudioRate] (Left AudioRate) "ShufflerB" [bufnum, readLocationMinima, readLocationMaxima, readIncrementMinima, readIncrementMaxima, durationMinima, durationMaxima, envelopeAmplitudeMinima, envelopeAmplitudeMaxima, envelopeShapeMinima, envelopeShapeMaxima, envelopeSkewMinima, envelopeSkewMaxima, stereoLocationMinima, stereoLocationMaxima, interOffsetTimeMinima, interOffsetTimeMaxima, ftableReadLocationIncrement, readIncrementQuanta, interOffsetTimeQuanta] Nothing 2 (Special 0) NoId
-
-{- | (Undocumented class)
-
- RShufflerL [AudioRate] in=0 fragmentSize=0.01 maxDelay=0.01
--}
-rShufflerL :: Ugen -> Ugen -> Ugen -> Ugen
-rShufflerL in_ fragmentSize maxDelay = mkUgen Nothing [AudioRate] (Right [0]) "RShufflerL" [in_, fragmentSize, maxDelay] Nothing 1 (Special 0) NoId
-
-{- | (Undocumented class)
-
- RSmplrIndex [ControlRate] buf=0 size=0 mnn=60
--}
-rSmplrIndex :: Rate -> Ugen -> Ugen -> Ugen -> Ugen
-rSmplrIndex rate buf size mnn = mkUgen Nothing [ControlRate] (Left rate) "RSmplrIndex" [buf, size, mnn] Nothing 2 (Special 0) NoId
-
-{- | (Undocumented class)
-
- TExpRandN [ControlRate] lo=0 hi=1 trigger=0;    NC INPUT: True, FILTER: TRUE, NONDET
--}
-tExpRandNId :: ID a => Int -> a -> Ugen -> Ugen -> Ugen -> Ugen
-tExpRandNId numChannels z lo hi trigger = mkUgen Nothing [ControlRate] (Right [2]) "TExpRandN" [lo, hi, trigger] Nothing numChannels (Special 0) (toUid z)
-
--- | Monad variant of TExpRandN.
-tExpRandNM :: Uid m => Int -> Ugen -> Ugen -> Ugen -> m Ugen
-tExpRandNM nc = liftUid3 (tExpRandNId nc)
-
--- | Unsafe variant of TExpRandN.
-tExpRandN :: Int -> Ugen -> Ugen -> Ugen -> Ugen
-tExpRandN nc = liftUnsafe3 (tExpRandNM nc)
-
-{- | (Undocumented class)
-
- TLinRandN [ControlRate] lo=0 hi=1 minmax=0 trigger=0;    NC INPUT: True, FILTER: TRUE, NONDET
--}
-tLinRandNId :: ID a => Int -> a -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
-tLinRandNId numChannels z lo hi minmax trigger = mkUgen Nothing [ControlRate] (Right [3]) "TLinRandN" [lo, hi, minmax, trigger] Nothing numChannels (Special 0) (toUid z)
-
--- | Monad variant of TLinRandN.
-tLinRandNM :: Uid m => Int -> Ugen -> Ugen -> Ugen -> Ugen -> m Ugen
-tLinRandNM nc = liftUid4 (tLinRandNId nc)
-
--- | Unsafe variant of TLinRandN.
-tLinRandN :: Int -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
-tLinRandN nc = liftUnsafe4 (tLinRandNM nc)
-
-{- | (Undocumented class)
-
- TRandN [ControlRate] lo=0 hi=1 trigger=0;    NC INPUT: True, FILTER: TRUE, NONDET
--}
-tRandNId :: ID a => Int -> a -> Ugen -> Ugen -> Ugen -> Ugen
-tRandNId numChannels z lo hi trigger = mkUgen Nothing [ControlRate] (Right [2]) "TRandN" [lo, hi, trigger] Nothing numChannels (Special 0) (toUid z)
-
--- | Monad variant of TRandN.
-tRandNM :: Uid m => Int -> Ugen -> Ugen -> Ugen -> m Ugen
-tRandNM nc = liftUid3 (tRandNId nc)
-
--- | Unsafe variant of TRandN.
-tRandN :: Int -> Ugen -> Ugen -> Ugen -> Ugen
-tRandN nc = liftUnsafe3 (tRandNM nc)
-
-{- | (Undocumented class)
-
- TScramble [InitialisationRate,ControlRate] trigger=0 *inputs=0;    MCE=1, FILTER: TRUE, NONDET
--}
-tScrambleId :: ID a => a -> Ugen -> Ugen -> Ugen
-tScrambleId z trigger inputs = mkUgen Nothing [InitialisationRate, ControlRate] (Right [0]) "TScramble" [trigger] (Just [inputs]) (length (mceChannels inputs) + 0) (Special 0) (toUid z)
-
--- | Monad variant of TScramble.
-tScrambleM :: Uid m => Ugen -> Ugen -> m Ugen
-tScrambleM = liftUid2 tScrambleId
-
--- | Unsafe variant of TScramble.
-tScramble :: Ugen -> Ugen -> Ugen
-tScramble = liftUnsafe2 tScrambleM
-
-{- | (Undocumented class)
-
- RTracePlay [ControlRate,AudioRate] bufnum=0 degree=4 rate=0 axis=1
--}
-rTracePlay :: Rate -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
-rTracePlay rate bufnum degree rate_ axis = mkUgen Nothing [ControlRate, AudioRate] (Left rate) "RTracePlay" [bufnum, degree, rate_, axis] Nothing 1 (Special 0) NoId
-
-{- | (Undocumented class)
-
- RTraceRd [ControlRate,AudioRate] bufnum=0 degree=4 index=0 axis=1
--}
-rTraceRd :: Rate -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
-rTraceRd rate bufnum degree index_ axis = mkUgen Nothing [ControlRate, AudioRate] (Left rate) "RTraceRd" [bufnum, degree, index_, axis] Nothing 1 (Special 0) NoId
 
 {- | differential pulse-code modulation
 
@@ -3539,3 +3265,235 @@ wrapSummer rate trig_ step min_ max_ reset resetval = mkUgen Nothing [ControlRat
 -}
 zOsc :: Rate -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
 zOsc rate freq formantfreq shape mode = mkUgen Nothing [ControlRate, AudioRate] (Left rate) "ZOsc" [freq, formantfreq, shape, mode] Nothing 1 (Special 0) NoId
+
+-- | Copies spectral frame (ie. PV_Copy with two outputs).
+--
+--  PV_Split kr bufferA=0 bufferB=0
+pv_Split :: Ugen -> Ugen -> Ugen
+pv_Split bufferA bufferB = mkUgen Nothing [ControlRate] (Left ControlRate) "PV_Split" [bufferA,bufferB] Nothing 2 (Special 0) NoId
+
+-- | Bezier curve oscillator.
+--
+--  Bezier kr|ar haltAfter=100 dx=0.0001 freq=440 phase=0 *param=0;    Mce=1
+bezier :: Rate -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
+bezier rate haltAfter dx freq phase param = mkUgen Nothing [ControlRate,AudioRate] (Left rate) "Bezier" [haltAfter,dx,freq,phase] (Just [param]) 1 (Special 0) NoId
+
+-- | Network of delay line maps
+--
+--  DelayMap ar bufnum=0 input=0 dynamic=0 *mapArray=0;    Mce=1, Filter: true
+delayMap :: Ugen -> Ugen -> Ugen -> Ugen -> Ugen
+delayMap bufnum input dynamic mapArray = mkUgen Nothing [AudioRate] (Right [1]) "DelayMap" [bufnum,input,dynamic] (Just [mapArray]) 1 (Special 0) NoId
+
+-- | Delay set (Buffer)
+--
+--  DelaySetBuf ar buffer=0 input=0 *setArray=0;    Mce=1, Filter: true
+delaySetBuf :: Ugen -> Ugen -> Ugen -> Ugen
+delaySetBuf buffer input setArray = mkUgen Nothing [AudioRate] (Right [1]) "DelaySetBuf" [buffer,input] (Just [setArray]) 1 (Special 0) NoId
+
+-- | Delay set (RTAlloc)
+--
+--  DelaySet ar input=0 *setArray=0;    Mce=1, Filter: true
+delaySet :: Ugen -> Ugen -> Ugen
+delaySet input setArray = mkUgen Nothing [AudioRate] (Right [0]) "DelaySet" [input] (Just [setArray]) 1 (Special 0) NoId
+
+-- | Dynamic library host
+--
+--  Dl ar *inputs=0;    Mce=1, Nc Input: True
+dl :: Int -> Ugen -> Ugen
+dl numChannels inputs = mkUgen Nothing [AudioRate] (Left AudioRate) "Dl" [] (Just [inputs]) numChannels (Special 0) NoId
+
+-- | Range variant of Dust
+--
+--  DustRange ar lo=0.0001 hi=1;    Nondet
+dustRangeId :: ID a => a -> Ugen -> Ugen -> Ugen
+dustRangeId z lo hi = mkUgen Nothing [AudioRate] (Left AudioRate) "DustRange" [lo,hi] Nothing 1 (Special 0) (toUid z)
+
+-- | Monad variant of DustRange.
+dustRangeM :: Uid m => Ugen -> Ugen -> m Ugen
+dustRangeM = liftUid2 dustRangeId
+
+-- | Unsafe variant of DustRange.
+dustRangeU :: Ugen -> Ugen -> Ugen
+dustRangeU = liftUnsafe2 dustRangeM
+
+-- | Dx7Env
+--
+--  Dx7Env ar gate=0 data=0 r1=99 r2=99 r3=99 r4=99 l1=99 l2=99 l3=99 l4=0 ol=0
+dx7Env :: Rate -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
+dx7Env rate gate_ data_ r1 r2 r3 r4 l1 l2 l3 l4 ol = mkUgen Nothing [AudioRate] (Left rate) "Dx7Env" [gate_,data_,r1,r2,r3,r4,l1,l2,l3,l4,ol] Nothing 1 (Special 0) NoId
+
+-- | Dx7 (MFSA/DEXED)
+--
+--  Dx7 ar bufnum=0 on=0 off=0 data=0 vc=0 mnn=60 vel=99 pw=0 mw=0 bc=0 fc=0
+dx7 :: Rate -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
+dx7 rate bufnum on off data_ vc mnn vel pw mw bc fc = mkUgen Nothing [AudioRate] (Left rate) "Dx7" [bufnum,on,off,data_,vc,mnn,vel,pw,mw,bc,fc] Nothing 1 (Special 0) NoId
+
+-- | Multi-channel variant of ExpRand
+--
+--  ExpRandN ir lo=0.0001 hi=1;    Nc Input: True, Nondet
+expRandNId :: ID a => Int -> a -> Ugen -> Ugen -> Ugen
+expRandNId numChannels z lo hi = mkUgen Nothing [InitialisationRate] (Left InitialisationRate) "ExpRandN" [lo,hi] Nothing numChannels (Special 0) (toUid z)
+
+-- | Monad variant of ExpRandN.
+expRandNM :: Uid m => Int -> Ugen -> Ugen -> m Ugen
+expRandNM = liftUid3 expRandNId
+
+-- | Unsafe variant of ExpRandN.
+expRandNU :: Int -> Ugen -> Ugen -> Ugen
+expRandNU = liftUnsafe3 expRandNM
+
+-- | Concurrent loops at signal buffer
+--
+--  Freezer ar bufnum=0 left=0 right=1 gain=0.1 increment=1 incrementOffset=0 incrementRandom=0.05 rightRandom=0.05 syncPhaseTrigger=0 randomizePhaseTrigger=0 numberOfLoops=6
+freezer :: Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
+freezer bufnum left right gain increment incrementOffset incrementRandom rightRandom syncPhaseTrigger randomizePhaseTrigger numberOfLoops = mkUgen Nothing [AudioRate] (Left AudioRate) "Freezer" [bufnum,left,right,gain,increment,incrementOffset,incrementRandom,rightRandom,syncPhaseTrigger,randomizePhaseTrigger,numberOfLoops] Nothing 1 (Special 0) NoId
+
+-- | Multi-channel variant of irand
+--
+--  IRandN ir lo=0.0001 hi=1;    Nc Input: True, Nondet
+iRandNId :: ID a => Int -> a -> Ugen -> Ugen -> Ugen
+iRandNId numChannels z lo hi = mkUgen Nothing [InitialisationRate] (Left InitialisationRate) "IRandN" [lo,hi] Nothing numChannels (Special 0) (toUid z)
+
+-- | Monad variant of IRandN.
+iRandNM :: Uid m => Int -> Ugen -> Ugen -> m Ugen
+iRandNM = liftUid3 iRandNId
+
+-- | Unsafe variant of IRandN.
+iRandNU :: Int -> Ugen -> Ugen -> Ugen
+iRandNU = liftUnsafe3 iRandNM
+
+-- | LagUD variant with curve inputs.
+--
+--  LagC kr in=0 timeUp=0.1 curveUp=0 timeDown=0.1 curveDown=0;    Filter: true
+lagC :: Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
+lagC in_ timeUp curveUp timeDown curveDown = mkUgen Nothing [ControlRate] (Right [0]) "LagC" [in_,timeUp,curveUp,timeDown,curveDown] Nothing 1 (Special 0) NoId
+
+-- | Multi-channel variant of LinRand
+--
+--  LinRandN ir lo=0.0001 hi=1 minmax=0;    Nc Input: True, Nondet
+linRandNId :: ID a => Int -> a -> Ugen -> Ugen -> Ugen -> Ugen
+linRandNId numChannels z lo hi minmax = mkUgen Nothing [InitialisationRate] (Left InitialisationRate) "LinRandN" [lo,hi,minmax] Nothing numChannels (Special 0) (toUid z)
+
+-- | Monad variant of LinRandN.
+linRandNM :: Uid m => Int -> Ugen -> Ugen -> Ugen -> m Ugen
+linRandNM = liftUid4 linRandNId
+
+-- | Unsafe variant of LinRandN.
+linRandNU :: Int -> Ugen -> Ugen -> Ugen -> Ugen
+linRandNU = liftUnsafe4 linRandNM
+
+-- | Obxd 12/24-dB multi-mode filter
+--
+--  ObxdFilter ar in=0 cutoff=440 resonance=0 multimode=0.5 bandpass=0 fourpole=0;    Filter: true
+obxdFilter :: Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
+obxdFilter in_ cutoff resonance multimode bandpass fourpole = mkUgen Nothing [AudioRate] (Right [0]) "ObxdFilter" [in_,cutoff,resonance,multimode,bandpass,fourpole] Nothing 1 (Special 0) NoId
+
+-- | Decay bin magnitudes according to multipliers in table.
+--
+--  PV_DecayTable kr fft_buf=0 decay_rate_buf=0 history_buf=0
+pv_DecayTable :: Ugen -> Ugen -> Ugen -> Ugen
+pv_DecayTable fft_buf decay_rate_buf history_buf = mkUgen Nothing [ControlRate] (Left ControlRate) "PV_DecayTable" [fft_buf,decay_rate_buf,history_buf] Nothing 1 (Special 0) NoId
+
+-- | Multi-channel variant of Rand
+--
+--  RandN ir lo=0.0001 hi=1;    Nc Input: True, Nondet
+randNId :: ID a => Int -> a -> Ugen -> Ugen -> Ugen
+randNId numChannels z lo hi = mkUgen Nothing [InitialisationRate] (Left InitialisationRate) "RandN" [lo,hi] Nothing numChannels (Special 0) (toUid z)
+
+-- | Monad variant of RandN.
+randNM :: Uid m => Int -> Ugen -> Ugen -> m Ugen
+randNM = liftUid3 randNId
+
+-- | Unsafe variant of RandN.
+randNU :: Int -> Ugen -> Ugen -> Ugen
+randNU = liftUnsafe3 randNM
+
+-- | Digital State-Variable Filter (Band-pass)
+--
+--  SvfBp kr|ar in=0 freq=440 q=0;    Filter: true
+svfBp :: Ugen -> Ugen -> Ugen -> Ugen
+svfBp in_ freq q = mkUgen Nothing [ControlRate,AudioRate] (Right [0]) "SvfBp" [in_,freq,q] Nothing 1 (Special 0) NoId
+
+-- | Digital State-Variable Filter (High-pass)
+--
+--  SvfHp kr|ar in=0 freq=440 q=0;    Filter: true
+svfHp :: Ugen -> Ugen -> Ugen -> Ugen
+svfHp in_ freq q = mkUgen Nothing [ControlRate,AudioRate] (Right [0]) "SvfHp" [in_,freq,q] Nothing 1 (Special 0) NoId
+
+-- | Digital State-Variable Filter (Low-pass)
+--
+--  SvflP kr|ar in=0 freq=440 q=0;    Filter: true
+svflP :: Ugen -> Ugen -> Ugen -> Ugen
+svflP in_ freq q = mkUgen Nothing [ControlRate,AudioRate] (Right [0]) "SvflP" [in_,freq,q] Nothing 1 (Special 0) NoId
+
+-- | Find buffer index and rate multiplier given table of mnn.
+--
+--  SamplerIndex kr buf=0 size=0 mnn=60
+samplerIndex :: Rate -> Ugen -> Ugen -> Ugen -> Ugen
+samplerIndex rate buf size mnn = mkUgen Nothing [ControlRate] (Left rate) "SamplerIndex" [buf,size,mnn] Nothing 2 (Special 0) NoId
+
+-- | Signal shuffler (Buffer)
+--
+--  ShufflerB ar bufnum=0 readLocationMinima=0 readLocationMaxima=0 readIncrementMinima=1 readIncrementMaxima=1 durationMinima=0.005 durationMaxima=0.5 envelopeAmplitudeMinima=0.5 envelopeAmplitudeMaxima=0.5 envelopeShapeMinima=0.5 envelopeShapeMaxima=0.5 envelopeSkewMinima=0.5 envelopeSkewMaxima=0.5 stereoLocationMinima=0 stereoLocationMaxima=1 interOffsetTimeMinima=0.05 interOffsetTimeMaxima=0.05 ftableReadLocationIncrement=1 readIncrementQuanta=0 interOffsetTimeQuanta=0
+shufflerB :: Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
+shufflerB bufnum readLocationMinima readLocationMaxima readIncrementMinima readIncrementMaxima durationMinima durationMaxima envelopeAmplitudeMinima envelopeAmplitudeMaxima envelopeShapeMinima envelopeShapeMaxima envelopeSkewMinima envelopeSkewMaxima stereoLocationMinima stereoLocationMaxima interOffsetTimeMinima interOffsetTimeMaxima ftableReadLocationIncrement readIncrementQuanta interOffsetTimeQuanta = mkUgen Nothing [AudioRate] (Left AudioRate) "ShufflerB" [bufnum,readLocationMinima,readLocationMaxima,readIncrementMinima,readIncrementMaxima,durationMinima,durationMaxima,envelopeAmplitudeMinima,envelopeAmplitudeMaxima,envelopeShapeMinima,envelopeShapeMaxima,envelopeSkewMinima,envelopeSkewMaxima,stereoLocationMinima,stereoLocationMaxima,interOffsetTimeMinima,interOffsetTimeMaxima,ftableReadLocationIncrement,readIncrementQuanta,interOffsetTimeQuanta] Nothing 2 (Special 0) NoId
+
+-- | Signal shuffler (Linear)
+--
+--  ShufflerL ar in=0 fragmentSize=0.005 maxDelay=0.005;    Filter: true
+shufflerL :: Ugen -> Ugen -> Ugen -> Ugen
+shufflerL in_ fragmentSize maxDelay = mkUgen Nothing [AudioRate] (Right [0]) "ShufflerL" [in_,fragmentSize,maxDelay] Nothing 1 (Special 0) NoId
+
+-- | Generate new exponentially distributed random values on trigger.
+--
+--  TExpRandN kr lo=0 hi=1 trigger=0;    Nc Input: True, Filter: true, Nondet
+tExpRandNId :: ID a => Int -> a -> Ugen -> Ugen -> Ugen -> Ugen
+tExpRandNId numChannels z lo hi trigger = mkUgen Nothing [ControlRate] (Right [2]) "TExpRandN" [lo,hi,trigger] Nothing numChannels (Special 0) (toUid z)
+
+-- | Monad variant of TExpRandN.
+tExpRandNM :: Uid m => Int -> Ugen -> Ugen -> Ugen -> m Ugen
+tExpRandNM = liftUid4 tExpRandNId
+
+-- | Unsafe variant of TExpRandN.
+tExpRandNU :: Int -> Ugen -> Ugen -> Ugen -> Ugen
+tExpRandNU = liftUnsafe4 tExpRandNM
+
+-- | Generate new random values on trigger.
+--
+--  TRandN kr lo=0 hi=1 trigger=0;    Nc Input: True, Filter: true, Nondet
+tRandNId :: ID a => Int -> a -> Ugen -> Ugen -> Ugen -> Ugen
+tRandNId numChannels z lo hi trigger = mkUgen Nothing [ControlRate] (Right [2]) "TRandN" [lo,hi,trigger] Nothing numChannels (Special 0) (toUid z)
+
+-- | Monad variant of TRandN.
+tRandNM :: Uid m => Int -> Ugen -> Ugen -> Ugen -> m Ugen
+tRandNM = liftUid4 tRandNId
+
+-- | Unsafe variant of TRandN.
+tRandNU :: Int -> Ugen -> Ugen -> Ugen -> Ugen
+tRandNU = liftUnsafe4 tRandNM
+
+-- | Scramble inputs on trigger.
+--
+--  TScramble ir|kr trigger=0 *inputs=0;    Mce=1, Filter: true, Nondet
+tScrambleId :: ID a => a -> Ugen -> Ugen -> Ugen
+tScrambleId z trigger inputs = mkUgen Nothing [InitialisationRate,ControlRate] (Right [0]) "TScramble" [trigger] (Just [inputs]) (length (mceChannels inputs) + 0) (Special 0) (toUid z)
+
+-- | Monad variant of TScramble.
+tScrambleM :: Uid m => Ugen -> Ugen -> m Ugen
+tScrambleM = liftUid2 tScrambleId
+
+-- | Unsafe variant of TScramble.
+tScrambleU :: Ugen -> Ugen -> Ugen
+tScrambleU = liftUnsafe2 tScrambleM
+
+-- | Play trace buffer
+--
+--  TracePlay kr|ar bufnum=0 degree=4 rate=0 access=1
+tracePlay :: Rate -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
+tracePlay rate bufnum degree rate_ access = mkUgen Nothing [ControlRate,AudioRate] (Left rate) "TracePlay" [bufnum,degree,rate_,access] Nothing 1 (Special 0) NoId
+
+-- | Read trace buffer
+--
+--  TraceRead kr|ar bufnum=0 degree=4 index=0 access=1
+traceRead :: Rate -> Ugen -> Ugen -> Ugen -> Ugen -> Ugen
+traceRead rate bufnum degree index_ access = mkUgen Nothing [ControlRate,AudioRate] (Left rate) "TraceRead" [bufnum,degree,index_,access] Nothing 1 (Special 0) NoId
