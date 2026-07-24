@@ -3339,8 +3339,8 @@ expRandNM :: Uid m => Int -> Ugen -> Ugen -> m Ugen
 expRandNM = liftUid3 expRandNId
 
 -- | Unsafe variant of ExpRandN.
-expRandNU :: Int -> Ugen -> Ugen -> Ugen
-expRandNU = liftUnsafe3 expRandNM
+expRandN :: Int -> Ugen -> Ugen -> Ugen
+expRandN = liftUnsafe3 expRandNM
 
 -- | Concurrent loops at signal buffer
 --
@@ -3359,8 +3359,8 @@ iRandNM :: Uid m => Int -> Ugen -> Ugen -> m Ugen
 iRandNM = liftUid3 iRandNId
 
 -- | Unsafe variant of IRandN.
-iRandNU :: Int -> Ugen -> Ugen -> Ugen
-iRandNU = liftUnsafe3 iRandNM
+iRandN :: Int -> Ugen -> Ugen -> Ugen
+iRandN = liftUnsafe3 iRandNM
 
 -- | LagUD variant with curve inputs.
 --
@@ -3379,8 +3379,8 @@ linRandNM :: Uid m => Int -> Ugen -> Ugen -> Ugen -> m Ugen
 linRandNM = liftUid4 linRandNId
 
 -- | Unsafe variant of LinRandN.
-linRandNU :: Int -> Ugen -> Ugen -> Ugen -> Ugen
-linRandNU = liftUnsafe4 linRandNM
+linRandN :: Int -> Ugen -> Ugen -> Ugen -> Ugen
+linRandN = liftUnsafe4 linRandNM
 
 -- | Obxd 12/24-dB multi-mode filter
 --
@@ -3405,8 +3405,8 @@ randNM :: Uid m => Int -> Ugen -> Ugen -> m Ugen
 randNM = liftUid3 randNId
 
 -- | Unsafe variant of RandN.
-randNU :: Int -> Ugen -> Ugen -> Ugen
-randNU = liftUnsafe3 randNM
+randN :: Int -> Ugen -> Ugen -> Ugen
+randN = liftUnsafe3 randNM
 
 -- | Digital State-Variable Filter (Band-pass)
 --
@@ -3455,8 +3455,8 @@ tExpRandNM :: Uid m => Int -> Ugen -> Ugen -> Ugen -> m Ugen
 tExpRandNM = liftUid4 tExpRandNId
 
 -- | Unsafe variant of TExpRandN.
-tExpRandNU :: Int -> Ugen -> Ugen -> Ugen -> Ugen
-tExpRandNU = liftUnsafe4 tExpRandNM
+tExpRandN :: Int -> Ugen -> Ugen -> Ugen -> Ugen
+tExpRandN = liftUnsafe4 tExpRandNM
 
 -- | Generate new random values on trigger.
 --
@@ -3469,8 +3469,8 @@ tRandNM :: Uid m => Int -> Ugen -> Ugen -> Ugen -> m Ugen
 tRandNM = liftUid4 tRandNId
 
 -- | Unsafe variant of TRandN.
-tRandNU :: Int -> Ugen -> Ugen -> Ugen -> Ugen
-tRandNU = liftUnsafe4 tRandNM
+tRandN :: Int -> Ugen -> Ugen -> Ugen -> Ugen
+tRandN = liftUnsafe4 tRandNM
 
 -- | Scramble inputs on trigger.
 --
